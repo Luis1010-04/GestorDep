@@ -1,0 +1,50 @@
+services:
+  app:
+    build:
+      context: ./backend/docker/app
+    working_dir: /var/www/html
+    command: tail -f /dev/null
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE:?Falta DB_DATABASE en .env}
+      DB_DATABASE_PRUEBAS: ${DB_DATABASE_PRUEBAS:?Falta DB_DATABASE_PRUEBAS en .env}
+      DB_USERNAME: ${DB_USERNAME:?Falta DB_USERNAME en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env}
+      DB_PROPIETARIO: ${DB_PROPIETARIO:?Falta DB_PROPIETARIO en .env}
+      DB_PROPIETARIO_CLAVE: ${DB_PROPIETARIO_CLAVE:?Falta DB_PROPIETARIO_CLAVE en .env}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      # Conecta con el rol de aplicacion; una excepcion de PDO termina con codigo distinto de cero
+      test: ["CMD", "php", "-r", "new PDO('pgsql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: ${DB_SUPERUSUARIO_CLAVE:?Falta DB_SUPERUSUARIO_CLAVE en .env}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_DATABASE_PRUEBAS: ${DB_DATABASE_PRUEBAS}
+      DB_PROPIETARIO: ${DB_PROPIETARIO}
+      DB_PROPIETARIO_CLAVE: ${DB_PROPIETARIO_CLAVE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:${DB_PUERTO_ANFITRION:-5433}:5432"
+    volumes:
+      - datos_db:/var/lib/postgresql/data
+      - ./backend/docker/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  datos_db:
