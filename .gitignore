@@ -1,0 +1,31 @@
+# Dependencias y entorno
+/backend/vendor/
+/backend/node_modules/
+.env
+.env.*
+!.env.example
+
+# Laravel
+/backend/storage/*.key
+/backend/storage/logs/*
+/backend/storage/framework/cache/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/views/*
+/backend/bootstrap/cache/*
+/backend/public/hot
+/backend/public/storage
+
+# Pruebas, cobertura y herramientas de calidad
+/backend/coverage/
+/backend/build/
+/backend/.phpunit.cache/
+/backend/.phpunit.result.cache
+/backend/.pint.cache
+/backend/.phpstan.cache
+
+# Editores y sistema operativo
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
