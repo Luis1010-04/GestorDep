@@ -1,28 +1,22 @@
 <?php
 
-namespace Tests\Feature;
-
 use Tests\TestCase;
 
-class SaludTest extends TestCase
-{
-    public function test_f1_h0_t03_salud_responde_200_con_aplicacion_y_base_de_datos_en_ok(): void
-    {
-        $respuesta = $this->getJson('/api/v1/salud');
-
-        $respuesta->assertOk()->assertExactJson([
+test('F1-H0-T03: salud responde 200 con aplicacion y base de datos en ok', function () {
+    /** @var TestCase $this */
+    $this->getJson('/api/v1/salud')
+        ->assertOk()
+        ->assertExactJson([
             'datos' => [
                 'aplicacion' => 'ok',
                 'base_de_datos' => 'ok',
             ],
         ]);
-    }
+});
 
-    public function test_f1_h0_t03_la_aplicacion_usa_utc_idioma_es_y_postgresql(): void
-    {
-        $this->assertSame('UTC', config('app.timezone'));
-        $this->assertSame('es', config('app.locale'));
-        $this->assertSame('America/Mexico_City', config('app.zona_presentacion'));
-        $this->assertSame('pgsql', config('database.default'));
-    }
-}
+test('F1-H0-T03: la aplicacion usa utc, idioma es y postgresql', function () {
+    expect(config('app.timezone'))->toBe('UTC')
+        ->and(config('app.locale'))->toBe('es')
+        ->and(config('app.zona_presentacion'))->toBe('America/Mexico_City')
+        ->and(config('database.default'))->toBe('pgsql');
+});
