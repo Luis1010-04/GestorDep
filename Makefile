@@ -16,10 +16,10 @@ pruebas:
 	docker compose exec -T app php vendor/bin/pest
 
 migrar:
-	docker compose exec -T app php artisan migrate --force
+	docker compose exec -T app php artisan migrate --database=propietario --force
 
 fresh:
-	docker compose exec -T app php artisan migrate:fresh --seed --force
+	docker compose exec -T app php artisan migrate:fresh --database=propietario --seed --force
 
 humo:
 	@set -e; guiones=$$(ls scripts/humo/humo-h*.sh 2>/dev/null || true); \

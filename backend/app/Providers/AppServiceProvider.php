@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Una subcarpeta de migraciones por contexto (docs/arquitectura.md, seccion 8.1).
+        $this->loadMigrationsFrom(glob(database_path('migrations/*'), GLOB_ONLYDIR) ?: []);
     }
 }
