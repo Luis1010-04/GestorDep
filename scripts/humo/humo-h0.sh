@@ -8,7 +8,7 @@ servidor=$!
 trap 'kill "$servidor" 2>/dev/null || true' EXIT
 
 for _ in $(seq 1 20); do
-    curl -s -o /dev/null "http://127.0.0.1:$puerto/up" && break
+    curl -s -o /dev/null "http://127.0.0.1:$puerto/api/v1/salud" && break
     sleep 0.5
 done
 
