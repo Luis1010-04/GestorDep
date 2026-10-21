@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\FormatoDeError;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,4 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        // Toda la api responde con el formato de error de docs/convenciones-api.md.
+        $exceptions->render(function (Throwable $e, Request $request) {
+            return $request->is('api/*') ? FormatoDeError::responder($e) : null;
+        });
     })->create();

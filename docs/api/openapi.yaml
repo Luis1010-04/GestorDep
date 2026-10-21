@@ -1,0 +1,72 @@
+openapi: 3.0.3
+info:
+  title: GestorDep API
+  version: 0.1.0
+  description: >-
+    API de seguimiento academico y deportivo de futbolistas (Fase 1).
+    Convenciones de formato y de errores en docs/convenciones-api.md.
+servers:
+  - url: /api/v1
+paths:
+  /salud:
+    get:
+      operationId: consultarSalud
+      summary: Estado de la aplicacion y de la base de datos
+      tags: [Salud]
+      responses:
+        '200':
+          description: La aplicacion y la base de datos responden.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: object
+                    additionalProperties: false
+                    required: [aplicacion, base_de_datos]
+                    properties:
+                      aplicacion:
+                        type: string
+                        enum: [ok]
+                      base_de_datos:
+                        type: string
+                        enum: [ok]
+        '503':
+          description: La aplicacion no alcanza la base de datos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required: [codigo, mensaje, errores]
+      properties:
+        codigo:
+          type: string
+          description: Codigo estable en snake_case; no se traduce.
+          pattern: '^[a-z][a-z0-9]*(_[a-z0-9]+)*$'
+        mensaje:
+          type: string
+          description: Mensaje traducido desde lang/es.
+        errores:
+          type: array
+          description: Detalle por campo; vacio si el error no es de campo.
+          items:
+            $ref: '#/components/schemas/ErrorDeCampo'
+    ErrorDeCampo:
+      type: object
+      additionalProperties: false
+      required: [campo, codigo, mensaje]
+      properties:
+        campo:
+          type: string
+        codigo:
+          type: string
+        mensaje:
+          type: string

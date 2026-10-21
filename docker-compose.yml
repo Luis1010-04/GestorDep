@@ -6,6 +6,8 @@ services:
     command: tail -f /dev/null
     volumes:
       - ./backend:/var/www/html
+      # El contrato vive en docs/api/openapi.yaml; las pruebas lo leen desde base_path('../docs')
+      - ./docs:/var/www/docs:ro
     environment:
       DB_HOST: db
       DB_PORT: 5432
