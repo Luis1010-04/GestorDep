@@ -43,6 +43,30 @@ test('F1-H0-T09: la api responde json aunque la peticion no lo pida', function (
         ->assertJsonPath('codigo', 'recurso_no_encontrado');
 });
 
+test('F1-H0-T09: 405 con metodo no permitido y la cabecera Allow', function () {
+    /** @var TestCase $this */
+    $this->postJson('/api/v1/salud')
+        ->assertMethodNotAllowed()
+        ->assertHeader('Allow', 'GET, HEAD')
+        ->assertExactJson([
+            'codigo' => 'metodo_no_permitido',
+            'mensaje' => 'El método no está permitido para esta ruta.',
+            'errores' => [],
+        ]);
+});
+
+test('F1-H0-T09: un codigo http sin codigo propio usa solicitud_no_valida y conserva sus cabeceras', function () {
+    /** @var TestCase $this */
+    $this->getJson(rutaDePrueba(fn () => abort(429, '', ['Retry-After' => '60'])))
+        ->assertTooManyRequests()
+        ->assertHeader('Retry-After', '60')
+        ->assertExactJson([
+            'codigo' => 'solicitud_no_valida',
+            'mensaje' => 'La solicitud no es válida.',
+            'errores' => [],
+        ]);
+});
+
 test('F1-H0-T09: 401 sin sesion con el formato de error', function () {
     /** @var TestCase $this */
     $this->getJson(rutaDePrueba(fn () => throw new AuthenticationException))

@@ -21,6 +21,7 @@ final class FormatoDeError
         401 => 'no_autenticado',
         403 => 'sin_permiso',
         404 => 'recurso_no_encontrado',
+        405 => 'metodo_no_permitido',
         409 => 'conflicto',
         422 => 'validacion_fallida',
         500 => 'error_interno',
@@ -34,10 +35,11 @@ final class FormatoDeError
             $e instanceof ReglaDeNegocioViolada => self::reglaDeNegocio($e),
             $e instanceof AuthenticationException => self::respuesta(401, 'no_autenticado'),
             $e instanceof ServicioNoDisponible => self::respuesta(503, 'servicio_no_disponible'),
+            // Se conservan las cabeceras de la excepcion, como Allow en el 405 o Retry-After.
             $e instanceof HttpExceptionInterface => self::respuesta(
                 $e->getStatusCode(),
                 self::CODIGOS_HTTP[$e->getStatusCode()] ?? 'solicitud_no_valida',
-            ),
+            )->withHeaders($e->getHeaders()),
             default => self::respuesta(500, 'error_interno'),
         };
     }
