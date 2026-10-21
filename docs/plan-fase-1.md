@@ -1,7 +1,7 @@
 # Plan de la Fase 1 (API del MVP)
 
-**Versión:** 1.1
-**Fecha:** 19 de octubre de 2026
+**Versión:** 1.2
+**Fecha:** 21 de octubre de 2026
 **Origen:** sección 5 del Documento de Arranque v1.0, con las dependencias corregidas por la auditoría (IC-04, IC-05).
 
 ## 1. Tecnologías y metodología
@@ -15,10 +15,11 @@
 | Identificadores | UUID v7 |
 | Autenticación | Laravel Sanctum en modo SPA (sesión con cookies) |
 | Entorno local | Docker Compose propio en la raíz del monorepo; todo se ejecuta con `make` |
-| Pruebas y calidad | Pest, Pest Arch, Laravel Pint, Larastan (nivel 6 a 8), Infection desde H2, cobertura de Pest, `composer audit` |
+| Pruebas y calidad | Pest, Pest Arch, Laravel Pint, Larastan (nivel por hito en `docs/estrategia-pruebas.md` §2), Infection desde H2, cobertura de Pest, `composer audit` |
+| Colas y tareas programadas | Cola `database` con servicio `worker` y planificador con servicio `scheduler` en Docker Compose (`docs/arquitectura.md` §11) |
 | Contrato | OpenAPI en `docs/api/openapi.yaml` |
 | Integración continua | GitHub Actions con PostgreSQL como servicio |
-| Agente de programación | Claude Code o Codex, guiados por `AGENTS.md` |
+| Agente de programación | Claude Code (con Laravel Boost) o Codex. Las reglas del agente se escriben en `backend/.ai/guidelines/proyecto.md`; Boost las copia a `backend/CLAUDE.md` y `backend/AGENTS.md` al ejecutar `boost:install` o `boost:update`, y esos dos **nunca se editan a mano**. El `CLAUDE.md` y el `AGENTS.md` de la raíz son punteros cortos escritos a mano |
 
 ### 1.2 Metodología
 
@@ -78,7 +79,7 @@ Algunas historias tienen criterios que necesitan datos de otro hito. Se implemen
 | H6 | DD-08, DD-12, DD-15 |
 | H7 | AB-02, AB-03; cierre del registro de decisiones |
 
-Si una decisión no está validada, el agente usa el valor por defecto como dato de fábrica con un comentario que lo indique (regla de `AGENTS.md`) y el hito se marca como "con valores por validar".
+Si una decisión no está validada, el agente usa el valor por defecto como dato de fábrica con un comentario que lo indique (`backend/.ai/guidelines/proyecto.md` §5) y el hito se marca como "con valores por validar".
 
 ## 4. Compuerta de cada hito
 
@@ -91,7 +92,7 @@ Un hito se da por cerrado cuando se cumple todo lo siguiente:
 5. Las reglas de negocio del hito se demuestran con las tablas de casos de ejemplo de `docs/estrategia-pruebas.md`.
 6. El guion de humo del hito (`make humo`) termina sin fallas.
 7. El hito cumple sus criterios de aceptación de `docs/criterios-aceptacion-fase-1.md`.
-8. El agente entregó el reporte de **fuera de alcance** (sección 5 de `AGENTS.md`) y no hay trabajo no pedido.
+8. El agente entregó el reporte de **fuera de alcance** (`backend/.ai/guidelines/proyecto.md` §6) y no hay trabajo no pedido.
 9. El responsable revisa los reportes de las tareas, prueba manualmente los flujos principales y aprueba.
 10. Se crea la etiqueta de git `f1-hN` y se fusiona la rama del hito.
 
@@ -99,4 +100,6 @@ Un hito se da por cerrado cuando se cumple todo lo siguiente:
 
 - La especificación de cada hito (`docs/hitos/f1-hN.md`) se redacta **justo antes** de empezarlo, con lo aprendido en el anterior. Solo H0 está escrita.
 - Cada especificación de hito incluye: tareas con las rutas que se pueden tocar, criterios de aceptación por tarea, tablas de casos de ejemplo de las reglas del hito, criterios diferidos y el guion de humo.
+- **Cada especificación de hito es autocontenida.** Copia el texto de las HU y RN del hito, sus tablas de casos y las tablas de datos de `docs/arquitectura.md` que usa. Así el agente trabaja con la especificación y consulta los documentos completos solo ante una duda, lo que ahorra contexto en cada tarea.
+- **Cada tarea se trabaja en una sesión nueva del agente**, que termina con el reporte y espera aprobación.
 - La Fase 2 se planifica al cerrar H7, con su propio descubrimiento y las condiciones de `docs/alcance-fases.md`.
