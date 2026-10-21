@@ -48,7 +48,7 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 | AB-03 | Plazo de conservación del historial tras la baja de un jugador | Institución | H7 |
 | AB-04 | Respaldos y recuperación de la base (frecuencia y retención) | Responsable del proyecto | Antes de producción |
 | AB-05 | Librería de validación contra OpenAPI. **Resuelta en DD-24** | Responsable, a propuesta del agente | T09 de H0 |
-| AB-06 | Si habrá aplicación móvil (cambia el modo de Sanctum) | Responsable | H1 |
+| AB-06 | Si habrá aplicación móvil (cambia el modo de Sanctum). **Resuelta el 21/10/2026: no habrá aplicación móvil; Sanctum en modo SPA con cookies** | Responsable | H1 |
 | AB-07 | Si existe reglamento de elegibilidad para convocar | Institución | H3 |
 | AB-08 | Origen de la retícula y quién verifica la carga inicial | Institución | H2 |
 | AB-09 | Quién construye el frontend y cuándo | Responsable | Planificación de la Fase 2 |
