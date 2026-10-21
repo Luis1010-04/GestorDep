@@ -1,7 +1,7 @@
 # Estrategia de pruebas y evaluación (Fase 1)
 
-**Versión:** 1.1
-**Fecha:** 19 de octubre de 2026
+**Versión:** 1.2
+**Fecha:** 21 de octubre de 2026
 **Origen:** sección 6 del Documento de Arranque v1.0, ampliada con pruebas de consola, casos de ejemplo por regla y la corrección de cobertura en H0.
 
 Este documento es una fuente de verdad del agente. Define cómo se demuestra que algo está terminado.
@@ -20,7 +20,7 @@ Este documento es una fuente de verdad del agente. Define cómo se demuestra que
 |---|---|---|
 | Pruebas unitarias, de integración y de API | Pest sobre PHPUnit | PostgreSQL real en contenedor |
 | Reglas de arquitectura | Pest Arch | Dominio sin framework, dirección de dependencias, aislamiento entre contextos |
-| Análisis estático | Larastan (PHPStan) | Nivel 6 en H0; sube por hito hasta el 8 |
+| Análisis estático | Larastan (PHPStan) | Nivel 6 en H0 y H1; nivel 7 de H2 a H4; nivel 8 desde H5. Se sube al abrir el hito y nunca se baja |
 | Estilo | Laravel Pint | En modo de comprobación |
 | Calidad de las pruebas del dominio | Infection (mutación) | Desde H2, solo sobre `Dominio/` |
 | Cobertura | Cobertura de Pest | Umbral por capa (sección 4) |
@@ -63,7 +63,7 @@ Cada comando tiene pruebas Pest que lo invocan con `$this->artisan(...)` y compr
 | Comando | Hito | Qué debe cumplir |
 |---|---|---|
 | `usuarios:crear` | H1 | Crea un usuario con uno o dos roles; la contraseña se pide por consola o por opción y se guarda solo como hash; rechaza correo duplicado, rol inexistente y contraseña que no cumple RNF-10; no imprime la contraseña |
-| `alertas:recalcular` | H6 | Concilia resúmenes y alertas abiertas; es idempotente (dos ejecuciones dejan el mismo estado); no reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores |
+| `alertas:recalcular` | H6 | Concilia resúmenes y alertas abiertas; es idempotente (dos ejecuciones dejan el mismo estado); no reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores; cierra las alertas cuya condición venció con el tiempo; una prueba confirma que está programado a diario en el planificador (`arquitectura.md` §11) |
 
 Ningún otro comando se crea sin aprobación.
 
@@ -74,6 +74,7 @@ Un script por hito en `scripts/humo/humo-hN.sh` (Bash y `curl`, sin dependencias
 - Recorre el flujo principal del hito por HTTP (inicio de sesión con cookie, creación, consulta) y termina con código distinto de cero si alguna respuesta no es la esperada.
 - Imprime una línea por paso con `OK` o `FALLA` y el código HTTP recibido.
 - No usa datos reales ni credenciales fuera de las del seeder de desarrollo.
+- El inicio de sesión sigue el flujo de Sanctum en modo SPA: `GET /sanctum/csrf-cookie`, guardar las cookies en un archivo (`curl -c`/`-b`), enviar el valor de la cookie `XSRF-TOKEN` (decodificado de URL) en la cabecera `X-XSRF-TOKEN`, y enviar `Origin` y `Referer` con un dominio incluido en `SANCTUM_STATEFUL_DOMAINS`. Una función de ayuda en `scripts/humo/lib.sh` lo resuelve una vez para todos los guiones.
 - Se escribe en la última tarea del hito y se ejecuta en la compuerta; el responsable puede correrlo para repetir la demostración.
 
 | Hito | El guion de humo comprueba |
@@ -117,6 +118,8 @@ Cada fila es una prueba. Los valores marcados [Propuesta] viven como datos de f�
 | 7.20 | 2 | en_riesgo |
 | 6.50 | 1 | en_riesgo |
 
+Los promedios se calculan con decimales exactos (`arquitectura.md` §7.1), nunca con `float`: con `float`, 7.495 se representa como 7.4949… y se redondearía a 7.49. La fila de 7.495 existe para detectar ese error. El redondeo al medio hacia arriba es **[Decisión por defecto]** (DD-20).
+
 ### RN-21 Alerta de riesgo de baja académica
 
 | Nivel de riesgo | Alerta abierta antes | Resultado esperado |
@@ -139,6 +142,8 @@ Cada fila es una prueba. Los valores marcados [Propuesta] viven como datos de f�
 
 ### RN-09 Acumulación de sanciones deportivas [Propuesta]
 
+La ventana de faltas es móvil: los 30 días naturales que terminan en la fecha de cálculo, inclusive (de `fecha_calculo − 29 días` a `fecha_calculo`). La fecha de cálculo sale del reloj inyectable, que las pruebas fijan.
+
 | Caso (por jugador y equipo) | Resultado esperado |
 |---|---|
 | 1 tarjeta roja en la temporada | se activa |
@@ -148,6 +153,8 @@ Cada fila es una prueba. Los valores marcados [Propuesta] viven como datos de f�
 | 2 faltas y 1 falta justificada en 30 días | no se activa |
 | 3 faltas repartidas en 31 días | no se activa |
 | 1 tarjeta roja de la temporada anterior | no se activa |
+| Alerta abierta por 3 faltas; en el recálculo diario la más antigua ya salió de la ventana | se cierra |
+| Alerta abierta por 1 tarjeta roja; el recálculo ocurre después del fin de la temporada | se cierra |
 
 ### RN-10 Riesgo de baja deportiva
 

@@ -1,8 +1,8 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.1 (corregida tras la auditoría cruzada)
-**Fecha:** 19 de octubre de 2026
+**Versión:** 1.2 (ajustes para el trabajo con agentes; ver sección 14)
+**Fecha:** 21 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
 ## 1. Propósito y alcance
@@ -85,33 +85,50 @@ Cada evento dispara el recalculo de riesgos y alertas del jugador afectado. Los 
 
 ## 5. Estructura de carpetas
 
+Todo el código de la Fase 1 vive en `backend/` (ADR-16). Las rutas de este documento que empiezan con `src/`, `database/` o `tests/` se leen siempre como `backend/src/`, `backend/database/` y `backend/tests/`.
+
 ```
-app/
-  Http/                      # Interfaz: controladores, solicitudes, recursos, middleware
-  Providers/
-src/                         # Espacio de nombres Src\ (PSR-4)
-  Compartido/
-  Identidad/
-  Plantel/
-  Academico/
-  Competencia/
-  Rendimiento/
-  CondicionFisica/
-  Salud/
-  Alertas/
-  Consultas/                 # solo Aplicacion/ e Infraestructura/ (sin Dominio/)
-    Dominio/                 # Entidades, objetos de valor, servicios, eventos, interfaces de repositorio
-    Aplicacion/              # Casos de uso (comandos y consultas), DTO, escuchas de eventos
-    Infraestructura/         # Modelos Eloquent, repositorios, consultas de lectura
-database/
-  migrations/                # Una subcarpeta por contexto: database/migrations/{contexto}/ (ver sección 8)
-  seeders/
-tests/
-  Unit/                      # Dominio sin base de datos
-  Integration/               # Repositorios, migraciones, restricciones e índices (PostgreSQL real)
-  Feature/                   # Casos de uso, HTTP y comandos de consola
-  Arch/                      # Reglas de arquitectura (Pest Arch)
+backend/
+  app/
+    Exceptions/                # Formato de error de la API (docs/convenciones-api.md)
+    Http/                      # Interfaz: controladores, solicitudes, recursos, middleware
+    Providers/
+  docker/                      # Imagenes y scripts de inicializacion de Docker Compose
+  lang/es/                     # Textos visibles al usuario
+  src/                         # Espacio de nombres Src\ (PSR-4)
+    Compartido/
+    Identidad/
+    Plantel/
+    Academico/
+    Competencia/
+    Rendimiento/
+    CondicionFisica/
+    Salud/
+    Alertas/
+    Consultas/                 # Excepcion: solo Aplicacion/ e Infraestructura/, sin Dominio/
+  database/
+    migrations/{contexto}/     # Una subcarpeta por contexto (seccion 8)
+    seeders/
+  tests/
+    Unit/                      # Dominio sin base de datos
+    Integration/               # Repositorios, migraciones, restricciones e indices (PostgreSQL real)
+    Feature/                   # Casos de uso, HTTP y comandos de consola
+    Arch/                      # Reglas de arquitectura (Pest Arch)
+docs/                          # Documentacion (el agente la lee; solo la edita si la tarea lo pide)
+scripts/humo/                  # Guiones de humo por hito
+frontend/                      # Fuera de la Fase 1: no se toca
 ```
+
+**Plantilla de cada contexto** (todos salvo `Consultas`, que no tiene `Dominio/`):
+
+```
+src/{Contexto}/
+  Dominio/                     # Entidades, objetos de valor, servicios, eventos, interfaces de repositorio. PHP puro
+  Aplicacion/                  # Casos de uso (comandos y consultas), DTO, escuchas de eventos
+  Infraestructura/             # Modelos Eloquent, repositorios, consultas de lectura
+```
+
+Los modelos Eloquent viven en `src/{Contexto}/Infraestructura/`, nunca en `app/Models/`. Si la autenticación de Laravel exige un modelo de usuario en otro lugar, la especificación de H1 lo resuelve y lo registra como decisión.
 
 **Regla de dependencia:** `Infraestructura` y `Http` dependen de `Aplicacion`; `Aplicacion` depende de `Dominio`; `Dominio` no depende de nada del framework. Se verifica en la integración continua con pruebas de arquitectura.
 
@@ -136,6 +153,9 @@ tests/
 - Las claves foráneas usan `ON DELETE RESTRICT`: como no hay borrado físico, nunca debe haber eliminaciones en cascada.
 - Valores cerrados (estados, tipos) como `varchar` con `CHECK` (ADR-10). Los valores abajo se muestran separados por barra.
 - Cada tabla marcada con **(H)** tiene su tabla `{tabla}_historial` (sección 9).
+- **Unicidad con borrado lógico.** Toda restricción de unicidad sobre una tabla con `eliminado_en` es un índice parcial `WHERE eliminado_en IS NULL` (ADR-05), incluidos los catálogos. Cuando una tabla dice "UQ parcial" sin condición, la condición es esa.
+- **Nombres de catálogo sin distinguir mayúsculas.** Las columnas `nombre` de los catálogos (categorías, periodos escolares, lugares, temporadas, torneos, rivales) y `clave` de asignaturas son `citext`, para que "Sub-17" y "sub-17" choquen con 409 (HU-28).
+- **Decimales exactos.** Promedios, umbrales, IMC y porcentajes nunca se calculan con `float`. La base usa `numeric`; el dominio usa un objeto de valor decimal de Compartido (con `bcmath`) y redondea al medio hacia arriba (`HALF_UP`) a dos decimales cuando una regla lo pide (RN-04).
 - `resumenes_academicos` es **derivada**: se puede reconstruir desde los datos capturados. `evaluaciones_rendimiento` y `alertas` son registros **persistentes de solo inserción** (una evaluación nueva no reemplaza a la anterior y una alerta cerrada se conserva), porque lo que el entrenador vio al decidir y las fechas reales de activación y cierre no se reconstruyen.
 
 ### 7.2 Identidad
@@ -152,7 +172,7 @@ Los usuarios se crean con el comando de consola `usuarios:crear` (RN-19) mientra
 
 | Tabla | Columnas | Restricciones e índices |
 |---|---|---|
-| `categorias` | nombre, activo | UQ `nombre` |
+| `categorias` | nombre (`citext`), activo | UQ parcial `nombre` |
 | `posiciones` | codigo (portero/defensa/medio/delantero), nombre | UQ `codigo` |
 | `jugadores` (H) | nombres, apellidos, fecha_nacimiento, matricula, estatus_academico (activo/baja), estatus_deportivo (activo/baja) | UQ parcial `matricula` donde `eliminado_en IS NULL`; `CHECK` de estatus |
 | `equipos` (H) | nombre, categoria_id, activo | UQ parcial (`nombre`, `categoria_id`) |
@@ -166,9 +186,9 @@ Los usuarios se crean con el comando de consola `usuarios:crear` (RN-19) mientra
 
 | Tabla | Columnas | Restricciones e índices |
 |---|---|---|
-| `periodos_escolares` | nombre, fecha_inicio, fecha_fin | `CHECK (fecha_fin > fecha_inicio)` |
-| `asignaturas` | clave, nombre, grado | UQ `clave` (la retícula; RN-12) |
-| `materias` (H) | asignatura_id, periodo_id, docente_id | UQ (`asignatura_id`, `periodo_id`, `docente_id`); IX `docente_id` |
+| `periodos_escolares` | nombre (`citext`), fecha_inicio, fecha_fin | UQ parcial `nombre`; `CHECK (fecha_fin > fecha_inicio)` |
+| `asignaturas` | clave (`citext`), nombre, grado | UQ parcial `clave` (la retícula; RN-12) |
+| `materias` (H) | asignatura_id, periodo_id, docente_id | UQ parcial (`asignatura_id`, `periodo_id`, `docente_id`); IX `docente_id` |
 | `inscripciones` (H) | materia_id, jugador_id | UQ parcial (`materia_id`, `jugador_id`); IX `jugador_id` |
 | `criterios_aprobacion` (H) | ambito (general/materia), materia_id, calificacion_minima `numeric(4,2)`, vigente_desde, vigente_hasta | `CHECK` de 0 a 10; `CHECK` que `materia_id` sea nulo si y solo si el ámbito es general; UQ parcial de un solo criterio vigente por materia y uno general |
 | `calificaciones` (H) | inscripcion_id, tipo (parcial/final), numero_parcial, valor `numeric(4,2)`, criterio_id (el aplicado, RN-03), fecha | `CHECK valor BETWEEN 0 AND 10`; `CHECK` que `numero_parcial` sea nulo si y solo si `tipo = 'final'`; UQ parcial (`inscripcion_id`, `tipo`, `numero_parcial`) con `NULLS NOT DISTINCT` |
@@ -198,9 +218,9 @@ El empalme de entrenamientos se **advierte** (HU-10) y no se impide, por lo que 
 | `metricas_posicion` *(sin auditoría)* | metrica_id, posicion_id, obligatoria, orden | PK compuesta |
 | `rendimientos_partido` (H) | partido_id, jugador_id, equipo_id, registrado_por, posicion_id, minutos, fue_titular, tarjetas_amarillas, tarjetas_rojas, calificacion_general `smallint`, observacion | `CHECK` de minutos 0 a 150 y calificación entera de 1 a 10; FK compuesta (`partido_id`, `equipo_id`) hacia `partidos` (`id`, `equipo_id`) para que el equipo coincida; UQ parcial (`partido_id`, `jugador_id`); IX (`jugador_id`, `partido_id`); IX (`registrado_por`) |
 | `valores_metrica` (H) | rendimiento_id, metrica_id, valor `numeric(10,2)` | `id uuid` como clave primaria; UQ parcial (`rendimiento_id`, `metrica_id`); la aplicación valida que la métrica pertenezca a la posición |
-| `plantillas_evaluacion` (H) | nombre, posicion_id, creada_por (nulo si es de fábrica), calificacion_minima, ventana_partidos, es_de_fabrica | `CHECK` de 1 a 10; `CHECK ventana_partidos > 0` |
-| `umbrales_rendimiento` (H) | jugador_id, equipo_id, entrenador_id, plantilla_id (opcional), calificacion_minima, ventana_partidos, vigente_desde, vigente_hasta | `CHECK` de 1 a 10 y `CHECK ventana_partidos > 0` (igual que la plantilla); UQ parcial (`jugador_id`, `equipo_id`) donde `vigente_hasta IS NULL` |
-| `evaluaciones_rendimiento` *(persistente, solo inserción, sin auditoría)* | jugador_id, equipo_id, umbral_id, promedio, partidos_considerados, resultado (pasa/no_pasa/datos_insuficientes), calculado_en | IX (`jugador_id`, `equipo_id`, `calculado_en` descendente) |
+| `plantillas_evaluacion` (H) | nombre, posicion_id, creada_por (nulo si es de fábrica), calificacion_minima `numeric(4,2)`, ventana_partidos, es_de_fabrica | `CHECK` de 1 a 10; `CHECK ventana_partidos > 0` |
+| `umbrales_rendimiento` (H) | jugador_id, equipo_id, entrenador_id, plantilla_id (opcional), calificacion_minima `numeric(4,2)`, ventana_partidos, vigente_desde, vigente_hasta | `CHECK` de 1 a 10 y `CHECK ventana_partidos > 0` (igual que la plantilla); UQ parcial (`jugador_id`, `equipo_id`) donde `vigente_hasta IS NULL` |
+| `evaluaciones_rendimiento` *(persistente, solo inserción, sin auditoría)* | jugador_id, equipo_id, umbral_id, promedio `numeric(4,2)`, partidos_considerados, resultado (pasa/no_pasa/datos_insuficientes), calculado_en | IX (`jugador_id`, `equipo_id`, `calculado_en` descendente) |
 
 El mínimo de calificaciones para evaluar es `ventana_partidos` (RN-08): con menos, el resultado es `datos_insuficientes`. `rendimientos_partido` y `valores_metrica` son la base de los gráficos de historial (HU-25). Para mostrar al entrenador solo lo que él registró (RN-14) se filtra por `registrado_por`.
 
@@ -231,9 +251,9 @@ Se separa **el estado oficial** (visible para todos los entrenadores del jugador
 | Tabla | Columnas | Restricciones e índices |
 |---|---|---|
 | `parametros_institucionales` (H) | clave, valor `jsonb`, descripcion, vigente_desde, vigente_hasta | UQ parcial `clave` donde `vigente_hasta IS NULL`. Guarda niveles de riesgo académico, nivel que activa la alerta académica (RN-21), reglas de sanción, niveles de calificación de partido y días para marcar un dato como desactualizado (RNF-04) |
-| `alertas` *(persistente, solo inserción de cierres)* | tipo (riesgo_baja_academica/riesgo_baja_deportiva/acumulacion_sanciones_deportivas), jugador_id, equipo_id (nulo en las académicas), causa `jsonb`, activada_en, cerrada_en | UQ parcial de una alerta abierta por (`tipo`, `jugador_id`, `COALESCE(equipo_id, uuid nulo)`) donde `cerrada_en IS NULL`; IX (`jugador_id`, `cerrada_en`) |
+| `alertas` *(persistente, sin auditoría; no se borra)* | tipo (riesgo_baja_academica/riesgo_baja_deportiva/acumulacion_sanciones_deportivas), jugador_id, equipo_id (nulo en las académicas), causa `jsonb`, activada_en, cerrada_en | UQ parcial de una alerta abierta por (`tipo`, `jugador_id`, `COALESCE(equipo_id, uuid nulo)`) donde `cerrada_en IS NULL`; IX (`jugador_id`, `cerrada_en`) |
 
-Una alerta cerrada se conserva: su historial es el propio registro (`activada_en` y `cerrada_en`), por lo que no necesita tabla de historial aparte.
+Una alerta cerrada se conserva: su historial es el propio registro (`activada_en` y `cerrada_en`), por lo que no necesita tabla de historial aparte. **La única modificación permitida** es asignar `cerrada_en` una vez (de nulo a una fecha); ninguna otra columna cambia y una alerta cerrada no se reabre: si la condición vuelve a cumplirse, se crea una alerta nueva. Un disparador rechaza cualquier otro `UPDATE` y todo `DELETE`.
 
 ## 8. Estrategia de migraciones (Laravel 13)
 
@@ -348,11 +368,13 @@ Un jugador con baja registrada (RN-23) queda fuera de listados, convocatorias y 
 ## 11. Alertas y recálculo (ADR-07)
 
 1. Un evento de dominio (por ejemplo, `CalificacionRegistrada`) se publica al confirmar la transacción.
-2. Un escucha en cola recalcula lo derivado del jugador: `resumenes_academicos` y alerta académica, o `evaluaciones_rendimiento` y alertas deportivas.
+2. Un escucha en cola recalcula lo derivado del jugador: `resumenes_academicos` y alerta académica, o `evaluaciones_rendimiento` y alertas deportivas. La cola usa el driver `database` (no es un servicio externo): en Docker Compose corre un servicio `worker`; en las pruebas el driver es `sync`. Los eventos se despachan después de confirmar la transacción (`afterCommit`).
 3. Si la condición se cumple y no hay alerta abierta, se crea; si deja de cumplirse, se cierra con `cerrada_en`.
 4. Los escuchas son **idempotentes** y reintentables. Un comando de consola (`alertas:recalcular`) concilia los resúmenes y las alertas abiertas, útil tras cambiar parámetros de fábrica; nunca reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores.
 
-Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion` y `umbrales_rendimiento`, nunca constantes del código.
+5. **Condiciones que vencen con el tiempo.** Algunas condiciones cambian sin que ocurra ningún evento: las faltas salen de la ventana de 30 días (RN-09), la tarjeta roja deja de contar al terminar la temporada y una fecha estimada de regreso se vence (HU-21). Por eso `alertas:recalcular` se programa en el planificador de Laravel **una vez al día a las 02:00 (America/Mexico_City)**, y en Docker Compose corre un servicio `scheduler` (`schedule:work`). Las marcas `requiere_actualizacion` (HU-21) y `posiblemente_desactualizado` (HU-24, RNF-04) no se guardan: se calculan al leer.
+
+Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion` y `umbrales_rendimiento`, nunca constantes del código. La fecha de cálculo se obtiene de un reloj inyectable de Compartido, para que las pruebas fijen el día.
 
 ## 12. Pruebas y calidad
 
@@ -378,3 +400,10 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | Diagrama entidad-relación | Aún no incluido | Se puede generar a partir de las secciones 7.2 a 7.9 |
 | Decisiones por defecto | RN-19 a RN-23, posición por equipo, alerta académica en "en riesgo" y docente sin riesgo deportivo se tomaron para avanzar | Validar con la institución (`docs/decisiones/registro-decisiones.md`) antes del hito que las usa |
 | Tablas de la Fase 2 | Datos y alertas del PDF fuera del MVP (`docs/alcance-fases.md`) | Entran como filas de catálogo (métricas, tipos de prueba) o como migraciones nuevas; no se anticipan tablas en la Fase 1 |
+
+## 14. Control de cambios
+
+| Versión | Fecha | Cambios |
+|---|---|---|
+| 1.1 | 19/10/2026 | Correcciones de la auditoría cruzada |
+| 1.2 | 21/10/2026 | Sección 5: todo bajo `backend/` y plantilla de contexto separada (Consultas sin Dominio). Sección 7.1: unicidad parcial con borrado lógico en todas las tablas, nombres de catálogo `citext`, decimales exactos con redondeo `HALF_UP`. Tipos `numeric(4,2)` en plantillas, umbrales y evaluaciones. Sección 7.9: única modificación permitida en `alertas`. Sección 11: cola `database` con servicio `worker`, eventos después del commit, recálculo diario programado y reloj inyectable |

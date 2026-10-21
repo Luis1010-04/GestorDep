@@ -1,7 +1,7 @@
 # Criterios de aceptación de la Fase 1
 
-**Versión:** 1.0
-**Fecha:** 19 de octubre de 2026
+**Versión:** 1.1
+**Fecha:** 21 de octubre de 2026
 **Fuentes:** `docs/requisitos.md` v1.1, `docs/plan-fase-1.md`, `docs/estrategia-pruebas.md`
 
 Este documento define cuándo se acepta una tarea, un hito y la Fase 1. Los criterios de cada historia (los "Dado... cuando... entonces") viven en `docs/requisitos.md`; aquí se fija **cómo se comprueban**.
@@ -24,18 +24,18 @@ Los de la compuerta de `docs/plan-fase-1.md` (sección 4), más los propios de c
 
 | Hito | Criterios propios, además de la compuerta |
 |---|---|
-| H0 | `make levantar` y `make verificar` funcionan en una máquina limpia siguiendo solo el `README.md`; `make verificar` **falla** si se introduce a propósito un error de estilo, de tipos o una prueba rota; las pruebas de arquitectura **fallan** ante una violación de ejemplo; CI en verde; `GET /api/v1/salud` documentada; ninguna tabla de negocio creada |
+| H0 | `make levantar` y `make verificar` funcionan en una máquina limpia siguiendo solo el `README.md`; `make verificar` **falla** si se introduce a propósito un error de estilo, de tipos o una prueba rota; las pruebas de arquitectura **fallan** ante una violación de ejemplo; CI en verde; `GET /api/v1/salud` documentada; Docker Compose define los servicios `worker` y `scheduler`; ninguna tabla de negocio creada |
 | H1 | `usuarios:crear` funciona y está probado; un usuario inicia y cierra sesión; un entrenador crea un equipo y queda asignado; un jugador duplicado responde 409 sin datos del expediente; un jugador ajeno responde 404; la búsqueda por matrícula devuelve solo nombres, apellidos y matrícula; se bloquea la cuenta tras 5 intentos fallidos |
 | H2 | Las diez filas de la tabla de RN-04 pasan; el criterio propio de una materia prevalece sobre el general y el sistema indica cuál se aplicó; una calificación fuera de 0 a 10 se rechaza; el docente ve solo a sus alumnos; Infection corre sobre `Dominio/` |
 | H3 | Un empalme de lugar y horario advierte sin impedir; un jugador no convocado no entra a la alineación; un partido con resultado pasa a "jugado"; la asistencia acepta presente, falta y falta justificada; las advertencias usan el formato de `docs/convenciones-api.md` |
 | H4 | La captura pide solo los campos de la posición del jugador; las tablas de RN-08 y RN-10 pasan; un cambio de umbral guarda quién, cuándo y el valor anterior; el resultado del jugador en dos equipos usa solo los datos y el umbral de cada entrenador |
 | H5 | Un aviso de docente o entrenador queda pendiente y no cambia el estado oficial; cualquier entrenador del jugador lo confirma y queda como registrante; el otro entrenador ve estado y fecha estimada de regreso pero no tipo, zona ni causa; el IMC se calcula sin captura; la tabla de RN-16 pasa |
-| H6 | Las tablas de RN-21, RN-09, RN-10 y RN-18 pasan; una alerta que deja de cumplirse se cierra y se conserva; `alertas:recalcular` es idempotente; el listado filtra por equipo, materia y tipo de alerta; la vista para convocar trae las cinco dimensiones, la disponibilidad y las fechas de actualización |
+| H6 | Las tablas de RN-21, RN-09, RN-10 y RN-18 pasan; una alerta que deja de cumplirse se cierra y se conserva; `alertas:recalcular` es idempotente, está programado a diario y cierra las alertas que vencen con el tiempo; el listado filtra por equipo, materia y tipo de alerta; la vista para convocar trae las cinco dimensiones, la disponibilidad y las fechas de actualización |
 | H7 | `GET` de historial devuelve autor, fecha, valor anterior y nuevo según la visibilidad del usuario; el borrado lógico no aparece en vistas normales pero sí en el historial; revisión de seguridad sin hallazgos abiertos; prueba de volumen con 15 equipos, 25 usuarios y unos 375 jugadores sin errores; valores de fábrica validados o marcados como pendientes por escrito |
 
 ## 3. Criterios por historia
 
-Cada historia se acepta cuando **todos** sus criterios de `docs/requisitos.md` tienen prueba y pasan. La tabla indica el hito, el número de criterios y dónde se prueba.
+Cada historia se acepta cuando **todos** sus criterios de `docs/requisitos.md` tienen prueba y pasan. La tabla indica el hito, el número de criterios y dónde se prueba. El hito de cada historia proviene de `docs/plan-fase-1.md` §2; si alguna vez difieren, prevalece el plan.
 
 | Historia | Hito | Criterios | Pruebas requeridas | Criterio diferido |
 |---|---|---|---|---|

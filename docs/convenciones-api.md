@@ -1,10 +1,10 @@
 # Convenciones de la API (se aplican desde H0)
 
-**Versión:** 1.1
-**Fecha:** 19 de octubre de 2026
+**Versión:** 1.2
+**Fecha:** 21 de octubre de 2026
 **Origen:** sección 7 del Documento de Arranque v1.0, con las correcciones de la auditoría (500 y 503, advertencias, excepción de la búsqueda por matrícula).
 
-Este documento es una fuente de verdad del agente. Si contradice a `docs/requisitos.md`, se detiene y pregunta.
+Este documento es una fuente de verdad del agente. Ante una contradicción con otro documento se aplica el orden de precedencia de `docs/README.md`, y el agente se detiene y pregunta.
 
 ## 1. Reglas generales
 
@@ -14,6 +14,7 @@ Este documento es una fuente de verdad del agente. Si contradice a `docs/requisi
 | Recursos | Plural en español: `/api/v1/jugadores`, `/api/v1/partidos`. Las acciones que no son un CRUD se expresan como sub-recurso: `/api/v1/avisos-lesion/{id}/confirmacion` |
 | Identificadores | UUID v7 |
 | Fechas y horas | ISO 8601 en UTC; las fechas sin hora, `AAAA-MM-DD`; los periodos mensuales, `AAAA-MM` |
+| Decimales | Calificaciones, promedios, umbrales, IMC y porcentajes se envían y reciben como cadena con dos decimales (`"7.50"`), para no perder precisión. Los enteros (minutos, tarjetas, calificación de partido) van como número |
 | Paginación | `pagina` y `por_pagina` (máximo 100); la respuesta incluye `datos` y `meta` |
 | Filtros y orden | `filtro[campo]=valor` y `orden=campo` o `orden=-campo` |
 | Autenticación | Sanctum en modo SPA (cookies de sesión); el detalle está en `docs/hitos/f1-h1.md` |
@@ -28,7 +29,7 @@ Este documento es una fuente de verdad del agente. Si contradice a `docs/requisi
 | 201 | Recurso creado |
 | 204 | Acción correcta sin cuerpo |
 | 401 | Sin sesión |
-| 403 | Sin permiso sobre un recurso que el usuario sí conoce (por ejemplo, un docente que intenta confirmar un estado oficial) |
+| 403 | Sin permiso sobre un recurso que el usuario sí conoce (por ejemplo, un docente que intenta confirmar un estado oficial), o llamada a una función exclusiva del otro rol (HU-01) |
 | 404 | El recurso no existe **o no es visible para el usuario**. Un recurso fuera de su alcance responde 404 y no 403, para no revelar que existe |
 | 409 | Conflicto: matrícula duplicada, valor de catálogo repetido, medida ya registrada en el periodo |
 | 422 | Validación de campos |
@@ -71,6 +72,16 @@ Las acciones que el sistema permite pero quiere señalar (HU-10 empalme, HU-12 j
 ```
 
 Los datos que el sistema "marca" (HU-21 estado que requiere actualización, HU-24 dato posiblemente desactualizado, HU-09 dato incompleto) se devuelven como campos booleanos o de estado dentro del recurso, con nombre en español (`requiere_actualizacion`, `posiblemente_desactualizado`, `incompleto`). Cada nombre se define en el contrato OpenAPI del hito.
+
+### 4.1 Confirmaciones
+
+Cuando una acción necesita que el usuario confirme algo (HU-17: medida ya registrada en el periodo), el flujo es:
+
+1. El primer intento responde **409** con un código estable, por ejemplo `medicion_ya_registrada`.
+2. El cliente repite la petición con `"es_correccion": true` y un `"motivo"` no vacío.
+3. La API responde **200**, reemplaza el valor y escribe el historial con `operacion = actualizar` y ese `motivo`.
+
+Un `es_correccion: true` sin `motivo` responde 422. Un `es_correccion: true` cuando no hay nada que corregir responde 422 con el código `nada_que_corregir`.
 
 ## 5. Idioma y cambio futuro de idioma
 

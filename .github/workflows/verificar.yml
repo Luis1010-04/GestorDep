@@ -1,0 +1,73 @@
+# Integracion continua (F1-H0-T10): migraciones y `composer verificar` contra PostgreSQL 16.
+# Las claves son solo de prueba para este flujo; no hay secretos.
+name: verificar
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: clave_superusuario_solo_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      # Las pruebas fuerzan la base de pruebas (phpunit.xml); las migraciones se aplican a la misma base
+      DB_DATABASE: gestordep_pruebas
+      DB_DATABASE_PRUEBAS: gestordep_pruebas
+      DB_PROPIETARIO: gestordep_propietario
+      DB_PROPIETARIO_CLAVE: clave_propietario_solo_ci
+      DB_USERNAME: gestordep_app
+      DB_PASSWORD: clave_aplicacion_solo_ci
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_pgsql, pgsql, zip
+          coverage: pcov
+
+      - name: Roles y base de pruebas
+        # Mismo guion que inicializa el contenedor de desarrollo; aqui la base de desarrollo y la de pruebas coinciden
+        env:
+          PGHOST: 127.0.0.1
+          PGPASSWORD: clave_superusuario_solo_ci
+          DB_DATABASE: gestordep_desarrollo_ci
+        run: bash docker/db/init/01-roles-y-bases.sh
+
+      - name: Dependencias
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Configuracion de la aplicacion
+        run: |
+          cp .env.example .env
+          php artisan key:generate --no-interaction
+
+      - name: Migraciones (fresh y rollback)
+        run: |
+          php artisan migrate:fresh --database=propietario --force --no-interaction
+          php artisan migrate:rollback --database=propietario --force --no-interaction
+          php artisan migrate --database=propietario --force --no-interaction
+
+      - name: Verificar
+        run: composer verificar

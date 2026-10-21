@@ -1,8 +1,8 @@
 # Alcance por fase: lo que se completa en la Fase 1 y lo que se espera en la Fase 2
 
 **Proyecto:** Sistema de seguimiento académico y deportivo de futbolistas
-**Versión:** 1.0
-**Fecha:** 19 de octubre de 2026
+**Versión:** 1.1
+**Fecha:** 21 de octubre de 2026
 **Fuentes:** `docs/requisitos.md` v1.1, `docs/arquitectura.md` v1.1 y el PDF original "Proceso general del sistema web"
 
 ## 1. Para qué sirve este documento
@@ -72,7 +72,7 @@ Está prohibido construirlo en la Fase 1, aunque parezca fácil o útil:
 - Carga o subida de archivos (fotografía, documentación).
 - Servicios externos de cualquier tipo.
 - Una aplicación móvil o el modo de tokens de Sanctum.
-- Optimizaciones no pedidas (particiones, cachés, colas externas), salvo que una prueba de rendimiento del hito H7 las exija y se apruebe.
+- Optimizaciones no pedidas (particiones, cachés, colas externas), salvo que una prueba de rendimiento del hito H7 las exija y se apruebe. La cola con driver `database` y el planificador de Laravel **sí** están permitidos: no son servicios externos y la arquitectura los exige (`docs/arquitectura.md` §11).
 
 ## 6. Cómo se prepara el terreno para la Fase 2 sin construirla
 
@@ -92,13 +92,4 @@ Nada de esto autoriza a anticipar tablas, endpoints o campos de la Fase 2.
 
 ## 8. Qué historias entran en cada hito
 
-| Hito | Historias | Entregable demostrable |
-|---|---|---|
-| H0 | Transversal | Entorno, verificación, CI, estructura DDD, historial y formato de errores |
-| H1 | HU-01, HU-02, HU-03, HU-04, HU-05, HU-27, HU-29 y HU-28 (solo categorías) | Usuarios por consola, sesión, equipos, jugadores, asignaciones y visibilidad por asignación |
-| H2 | HU-06 a HU-09 y HU-28 (periodos y asignaturas) | Materias, inscripciones, calificaciones, criterios y riesgo académico |
-| H3 | HU-10 a HU-13 y HU-28 (lugares, temporadas, torneos y rivales) | Entrenamientos, asistencia, partidos, convocatorias y alineación |
-| H4 | HU-14 a HU-16 | Captura por posición, plantillas, umbrales y resultado |
-| H5 | HU-17 a HU-21 y HU-30 | Mediciones, pruebas, avisos, lesiones y disponibilidad |
-| H6 | HU-22 a HU-25 | Alertas, listado, vista para convocar y datos para gráficos |
-| H7 | HU-26 y transversal | Historial consultable, revisión de seguridad y rendimiento |
+La relación entre hitos, historias y entregables vive **solo** en `docs/plan-fase-1.md` §2, para que no haya dos versiones que se desfasen.

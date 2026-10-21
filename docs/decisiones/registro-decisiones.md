@@ -1,6 +1,6 @@
 # Registro de decisiones tomadas por defecto tras la auditoría
 
-**Fecha:** 19 de octubre de 2026
+**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026)
 **Estado:** Pendiente de validación
 
 La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los documentos. Para trabajar con lo que se tiene, el equipo de análisis aplicó la **recomendación de la auditoría** en cada una y las registró aquí. Ninguna cuenta como validada por la institución. Cada una indica antes de qué hito debe confirmarse; si se cambia, se corrige el documento afectado y se anota en este registro.
@@ -27,6 +27,15 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-16 | Seguridad de acceso: contraseña de al menos 10 caracteres, bloqueo de 15 minutos tras 5 intentos fallidos, sesión de 120 minutos de inactividad | Req RNF-10; Arq ADR-14 | H1 | OM-10 |
 | DD-17 | Entre entrenadores de un mismo equipo se aplica la regla estricta de RN-14 (cada uno ve solo lo que registró) | Req RN-22; Arq 13 | H3 | Arq 13 |
 | DD-18 | Un partido no incluye la categoría como campo propio (se toma del equipo) y el entrenamiento incluye hora de fin y responsable | Req HU-10, HU-12; Arq 7.5 | H3 | DA-06 |
+| DD-19 | La ventana de 30 días de RN-09 es móvil y termina en la fecha de cálculo, inclusive; cuando las faltas salen de la ventana o termina la temporada, la acumulación deja de estar activa. *Validar con la coordinación deportiva* | Req RN-09; Arq 11; Pruebas RN-09 | H6 | v1.2 §3.1 |
+| DD-20 | El promedio de RN-04 se redondea a dos decimales al medio hacia arriba (7.495 se vuelve 7.50). *Validar con la coordinación académica* | Req RN-04; Arq 7.1; Pruebas RN-04 | H2 | v1.2 §3.2 |
+| DD-21 | Técnica: cola `database` con servicio `worker`, y `alertas:recalcular` programado a diario a las 02:00 America/Mexico_City con el servicio `scheduler` | Arq 11; Plan 1.1; Alcance 5; Criterios H0 y H6 | H0 (servicios) y H6 (programación) | v1.2 §3.3 |
+| DD-22 | Técnica: los decimales viajan como cadena con dos decimales en el JSON de la API; los enteros, como número | Conv. API §1; Arq 7.1 | H2 | v1.2 §3.4 |
+| DD-23 | Técnica: las reglas del agente viven en `backend/.ai/guidelines/proyecto.md`; Laravel Boost genera `backend/CLAUDE.md` y `backend/AGENTS.md`; el `CLAUDE.md` y el `AGENTS.md` de la raíz son punteros escritos a mano | README §2; Plan 1.1 | H0 | v1.2 §3.5 |
+| DD-24 | Técnica: la validación de respuestas contra `docs/api/openapi.yaml` usa `osteel/openapi-httpfoundation-testing` (aprobada por el responsable en F1-H0-T09; resuelve AB-05) | `backend/composer.json`; pruebas de contrato | H0 | AB-05 |
+| DD-25 | Técnica: la cola `database` usa las tablas `trabajos` y `trabajos_fallidos`, generadas con los comandos de Laravel, en el grupo 000 de migraciones. Sus columnas y su `id` numérico son los que exige el driver de cola; solo el nombre de la tabla está en español | `backend/config/queue.php`; `database/migrations/compartido/`; Arq 8.2 y 11 | H0 | F1-H0-EXTRA |
+| DD-26 | Técnica: el almacén de caché por defecto es `file`, sin tabla `cache`; el framework lo usa para sus señales internas (por ejemplo, `queue:restart`). Las migraciones por defecto de Laravel (usuarios, caché y cola) se omitieron en F1-H0-T03 | `backend/config/cache.php` | H0 | F1-H0-EXTRA |
+| DD-27 | Técnica: la integración continua crea los roles con el mismo guion que el contenedor de base de datos y ejecuta `migrate:fresh`, `migrate:rollback` y `migrate` antes de `composer verificar` | `.github/workflows/verificar.yml`; Pruebas §3 | H0 | F1-H0-T10 |
 
 ## 2. Decisiones que siguen abiertas
 
@@ -38,8 +47,8 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 | AB-02 | Cifra estimada de futbolistas para dimensionar | Institución | H7 |
 | AB-03 | Plazo de conservación del historial tras la baja de un jugador | Institución | H7 |
 | AB-04 | Respaldos y recuperación de la base (frecuencia y retención) | Responsable del proyecto | Antes de producción |
-| AB-05 | Librería de validación contra OpenAPI | Responsable, a propuesta del agente | T09 de H0 |
-| AB-06 | Si habrá aplicación móvil (cambia el modo de Sanctum) | Responsable | H1 |
+| AB-05 | Librería de validación contra OpenAPI. **Resuelta en DD-24** | Responsable, a propuesta del agente | T09 de H0 |
+| AB-06 | Si habrá aplicación móvil (cambia el modo de Sanctum). **Resuelta el 21/10/2026: no habrá aplicación móvil; Sanctum en modo SPA con cookies** | Responsable | H1 |
 | AB-07 | Si existe reglamento de elegibilidad para convocar | Institución | H3 |
 | AB-08 | Origen de la retícula y quién verifica la carga inicial | Institución | H2 |
 | AB-09 | Quién construye el frontend y cuándo | Responsable | Planificación de la Fase 2 |

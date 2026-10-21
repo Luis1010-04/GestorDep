@@ -1,8 +1,8 @@
 # Documento de Requisitos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas, Universidad del Fútbol y Ciencias del Deporte
-**Versión:** 1.1 (corregida tras la auditoría cruzada)
-**Fecha:** 19 de octubre de 2026
+**Versión:** 1.2 (precisiones de RN-04 y RN-09)
+**Fecha:** 21 de octubre de 2026
 **Estado:** Pendiente de validación por la institución. Lo marcado **[Propuesta]** o **[Decisión por defecto]** debe validarse antes de construir la parte que lo usa (ver `docs/decisiones/registro-decisiones.md`)
 
 ## Control de versiones
@@ -11,6 +11,7 @@
 |---|---|---|
 | 1.0 | 12/10/2026 | Primera versión, derivada del proceso de descubrimiento y del documento "Proceso general del sistema web" |
 | 1.1 | 19/10/2026 | Correcciones de la auditoría cruzada: RN-19 a RN-23, HU-27 a HU-30, referencias cruzadas, matriz de visibilidad, RNF-10 y RNF-11, y backlog completo según el PDF |
+| 1.2 | 21/10/2026 | RN-04: tipo de redondeo. RN-09: ventana móvil de 30 días y vencimiento por tiempo. HU-17: cómo se confirma una corrección |
 
 ## 1. Introducción
 
@@ -79,7 +80,7 @@ Los valores marcados como **[Propuesta]** son valores de fábrica sugeridos por 
 - **RN-01.** La escala de calificación es de 0 a 10. **[Propuesta]** Calificación mínima aprobatoria general: 7.0.
 - **RN-02.** El sistema calcula automáticamente el promedio general y el número de materias reprobadas a partir de las calificaciones capturadas. **[Propuesta]** La calificación de una materia es la final si existe; si no, el promedio de sus parciales. Una materia sin ninguna calificación no cuenta como reprobada y marca el dato como incompleto (HU-09).
 - **RN-03.** Un docente puede definir un criterio propio para su materia, que prevalece sobre el general. El sistema debe mostrar siempre cuál criterio se aplicó.
-- **RN-04.** El riesgo académico es único para todo el jugador, se calcula sobre el periodo escolar vigente y tiene tres niveles. **[Propuesta]** El promedio se redondea a dos decimales antes de comparar y prevalece el nivel más grave que se cumpla.
+- **RN-04.** El riesgo académico es único para todo el jugador, se calcula sobre el periodo escolar vigente y tiene tres niveles. **[Propuesta]** El promedio se redondea a dos decimales antes de comparar y prevalece el nivel más grave que se cumpla. **[Decisión por defecto]** El redondeo es al medio hacia arriba (7.495 se vuelve 7.50).
   - *Sin riesgo:* promedio general igual o mayor a 7.5 y ninguna materia reprobada.
   - *En observación:* promedio igual o mayor a 7.0 y menor a 7.5, o una materia reprobada.
   - *En riesgo:* promedio menor a 7.0, o dos o más materias reprobadas.
@@ -89,7 +90,7 @@ Los valores marcados como **[Propuesta]** son valores de fábrica sugeridos por 
 - **RN-06.** La calificación general de partido usa una escala de números enteros de 1 a 10. **[Propuesta]** 1 a 4 deficiente, 5 a 6 regular, 7 a 8 bueno, 9 a 10 sobresaliente. Esto permite que un 8 signifique lo mismo en todos los equipos.
 - **RN-07.** Cada posición tiene una plantilla de captura y de umbrales. El entrenador puede usarla, ajustarla o crear la suya por jugador. Todo cambio de umbral queda registrado.
 - **RN-08.** "Bajo rendimiento" se determina así: el sistema promedia las últimas N calificaciones generales del jugador (N es la ventana de su umbral) y compara el promedio con el umbral; el resultado es "pasa" o "no pasa". Si el jugador tiene menos de N calificaciones, el resultado es "datos insuficientes" y no activa ninguna alerta. **[Propuesta]** Plantilla base: N = 5, umbral 6.0.
-- **RN-09.** Acumulación de sanciones deportivas. **[Propuesta]** Se activa con una tarjeta roja, o con tres amarillas en la temporada, o con tres inasistencias injustificadas ("falta", no "falta justificada") a entrenamientos en 30 días. Se calcula por equipo, con los datos que registró su entrenador. La tarjeta roja mantiene la acumulación activa hasta el final de la temporada en que ocurrió. Las sanciones académicas son una categoría separada y quedan en el backlog.
+- **RN-09.** Acumulación de sanciones deportivas. **[Propuesta]** Se activa con una tarjeta roja, o con tres amarillas en la temporada, o con tres inasistencias injustificadas ("falta", no "falta justificada") a entrenamientos en 30 días. Se calcula por equipo, con los datos que registró su entrenador. La tarjeta roja mantiene la acumulación activa hasta el final de la temporada en que ocurrió. **[Decisión por defecto]** Los 30 días son una ventana móvil que termina en la fecha de cálculo, inclusive; cuando las faltas salen de la ventana o termina la temporada, la acumulación deja de estar activa aunque no se haya capturado nada nuevo. Las sanciones académicas son una categoría separada y quedan en el backlog.
 - **RN-10.** Riesgo de baja deportiva: se activa cuando el jugador "no pasa" su umbral de rendimiento o tiene acumulación de sanciones deportivas. "Datos insuficientes" no lo activa. Se calcula por equipo, con el umbral del entrenador de ese equipo.
 - **RN-11.** Asistencia a entrenamientos: cada registro es presente, falta o falta justificada.
 
@@ -235,7 +236,7 @@ Como entrenador, quiero que el sistema compare el promedio del jugador con su um
 **HU-17. Registrar medidas periódicas.**
 Como entrenador, quiero registrar peso y estatura por periodo, para seguir la evolución física.
 - Dado un jugador, cuando se captura peso y estatura en un periodo, entonces se guardan junto con el índice de masa corporal calculado automáticamente.
-- Dado una medida ya registrada para el periodo, cuando se captura otra, entonces el sistema pide confirmar si es una corrección.
+- Dado una medida ya registrada para el periodo, cuando se captura otra, entonces el sistema pide confirmar si es una corrección; confirmada con un motivo, reemplaza la anterior y la anterior queda en el historial (`docs/convenciones-api.md` §4.1).
 - Dado un historial de medidas, cuando se consulta, entonces se muestra su evolución.
 
 **HU-18. Registrar pruebas físicas.**
