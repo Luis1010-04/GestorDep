@@ -61,6 +61,29 @@ final class MacrosDeEsquema
                 "alter table {$tabla} add constraint ck_{$tabla}_operacion
                     check (operacion in ('crear', 'actualizar', 'eliminar', 'restaurar'))"
             );
+
+            $this->soloInsercion($tabla);
+        });
+
+        // Seccion 9.2: el disparador rechaza UPDATE y DELETE aun al propietario, y el rol de aplicacion pierde ambos permisos.
+        Builder::macro('soloInsercion', function (string $tabla): void {
+            /** @var Builder $this */
+            $conexion = $this->getConnection();
+            $rolAplicacion = config('database.connections.pgsql.username');
+
+            $conexion->statement(<<<'SQL'
+                create or replace function rechazar_modificacion_historial() returns trigger
+                language plpgsql as $$
+                begin
+                    raise exception 'historial_solo_insercion: %', tg_table_name;
+                end;
+                $$
+                SQL);
+            $conexion->statement(
+                "create trigger tg_{$tabla}_solo_insercion before update or delete on {$tabla}
+                    for each row execute function rechazar_modificacion_historial()"
+            );
+            $conexion->statement("revoke update, delete on {$tabla} from \"{$rolAplicacion}\"");
         });
     }
 }
