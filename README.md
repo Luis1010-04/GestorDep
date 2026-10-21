@@ -28,7 +28,7 @@ Todo se ejecuta con `make`, dentro de Docker. Los objetivos se agregan por tarea
 
 | Comando | Qué hace | Disponible desde |
 |---|---|---|
-| `make levantar` / `make bajar` | Inicia y detiene el entorno | F1-H0-T02 |
+| `make levantar` / `make bajar` | Inicia y detiene el entorno: `app`, `db`, `worker` (cola `database`) y `scheduler` (planificador) | F1-H0-T02 |
 | `make consola` | Terminal dentro del contenedor de la aplicación | F1-H0-T02 |
 | `make migrar` / `make fresh` | Migra / reconstruye la base | F1-H0-T04 |
 | `make pruebas` | Ejecuta solo las pruebas | F1-H0-T04 |

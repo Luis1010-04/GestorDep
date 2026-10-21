@@ -1,31 +1,48 @@
+# Configuracion comun de app, worker y scheduler: misma imagen, codigo y conexion a la base
+x-aplicacion: &aplicacion
+  image: gestordep-app
+  build:
+    context: ./backend/docker/app
+  working_dir: /var/www/html
+  volumes:
+    - ./backend:/var/www/html
+    # El contrato vive en docs/api/openapi.yaml; las pruebas lo leen desde base_path('../docs')
+    - ./docs:/var/www/docs:ro
+  environment:
+    DB_HOST: db
+    DB_PORT: 5432
+    DB_DATABASE: ${DB_DATABASE:?Falta DB_DATABASE en .env}
+    DB_DATABASE_PRUEBAS: ${DB_DATABASE_PRUEBAS:?Falta DB_DATABASE_PRUEBAS en .env}
+    DB_USERNAME: ${DB_USERNAME:?Falta DB_USERNAME en .env}
+    DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env}
+    DB_PROPIETARIO: ${DB_PROPIETARIO:?Falta DB_PROPIETARIO en .env}
+    DB_PROPIETARIO_CLAVE: ${DB_PROPIETARIO_CLAVE:?Falta DB_PROPIETARIO_CLAVE en .env}
+  depends_on:
+    db:
+      condition: service_healthy
+
 services:
   app:
-    build:
-      context: ./backend/docker/app
-    working_dir: /var/www/html
+    <<: *aplicacion
     command: tail -f /dev/null
-    volumes:
-      - ./backend:/var/www/html
-      # El contrato vive en docs/api/openapi.yaml; las pruebas lo leen desde base_path('../docs')
-      - ./docs:/var/www/docs:ro
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: ${DB_DATABASE:?Falta DB_DATABASE en .env}
-      DB_DATABASE_PRUEBAS: ${DB_DATABASE_PRUEBAS:?Falta DB_DATABASE_PRUEBAS en .env}
-      DB_USERNAME: ${DB_USERNAME:?Falta DB_USERNAME en .env}
-      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env}
-      DB_PROPIETARIO: ${DB_PROPIETARIO:?Falta DB_PROPIETARIO en .env}
-      DB_PROPIETARIO_CLAVE: ${DB_PROPIETARIO_CLAVE:?Falta DB_PROPIETARIO_CLAVE en .env}
-    depends_on:
-      db:
-        condition: service_healthy
     healthcheck:
       # Conecta con el rol de aplicacion; una excepcion de PDO termina con codigo distinto de cero
       test: ["CMD", "php", "-r", "new PDO('pgsql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));"]
       interval: 5s
       timeout: 5s
       retries: 10
+
+  # Cola `database` (docs/arquitectura.md §11); usa el rol de aplicacion
+  worker:
+    <<: *aplicacion
+    command: php artisan queue:work --tries=3
+    restart: unless-stopped
+
+  # Planificador de Laravel (docs/arquitectura.md §11); las tareas programadas llegan en H6
+  scheduler:
+    <<: *aplicacion
+    command: php artisan schedule:work
+    restart: unless-stopped
 
   db:
     image: postgres:16

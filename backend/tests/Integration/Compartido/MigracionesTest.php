@@ -2,6 +2,7 @@
 
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 use function Pest\Laravel\artisan;
 
@@ -24,6 +25,18 @@ test('F1-H0-T07: la migracion de citext se revierte y se vuelve a aplicar', func
 
     artisan('migrate', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     expect(citextHabilitada())->toBeTrue();
+});
+
+test('F1-H0-EXTRA: migrate:fresh crea las tablas de la cola database que usa la configuracion', function () {
+    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+
+    $tablaDeTrabajos = config('queue.connections.database.table');
+    $tablaDeFallidos = config('queue.failed.table');
+
+    expect($tablaDeTrabajos)->toBe('trabajos')
+        ->and($tablaDeFallidos)->toBe('trabajos_fallidos')
+        ->and(Schema::connection('propietario')->hasTable($tablaDeTrabajos))->toBeTrue()
+        ->and(Schema::connection('propietario')->hasTable($tablaDeFallidos))->toBeTrue();
 });
 
 test('F1-H0-T07: las migraciones de las subcarpetas por contexto estan registradas', function () {
