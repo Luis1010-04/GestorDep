@@ -9,5 +9,8 @@ class DatabaseSeeder extends Seeder
     /**
      * Los seeders de datos de fabrica se agregan por hito (docs/arquitectura.md, seccion 8.4).
      */
-    public function run(): void {}
+    public function run(): void
+    {
+        $this->call(RolesSeeder::class);
+    }
 }

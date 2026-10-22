@@ -68,7 +68,14 @@ beforeEach(function () {
     });
     $esquema->historial('prueba_registros', 'prueba_registro_id');
 
-    DB::connection('propietario')->table('usuarios')->insert(['id' => USUARIO_DE_PRUEBA]);
+    DB::connection('propietario')->table('usuarios')->insert([
+        'id' => USUARIO_DE_PRUEBA,
+        ...(usuariosCreadosPorLaPrueba() ? [] : [
+            'nombre' => 'Usuario de prueba',
+            'correo' => 'historial@example.test',
+            'contrasena_hash' => 'hash-de-prueba',
+        ]),
+    ]);
 });
 
 afterEach(function () {

@@ -76,13 +76,13 @@ Origen de la columna **Hito**:
 | Elemento | Hito | Pruebas |
 |---|---|---|
 | RNF-01 Confidencialidad | H1 a H7 | |
-| RNF-02 Trazabilidad | H0 a H7 | H0: `EscritorDeHistorialTest`, `MacrosDeEsquemaTest` |
-| RNF-03 Integridad | H1 a H7 | |
+| RNF-02 Trazabilidad | H0 a H7 | H0: `EscritorDeHistorialTest`, `MacrosDeEsquemaTest`; H1: `MigracionesDeIdentidadTest` |
+| RNF-03 Integridad | H1 a H7 | H1: `MigracionesDeIdentidadTest` |
 | RNF-04 Vigencia de datos | H6 | |
 | RNF-05 Usabilidad | H4 (solo los campos de la posición); el resto, fuera de la Fase 1 | |
 | RNF-06 Capacidad | H7 | |
 | RNF-07 Disponibilidad | Fuera de la Fase 1 | |
 | RNF-08 Idioma | H0 a H7 | H0: `TextosEnLangTest`, `FormatoDeErrorTest` |
 | RNF-09 Extensibilidad | H2, H4 | |
-| RNF-10 Seguridad de acceso | H1 | |
+| RNF-10 Seguridad de acceso | H1 | H1: `MigracionesDeIdentidadTest` (tabla `sessions`) |
 | RNF-11 Mantenibilidad y pruebas | H0 a H7 | |
