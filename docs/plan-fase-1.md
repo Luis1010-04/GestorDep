@@ -1,6 +1,6 @@
 # Plan de la Fase 1 (API del MVP)
 
-**Versión:** 1.2
+**Versión:** 1.2.1
 **Fecha:** 21 de octubre de 2026
 **Origen:** sección 5 del Documento de Arranque v1.0, con las dependencias corregidas por la auditoría (IC-04, IC-05).
 
@@ -58,7 +58,9 @@ Algunas historias tienen criterios que necesitan datos de otro hito. Se implemen
 
 | Historia y criterio | Se verifica en | Motivo |
 |---|---|---|
+| HU-01, criterio 3 (un entrenador no ve funciones exclusivas de docente) y la parte docente del criterio 4 | H2 | En H1 no existen funciones exclusivas de docente |
 | HU-02, criterio 2 (docente ve solo a sus alumnos) | H2 | Necesita materias e inscripciones |
+| HU-04, criterio 2 (cada entrenador ve solo lo que registró) | H4 | En H1 ningún entrenador registra datos del jugador salvo el alta; el primer dato con registrante es el rendimiento |
 | HU-04, criterio 3 (mismo estado de disponibilidad para los dos entrenadores) | H5 | Necesita el estado de disponibilidad |
 | HU-29, criterio 3 (el jugador en baja no aparece en convocatorias) | H3 | Necesita convocatorias |
 | HU-29, criterio 3 (el jugador en baja no aparece en listados ni alertas) | H6 | Necesita listado y alertas |
@@ -98,7 +100,7 @@ Un hito se da por cerrado cuando se cumple todo lo siguiente:
 
 ## 5. Qué se escribe y cuándo
 
-- La especificación de cada hito (`docs/hitos/f1-hN.md`) se redacta **justo antes** de empezarlo, con lo aprendido en el anterior. Solo H0 está escrita.
+- La especificación de cada hito (`docs/hitos/f1-hN.md`) se redacta **justo antes** de empezarlo, con lo aprendido en el anterior. H0 y H1 están escritas.
 - Cada especificación de hito incluye: tareas con las rutas que se pueden tocar, criterios de aceptación por tarea, tablas de casos de ejemplo de las reglas del hito, criterios diferidos y el guion de humo.
 - **Cada especificación de hito es autocontenida.** Copia el texto de las HU y RN del hito, sus tablas de casos y las tablas de datos de `docs/arquitectura.md` que usa. Así el agente trabaja con la especificación y consulta los documentos completos solo ante una duda, lo que ahorra contexto en cada tarea.
 - **Cada tarea se trabaja en una sesión nueva del agente**, que termina con el reporte y espera aprobación.

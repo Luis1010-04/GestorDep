@@ -1,7 +1,7 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.2 (ajustes para el trabajo con agentes; ver sección 14)
+**Versión:** 1.2.1 (ver sección 14)
 **Fecha:** 21 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
@@ -166,7 +166,7 @@ Los modelos Eloquent viven en `src/{Contexto}/Infraestructura/`, nunca en `app/M
 | `roles` | codigo (docente/entrenador), nombre | UQ `codigo` |
 | `usuario_rol` *(sin auditoría)* | usuario_id, rol_id | PK compuesta |
 
-Los usuarios se crean con el comando de consola `usuarios:crear` (RN-19) mientras no exista perfil de administración; la contraseña se pide por consola y se guarda solo como hash. La tabla `sessions` de Laravel (sesión) es de framework y no lleva auditoría.
+Los usuarios se crean con el comando de consola `usuarios:crear` (RN-19) mientras no exista perfil de administración; la contraseña se pide por consola y se guarda solo como hash. La tabla `sessions` de Laravel (driver `database`, DD-28) es de framework y no lleva auditoría.
 
 ### 7.3 Plantel
 
@@ -270,7 +270,7 @@ Una alerta cerrada se conserva: su historial es el propio registro (`activada_en
 
 | Grupo | Contenido |
 |---|---|
-| 000 | Extensión `citext` |
+| 000 | Extensión `citext`; tablas del framework: `trabajos` y `trabajos_fallidos` (H0) y `sessions` (H1) |
 | 010 | Identidad: `usuarios`, `roles`, `usuario_rol` |
 | 020 | Plantel: `categorias`, `posiciones`, `jugadores`, `equipos`, `jugador_equipo`, `entrenador_equipo`, `bajas_jugador` |
 | 030 | Académico: `periodos_escolares`, `asignaturas`, `materias`, `inscripciones`, `criterios_aprobacion`, `calificaciones`, `asistencias_clase`, `resumenes_academicos` |
@@ -407,3 +407,4 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 |---|---|---|
 | 1.1 | 19/10/2026 | Correcciones de la auditoría cruzada |
 | 1.2 | 21/10/2026 | Sección 5: todo bajo `backend/` y plantilla de contexto separada (Consultas sin Dominio). Sección 7.1: unicidad parcial con borrado lógico en todas las tablas, nombres de catálogo `citext`, decimales exactos con redondeo `HALF_UP`. Tipos `numeric(4,2)` en plantillas, umbrales y evaluaciones. Sección 7.9: única modificación permitida en `alertas`. Sección 11: cola `database` con servicio `worker`, eventos después del commit, recálculo diario programado y reloj inyectable |
+| 1.2.1 | 22/10/2026 | Sección 7.2 y grupo 000 de 8.2: la tabla `sessions` (driver `database`) y las tablas de cola de H0 |
