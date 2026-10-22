@@ -44,11 +44,13 @@ Todo se agrupa en `make verificar` (en el contenedor: `composer verificar`).
 
 ## 4. Umbrales de calidad
 
-| Capa | Cobertura mínima | Desde |
-|---|---|---|
-| Dominio | 95 % (y pruebas de mutación desde H2) | H1 |
-| Aplicación | 85 % | H1 |
-| Infraestructura y HTTP | 70 % | H1 |
+| Capa | Rutas medidas | Cobertura mínima | Desde |
+|---|---|---|---|
+| Dominio | `src/*/Dominio/**` | 95 % (y pruebas de mutación desde H2) | H1 |
+| Aplicación | `src/*/Aplicacion/**` | 85 % | H1 |
+| Infraestructura y HTTP | `src/*/Infraestructura/**` y `app/**` | 70 % | H1 |
+
+La cobertura es de líneas ejecutables, calculada por capa desde el reporte Clover por `bin/verificar-cobertura.php`, que `composer verificar` ejecuta. Una capa sin archivos se reporta como "sin código" y no falla.
 
 En H0 la cobertura **se mide y se reporta, pero no bloquea**, porque todavía no hay código de negocio que cubrir. Desde H1 es exigible. Son valores iniciales: se ajustan con experiencia y **nunca se bajan para que una tarea pase**.
 
