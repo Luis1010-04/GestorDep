@@ -1,6 +1,6 @@
 # Convenciones de la API (se aplican desde H0)
 
-**Versión:** 1.2
+**Versión:** 1.2.1
 **Fecha:** 21 de octubre de 2026
 **Origen:** sección 7 del Documento de Arranque v1.0, con las correcciones de la auditoría (500 y 503, advertencias, excepción de la búsqueda por matrícula).
 
@@ -33,6 +33,7 @@ Este documento es una fuente de verdad del agente. Ante una contradicción con o
 | 404 | El recurso no existe **o no es visible para el usuario**. Un recurso fuera de su alcance responde 404 y no 403, para no revelar que existe |
 | 409 | Conflicto: matrícula duplicada, valor de catálogo repetido, medida ya registrada en el periodo |
 | 422 | Validación de campos |
+| 429 | Cuenta bloqueada temporalmente por intentos fallidos (RNF-10), con la cabecera `Retry-After` |
 | 500 | Error inesperado; sin trazas en producción |
 | 503 | La aplicación no alcanza un servicio que necesita (por ejemplo, la base de datos en la ruta de salud) |
 

@@ -12,10 +12,10 @@ Origen de la columna **Hito**:
 
 | Elemento | Hito | Pruebas |
 |---|---|---|
-| HU-01 Iniciar sesión | H1 | |
+| HU-01 Iniciar sesión | H1 (criterio 3 y parte docente del 4 en H2) | |
 | HU-02 Ver solo mis jugadores asignados | H1 (criterio 2 en H2) | |
 | HU-03 Registrar equipos y jugadores | H1 | |
-| HU-04 Asignar un jugador a varios equipos | H1 (criterio 3 en H5) | |
+| HU-04 Asignar un jugador a varios equipos | H1 (criterio 2 en H4, criterio 3 en H5) | |
 | HU-05 Mantener el estatus del jugador | H1 | |
 | HU-06 Dar de alta materias y alumnos | H2 | |
 | HU-07 Capturar calificaciones y asistencia a clases | H2 | |
@@ -59,11 +59,11 @@ Origen de la columna **Hito**:
 | RN-10 Riesgo de baja deportiva | H4, H6 | |
 | RN-11 Asistencia a entrenamientos | H3 | |
 | RN-12 Carga inicial y catálogos | H1, H2, H3 | |
-| RN-13 Detalle propio y resumen del resto | H6 | |
-| RN-14 Jugador en dos equipos | H1 | |
+| RN-13 Detalle propio y resumen del resto | H2, H6 | |
+| RN-14 Jugador en dos equipos | H1 (equipos propios); H3, H4 y H5 (datos que cada entrenador registra) | |
 | RN-15 Detalle de lesión solo para quien la registró | H5 | |
 | RN-16 Aviso pendiente de confirmación | H5 | |
-| RN-17 Conservación del historial y borrado lógico | H7 | |
+| RN-17 Conservación del historial y borrado lógico | H1 (borrado lógico e historial), H7 (consulta) | |
 | RN-18 Criterios de convocatoria y prioridad por desempeño | H3, H6 | |
 | RN-19 Usuarios creados por el equipo del proyecto | H1 | |
 | RN-20 Búsqueda por matrícula | H1 | |
@@ -76,13 +76,13 @@ Origen de la columna **Hito**:
 | Elemento | Hito | Pruebas |
 |---|---|---|
 | RNF-01 Confidencialidad | H1 a H7 | |
-| RNF-02 Trazabilidad | H0 a H7 | |
+| RNF-02 Trazabilidad | H0 a H7 | H0: `EscritorDeHistorialTest`, `MacrosDeEsquemaTest` |
 | RNF-03 Integridad | H1 a H7 | |
 | RNF-04 Vigencia de datos | H6 | |
 | RNF-05 Usabilidad | H4 (solo los campos de la posición); el resto, fuera de la Fase 1 | |
 | RNF-06 Capacidad | H7 | |
 | RNF-07 Disponibilidad | Fuera de la Fase 1 | |
-| RNF-08 Idioma | H0 a H7 | |
+| RNF-08 Idioma | H0 a H7 | H0: `TextosEnLangTest`, `FormatoDeErrorTest` |
 | RNF-09 Extensibilidad | H2, H4 | |
 | RNF-10 Seguridad de acceso | H1 | |
 | RNF-11 Mantenibilidad y pruebas | H0 a H7 | |

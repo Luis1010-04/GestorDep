@@ -30,7 +30,7 @@ Cada dato tiene **una sola fuente**; los demás documentos lo citan, no lo copia
 | `criterios-aceptacion-fase-1.md` | Cuándo se acepta una tarea, un hito y la fase | Quien revisa |
 | `estrategia-pruebas.md` | Herramientas, umbrales, pruebas de consola y tablas de casos | El agente y quien revisa |
 | `convenciones-api.md` | Formato de la API, errores, advertencias y confirmaciones | El agente y el frontend |
-| `hitos/f1-hN.md` | Especificación autocontenida de cada hito; solo existe H0 | El agente, durante ese hito |
+| `hitos/f1-hN.md` | Especificación autocontenida de cada hito; existen H0 y H1 | El agente, durante ese hito |
 | `decisiones/registro-decisiones.md` | Decisiones por defecto y decisiones abiertas | El responsable |
 | `trazabilidad.md` | HU, RN y RNF contra sus pruebas (se crea en T01 y se llena en cada hito) | Quien revisa |
 | `api/openapi.yaml` | Contrato de la API (se crea en T09 y crece con cada hito) | Agente y frontend |

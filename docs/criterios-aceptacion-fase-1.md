@@ -1,6 +1,6 @@
 # Criterios de aceptación de la Fase 1
 
-**Versión:** 1.1
+**Versión:** 1.2
 **Fecha:** 21 de octubre de 2026
 **Fuentes:** `docs/requisitos.md` v1.1, `docs/plan-fase-1.md`, `docs/estrategia-pruebas.md`
 
@@ -25,7 +25,7 @@ Los de la compuerta de `docs/plan-fase-1.md` (sección 4), más los propios de c
 | Hito | Criterios propios, además de la compuerta |
 |---|---|
 | H0 | `make levantar` y `make verificar` funcionan en una máquina limpia siguiendo solo el `README.md`; `make verificar` **falla** si se introduce a propósito un error de estilo, de tipos o una prueba rota; las pruebas de arquitectura **fallan** ante una violación de ejemplo; CI en verde; `GET /api/v1/salud` documentada; Docker Compose define los servicios `worker` y `scheduler`; ninguna tabla de negocio creada |
-| H1 | `usuarios:crear` funciona y está probado; un usuario inicia y cierra sesión; un entrenador crea un equipo y queda asignado; un jugador duplicado responde 409 sin datos del expediente; un jugador ajeno responde 404; la búsqueda por matrícula devuelve solo nombres, apellidos y matrícula; se bloquea la cuenta tras 5 intentos fallidos |
+| H1 | `usuarios:crear` funciona y está probado; un usuario inicia y cierra sesión; un entrenador crea un equipo y queda asignado; un jugador duplicado responde 409 sin datos del expediente; un jugador ajeno responde 404; la búsqueda por matrícula devuelve solo nombres, apellidos y matrícula; se bloquea la cuenta tras 5 intentos fallidos; el umbral de cobertura por capa es exigible en `make verificar` |
 | H2 | Las diez filas de la tabla de RN-04 pasan; el criterio propio de una materia prevalece sobre el general y el sistema indica cuál se aplicó; una calificación fuera de 0 a 10 se rechaza; el docente ve solo a sus alumnos; Infection corre sobre `Dominio/` |
 | H3 | Un empalme de lugar y horario advierte sin impedir; un jugador no convocado no entra a la alineación; un partido con resultado pasa a "jugado"; la asistencia acepta presente, falta y falta justificada; las advertencias usan el formato de `docs/convenciones-api.md` |
 | H4 | La captura pide solo los campos de la posición del jugador; las tablas de RN-08 y RN-10 pasan; un cambio de umbral guarda quién, cuándo y el valor anterior; el resultado del jugador en dos equipos usa solo los datos y el umbral de cada entrenador |
@@ -39,11 +39,11 @@ Cada historia se acepta cuando **todos** sus criterios de `docs/requisitos.md` t
 
 | Historia | Hito | Criterios | Pruebas requeridas | Criterio diferido |
 |---|---|---|---|---|
-| HU-01 Iniciar sesión | H1 | 4 | Feature, Seguridad | |
+| HU-01 Iniciar sesión | H1 | 4 | Feature, Seguridad | c3 y parte docente del c4 en H2 |
 | HU-02 Ver solo mis jugadores | H1 | 3 | Feature, Seguridad, Arch | c2 en H2 |
 | HU-27 Cerrar sesión y cambiar contraseña | H1 | 3 | Feature | |
 | HU-03 Registrar equipos y jugadores | H1 | 3 | Feature, Integración | |
-| HU-04 Asignar a varios equipos | H1 | 3 | Feature, Seguridad | c3 en H5 |
+| HU-04 Asignar a varios equipos | H1 | 3 | Feature, Seguridad | c2 en H4; c3 en H5 |
 | HU-05 Mantener el estatus | H1 | 2 | Feature, Integración | |
 | HU-29 Registrar la baja | H1 | 3 | Feature | c3 en H3 y H6 |
 | HU-28 Gestionar catálogos | H1, H2, H3 | 4 por catálogo | Feature, Integración | Categorías en H1; periodos y asignaturas en H2; lugares, temporadas, torneos y rivales en H3 |
