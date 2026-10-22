@@ -79,7 +79,7 @@
         "verificar": [
             "@php vendor/bin/pint --test",
             "@php vendor/bin/phpstan analyse --memory-limit=1G --no-progress",
-            "@php vendor/bin/pest --coverage --coverage-html=build/coverage",
+            "@php -d pcov.directory=. vendor/bin/pest --coverage --coverage-html=build/coverage",
             "@composer audit"
         ]
     },
