@@ -50,7 +50,7 @@ final class EscritorDeHistorial
                 'operacion' => $operacion,
                 'datos_anteriores' => $datosAnteriores === null ? null : json_encode($datosAnteriores, JSON_THROW_ON_ERROR),
                 'datos_nuevos' => $datosNuevos === null ? null : json_encode($datosNuevos, JSON_THROW_ON_ERROR),
-                'usuario_id' => $this->usuarioActual->identificador()->valor(),
+                'usuario_id' => $this->usuarioActual->identificador()?->valor(),
                 'ocurrido_en' => $this->reloj->ahora()->format('Y-m-d H:i:s.uP'),
                 'motivo' => $motivo,
             ]);

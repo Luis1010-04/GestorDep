@@ -14,5 +14,10 @@ return [
     'servicio_no_disponible' => 'El servicio no está disponible en este momento.',
 
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
-    'reglas' => [],
+    'reglas' => [
+        'contrasena_muy_corta' => 'La contraseña debe tener al menos 10 caracteres.',
+        'correo_duplicado' => 'Ya existe un usuario con ese correo.',
+        'rol_obligatorio' => 'El usuario debe tener al menos un rol.',
+        'rol_inexistente' => 'El rol indicado no existe.',
+    ],
 ];
