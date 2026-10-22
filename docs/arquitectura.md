@@ -336,6 +336,8 @@ El catálogo de métricas es el punto de crecimiento principal: agregar una esta
 
 Restricciones: UQ (`{entidad}_id`, `version`) e IX (`{entidad}_id`, `ocurrido_en` descendente).
 
+**Excepción:** en `usuarios_historial` la columna de la entidad se llama `usuario_afectado_id`, porque `usuario_id` (autor del cambio) ya existe (DD-34).
+
 ### 9.2 Cómo se escribe
 - El repositorio de cada agregado escribe el cambio y su registro de historial **en la misma transacción**; si una falla, fallan ambas.
 - Las tablas de historial son de solo inserción: se revoca `UPDATE` y `DELETE` al rol de la aplicación y se agrega un disparador que rechaza ambas operaciones.
