@@ -7,6 +7,8 @@ use Src\Compartido\Dominio\Identificador;
 /** Persistencia de categorías. Solo ve las no eliminadas; el borrado es lógico. */
 interface RepositorioDeCategorias
 {
+    public function buscarVigente(Identificador $id): ?Categoria;
+
     public function existeNombre(string $nombre): bool;
 
     /** Si otra petición registró el mismo nombre entre la comprobación y la escritura, lanza CategoriaDuplicada (Aplicacion). */

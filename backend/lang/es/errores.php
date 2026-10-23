@@ -23,5 +23,7 @@ return [
         'rol_obligatorio' => 'El usuario debe tener al menos un rol.',
         'rol_inexistente' => 'El rol indicado no existe.',
         'categoria_duplicada' => 'Ya existe una categoría con ese nombre.',
+        'equipo_duplicado' => 'Ya existe un equipo con ese nombre en la categoría.',
+        'categoria_inexistente' => 'La categoría indicada no existe.',
     ],
 ];

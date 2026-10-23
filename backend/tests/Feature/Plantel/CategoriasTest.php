@@ -84,7 +84,7 @@ test('HU-28: borrar una categoría con equipos da 204 y el equipo conserva su ca
 
     sesionesPeticion($this, 'DELETE', "/api/v1/categorias/$id", idDeSesion: sesionesIniciar($this, 'a@x.com'))->assertNoContent();
 
-    // La lectura del equipo por la API llega en T11; aquí se comprueba que la categoría sigue resoluble desde el equipo.
+    // Aquí se comprueba en la base que la categoría sigue resoluble desde el equipo; la lectura por la API (GET /equipos) la cubre EquiposTest.
     $categoria = DB::table('equipos')->join('categorias', 'categorias.id', '=', 'equipos.categoria_id')
         ->where('equipos.id', $equipoId)->value('categorias.nombre');
     expect($categoria)->toBe('Sub-17');

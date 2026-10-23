@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
+use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
 use Illuminate\Support\Facades\Route;
@@ -18,5 +19,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/categorias', [CategoriaController::class, 'listar']);
         Route::post('/categorias', [CategoriaController::class, 'crear']);
         Route::delete('/categorias/{id}', [CategoriaController::class, 'eliminar'])->whereUuid('id');
+
+        Route::get('/equipos', [EquipoController::class, 'listar']);
+        Route::post('/equipos', [EquipoController::class, 'crear']);
     });
 });

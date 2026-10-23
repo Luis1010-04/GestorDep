@@ -302,6 +302,125 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /equipos:
+    get:
+      operationId: listarEquipos
+      summary: Lista los equipos del entrenador que consulta
+      description: >-
+        Solo entrenadores (HU-03). Devuelve unicamente los equipos con asignacion vigente del usuario
+        (RN-22); orden por nombre. La categoria se muestra aunque haya sido eliminada.
+      tags: [Equipos]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [nombre, '-nombre'], default: nombre}
+      responses:
+        '200':
+          description: Pagina de equipos.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Equipo'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearEquipo
+      summary: Da de alta un equipo
+      description: >-
+        Solo entrenadores (HU-03). Quien lo crea queda asignado como entrenador (RN-22): el equipo, la fila
+        vigente de entrenador_equipo y sus historiales se escriben en una sola transaccion.
+      tags: [Equipos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre, categoria_id]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+                categoria_id:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Equipo creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Equipo'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe un equipo vigente con ese nombre y categoria (equipo_duplicado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Nombre ausente, vacio o de mas de 100 caracteres, o categoria_id ausente o mal formado
+            (validacion_fallida); categoria inexistente o eliminada (categoria_inexistente).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Categoria:
@@ -314,6 +433,29 @@ components:
           format: uuid
         nombre:
           type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Equipo:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, categoria, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        categoria:
+          type: object
+          additionalProperties: false
+          required: [id, nombre]
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombre:
+              type: string
         actualizado_en:
           type: string
           format: date-time

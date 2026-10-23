@@ -26,6 +26,17 @@ final class RepositorioDeCategoriasEloquent implements RepositorioDeCategorias
         private readonly Reloj $reloj,
     ) {}
 
+    public function buscarVigente(Identificador $id): ?Categoria
+    {
+        $fila = $this->vigentes()->where('id', $id->valor())->first(['id', 'nombre', 'actualizado_en']);
+
+        return $fila === null ? null : new Categoria(
+            Identificador::desdeTexto($fila->id),
+            $fila->nombre,
+            (new DateTimeImmutable($fila->actualizado_en))->setTimezone(new DateTimeZone('UTC')),
+        );
+    }
+
     public function existeNombre(string $nombre): bool
     {
         return $this->vigentes()->where('nombre', $nombre)->exists();
