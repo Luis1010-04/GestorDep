@@ -15,6 +15,8 @@ return [
 
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
     'reglas' => [
+        'credenciales_invalidas' => 'Las credenciales no son válidas.',
+        'cuenta_bloqueada' => 'La cuenta está bloqueada temporalmente por intentos fallidos.',
         'contrasena_muy_corta' => 'La contraseña debe tener al menos 10 caracteres.',
         'correo_duplicado' => 'Ya existe un usuario con ese correo.',
         'rol_obligatorio' => 'El usuario debe tener al menos un rol.',

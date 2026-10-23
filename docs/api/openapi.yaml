@@ -40,8 +40,91 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /sanctum/csrf-cookie:
+    servers:
+      - url: /
+    get:
+      operationId: obtenerCookieCsrf
+      summary: Entrega la cookie XSRF-TOKEN y abre la sesion (ruta estandar de Sanctum, fuera de /api/v1)
+      tags: [Sesion]
+      responses:
+        '204':
+          description: Cookie entregada.
+  /sesion:
+    post:
+      operationId: iniciarSesion
+      summary: Inicia sesion con correo y contrasena
+      description: >-
+        Cinco contrasenas incorrectas seguidas bloquean la cuenta 15 minutos (RNF-10).
+        Un usuario inexistente, desactivado o con contrasena incorrecta responde siempre lo mismo.
+      tags: [Sesion]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [correo, contrasena]
+              properties:
+                correo:
+                  type: string
+                contrasena:
+                  type: string
+      responses:
+        '200':
+          description: Sesion iniciada; el identificador de sesion se regenera.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Credenciales invalidas (codigo credenciales_invalidas).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Falta el correo o la contrasena (codigo validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Cuenta bloqueada (codigo cuenta_bloqueada).
+          headers:
+            Retry-After:
+              description: Segundos que faltan para que termine el bloqueo.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Usuario:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, correo, roles]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        correo:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+            enum: [docente, entrenador]
     Error:
       type: object
       additionalProperties: false

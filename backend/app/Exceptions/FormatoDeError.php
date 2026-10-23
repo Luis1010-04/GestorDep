@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
+use Src\Identidad\Aplicacion\CredencialesInvalidas;
+use Src\Identidad\Aplicacion\CuentaBloqueada;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -32,6 +34,8 @@ final class FormatoDeError
     {
         return match (true) {
             $e instanceof ValidationException => self::respuesta(422, 'validacion_fallida', self::erroresDeCampo($e)),
+            $e instanceof CuentaBloqueada => self::reglaDeNegocio($e, 429)->header('Retry-After', (string) $e->segundosRestantes()),
+            $e instanceof CredencialesInvalidas => self::reglaDeNegocio($e, 401),
             $e instanceof ReglaDeNegocioViolada => self::reglaDeNegocio($e),
             $e instanceof AuthenticationException => self::respuesta(401, 'no_autenticado'),
             $e instanceof ServicioNoDisponible => self::respuesta(503, 'servicio_no_disponible'),
@@ -44,12 +48,12 @@ final class FormatoDeError
         };
     }
 
-    private static function reglaDeNegocio(ReglaDeNegocioViolada $e): JsonResponse
+    private static function reglaDeNegocio(ReglaDeNegocioViolada $e, int $estado = 422): JsonResponse
     {
         $clave = 'errores.reglas.'.$e->codigo();
         $mensaje = Lang::has($clave) ? __($clave) : __('errores.regla_de_negocio_violada');
 
-        return self::json(422, $e->codigo(), $mensaje, []);
+        return self::json($estado, $e->codigo(), $mensaje, []);
     }
 
     /**

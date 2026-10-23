@@ -2,8 +2,11 @@
 
 namespace Src\Identidad\Infraestructura;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Illuminate\Database\ConnectionInterface;
 use Src\Compartido\Aplicacion\UsuarioActual;
+use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Identidad\Dominio\RepositorioDeUsuarios;
 use Src\Identidad\Dominio\Usuario;
@@ -25,6 +28,42 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
     public function existeRol(string $codigo): bool
     {
         return $this->conexion->table('roles')->where('codigo', $codigo)->exists();
+    }
+
+    public function buscarPorCorreo(string $correo): ?Usuario
+    {
+        $fila = $this->conexion->table('usuarios')->where('correo', $correo)->whereNull('eliminado_en')->first();
+        if ($fila === null) {
+            return null;
+        }
+
+        $roles = $this->conexion->table('usuario_rol')
+            ->join('roles', 'roles.id', '=', 'usuario_rol.rol_id')
+            ->where('usuario_rol.usuario_id', $fila->id)
+            ->orderBy('roles.codigo')
+            ->pluck('roles.codigo')
+            ->all();
+
+        return Usuario::reconstituir(
+            Identificador::desdeTexto($fila->id),
+            $fila->nombre,
+            $fila->correo,
+            $fila->contrasena_hash,
+            (bool) $fila->activo,
+            $roles,
+            (int) $fila->intentos_fallidos,
+            $fila->bloqueado_hasta === null
+                ? null
+                : (new DateTimeImmutable($fila->bloqueado_hasta))->setTimezone(new DateTimeZone('UTC')),
+        );
+    }
+
+    public function guardarAcceso(Usuario $usuario): void
+    {
+        $this->conexion->table('usuarios')->where('id', $usuario->id()->valor())->update([
+            'intentos_fallidos' => $usuario->intentosFallidos(),
+            'bloqueado_hasta' => $usuario->bloqueadoHasta()?->format('Y-m-d H:i:s.uP'),
+        ]);
     }
 
     public function guardarNuevo(Usuario $usuario): void
