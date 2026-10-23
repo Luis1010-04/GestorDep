@@ -45,6 +45,11 @@ function escritorDeHistorial(): EscritorDeHistorial
         {
             return usuarioDePrueba();
         }
+
+        public function roles(): array
+        {
+            return [];
+        }
     };
 
     return new EscritorDeHistorial(DB::connection(), new RelojFijo(momentoDePrueba()), $usuario);
@@ -222,6 +227,11 @@ test('F1-H1-T04: sin usuario actual el historial se escribe con usuario_id nulo'
         public function identificador(): ?Identificador
         {
             return null;
+        }
+
+        public function roles(): array
+        {
+            return [];
         }
     };
     $escritor = new EscritorDeHistorial(DB::connection(), new RelojFijo(momentoDePrueba()), $sinUsuario);

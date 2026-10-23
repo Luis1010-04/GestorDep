@@ -8,4 +8,7 @@ use Src\Compartido\Dominio\Identificador;
 interface UsuarioActual
 {
     public function identificador(): ?Identificador;
+
+    /** @return list<string> codigos de los roles del usuario; vacio sin sesion */
+    public function roles(): array;
 }
