@@ -22,5 +22,6 @@ return [
         'correo_duplicado' => 'Ya existe un usuario con ese correo.',
         'rol_obligatorio' => 'El usuario debe tener al menos un rol.',
         'rol_inexistente' => 'El rol indicado no existe.',
+        'categoria_duplicada' => 'Ya existe una categoría con ese nombre.',
     ],
 ];

@@ -11,6 +11,7 @@ use Src\Compartido\Dominio\ReglaDeNegocioViolada;
 use Src\Identidad\Aplicacion\ContrasenaNuevaMuyCorta;
 use Src\Identidad\Aplicacion\CredencialesInvalidas;
 use Src\Identidad\Aplicacion\CuentaBloqueada;
+use Src\Plantel\Aplicacion\CategoriaDuplicada;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -38,6 +39,7 @@ final class FormatoDeError
             $e instanceof CuentaBloqueada => self::reglaDeNegocio($e, 429)->header('Retry-After', (string) $e->segundosRestantes()),
             $e instanceof CredencialesInvalidas => self::reglaDeNegocio($e, 401),
             $e instanceof ContrasenaNuevaMuyCorta => self::contrasenaNuevaMuyCorta($e),
+            $e instanceof CategoriaDuplicada => self::reglaDeNegocio($e, 409),
             $e instanceof ReglaDeNegocioViolada => self::reglaDeNegocio($e),
             $e instanceof AuthenticationException => self::respuesta(401, 'no_autenticado'),
             $e instanceof ServicioNoDisponible => self::respuesta(503, 'servicio_no_disponible'),

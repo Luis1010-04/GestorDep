@@ -158,8 +158,165 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /categorias:
+    get:
+      operationId: listarCategorias
+      summary: Lista las categorias vigentes
+      description: Solo entrenadores (HU-28). Excluye las eliminadas; orden por nombre.
+      tags: [Categorias]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [nombre, '-nombre'], default: nombre}
+      responses:
+        '200':
+          description: Pagina de categorias.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Categoria'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearCategoria
+      summary: Da de alta una categoria
+      description: Solo entrenadores (HU-28). Queda disponible para todos los entrenadores.
+      tags: [Categorias]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+      responses:
+        '201':
+          description: Categoria creada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Categoria'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe una categoria vigente con ese nombre, sin distinguir mayusculas (categoria_duplicada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Nombre ausente, vacio o de mas de 100 caracteres (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /categorias/{id}:
+    delete:
+      operationId: eliminarCategoria
+      summary: Elimina logicamente una categoria
+      description: >-
+        Solo entrenadores (HU-28). Fija eliminado_en y eliminado_por; la fila se conserva y los equipos
+        que la usan siguen mostrandola. El nombre puede darse de alta de nuevo.
+      tags: [Categorias]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Categoria eliminada.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La categoria no existe o ya estaba eliminada (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Categoria:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        actualizado_en:
+          type: string
+          format: date-time
     Usuario:
       type: object
       additionalProperties: false
