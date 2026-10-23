@@ -6,6 +6,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Support\ServiceProvider;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Reloj;
+use Src\Identidad\Aplicacion\CierreDeSesiones;
 use Src\Identidad\Aplicacion\IniciarSesion;
 use Src\Identidad\Dominio\PoliticaDeContrasena;
 use Src\Identidad\Dominio\RepositorioDeUsuarios;
@@ -17,6 +18,7 @@ class IdentidadServiceProvider extends ServiceProvider
     {
         $this->app->bind(UsuarioActual::class, UsuarioActualDeSesion::class);
         $this->app->bind(RepositorioDeUsuarios::class, RepositorioDeUsuariosEloquent::class);
+        $this->app->bind(CierreDeSesiones::class, CierreDeSesionesEnBaseDeDatos::class);
         $this->app->bind(
             PoliticaDeContrasena::class,
             fn () => new PoliticaDeContrasena((int) config('identidad.longitud_minima_contrasena')),

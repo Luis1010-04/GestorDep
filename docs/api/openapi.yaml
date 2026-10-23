@@ -106,6 +106,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    delete:
+      operationId: cerrarSesion
+      summary: Cierra la sesion actual
+      description: La cookie de sesion deja de ser valida; usarla de nuevo responde 401 (HU-27).
+      tags: [Sesion]
+      responses:
+        '204':
+          description: Sesion cerrada.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /contrasena:
+    put:
+      operationId: cambiarContrasena
+      summary: Cambia la contrasena del usuario con sesion
+      description: >-
+        Cierra las demas sesiones del usuario y conserva la actual (HU-27).
+        La contrasena nueva debe tener al menos 10 caracteres (RNF-10).
+      tags: [Sesion]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [contrasena_actual, contrasena_nueva]
+              properties:
+                contrasena_actual:
+                  type: string
+                contrasena_nueva:
+                  type: string
+      responses:
+        '204':
+          description: Contrasena cambiada; las demas sesiones del usuario se cerraron.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Falta un campo (validacion_fallida), la contrasena actual es incorrecta
+            (contrasena_actual_incorrecta) o la nueva es muy corta (contrasena_muy_corta, campo contrasena_nueva).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Usuario:

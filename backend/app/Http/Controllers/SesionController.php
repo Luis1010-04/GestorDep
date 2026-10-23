@@ -6,6 +6,8 @@ use App\Http\Requests\SolicitudDeInicioDeSesion;
 use App\Http\Resources\UsuarioRecurso;
 use App\Http\Respuestas\Respuesta;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Src\Identidad\Aplicacion\IniciarSesion;
 
@@ -22,5 +24,14 @@ class SesionController extends Controller
         $solicitud->session()->regenerate();
 
         return Respuesta::conDatos((new UsuarioRecurso($usuario))->resolve($solicitud));
+    }
+
+    public function cerrar(Request $solicitud): Response
+    {
+        Auth::guard('web')->logout();
+        $solicitud->session()->invalidate();
+        $solicitud->session()->regenerateToken();
+
+        return response()->noContent();
     }
 }

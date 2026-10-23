@@ -5,6 +5,7 @@ namespace Src\Identidad\Infraestructura;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Expression;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
@@ -32,7 +33,20 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
 
     public function buscarPorCorreo(string $correo): ?Usuario
     {
-        $fila = $this->conexion->table('usuarios')->where('correo', $correo)->whereNull('eliminado_en')->first();
+        return $this->reconstituir(
+            $this->conexion->table('usuarios')->where('correo', $correo)->whereNull('eliminado_en')->first(),
+        );
+    }
+
+    public function buscarPorId(Identificador $id): ?Usuario
+    {
+        return $this->reconstituir(
+            $this->conexion->table('usuarios')->where('id', $id->valor())->whereNull('eliminado_en')->first(),
+        );
+    }
+
+    private function reconstituir(?object $fila): ?Usuario
+    {
         if ($fila === null) {
             return null;
         }
@@ -64,6 +78,23 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
             'intentos_fallidos' => $usuario->intentosFallidos(),
             'bloqueado_hasta' => $usuario->bloqueadoHasta()?->format('Y-m-d H:i:s.uP'),
         ]);
+    }
+
+    public function guardarContrasena(Usuario $usuario): void
+    {
+        $this->historial->registrar(
+            'usuarios',
+            'usuario_afectado_id',
+            $usuario->id(),
+            'actualizar',
+            [],
+            ['contrasena_modificada' => true],
+            fn () => $this->conexion->table('usuarios')->where('id', $usuario->id()->valor())->update([
+                'contrasena_hash' => $usuario->contrasenaHash(),
+                'actualizado_en' => new Expression('now()'),
+                'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
+            ]),
+        );
     }
 
     public function guardarNuevo(Usuario $usuario): void

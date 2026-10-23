@@ -15,7 +15,7 @@ final class Usuario
         private readonly Identificador $id,
         private readonly string $nombre,
         private readonly string $correo,
-        private readonly string $contrasenaHash,
+        private string $contrasenaHash,
         private readonly bool $activo,
         private readonly array $roles,
         private int $intentosFallidos,
@@ -64,6 +64,11 @@ final class Usuario
         if ($this->intentosFallidos >= $intentosMaximos) {
             $this->bloqueadoHasta = $ahora->modify("+{$minutosDeBloqueo} minutes");
         }
+    }
+
+    public function cambiarContrasena(string $contrasenaHash): void
+    {
+        $this->contrasenaHash = $contrasenaHash;
     }
 
     public function registrarAcceso(): void
