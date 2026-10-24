@@ -16,6 +16,10 @@ Route::middleware('auth:web')->group(function () {
     Route::delete('/sesion', [SesionController::class, 'cerrar']);
     Route::put('/contrasena', [ContrasenaController::class, 'cambiar']);
 
+    Route::get('/jugadores', [JugadorController::class, 'listar']);
+    Route::get('/jugadores/busqueda', [JugadorController::class, 'buscar']);
+    Route::get('/jugadores/{jugador}', [JugadorController::class, 'ver'])->whereUuid('jugador');
+
     Route::middleware('rol:entrenador')->group(function () {
         Route::get('/categorias', [CategoriaController::class, 'listar']);
         Route::post('/categorias', [CategoriaController::class, 'crear']);

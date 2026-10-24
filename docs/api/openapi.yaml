@@ -422,6 +422,64 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   /jugadores:
+    get:
+      operationId: listarJugadores
+      summary: Lista los jugadores de los equipos del usuario
+      description: >-
+        Con sesion (HU-02). Solo los jugadores con membresia vigente en un equipo donde el usuario tiene
+        asignacion vigente; los jugadores en baja no aparecen (DD-30). Un docente recibe lista vacia hasta H2.
+        El arreglo equipos de cada jugador contiene solo los equipos del usuario (RN-14). filtro[equipo_id] se
+        cruza con los equipos del usuario: un equipo ajeno devuelve lista vacia con total 0 y nunca revela quien
+        pertenece a el. Orden por defecto: apellidos y nombres.
+      tags: [Jugadores]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [apellidos, '-apellidos', nombres, '-nombres'], default: apellidos}
+        - name: filtro[equipo_id]
+          in: query
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Pagina de jugadores.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Jugador'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion, orden o filtro invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       operationId: registrarJugador
       summary: Registra un jugador en un equipo del entrenador
@@ -504,8 +562,104 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/busqueda:
+    get:
+      operationId: buscarJugadorPorMatricula
+      summary: Busca un jugador por matricula
+      description: >-
+        Con sesion, docente o entrenador (RN-20). Unica excepcion a la regla del 404: devuelve exactamente
+        nombres, apellidos y matricula de un jugador aunque no este asignado al usuario, sin identificador y
+        sin dar alcance sobre el. No distingue mayusculas ni espacios alrededor (DD-37). Encuentra tambien a los
+        jugadores en baja (DD-38); no a los eliminados.
+      tags: [Jugadores]
+      parameters:
+        - name: matricula
+          in: query
+          required: true
+          schema: {type: string, maxLength: 30}
+      responses:
+        '200':
+          description: Jugador encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/JugadorBuscado'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No existe un jugador con esa matricula (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Matricula ausente, vacia o de mas de 30 caracteres (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}:
+    get:
+      operationId: verJugador
+      summary: Consulta el expediente de un jugador del usuario
+      description: >-
+        Con sesion (HU-02). Un jugador fuera del alcance del usuario, inexistente o con identificador mal
+        formado responde 404 con el mismo cuerpo, para no revelar que existe. Un jugador en baja sigue
+        respondiendo 200 con estatus baja a quien ya lo tenia asignado (DD-30). Es el mismo esquema Jugador que
+        el 201 de POST /jugadores.
+      tags: [Jugadores]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Expediente del jugador, con solo los equipos del usuario.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    JugadorBuscado:
+      type: object
+      additionalProperties: false
+      description: Resultado de la busqueda por matricula (RN-20); no incluye identificador.
+      required: [nombres, apellidos, matricula]
+      properties:
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        matricula:
+          type: string
     Jugador:
       type: object
       additionalProperties: false
