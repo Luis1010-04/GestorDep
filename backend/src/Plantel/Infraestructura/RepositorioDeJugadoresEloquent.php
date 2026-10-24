@@ -34,13 +34,14 @@ final class RepositorioDeJugadoresEloquent implements RepositorioDeJugadores
     public function guardarNuevo(Jugador $jugador, Identificador $equipoId, Identificador $posicionId): void
     {
         $autor = $this->usuarioActual->identificador()?->valor();
-        $instante = $jugador->actualizadoEn()->format('Y-m-d H:i:s.uP');
+        $momento = $jugador->actualizadoEn();
+        $instante = $momento->format('Y-m-d H:i:sP');
         $desde = $this->hoyDeNegocio->hoy()->format('Y-m-d');
         $nacimiento = $jugador->fechaNacimiento()->format('Y-m-d');
         $membresiaId = Identificador::generar();
 
         try {
-            $this->conexion->transaction(function () use ($jugador, $equipoId, $posicionId, $autor, $instante, $desde, $nacimiento, $membresiaId): void {
+            $this->conexion->transaction(function () use ($momento, $jugador, $equipoId, $posicionId, $autor, $instante, $desde, $nacimiento, $membresiaId): void {
                 $this->historial->registrar(
                     'jugadores',
                     'jugador_id',
@@ -68,6 +69,7 @@ final class RepositorioDeJugadoresEloquent implements RepositorioDeJugadores
                         'creado_por' => $autor,
                         'actualizado_por' => $autor,
                     ]),
+                    instante: $momento,
                 );
 
                 $this->historial->registrar(
@@ -94,6 +96,7 @@ final class RepositorioDeJugadoresEloquent implements RepositorioDeJugadores
                         'creado_por' => $autor,
                         'actualizado_por' => $autor,
                     ]),
+                    instante: $momento,
                 );
             });
         } catch (UniqueConstraintViolationException $e) {

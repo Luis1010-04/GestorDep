@@ -3,6 +3,7 @@
 namespace Src\Plantel\Aplicacion;
 
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
 use Src\Plantel\Dominio\Categoria;
 use Src\Plantel\Dominio\RepositorioDeCategorias;
@@ -22,7 +23,7 @@ final class CrearCategoria
             throw new CategoriaDuplicada;
         }
 
-        $categoria = new Categoria(Identificador::generar(), $nombre, $this->reloj->ahora());
+        $categoria = new Categoria(Identificador::generar(), $nombre, Instante::truncadoASegundos($this->reloj->ahora()));
         $this->categorias->guardarNueva($categoria);
 
         return $categoria;

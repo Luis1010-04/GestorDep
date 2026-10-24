@@ -312,11 +312,8 @@ test('HU-02: el detalle y el 201 de POST /jugadores tienen exactamente el mismo 
 
     $detalle = consultaComo($this, 'a@x.com', '/api/v1/jugadores/'.$creado->json('datos.id'))->assertOk();
 
-    // `actualizado_en` se compara aparte: la columna guarda segundos (redondea) y el 201 de T12 devuelve el instante del reloj truncado.
-    $sinInstante = fn (array $datos): array => array_diff_key($datos, ['actualizado_en' => 0]);
-
     expect(array_keys($detalle->json('datos')))->toBe(array_keys($creado->json('datos')))
         ->and(array_keys($detalle->json('datos.equipos.0')))->toBe(array_keys($creado->json('datos.equipos.0')))
-        ->and($sinInstante($detalle->json('datos')))->toBe($sinInstante($creado->json('datos')))
+        ->and($detalle->json('datos'))->toBe($creado->json('datos'))
         ->and($detalle->json('datos.actualizado_en'))->toMatch('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00$/');
 });

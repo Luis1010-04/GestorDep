@@ -9,6 +9,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
 use Src\Plantel\Aplicacion\CategoriaDuplicada;
 use Src\Plantel\Dominio\Categoria;
@@ -45,7 +46,7 @@ final class RepositorioDeCategoriasEloquent implements RepositorioDeCategorias
     public function guardarNueva(Categoria $categoria): void
     {
         $autor = $this->usuarioActual->identificador()?->valor();
-        $instante = $categoria->actualizadoEn()->format('Y-m-d H:i:s.uP');
+        $instante = $categoria->actualizadoEn()->format('Y-m-d H:i:sP');
 
         try {
             $this->conexion->table('categorias')->insert([
@@ -85,7 +86,7 @@ final class RepositorioDeCategoriasEloquent implements RepositorioDeCategorias
     public function eliminar(Identificador $id): bool
     {
         $autor = $this->usuarioActual->identificador()?->valor();
-        $instante = $this->reloj->ahora()->format('Y-m-d H:i:s.uP');
+        $instante = Instante::truncadoASegundos($this->reloj->ahora())->format('Y-m-d H:i:sP');
 
         return $this->vigentes()->where('id', $id->valor())->update([
             'eliminado_en' => $instante,

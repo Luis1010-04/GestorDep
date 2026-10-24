@@ -42,12 +42,13 @@ final class RepositorioDeEquiposEloquent implements RepositorioDeEquipos
     public function guardarNuevo(Equipo $equipo, Identificador $entrenador): void
     {
         $autor = $this->usuarioActual->identificador()?->valor();
-        $instante = $equipo->actualizadoEn()->format('Y-m-d H:i:s.uP');
+        $momento = $equipo->actualizadoEn();
+        $instante = $momento->format('Y-m-d H:i:sP');
         $desde = $this->hoyDeNegocio->hoy()->format('Y-m-d');
         $asignacionId = Identificador::generar();
 
         try {
-            $this->conexion->transaction(function () use ($equipo, $entrenador, $autor, $instante, $desde, $asignacionId): void {
+            $this->conexion->transaction(function () use ($momento, $equipo, $entrenador, $autor, $instante, $desde, $asignacionId): void {
                 $this->historial->registrar(
                     'equipos',
                     'equipo_id',
@@ -64,6 +65,7 @@ final class RepositorioDeEquiposEloquent implements RepositorioDeEquipos
                         'creado_por' => $autor,
                         'actualizado_por' => $autor,
                     ]),
+                    instante: $momento,
                 );
 
                 $this->historial->registrar(
@@ -83,6 +85,7 @@ final class RepositorioDeEquiposEloquent implements RepositorioDeEquipos
                         'creado_por' => $autor,
                         'actualizado_por' => $autor,
                     ]),
+                    instante: $momento,
                 );
             });
         } catch (UniqueConstraintViolationException) {

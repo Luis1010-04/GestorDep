@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use LogicException;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
 use Src\Plantel\Dominio\Jugador;
 use Src\Plantel\Dominio\RepositorioDeEquipos;
@@ -42,7 +43,7 @@ final class RegistrarJugador
             throw new MatriculaDuplicada;
         }
 
-        $jugador = new Jugador(Identificador::generar(), $nombres, $apellidos, $fechaNacimiento, $matricula, $this->reloj->ahora());
+        $jugador = new Jugador(Identificador::generar(), $nombres, $apellidos, $fechaNacimiento, $matricula, Instante::truncadoASegundos($this->reloj->ahora()));
         $this->jugadores->guardarNuevo($jugador, $equipoId, $posicionId);
 
         return new JugadorRegistrado($jugador, $equipo, $posicion);

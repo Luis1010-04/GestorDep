@@ -2,9 +2,11 @@
 
 namespace Src\Compartido\Infraestructura\Historial;
 
+use DateTimeImmutable;
 use Illuminate\Database\ConnectionInterface;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
 
 /**
@@ -23,6 +25,7 @@ final class EscritorDeHistorial
      * @param  array<string, mixed>|null  $datosAnteriores  nulo al crear
      * @param  array<string, mixed>|null  $datosNuevos  nulo al eliminar
      * @param  callable(): mixed  $cambio  escribe el cambio en la tabla de la entidad
+     * @param  DateTimeImmutable|null  $instante  instante de la operación; por defecto el del reloj, truncado a segundos
      */
     public function registrar(
         string $tabla,
@@ -33,8 +36,11 @@ final class EscritorDeHistorial
         ?array $datosNuevos,
         callable $cambio,
         ?string $motivo = null,
+        ?DateTimeImmutable $instante = null,
     ): void {
-        $this->conexion->transaction(function () use ($tabla, $columnaEntidad, $entidadId, $operacion, $datosAnteriores, $datosNuevos, $cambio, $motivo) {
+        $this->conexion->transaction(function () use ($tabla, $columnaEntidad, $entidadId, $operacion, $datosAnteriores, $datosNuevos, $cambio, $motivo, $instante) {
+            $ocurridoEn = Instante::truncadoASegundos($instante ?? $this->reloj->ahora());
+
             $cambio();
 
             $historial = "{$tabla}_historial";
@@ -51,7 +57,7 @@ final class EscritorDeHistorial
                 'datos_anteriores' => $datosAnteriores === null ? null : json_encode($datosAnteriores, JSON_THROW_ON_ERROR),
                 'datos_nuevos' => $datosNuevos === null ? null : json_encode($datosNuevos, JSON_THROW_ON_ERROR),
                 'usuario_id' => $this->usuarioActual->identificador()?->valor(),
-                'ocurrido_en' => $this->reloj->ahora()->format('Y-m-d H:i:s.uP'),
+                'ocurrido_en' => $ocurridoEn->format('Y-m-d H:i:sP'),
                 'motivo' => $motivo,
             ]);
         });

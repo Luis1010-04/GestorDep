@@ -5,6 +5,7 @@ namespace Src\Plantel\Aplicacion;
 use LogicException;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
 use Src\Plantel\Dominio\Equipo;
 use Src\Plantel\Dominio\RepositorioDeCategorias;
@@ -30,7 +31,7 @@ final class CrearEquipo
             throw new EquipoDuplicado;
         }
 
-        $equipo = new Equipo(Identificador::generar(), $nombre, $categoriaId, $this->reloj->ahora());
+        $equipo = new Equipo(Identificador::generar(), $nombre, $categoriaId, Instante::truncadoASegundos($this->reloj->ahora()));
         $this->equipos->guardarNuevo($equipo, $entrenador);
 
         return new EquipoConCategoria($equipo, $categoria->nombre());
