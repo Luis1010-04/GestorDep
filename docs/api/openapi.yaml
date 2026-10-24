@@ -421,8 +421,143 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores:
+    post:
+      operationId: registrarJugador
+      summary: Registra un jugador en un equipo del entrenador
+      description: >-
+        Solo entrenadores (HU-03). Crea el expediente y la membresia vigente en el equipo, con sus historiales,
+        en una sola transaccion; la categoria se toma del equipo. Los textos se recortan. La matricula se guarda
+        tal como se escribio, pero no se distingue por mayusculas ni por espacios alrededor. El equipo ajeno o
+        inexistente responde 404 antes de revisar la posicion y la matricula.
+      tags: [Jugadores]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombres, apellidos, fecha_nacimiento, matricula, equipo_id, posicion]
+              properties:
+                nombres:
+                  type: string
+                  maxLength: 120
+                apellidos:
+                  type: string
+                  maxLength: 120
+                fecha_nacimiento:
+                  type: string
+                  format: date
+                matricula:
+                  type: string
+                  maxLength: 30
+                equipo_id:
+                  type: string
+                  format: uuid
+                posicion:
+                  type: string
+                  enum: [portero, defensa, medio, delantero]
+      responses:
+        '201':
+          description: Jugador registrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no es su entrenador (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Ya existe un jugador vigente con esa matricula (matricula_duplicada). El cuerpo no incluye
+            datos del expediente existente; puede buscarse por matricula (RN-20).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente, vacio, demasiado largo o mal formado, o fecha que no es AAAA-MM-DD (validacion_fallida,
+            con el campo en errores); codigo de posicion que no existe (posicion_invalida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Jugador:
+      type: object
+      additionalProperties: false
+      required: [id, nombres, apellidos, fecha_nacimiento, matricula, estatus_academico, estatus_deportivo, equipos, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        fecha_nacimiento:
+          type: string
+          format: date
+        matricula:
+          type: string
+        estatus_academico:
+          type: string
+          enum: [activo, baja]
+        estatus_deportivo:
+          type: string
+          enum: [activo, baja]
+        equipos:
+          type: array
+          description: Solo los equipos donde el usuario que consulta es entrenador (RN-14).
+          items:
+            type: object
+            additionalProperties: false
+            required: [equipo_id, nombre, categoria, posicion]
+            properties:
+              equipo_id:
+                type: string
+                format: uuid
+              nombre:
+                type: string
+              categoria:
+                type: object
+                additionalProperties: false
+                required: [id, nombre]
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  nombre:
+                    type: string
+              posicion:
+                type: string
+                enum: [portero, defensa, medio, delantero]
+        actualizado_en:
+          type: string
+          format: date-time
     Categoria:
       type: object
       additionalProperties: false

@@ -21,6 +21,8 @@ use Src\Plantel\Dominio\RepositorioDeEquipos;
 /** Escribe `equipos` y `entrenador_equipo`, cada uno con su historial, todo en una transacción (docs/arquitectura.md, sección 9.2). */
 final class RepositorioDeEquiposEloquent implements RepositorioDeEquipos
 {
+    private const COLUMNAS = ['equipos.id', 'equipos.nombre', 'equipos.categoria_id', 'equipos.actualizado_en', 'categorias.nombre as categoria_nombre'];
+
     public function __construct(
         private readonly ConnectionInterface $conexion,
         private readonly EscritorDeHistorial $historial,
@@ -98,17 +100,29 @@ final class RepositorioDeEquiposEloquent implements RepositorioDeEquipos
             ->orderBy('equipos.id')
             ->offset(($pagina - 1) * $porPagina)
             ->limit($porPagina)
-            ->get(['equipos.id', 'equipos.nombre', 'equipos.categoria_id', 'equipos.actualizado_en', 'categorias.nombre as categoria_nombre'])
-            ->map(fn (object $fila) => new EquipoConCategoria(
-                new Equipo(
-                    Identificador::desdeTexto($fila->id),
-                    $fila->nombre,
-                    Identificador::desdeTexto($fila->categoria_id),
-                    (new DateTimeImmutable($fila->actualizado_en))->setTimezone(new DateTimeZone('UTC')),
-                ),
-                $fila->categoria_nombre,
-            ))
+            ->get(self::COLUMNAS)
+            ->map(fn (object $fila) => $this->aEquipoConCategoria($fila))
             ->all();
+    }
+
+    public function buscarDelEntrenador(Identificador $equipoId, Identificador $entrenador): ?EquipoConCategoria
+    {
+        $fila = $this->delEntrenador($entrenador)->where('equipos.id', $equipoId->valor())->first(self::COLUMNAS);
+
+        return $fila === null ? null : $this->aEquipoConCategoria($fila);
+    }
+
+    private function aEquipoConCategoria(object $fila): EquipoConCategoria
+    {
+        return new EquipoConCategoria(
+            new Equipo(
+                Identificador::desdeTexto($fila->id),
+                $fila->nombre,
+                Identificador::desdeTexto($fila->categoria_id),
+                (new DateTimeImmutable($fila->actualizado_en))->setTimezone(new DateTimeZone('UTC')),
+            ),
+            $fila->categoria_nombre,
+        );
     }
 
     public function contarDelEntrenador(Identificador $entrenador): int

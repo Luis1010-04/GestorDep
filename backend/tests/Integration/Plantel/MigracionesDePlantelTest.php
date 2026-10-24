@@ -93,6 +93,44 @@ test('RNF-03: la matricula se puede reutilizar si el primer registro tiene borra
     expect(plantelRechazo(fn () => plantelJugador(['matricula' => 'M-200'])))->toBeNull();
 });
 
+test('RNF-03: la base rechaza una matricula que solo difiere en mayusculas', function () {
+    plantelJugador(['matricula' => 'm-1']);
+
+    expect(plantelRechazo(fn () => plantelJugador(['matricula' => 'M-1'])))->toBe('23505');
+});
+
+test('RNF-03: la matricula en otras mayusculas se permite si el primer registro tiene borrado logico', function () {
+    $primero = plantelJugador(['matricula' => 'm-2']);
+    DB::connection('propietario')->table('jugadores')->where('id', $primero)->update(['eliminado_en' => '2026-03-15 10:30:00+00']);
+
+    expect(plantelRechazo(fn () => plantelJugador(['matricula' => 'M-2'])))->toBeNull();
+});
+
+test('RNF-03: la columna matricula sigue siendo varchar(30) y el indice es parcial sobre lower(matricula)', function () {
+    $columna = DB::connection('propietario')->selectOne(
+        "select data_type, character_maximum_length from information_schema.columns where table_name = 'jugadores' and column_name = 'matricula'",
+    );
+    $indice = DB::connection('propietario')->scalar("select indexdef from pg_indexes where indexname = 'uq_jugadores_matricula'");
+
+    expect($columna->data_type)->toBe('character varying')
+        ->and($columna->character_maximum_length)->toBe(30)
+        ->and($indice)->toContain('lower((matricula)::text)')->toContain('WHERE (eliminado_en IS NULL)');
+});
+
+test('RNF-03: revertir la migracion del indice restaura el indice anterior', function () {
+    $indiceNuevo = DB::connection('propietario')->scalar("select indexdef from pg_indexes where indexname = 'uq_jugadores_matricula'");
+    expect($indiceNuevo)->toContain('lower(');
+
+    artisan('migrate:rollback', [
+        '--database' => 'propietario',
+        '--force' => true,
+        '--path' => 'database/migrations/plantel/2026_10_21_020800_indice_de_matricula_sin_mayusculas.php',
+    ])->assertSuccessful();
+
+    $indice = DB::connection('propietario')->scalar("select indexdef from pg_indexes where indexname = 'uq_jugadores_matricula'");
+    expect($indice)->toBe('CREATE UNIQUE INDEX uq_jugadores_matricula ON public.jugadores USING btree (matricula) WHERE (eliminado_en IS NULL)');
+});
+
 test('RNF-03: jugadores.estatus solo admite activo o baja y por defecto es activo', function () {
     $id = plantelJugador();
     $fila = DB::connection('propietario')->table('jugadores')->where('id', $id)->first();

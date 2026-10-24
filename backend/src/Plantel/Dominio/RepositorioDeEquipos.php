@@ -23,5 +23,8 @@ interface RepositorioDeEquipos
      */
     public function listarDelEntrenador(Identificador $entrenador, int $pagina, int $porPagina, bool $descendente): array;
 
+    /** Nulo si el equipo no existe o el entrenador no tiene asignación vigente en él. */
+    public function buscarDelEntrenador(Identificador $equipoId, Identificador $entrenador): ?EquipoConCategoria;
+
     public function contarDelEntrenador(Identificador $entrenador): int;
 }

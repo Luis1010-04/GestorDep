@@ -13,6 +13,8 @@ use Src\Identidad\Aplicacion\CredencialesInvalidas;
 use Src\Identidad\Aplicacion\CuentaBloqueada;
 use Src\Plantel\Aplicacion\CategoriaDuplicada;
 use Src\Plantel\Aplicacion\EquipoDuplicado;
+use Src\Plantel\Aplicacion\EquipoNoEncontrado;
+use Src\Plantel\Aplicacion\MatriculaDuplicada;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -42,6 +44,8 @@ final class FormatoDeError
             $e instanceof ContrasenaNuevaMuyCorta => self::contrasenaNuevaMuyCorta($e),
             $e instanceof CategoriaDuplicada => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
+            $e instanceof MatriculaDuplicada => self::reglaDeNegocio($e, 409),
+            $e instanceof EquipoNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof ReglaDeNegocioViolada => self::reglaDeNegocio($e),
             $e instanceof AuthenticationException => self::respuesta(401, 'no_autenticado'),
             $e instanceof ServicioNoDisponible => self::respuesta(503, 'servicio_no_disponible'),

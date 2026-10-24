@@ -25,5 +25,7 @@ return [
         'categoria_duplicada' => 'Ya existe una categoría con ese nombre.',
         'equipo_duplicado' => 'Ya existe un equipo con ese nombre en la categoría.',
         'categoria_inexistente' => 'La categoría indicada no existe.',
+        'matricula_duplicada' => 'Ya existe un jugador con esa matrícula.',
+        'posicion_invalida' => 'La posición indicada no existe.',
     ],
 ];
