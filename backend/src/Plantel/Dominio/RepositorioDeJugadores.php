@@ -3,6 +3,7 @@
 namespace Src\Plantel\Dominio;
 
 use Src\Compartido\Dominio\Identificador;
+use Src\Plantel\Aplicacion\JugadorParaAsignar;
 
 /** Persistencia de jugadores y de su membresía en un equipo. Solo ve lo no eliminado. */
 interface RepositorioDeJugadores
@@ -15,4 +16,7 @@ interface RepositorioDeJugadores
      * historiales, en una transacción. Si otra petición ganó la carrera por la matrícula, lanza MatriculaDuplicada (Aplicacion).
      */
     public function guardarNuevo(Jugador $jugador, Identificador $equipoId, Identificador $posicionId): void;
+
+    /** Solo para asignar (DD-31): el llamador nunca entrega el identificador al usuario. Matrícula ya recortada, sin distinguir mayúsculas. */
+    public function buscarParaAsignar(string $matricula): ?JugadorParaAsignar;
 }

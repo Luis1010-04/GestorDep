@@ -8,6 +8,7 @@ use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\HoyDeNegocio;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
+use Src\Plantel\Aplicacion\JugadorParaAsignar;
 use Src\Plantel\Aplicacion\MatriculaDuplicada;
 use Src\Plantel\Dominio\Jugador;
 use Src\Plantel\Dominio\RepositorioDeJugadores;
@@ -29,6 +30,17 @@ final class RepositorioDeJugadoresEloquent implements RepositorioDeJugadores
             ->whereNull('eliminado_en')
             ->whereRaw('lower(matricula) = lower(?)', [$matricula])
             ->exists();
+    }
+
+    /** Compara con `lower()` para usar el índice `uq_jugadores_matricula`. */
+    public function buscarParaAsignar(string $matricula): ?JugadorParaAsignar
+    {
+        $fila = $this->conexion->table('jugadores')
+            ->whereNull('eliminado_en')
+            ->whereRaw('lower(matricula) = lower(?)', [$matricula])
+            ->first(['id', 'estatus_deportivo']);
+
+        return $fila === null ? null : new JugadorParaAsignar(Identificador::desdeTexto($fila->id), $fila->estatus_deportivo === 'baja');
     }
 
     public function guardarNuevo(Jugador $jugador, Identificador $equipoId, Identificador $posicionId): void

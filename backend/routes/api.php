@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\EquipoController;
+use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
@@ -27,6 +28,9 @@ Route::middleware('auth:web')->group(function () {
 
         Route::get('/equipos', [EquipoController::class, 'listar']);
         Route::post('/equipos', [EquipoController::class, 'crear']);
+
+        Route::post('/equipos/{equipo}/jugadores', [EquipoJugadorController::class, 'asignar'])->whereUuid('equipo');
+        Route::patch('/equipos/{equipo}/jugadores/{jugador}', [EquipoJugadorController::class, 'cambiarPosicion'])->whereUuid(['equipo', 'jugador']);
 
         Route::post('/jugadores', [JugadorController::class, 'crear']);
     });

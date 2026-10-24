@@ -646,6 +646,155 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/jugadores:
+    post:
+      operationId: asignarJugadorAEquipo
+      summary: Asigna un jugador existente a un equipo del entrenador, por matricula
+      description: >-
+        Solo entrenadores (HU-04, RN-20, DD-31). El jugador se localiza por matricula, sin distinguir mayusculas
+        ni espacios alrededor (DD-37), y nunca se devuelve su identificador ni sus datos antes de asignar. Crea la
+        membresia vigente y su historial en una transaccion. Asignar otorga alcance: la respuesta es el esquema
+        Jugador, con solo los equipos del usuario (RN-14). Orden de comprobaciones: equipo del entrenador (404),
+        campos (422 validacion_fallida), posicion (422 posicion_invalida) y, solo entonces, la matricula.
+      tags: [Equipos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [matricula, posicion]
+              properties:
+                matricula:
+                  type: string
+                  maxLength: 30
+                posicion:
+                  type: string
+                  enum: [portero, defensa, medio, delantero]
+      responses:
+        '201':
+          description: Jugador asignado al equipo.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            El equipo no existe o el usuario no es su entrenador, o no existe un jugador con esa matricula
+            (codigo recurso_no_encontrado). El 404 por equipo ajeno no depende de la matricula.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El jugador ya tiene una membresia vigente en ese equipo (jugador_ya_en_equipo) o esta en baja
+            (jugador_en_baja, DD-30).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Matricula o posicion ausente, vacia, demasiado larga o mal formada (validacion_fallida, con el campo en
+            errores); codigo de posicion que no existe (posicion_invalida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/jugadores/{jugador}:
+    patch:
+      operationId: cambiarPosicionDeJugador
+      summary: Cambia la posicion de un jugador en un equipo del entrenador
+      description: >-
+        Solo entrenadores (HU-05). Cambia unicamente la posicion en la membresia vigente de ese equipo; las demas
+        membresias del jugador no cambian. El historial (jugador_equipo_historial, operacion actualizar) conserva la
+        fila completa antes y despues del cambio. Una posicion igual a la actual responde 200 sin escribir historial.
+        Cambiarla en un jugador en baja es valido. Los campos desconocidos del cuerpo se ignoran. Orden de
+        comprobaciones: equipo del entrenador (404), campo (422 validacion_fallida), posicion (422 posicion_invalida)
+        y membresia vigente (404).
+      tags: [Equipos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [posicion]
+              properties:
+                posicion:
+                  type: string
+                  enum: [portero, defensa, medio, delantero]
+      responses:
+        '200':
+          description: Jugador con la posicion actualizada, con solo los equipos del usuario.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            El equipo no existe o el usuario no es su entrenador, o el jugador no tiene membresia vigente en ese
+            equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Posicion ausente, vacia o mal formada (validacion_fallida); codigo que no existe (posicion_invalida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     JugadorBuscado:

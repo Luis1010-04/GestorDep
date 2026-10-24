@@ -107,3 +107,47 @@ test('RN-20: la búsqueda nunca expone el id ni otros campos del expediente', fu
             ->and(str_contains((string) $respuesta->getContent(), $m['j2']) || str_contains((string) $respuesta->getContent(), $m['eb']))->toBeFalse();
     }
 });
+
+test('RNF-01: las rutas de equipos/jugadores con un usuario ajeno responden 404 idéntico al de un equipo inexistente y no revelan a J2', function () {
+    /** @var TestCase $this */
+    $m = mundoDeJugadores();
+    $asignar = fn (string $equipo) => seguridadComo($this, 'a@x.com', 'POST', "/api/v1/equipos/{$equipo}/jugadores", ['matricula' => 'M-2', 'posicion' => 'medio']);
+    $cambiar = fn (string $equipo) => seguridadComo($this, 'a@x.com', 'PATCH', "/api/v1/equipos/{$equipo}/jugadores/{$m['j2']}", ['posicion' => 'medio']);
+
+    $inexistente = (string) Str::uuid7();
+    foreach ([$asignar, $cambiar] as $peticion) {
+        $ajeno = $peticion($m['eb'])->assertNotFound();
+
+        expect($ajeno->getContent())->toBe($peticion($inexistente)->assertNotFound()->getContent())
+            ->and(str_contains((string) $ajeno->getContent(), $m['j2']) || str_contains((string) $ajeno->getContent(), 'M-2') || str_contains((string) $ajeno->getContent(), 'EB'))->toBeFalse();
+    }
+});
+
+test('RNF-01: con un docente, las rutas de equipos/jugadores responden 403 sin_permiso', function () {
+    /** @var TestCase $this */
+    $m = mundoDeJugadores();
+
+    seguridadComo($this, 'd@x.com', 'POST', "/api/v1/equipos/{$m['ea']}/jugadores", ['matricula' => 'M-4', 'posicion' => 'medio'])
+        ->assertForbidden()->assertJsonPath('codigo', 'sin_permiso');
+    seguridadComo($this, 'd@x.com', 'PATCH', "/api/v1/equipos/{$m['ea']}/jugadores/{$m['j1']}", ['posicion' => 'medio'])
+        ->assertForbidden()->assertJsonPath('codigo', 'sin_permiso');
+});
+
+test('RNF-01: sin sesión, las rutas de equipos/jugadores responden 401', function () {
+    /** @var TestCase $this */
+    $m = mundoDeJugadores();
+
+    seguridadComo($this, null, 'POST', "/api/v1/equipos/{$m['ea']}/jugadores", ['matricula' => 'M-4', 'posicion' => 'medio'])->assertUnauthorized();
+    seguridadComo($this, null, 'PATCH', "/api/v1/equipos/{$m['ea']}/jugadores/{$m['j1']}", ['posicion' => 'medio'])->assertUnauthorized();
+});
+
+test('RN-20: asignar por matrícula no entrega el id ni datos del jugador ajeno antes de asignar', function () {
+    /** @var TestCase $this */
+    $m = mundoDeJugadores();
+
+    foreach (['NO-EXISTE', 'M-5'] as $matricula) {
+        $respuesta = seguridadComo($this, 'a@x.com', 'POST', "/api/v1/equipos/{$m['ea']}/jugadores", ['matricula' => $matricula, 'posicion' => 'medio']);
+
+        expect(str_contains((string) $respuesta->getContent(), $m['j5']) || str_contains((string) $respuesta->getContent(), 'Estrada'))->toBeFalse();
+    }
+});

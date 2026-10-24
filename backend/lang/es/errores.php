@@ -27,5 +27,7 @@ return [
         'categoria_inexistente' => 'La categoría indicada no existe.',
         'matricula_duplicada' => 'Ya existe un jugador con esa matrícula.',
         'posicion_invalida' => 'La posición indicada no existe.',
+        'jugador_ya_en_equipo' => 'El jugador ya pertenece a ese equipo.',
+        'jugador_en_baja' => 'El jugador está en baja y no se puede asignar.',
     ],
 ];
