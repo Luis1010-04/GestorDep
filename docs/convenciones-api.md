@@ -55,7 +55,7 @@ Un objeto con tres claves:
 
 - `codigo`: estable, en `snake_case`, legible por máquina. Nunca se traduce.
 - `mensaje`: traducido, sale de `lang/es`.
-- `errores`: detalle por campo, cada uno con su propio `codigo` y `mensaje`. Es un arreglo vacío si el error no es de campo.
+- `errores`: detalle por campo, cada uno con su propio `codigo` y `mensaje`. Es un arreglo vacío si el error no es de campo. Cuando la petición es inválida como un todo (por ejemplo, un `PATCH` sin ningún campo permitido), el detalle usa `campo: "cuerpo"`. Un campo que el endpoint no admite se rechaza con `codigo: "prohibited"`.
 
 Las violaciones de regla de negocio usan la excepción `ReglaDeNegocioViolada` con un código estable y se responden con 409 o 422 según el caso.
 
