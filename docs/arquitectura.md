@@ -174,7 +174,7 @@ Los usuarios se crean con el comando de consola `usuarios:crear` (RN-19) mientra
 |---|---|---|
 | `categorias` | nombre (`citext`), activo | UQ parcial `nombre` |
 | `posiciones` | codigo (portero/defensa/medio/delantero), nombre | UQ `codigo` |
-| `jugadores` (H) | nombres, apellidos, fecha_nacimiento, matricula, estatus_academico (activo/baja), estatus_deportivo (activo/baja) | UQ parcial `matricula` donde `eliminado_en IS NULL`; `CHECK` de estatus |
+| `jugadores` (H) | nombres, apellidos, fecha_nacimiento, matricula, estatus_academico (activo/baja), estatus_deportivo (activo/baja) | UQ parcial sobre `lower(matricula)` donde `eliminado_en IS NULL` (DD-37); `CHECK` de estatus |
 | `equipos` (H) | nombre, categoria_id, activo | UQ parcial (`nombre`, `categoria_id`) |
 | `jugador_equipo` (H) | jugador_id, equipo_id, posicion_id, desde, hasta | UQ parcial (`jugador_id`, `equipo_id`) donde `hasta IS NULL`; IX `equipo_id` |
 | `entrenador_equipo` (H) | usuario_id, equipo_id, desde, hasta | UQ parcial (`usuario_id`, `equipo_id`) donde `hasta IS NULL`; IX `equipo_id` |
@@ -299,7 +299,7 @@ public function up(): void
 
     DB::statement("ALTER TABLE jugadores ADD CONSTRAINT ck_jugadores_estatus
         CHECK (estatus_academico IN ('activo','baja') AND estatus_deportivo IN ('activo','baja'))");
-    DB::statement('CREATE UNIQUE INDEX uq_jugadores_matricula ON jugadores (matricula) WHERE eliminado_en IS NULL');
+    DB::statement('CREATE UNIQUE INDEX uq_jugadores_matricula ON jugadores (lower(matricula)) WHERE eliminado_en IS NULL');
 }
 ```
 
