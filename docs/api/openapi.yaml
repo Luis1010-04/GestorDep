@@ -646,6 +646,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    patch:
+      operationId: actualizarJugador
+      summary: Actualiza nombres, apellidos o fecha de nacimiento de un jugador del usuario
+      description: >-
+        Solo entrenadores (HU-05, RNF-02). Acepta cualquiera de nombres, apellidos y fecha_nacimiento; cualquier
+        otro campo (matricula, estatus_academico, estatus_deportivo, id...) se rechaza con 422 validacion_fallida
+        senalandolo (codigo de campo prohibited). Un cuerpo sin campos responde 422 con el campo cuerpo. Los textos
+        se recortan antes de validar. Un jugador fuera del alcance, inexistente o con identificador que no es UUID v7
+        responde 404 con el mismo cuerpo, con cualquier cuerpo, valido o no, antes de validarlo. Sin cambios reales
+        responde 200 sin escribir historial ni tocar actualizado_en. Con cambios escribe una fila actualizar en
+        jugadores_historial con la instantanea completa antes y despues (DD-39), en la misma transaccion. Un jugador
+        en baja tambien puede actualizarse. Respuesta: el esquema Jugador, con solo los equipos del usuario (RN-14).
+      tags: [Jugadores]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                nombres: {type: string, minLength: 1, maxLength: 120}
+                apellidos: {type: string, minLength: 1, maxLength: 120}
+                fecha_nacimiento: {type: string, format: date}
+      responses:
+        '200':
+          description: Expediente del jugador actualizado (o sin cambios), con solo los equipos del usuario.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Campo no permitido, cuerpo vacio, texto vacio o de mas de 120 caracteres, o fecha que no es AAAA-MM-DD (codigo validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos/{equipo}/jugadores:
     post:
       operationId: asignarJugadorAEquipo

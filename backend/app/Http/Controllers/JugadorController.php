@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SolicitudDeActualizacionDeJugador;
 use App\Http\Requests\SolicitudDeNuevoJugador;
 use App\Http\Resources\ColeccionPaginada;
 use App\Http\Resources\JugadorBuscadoRecurso;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use InvalidArgumentException;
 use Src\Compartido\Dominio\Identificador;
+use Src\Plantel\Aplicacion\ActualizarExpedienteDeJugador;
 use Src\Plantel\Aplicacion\BuscarJugadorPorMatricula;
 use Src\Plantel\Aplicacion\JugadorNoEncontrado;
 use Src\Plantel\Aplicacion\ListarJugadores;
@@ -59,6 +61,20 @@ class JugadorController extends Controller
         }
 
         return Respuesta::conDatos((new JugadorConsultadoRecurso($verJugador->ejecutar($jugadorId)))->resolve($solicitud));
+    }
+
+    public function actualizar(SolicitudDeActualizacionDeJugador $solicitud, string $jugador, ActualizarExpedienteDeJugador $actualizarExpediente): JsonResponse
+    {
+        $datos = $solicitud->validated();
+
+        $actualizado = $actualizarExpediente->ejecutar(
+            Identificador::desdeTexto($jugador),
+            $datos['nombres'] ?? null,
+            $datos['apellidos'] ?? null,
+            isset($datos['fecha_nacimiento']) ? new DateTimeImmutable($datos['fecha_nacimiento']) : null,
+        );
+
+        return Respuesta::conDatos((new JugadorConsultadoRecurso($actualizado))->resolve($solicitud));
     }
 
     public function buscar(Request $solicitud, BuscarJugadorPorMatricula $buscarJugador): JsonResponse

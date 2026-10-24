@@ -13,6 +13,9 @@ return [
     'error_interno' => 'Ocurrió un error inesperado.',
     'servicio_no_disponible' => 'El servicio no está disponible en este momento.',
 
+    // Mensaje del error de campo "cuerpo" (PATCH sin ningún campo): no es un código de error sino un detalle de validación.
+    'cuerpo_sin_campos' => 'Debe enviar al menos uno de: nombres, apellidos, fecha_nacimiento',
+
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
     'reglas' => [
         'credenciales_invalidas' => 'Las credenciales no son válidas.',

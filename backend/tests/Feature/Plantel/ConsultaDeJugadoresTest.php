@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -55,6 +56,16 @@ test('RNF-01: un jugador de un equipo ajeno responde 404 en el detalle', functio
     /** @var TestCase $this */
     $m = mundoDeJugadores();
     consultaComo($this, 'a@x.com', "/api/v1/jugadores/{$m['j2']}")->assertNotFound()->assertJsonPath('codigo', 'recurso_no_encontrado');
+});
+
+test('HU-02: un UUID válido pero que no es v7 responde 404 en el detalle', function () {
+    /** @var TestCase $this */
+    mundoDeJugadores();
+    $inexistente = consultaComo($this, 'a@x.com', '/api/v1/jugadores/'.Str::uuid7())->assertNotFound();
+
+    $respuesta = consultaComo($this, 'a@x.com', '/api/v1/jugadores/3f8c2a52-6f3c-4a43-9d8f-0b1d2f4e5a6b')->assertNotFound();
+
+    expect($respuesta->getContent())->toBe($inexistente->getContent());
 });
 
 test('RNF-01: un jugador sin equipo responde 404 en el detalle', function () {

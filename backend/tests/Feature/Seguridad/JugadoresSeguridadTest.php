@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -139,6 +140,34 @@ test('RNF-01: sin sesión, las rutas de equipos/jugadores responden 401', functi
 
     seguridadComo($this, null, 'POST', "/api/v1/equipos/{$m['ea']}/jugadores", ['matricula' => 'M-4', 'posicion' => 'medio'])->assertUnauthorized();
     seguridadComo($this, null, 'PATCH', "/api/v1/equipos/{$m['ea']}/jugadores/{$m['j1']}", ['posicion' => 'medio'])->assertUnauthorized();
+});
+
+test('RNF-01: el PATCH de un jugador ajeno es un 404 byte a byte idéntico al de un id inexistente, con cuerpo válido o inválido', function () {
+    /** @var TestCase $this */
+    $m = mundoDeJugadores();
+    $sesion = sesionesIniciar($this, 'a@x.com');
+    $patch = fn (string $id, array $cuerpo) => sesionesPeticion($this, 'PATCH', "/api/v1/jugadores/{$id}", $cuerpo, $sesion)->assertNotFound();
+
+    foreach ([['nombres' => 'X'], [], ['matricula' => 'X'], ['nombres' => str_repeat('a', 200), 'fecha_nacimiento' => 'mal']] as $cuerpo) {
+        $inexistente = $patch((string) Str::uuid7(), $cuerpo);
+
+        foreach (['j2', 'j4'] as $ajeno) {
+            $respuesta = $patch($m[$ajeno], $cuerpo);
+
+            expect($respuesta->getContent())->toBe($inexistente->getContent())
+                ->and($respuesta->headers->get('Content-Type'))->toBe($inexistente->headers->get('Content-Type'))
+                ->and(str_contains((string) $respuesta->getContent(), $m[$ajeno]) || str_contains((string) $respuesta->getContent(), 'M-2'))->toBeFalse();
+        }
+    }
+});
+
+test('RNF-01: un docente recibe 403 sin_permiso al actualizar un expediente y sin sesión 401', function () {
+    /** @var TestCase $this */
+    $m = mundoDeJugadores();
+
+    seguridadComo($this, 'd@x.com', 'PATCH', "/api/v1/jugadores/{$m['j1']}", ['nombres' => 'X'])->assertForbidden()->assertJsonPath('codigo', 'sin_permiso');
+    seguridadComo($this, null, 'PATCH', "/api/v1/jugadores/{$m['j1']}", ['nombres' => 'X'])->assertUnauthorized();
+    expect(DB::table('jugadores')->where('id', $m['j1'])->value('nombres'))->toBe('Uno');
 });
 
 test('RN-20: asignar por matrícula no entrega el id ni datos del jugador ajeno antes de asignar', function () {
