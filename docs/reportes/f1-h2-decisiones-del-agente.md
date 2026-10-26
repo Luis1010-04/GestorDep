@@ -37,3 +37,10 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué se eligió:** `database/migrations/alertas/` (arquitectura §7.9 agrupa la tabla con las alertas y H6 agrega `alertas` ahí); columnas `materia_id`, `inscripcion_id`, `criterio_aprobacion_id`, `calificacion_id`, `asistencia_clase_id` y `parametro_institucional_id` (singular de la tabla, como `jugador_equipo_id` y `baja_jugador_id` en H1).
 - **Cómo se revierte:** mover el archivo de carpeta no altera el esquema; renombrar una columna de historial exige una migración nueva si ya se integró.
 - **Seguridad/privacidad:** ninguna.
+
+## DA-06: `Identificador::generar()` sin `floor`
+
+- **Qué faltaba:** la regla de arquitectura de T02 (prohibir `round`, `floor`, `ceil` y `number_format` en `src/*/Dominio/`) encontró `(int) floor(microtime(true) * 1000)` en `src/Compartido/Dominio/Identificador.php` (H0).
+- **Qué se eligió:** `(int) (microtime(true) * 1000)`: para un instante positivo, truncar y `floor` dan el mismo entero, así que el comportamiento no cambia (las pruebas de `IdentificadorTest` lo confirman). Es la opción que no debilita la regla: la alternativa era exceptuar el archivo. La ruta (`src/Compartido/Dominio/**`) está permitida en T02.
+- **Cómo se revierte:** restaurar `floor` y exceptuar `Identificador.php` en la regla (debilita la regla: requeriría aprobación).
+- **Seguridad/privacidad:** ninguna.

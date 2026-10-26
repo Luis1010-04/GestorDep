@@ -2,7 +2,7 @@ FROM php:8.4-cli
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git unzip libpq-dev libzip-dev $PHPIZE_DEPS \
-    && docker-php-ext-install pdo_pgsql pgsql zip \
+    && docker-php-ext-install pdo_pgsql pgsql zip bcmath \
     && pecl install pcov \
     && docker-php-ext-enable pcov \
     && apt-get purge -y --auto-remove $PHPIZE_DEPS \
