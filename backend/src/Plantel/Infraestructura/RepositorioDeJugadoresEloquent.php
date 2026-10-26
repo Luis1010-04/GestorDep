@@ -11,8 +11,10 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
+use Src\Plantel\Aplicacion\Baja;
 use Src\Plantel\Aplicacion\JugadorNoEncontrado;
 use Src\Plantel\Aplicacion\JugadorParaAsignar;
+use Src\Plantel\Aplicacion\JugadorYaEnBaja;
 use Src\Plantel\Aplicacion\MatriculaDuplicada;
 use Src\Plantel\Dominio\Jugador;
 use Src\Plantel\Dominio\RepositorioDeJugadores;
@@ -98,6 +100,77 @@ final class RepositorioDeJugadoresEloquent implements RepositorioDeJugadores
                 instante: $momento,
             );
         });
+    }
+
+    public function darDeBaja(Identificador $jugadorId, string $motivo, DateTimeImmutable $fecha): Baja
+    {
+        $autor = $this->usuarioActual->identificador()?->valor();
+        $momento = Instante::truncadoASegundos($this->reloj->ahora());
+        $instante = $momento->format('Y-m-d H:i:sP');
+        $bajaId = Identificador::generar();
+        $fechaTexto = $fecha->format('Y-m-d');
+
+        $this->conexion->transaction(function () use ($jugadorId, $motivo, $fechaTexto, $autor, $momento, $instante, $bajaId): void {
+            $fila = $this->conexion->table('jugadores')
+                ->where('id', $jugadorId->valor())
+                ->whereNull('eliminado_en')
+                ->lockForUpdate()
+                ->first();
+            if ($fila === null) {
+                throw new JugadorNoEncontrado;
+            }
+            if ($fila->estatus_academico === 'baja' || $fila->estatus_deportivo === 'baja') {
+                throw new JugadorYaEnBaja;
+            }
+
+            $anteriores = [
+                'nombres' => $fila->nombres,
+                'apellidos' => $fila->apellidos,
+                'fecha_nacimiento' => $fila->fecha_nacimiento,
+                'matricula' => $fila->matricula,
+                'estatus_academico' => $fila->estatus_academico,
+                'estatus_deportivo' => $fila->estatus_deportivo,
+            ];
+
+            $this->historial->registrar(
+                'jugadores',
+                'jugador_id',
+                $jugadorId,
+                'actualizar',
+                $anteriores,
+                [...$anteriores, 'estatus_academico' => 'baja', 'estatus_deportivo' => 'baja'],
+                fn () => $this->conexion->table('jugadores')->where('id', $jugadorId->valor())->update([
+                    'estatus_academico' => 'baja',
+                    'estatus_deportivo' => 'baja',
+                    'actualizado_en' => $instante,
+                    'actualizado_por' => $autor,
+                ]),
+                instante: $momento,
+            );
+
+            $this->historial->registrar(
+                'bajas_jugador',
+                'baja_jugador_id',
+                $bajaId,
+                'crear',
+                null,
+                ['jugador_id' => $jugadorId->valor(), 'motivo' => $motivo, 'fecha' => $fechaTexto, 'registrada_por' => $autor],
+                fn () => $this->conexion->table('bajas_jugador')->insert([
+                    'id' => $bajaId->valor(),
+                    'jugador_id' => $jugadorId->valor(),
+                    'motivo' => $motivo,
+                    'fecha' => $fechaTexto,
+                    'registrada_por' => $autor,
+                    'creado_en' => $instante,
+                    'actualizado_en' => $instante,
+                    'creado_por' => $autor,
+                    'actualizado_por' => $autor,
+                ]),
+                instante: $momento,
+            );
+        });
+
+        return new Baja($jugadorId, $motivo, new DateTimeImmutable($fechaTexto), $momento);
     }
 
     public function guardarNuevo(Jugador $jugador, Identificador $equipoId, Identificador $posicionId): void

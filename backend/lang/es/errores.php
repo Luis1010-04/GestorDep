@@ -32,5 +32,7 @@ return [
         'posicion_invalida' => 'La posición indicada no existe.',
         'jugador_ya_en_equipo' => 'El jugador ya pertenece a ese equipo.',
         'jugador_en_baja' => 'El jugador está en baja y no se puede asignar.',
+        'jugador_ya_en_baja' => 'El jugador ya está en baja.',
+        'motivo_obligatorio' => 'La baja requiere un motivo.',
     ],
 ];

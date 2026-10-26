@@ -34,5 +34,6 @@ Route::middleware('auth:web')->group(function () {
 
         Route::post('/jugadores', [JugadorController::class, 'crear']);
         Route::patch('/jugadores/{jugador}', [JugadorController::class, 'actualizar'])->whereUuid('jugador');
+        Route::post('/jugadores/{jugador}/baja', [JugadorController::class, 'darDeBaja'])->whereUuid('jugador');
     });
 });

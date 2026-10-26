@@ -16,6 +16,7 @@ use Src\Plantel\Aplicacion\EquipoDuplicado;
 use Src\Plantel\Aplicacion\EquipoNoEncontrado;
 use Src\Plantel\Aplicacion\JugadorEnBaja;
 use Src\Plantel\Aplicacion\JugadorNoEncontrado;
+use Src\Plantel\Aplicacion\JugadorYaEnBaja;
 use Src\Plantel\Aplicacion\JugadorYaEnEquipo;
 use Src\Plantel\Aplicacion\MatriculaDuplicada;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -47,7 +48,7 @@ final class FormatoDeError
             $e instanceof ContrasenaNuevaMuyCorta => self::contrasenaNuevaMuyCorta($e),
             $e instanceof CategoriaDuplicada => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
-            $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja => self::reglaDeNegocio($e, 409),
+            $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof ReglaDeNegocioViolada => self::reglaDeNegocio($e),
             $e instanceof AuthenticationException => self::respuesta(401, 'no_autenticado'),

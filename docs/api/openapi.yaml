@@ -712,6 +712,85 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/baja:
+    post:
+      operationId: darDeBajaJugador
+      summary: Registra la baja de un jugador del usuario
+      description: >-
+        Solo entrenadores (HU-29, RN-23). La baja es global (DD-30): cambia estatus_academico y estatus_deportivo a
+        baja, el jugador desaparece de los listados de todos sus entrenadores y sus membresias no se cierran (RN-17);
+        el detalle sigue respondiendo 200 con estatus baja. Se guarda la baja, los estatus y los historiales
+        (actualizar del jugador con la instantanea completa y crear de la baja) en una transaccion, con el mismo
+        instante. El motivo se recorta; la fecha es la que envia el usuario (AAAA-MM-DD, se acepta una fecha futura).
+        Un jugador fuera del alcance, inexistente o con identificador que no es UUID v7 responde 404 con el mismo
+        cuerpo, con cualquier cuerpo, antes de validarlo. Orden: alcance (404), validacion de campos
+        (422 validacion_fallida), motivo ausente o en blanco (422 motivo_obligatorio) y jugador ya en baja (409).
+      tags: [Jugadores]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [motivo, fecha]
+              properties:
+                motivo:
+                  type: string
+                  maxLength: 500
+                  description: No vacio tras recortar espacios (de lo contrario, 422 motivo_obligatorio).
+                fecha:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Baja registrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Baja'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador ya esta en baja (codigo jugador_ya_en_baja).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Fecha ausente o que no es AAAA-MM-DD, o motivo de mas de 500 caracteres o de tipo incorrecto
+            (validacion_fallida, con el campo en errores); motivo ausente o en blanco (motivo_obligatorio).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos/{equipo}/jugadores:
     post:
       operationId: asignarJugadorAEquipo
@@ -863,6 +942,22 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Baja:
+      type: object
+      additionalProperties: false
+      required: [jugador_id, motivo, fecha, creado_en]
+      properties:
+        jugador_id:
+          type: string
+          format: uuid
+        motivo:
+          type: string
+        fecha:
+          type: string
+          format: date
+        creado_en:
+          type: string
+          format: date-time
     JugadorBuscado:
       type: object
       additionalProperties: false

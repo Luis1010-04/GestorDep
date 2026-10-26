@@ -170,6 +170,37 @@ test('RNF-01: un docente recibe 403 sin_permiso al actualizar un expediente y si
     expect(DB::table('jugadores')->where('id', $m['j1'])->value('nombres'))->toBe('Uno');
 });
 
+test('RNF-01: la baja de un jugador ajeno es un 404 byte a byte idéntico al de un id inexistente, con cuerpo válido o inválido', function () {
+    /** @var TestCase $this */
+    $m = mundoDeJugadores();
+    $sesion = sesionesIniciar($this, 'a@x.com');
+    $baja = fn (string $id, array $cuerpo) => sesionesPeticion($this, 'POST', "/api/v1/jugadores/{$id}/baja", $cuerpo, $sesion)->assertNotFound();
+
+    foreach ([['motivo' => 'x', 'fecha' => '2026-03-09'], [], ['motivo' => '   ', 'fecha' => '2026-03-09'], ['motivo' => str_repeat('a', 600), 'fecha' => 'mal']] as $cuerpo) {
+        $inexistente = $baja((string) Str::uuid7(), $cuerpo);
+
+        foreach (['j2', 'j4'] as $ajeno) {
+            $respuesta = $baja($m[$ajeno], $cuerpo);
+
+            expect($respuesta->getContent())->toBe($inexistente->getContent())
+                ->and($respuesta->headers->get('Content-Type'))->toBe($inexistente->headers->get('Content-Type'))
+                ->and(str_contains((string) $respuesta->getContent(), $m[$ajeno]) || str_contains((string) $respuesta->getContent(), 'M-2'))->toBeFalse();
+        }
+    }
+    expect(DB::table('bajas_jugador')->count())->toBe(0);
+});
+
+test('RNF-01: un docente recibe 403 sin_permiso al dar de baja y sin sesión 401', function () {
+    /** @var TestCase $this */
+    $m = mundoDeJugadores();
+    $cuerpo = ['motivo' => 'x', 'fecha' => '2026-03-09'];
+
+    seguridadComo($this, 'd@x.com', 'POST', "/api/v1/jugadores/{$m['j1']}/baja", $cuerpo)->assertForbidden()->assertJsonPath('codigo', 'sin_permiso');
+    seguridadComo($this, null, 'POST', "/api/v1/jugadores/{$m['j1']}/baja", $cuerpo)->assertUnauthorized();
+    expect(DB::table('bajas_jugador')->count())->toBe(0)
+        ->and(DB::table('jugadores')->where('id', $m['j1'])->value('estatus_deportivo'))->toBe('activo');
+});
+
 test('RN-20: asignar por matrícula no entrega el id ni datos del jugador ajeno antes de asignar', function () {
     /** @var TestCase $this */
     $m = mundoDeJugadores();

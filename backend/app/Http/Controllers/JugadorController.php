@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SolicitudDeActualizacionDeJugador;
+use App\Http\Requests\SolicitudDeBajaDeJugador;
 use App\Http\Requests\SolicitudDeNuevoJugador;
+use App\Http\Resources\BajaRecurso;
 use App\Http\Resources\ColeccionPaginada;
 use App\Http\Resources\JugadorBuscadoRecurso;
 use App\Http\Resources\JugadorConsultadoRecurso;
@@ -17,6 +19,7 @@ use InvalidArgumentException;
 use Src\Compartido\Dominio\Identificador;
 use Src\Plantel\Aplicacion\ActualizarExpedienteDeJugador;
 use Src\Plantel\Aplicacion\BuscarJugadorPorMatricula;
+use Src\Plantel\Aplicacion\DarDeBajaAJugador;
 use Src\Plantel\Aplicacion\JugadorNoEncontrado;
 use Src\Plantel\Aplicacion\ListarJugadores;
 use Src\Plantel\Aplicacion\RegistrarJugador;
@@ -75,6 +78,17 @@ class JugadorController extends Controller
         );
 
         return Respuesta::conDatos((new JugadorConsultadoRecurso($actualizado))->resolve($solicitud));
+    }
+
+    public function darDeBaja(SolicitudDeBajaDeJugador $solicitud, string $jugador, DarDeBajaAJugador $darDeBaja): JsonResponse
+    {
+        $baja = $darDeBaja->ejecutar(
+            Identificador::desdeTexto($jugador),
+            (string) $solicitud->validated('motivo'),
+            new DateTimeImmutable((string) $solicitud->validated('fecha')),
+        );
+
+        return Respuesta::conDatos((new BajaRecurso($baja))->resolve($solicitud), estado: 201);
     }
 
     public function buscar(Request $solicitud, BuscarJugadorPorMatricula $buscarJugador): JsonResponse
