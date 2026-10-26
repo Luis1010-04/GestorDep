@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Src\Compartido\Dominio\Identificador;
 
-use function Pest\Laravel\artisan;
-
 beforeEach(function () {
     esquemaReiniciar();
 });
@@ -153,20 +151,20 @@ test('RNF-03: migrate:rollback de Identidad y de sesion no falla y se vuelve a a
     esquemaMarcarSucio();
     $tablas = ['usuarios', 'roles', 'usuario_rol', 'usuarios_historial', 'sessions'];
 
-    artisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     foreach ($tablas as $tabla) {
         expect(Schema::connection('propietario')->hasTable($tabla))->toBeFalse();
     }
 
-    artisan('migrate', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     foreach ($tablas as $tabla) {
         expect(Schema::connection('propietario')->hasTable($tabla))->toBeTrue();
     }
 });
 
 test('RNF-03: RolesSeeder dos veces no duplica filas', function () {
-    artisan('db:seed', ['--class' => 'RolesSeeder', '--force' => true])->assertSuccessful();
-    artisan('db:seed', ['--class' => 'RolesSeeder', '--force' => true])->assertSuccessful();
+    consolaArtisan('db:seed', ['--class' => 'RolesSeeder', '--force' => true])->assertSuccessful();
+    consolaArtisan('db:seed', ['--class' => 'RolesSeeder', '--force' => true])->assertSuccessful();
 
     $codigos = DB::connection('propietario')->table('roles')->orderBy('codigo')->pluck('codigo')->all();
 

@@ -11,6 +11,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Identidad\Dominio\RepositorioDeUsuarios;
 use Src\Identidad\Dominio\Usuario;
+use stdClass;
 
 /** Escribe `usuarios` y `usuarios_historial` según DD-33 (sin hash ni contadores) y DD-34 (`usuario_afectado_id`). */
 final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
@@ -45,12 +46,13 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
         );
     }
 
-    private function reconstituir(?object $fila): ?Usuario
+    private function reconstituir(?stdClass $fila): ?Usuario
     {
         if ($fila === null) {
             return null;
         }
 
+        /** @var list<string> $roles */
         $roles = $this->conexion->table('usuario_rol')
             ->join('roles', 'roles.id', '=', 'usuario_rol.rol_id')
             ->where('usuario_rol.usuario_id', $fila->id)

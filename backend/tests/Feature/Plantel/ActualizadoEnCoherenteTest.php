@@ -128,7 +128,7 @@ test('RNF-02: el historial sin instante explícito sale del reloj truncado a seg
     /** @var TestCase $this */
     coherenciaFijarReloj();
 
-    $this->artisan('usuarios:crear', ['correo' => 'nuevo@x.com', 'nombre' => 'Nuevo', '--rol' => ['entrenador'], '--contrasena' => 'una-clave-larga-1'])
+    consolaArtisan('usuarios:crear', ['correo' => 'nuevo@x.com', 'nombre' => 'Nuevo', '--rol' => ['entrenador'], '--contrasena' => 'una-clave-larga-1'])
         ->assertSuccessful();
     $id = DB::table('usuarios')->where('correo', 'nuevo@x.com')->value('id');
 

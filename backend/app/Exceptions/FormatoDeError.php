@@ -110,7 +110,7 @@ final class FormatoDeError
             foreach (array_values($mensajes) as $indice => $mensaje) {
                 $errores[] = [
                     'campo' => $campo,
-                    'codigo' => isset($reglas[$indice]) ? Str::snake(class_basename($reglas[$indice])) : 'validacion_fallida',
+                    'codigo' => isset($reglas[$indice]) ? Str::snake(class_basename((string) $reglas[$indice])) : 'validacion_fallida',
                     'mensaje' => $mensaje,
                 ];
             }

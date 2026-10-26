@@ -112,7 +112,10 @@ function alcanceMatriculas(?string $id, array $roles, bool $incluirBajas = false
 {
     $consulta = app(AlcanceDeJugadores::class)->restringir(alcanceActual($id, $roles), DB::table('jugadores'), 'jugadores.id', $incluirBajas);
 
-    return $consulta->orderBy('matricula')->pluck('matricula')->all();
+    /** @var list<string> $matriculas */
+    $matriculas = $consulta->orderBy('matricula')->pluck('matricula')->all();
+
+    return $matriculas;
 }
 
 test('HU-02: A ve a J1 y J3, no a J2, J4 ni J5 (fila 1)', function () {

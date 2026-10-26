@@ -323,8 +323,8 @@ test('RNF-02: si falla el historial, ni el jugador, ni la membresía ni los hist
     $sesion = sesionesIniciar($this, 'a@x.com');
     $propietario = DB::connection('propietario');
     esquemaMarcarSucio();
-    $propietario->unprepared("create or replace function falla_historial_de_prueba() returns trigger language plpgsql as \$\$ begin raise exception 'historial_de_prueba_falla'; end \$\$");
-    $propietario->unprepared("create trigger tg_falla_de_prueba before insert on {$tablaQueFalla} for each row execute function falla_historial_de_prueba()");
+    $propietario->statement("create or replace function falla_historial_de_prueba() returns trigger language plpgsql as \$\$ begin raise exception 'historial_de_prueba_falla'; end \$\$");
+    $propietario->statement("create trigger tg_falla_de_prueba before insert on {$tablaQueFalla} for each row execute function falla_historial_de_prueba()");
 
     try {
         sesionesPeticion($this, 'POST', '/api/v1/jugadores', jugadoresCuerpo($equipo['id']), $sesion)
@@ -334,7 +334,7 @@ test('RNF-02: si falla el historial, ni el jugador, ni la membresía ni los hist
             expect(DB::table($tabla)->count())->toBe(0, $tabla);
         }
     } finally {
-        $propietario->unprepared("drop trigger if exists tg_falla_de_prueba on {$tablaQueFalla}");
-        $propietario->unprepared('drop function if exists falla_historial_de_prueba()');
+        $propietario->statement("drop trigger if exists tg_falla_de_prueba on {$tablaQueFalla}");
+        $propietario->statement('drop function if exists falla_historial_de_prueba()');
     }
 })->with(['jugadores_historial', 'jugador_equipo_historial']);

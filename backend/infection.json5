@@ -1,0 +1,24 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    // Mutación solo sobre el dominio (docs/estrategia-pruebas.md §2 y §4; DD-53): se ejecutan las pruebas unitarias.
+    "source": {
+        "directories": ["src"],
+        "excludes": ["Aplicacion", "Infraestructura"]
+    },
+    "testFramework": "phpunit",
+    "testFrameworkOptions": "--testsuite=Unit",
+    // Las pruebas son de Pest: Infection usa un adaptador de Pest en lugar de phpunit.
+    "phpUnit": {
+        "customPath": "tests/Ayudantes/AdaptadorPestParaInfection.php"
+    },
+    "threads": 4,
+    "timeout": 20,
+    // Fuera del montaje de Windows: los archivos temporales de Infection desaparecen mientras los recorre.
+    "tmpDir": "/tmp/infection",
+    "logs": {
+        "text": "build/infection/infection.log",
+        "summary": "build/infection/resumen.log"
+    },
+    "minMsi": 80,
+    "minCoveredMsi": 85
+}

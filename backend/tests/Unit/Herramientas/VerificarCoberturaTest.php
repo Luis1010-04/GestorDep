@@ -30,6 +30,7 @@ function escribirClover(array $archivos): string
 function ejecutarVerificacion(string $reporte): array
 {
     $comando = escapeshellarg(PHP_BINARY).' '.escapeshellarg(dirname(__DIR__, 3).'/bin/verificar-cobertura.php').' '.escapeshellarg($reporte);
+    /** @var resource $proceso */
     $proceso = proc_open($comando, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $tuberias);
     $salida = stream_get_contents($tuberias[1]).stream_get_contents($tuberias[2]);
     fclose($tuberias[1]);

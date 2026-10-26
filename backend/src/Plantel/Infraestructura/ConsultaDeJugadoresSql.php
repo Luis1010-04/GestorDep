@@ -12,6 +12,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Plantel\Aplicacion\ConsultaDeJugadores;
 use Src\Plantel\Aplicacion\EquipoDelJugador;
 use Src\Plantel\Aplicacion\JugadorConEquipos;
+use stdClass;
 
 /** Lecturas de jugadores: los filtros se aplican primero y `AlcanceDeJugadores::restringir()` va al final de las condiciones. */
 final class ConsultaDeJugadoresSql implements ConsultaDeJugadores
@@ -36,7 +37,7 @@ final class ConsultaDeJugadoresSql implements ConsultaDeJugadores
             ->get()
             ->all();
 
-        return $this->conEquipos($filas);
+        return $this->conEquipos(array_values($filas));
     }
 
     public function contar(?Identificador $equipoId): int
@@ -82,7 +83,7 @@ final class ConsultaDeJugadoresSql implements ConsultaDeJugadores
     /**
      * Una sola consulta para los equipos de todos los jugadores de la página.
      *
-     * @param  list<object>  $filas
+     * @param  list<stdClass>  $filas
      * @return list<JugadorConEquipos>
      */
     private function conEquipos(array $filas): array
@@ -105,7 +106,7 @@ final class ConsultaDeJugadoresSql implements ConsultaDeJugadores
             $equiposPorJugador[$equipo->jugador_id][] = new EquipoDelJugador($equipo->equipo_id, $equipo->nombre, $equipo->categoria_id, $equipo->categoria_nombre, $equipo->posicion);
         }
 
-        return array_map(fn (object $fila) => new JugadorConEquipos(
+        return array_map(fn (stdClass $fila) => new JugadorConEquipos(
             $fila->id,
             $fila->nombres,
             $fila->apellidos,

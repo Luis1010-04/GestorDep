@@ -12,6 +12,7 @@
  */
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Testing\PendingCommand;
 
 use function Pest\Laravel\artisan;
 
@@ -63,11 +64,11 @@ function esquemaVaciarDatos(): void
     $conexion = DB::connection('propietario');
 
     $tablas = array_map(
-        fn (object $fila): string => $fila->tablename,
+        fn (stdClass $fila): string => $fila->tablename,
         $conexion->select("select tablename from pg_tables where schemaname = 'public' and tablename <> 'migrations' order by tablename"),
     );
     $consultas = array_map(fn (string $tabla): string => "select '{$tabla}' as tabla where exists (select 1 from \"{$tabla}\")", $tablas);
-    $conDatos = array_map(fn (object $fila): string => '"'.$fila->tabla.'"', $conexion->select(implode(' union all ', $consultas)));
+    $conDatos = array_map(fn (stdClass $fila): string => '"'.$fila->tabla.'"', $conexion->select(implode(' union all ', $consultas)));
 
     if ($conDatos !== []) {
         $conexion->statement('truncate table '.implode(', ', $conDatos).' restart identity cascade');
@@ -85,7 +86,7 @@ function esquemaVaciarDatos(): void
 function esquemaReconstruir(): void
 {
     esquemaMarcarSucio();
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     esquemaEstadoDePrueba(['preparado' => true, 'sucio' => false, 'estructura' => esquemaEstructura()]);
 }
 
@@ -107,4 +108,17 @@ function esquemaReiniciar(): string
     esquemaReconstruir();
 
     return 'completo';
+}
+
+/**
+ * `artisan()` de Pest devuelve `PendingCommand|int`; las pruebas encadenan expectativas, así que aquí se acota el tipo.
+ *
+ * @param  array<string, mixed>  $parametros
+ */
+function consolaArtisan(string $comando, array $parametros = []): PendingCommand
+{
+    $pendiente = artisan($comando, $parametros);
+    assert($pendiente instanceof PendingCommand);
+
+    return $pendiente;
 }
