@@ -29,15 +29,14 @@ git clone https://github.com/Luis1010-04/GestorDep.git
 cd GestorDep
 cp .env.example .env
 cp backend/.env.example backend/.env
-docker compose run --rm app composer install
-docker compose run --rm app php artisan key:generate
 make levantar
+docker compose exec -T app php artisan key:generate
 make fresh
 make verificar
 make humo
 ```
 
-Las claves de `.env.example` son solo de prueba para desarrollo local. Las dependencias se instalan antes de `make levantar` porque los servicios `worker` y `scheduler` las necesitan para arrancar.
+Las claves de `.env.example` son solo de prueba para desarrollo local. `vendor`, `bootstrap/cache` y las vistas compiladas viven en volúmenes de Docker (leerlos desde el montaje de Windows es muy lento). `make levantar` instala las dependencias solo si `vendor` está vacío; después de cambiar `composer.json` o `composer.lock` hay que ejecutar `make dependencias`, porque el volumen no se actualiza solo. Los registros siguen en `backend/storage/logs`. `scripts/` se monta de solo lectura en `/scripts` para `make humo`: si el contenedor se creó antes de ese montaje, `make levantar` lo recrea y lo incorpora.
 
 ## Comandos
 
@@ -47,6 +46,8 @@ Todo se ejecuta con `make`, dentro de Docker:
 |---|---|
 | `make levantar` / `make bajar` | Inicia y detiene el entorno: `app`, `db`, `worker` (cola `database`) y `scheduler` (planificador) |
 | `make consola` | Terminal dentro del contenedor de la aplicación |
+| `make dependencias` | `composer install` dentro del contenedor; obligatorio tras cambiar `composer.lock` |
+| `make vendor-local` | Opcional: copia `vendor` del contenedor a `backend/vendor` solo para el autocompletado del editor; esa copia no se ejecuta |
 | `make migrar` / `make fresh` | Migra / reconstruye la base con datos de fábrica |
 | `make pruebas` | Ejecuta solo las pruebas |
 | `make verificar` | Estilo, análisis estático, pruebas con cobertura y auditoría de dependencias |

@@ -18,6 +18,7 @@ test('F1-H0-T07: migrate:fresh con el rol propietario habilita citext', function
 });
 
 test('F1-H0-T07: la migracion de citext se revierte y se vuelve a aplicar', function () {
+    esquemaMarcarSucio();
     artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
 
     artisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();

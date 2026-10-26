@@ -21,3 +21,8 @@
 - [ ] Confirmar que las rutas fuera de lista que tocó H0 (reporte de H0, pendiente 3) fueron aprobadas.
 - [ ] Validar con la institución DD-30: la baja decidida por un entrenador afecta también al otro entrenador del jugador.
 - [ ] Antes de H2: DD-20. Antes de H6: DD-19.
+
+## Corrección posterior a T03 (22/10/2026)
+
+- `hitos/f1-h1.md` 1.1: DD-34 (`usuarios_historial.usuario_afectado_id`) y fecha de las migraciones.
+- `arquitectura.md` §9.1: excepción de `usuarios_historial`.

@@ -13,6 +13,26 @@ return [
     'error_interno' => 'Ocurrió un error inesperado.',
     'servicio_no_disponible' => 'El servicio no está disponible en este momento.',
 
+    // Mensaje del error de campo "cuerpo" (PATCH sin ningún campo): no es un código de error sino un detalle de validación.
+    'cuerpo_sin_campos' => 'Debe enviar al menos uno de: nombres, apellidos, fecha_nacimiento',
+
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
-    'reglas' => [],
+    'reglas' => [
+        'credenciales_invalidas' => 'Las credenciales no son válidas.',
+        'cuenta_bloqueada' => 'La cuenta está bloqueada temporalmente por intentos fallidos.',
+        'contrasena_actual_incorrecta' => 'La contraseña actual no es correcta.',
+        'contrasena_muy_corta' => 'La contraseña debe tener al menos 10 caracteres.',
+        'correo_duplicado' => 'Ya existe un usuario con ese correo.',
+        'rol_obligatorio' => 'El usuario debe tener al menos un rol.',
+        'rol_inexistente' => 'El rol indicado no existe.',
+        'categoria_duplicada' => 'Ya existe una categoría con ese nombre.',
+        'equipo_duplicado' => 'Ya existe un equipo con ese nombre en la categoría.',
+        'categoria_inexistente' => 'La categoría indicada no existe.',
+        'matricula_duplicada' => 'Ya existe un jugador con esa matrícula.',
+        'posicion_invalida' => 'La posición indicada no existe.',
+        'jugador_ya_en_equipo' => 'El jugador ya pertenece a ese equipo.',
+        'jugador_en_baja' => 'El jugador está en baja y no se puede asignar.',
+        'jugador_ya_en_baja' => 'El jugador ya está en baja.',
+        'motivo_obligatorio' => 'La baja requiere un motivo.',
+    ],
 ];

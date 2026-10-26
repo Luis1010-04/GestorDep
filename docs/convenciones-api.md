@@ -15,7 +15,7 @@ Este documento es una fuente de verdad del agente. Ante una contradicción con o
 | Identificadores | UUID v7 |
 | Fechas y horas | ISO 8601 en UTC; las fechas sin hora, `AAAA-MM-DD`; los periodos mensuales, `AAAA-MM` |
 | Decimales | Calificaciones, promedios, umbrales, IMC y porcentajes se envían y reciben como cadena con dos decimales (`"7.50"`), para no perder precisión. Los enteros (minutos, tarjetas, calificación de partido) van como número |
-| Paginación | `pagina` y `por_pagina` (máximo 100); la respuesta incluye `datos` y `meta` |
+| Paginación | `pagina` y `por_pagina` (por defecto 15, máximo 100); la respuesta incluye `datos` y `meta` |
 | Filtros y orden | `filtro[campo]=valor` y `orden=campo` o `orden=-campo` |
 | Autenticación | Sanctum en modo SPA (cookies de sesión); el detalle está en `docs/hitos/f1-h1.md` |
 | Idioma de los mensajes | Archivos `lang/es`; el idioma se resuelve con una función única, lista para leer `Accept-Language` en el futuro |
@@ -55,7 +55,7 @@ Un objeto con tres claves:
 
 - `codigo`: estable, en `snake_case`, legible por máquina. Nunca se traduce.
 - `mensaje`: traducido, sale de `lang/es`.
-- `errores`: detalle por campo, cada uno con su propio `codigo` y `mensaje`. Es un arreglo vacío si el error no es de campo.
+- `errores`: detalle por campo, cada uno con su propio `codigo` y `mensaje`. Es un arreglo vacío si el error no es de campo. Cuando la petición es inválida como un todo (por ejemplo, un `PATCH` sin ningún campo permitido), el detalle usa `campo: "cuerpo"`. Un campo que el endpoint no admite se rechaza con `codigo: "prohibited"`.
 
 Las violaciones de regla de negocio usan la excepción `ReglaDeNegocioViolada` con un código estable y se responden con 409 o 422 según el caso.
 

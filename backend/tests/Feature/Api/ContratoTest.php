@@ -12,7 +12,10 @@ function rutaDelContrato(): string
     return base_path('../docs/api/openapi.yaml');
 }
 
-/** @return list<string> operaciones del contrato como "METODO /api/v1/ruta" */
+/** Ruta estandar de Sanctum, fuera de /api/v1 (DD-28); el contrato la declara con su propio servidor. */
+const RUTA_DE_COOKIE_CSRF = 'sanctum/csrf-cookie';
+
+/** @return list<string> operaciones del contrato como "METODO /api/v1/ruta" (o "METODO /ruta" si la ruta declara el servidor raiz) */
 function operacionesDocumentadas(): array
 {
     /** @var OpenApi $contrato */
@@ -20,8 +23,9 @@ function operacionesDocumentadas(): array
 
     $operaciones = [];
     foreach ($contrato->paths as $ruta => $elemento) {
+        $prefijo = ($elemento->servers[0]->url ?? null) === '/' ? '' : '/api/v1';
         foreach (array_keys($elemento->getOperations()) as $metodo) {
-            $operaciones[] = strtoupper($metodo).' /api/v1'.$ruta;
+            $operaciones[] = strtoupper($metodo).' '.$prefijo.$ruta;
         }
     }
     sort($operaciones);
@@ -29,13 +33,13 @@ function operacionesDocumentadas(): array
     return $operaciones;
 }
 
-/** @return list<string> rutas registradas bajo /api/v1 como "METODO /api/v1/ruta" */
+/** @return list<string> rutas registradas bajo /api/v1, y la cookie CSRF de Sanctum, como "METODO /ruta" */
 function operacionesRegistradas(): array
 {
     $operaciones = [];
     foreach (app('router')->getRoutes()->getRoutes() as $ruta) {
         /** @var Route $ruta */
-        if (! str_starts_with($ruta->uri(), 'api/v1/')) {
+        if (! str_starts_with($ruta->uri(), 'api/v1/') && $ruta->uri() !== RUTA_DE_COOKIE_CSRF) {
             continue;
         }
         foreach (array_diff($ruta->methods(), ['HEAD']) as $metodo) {

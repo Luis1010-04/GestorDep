@@ -45,12 +45,19 @@ function escritorDeHistorial(): EscritorDeHistorial
         {
             return usuarioDePrueba();
         }
+
+        public function roles(): array
+        {
+            return [];
+        }
     };
 
     return new EscritorDeHistorial(DB::connection(), new RelojFijo(momentoDePrueba()), $usuario);
 }
 
 beforeEach(function () {
+    esquemaMarcarSucio();
+
     $esquema = Schema::connection('propietario');
     $esquema->dropIfExists('prueba_registros_historial');
     $esquema->dropIfExists('prueba_registros');
@@ -68,7 +75,14 @@ beforeEach(function () {
     });
     $esquema->historial('prueba_registros', 'prueba_registro_id');
 
-    DB::connection('propietario')->table('usuarios')->insert(['id' => USUARIO_DE_PRUEBA]);
+    DB::connection('propietario')->table('usuarios')->insert([
+        'id' => USUARIO_DE_PRUEBA,
+        ...(usuariosCreadosPorLaPrueba() ? [] : [
+            'nombre' => 'Usuario de prueba',
+            'correo' => 'historial@example.test',
+            'contrasena_hash' => 'hash-de-prueba',
+        ]),
+    ]);
 });
 
 afterEach(function () {
@@ -207,4 +221,29 @@ test('F1-H0-T08: el rol de aplicacion no tiene permiso de DELETE en el historial
 
     expect(sqlstateDelRechazo(fn () => DB::table('prueba_registros_historial')->delete()))
         ->toBe('42501');
+});
+
+test('F1-H1-T04: sin usuario actual el historial se escribe con usuario_id nulo', function () {
+    $sinUsuario = new class implements UsuarioActual
+    {
+        public function identificador(): ?Identificador
+        {
+            return null;
+        }
+
+        public function roles(): array
+        {
+            return [];
+        }
+    };
+    $escritor = new EscritorDeHistorial(DB::connection(), new RelojFijo(momentoDePrueba()), $sinUsuario);
+    $id = Identificador::generar();
+
+    $escritor->registrar('prueba_registros', 'prueba_registro_id', $id, 'crear', null, ['nombre' => 'inicial'],
+        fn () => DB::table('prueba_registros')->insert(['id' => $id->valor(), 'nombre' => 'inicial']));
+
+    $registro = DB::table('prueba_registros_historial')->where('prueba_registro_id', $id->valor())->first();
+
+    expect($registro->usuario_id)->toBeNull()
+        ->and($registro->operacion)->toBe('crear');
 });

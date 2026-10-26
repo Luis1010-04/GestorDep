@@ -40,8 +40,1041 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /sanctum/csrf-cookie:
+    servers:
+      - url: /
+    get:
+      operationId: obtenerCookieCsrf
+      summary: Entrega la cookie XSRF-TOKEN y abre la sesion (ruta estandar de Sanctum, fuera de /api/v1)
+      tags: [Sesion]
+      responses:
+        '204':
+          description: Cookie entregada.
+  /sesion:
+    post:
+      operationId: iniciarSesion
+      summary: Inicia sesion con correo y contrasena
+      description: >-
+        Cinco contrasenas incorrectas seguidas bloquean la cuenta 15 minutos (RNF-10).
+        Un usuario inexistente, desactivado o con contrasena incorrecta responde siempre lo mismo.
+      tags: [Sesion]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [correo, contrasena]
+              properties:
+                correo:
+                  type: string
+                contrasena:
+                  type: string
+      responses:
+        '200':
+          description: Sesion iniciada; el identificador de sesion se regenera.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Credenciales invalidas (codigo credenciales_invalidas).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Falta el correo o la contrasena (codigo validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Cuenta bloqueada (codigo cuenta_bloqueada).
+          headers:
+            Retry-After:
+              description: Segundos que faltan para que termine el bloqueo.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: cerrarSesion
+      summary: Cierra la sesion actual
+      description: La cookie de sesion deja de ser valida; usarla de nuevo responde 401 (HU-27).
+      tags: [Sesion]
+      responses:
+        '204':
+          description: Sesion cerrada.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /contrasena:
+    put:
+      operationId: cambiarContrasena
+      summary: Cambia la contrasena del usuario con sesion
+      description: >-
+        Cierra las demas sesiones del usuario y conserva la actual (HU-27).
+        La contrasena nueva debe tener al menos 10 caracteres (RNF-10).
+      tags: [Sesion]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [contrasena_actual, contrasena_nueva]
+              properties:
+                contrasena_actual:
+                  type: string
+                contrasena_nueva:
+                  type: string
+      responses:
+        '204':
+          description: Contrasena cambiada; las demas sesiones del usuario se cerraron.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Falta un campo (validacion_fallida), la contrasena actual es incorrecta
+            (contrasena_actual_incorrecta) o la nueva es muy corta (contrasena_muy_corta, campo contrasena_nueva).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /categorias:
+    get:
+      operationId: listarCategorias
+      summary: Lista las categorias vigentes
+      description: Solo entrenadores (HU-28). Excluye las eliminadas; orden por nombre.
+      tags: [Categorias]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [nombre, '-nombre'], default: nombre}
+      responses:
+        '200':
+          description: Pagina de categorias.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Categoria'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearCategoria
+      summary: Da de alta una categoria
+      description: Solo entrenadores (HU-28). Queda disponible para todos los entrenadores.
+      tags: [Categorias]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+      responses:
+        '201':
+          description: Categoria creada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Categoria'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe una categoria vigente con ese nombre, sin distinguir mayusculas (categoria_duplicada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Nombre ausente, vacio o de mas de 100 caracteres (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /categorias/{id}:
+    delete:
+      operationId: eliminarCategoria
+      summary: Elimina logicamente una categoria
+      description: >-
+        Solo entrenadores (HU-28). Fija eliminado_en y eliminado_por; la fila se conserva y los equipos
+        que la usan siguen mostrandola. El nombre puede darse de alta de nuevo.
+      tags: [Categorias]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Categoria eliminada.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La categoria no existe o ya estaba eliminada (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos:
+    get:
+      operationId: listarEquipos
+      summary: Lista los equipos del entrenador que consulta
+      description: >-
+        Solo entrenadores (HU-03). Devuelve unicamente los equipos con asignacion vigente del usuario
+        (RN-22); orden por nombre. La categoria se muestra aunque haya sido eliminada.
+      tags: [Equipos]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [nombre, '-nombre'], default: nombre}
+      responses:
+        '200':
+          description: Pagina de equipos.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Equipo'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearEquipo
+      summary: Da de alta un equipo
+      description: >-
+        Solo entrenadores (HU-03). Quien lo crea queda asignado como entrenador (RN-22): el equipo, la fila
+        vigente de entrenador_equipo y sus historiales se escriben en una sola transaccion.
+      tags: [Equipos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre, categoria_id]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+                categoria_id:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Equipo creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Equipo'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe un equipo vigente con ese nombre y categoria (equipo_duplicado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Nombre ausente, vacio o de mas de 100 caracteres, o categoria_id ausente o mal formado
+            (validacion_fallida); categoria inexistente o eliminada (categoria_inexistente).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores:
+    get:
+      operationId: listarJugadores
+      summary: Lista los jugadores de los equipos del usuario
+      description: >-
+        Con sesion (HU-02). Solo los jugadores con membresia vigente en un equipo donde el usuario tiene
+        asignacion vigente; los jugadores en baja no aparecen (DD-30). Un docente recibe lista vacia hasta H2.
+        El arreglo equipos de cada jugador contiene solo los equipos del usuario (RN-14). filtro[equipo_id] se
+        cruza con los equipos del usuario: un equipo ajeno devuelve lista vacia con total 0 y nunca revela quien
+        pertenece a el. Orden por defecto: apellidos y nombres.
+      tags: [Jugadores]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [apellidos, '-apellidos', nombres, '-nombres'], default: apellidos}
+        - name: filtro[equipo_id]
+          in: query
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Pagina de jugadores.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Jugador'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion, orden o filtro invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarJugador
+      summary: Registra un jugador en un equipo del entrenador
+      description: >-
+        Solo entrenadores (HU-03). Crea el expediente y la membresia vigente en el equipo, con sus historiales,
+        en una sola transaccion; la categoria se toma del equipo. Los textos se recortan. La matricula se guarda
+        tal como se escribio, pero no se distingue por mayusculas ni por espacios alrededor. El equipo ajeno o
+        inexistente responde 404 antes de revisar la posicion y la matricula.
+      tags: [Jugadores]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombres, apellidos, fecha_nacimiento, matricula, equipo_id, posicion]
+              properties:
+                nombres:
+                  type: string
+                  maxLength: 120
+                apellidos:
+                  type: string
+                  maxLength: 120
+                fecha_nacimiento:
+                  type: string
+                  format: date
+                matricula:
+                  type: string
+                  maxLength: 30
+                equipo_id:
+                  type: string
+                  format: uuid
+                posicion:
+                  type: string
+                  enum: [portero, defensa, medio, delantero]
+      responses:
+        '201':
+          description: Jugador registrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no es su entrenador (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Ya existe un jugador vigente con esa matricula (matricula_duplicada). El cuerpo no incluye
+            datos del expediente existente; puede buscarse por matricula (RN-20).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente, vacio, demasiado largo o mal formado, o fecha que no es AAAA-MM-DD (validacion_fallida,
+            con el campo en errores); codigo de posicion que no existe (posicion_invalida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/busqueda:
+    get:
+      operationId: buscarJugadorPorMatricula
+      summary: Busca un jugador por matricula
+      description: >-
+        Con sesion, docente o entrenador (RN-20). Unica excepcion a la regla del 404: devuelve exactamente
+        nombres, apellidos y matricula de un jugador aunque no este asignado al usuario, sin identificador y
+        sin dar alcance sobre el. No distingue mayusculas ni espacios alrededor (DD-37). Encuentra tambien a los
+        jugadores en baja (DD-38); no a los eliminados.
+      tags: [Jugadores]
+      parameters:
+        - name: matricula
+          in: query
+          required: true
+          schema: {type: string, maxLength: 30}
+      responses:
+        '200':
+          description: Jugador encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/JugadorBuscado'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No existe un jugador con esa matricula (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Matricula ausente, vacia o de mas de 30 caracteres (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}:
+    get:
+      operationId: verJugador
+      summary: Consulta el expediente de un jugador del usuario
+      description: >-
+        Con sesion (HU-02). Un jugador fuera del alcance del usuario, inexistente o con identificador mal
+        formado responde 404 con el mismo cuerpo, para no revelar que existe. Un jugador en baja sigue
+        respondiendo 200 con estatus baja a quien ya lo tenia asignado (DD-30). Es el mismo esquema Jugador que
+        el 201 de POST /jugadores.
+      tags: [Jugadores]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Expediente del jugador, con solo los equipos del usuario.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      operationId: actualizarJugador
+      summary: Actualiza nombres, apellidos o fecha de nacimiento de un jugador del usuario
+      description: >-
+        Solo entrenadores (HU-05, RNF-02). Acepta cualquiera de nombres, apellidos y fecha_nacimiento; cualquier
+        otro campo (matricula, estatus_academico, estatus_deportivo, id...) se rechaza con 422 validacion_fallida
+        senalandolo (codigo de campo prohibited). Un cuerpo sin campos responde 422 con el campo cuerpo. Los textos
+        se recortan antes de validar. Un jugador fuera del alcance, inexistente o con identificador que no es UUID v7
+        responde 404 con el mismo cuerpo, con cualquier cuerpo, valido o no, antes de validarlo. Sin cambios reales
+        responde 200 sin escribir historial ni tocar actualizado_en. Con cambios escribe una fila actualizar en
+        jugadores_historial con la instantanea completa antes y despues (DD-39), en la misma transaccion. Un jugador
+        en baja tambien puede actualizarse. Respuesta: el esquema Jugador, con solo los equipos del usuario (RN-14).
+      tags: [Jugadores]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                nombres: {type: string, minLength: 1, maxLength: 120}
+                apellidos: {type: string, minLength: 1, maxLength: 120}
+                fecha_nacimiento: {type: string, format: date}
+      responses:
+        '200':
+          description: Expediente del jugador actualizado (o sin cambios), con solo los equipos del usuario.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Campo no permitido, cuerpo vacio, texto vacio o de mas de 120 caracteres, o fecha que no es AAAA-MM-DD (codigo validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/baja:
+    post:
+      operationId: darDeBajaJugador
+      summary: Registra la baja de un jugador del usuario
+      description: >-
+        Solo entrenadores (HU-29, RN-23). La baja es global (DD-30): cambia estatus_academico y estatus_deportivo a
+        baja, el jugador desaparece de los listados de todos sus entrenadores y sus membresias no se cierran (RN-17);
+        el detalle sigue respondiendo 200 con estatus baja. Se guarda la baja, los estatus y los historiales
+        (actualizar del jugador con la instantanea completa y crear de la baja) en una transaccion, con el mismo
+        instante. El motivo se recorta; la fecha es la que envia el usuario (AAAA-MM-DD, se acepta una fecha futura).
+        Un jugador fuera del alcance, inexistente o con identificador que no es UUID v7 responde 404 con el mismo
+        cuerpo, con cualquier cuerpo, antes de validarlo. Orden: alcance (404), validacion de campos
+        (422 validacion_fallida), motivo ausente o en blanco (422 motivo_obligatorio) y jugador ya en baja (409).
+      tags: [Jugadores]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [motivo, fecha]
+              properties:
+                motivo:
+                  type: string
+                  maxLength: 500
+                  description: No vacio tras recortar espacios (de lo contrario, 422 motivo_obligatorio).
+                fecha:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Baja registrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Baja'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador ya esta en baja (codigo jugador_ya_en_baja).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Fecha ausente o que no es AAAA-MM-DD, o motivo de mas de 500 caracteres o de tipo incorrecto
+            (validacion_fallida, con el campo en errores); motivo ausente o en blanco (motivo_obligatorio).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/jugadores:
+    post:
+      operationId: asignarJugadorAEquipo
+      summary: Asigna un jugador existente a un equipo del entrenador, por matricula
+      description: >-
+        Solo entrenadores (HU-04, RN-20, DD-31). El jugador se localiza por matricula, sin distinguir mayusculas
+        ni espacios alrededor (DD-37), y nunca se devuelve su identificador ni sus datos antes de asignar. Crea la
+        membresia vigente y su historial en una transaccion. Asignar otorga alcance: la respuesta es el esquema
+        Jugador, con solo los equipos del usuario (RN-14). Orden de comprobaciones: equipo del entrenador (404),
+        campos (422 validacion_fallida), posicion (422 posicion_invalida) y, solo entonces, la matricula.
+      tags: [Equipos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [matricula, posicion]
+              properties:
+                matricula:
+                  type: string
+                  maxLength: 30
+                posicion:
+                  type: string
+                  enum: [portero, defensa, medio, delantero]
+      responses:
+        '201':
+          description: Jugador asignado al equipo.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            El equipo no existe o el usuario no es su entrenador, o no existe un jugador con esa matricula
+            (codigo recurso_no_encontrado). El 404 por equipo ajeno no depende de la matricula.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El jugador ya tiene una membresia vigente en ese equipo (jugador_ya_en_equipo) o esta en baja
+            (jugador_en_baja, DD-30).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Matricula o posicion ausente, vacia, demasiado larga o mal formada (validacion_fallida, con el campo en
+            errores); codigo de posicion que no existe (posicion_invalida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/jugadores/{jugador}:
+    patch:
+      operationId: cambiarPosicionDeJugador
+      summary: Cambia la posicion de un jugador en un equipo del entrenador
+      description: >-
+        Solo entrenadores (HU-05). Cambia unicamente la posicion en la membresia vigente de ese equipo; las demas
+        membresias del jugador no cambian. El historial (jugador_equipo_historial, operacion actualizar) conserva la
+        fila completa antes y despues del cambio. Una posicion igual a la actual responde 200 sin escribir historial.
+        Cambiarla en un jugador en baja es valido. Los campos desconocidos del cuerpo se ignoran. Orden de
+        comprobaciones: equipo del entrenador (404), campo (422 validacion_fallida), posicion (422 posicion_invalida)
+        y membresia vigente (404).
+      tags: [Equipos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [posicion]
+              properties:
+                posicion:
+                  type: string
+                  enum: [portero, defensa, medio, delantero]
+      responses:
+        '200':
+          description: Jugador con la posicion actualizada, con solo los equipos del usuario.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Jugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no es entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            El equipo no existe o el usuario no es su entrenador, o el jugador no tiene membresia vigente en ese
+            equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Posicion ausente, vacia o mal formada (validacion_fallida); codigo que no existe (posicion_invalida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Baja:
+      type: object
+      additionalProperties: false
+      required: [jugador_id, motivo, fecha, creado_en]
+      properties:
+        jugador_id:
+          type: string
+          format: uuid
+        motivo:
+          type: string
+        fecha:
+          type: string
+          format: date
+        creado_en:
+          type: string
+          format: date-time
+    JugadorBuscado:
+      type: object
+      additionalProperties: false
+      description: Resultado de la busqueda por matricula (RN-20); no incluye identificador.
+      required: [nombres, apellidos, matricula]
+      properties:
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        matricula:
+          type: string
+    Jugador:
+      type: object
+      additionalProperties: false
+      required: [id, nombres, apellidos, fecha_nacimiento, matricula, estatus_academico, estatus_deportivo, equipos, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        fecha_nacimiento:
+          type: string
+          format: date
+        matricula:
+          type: string
+        estatus_academico:
+          type: string
+          enum: [activo, baja]
+        estatus_deportivo:
+          type: string
+          enum: [activo, baja]
+        equipos:
+          type: array
+          description: Solo los equipos donde el usuario que consulta es entrenador (RN-14).
+          items:
+            type: object
+            additionalProperties: false
+            required: [equipo_id, nombre, categoria, posicion]
+            properties:
+              equipo_id:
+                type: string
+                format: uuid
+              nombre:
+                type: string
+              categoria:
+                type: object
+                additionalProperties: false
+                required: [id, nombre]
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  nombre:
+                    type: string
+              posicion:
+                type: string
+                enum: [portero, defensa, medio, delantero]
+        actualizado_en:
+          type: string
+          format: date-time
+    Categoria:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Equipo:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, categoria, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        categoria:
+          type: object
+          additionalProperties: false
+          required: [id, nombre]
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombre:
+              type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Usuario:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, correo, roles]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        correo:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+            enum: [docente, entrenador]
     Error:
       type: object
       additionalProperties: false
