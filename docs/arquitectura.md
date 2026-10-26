@@ -1,7 +1,7 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.2.1 (ver sección 14)
+**Versión:** 1.3 (ver sección 14)
 **Fecha:** 21 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
@@ -278,7 +278,8 @@ Una alerta cerrada se conserva: su historial es el propio registro (`activada_en
 | 050 | Rendimiento: `metricas`, `metricas_posicion`, `rendimientos_partido`, `valores_metrica`, `plantillas_evaluacion`, `umbrales_rendimiento`, `evaluaciones_rendimiento` |
 | 060 | Condición Física: `mediciones_corporales`, `tipos_prueba`, `pruebas_fisicas` |
 | 070 | Salud: `lesiones`, `avisos_lesion`, `estados_disponibilidad` |
-| 080 | Alertas: `parametros_institucionales`, `alertas` |
+| 035 | Parámetros: `parametros_institucionales` (se crea en H2, porque el riesgo académico la lee) |
+| 080 | Alertas: `alertas` |
 | 090 | Todas las tablas `*_historial`, más restricciones de solo inserción |
 
 ### 8.3 Ejemplo de migración
@@ -410,3 +411,4 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | 1.1 | 19/10/2026 | Correcciones de la auditoría cruzada |
 | 1.2 | 21/10/2026 | Sección 5: todo bajo `backend/` y plantilla de contexto separada (Consultas sin Dominio). Sección 7.1: unicidad parcial con borrado lógico en todas las tablas, nombres de catálogo `citext`, decimales exactos con redondeo `HALF_UP`. Tipos `numeric(4,2)` en plantillas, umbrales y evaluaciones. Sección 7.9: única modificación permitida en `alertas`. Sección 11: cola `database` con servicio `worker`, eventos después del commit, recálculo diario programado y reloj inyectable |
 | 1.2.1 | 22/10/2026 | Sección 7.2 y grupo 000 de 8.2: la tabla `sessions` (driver `database`) y las tablas de cola de H0 |
+| 1.3 | 26/10/2026 | Sección 8.2: `parametros_institucionales` pasa del grupo 080 al grupo 035 y se crea en H2 (DD-42); el grupo 080 queda con `alertas`. Sección 7.1: el índice único de matrícula es sobre `lower(matricula)` (DD-37) |
