@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Schema;
  * que se revierte al final: PostgreSQL revierte tambien el DDL.
  */
 beforeEach(function () {
+    esquemaMarcarSucio();
+
     /** @var Connection $conexion */
     $conexion = DB::connection('propietario');
     $conexion->beginTransaction();

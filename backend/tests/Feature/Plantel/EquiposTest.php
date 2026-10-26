@@ -237,6 +237,7 @@ test('RNF-02: si falla el historial, el equipo y la asignación tampoco se guard
     $categoriaId = equiposCrearCategoria($this, 'Sub-17')->json('datos.id');
     $sesion = sesionesIniciar($this, 'a@x.com');
     $propietario = DB::connection('propietario');
+    esquemaMarcarSucio();
     $propietario->unprepared("create or replace function falla_historial_de_prueba() returns trigger language plpgsql as \$\$ begin raise exception 'historial_de_prueba_falla'; end \$\$");
     $propietario->unprepared("create trigger tg_falla_de_prueba before insert on {$tablaQueFalla} for each row execute function falla_historial_de_prueba()");
 

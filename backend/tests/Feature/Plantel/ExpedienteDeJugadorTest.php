@@ -237,6 +237,7 @@ test('RNF-02: si falla el historial, la actualización del expediente no se guar
     $sesion = sesionesIniciar($this, 'a@x.com');
     $antes = expedienteFila($m['j1']);
     $propietario = DB::connection('propietario');
+    esquemaMarcarSucio();
     $propietario->unprepared("create or replace function falla_historial_de_prueba() returns trigger language plpgsql as \$\$ begin raise exception 'historial_de_prueba_falla'; end \$\$");
     $propietario->unprepared('create trigger tg_falla_de_prueba before insert on jugadores_historial for each row execute function falla_historial_de_prueba()');
 

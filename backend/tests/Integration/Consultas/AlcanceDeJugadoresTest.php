@@ -7,10 +7,8 @@ use Src\Compartido\Aplicacion\AlcanceDeJugadores;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 
-use function Pest\Laravel\artisan;
-
 beforeEach(function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
 });
 
 /** @param  array<string, mixed>  $atributos */

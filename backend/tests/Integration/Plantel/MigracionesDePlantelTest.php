@@ -18,7 +18,7 @@ const HISTORIALES_DE_PLANTEL = [
 ];
 
 beforeEach(function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
 });
 
 /** @param  array<string, mixed>  $atributos */
@@ -118,6 +118,7 @@ test('RNF-03: la columna matricula sigue siendo varchar(30) y el indice es parci
 });
 
 test('RNF-03: revertir la migracion del indice restaura el indice anterior', function () {
+    esquemaMarcarSucio();
     $indiceNuevo = DB::connection('propietario')->scalar("select indexdef from pg_indexes where indexname = 'uq_jugadores_matricula'");
     expect($indiceNuevo)->toContain('lower(');
 
@@ -276,6 +277,7 @@ test('RNF-02: categorias y posiciones no llevan historial y las demas tablas de 
 });
 
 test('RNF-03: migrate:rollback de Plantel no falla y se vuelve a aplicar', function () {
+    esquemaMarcarSucio();
     $tablas = [...TABLAS_DE_PLANTEL, ...array_keys(HISTORIALES_DE_PLANTEL)];
 
     artisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();

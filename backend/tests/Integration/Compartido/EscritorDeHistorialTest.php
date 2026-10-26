@@ -56,6 +56,8 @@ function escritorDeHistorial(): EscritorDeHistorial
 }
 
 beforeEach(function () {
+    esquemaMarcarSucio();
+
     $esquema = Schema::connection('propietario');
     $esquema->dropIfExists('prueba_registros_historial');
     $esquema->dropIfExists('prueba_registros');

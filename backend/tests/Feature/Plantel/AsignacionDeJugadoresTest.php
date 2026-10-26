@@ -358,6 +358,7 @@ test('RNF-02: si falla el historial, la asignación no deja la membresía ni el 
     $m = mundoDeJugadores();
     $sesion = sesionesIniciar($this, 'b@x.com');
     $propietario = DB::connection('propietario');
+    esquemaMarcarSucio();
     $propietario->unprepared("create or replace function falla_historial_de_prueba() returns trigger language plpgsql as \$\$ begin raise exception 'historial_de_prueba_falla'; end \$\$");
     $propietario->unprepared('create trigger tg_falla_de_prueba before insert on jugador_equipo_historial for each row execute function falla_historial_de_prueba()');
     $antes = asignacionConteos();
@@ -379,6 +380,7 @@ test('RNF-02: si falla el historial, el cambio de posición no se guarda', funct
     $sesion = sesionesIniciar($this, 'a@x.com');
     $antes = DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->first();
     $propietario = DB::connection('propietario');
+    esquemaMarcarSucio();
     $propietario->unprepared("create or replace function falla_historial_de_prueba() returns trigger language plpgsql as \$\$ begin raise exception 'historial_de_prueba_falla'; end \$\$");
     $propietario->unprepared('create trigger tg_falla_de_prueba before insert on jugador_equipo_historial for each row execute function falla_historial_de_prueba()');
 

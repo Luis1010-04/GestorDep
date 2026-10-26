@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Schema;
 
-use function Pest\Laravel\artisan;
-
 /**
  * Tablas marcadas (H) en docs/arquitectura.md: filas de tabla con la forma "| `tabla` (H) |".
  *
@@ -52,7 +50,7 @@ test('F1-H1-T08: la arquitectura se lee y marca las tablas de H1 con historial',
 });
 
 test('F1-H1-T08: cada tabla (H) que existe en la base tiene su tabla de historial', function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
 
     $existentes = Schema::connection('propietario')->getTableListing(schema: 'public', schemaQualified: false);
 

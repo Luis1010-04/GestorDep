@@ -7,10 +7,8 @@ use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 use Src\Identidad\Infraestructura\Modelos\UsuarioModelo;
 
-use function Pest\Laravel\artisan;
-
 beforeEach(function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
     (new RolesSeeder)->run();
 });
 

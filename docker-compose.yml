@@ -8,6 +8,12 @@ x-aplicacion: &aplicacion
     - ./backend:/var/www/html
     # El contrato vive en docs/api/openapi.yaml; las pruebas lo leen desde base_path('../docs')
     - ./docs:/var/www/docs:ro
+    # El montaje del codigo desde Windows (9p) es lento al leer miles de archivos pequenos. Lo que PHP lee en
+    # cada arranque y no se edita vive en volumenes nombrados (storage/logs sigue en el montaje normal para
+    # poder leer los registros desde Windows).
+    - vendor_app:/var/www/html/vendor
+    - cache_bootstrap:/var/www/html/bootstrap/cache
+    - vistas_compiladas:/var/www/html/storage/framework/views
   environment:
     DB_HOST: db
     DB_PORT: 5432
@@ -67,3 +73,6 @@ services:
 
 volumes:
   datos_db:
+  vendor_app:
+  cache_bootstrap:
+  vistas_compiladas:

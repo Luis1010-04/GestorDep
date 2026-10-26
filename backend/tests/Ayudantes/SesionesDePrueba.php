@@ -15,14 +15,12 @@ use Src\Compartido\Dominio\Identificador;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-use function Pest\Laravel\artisan;
-
 const CLAVE_DE_SESIONES_DE_PRUEBA = 'una-clave-larga-1';
 
 /** Reconstruye la base con los roles de fabrica y la sesion en la tabla `sessions`. */
 function sesionesPrepararBase(): void
 {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
     (new RolesSeeder)->run();
     config(['session.driver' => 'database']);
 }

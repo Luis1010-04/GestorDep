@@ -11,13 +11,11 @@ use Src\Compartido\Dominio\Identificador;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-use function Pest\Laravel\artisan;
-
 const CLAVE_VIGENTE = 'una-clave-larga-1';
 const CORREO_DE_LUZ = 'luz@x.com';
 
 beforeEach(function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
     (new RolesSeeder)->run();
     config(['session.driver' => 'database']);
 });

@@ -9,7 +9,7 @@ use function Pest\Laravel\artisan;
 const CONTRASENA_VALIDA = 'una-clave-larga-1';
 
 beforeEach(function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
     (new RolesSeeder)->run();
 });
 

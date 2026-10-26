@@ -14,13 +14,11 @@ use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-use function Pest\Laravel\artisan;
-
 const CLAVE_CORRECTA = 'una-clave-larga-1';
 const CORREO_DE_ANA = 'ana@x.com';
 
 beforeEach(function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
     (new RolesSeeder)->run();
     config(['session.driver' => 'database']);
     fijarReloj('2026-03-15 10:00:00');

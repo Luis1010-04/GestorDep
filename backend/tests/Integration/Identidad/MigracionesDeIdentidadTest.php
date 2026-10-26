@@ -8,7 +8,7 @@ use Src\Compartido\Dominio\Identificador;
 use function Pest\Laravel\artisan;
 
 beforeEach(function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    esquemaReiniciar();
 });
 
 /** @param  array<string, mixed>  $atributos */
@@ -150,6 +150,7 @@ test('RNF-10: la configuracion de sesion usa la tabla sessions y 120 minutos', f
 });
 
 test('RNF-03: migrate:rollback de Identidad y de sesion no falla y se vuelve a aplicar', function () {
+    esquemaMarcarSucio();
     $tablas = ['usuarios', 'roles', 'usuario_rol', 'usuarios_historial', 'sessions'];
 
     artisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
