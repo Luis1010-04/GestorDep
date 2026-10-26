@@ -36,7 +36,7 @@ make verificar
 make humo
 ```
 
-Las claves de `.env.example` son solo de prueba para desarrollo local. `vendor`, `bootstrap/cache` y las vistas compiladas viven en volúmenes de Docker (leerlos desde el montaje de Windows es muy lento). `make levantar` instala las dependencias solo si `vendor` está vacío; después de cambiar `composer.json` o `composer.lock` hay que ejecutar `make dependencias`, porque el volumen no se actualiza solo. Los registros siguen en `backend/storage/logs`.
+Las claves de `.env.example` son solo de prueba para desarrollo local. `vendor`, `bootstrap/cache` y las vistas compiladas viven en volúmenes de Docker (leerlos desde el montaje de Windows es muy lento). `make levantar` instala las dependencias solo si `vendor` está vacío; después de cambiar `composer.json` o `composer.lock` hay que ejecutar `make dependencias`, porque el volumen no se actualiza solo. Los registros siguen en `backend/storage/logs`. `scripts/` se monta de solo lectura en `/scripts` para `make humo`: si el contenedor se creó antes de ese montaje, `make levantar` lo recrea y lo incorpora.
 
 ## Comandos
 

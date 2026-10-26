@@ -13,5 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesSeeder::class);
         $this->call(PosicionesSeeder::class);
+
+        if (! app()->environment('production')) {
+            $this->call(UsuariosDemoSeeder::class);
+        }
     }
 }

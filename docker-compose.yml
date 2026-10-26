@@ -8,6 +8,8 @@ x-aplicacion: &aplicacion
     - ./backend:/var/www/html
     # El contrato vive en docs/api/openapi.yaml; las pruebas lo leen desde base_path('../docs')
     - ./docs:/var/www/docs:ro
+    # Los guiones de humo (make humo) se ejecutan desde aqui
+    - ./scripts:/scripts:ro
     # El montaje del codigo desde Windows (9p) es lento al leer miles de archivos pequenos. Lo que PHP lee en
     # cada arranque y no se edita vive en volumenes nombrados (storage/logs sigue en el montaje normal para
     # poder leer los registros desde Windows).

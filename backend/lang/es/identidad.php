@@ -6,4 +6,7 @@ return [
         'pedir_contrasena' => 'Contraseña del usuario (mínimo 10 caracteres)',
         'creado' => 'Usuario creado: :correo',
     ],
+    'demo' => [
+        'produccion' => 'Los usuarios de demostración no se pueden crear con APP_ENV=production.',
+    ],
 ];

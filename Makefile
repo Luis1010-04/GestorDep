@@ -35,6 +35,5 @@ fresh:
 	docker compose exec -T app php artisan migrate:fresh --database=propietario --seed --force
 
 humo:
-	@set -e; guiones=$$(ls scripts/humo/humo-h*.sh 2>/dev/null || true); \
-	if [ -z "$$guiones" ]; then echo "No hay guiones de humo en scripts/humo/"; exit 1; fi; \
-	for g in $$guiones; do echo "== $$g"; docker compose exec -T app bash -s < "$$g"; done
+	docker compose exec -T app bash -s < scripts/humo/humo-h0.sh
+	docker compose exec -T app bash /scripts/humo/humo-h1.sh

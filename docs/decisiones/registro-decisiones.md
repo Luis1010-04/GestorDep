@@ -1,7 +1,7 @@
 # Registro de decisiones tomadas por defecto tras la auditoría
 
-**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026)
-**Estado:** Pendiente de validación
+**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026)
+**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04)
 
 La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los documentos. Para trabajar con lo que se tiene, el equipo de análisis aplicó la **recomendación de la auditoría** en cada una y las registró aquí. Ninguna cuenta como validada por la institución. Cada una indica antes de qué hito debe confirmarse; si se cambia, se corrige el documento afectado y se anota en este registro.
 
@@ -36,6 +36,20 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-25 | Técnica: la cola `database` usa las tablas `trabajos` y `trabajos_fallidos`, generadas con los comandos de Laravel, en el grupo 000 de migraciones. Sus columnas y su `id` numérico son los que exige el driver de cola; solo el nombre de la tabla está en español | `backend/config/queue.php`; `database/migrations/compartido/`; Arq 8.2 y 11 | H0 | F1-H0-EXTRA |
 | DD-26 | Técnica: el almacén de caché por defecto es `file`, sin tabla `cache`; el framework lo usa para sus señales internas (por ejemplo, `queue:restart`). Las migraciones por defecto de Laravel (usuarios, caché y cola) se omitieron en F1-H0-T03 | `backend/config/cache.php` | H0 | F1-H0-EXTRA |
 | DD-27 | Técnica: la integración continua crea los roles con el mismo guion que el contenedor de base de datos y ejecuta `migrate:fresh`, `migrate:rollback` y `migrate` antes de `composer verificar` | `.github/workflows/verificar.yml`; Pruebas §3 | H0 | F1-H0-T10 |
+| DD-28 | Sesión en la tabla `sessions` (driver `database`), caducidad de 120 minutos de inactividad (`SESSION_LIFETIME=120`). La ruta `GET /sanctum/csrf-cookie` conserva su ruta estándar, fuera de `/api/v1`, y se documenta en OpenAPI | `database/migrations/compartido/` (`sessions`); `docs/api/openapi.yaml`; H1 §3 | H1 | F1-H1 |
+| DD-29 | Una cuenta bloqueada (RNF-10) responde **429** con código `cuenta_bloqueada` y la cabecera `Retry-After`. Un usuario inexistente, desactivado o con contraseña incorrecta responde 401 `credenciales_invalidas`, siempre con el mismo cuerpo. Solo se revela el bloqueo después de 5 fallos | `docs/convenciones-api.md` §2; H1 §3 | H1 | F1-H1 |
+| DD-30 | La baja (RN-23) es **global**: cambia `estatus_academico` y `estatus_deportivo` del jugador a `baja` y desaparece de los listados de todos sus entrenadores; sus asignaciones no se cierran (RN-17). El detalle sigue respondiendo 200 con estatus `baja` a quien ya lo tenía asignado. Un jugador en baja no se puede asignar a un equipo (409 `jugador_en_baja`). El estatus solo cambia por la baja. *Validar con la institución:* que la baja decidida por un entrenador afecte también al otro | H1 §3; `POST /jugadores/{jugador}/baja` | Institución (sin hito fijado) | F1-H1 |
+| DD-31 | Asignar un jugador existente a un equipo se hace **por matrícula** (`POST /equipos/{id}/jugadores`), no por identificador, para no entregar el `id` de un jugador ajeno (RN-14) | H1 §3; `docs/api/openapi.yaml` | H1 | F1-H1 |
+| DD-32 | Los eventos `JugadorAsignadoAEquipo` y `JugadorDadoDeBaja` (catálogo de `docs/arquitectura.md` §4.2) no se crean en H1: sin consumidores serían código muerto; `alertas:recalcular` (H6) concilia lo que ocurrió antes | H1 §3 | H6 | F1-H1 |
+| DD-33 | El historial de `usuarios` no guarda `contrasena_hash`, `intentos_fallidos` ni `bloqueado_hasta`. Un cambio de contraseña escribe una fila `actualizar` con `datos_anteriores` vacío y `datos_nuevos = {"contrasena_modificada": true}`. Un usuario creado por consola se registra con `usuario_id` nulo | H1 §3; `usuarios_historial` | H1 | F1-H1 |
+| DD-34 | En `usuarios_historial` la columna de la entidad se llama `usuario_afectado_id` y `usuario_id` es el autor del cambio (la macro `historial()` de H0 no admite dos columnas con el mismo nombre; error de la especificación v1.0 de H1) | `docs/arquitectura.md`; migración `090100` | H1 | F1-H1 |
+| DD-35 | `UsuarioActual::identificador()` puede devolver nulo; el historial de cambios hechos sin sesión (consola) se escribe con `usuario_id` nulo. Los parámetros de acceso (5 intentos, 15 minutos, 10 caracteres) viven en `config/identidad.php`: son parámetros de seguridad (RNF-10), no umbrales ni plantillas de RNF-09 | `backend/config/identidad.php`; H1 §3 | H1 | F1-H1 |
+| DD-36 | Las fechas de negocio que calcula el sistema (`desde` de `entrenador_equipo` y `jugador_equipo`) usan el día en America/Mexico_City mediante `HoyDeNegocio` (Compartido); la zona sale de `config('app.zona_presentacion')` (RNF-04) | `src/Compartido/Dominio/HoyDeNegocio.php`; H1 §3 | H1 | F1-H1 |
+| DD-37 | La matrícula no distingue mayúsculas: índice único parcial sobre `lower(matricula)` (migración 020800); se guarda recortada y como la escribió el usuario. Toda comparación usa `lower(matricula) = lower(?)` | `database/migrations/plantel/`; `docs/arquitectura.md` | H1 | F1-H1 |
+| DD-38 | La búsqueda por matrícula (RN-20) también encuentra jugadores en baja y devuelve solo `nombres`, `apellidos` y `matricula`. Un `filtro[equipo_id]` con formato inválido responde 422 `validacion_fallida`; con un equipo ajeno, lista vacía | H1 §3; `GET /jugadores/busqueda` | H1 | F1-H1 |
+| DD-39 | En el historial, `datos_anteriores` y `datos_nuevos` de una acción `actualizar` llevan la instantánea completa de la fila (misma forma que `crear`), no solo los campos cambiados. Excepción: `usuarios_historial` (DD-33) | H1 §3 | H1 | F1-H1 |
+| DD-40 | Un jugador en baja **sí** puede cambiar de posición y actualizar su expediente: ninguna regla lo impide y RN-17 conserva sus membresías. `PATCH /jugadores/{id}` rechaza los campos no permitidos (422 `prohibited`); `PATCH /equipos/.../jugadores/...` ignora los desconocidos. *Validar con la institución:* si un expediente en baja debe quedar congelado | H1 §3; `docs/convenciones-api.md` | Institución (sin hito fijado) | F1-H1 |
+| DD-41 | En la baja: la `fecha` es la que envía el usuario (no usa `HoyDeNegocio`) y se acepta una fecha futura; el `motivo` se recorta y tiene un tope de 500 caracteres solo en la API; un motivo ausente o en blanco responde `motivo_obligatorio` solo cuando la fecha es válida (si la fecha falla, `validacion_fallida`) | H1 §3; `POST /jugadores/{jugador}/baja` | H1 | F1-H1 |
 
 ## 2. Decisiones que siguen abiertas
 
@@ -52,3 +66,26 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 | AB-07 | Si existe reglamento de elegibilidad para convocar | Institución | H3 |
 | AB-08 | Origen de la retícula y quién verifica la carga inicial | Institución | H2 |
 | AB-09 | Quién construye el frontend y cuándo | Responsable | Planificación de la Fase 2 |
+| AB-10 | Confirmar DD-24 (biblioteca `osteel/openapi-httpfoundation-testing` para validar contra OpenAPI) | Responsable | H2 |
+| AB-11 | Validar DD-30 (la baja es global y la decidida por un entrenador afecta al otro) | Institución | Sin hito fijado (antes de que se use la baja en convocatorias, H3) |
+| AB-12 | Validar DD-40 (un expediente en baja se puede seguir actualizando y cambiar de posición) | Institución | Sin hito fijado |
+| AB-13 | Validar DD-19 (ventana móvil de 30 días de RN-09) con la coordinación deportiva | Institución | H6 |
+| AB-14 | Validar DD-20 (redondeo del promedio de RN-04 al medio hacia arriba) con la coordinación académica | Institución | H2 |
+| AB-15 | Aceptación escrita del cliente de que la Fase 1 es solo API (DD-14) | Responsable, con el cliente | H3 |
+| AB-16 | Visor de OpenAPI (Swagger UI, Redoc u otro) para que el cliente lea `docs/api/openapi.yaml`: decidir si se agrega y cuál | Responsable | Sin hito fijado |
+| AB-17 | Revisión de seguridad: carrera en el bloqueo por intentos (dos fallos simultáneos pueden contar uno; solución probable: incremento atómico en SQL) | Responsable (revisión de seguridad) | H7 |
+| AB-18 | Revisión de seguridad: el tiempo de respuesta del inicio de sesión distingue cuentas existentes de inexistentes (no se calcula un hash ficticio) | Responsable (revisión de seguridad) | H7 |
+| AB-19 | Revisión de seguridad: una petición sin `Origin` ni `Referer` de un dominio con estado no abre sesión y `regenerate()` falla con 500 en lugar de un error controlado | Responsable (revisión de seguridad) | H7 |
+| AB-20 | Revisión de seguridad: asignación y baja simultáneas pueden dejar una membresía vigente de un jugador en baja y romper el 409 `jugador_ya_en_baja`/`jugador_en_baja` (solución probable: `lockForUpdate` sobre el jugador) | Responsable (revisión de seguridad) | H7 |
+| AB-21 | Revisión de seguridad: desfase de reloj en `usuarios` (ver PT-04) | Responsable (revisión de seguridad) | H7 |
+
+## 3. Pendientes técnicos tras H1
+
+Anotados al cerrar H1; ninguno bloquea el hito. Los decide el responsable.
+
+| ID | Pendiente | Antes de (sugerido) |
+|---|---|---|
+| PT-01 | Las acciones de GitHub Actions emiten advertencias de obsolescencia: `actions/checkout@v4` corre en Node 20 y `ubuntu-latest` cambia de imagen. Actualizar las versiones en `.github/workflows/verificar.yml` | H2 |
+| PT-02 | `bin/verificar-cobertura.php` debe rechazar un `clover.xml` anterior a la ejecución de las pruebas. Se vio que leía uno antiguo cuando Pest falló por falta de memoria y el guion evaluó un reporte viejo | H2 |
+| PT-03 | Un arranque con el servicio `db` en estado "unhealthy", visto una sola vez con un volumen nuevo. No se reprodujo; vigilar y, si reaparece, revisar el `healthcheck` y los tiempos de `docker-compose.yml` | H2 |
+| PT-04 | `usuarios.actualizado_en` y `bloqueado_hasta` no salen de `Reloj` (usan `now()` de la base o microsegundos), a diferencia del resto de las tablas tras `F1-H1-FIX`. Es el mismo desfase que anota `docs/hitos/f1-h1.md` §11 | H7 |
