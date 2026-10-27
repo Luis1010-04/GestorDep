@@ -9,6 +9,10 @@
 | T05 Periodos escolares | hecha | `3a82618` | pasa; 623 pruebas; 11 min 49 s |
 | T06 Asignaturas | hecha | `f58b835` | pasa; 643 pruebas; 12 min 50 s |
 | T07 Materias | hecha | `d4c9bcf` | pasa; 663 pruebas; 13 min 57 s |
+| FIX reinicio de pruebas por `DELETE` | hecho | `e3e02be` | pasa; 667 pruebas; 7 min 5 s (`f1-h2-fix-04.md`) |
+| FIX lotería de sesiones (PT-05) | hecho | `143474e` | pasa; 669 pruebas; 6 min 58 s (`f1-h2-fix-02.md`) |
+| FIX UUID que no es v7 en `DELETE /categorias/{id}` | hecho | `752e4eb` | pasa; 676 pruebas; 6 min 20 s (`f1-h2-fix-05.md`) |
+| T08 Alcance del docente | **plan escrito, espera aprobación** | (solo el plan) | no se implementó (`f1-h2-plan-t08.md`) |
 
 ## Resumen del lote B (T04 a T07)
 
@@ -20,9 +24,9 @@
 - **Decisiones del agente nuevas:** DA-08 (respuestas del plan de T04, aceptada por el responsable) y DA-09 (orden del listado de materias). Ninguna cambia privacidad ni permisos.
 - **Rutas fuera de la especificación:** ninguna en el lote B. `tests/Pest.php` no se tocó.
 - **Puntos de atención**
-  1. **Tiempo de `verificar`:** 13 min 57 s en T07, a 63 s del límite de 15 min de §0.4; sube 1 a 2 min por tarea. T08 lo superará casi con seguridad. Hace falta decidir antes de T08 (por ejemplo, correr Infection solo por lote y en CI, o acelerar el reinicio de la base en las pruebas de ruta).
-  2. **Prueba intermitente de H1** (`ConsultaDeJugadoresTest.php:313`, lotería de sesiones) sigue pendiente de la decisión sobre cómo fijar `session.lottery`.
-  3. `DELETE /categorias/{id}` (H1) responde 500 con un UUID válido que no sea v7; las rutas nuevas usan `IdentificadorDeRuta` (404). No se tocó H1.
+  1. **Tiempo de `verificar`:** 13 min 57 s en T07. **Resuelto** por el FIX `e3e02be`: el reinicio por `DELETE` en lugar de `TRUNCATE` lo baja a ~6 a 7 min (Pest de ~725 s a ~255 a 295 s). Volver a medir al cierre de C2.
+  2. **Prueba intermitente de H1** (`ConsultaDeJugadoresTest.php:313`, lotería de sesiones): **resuelta** por el FIX `143474e` (PT-05, `tests/TestCase.php`).
+  3. `DELETE /categorias/{id}` (H1) respondía 500 con un UUID válido que no fuera v7: **corregido** en `752e4eb`; las demás rutas de H1 con parámetro ya respondían 404.
   4. En T05 a T07 las clases internas se escribieron antes de ejecutar las pruebas; la evidencia del fallo se obtuvo quitando las rutas (ver cada reporte).
 
 ## Resumen del lote A
