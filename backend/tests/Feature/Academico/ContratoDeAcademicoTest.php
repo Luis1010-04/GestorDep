@@ -11,6 +11,30 @@ beforeEach(function () {
     sesionesCrearUsuario('a@x.com', ['entrenador']);
 });
 
+test('HU-28: las respuestas de asignaturas cumplen el contrato', function () {
+    /** @var TestCase $this */
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    $sesion = sesionesIniciar($this, 'd1@x.com');
+    $cuerpo = ['clave' => 'MAT-101', 'nombre' => 'Matemáticas', 'grado' => 1];
+
+    $creada = sesionesPeticion($this, 'POST', '/api/v1/asignaturas', $cuerpo, $sesion)->assertCreated();
+    $respuestas = [
+        ['/asignaturas', 'post', $creada],
+        ['/asignaturas', 'post', sesionesPeticion($this, 'POST', '/api/v1/asignaturas', $cuerpo, $sesion)->assertStatus(409)],
+        ['/asignaturas', 'post', sesionesPeticion($this, 'POST', '/api/v1/asignaturas', [...$cuerpo, 'clave' => 'X', 'grado' => 13], $sesion)->assertUnprocessable()],
+        ['/asignaturas', 'post', sesionesPeticion($this, 'POST', '/api/v1/asignaturas', $cuerpo)->assertUnauthorized()],
+        ['/asignaturas', 'post', sesionesPeticion($this, 'POST', '/api/v1/asignaturas', $cuerpo, sesionesIniciar($this, 'a@x.com'))->assertForbidden()],
+        ['/asignaturas', 'get', sesionesPeticion($this, 'GET', '/api/v1/asignaturas', idDeSesion: $sesion)->assertOk()],
+        ['/asignaturas', 'get', sesionesPeticion($this, 'GET', '/api/v1/asignaturas?orden=x', idDeSesion: $sesion)->assertUnprocessable()],
+        ['/asignaturas/{id}', 'delete', sesionesPeticion($this, 'DELETE', '/api/v1/asignaturas/'.$creada->json('datos.id'), idDeSesion: $sesion)->assertNoContent()],
+        ['/asignaturas/{id}', 'delete', sesionesPeticion($this, 'DELETE', '/api/v1/asignaturas/'.Identificador::generar()->valor(), idDeSesion: $sesion)->assertNotFound()],
+    ];
+
+    foreach ($respuestas as [$ruta, $metodo, $respuesta]) {
+        expect($validador->validate($respuesta->baseResponse, $ruta, $metodo))->toBeTrue("$metodo $ruta {$respuesta->getStatusCode()}");
+    }
+});
+
 test('HU-28: las respuestas de periodos escolares cumplen el contrato', function () {
     /** @var TestCase $this */
     $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();

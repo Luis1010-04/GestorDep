@@ -7,6 +7,7 @@
 | T03 Migraciones y seeders | hecha | `c84f4c5` | pasa; 530 pruebas; 8 min 45 s |
 | T04 Dominio del riesgo | hecha | `5db7870` | pasa; 596 pruebas; 9 min 17 s sin carga ajena (la corrida con carga paralela tardó 31 min 04 s; ver `f1-h2-medicion-verificar.md`) |
 | T05 Periodos escolares | hecha | ver `git log` | pasa; 623 pruebas; 11 min 49 s |
+| T06 Asignaturas | hecha | ver `git log` | pasa; 643 pruebas; 12 min 50 s |
 
 ## Resumen del lote A
 

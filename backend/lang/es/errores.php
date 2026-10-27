@@ -35,6 +35,7 @@ return [
         'jugador_ya_en_baja' => 'El jugador ya está en baja.',
         'motivo_obligatorio' => 'La baja requiere un motivo.',
         'periodo_duplicado' => 'Ya existe un periodo escolar con ese nombre.',
+        'asignatura_duplicada' => 'Ya existe una asignatura con esa clave.',
         'rango_de_fechas_invalido' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
     ],
 ];

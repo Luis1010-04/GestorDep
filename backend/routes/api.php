@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AsignaturaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\EquipoController;
@@ -26,6 +27,10 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/periodos-escolares', [PeriodoEscolarController::class, 'listar']);
         Route::post('/periodos-escolares', [PeriodoEscolarController::class, 'crear']);
         Route::delete('/periodos-escolares/{id}', [PeriodoEscolarController::class, 'eliminar'])->whereUuid('id');
+
+        Route::get('/asignaturas', [AsignaturaController::class, 'listar']);
+        Route::post('/asignaturas', [AsignaturaController::class, 'crear']);
+        Route::delete('/asignaturas/{id}', [AsignaturaController::class, 'eliminar'])->whereUuid('id');
     });
 
     Route::middleware('rol:entrenador')->group(function () {

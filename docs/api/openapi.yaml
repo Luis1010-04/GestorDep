@@ -456,6 +456,157 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /asignaturas:
+    get:
+      operationId: listarAsignaturas
+      summary: Lista las asignaturas vigentes
+      description: Solo docentes (HU-28, DD-49). Excluye las eliminadas; orden por defecto clave.
+      tags: [Asignaturas]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [clave, '-clave'], default: clave}
+      responses:
+        '200':
+          description: Pagina de asignaturas.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Asignatura'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearAsignatura
+      summary: Da de alta una asignatura
+      description: Solo docentes (HU-28, DD-49).
+      tags: [Asignaturas]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [clave, nombre, grado]
+              properties:
+                clave:
+                  type: string
+                  maxLength: 20
+                nombre:
+                  type: string
+                  maxLength: 150
+                grado:
+                  type: integer
+                  minimum: 1
+                  maximum: 12
+      responses:
+        '201':
+          description: Asignatura creada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Asignatura'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe una asignatura vigente con esa clave, sin distinguir mayusculas (asignatura_duplicada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Campo ausente, vacio, demasiado largo o grado fuera de 1 a 12 (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asignaturas/{id}:
+    delete:
+      operationId: eliminarAsignatura
+      summary: Elimina logicamente una asignatura
+      description: >-
+        Solo docentes (HU-28, DD-49). Fija eliminado_en y eliminado_por; la fila se conserva y las materias que
+        la usan siguen mostrandola. La clave puede darse de alta de nuevo.
+      tags: [Asignaturas]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Asignatura eliminada.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La asignatura no existe o ya estaba eliminada (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos:
     get:
       operationId: listarEquipos
@@ -1186,6 +1337,25 @@ components:
           format: uuid
         nombre:
           type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Asignatura:
+      type: object
+      additionalProperties: false
+      required: [id, clave, nombre, grado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        clave:
+          type: string
+        nombre:
+          type: string
+        grado:
+          type: integer
+          minimum: 1
+          maximum: 12
         actualizado_en:
           type: string
           format: date-time
