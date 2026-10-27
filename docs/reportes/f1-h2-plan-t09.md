@@ -1,0 +1,9 @@
+# Plan F1-H2-T09: recálculo del resumen académico
+
+- **Eventos** (`src/Compartido/Dominio/Eventos/`, solo cadenas con identificadores): `CalificacionRegistrada`, `AsistenciaDeClaseRegistrada` y `JugadorInscrito` (inscripción, materia, jugador) y `CriterioDeMateriaModificado` (materia).
+- **Mecanismo de publicación** (H0 no lo ofrece; `src/Compartido/**` lo permite): puerto `PublicadorDeEventos` (Aplicación) e implementación `PublicadorDeEventosLaravel` que despacha con `DB::afterCommit` (fuera de una transacción, de inmediato; dentro, al confirmar; si se revierte, nunca).
+- **Aplicación** (`src/Academico/Aplicacion/`): `RecalcularResumenDeJugador` (periodo vigente DD-45 → datos → dominio de T04 → guarda; nada si no hay periodo vigente), `RecalcularResumenesDeMateria`, `ConciliarResumenes`; puerto `FuenteDeDatosAcademicos`.
+- **Dominio**: puertos `RepositorioDeParametros` (`riesgo_academico` de `parametros_institucionales`, sin constantes) y `RepositorioDeResumenes` (upsert idempotente por jugador y periodo); `RepositorioDeCriterios` gana `propiosVigentes()` (lo reutiliza T11).
+- **Infraestructura**: `FuenteDeDatosAcademicosSql`, `RepositorioDeParametrosEloquent`, `RepositorioDeResumenesEloquent`, el escucha en cola `RecalcularResumenAcademico` (`afterCommit`, 3 intentos, idempotente), el comando `alertas:recalcular` y su programación diaria a las 02:00 America/Mexico_City en `routes/console.php`.
+- **Pruebas:** filas 15 y 16 (caso de uso / comando), 17, 18, 19, 22 y 24 de §7.10 y la fila 8 de §7.12; además el cálculo con datos sembrados (§7.10 filas 1, 2, 5 a 8), el publicador `afterCommit` y la forma de los eventos.
+- **Duda de ruta (§0.4):** el comando necesitaría una descripción y mensajes en `lang/es`, ruta no permitida en T09. **Decisión:** el comando no imprime texto ni lleva descripción (solo código de salida); si se quiere texto, se agrega en una tarea que permita `lang/es/**`.

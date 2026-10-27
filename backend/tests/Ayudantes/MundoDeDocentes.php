@@ -8,7 +8,9 @@
  */
 
 use Database\Seeders\CriterioGeneralSeeder;
+use Database\Seeders\ParametrosInstitucionalesSeeder;
 use Database\Seeders\PosicionesSeeder;
+use Illuminate\Support\Facades\DB;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 
@@ -25,6 +27,7 @@ function mundoDeDocentes(): array
     sesionesPrepararBase();
     (new PosicionesSeeder)->run();
     (new CriterioGeneralSeeder)->run();
+    (new ParametrosInstitucionalesSeeder)->run();
     app()->instance(Reloj::class, new RelojFijo(new DateTimeImmutable('2026-03-10 12:00:00', new DateTimeZone('UTC'))));
 
     $d1 = sesionesCrearUsuario('d1@x.com', ['docente']);
@@ -69,4 +72,32 @@ function mundoAgregarEquipoYMateriaDeDocenteEntrenador(array $m): array
     $m3 = mundoInsertar('materias', ['asignatura_id' => $m['s1'], 'periodo_id' => $m['p1'], 'docente_id' => $m['de']]);
 
     return [...$m, 'ed' => $ed, 'm3' => $m3, 'i1m3' => mundoInscribir($m3, $m['j1'])];
+}
+
+/** Una calificación capturada con el criterio general vigente (DD-47). Un parcial lleva `$numeroParcial`; la final, nulo. */
+function mundoCalificar(string $inscripcionId, string $tipo, string $valor, ?int $numeroParcial = null): string
+{
+    return mundoInsertar('calificaciones', [
+        'inscripcion_id' => $inscripcionId,
+        'tipo' => $tipo,
+        'numero_parcial' => $numeroParcial,
+        'valor' => $valor,
+        'criterio_id' => DB::table('criterios_aprobacion')->where('ambito', 'general')->whereNull('vigente_hasta')->value('id'),
+        'fecha' => '2026-03-10',
+    ]);
+}
+
+function mundoAsistir(string $inscripcionId, string $fecha, string $estado): string
+{
+    return mundoInsertar('asistencias_clase', ['inscripcion_id' => $inscripcionId, 'fecha' => $fecha, 'estado' => $estado]);
+}
+
+function mundoCriterioPropio(string $materiaId, string $minimo): string
+{
+    return mundoInsertar('criterios_aprobacion', [
+        'ambito' => 'materia',
+        'materia_id' => $materiaId,
+        'calificacion_minima' => $minimo,
+        'vigente_desde' => '2026-01-01',
+    ]);
 }
