@@ -3,5 +3,12 @@
 namespace Src\Academico\Infraestructura;
 
 use Illuminate\Support\ServiceProvider;
+use Src\Academico\Dominio\RepositorioDePeriodos;
 
-class AcademicoServiceProvider extends ServiceProvider {}
+class AcademicoServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->bind(RepositorioDePeriodos::class, RepositorioDePeriodosEloquent::class);
+    }
+}

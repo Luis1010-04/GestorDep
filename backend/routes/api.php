@@ -5,6 +5,7 @@ use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\JugadorController;
+use App\Http\Controllers\PeriodoEscolarController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,12 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/jugadores', [JugadorController::class, 'listar']);
     Route::get('/jugadores/busqueda', [JugadorController::class, 'buscar']);
     Route::get('/jugadores/{jugador}', [JugadorController::class, 'ver'])->whereUuid('jugador');
+
+    Route::middleware('rol:docente')->group(function () {
+        Route::get('/periodos-escolares', [PeriodoEscolarController::class, 'listar']);
+        Route::post('/periodos-escolares', [PeriodoEscolarController::class, 'crear']);
+        Route::delete('/periodos-escolares/{id}', [PeriodoEscolarController::class, 'eliminar'])->whereUuid('id');
+    });
 
     Route::middleware('rol:entrenador')->group(function () {
         Route::get('/categorias', [CategoriaController::class, 'listar']);

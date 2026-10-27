@@ -34,5 +34,7 @@ return [
         'jugador_en_baja' => 'El jugador está en baja y no se puede asignar.',
         'jugador_ya_en_baja' => 'El jugador ya está en baja.',
         'motivo_obligatorio' => 'La baja requiere un motivo.',
+        'periodo_duplicado' => 'Ya existe un periodo escolar con ese nombre.',
+        'rango_de_fechas_invalido' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
     ],
 ];
