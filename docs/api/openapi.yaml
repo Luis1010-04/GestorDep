@@ -732,8 +732,8 @@ paths:
       summary: Consulta una materia del docente que consulta
       description: >-
         Solo el docente dueño de la materia (HU-06, HU-08). Una materia ajena, inexistente o con id que no es v7
-        responde el mismo 404 (DD-50). criterio_aplicado es el criterio general vigente (el propio de la materia
-        llega con la tarea de criterios).
+        responde el mismo 404 (DD-50). criterio_aplicado es el criterio propio vigente de la materia si lo tiene y,
+        si no, el general vigente (RN-03).
       tags: [Materias]
       parameters:
         - name: materia
@@ -766,6 +766,73 @@ paths:
                 $ref: '#/components/schemas/Error'
         '404':
           description: La materia no existe o no es del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /materias/{materia}/criterio:
+    put:
+      operationId: definirCriterioDeMateria
+      summary: Define el criterio de aprobacion propio de una materia
+      description: >-
+        Solo el docente dueño de la materia (HU-08, RN-03). Un valor distinto del vigente cierra el criterio propio
+        vigente (vigente_hasta = hoy) y crea el nuevo, con sus historiales, en una transaccion, y publica
+        CriterioDeMateriaModificado para recalcular los resumenes de los inscritos. Un valor igual al vigente
+        responde 200 sin escribir nada. Una materia ajena, inexistente o con id que no es v7 responde el mismo
+        404 antes de validar el cuerpo (DD-50).
+      tags: [Materias]
+      parameters:
+        - name: materia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [calificacion_minima]
+              properties:
+                calificacion_minima:
+                  type: string
+                  description: Cadena de 0.00 a 10.00 con hasta dos decimales; un numero JSON se rechaza (DD-51).
+                  pattern: '^-?\d+(\.\d{1,2})?$'
+      responses:
+        '200':
+          description: El criterio propio vigente.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Criterio'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La materia no existe o no es del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Valor ausente, no cadena o con formato invalido (validacion_fallida) o numerico fuera de 0 a 10
+            (calificacion_fuera_de_rango, campo calificacion_minima).
           content:
             application/json:
               schema:
@@ -1505,6 +1572,20 @@ components:
         actualizado_en:
           type: string
           format: date-time
+    Criterio:
+      type: object
+      additionalProperties: false
+      required: [ambito, calificacion_minima, vigente_desde]
+      properties:
+        ambito:
+          type: string
+          enum: [general, materia]
+        calificacion_minima:
+          type: string
+          pattern: '^\d{1,2}\.\d{2}$'
+        vigente_desde:
+          type: string
+          format: date
     Materia:
       type: object
       additionalProperties: false

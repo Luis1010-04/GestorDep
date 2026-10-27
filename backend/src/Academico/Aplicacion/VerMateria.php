@@ -20,6 +20,9 @@ final class VerMateria
 
         return $detalle === null
             ? null
-            : new MateriaConCriterio($detalle, CriterioDeAprobacion::resolver(null, $this->criterios->generalVigente()));
+            : new MateriaConCriterio($detalle, CriterioDeAprobacion::resolver(
+                $this->criterios->propioVigente($materia)?->criterio(),
+                $this->criterios->generalVigente(),
+            ));
     }
 }

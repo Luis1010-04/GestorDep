@@ -36,6 +36,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/materias', [MateriaController::class, 'listar']);
         Route::post('/materias', [MateriaController::class, 'crear']);
         Route::get('/materias/{materia}', [MateriaController::class, 'ver'])->whereUuid('materia');
+        Route::put('/materias/{materia}/criterio', [MateriaController::class, 'definirCriterio'])->whereUuid('materia');
     });
 
     Route::middleware('rol:entrenador')->group(function () {

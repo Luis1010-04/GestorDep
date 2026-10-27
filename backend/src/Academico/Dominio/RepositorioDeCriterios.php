@@ -2,7 +2,9 @@
 
 namespace Src\Academico\Dominio;
 
+use DateTimeImmutable;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\NumeroDecimal;
 
 /** Criterios de aprobación (RN-01, RN-03). */
 interface RepositorioDeCriterios
@@ -17,4 +19,12 @@ interface RepositorioDeCriterios
      * @return array<string, CriterioDeAprobacion> por identificador de materia; las que no tienen criterio propio no aparecen
      */
     public function propiosVigentes(array $materias): array;
+
+    public function propioVigente(Identificador $materia): ?CriterioVigente;
+
+    /**
+     * Cierra el criterio propio vigente de la materia (su `vigente_hasta` pasa a `$hoy`) y crea el nuevo desde `$hoy`, con
+     * sus historiales, en una sola transacción: si algo falla no queda ni el cierre ni el nuevo.
+     */
+    public function reemplazarPropio(Identificador $materia, NumeroDecimal $minimo, DateTimeImmutable $hoy): CriterioVigente;
 }

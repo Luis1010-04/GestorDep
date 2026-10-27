@@ -34,6 +34,12 @@ test('HU-06: las respuestas de materias cumplen el contrato', function () {
         ['/materias', 'get', sesionesPeticion($this, 'GET', '/api/v1/materias?filtro[periodo_id]=x', idDeSesion: $sesion)->assertUnprocessable()],
         ['/materias/{materia}', 'get', sesionesPeticion($this, 'GET', "/api/v1/materias/$id", idDeSesion: $sesion)->assertOk()],
         ['/materias/{materia}', 'get', sesionesPeticion($this, 'GET', '/api/v1/materias/'.Identificador::generar()->valor(), idDeSesion: $sesion)->assertNotFound()],
+        ['/materias/{materia}/criterio', 'put', sesionesPeticion($this, 'PUT', "/api/v1/materias/$id/criterio", ['calificacion_minima' => '6.50'], $sesion)->assertOk()],
+        ['/materias/{materia}/criterio', 'put', sesionesPeticion($this, 'PUT', "/api/v1/materias/$id/criterio", ['calificacion_minima' => '10.01'], $sesion)->assertUnprocessable()],
+        ['/materias/{materia}/criterio', 'put', sesionesPeticion($this, 'PUT', "/api/v1/materias/$id/criterio", ['calificacion_minima' => 6], $sesion)->assertUnprocessable()],
+        ['/materias/{materia}/criterio', 'put', sesionesPeticion($this, 'PUT', '/api/v1/materias/'.Identificador::generar()->valor().'/criterio', ['calificacion_minima' => '6.50'], $sesion)->assertNotFound()],
+        ['/materias/{materia}/criterio', 'put', sesionesPeticion($this, 'PUT', "/api/v1/materias/$id/criterio", ['calificacion_minima' => '6.50'])->assertUnauthorized()],
+        ['/materias/{materia}/criterio', 'put', sesionesPeticion($this, 'PUT', "/api/v1/materias/$id/criterio", ['calificacion_minima' => '6.50'], sesionesIniciar($this, 'a@x.com'))->assertForbidden()],
     ];
 
     foreach ($respuestas as [$ruta, $metodo, $respuesta]) {

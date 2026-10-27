@@ -142,7 +142,11 @@ test('RNF-01 (§7.4 fila 14): las lecturas de jugadores siguen pasando por Alcan
         archivosPhpDeLaAplicacion(),
         [IMPLEMENTACION_DEL_ALCANCE, DECLARACION_DEL_MODELO_JUGADOR, ...array_keys(USOS_AUTORIZADOS_SIN_ALCANCE)],
     ))->toBe([]);
-});
+})->skip(
+    fn () => ! function_exists('consultasDeJugadoresSinAlcance'),
+    // Usa las funciones de tests/Arch/AlcanceDeJugadoresTest.php: solo existen si la ejecución incluye esa carpeta (la suite completa sí).
+    'Ejecución parcial sin tests/Arch: la suite completa la corre.',
+);
 
 test('RNF-01: una inscripción eliminada o una materia eliminada ya no otorgan alcance', function () {
     /** @var TestCase $this */

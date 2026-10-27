@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SolicitudDeCriterioDeMateria;
 use App\Http\Requests\SolicitudDeNuevaMateria;
 use App\Http\Resources\ColeccionPaginada;
+use App\Http\Resources\CriterioRecurso;
 use App\Http\Resources\MateriaRecurso;
 use App\Http\Respuestas\IdentificadorDeRuta;
 use App\Http\Respuestas\Respuesta;
@@ -12,10 +14,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Src\Academico\Aplicacion\CrearMateria;
+use Src\Academico\Aplicacion\DefinirCriterioDeMateria;
 use Src\Academico\Aplicacion\ListarMaterias;
 use Src\Academico\Aplicacion\VerMateria;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\NumeroDecimal;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MateriaController extends Controller
@@ -61,6 +65,16 @@ class MateriaController extends Controller
             ?? throw new NotFoundHttpException;
 
         return Respuesta::conDatos((new MateriaRecurso($encontrada))->resolve($solicitud));
+    }
+
+    public function definirCriterio(SolicitudDeCriterioDeMateria $solicitud, string $materia, DefinirCriterioDeMateria $definirCriterio): JsonResponse
+    {
+        $criterio = $definirCriterio->ejecutar(
+            IdentificadorDeRuta::desde($materia),
+            NumeroDecimal::desdeTexto((string) $solicitud->validated('calificacion_minima')),
+        );
+
+        return Respuesta::conDatos((new CriterioRecurso($criterio))->resolve($solicitud));
     }
 
     private function docente(UsuarioActual $usuarioActual): Identificador

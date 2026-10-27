@@ -36,6 +36,7 @@ return [
         'motivo_obligatorio' => 'La baja requiere un motivo.',
         'periodo_duplicado' => 'Ya existe un periodo escolar con ese nombre.',
         'asignatura_duplicada' => 'Ya existe una asignatura con esa clave.',
+        'calificacion_fuera_de_rango' => 'La calificación debe estar entre 0 y 10.',
         'materia_duplicada' => 'Ya tiene una materia con esa asignatura en ese periodo.',
         'asignatura_inexistente' => 'La asignatura indicada no existe.',
         'periodo_inexistente' => 'El periodo escolar indicado no existe.',

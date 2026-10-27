@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Src\Academico\Aplicacion\AsignaturaDuplicada;
+use Src\Academico\Aplicacion\CalificacionFueraDeRango;
 use Src\Academico\Aplicacion\MateriaDuplicada;
 use Src\Academico\Aplicacion\PeriodoDuplicado;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
@@ -49,6 +50,7 @@ final class FormatoDeError
             $e instanceof CuentaBloqueada => self::reglaDeNegocio($e, 429)->header('Retry-After', (string) $e->segundosRestantes()),
             $e instanceof CredencialesInvalidas => self::reglaDeNegocio($e, 401),
             $e instanceof ContrasenaNuevaMuyCorta => self::contrasenaNuevaMuyCorta($e),
+            $e instanceof CalificacionFueraDeRango => self::calificacionFueraDeRango($e),
             $e instanceof CategoriaDuplicada, $e instanceof PeriodoDuplicado, $e instanceof AsignaturaDuplicada, $e instanceof MateriaDuplicada => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
@@ -66,6 +68,15 @@ final class FormatoDeError
     }
 
     private static function contrasenaNuevaMuyCorta(ContrasenaNuevaMuyCorta $e): JsonResponse
+    {
+        $mensaje = __('errores.reglas.'.$e->codigo());
+
+        return self::json(422, $e->codigo(), $mensaje, [
+            ['campo' => $e->campo(), 'codigo' => $e->codigo(), 'mensaje' => $mensaje],
+        ]);
+    }
+
+    private static function calificacionFueraDeRango(CalificacionFueraDeRango $e): JsonResponse
     {
         $mensaje = __('errores.reglas.'.$e->codigo());
 
