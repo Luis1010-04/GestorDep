@@ -56,3 +56,10 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 
 - **Corrección:** la carpeta `alertas/` elegida originalmente se reemplaza por `academico/` por decisión del responsable. Los nombres de las columnas de historial de DA-05 no cambian. Los nombres de archivo (y por tanto el orden y el registro en la tabla `migrations`) tampoco: solo cambia la carpeta.
 - **Cómo se revierte:** mover los dos archivos de vuelta a `alertas/`.
+
+## DA-08: respuestas a las preguntas abiertas del plan de T04
+
+- **Qué faltaba:** el responsable aprobó el plan de T04 "con las respuestas del mensaje anterior", pero ese mensaje no traía respuestas a las 6 preguntas de `f1-h2-plan-t04.md` §5.
+- **Qué se eligió:** la recomendación de cada pregunta, tal como está escrita en el plan: (1) `AmbitoDeCriterio` y `NivelDeRiesgo` como `enum`, sin enum de asistencia; (2) la asistencia entra como conteos; (3) `ParametrosDeRiesgo` valida `observacion <= sin_riesgo`, `0 < reprobadas_observacion <= reprobadas_riesgo` y umbrales entre 0 y 10 (`parametros_de_riesgo_invalidos`); (4) la escala 2 es constante del código, no parámetro; (5) el promedio es la media de calificaciones ya redondeadas; (6) `aprobada()` es `?bool`. Además, `CriterioDeAprobacion::resolver` exige ámbito `materia` en el propio y `general` en el general (`criterio_de_ambito_invalido`), para que "indica cuál se aplicó" sea confiable.
+- **Cómo se revierte:** cada regla vive en una sola clase; si el responsable respondió distinto, se corrige en un `F1-H2-FIX`.
+- **Seguridad/privacidad:** ninguna.

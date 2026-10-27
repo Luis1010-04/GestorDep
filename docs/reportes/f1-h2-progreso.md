@@ -5,7 +5,7 @@
 | T01 Calidad (PHPStan 7 e Infection) | hecha | `70ceea1` | pasa; 447 pruebas; 6 min 11 s |
 | T02 `NumeroDecimal` | hecha | `2aca9ed` | pasa; 499 pruebas; 5 min 41 s |
 | T03 Migraciones y seeders | hecha | `c84f4c5` | pasa; 530 pruebas; 8 min 45 s |
-| T04 Dominio del riesgo | **plan escrito, espera aprobación** | (solo el plan) | no se implementó |
+| T04 Dominio del riesgo | hecha (verificar pasó pero tardó 31 min: §0.4, lote B detenido) | ver `git log` | pasa; 596 pruebas; 31 min 04 s |
 
 ## Resumen del lote A
 
