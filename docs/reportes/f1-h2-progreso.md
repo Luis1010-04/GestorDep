@@ -15,7 +15,24 @@
 | T08 Alcance del docente | hecha | `1a7b472` | pasa; 701 pruebas; 6 min 0 s (una primera corrida lenta tardó 17 min 16 s por una ralentización transitoria; ver `f1-h2-t08.md`) |
 | T09 Recálculo del resumen académico | hecha | `324a977` | pasa; 720 pruebas; 5 min 51 s |
 | T10 Inscripciones | **bloqueada (§0.4)** | (sin commit) | no se implementó; ver `f1-h2-t10.md` |
-| T11 Criterio por materia | hecha | ver `git log` | pasa; 749 pruebas; 6 min 15 s |
+| T11 Criterio por materia | hecha | `865c75f` | pasa; 749 pruebas; 6 min 15 s |
+
+## Resumen del lote C2 (T08, T09, T11; T10 bloqueada)
+
+**El lote no está completo: T10 no se implementó** (condición de §0.4, `f1-h2-t10.md`). Se hizo T11 antes porque no depende de ella. La auditoría independiente del lote C2 (§0.5) debe decidirse con esto a la vista: faltan las rutas de inscripción y su prueba de la fila 23 de §7.10.
+
+- **Commits:** T08 `1a7b472`, T09 `324a977`, T11 `865c75f`; además los tres `F1-H2-FIX` previos (`e3e02be`, `143474e`, `752e4eb`) y los `F1-DOC` de documentación.
+- **`make verificar` (compuerta de cada tarea):** T08 6 min 0 s (701 pruebas; una primera corrida lenta de 17 min 16 s con 50 mutantes omitidos por una ralentización transitoria, repetida en 6 min), T09 5 min 51 s (720), T11 6 min 15 s (749).
+- **Medición por etapas al cierre del lote** (una corrida, sin otros procesos, 749 pruebas): Pint 8 s, PHPStan 7 s, Infection 64 s, Pest con cobertura 305 s (Pest informa 285,5 s), cobertura 3 s, auditoría 9 s. **Total 396 s (6 min 36 s)**, por debajo de los 15 min de §0.4 con holgura de 8 min 24 s.
+- **Cobertura por capa (T11):** Dominio 100,0 % (umbral 95), Aplicación 100,0 % (85), Infraestructura y HTTP 99,9 % (70).
+- **Mutación (Infection, solo `Dominio/`):** 331 mutantes eliminados, MSI 100 %, MSI cubierto 100 %.
+- **Rutas nuevas:** `PUT /materias/{materia}/criterio`. Cambia el contenido de `GET /materias` y `GET /materias/{materia}` (`criterio_aplicado` con el criterio propio). Documentadas y validadas contra respuestas reales. T08 solo actualizó descripciones de rutas de H1.
+- **Comando y planificador:** `alertas:recalcular` (diario 02:00 America/Mexico_City; sin texto en consola porque T09 no permitía `lang/es`).
+- **Decisiones del agente y de permisos:** **DA-10** (escrituras de plantel solo con alcance de entrenador; aprobada por el responsable). Ninguna otra decisión cambia privacidad o permisos.
+- **Para la auditoría (anotado por petición del responsable):** `estatus_deportivo` y `estatus_academico` siguen visibles en el recurso `Jugador` que ve un docente (fila 5 de §7.4, DD-30); `equipos` sale vacío para un docente puro.
+- **Rutas fuera de la especificación:** ninguna; `tests/Pest.php` y `tests/Ayudantes/**` se tocaron dentro de `tests/**`.
+- **Variabilidad:** dos ralentizaciones transitorias del entorno (495 s en una etapa de Pest del FIX de velocidad y 17 min 16 s en una corrida de T08), sin causa identificada; las repeticiones fueron normales (`f1-h2-t08.md`, «Variabilidad»).
+- **Pendiente de respuesta:** cómo resolver la búsqueda por matrícula de T10 (opciones A, B y C en `f1-h2-t10.md`; recomiendo A) y el texto de `jugador_en_baja`.
 
 ## Resumen del lote B (T04 a T07)
 
