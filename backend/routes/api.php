@@ -6,6 +6,7 @@ use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\JugadorController;
+use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PeriodoEscolarController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
@@ -31,6 +32,10 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/asignaturas', [AsignaturaController::class, 'listar']);
         Route::post('/asignaturas', [AsignaturaController::class, 'crear']);
         Route::delete('/asignaturas/{id}', [AsignaturaController::class, 'eliminar'])->whereUuid('id');
+
+        Route::get('/materias', [MateriaController::class, 'listar']);
+        Route::post('/materias', [MateriaController::class, 'crear']);
+        Route::get('/materias/{materia}', [MateriaController::class, 'ver'])->whereUuid('materia');
     });
 
     Route::middleware('rol:entrenador')->group(function () {

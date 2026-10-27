@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\CriterioGeneralSeeder;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use Src\Compartido\Dominio\Identificador;
 use Tests\TestCase;
@@ -9,6 +10,35 @@ beforeEach(function () {
     sesionesPrepararBase();
     sesionesCrearUsuario('d1@x.com', ['docente']);
     sesionesCrearUsuario('a@x.com', ['entrenador']);
+});
+
+test('HU-06: las respuestas de materias cumplen el contrato', function () {
+    /** @var TestCase $this */
+    (new CriterioGeneralSeeder)->run();
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    $sesion = sesionesIniciar($this, 'd1@x.com');
+    $asignatura = mundoInsertar('asignaturas', ['clave' => 'MAT-101', 'nombre' => 'Matemáticas', 'grado' => 1]);
+    $periodo = mundoInsertar('periodos_escolares', ['nombre' => '2026-1', 'fecha_inicio' => '2026-01-12', 'fecha_fin' => '2026-06-30']);
+    $cuerpo = ['asignatura_id' => $asignatura, 'periodo_id' => $periodo];
+
+    $creada = sesionesPeticion($this, 'POST', '/api/v1/materias', $cuerpo, $sesion)->assertCreated();
+    $id = $creada->json('datos.id');
+    $respuestas = [
+        ['/materias', 'post', $creada],
+        ['/materias', 'post', sesionesPeticion($this, 'POST', '/api/v1/materias', $cuerpo, $sesion)->assertStatus(409)],
+        ['/materias', 'post', sesionesPeticion($this, 'POST', '/api/v1/materias', ['asignatura_id' => Identificador::generar()->valor(), 'periodo_id' => $periodo], $sesion)->assertUnprocessable()],
+        ['/materias', 'post', sesionesPeticion($this, 'POST', '/api/v1/materias', [], $sesion)->assertUnprocessable()],
+        ['/materias', 'post', sesionesPeticion($this, 'POST', '/api/v1/materias', $cuerpo)->assertUnauthorized()],
+        ['/materias', 'post', sesionesPeticion($this, 'POST', '/api/v1/materias', $cuerpo, sesionesIniciar($this, 'a@x.com'))->assertForbidden()],
+        ['/materias', 'get', sesionesPeticion($this, 'GET', '/api/v1/materias', idDeSesion: $sesion)->assertOk()],
+        ['/materias', 'get', sesionesPeticion($this, 'GET', '/api/v1/materias?filtro[periodo_id]=x', idDeSesion: $sesion)->assertUnprocessable()],
+        ['/materias/{materia}', 'get', sesionesPeticion($this, 'GET', "/api/v1/materias/$id", idDeSesion: $sesion)->assertOk()],
+        ['/materias/{materia}', 'get', sesionesPeticion($this, 'GET', '/api/v1/materias/'.Identificador::generar()->valor(), idDeSesion: $sesion)->assertNotFound()],
+    ];
+
+    foreach ($respuestas as [$ruta, $metodo, $respuesta]) {
+        expect($validador->validate($respuesta->baseResponse, $ruta, $metodo))->toBeTrue("$metodo $ruta {$respuesta->getStatusCode()}");
+    }
 });
 
 test('HU-28: las respuestas de asignaturas cumplen el contrato', function () {

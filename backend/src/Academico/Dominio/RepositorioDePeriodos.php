@@ -8,6 +8,8 @@ use Src\Compartido\Dominio\Identificador;
 /** Persistencia de periodos escolares. Solo ve los no eliminados; el borrado es lógico. */
 interface RepositorioDePeriodos
 {
+    public function existe(Identificador $id): bool;
+
     public function existeNombre(string $nombre): bool;
 
     /** Si otra petición registró el mismo nombre entre la comprobación y la escritura, lanza PeriodoDuplicado (Aplicacion). */

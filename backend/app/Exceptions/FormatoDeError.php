@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Src\Academico\Aplicacion\AsignaturaDuplicada;
+use Src\Academico\Aplicacion\MateriaDuplicada;
 use Src\Academico\Aplicacion\PeriodoDuplicado;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
 use Src\Identidad\Aplicacion\ContrasenaNuevaMuyCorta;
@@ -48,7 +49,7 @@ final class FormatoDeError
             $e instanceof CuentaBloqueada => self::reglaDeNegocio($e, 429)->header('Retry-After', (string) $e->segundosRestantes()),
             $e instanceof CredencialesInvalidas => self::reglaDeNegocio($e, 401),
             $e instanceof ContrasenaNuevaMuyCorta => self::contrasenaNuevaMuyCorta($e),
-            $e instanceof CategoriaDuplicada, $e instanceof PeriodoDuplicado, $e instanceof AsignaturaDuplicada => self::reglaDeNegocio($e, 409),
+            $e instanceof CategoriaDuplicada, $e instanceof PeriodoDuplicado, $e instanceof AsignaturaDuplicada, $e instanceof MateriaDuplicada => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),

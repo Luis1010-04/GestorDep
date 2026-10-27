@@ -7,6 +7,8 @@ use Src\Compartido\Dominio\Identificador;
 /** Persistencia de asignaturas. Solo ve las no eliminadas; el borrado es lógico. */
 interface RepositorioDeAsignaturas
 {
+    public function existe(Identificador $id): bool;
+
     public function existeClave(string $clave): bool;
 
     /** Si otra petición registró la misma clave entre la comprobación y la escritura, lanza AsignaturaDuplicada (Aplicacion). */

@@ -607,6 +607,169 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /materias:
+    get:
+      operationId: listarMaterias
+      summary: Lista las materias del docente que consulta
+      description: >-
+        Solo docentes (HU-06, DD-49). Devuelve unicamente las materias cuyo docente es el usuario; orden por
+        clave de la asignatura. La asignatura y el periodo se muestran aunque esten eliminados.
+      tags: [Materias]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: filtro[periodo_id]
+          in: query
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Pagina de materias.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Materia'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion o filtro invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearMateria
+      summary: Da de alta una materia del docente que consulta
+      description: >-
+        Solo docentes (HU-06). El docente de la materia es el usuario actual. Escribe el registro crear en
+        materias_historial en la misma transaccion.
+      tags: [Materias]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [asignatura_id, periodo_id]
+              properties:
+                asignatura_id:
+                  type: string
+                  format: uuid
+                periodo_id:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Materia creada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Materia'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El docente ya tiene una materia con esa asignatura en ese periodo (materia_duplicada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente o UUID mal formado (validacion_fallida), asignatura inexistente o eliminada
+            (asignatura_inexistente) o periodo inexistente o eliminado (periodo_inexistente).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /materias/{materia}:
+    get:
+      operationId: verMateria
+      summary: Consulta una materia del docente que consulta
+      description: >-
+        Solo el docente dueño de la materia (HU-06, HU-08). Una materia ajena, inexistente o con id que no es v7
+        responde el mismo 404 (DD-50). criterio_aplicado es el criterio general vigente (el propio de la materia
+        llega con la tarea de criterios).
+      tags: [Materias]
+      parameters:
+        - name: materia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: La materia.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Materia'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La materia no existe o no es del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos:
     get:
       operationId: listarEquipos
@@ -1337,6 +1500,50 @@ components:
           format: uuid
         nombre:
           type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Materia:
+      type: object
+      additionalProperties: false
+      required: [id, asignatura, periodo, criterio_aplicado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        asignatura:
+          type: object
+          additionalProperties: false
+          required: [id, clave, nombre]
+          properties:
+            id:
+              type: string
+              format: uuid
+            clave:
+              type: string
+            nombre:
+              type: string
+        periodo:
+          type: object
+          additionalProperties: false
+          required: [id, nombre]
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombre:
+              type: string
+        criterio_aplicado:
+          type: object
+          additionalProperties: false
+          required: [ambito, calificacion_minima]
+          properties:
+            ambito:
+              type: string
+              enum: [general, materia]
+            calificacion_minima:
+              type: string
+              pattern: '^\d{1,2}\.\d{2}$'
         actualizado_en:
           type: string
           format: date-time

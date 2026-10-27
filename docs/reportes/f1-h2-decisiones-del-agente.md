@@ -63,3 +63,10 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué se eligió:** la recomendación de cada pregunta, tal como está escrita en el plan: (1) `AmbitoDeCriterio` y `NivelDeRiesgo` como `enum`, sin enum de asistencia; (2) la asistencia entra como conteos; (3) `ParametrosDeRiesgo` valida `observacion <= sin_riesgo`, `0 < reprobadas_observacion <= reprobadas_riesgo` y umbrales entre 0 y 10 (`parametros_de_riesgo_invalidos`); (4) la escala 2 es constante del código, no parámetro; (5) el promedio es la media de calificaciones ya redondeadas; (6) `aprobada()` es `?bool`. Además, `CriterioDeAprobacion::resolver` exige ámbito `materia` en el propio y `general` en el general (`criterio_de_ambito_invalido`), para que "indica cuál se aplicó" sea confiable.
 - **Cómo se revierte:** cada regla vive en una sola clase; si el responsable respondió distinto, se corrige en un `F1-H2-FIX`.
 - **Seguridad/privacidad:** ninguna.
+
+## DA-09: orden del listado de materias
+
+- **Qué faltaba:** `GET /materias` (§6.1) no dice cómo se ordena.
+- **Qué se eligió:** por `clave` de la asignatura y, a igualdad, por `id` (estable y legible para el docente). Sin parámetro `orden`.
+- **Cómo se revierte:** cambiar el `orderBy` de `ConsultaDeMateriasSql::listarDelDocente`; agregar un parámetro `orden` exigiría actualizar el contrato.
+- **Seguridad/privacidad:** ninguna; solo se listan las materias del propio docente.

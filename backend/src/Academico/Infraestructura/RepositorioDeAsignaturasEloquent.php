@@ -27,6 +27,11 @@ final class RepositorioDeAsignaturasEloquent implements RepositorioDeAsignaturas
         private readonly Reloj $reloj,
     ) {}
 
+    public function existe(Identificador $id): bool
+    {
+        return $this->vigentes()->where('id', $id->valor())->exists();
+    }
+
     public function existeClave(string $clave): bool
     {
         return $this->vigentes()->where('clave', $clave)->exists();
