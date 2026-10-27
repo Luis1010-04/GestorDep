@@ -51,3 +51,8 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué se eligió:** agregar `bcmath` a `extensions` de `shivammathur/setup-php` en `.github/workflows/verificar.yml`.
 - **Cómo se revierte:** quitar la palabra (haría fallar `composer install` en CI).
 - **Seguridad/privacidad:** ninguna.
+
+## DA-05 (corregida): `parametros_institucionales` va en `database/migrations/academico/`
+
+- **Corrección:** la carpeta `alertas/` elegida originalmente se reemplaza por `academico/` por decisión del responsable. Los nombres de las columnas de historial de DA-05 no cambian. Los nombres de archivo (y por tanto el orden y el registro en la tabla `migrations`) tampoco: solo cambia la carpeta.
+- **Cómo se revierte:** mover los dos archivos de vuelta a `alertas/`.
