@@ -44,3 +44,10 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué se eligió:** `(int) (microtime(true) * 1000)`: para un instante positivo, truncar y `floor` dan el mismo entero, así que el comportamiento no cambia (las pruebas de `IdentificadorTest` lo confirman). Es la opción que no debilita la regla: la alternativa era exceptuar el archivo. La ruta (`src/Compartido/Dominio/**`) está permitida en T02.
 - **Cómo se revierte:** restaurar `floor` y exceptuar `Identificador.php` en la regla (debilita la regla: requeriría aprobación).
 - **Seguridad/privacidad:** ninguna.
+
+## DA-07: `bcmath` en la integración continua (aprobada por el responsable)
+
+- **Qué faltaba:** `composer.json` exige `ext-bcmath` desde T02 y el flujo de CI instalaba PHP sin esa extensión.
+- **Qué se eligió:** agregar `bcmath` a `extensions` de `shivammathur/setup-php` en `.github/workflows/verificar.yml`.
+- **Cómo se revierte:** quitar la palabra (haría fallar `composer install` en CI).
+- **Seguridad/privacidad:** ninguna.
