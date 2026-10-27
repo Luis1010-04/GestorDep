@@ -52,7 +52,14 @@ final class ConsultaDeJugadoresSql implements ConsultaDeJugadores
         return $fila === null ? null : $this->conEquipos([$fila])[0];
     }
 
-    private function visibles(?Identificador $equipoId, bool $incluirBajas): Builder
+    public function buscarParaEscribir(Identificador $jugadorId): ?JugadorConEquipos
+    {
+        $fila = $this->visibles(null, incluirBajas: true, soloEntrenador: true)->where('jugadores.id', $jugadorId->valor())->first();
+
+        return $fila === null ? null : $this->conEquipos([$fila])[0];
+    }
+
+    private function visibles(?Identificador $equipoId, bool $incluirBajas, bool $soloEntrenador = false): Builder
     {
         $consulta = $this->conexion->table('jugadores')->select('jugadores.*')->whereNull('jugadores.eliminado_en');
 
@@ -65,7 +72,7 @@ final class ConsultaDeJugadoresSql implements ConsultaDeJugadores
         }
 
         /** @var Builder */
-        return $this->alcance->restringir($this->usuarioActual, $consulta, 'jugadores.id', $incluirBajas);
+        return $this->alcance->restringir($this->usuarioActual, $consulta, 'jugadores.id', $incluirBajas, $soloEntrenador);
     }
 
     /** Membresías vigentes en equipos donde el usuario tiene asignación vigente. */

@@ -80,25 +80,35 @@ function esquemaBorrarFilas(ConnectionInterface $conexion, array $tablas): void
         return;
     }
 
-    $conexion->transaction(function () use ($conexion, $orden): void {
-        $conDisparadores = array_map(
-            fn (stdClass $fila): string => $fila->tabla,
-            $conexion->select(
-                "select distinct c.relname as tabla from pg_trigger t join pg_class c on c.oid = t.tgrelid
-                  where not t.tgisinternal and c.relnamespace = 'public'::regnamespace and c.relname in ('".implode("', '", $orden)."')",
-            ),
-        );
+    $conDisparadores = array_map(
+        fn (stdClass $fila): string => $fila->tabla,
+        $conexion->select(
+            "select distinct c.relname as tabla from pg_trigger t join pg_class c on c.oid = t.tgrelid
+              where not t.tgisinternal and c.relnamespace = 'public'::regnamespace and c.relname in ('".implode("', '", $orden)."')",
+        ),
+    );
 
-        foreach ($conDisparadores as $tabla) {
-            $conexion->statement("alter table \"{$tabla}\" disable trigger user");
-        }
-        foreach ($orden as $tabla) {
-            $conexion->statement("delete from \"{$tabla}\"");
-        }
+    try {
+        $conexion->transaction(function () use ($conexion, $orden, $conDisparadores): void {
+            foreach ($conDisparadores as $tabla) {
+                $conexion->statement("alter table \"{$tabla}\" disable trigger user");
+            }
+            foreach ($orden as $tabla) {
+                $conexion->statement("delete from \"{$tabla}\"");
+            }
+            foreach ($conDisparadores as $tabla) {
+                $conexion->statement("alter table \"{$tabla}\" enable trigger user");
+            }
+        });
+    } catch (Throwable $fallo) {
+        // El DDL de PostgreSQL es transaccional: la reversión ya dejó los disparadores como estaban. Esto es el respaldo
+        // explícito (idempotente) para que ningún fallo deje un disparador de solo inserción desactivado.
         foreach ($conDisparadores as $tabla) {
             $conexion->statement("alter table \"{$tabla}\" enable trigger user");
         }
-    });
+
+        throw $fallo;
+    }
 }
 
 /**

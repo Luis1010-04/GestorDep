@@ -70,3 +70,11 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué se eligió:** por `clave` de la asignatura y, a igualdad, por `id` (estable y legible para el docente). Sin parámetro `orden`.
 - **Cómo se revierte:** cambiar el `orderBy` de `ConsultaDeMateriasSql::listarDelDocente`; agregar un parámetro `orden` exigiría actualizar el contrato.
 - **Seguridad/privacidad:** ninguna; solo se listan las materias del propio docente.
+
+## DA-10: las escrituras de plantel usan solo el alcance de entrenador; las académicas, el del docente (cambio de permisos, aprobado por el responsable)
+
+- **Qué faltaba:** al agregar la rama del docente a `AlcanceDeJugadores`, las escrituras de H1 que reutilizaban `ConsultaDeJugadores::buscar()` (expediente, baja, asignar, cambiar posición) la habrían heredado, y un usuario docente-entrenador podría haber modificado a un jugador que solo ve porque lo enseña.
+- **Qué se eligió (decisión del responsable sobre el plan de T08):** `AlcanceDeJugadores::restringir()` gana el parámetro opcional `soloEntrenador`; `ConsultaDeJugadores::buscarParaEscribir()` lo usa y lo emplean `ComprobarJugadorEscribible` (en las solicitudes de expediente y baja), `ActualizarExpedienteDeJugador`, `CambiarPosicionDeJugador` y `AsignarJugadorAEquipo`. Las lecturas (`GET /jugadores`, `GET /jugadores/{jugador}`) usan la unión de ramas. Las escrituras académicas (inscribir, calificar, asistencia, criterio; T10 a T13) se autorizan por ser el docente dueño de la materia, no por `AlcanceDeJugadores`.
+- **Efecto sobre permisos:** ningún usuario gana permisos de escritura sobre plantel. Un docente puro sigue recibiendo 403; un docente-entrenador recibe 404 al intentar modificar a un jugador que solo enseña (probado en `EscrituraDeUsuarioConDosRolesTest`).
+- **Cómo se revierte:** quitar el parámetro y volver a `buscar()` en esos cuatro casos de uso (ampliaría permisos de escritura: requeriría aprobación).
+- **Anotado para la auditoría:** `estatus_deportivo` se mantiene en el recurso `Jugador` que ve el docente (fila 5 de §7.4, DD-30); el arreglo `equipos` sale vacío para un docente puro porque se limita a las asignaciones del propio usuario.

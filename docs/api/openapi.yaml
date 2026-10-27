@@ -894,9 +894,10 @@ paths:
       operationId: listarJugadores
       summary: Lista los jugadores de los equipos del usuario
       description: >-
-        Con sesion (HU-02). Solo los jugadores con membresia vigente en un equipo donde el usuario tiene
-        asignacion vigente; los jugadores en baja no aparecen (DD-30). Un docente recibe lista vacia hasta H2.
-        El arreglo equipos de cada jugador contiene solo los equipos del usuario (RN-14). filtro[equipo_id] se
+        Con sesion (HU-02). Un entrenador ve a los jugadores con membresia vigente en un equipo donde tiene
+        asignacion vigente; un docente, a los jugadores inscritos en alguna de sus materias (en cualquier
+        periodo); un usuario con los dos roles, la union de ambos sin duplicados. Los jugadores en baja no
+        aparecen (DD-30). Un docente sin inscripciones recibe lista vacia con 200. El arreglo equipos de cada jugador contiene solo los equipos del usuario (RN-14). filtro[equipo_id] se
         cruza con los equipos del usuario: un equipo ajeno devuelve lista vacia con total 0 y nunca revela quien
         pertenece a el. Orden por defecto: apellidos y nombres.
       tags: [Jugadores]
@@ -1080,10 +1081,11 @@ paths:
       operationId: verJugador
       summary: Consulta el expediente de un jugador del usuario
       description: >-
-        Con sesion (HU-02). Un jugador fuera del alcance del usuario, inexistente o con identificador mal
-        formado responde 404 con el mismo cuerpo, para no revelar que existe. Un jugador en baja sigue
-        respondiendo 200 con estatus baja a quien ya lo tenia asignado (DD-30). Es el mismo esquema Jugador que
-        el 201 de POST /jugadores.
+        Con sesion (HU-02). Un jugador fuera del alcance del usuario (como entrenador o como docente de una materia
+        en la que esta inscrito), inexistente o con identificador mal formado responde 404 con el mismo cuerpo,
+        para no revelar que existe. Un jugador en baja sigue respondiendo 200 con estatus baja a quien ya lo
+        tenia asignado o inscrito (DD-30). Un docente ve el arreglo equipos vacio (RN-13). Es el mismo esquema
+        Jugador que el 201 de POST /jugadores.
       tags: [Jugadores]
       parameters:
         - name: jugador
@@ -1121,7 +1123,7 @@ paths:
         Solo entrenadores (HU-05, RNF-02). Acepta cualquiera de nombres, apellidos y fecha_nacimiento; cualquier
         otro campo (matricula, estatus_academico, estatus_deportivo, id...) se rechaza con 422 validacion_fallida
         senalandolo (codigo de campo prohibited). Un cuerpo sin campos responde 422 con el campo cuerpo. Los textos
-        se recortan antes de validar. Un jugador fuera del alcance, inexistente o con identificador que no es UUID v7
+        se recortan antes de validar. Un jugador fuera del alcance de entrenador (quien solo lo ve por ensenarlo no puede modificarlo, DA-10), inexistente o con identificador que no es UUID v7
         responde 404 con el mismo cuerpo, con cualquier cuerpo, valido o no, antes de validarlo. Sin cambios reales
         responde 200 sin escribir historial ni tocar actualizado_en. Con cambios escribe una fila actualizar en
         jugadores_historial con la instantanea completa antes y despues (DD-39), en la misma transaccion. Un jugador
@@ -1190,7 +1192,7 @@ paths:
         el detalle sigue respondiendo 200 con estatus baja. Se guarda la baja, los estatus y los historiales
         (actualizar del jugador con la instantanea completa y crear de la baja) en una transaccion, con el mismo
         instante. El motivo se recorta; la fecha es la que envia el usuario (AAAA-MM-DD, se acepta una fecha futura).
-        Un jugador fuera del alcance, inexistente o con identificador que no es UUID v7 responde 404 con el mismo
+        Un jugador fuera del alcance de entrenador (quien solo lo ve por ensenarlo no puede modificarlo, DA-10), inexistente o con identificador que no es UUID v7 responde 404 con el mismo
         cuerpo, con cualquier cuerpo, antes de validarlo. Orden: alcance (404), validacion de campos
         (422 validacion_fallida), motivo ausente o en blanco (422 motivo_obligatorio) y jugador ya en baja (409).
       tags: [Jugadores]

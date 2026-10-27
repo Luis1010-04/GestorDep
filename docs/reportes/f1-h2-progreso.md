@@ -12,7 +12,7 @@
 | FIX reinicio de pruebas por `DELETE` | hecho | `e3e02be` | pasa; 667 pruebas; 7 min 5 s (`f1-h2-fix-04.md`) |
 | FIX lotería de sesiones (PT-05) | hecho | `143474e` | pasa; 669 pruebas; 6 min 58 s (`f1-h2-fix-02.md`) |
 | FIX UUID que no es v7 en `DELETE /categorias/{id}` | hecho | `752e4eb` | pasa; 676 pruebas; 6 min 20 s (`f1-h2-fix-05.md`) |
-| T08 Alcance del docente | **plan escrito, espera aprobación** | (solo el plan) | no se implementó (`f1-h2-plan-t08.md`) |
+| T08 Alcance del docente | hecha | ver `git log` | pasa; 701 pruebas; 6 min 0 s (una primera corrida lenta tardó 17 min 16 s por una ralentización transitoria; ver `f1-h2-t08.md`) |
 
 ## Resumen del lote B (T04 a T07)
 

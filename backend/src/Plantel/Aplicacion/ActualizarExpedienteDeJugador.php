@@ -25,10 +25,10 @@ final class ActualizarExpedienteDeJugador
     {
         $this->usuarioActual->identificador() ?? throw new LogicException('usuario_no_identificado');
 
-        $this->consulta->buscar($jugadorId) ?? throw new JugadorNoEncontrado;
+        $this->consulta->buscarParaEscribir($jugadorId) ?? throw new JugadorNoEncontrado;
 
         $this->jugadores->actualizarExpediente($jugadorId, $nombres === null ? null : trim($nombres), $apellidos === null ? null : trim($apellidos), $fechaNacimiento);
 
-        return $this->consulta->buscar($jugadorId) ?? throw new JugadorNoEncontrado;
+        return $this->consulta->buscarParaEscribir($jugadorId) ?? throw new JugadorNoEncontrado;
     }
 }
