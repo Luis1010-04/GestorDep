@@ -11,6 +11,7 @@
  * con la que dejo la ultima migracion completa, tambien se reconstruye.
  */
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\PendingCommand;
 
@@ -58,6 +59,85 @@ function esquemaEstructura(): string
         SQL);
 }
 
+/**
+ * Borra las filas de las tablas dadas. `TRUNCATE` cuesta ~0,5 s por tabla en el volumen de Docker (crea archivos y los
+ * sincroniza), así que se usa `DELETE` en orden de claves foráneas (hijas antes que padres), con los disparadores de
+ * solo inserción de esas tablas desactivados dentro de la misma transacción. Si las claves foráneas forman un ciclo,
+ * se vuelve a `TRUNCATE`.
+ *
+ * @param  list<string>  $tablas
+ */
+function esquemaBorrarFilas(ConnectionInterface $conexion, array $tablas): void
+{
+    $orden = esquemaOrdenDeBorrado($tablas, $conexion->select(
+        "select conrelid::regclass::text as hija, confrelid::regclass::text as padre
+           from pg_constraint where contype = 'f' and connamespace = 'public'::regnamespace",
+    ));
+
+    if ($orden === null) {
+        $conexion->statement('truncate table "'.implode('", "', $tablas).'" restart identity cascade');
+
+        return;
+    }
+
+    $conexion->transaction(function () use ($conexion, $orden): void {
+        $conDisparadores = array_map(
+            fn (stdClass $fila): string => $fila->tabla,
+            $conexion->select(
+                "select distinct c.relname as tabla from pg_trigger t join pg_class c on c.oid = t.tgrelid
+                  where not t.tgisinternal and c.relnamespace = 'public'::regnamespace and c.relname in ('".implode("', '", $orden)."')",
+            ),
+        );
+
+        foreach ($conDisparadores as $tabla) {
+            $conexion->statement("alter table \"{$tabla}\" disable trigger user");
+        }
+        foreach ($orden as $tabla) {
+            $conexion->statement("delete from \"{$tabla}\"");
+        }
+        foreach ($conDisparadores as $tabla) {
+            $conexion->statement("alter table \"{$tabla}\" enable trigger user");
+        }
+    });
+}
+
+/**
+ * @param  list<string>  $tablas
+ * @param  array<int, stdClass>  $dependencias  claves foráneas: la tabla `hija` referencia a `padre`
+ * @return list<string>|null las tablas con las hijas antes que sus padres; nulo si hay un ciclo
+ */
+function esquemaOrdenDeBorrado(array $tablas, array $dependencias): ?array
+{
+    $pendientes = array_fill_keys($tablas, true);
+    $orden = [];
+
+    while ($pendientes !== []) {
+        $libres = array_filter(
+            array_keys($pendientes),
+            function (string $tabla) use ($pendientes, $dependencias): bool {
+                foreach ($dependencias as $dependencia) {
+                    if ($dependencia->padre === $tabla && $dependencia->hija !== $tabla && isset($pendientes[$dependencia->hija])) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+        );
+
+        if ($libres === []) {
+            return null;
+        }
+
+        foreach ($libres as $tabla) {
+            $orden[] = $tabla;
+            unset($pendientes[$tabla]);
+        }
+    }
+
+    return $orden;
+}
+
 /** Vacia las tablas con filas y reinicia las secuencias que avanzaron; deja la base como la deja `migrate:fresh`. */
 function esquemaVaciarDatos(): void
 {
@@ -71,7 +151,7 @@ function esquemaVaciarDatos(): void
     $conDatos = array_map(fn (stdClass $fila): string => '"'.$fila->tabla.'"', $conexion->select(implode(' union all ', $consultas)));
 
     if ($conDatos !== []) {
-        $conexion->statement('truncate table '.implode(', ', $conDatos).' restart identity cascade');
+        esquemaBorrarFilas($conexion, array_values(array_map(fn (string $tabla): string => trim($tabla, '"'), $conDatos)));
     }
 
     $secuencias = $conexion->select(
