@@ -79,6 +79,21 @@ Cada tarea tiene su reporte `docs/reportes/f1-h2-tNN.md` con el detalle completo
 - `b9aa299`: M-6 (`f1-h2-fix-m6.md`).
 - `bc9d01f`: M-10 (`f1-h2-fix-m10.md`).
 
+**Commits del Lote E** (desde el resumen del Lote D, `cc66784`), en orden, con su prefijo:
+
+| # | Hash | Prefijo | Mensaje |
+|---|---|---|---|
+| 1 | `9d931b6` | F1-H2-FIX | actualiza symfony/mime por CVE-2026-45070 |
+| 2 | `2cfabd7` | F1-DOC | reporte del FIX de dependencias (CVE-2026-45070) |
+| 3 | `1180f98` | F1-DOC | plan del FIX de la deuda menor de C2 (M-3, M-6, M-10) |
+| 4 | `1982976` | F1-H2-FIX | M-3 la materia muestra el periodo y la asignatura eliminados por la API |
+| 5 | `b9aa299` | F1-H2-FIX | M-6 la fila 9 de 7.6 comprueba que el evento sale ya confirmado |
+| 6 | `bc9d01f` | F1-H2-FIX | M-10 pruebas de la configuracion de mutacion |
+| 7 | `447adac` | F1-H2-T15 | humo de H2 y cierre documental |
+| 8 | (este commit) | F1-DOC | correcciones del reporte de cierre de H2 |
+
+**Hash final de la tarea:** `447adac` (F1-H2-T15), sobre el que se midió `make verificar` (sección 2). Las correcciones de este reporte van en un commit F1-DOC posterior que solo cambia documentación. Un commit no puede contener su propio hash: el hash final de la rama se ve en `git log -1` y se informa en la entrega. Es el commit en el que CI debe quedar en verde (sección 6, punto 1).
+
 ### T01 — PHPStan nivel 7 e Infection (`70ceea1`)
 
 - **Archivos:**
@@ -253,7 +268,7 @@ Detalle en `f1-h2-decisiones-del-agente.md`; registradas en `docs/decisiones/reg
 - **DA-11:** 404 `jugador_no_registrado`; confirmada.
 - **DA-12:** texto de `jugador_en_baja` que cubre la captura.
 - **DA-13:** corregir con el jugador en baja → 409.
-- **DA-14 (lectura):** el docente dueño sigue viendo calificaciones y asistencias de un alumno en baja. Para revisión.
+- **DA-14 (lectura):** el docente dueño sigue viendo calificaciones y asistencias de un alumno en baja. **Aceptada en revisión del 28/10; sujeta a confirmación del responsable.**
 - **DA-15 (lectura, restrictiva):** la situación lista solo las materias del docente del periodo vigente. **Pendiente de confirmación del responsable** (AB-27).
 
 M-8 de la auditoría de C2 (el 409 al inscribir revela a un docente que una matrícula está en baja) queda registrado como **comportamiento exigido por DD-52**, con su revisión en H7 (AB-26).
@@ -262,10 +277,10 @@ M-8 de la auditoría de C2 (el 409 al inscribir revela a un docente que una matr
 
 | # | Punto | Estado | Evidencia |
 |---|---|---|---|
-| 1 | `make verificar` pasa en local y en la integración continua, con umbrales por capa, PHPStan 7 e Infection (MSI ≥ 80, cubierto ≥ 85) | **Local: cumplido. CI: pendiente de verificar** | Local: sección 2. CI: el responsable informó la falla de `composer audit` en `cc66784`, corregida en `9d931b6`; desde entonces no hubo push (regla vigente), así que el estado en CI de los commits posteriores no se ha observado |
+| 1 | `make verificar` pasa en local y en la integración continua, con umbrales por capa, PHPStan 7 e Infection (MSI ≥ 80, cubierto ≥ 85) | **Local: cumplido. CI: pendiente; el cierre depende de él** | Local: sección 2. CI: el responsable informó la falla de `composer audit` en `cc66784`, corregida en `9d931b6`; desde entonces no hubo push (regla vigente), así que el estado en CI de los commits posteriores no se ha observado. **El cierre de este punto depende de que CI quede en verde en el commit final de la rama, después del push del responsable** |
 | 2 | Cada historia del hito tiene pruebas con su identificador; los diferidos de §2.2 anotados en la trazabilidad | Cumplido, con la nota de RN-12 | `docs/trazabilidad.md`: HU-01, 02, 06, 07, 08, 09 y 28 y RN-01 a 05, 13, 14 y 20 con sus pruebas; «Estado al cierre de H2» con los diferidos de §2.2. **RN-12** no tiene prueba con su identificador (igual que en H1); su parte docente la cubren HU-28, DD-49 y HU-06 |
 | 3 | `openapi.yaml` incluye las rutas de §6.1 y las respuestas reales coinciden | Cumplido | Las 19 operaciones de §6.1 están en `openapi.yaml` (comprobado por ruta y método) y en `route:list` (19). `ContratoDeAcademicoTest` valida respuestas reales de todas: 7 pruebas |
-| 4 | `make fresh` y `migrate:rollback` sin errores | Cumplido | `make fresh` con código 0 (36 migraciones y 5 seeders). `migrate:rollback --database=propietario` sobre la base de desarrollo revirtió todas (`migrate:status`: 0 ejecutadas) y `make fresh` las reconstruyó (36). En la suite, §7.11 fila 14 (`MigracionesDeAcademicoTest`) |
+| 4 | `make fresh` y `migrate:rollback` sin errores | Cumplido | `make fresh` con código 0 (36 migraciones y 5 seeders). Sobre la base de desarrollo, recién reconstruida: **antes** del rollback, `migrate:status` daba 36 migraciones ejecutadas y 0 pendientes. `migrate:rollback --database=propietario --force` salió con código 0 y **revirtió las 36** (36 líneas `DONE`, ninguna con error; `make fresh` las deja todas en el lote 1). **Después**, `migrate:status` dio 0 ejecutadas y 36 pendientes, y en el esquema solo quedó la tabla `migrations`. `make fresh` las volvió a ejecutar (36 ejecutadas, 0 pendientes). En la suite, §7.11 fila 14 (`MigracionesDeAcademicoTest`) |
 | 5 | Las tablas de §7 pasan, una prueba por fila (las diez de RN-04 y las filas 11 a 13) | Cumplido | §7.1 a §7.12 con una prueba por fila (reportes de T01 a T14; contraste fila por fila en la auditoría de C2 para §7.1 a §7.6 y §7.10). Las 13 filas de riesgo de §7.9, entre ellas las diez de RN-04, en `RiesgoAcademicoTest`. Las filas 11 a 13 de §7.9 y de §7.10 tienen prueba propia |
 | 6 | `make humo` sin fallas | Cumplido | Tras `make fresh`: `HUMO H0 OK`, `HUMO H1 OK: 14 pasos`, `HUMO H2 OK: 16 pasos`, código 0 (salida en la sección 7) |
 | 7 | Criterios propios de H2 | Cumplido | El criterio propio prevalece e indica cuál se aplicó: `CriterioPorMateriaTest`, §7.9 RN-03, humo paso 11. Calificación fuera de 0 a 10 rechazada: §7.7 fila 3, humo paso 15. El docente ve solo a sus alumnos: §7.4, `AcademicoSeguridadTest`, humo paso 13. El entrenador no ve calificaciones individuales: §7.10 fila 9, humo paso 12. Recálculo tras cada captura: §7.10 filas 2 a 8 y 23. `alertas:recalcular` idempotente y programado: §7.10 filas 17 y 24 |
@@ -274,13 +289,37 @@ M-8 de la auditoría de C2 (el 409 al inscribir revela a un docente que una matr
 | 10 | Las dos auditorías independientes entregadas, sin hallazgos bloqueantes abiertos | **Parcial** | Auditoría de C2: `f1-h2-auditoria-lote-c2.md`, 0 bloqueantes. I-1 resuelto en la especificación, M-1 a M-10 resueltos o registrados (`f1-h2-progreso.md`). **Falta la auditoría del Lote E** (§0.5) |
 | 11 | El responsable revisa, prueba `make humo` y aprueba; etiqueta `f1-h2` y fusión | **Pendiente del responsable** | No se creó la etiqueta ni se fusionó (regla vigente) |
 
-## 7. Salida de `make humo` al cierre (tras `make fresh`)
+## 7. Salida completa de `make humo` al cierre
+
+Salida literal de `make humo` (código de salida 0), ejecutado justo después de `make fresh` el 28 de octubre de 2026. Después se volvió a ejecutar `make fresh` para dejar la base de desarrollo limpia.
 
 ```
+docker compose exec -T app bash -s < scripts/humo/humo-h0.sh
 HUMO H0 OK: GET /api/v1/salud -> 200
+docker compose exec -T app bash /scripts/humo/humo-h1.sh
 OK     paso 1: GET /api/v1/salud -> HTTP 200
-… (H1, 14 pasos)
+OK     paso 2: el entrenador 1 inicia sesión -> HTTP 200
+OK     paso 3: crea la categoría Sub-17 -> HTTP 201
+OK     paso 4: crea el equipo Tigres Sub-17 -> HTTP 201
+OK     paso 4: el equipo aparece en GET /equipos -> HTTP 200
+OK     paso 5: registra un jugador en ese equipo -> HTTP 201
+OK     paso 6: la misma matrícula responde 409 sin datos del primero -> HTTP 409
+OK     paso 7: el entrenador 2 inicia sesión con otro archivo de cookies -> HTTP 200
+OK     paso 8: el jugador del entrenador 1 responde 404 al entrenador 2 -> HTTP 404
+OK     paso 9: la búsqueda por matrícula devuelve solo nombres, apellidos y matrícula -> HTTP 200
+OK     paso 10: el entrenador 2 crea su equipo -> HTTP 201
+OK     paso 10: asigna al jugador por matrícula -> HTTP 201
+OK     paso 11: GET /jugadores del entrenador 2 devuelve al jugador con solo su equipo -> HTTP 200
+OK     paso 12: el docente inicia sesión -> HTTP 200
+OK     paso 12: el docente recibe 403 al crear un equipo -> HTTP 403
+OK     paso 12: el docente recibe una lista vacía en GET /jugadores -> HTTP 200
+OK     paso 13: el entrenador 1 da de baja al jugador -> HTTP 201
+OK     paso 13: deja de aparecer en GET /jugadores del entrenador 1 -> HTTP 200
+OK     paso 13: deja de aparecer en GET /jugadores del entrenador 2 -> HTTP 200
+OK     paso 14: el entrenador 1 cierra sesión -> HTTP 204
+OK     paso 14: la misma cookie responde 401 -> HTTP 401
 HUMO H1 OK: 14 pasos
+docker compose exec -T app bash /scripts/humo/humo-h2.sh
 Servidor del guion con QUEUE_CONNECTION=sync
 OK     paso 1: GET /api/v1/salud -> HTTP 200
 OK     paso 2: el docente 1 inicia sesión -> HTTP 200
@@ -311,15 +350,14 @@ OK     paso 15: un valor fuera de rango responde calificacion_fuera_de_rango -> 
 OK     paso 16: el docente 1 cierra sesión -> HTTP 204
 OK     paso 16: la misma cookie responde 401 -> HTTP 401
 HUMO H2 OK: 16 pasos
-humo EXIT=0
 ```
 
 ## 8. Pendientes que H2 deja
 
 - **Para el responsable:**
-  - confirmar DA-15 y revisar DA-14;
+  - confirmar DA-15 y DA-14 (esta, aceptada en revisión del 28/10);
   - abrir la auditoría independiente del Lote E (§0.5);
-  - comprobar `make verificar` en CI tras el próximo push;
+  - hacer el push y comprobar que CI queda en verde en el commit final (condición del punto 1 de la compuerta);
   - aprobar, etiquetar `f1-h2` y fusionar.
 - **Para la revisión de seguridad de H7:** AB-17 a AB-21 de H1, AB-26 (M-8 y la captura académica sin bloqueo de la fila del jugador, §11) y PT-04.
 - **Con la institución (no bloquean H2):** AB-22 a AB-25 (RN-01, RN-04, DD-43, DD-44, DD-20 y AB-08).

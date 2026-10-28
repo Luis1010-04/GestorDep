@@ -122,5 +122,5 @@ Decisiones que tomó el agente donde la especificación de H2 callaba (`docs/hit
 | DA-11 | Matrícula sin expediente al inscribir: 404 `jugador_no_registrado` (§6.3), sin datos de nadie | No | Confirmada por el responsable |
 | DA-12 | El texto de `jugador_en_baja` cubre asignar, inscribir y capturar; el código no cambia | No | Vigente |
 | DA-13 | Corregir una calificación o una asistencia de un jugador en baja también da 409 | No (restringe escrituras) | Vigente |
-| DA-14 | El docente dueño sigue viendo calificaciones y asistencias de un alumno ya en baja | **Sí** (lectura) | Vigente; para revisión del responsable |
+| DA-14 | El docente dueño sigue viendo calificaciones y asistencias de un alumno ya en baja | **Sí** (lectura) | Aceptada en revisión del 28/10; sujeta a confirmación del responsable |
 | DA-15 | La situación académica lista solo las materias del docente **del periodo vigente**; sin periodo vigente, arreglo vacío | **Sí** (lectura, restrictiva) | **Pendiente de confirmación del responsable** (AB-27) |
