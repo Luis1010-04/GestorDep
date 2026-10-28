@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\CriterioGeneralSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\TestResponse;
 use Src\Academico\Aplicacion\AsignaturaDuplicada;
@@ -100,9 +101,10 @@ test('HU-28 (§7.2 fila 5): el listado va ordenado por clave y paginado', functi
 test('HU-28 (§7.2 fila 6): borrar da 204, se puede crear la misma clave y una materia que la usa la sigue mostrando', function () {
     /** @var TestCase $this */
     $id = asignaturasCrear($this, ['clave' => 'MAT-101', 'nombre' => 'Matemáticas', 'grado' => 1])->json('datos.id');
+    (new CriterioGeneralSeeder)->run();
     $docente = DB::table('usuarios')->where('correo', 'd1@x.com')->value('id');
     $periodo = mundoInsertar('periodos_escolares', ['nombre' => '2026-1', 'fecha_inicio' => '2026-01-12', 'fecha_fin' => '2026-06-30']);
-    mundoInsertar('materias', ['asignatura_id' => $id, 'periodo_id' => $periodo, 'docente_id' => $docente]);
+    $materia = mundoInsertar('materias', ['asignatura_id' => $id, 'periodo_id' => $periodo, 'docente_id' => $docente]);
     $sesion = sesionesIniciar($this, 'd1@x.com');
 
     sesionesPeticion($this, 'DELETE', "/api/v1/asignaturas/$id", idDeSesion: $sesion)->assertNoContent();
@@ -111,6 +113,12 @@ test('HU-28 (§7.2 fila 6): borrar da 204, se puede crear la misma clave y una m
     $fila = DB::table('asignaturas')->where('id', $id)->first();
     expect($fila->eliminado_en)->not->toBeNull()->and($fila->eliminado_por)->toBe($docente)
         ->and(DB::table('materias')->join('asignaturas', 'asignaturas.id', '=', 'materias.asignatura_id')->value('asignaturas.clave'))->toBe('MAT-101');
+    // La materia que la usa la sigue mostrando por la API (auditoría de C2, M-3).
+    sesionesPeticion($this, 'GET', "/api/v1/materias/$materia", idDeSesion: $sesion)
+        ->assertOk()
+        ->assertJsonPath('datos.asignatura', ['id' => $id, 'clave' => 'MAT-101', 'nombre' => 'Matemáticas']);
+    sesionesPeticion($this, 'GET', '/api/v1/materias', idDeSesion: $sesion)
+        ->assertJsonPath('datos.0.asignatura', ['id' => $id, 'clave' => 'MAT-101', 'nombre' => 'Matemáticas']);
     asignaturasCrear($this, ['clave' => 'MAT-101', 'nombre' => 'Matemáticas', 'grado' => 1])->assertCreated();
 });
 

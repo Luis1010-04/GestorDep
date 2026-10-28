@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\CriterioGeneralSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\TestResponse;
 use Src\Academico\Aplicacion\PeriodoDuplicado;
@@ -154,9 +155,10 @@ test('DD-45: un periodo eliminado no puede ser el vigente', function () {
 test('HU-28 (§7.1 fila 8): borrar P0 da 204, deja de listarse y una materia que lo usa lo sigue mostrando', function () {
     /** @var TestCase $this */
     $ids = periodosDePartida();
+    (new CriterioGeneralSeeder)->run();
     $docente = DB::table('usuarios')->where('correo', 'd1@x.com')->value('id');
     $asignatura = mundoInsertar('asignaturas', ['clave' => 'MAT-101', 'nombre' => 'Matemáticas', 'grado' => 1]);
-    mundoInsertar('materias', ['asignatura_id' => $asignatura, 'periodo_id' => $ids['p0'], 'docente_id' => $docente]);
+    $materia = mundoInsertar('materias', ['asignatura_id' => $asignatura, 'periodo_id' => $ids['p0'], 'docente_id' => $docente]);
     $sesion = sesionesIniciar($this, 'd1@x.com');
 
     sesionesPeticion($this, 'DELETE', '/api/v1/periodos-escolares/'.$ids['p0'], idDeSesion: $sesion)->assertNoContent();
@@ -166,6 +168,13 @@ test('HU-28 (§7.1 fila 8): borrar P0 da 204, deja de listarse y una materia que
     expect($fila->eliminado_en)->not->toBeNull()
         ->and($fila->eliminado_por)->toBe($docente)
         ->and(DB::table('materias')->join('periodos_escolares', 'periodos_escolares.id', '=', 'materias.periodo_id')->value('periodos_escolares.nombre'))->toBe('2025-2');
+    // La materia que lo usa lo sigue mostrando por la API (auditoría de C2, M-3).
+    sesionesPeticion($this, 'GET', "/api/v1/materias/$materia", idDeSesion: $sesion)
+        ->assertOk()
+        ->assertJsonPath('datos.periodo', ['id' => $ids['p0'], 'nombre' => '2025-2']);
+    sesionesPeticion($this, 'GET', '/api/v1/materias?filtro[periodo_id]='.$ids['p0'], idDeSesion: $sesion)
+        ->assertOk()
+        ->assertJsonPath('datos.0.periodo', ['id' => $ids['p0'], 'nombre' => '2025-2']);
 });
 
 test('HU-28 (§7.1 fila 9): tras borrar un periodo se puede crear otro con el mismo nombre', function () {
