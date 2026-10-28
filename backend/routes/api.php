@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AsignaturaController;
+use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\EquipoController;
@@ -40,6 +41,10 @@ Route::middleware('auth:web')->group(function () {
         Route::put('/materias/{materia}/criterio', [MateriaController::class, 'definirCriterio'])->whereUuid('materia');
         Route::get('/materias/{materia}/inscripciones', [InscripcionController::class, 'listar'])->whereUuid('materia');
         Route::post('/materias/{materia}/inscripciones', [InscripcionController::class, 'crear'])->whereUuid('materia');
+
+        Route::get('/inscripciones/{inscripcion}/calificaciones', [CalificacionController::class, 'listar'])->whereUuid('inscripcion');
+        Route::post('/inscripciones/{inscripcion}/calificaciones', [CalificacionController::class, 'crear'])->whereUuid('inscripcion');
+        Route::patch('/calificaciones/{calificacion}', [CalificacionController::class, 'corregir'])->whereUuid('calificacion');
     });
 
     Route::middleware('rol:entrenador')->group(function () {

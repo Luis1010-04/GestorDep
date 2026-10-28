@@ -70,6 +70,22 @@ final class RepositorioDeCriteriosEloquent implements RepositorioDeCriterios
         );
     }
 
+    public function idVigenteParaMateria(Identificador $materia): Identificador
+    {
+        $id = $this->propios()->where('materia_id', $materia->valor())->value('id')
+            ?? $this->conexion->table('criterios_aprobacion')
+                ->where('ambito', 'general')
+                ->whereNull('vigente_hasta')
+                ->whereNull('eliminado_en')
+                ->value('id');
+
+        if ($id === null) {
+            throw new LogicException('criterio_general_inexistente');
+        }
+
+        return Identificador::desdeTexto((string) $id);
+    }
+
     public function reemplazarPropio(Identificador $materia, NumeroDecimal $minimo, DateTimeImmutable $hoy): CriterioVigente
     {
         $autor = $this->usuarioActual->identificador()?->valor();

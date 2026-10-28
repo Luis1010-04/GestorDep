@@ -974,6 +974,229 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /inscripciones/{inscripcion}/calificaciones:
+    get:
+      operationId: listarCalificaciones
+      summary: Lista las calificaciones de una inscripcion del docente
+      description: >-
+        Solo el docente dueño de la materia de la inscripcion (HU-07, DD-50). Parciales por numero y la final al ultimo.
+        Las calificaciones de un jugador en baja siguen visibles (DD-52). Una inscripcion ajena, inexistente o con id
+        que no es v7 responde el mismo 404 antes de validar los parametros.
+      tags: [Calificaciones]
+      parameters:
+        - name: inscripcion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de calificaciones.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Calificacion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La inscripcion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarCalificacion
+      summary: Captura una calificacion parcial o final
+      description: >-
+        Solo el docente dueño de la materia de la inscripcion (HU-07, DD-50). Guarda el criterio de aprobacion vigente
+        al capturar (DD-47), escribe el registro crear en calificaciones_historial en la misma transaccion y publica
+        CalificacionRegistrada, que recalcula el resumen academico. La fecha es opcional (por defecto, hoy de negocio)
+        y no se valida que no sea futura (DD-55). Una inscripcion ajena o inexistente responde el mismo 404 antes de
+        validar el cuerpo.
+      tags: [Calificaciones]
+      parameters:
+        - name: inscripcion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tipo, valor]
+              properties:
+                tipo:
+                  type: string
+                  enum: [parcial, final]
+                numero_parcial:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                  description: Obligatorio si el tipo es parcial; ausente si es final.
+                valor:
+                  type: string
+                  description: Cadena de 0.00 a 10.00 con hasta dos decimales; un numero JSON se rechaza (DD-51).
+                  pattern: '^-?\d+(\.\d{1,2})?$'
+                fecha:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Calificacion capturada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Calificacion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La inscripcion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Ya existe una calificacion del mismo tipo y numero de parcial (calificacion_duplicada) o el jugador esta en
+            baja (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente o con formato invalido, numero_parcial con una final o sin el en un parcial, o fuera de 1 a 10
+            (validacion_fallida); valor numerico fuera de 0 a 10 (calificacion_fuera_de_rango, campo valor).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /calificaciones/{calificacion}:
+    patch:
+      operationId: corregirCalificacion
+      summary: Corrige el valor de una calificacion
+      description: >-
+        Solo el docente dueño de la materia (HU-07, DD-50). El valor es la unica modificacion permitida: cualquier otro
+        campo se rechaza (prohibited). El criterio guardado al capturar no cambia (DD-47). Un valor igual al guardado
+        responde 200 sin escribir historial ni cambiar actualizado_en; uno distinto escribe el registro actualizar con
+        los datos anteriores y nuevos y publica CalificacionRegistrada. Un jugador en baja no admite correcciones (409).
+        Una calificacion ajena, inexistente o con id que no es v7 responde el mismo 404 antes de validar el cuerpo.
+      tags: [Calificaciones]
+      parameters:
+        - name: calificacion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [valor]
+              properties:
+                valor:
+                  type: string
+                  pattern: '^-?\d+(\.\d{1,2})?$'
+      responses:
+        '200':
+          description: La calificacion corregida (o sin cambios).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Calificacion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La calificacion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador esta en baja (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Valor ausente o con formato invalido, u otro campo enviado (validacion_fallida, con codigo prohibited en el
+            campo); valor numerico fuera de 0 a 10 (calificacion_fuera_de_rango).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos:
     get:
       operationId: listarEquipos
@@ -1734,6 +1957,47 @@ components:
               type: string
             matricula:
               type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Calificacion:
+      type: object
+      additionalProperties: false
+      required: [id, inscripcion_id, tipo, numero_parcial, valor, criterio, fecha, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        inscripcion_id:
+          type: string
+          format: uuid
+        tipo:
+          type: string
+          enum: [parcial, final]
+        numero_parcial:
+          type: integer
+          nullable: true
+          minimum: 1
+          maximum: 10
+          description: Nulo si es la final.
+        valor:
+          type: string
+          pattern: '^\d{1,2}\.\d{2}$'
+        criterio:
+          type: object
+          additionalProperties: false
+          required: [ambito, calificacion_minima]
+          description: El criterio de aprobacion vigente al capturar (DD-47); no cambia si el criterio cambia despues.
+          properties:
+            ambito:
+              type: string
+              enum: [general, materia]
+            calificacion_minima:
+              type: string
+              pattern: '^\d{1,2}\.\d{2}$'
+        fecha:
+          type: string
+          format: date
         actualizado_en:
           type: string
           format: date-time

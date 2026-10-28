@@ -8,6 +8,7 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use Src\Academico\Aplicacion\ConsultaDeInscripciones;
 use Src\Academico\Aplicacion\InscripcionConJugador;
+use Src\Academico\Aplicacion\InscripcionDelDocente;
 use Src\Compartido\Aplicacion\AlcanceDeJugadores;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
@@ -48,6 +49,38 @@ final class ConsultaDeInscripcionesSql implements ConsultaDeInscripciones
     public function contarDeLaMateria(Identificador $materiaId): int
     {
         return $this->visibles()->where('inscripciones.materia_id', $materiaId->valor())->count();
+    }
+
+    /**
+     * La pertenencia sale de la materia, sin leer jugadores. La baja se deduce del alcance: una inscripción no eliminada en
+     * una materia del docente siempre está en su alcance, salvo que el jugador esté en baja (`restringir()` sin
+     * `incluirBajas`).
+     */
+    public function delDocente(Identificador $inscripcionId, Identificador $docenteId): ?InscripcionDelDocente
+    {
+        $fila = $this->conexion->table('inscripciones')
+            ->join('materias', 'materias.id', '=', 'inscripciones.materia_id')
+            ->where('inscripciones.id', $inscripcionId->valor())
+            ->whereNull('inscripciones.eliminado_en')
+            ->whereNull('materias.eliminado_en')
+            ->where('materias.docente_id', $docenteId->valor())
+            ->first(['inscripciones.id', 'inscripciones.materia_id', 'inscripciones.jugador_id']);
+        if ($fila === null) {
+            return null;
+        }
+
+        $enAlcance = $this->alcance->restringir(
+            $this->usuarioActual,
+            $this->conexion->table('inscripciones')->where('inscripciones.id', $fila->id),
+            'inscripciones.jugador_id',
+        )->exists();
+
+        return new InscripcionDelDocente(
+            Identificador::desdeTexto($fila->id),
+            Identificador::desdeTexto($fila->materia_id),
+            Identificador::desdeTexto($fila->jugador_id),
+            ! $enAlcance,
+        );
     }
 
     private function visibles(): Builder

@@ -74,6 +74,50 @@ test('HU-06: las respuestas de inscripciones cumplen el contrato', function () {
     }
 });
 
+test('HU-07: las respuestas de calificaciones cumplen el contrato', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    $sesion = sesionesIniciar($this, 'd1@x.com');
+    $ruta = '/api/v1/inscripciones/'.$m['i1'].'/calificaciones';
+    $inexistente = Identificador::generar()->valor();
+
+    $creada = sesionesPeticion($this, 'POST', $ruta, ['tipo' => 'parcial', 'numero_parcial' => 1, 'valor' => '8.50'], $sesion)->assertCreated();
+    $final = sesionesPeticion($this, 'POST', $ruta, ['tipo' => 'final', 'valor' => '8.00'], $sesion)->assertCreated();
+    $id = $creada->json('datos.id');
+    $listado = [
+        ['post', $creada],
+        ['post', $final],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['tipo' => 'final', 'valor' => '9.00'], $sesion)->assertStatus(409)],
+        ['post', sesionesPeticion($this, 'POST', '/api/v1/inscripciones/'.$m['i5'].'/calificaciones', ['tipo' => 'final', 'valor' => '9.00'], $sesion)->assertStatus(409)],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['tipo' => 'final', 'valor' => '10.01'], $sesion)->assertUnprocessable()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['tipo' => 'parcial', 'valor' => 8.5], $sesion)->assertUnprocessable()],
+        ['post', sesionesPeticion($this, 'POST', "/api/v1/inscripciones/$inexistente/calificaciones", ['tipo' => 'final', 'valor' => '9.00'], $sesion)->assertNotFound()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['tipo' => 'final', 'valor' => '9.00'])->assertUnauthorized()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['tipo' => 'final', 'valor' => '9.00'], sesionesIniciar($this, 'a@x.com'))->assertForbidden()],
+        ['get', sesionesPeticion($this, 'GET', $ruta, idDeSesion: $sesion)->assertOk()],
+        ['get', sesionesPeticion($this, 'GET', $ruta.'?pagina=0', idDeSesion: $sesion)->assertUnprocessable()],
+        ['get', sesionesPeticion($this, 'GET', "/api/v1/inscripciones/$inexistente/calificaciones", idDeSesion: $sesion)->assertNotFound()],
+    ];
+    foreach ($listado as [$metodo, $respuesta]) {
+        expect($validador->validate($respuesta->baseResponse, '/inscripciones/{inscripcion}/calificaciones', $metodo))->toBeTrue("$metodo {$respuesta->getStatusCode()}");
+    }
+
+    $correccion = [
+        sesionesPeticion($this, 'PATCH', "/api/v1/calificaciones/$id", ['valor' => '9.00'], $sesion)->assertOk(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/calificaciones/$id", ['valor' => '10.01'], $sesion)->assertUnprocessable(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/calificaciones/$id", ['valor' => '9.00', 'tipo' => 'final'], $sesion)->assertUnprocessable(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/calificaciones/$inexistente", ['valor' => '9.00'], $sesion)->assertNotFound(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/calificaciones/$id", ['valor' => '9.00'])->assertUnauthorized(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/calificaciones/$id", ['valor' => '9.00'], sesionesIniciar($this, 'a@x.com'))->assertForbidden(),
+    ];
+    $previa = mundoCalificar($m['i5'], 'final', '7.00');
+    $correccion[] = sesionesPeticion($this, 'PATCH', "/api/v1/calificaciones/$previa", ['valor' => '9.00'], $sesion)->assertStatus(409);
+    foreach ($correccion as $respuesta) {
+        expect($validador->validate($respuesta->baseResponse, '/calificaciones/{calificacion}', 'patch'))->toBeTrue("patch {$respuesta->getStatusCode()}");
+    }
+});
+
 test('HU-28: las respuestas de asignaturas cumplen el contrato', function () {
     /** @var TestCase $this */
     $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();

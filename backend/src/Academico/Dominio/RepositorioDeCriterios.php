@@ -22,6 +22,9 @@ interface RepositorioDeCriterios
 
     public function propioVigente(Identificador $materia): ?CriterioVigente;
 
+    /** El identificador del criterio que rige hoy la materia: el propio vigente o, si no tiene, el general (RN-03, DD-47). */
+    public function idVigenteParaMateria(Identificador $materia): Identificador;
+
     /**
      * Cierra el criterio propio vigente de la materia (su `vigente_hasta` pasa a `$hoy`) y crea el nuevo desde `$hoy`, con
      * sus historiales, en una sola transacción: si algo falla no queda ni el cierre ni el nuevo.

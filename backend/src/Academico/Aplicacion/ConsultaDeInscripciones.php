@@ -17,4 +17,10 @@ interface ConsultaDeInscripciones
     public function listarDeLaMateria(Identificador $materiaId, int $pagina, int $porPagina): array;
 
     public function contarDeLaMateria(Identificador $materiaId): int;
+
+    /**
+     * La inscripción, si es de una materia del docente (DD-50); nula si no existe, está eliminada o es de otra materia.
+     * Incluye a los jugadores en baja, marcados (DD-52).
+     */
+    public function delDocente(Identificador $inscripcionId, Identificador $docenteId): ?InscripcionDelDocente;
 }

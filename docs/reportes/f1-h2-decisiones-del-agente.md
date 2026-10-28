@@ -86,3 +86,24 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Cómo se revierte:** en `FormatoDeError`, cambiar la rama de `JugadorNoRegistrado` a `self::respuesta(404, 'recurso_no_encontrado')` y ajustar el texto esperado de la prueba de la fila 3.
 - **Seguridad/privacidad:** ninguna: ambos cuerpos son iguales sea cual sea la matrícula inexistente y no revelan datos.
 - **Estado:** confirmada por el responsable tras la auditoría de C2 (`jugador_no_registrado` con 404, según §6.3).
+
+## DA-12: texto de `jugador_en_baja` generalizado para cubrir la captura (T12)
+
+- **Qué faltaba:** DD-52 pide 409 `jugador_en_baja` también al capturar calificaciones o asistencias, pero el texto vigente («…no se puede asignar ni inscribir.») no describe la captura, y cada código tiene un solo mensaje en `lang/es`.
+- **Qué se eligió:** «El jugador está en baja: no se puede asignar, inscribir ni capturar calificaciones o asistencias.» El código no cambia. Se ajustó el texto esperado (con `assertExactJson`, sin debilitarlas) en `AsignacionDeJugadoresTest.php:160` (H1) e `InscripcionesTest.php:84`.
+- **Cómo se revierte:** restaurar el texto en `lang/es/errores.php` y en esas dos pruebas.
+- **Seguridad/privacidad:** ninguna.
+
+## DA-13: corregir la calificación de un jugador en baja también da 409 (T12)
+
+- **Qué faltaba:** DD-52 dice «capturar calificaciones o asistencias de un jugador en baja también (409)» y «la baja detiene la captura», pero no dice si una corrección (`PATCH`) es captura.
+- **Qué se eligió:** la opción más estricta: `PATCH /calificaciones/{id}` de un jugador en baja responde 409 `jugador_en_baja` y no escribe nada. T13 aplica lo mismo a `PATCH /asistencias-clase/{id}`.
+- **Cómo se revierte:** quitar la comprobación de baja de `CorregirCalificacion` (y de su equivalente en asistencias) y su prueba.
+- **Seguridad/privacidad:** ninguna; restringe escrituras, no lecturas.
+
+## DA-14: el listado de calificaciones de un jugador en baja sigue visible al docente dueño (T12)
+
+- **Qué faltaba:** DD-52 dice que un jugador inscrito que pasa a baja «sigue visible (detalle) para quien ya lo tenía», sin nombrar el listado de calificaciones.
+- **Qué se eligió:** `GET /inscripciones/{id}/calificaciones` responde 200 al docente dueño aunque el jugador esté en baja (como el detalle de H1, DD-30). Lo mismo para las asistencias en T13.
+- **Cómo se revierte:** en el controlador, responder 404 si `InscripcionDelDocente::jugadorEnBaja`.
+- **Seguridad/privacidad:** **sí, de lectura**: el docente dueño sigue viendo las calificaciones que él mismo capturó de un alumno ya en baja. No amplía a nadie más. Para la revisión del responsable.

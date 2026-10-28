@@ -81,7 +81,7 @@ test('DD-52 (§7.5 fila 5): inscribir a un jugador en baja da 409 jugador_en_baj
 
     inscripcionesCrear($this, $m['m1'], ['matricula' => 'M-9'])
         ->assertStatus(409)
-        ->assertExactJson(['codigo' => 'jugador_en_baja', 'mensaje' => 'El jugador está en baja: no se puede asignar ni inscribir.', 'errores' => []]);
+        ->assertExactJson(['codigo' => 'jugador_en_baja', 'mensaje' => 'El jugador está en baja: no se puede asignar, inscribir ni capturar calificaciones o asistencias.', 'errores' => []]);
     expect(DB::table('inscripciones')->where('jugador_id', $baja)->count())->toBe(0);
 });
 
