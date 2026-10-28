@@ -157,7 +157,7 @@ test('DD-30: asignar a un jugador en baja da 409 jugador_en_baja', function () {
 
     asignacionAsignar($this, 'b@x.com', $m['eb'], ['matricula' => 'M-5', 'posicion' => 'medio'])
         ->assertStatus(409)
-        ->assertExactJson(['codigo' => 'jugador_en_baja', 'mensaje' => 'El jugador está en baja y no se puede asignar.', 'errores' => []]);
+        ->assertExactJson(['codigo' => 'jugador_en_baja', 'mensaje' => 'El jugador está en baja: no se puede asignar ni inscribir.', 'errores' => []]);
 
     expect(asignacionConteos())->toBe($antes);
 });

@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
+use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PeriodoEscolarController;
@@ -37,6 +38,8 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/materias', [MateriaController::class, 'crear']);
         Route::get('/materias/{materia}', [MateriaController::class, 'ver'])->whereUuid('materia');
         Route::put('/materias/{materia}/criterio', [MateriaController::class, 'definirCriterio'])->whereUuid('materia');
+        Route::get('/materias/{materia}/inscripciones', [InscripcionController::class, 'listar'])->whereUuid('materia');
+        Route::post('/materias/{materia}/inscripciones', [InscripcionController::class, 'crear'])->whereUuid('materia');
     });
 
     Route::middleware('rol:entrenador')->group(function () {

@@ -78,3 +78,10 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Efecto sobre permisos:** ningún usuario gana permisos de escritura sobre plantel. Un docente puro sigue recibiendo 403; un docente-entrenador recibe 404 al intentar modificar a un jugador que solo enseña (probado en `EscrituraDeUsuarioConDosRolesTest`).
 - **Cómo se revierte:** quitar el parámetro y volver a `buscar()` en esos cuatro casos de uso (ampliaría permisos de escritura: requeriría aprobación).
 - **Anotado para la auditoría:** `estatus_deportivo` se mantiene en el recurso `Jugador` que ve el docente (fila 5 de §7.4, DD-30); el arreglo `equipos` sale vacío para un docente puro porque se limita a las asignaciones del propio usuario.
+
+## DA-11: cuerpo del 404 de una matrícula sin expediente al inscribir
+
+- **Qué faltaba / contradicción:** la instrucción del responsable para T10 pedía que la matrícula inexistente dé 404 «con los mismos cuerpos que en H1»; la especificación (§6.3 y §7.5 fila 3) pide `404 jugador_no_registrado` y H1 responde `recurso_no_encontrado`.
+- **Qué se eligió:** la especificación: código `jugador_no_registrado`, mensaje «No existe un expediente con esa matrícula: el jugador debe tener un expediente.», formato estándar `{codigo, mensaje, errores: []}`, sin datos de nadie. `jugador_en_baja` conserva código y cuerpo de H1 (solo cambia el texto, por decisión del responsable).
+- **Cómo se revierte:** en `FormatoDeError`, cambiar la rama de `JugadorNoRegistrado` a `self::respuesta(404, 'recurso_no_encontrado')` y ajustar el texto esperado de la prueba de la fila 3.
+- **Seguridad/privacidad:** ninguna: ambos cuerpos son iguales sea cual sea la matrícula inexistente y no revelan datos.

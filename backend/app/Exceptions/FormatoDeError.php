@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Src\Academico\Aplicacion\AsignaturaDuplicada;
 use Src\Academico\Aplicacion\CalificacionFueraDeRango;
+use Src\Academico\Aplicacion\JugadorEnBajaNoInscribible;
+use Src\Academico\Aplicacion\JugadorNoRegistrado;
+use Src\Academico\Aplicacion\JugadorYaInscrito;
 use Src\Academico\Aplicacion\MateriaDuplicada;
 use Src\Academico\Aplicacion\PeriodoDuplicado;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
@@ -51,10 +54,11 @@ final class FormatoDeError
             $e instanceof CredencialesInvalidas => self::reglaDeNegocio($e, 401),
             $e instanceof ContrasenaNuevaMuyCorta => self::contrasenaNuevaMuyCorta($e),
             $e instanceof CalificacionFueraDeRango => self::calificacionFueraDeRango($e),
-            $e instanceof CategoriaDuplicada, $e instanceof PeriodoDuplicado, $e instanceof AsignaturaDuplicada, $e instanceof MateriaDuplicada => self::reglaDeNegocio($e, 409),
+            $e instanceof CategoriaDuplicada, $e instanceof PeriodoDuplicado, $e instanceof AsignaturaDuplicada, $e instanceof MateriaDuplicada, $e instanceof JugadorYaInscrito, $e instanceof JugadorEnBajaNoInscribible => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
+            $e instanceof JugadorNoRegistrado => self::reglaDeNegocio($e, 404),
             $e instanceof ReglaDeNegocioViolada => self::reglaDeNegocio($e),
             $e instanceof AuthenticationException => self::respuesta(401, 'no_autenticado'),
             $e instanceof ServicioNoDisponible => self::respuesta(503, 'servicio_no_disponible'),

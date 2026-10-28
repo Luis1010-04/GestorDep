@@ -3,6 +3,7 @@
 namespace Src\Plantel\Infraestructura;
 
 use Illuminate\Support\ServiceProvider;
+use Src\Compartido\Aplicacion\LocalizadorDeJugadores;
 use Src\Plantel\Aplicacion\BuscadorDeJugadorPorMatricula;
 use Src\Plantel\Aplicacion\ConsultaDeJugadores;
 use Src\Plantel\Dominio\RepositorioDeCategorias;
@@ -17,6 +18,7 @@ class PlantelServiceProvider extends ServiceProvider
     {
         $this->app->bind(BuscadorDeJugadorPorMatricula::class, BusquedaDeJugadorPorMatricula::class);
         $this->app->bind(ConsultaDeJugadores::class, ConsultaDeJugadoresSql::class);
+        $this->app->bind(LocalizadorDeJugadores::class, LocalizadorDeJugadoresPlantel::class);
         $this->app->bind(RepositorioDeCategorias::class, RepositorioDeCategoriasEloquent::class);
         $this->app->bind(RepositorioDeEquipos::class, RepositorioDeEquiposEloquent::class);
         $this->app->bind(RepositorioDeJugadores::class, RepositorioDeJugadoresEloquent::class);

@@ -47,6 +47,33 @@ test('HU-06: las respuestas de materias cumplen el contrato', function () {
     }
 });
 
+test('HU-06: las respuestas de inscripciones cumplen el contrato', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    $sesion = sesionesIniciar($this, 'd1@x.com');
+    $ruta = '/api/v1/materias/'.$m['m1'].'/inscripciones';
+    mundoJugador('M-9', 'Zamora', enBaja: true);
+
+    $respuestas = [
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['matricula' => 'M-4'], $sesion)->assertCreated()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['matricula' => 'M-4'], $sesion)->assertStatus(409)],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['matricula' => 'M-9'], $sesion)->assertStatus(409)],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['matricula' => 'NO-EXISTE'], $sesion)->assertNotFound()],
+        ['post', sesionesPeticion($this, 'POST', '/api/v1/materias/'.$m['m2'].'/inscripciones', ['matricula' => 'M-4'], $sesion)->assertNotFound()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, [], $sesion)->assertUnprocessable()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['matricula' => 'M-4'])->assertUnauthorized()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['matricula' => 'M-4'], sesionesIniciar($this, 'a@x.com'))->assertForbidden()],
+        ['get', sesionesPeticion($this, 'GET', $ruta, idDeSesion: $sesion)->assertOk()],
+        ['get', sesionesPeticion($this, 'GET', $ruta.'?pagina=0', idDeSesion: $sesion)->assertUnprocessable()],
+        ['get', sesionesPeticion($this, 'GET', '/api/v1/materias/'.$m['m2'].'/inscripciones', idDeSesion: $sesion)->assertNotFound()],
+    ];
+
+    foreach ($respuestas as [$metodo, $respuesta]) {
+        expect($validador->validate($respuesta->baseResponse, '/materias/{materia}/inscripciones', $metodo))->toBeTrue("$metodo {$respuesta->getStatusCode()}");
+    }
+});
+
 test('HU-28: las respuestas de asignaturas cumplen el contrato', function () {
     /** @var TestCase $this */
     $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
