@@ -62,7 +62,7 @@ Cada tarea tiene su reporte `docs/reportes/f1-h2-tNN.md` con el detalle completo
 | T12 Calificaciones | `74226f4` | 836 | pasa; 8 min 31 s | `f1-h2-t12.md` |
 | T13 Asistencia a clase | `6184d2f` | 860 | pasa; 7 min 49 s | `f1-h2-t13.md` |
 | T14 Situación académica | `859984a` | 889 | pasa; 8 min 9 s | `f1-h2-t14.md` |
-| T15 Humo y cierre documental | este commit | 897 | pasa; 8 min 22 s | este reporte |
+| T15 Humo y cierre documental | `447adac` | 897 | pasa; 8 min 22 s | este reporte |
 
 **Commits `F1-H2-FIX`** (cada uno con su reporte o su fila en el progreso):
 
@@ -90,7 +90,8 @@ Cada tarea tiene su reporte `docs/reportes/f1-h2-tNN.md` con el detalle completo
 | 5 | `b9aa299` | F1-H2-FIX | M-6 la fila 9 de 7.6 comprueba que el evento sale ya confirmado |
 | 6 | `bc9d01f` | F1-H2-FIX | M-10 pruebas de la configuracion de mutacion |
 | 7 | `447adac` | F1-H2-T15 | humo de H2 y cierre documental |
-| 8 | (este commit) | F1-DOC | correcciones del reporte de cierre de H2 |
+| 8 | `ae277b7` | F1-DOC | correcciones del reporte de cierre de H2 |
+| 9 | (último commit de la rama) | F1-DOC | hash de T15 en el reporte de cierre |
 
 **Hash final de la tarea:** `447adac` (F1-H2-T15), sobre el que se midió `make verificar` (sección 2). Las correcciones de este reporte van en un commit F1-DOC posterior que solo cambia documentación. Un commit no puede contener su propio hash: el hash final de la rama se ve en `git log -1` y se informa en la entrega. Es el commit en el que CI debe quedar en verde (sección 6, punto 1).
 
@@ -211,7 +212,7 @@ Cada tarea tiene su reporte `docs/reportes/f1-h2-tNN.md` con el detalle completo
   - El caso de uso vive en `src/Academico` (rutas base), no en `src/Consultas`: la arquitectura prohíbe a Consultas importar dominio ajeno.
   - DA-15, pendiente de confirmación.
 
-### T15 — Humo de H2 y cierre documental (este commit; plan `f1-h2-plan-t15.md`)
+### T15 — Humo de H2 y cierre documental (`447adac`; plan `f1-h2-plan-t15.md`)
 
 - **Archivos:**
   - `scripts/humo/humo-h2.sh` (nuevo; `lib.sh` sin cambios);
