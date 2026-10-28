@@ -14,44 +14,26 @@
 | FIX UUID que no es v7 en `DELETE /categorias/{id}` | hecho | `752e4eb` | pasa; 676 pruebas; 6 min 20 s (`f1-h2-fix-05.md`) |
 | T08 Alcance del docente | hecha | `1a7b472` | pasa; 701 pruebas; 6 min 0 s (una primera corrida lenta tardó 17 min 16 s por una ralentización transitoria; ver `f1-h2-t08.md`) |
 | T09 Recálculo del resumen académico | hecha | `324a977` | pasa; 720 pruebas; 5 min 51 s |
-| T10 Inscripciones | **bloqueada (§0.4)** | (sin commit) | no se implementó; ver `f1-h2-t10.md` |
+| T10 Inscripciones | hecha (después de T11) | `952150b` | pasa; 776 pruebas; 11 min 7 s (primera corrida tras reiniciar el equipo, en frío) |
 | T11 Criterio por materia | hecha | `865c75f` | pasa; 749 pruebas; 6 min 15 s |
+| FIX `verificar` falla si Infection omite mutantes por tiempo | hecho | `aff1240` | pasa; 783 pruebas; 6 min 21 s (`f1-h2-fix-06.md`) |
 
-## PUNTO DE REANUDACIÓN (la sesión se interrumpió a petición del responsable)
+## Resumen del lote C2 (T08, T09, T10, T11) — completo; T11 se hizo antes que T10
 
-**Último estado:** T10 está **implementada pero sin confirmar**: el código y las pruebas están en el árbol de trabajo (sin commit) y `make verificar` de T10 se estaba corriendo cuando se apagó el equipo, por lo que **no hay resultado**. Antes de apagarse: PHPStan sin errores y 294 pruebas verdes en la corrida estrecha (`tests/Feature/Academico`, `tests/Unit/Academico`, `tests/Arch` y `AsignacionDeJugadoresTest`). Último commit: `1dfe522`. No hay `git stash` pendiente.
+T10 estuvo bloqueada por una condición de §0.4 (la búsqueda por matrícula antes de tener alcance) hasta que el responsable aprobó la opción A (puerto `LocalizadorDeJugadores` en Compartido y adaptador en Plantel). Como T11 no depende de T10, se hizo primero. **No se inició el Lote D.** Queda pendiente la auditoría independiente de C2 (§0.5).
 
-Opción A de T10 aprobada por el responsable (rutas adicionales solo para T10: `src/Compartido/Aplicacion/**` y `src/Plantel/Infraestructura/**`); condiciones: el puerto devuelve solo identificador y baja; prueba de arquitectura de que solo lo usa `InscribirJugador` sin tocar la lista cerrada; mensaje de `jugador_en_baja` = «El jugador está en baja: no se puede asignar ni inscribir.» (ya cambiado en `lang/es` y en `AsignacionDeJugadoresTest.php:160`).
-
-**Archivos sin commit de T10** (todos bajo `backend/` salvo `docs/api/openapi.yaml`): `app/Http/Controllers/InscripcionController.php`, `app/Http/Requests/SolicitudDeNuevaInscripcion.php`, `app/Http/Resources/InscripcionRecurso.php`, `app/Exceptions/FormatoDeError.php`, `lang/es/errores.php`, `routes/api.php`, `src/Academico/Aplicacion/{ConsultaDeInscripciones,InscribirJugador,InscripcionConJugador,JugadorEnBajaNoInscribible,JugadorNoRegistrado,JugadorYaInscrito,ListarInscripciones}.php`, `src/Academico/Dominio/{Inscripcion,RepositorioDeInscripciones}.php`, `src/Academico/Infraestructura/{ConsultaDeInscripcionesSql,RepositorioDeInscripcionesEloquent,AcademicoServiceProvider}.php`, `src/Compartido/Aplicacion/{JugadorLocalizado,LocalizadorDeJugadores}.php`, `src/Plantel/Infraestructura/{LocalizadorDeJugadoresPlantel,PlantelServiceProvider}.php`, y las pruebas `tests/Feature/Academico/{InscripcionesTest,ContratoDeAcademicoTest}.php`, `tests/Feature/Plantel/AsignacionDeJugadoresTest.php`, `tests/Arch/LocalizadorDeJugadoresTest.php`, `tests/Unit/Academico/InscripcionTest.php`.
-
-**Qué falta, en orden:**
-1. Correr `make verificar` (sin otros procesos). Si falla, corregir (PHPStan/Pint se corrigen con `vendor/bin/pint` y revisión de tipos). Si pasa, anotar duración y número de pruebas.
-2. **Reescribir `docs/reportes/f1-h2-t10.md`**: hoy describe el bloqueo y está obsoleto. Debe llevar archivos, pruebas (§7.5 filas 1 a 12 y §7.10 fila 23), fallo previo (6 pruebas de 201→404, 5 de 422→404, 2 de 409→404, 2 de 200→404 y las de arquitectura), `verificar`, y registrar **DA-11** (ver abajo). Quitar la fila «bloqueada» de la tabla de arriba y poner el commit.
-3. Commit `F1-H2-T10: inscripciones` (con `Co-Authored-By`), y actualizar la fila de T10 de esta tabla.
-4. **`F1-H2-FIX`**: `make verificar` debe fallar si Infection omite o descarta mutantes por tiempo, o fijar un tiempo límite explícito que no se alcance. Reportar **antes y después con un mutante forzado a timeout**. Contexto: en una corrida de T08 hubo «50 mutants required more time than configured» (símbolo `S`) y `verificar` pasó igual; `infection.json5` ya tiene `"timeout": 20`.
-5. Medir `make verificar` por etapas (`scratchpad/etapas.sh` o equivalente), reescribir el resumen del lote C2 (con T11 hecha antes que T10) y **detenerse: no iniciar el Lote D**. Los commits de documentación llevan `F1-DOC`.
-
-**DA-11 pendiente de escribir:** la instrucción del responsable para T10 dice que la matrícula inexistente da 404 «con los mismos cuerpos que en H1», pero §6.3 y §7.5 fila 3 de la especificación piden `404 jugador_no_registrado` (H1 responde `recurso_no_encontrado`). Se implementó la especificación (`jugador_no_registrado`, formato estándar de error, sin datos de nadie) y `jugador_en_baja` con el mismo código y cuerpo que H1 (texto nuevo). Si el responsable prefiere el cuerpo `recurso_no_encontrado`, el cambio es una línea en `FormatoDeError` (`JugadorNoRegistrado`) y el texto esperado de la prueba de la fila 3. Hay que avisarlo en el reporte.
-
-**Pendientes de decisión del responsable:** ninguno bloqueante, salvo la nota de DA-11. Datos útiles: los scripts de medición están en el directorio temporal de la sesión (`scratchpad/verificar.sh`, `etapas.sh`) y pueden no existir en la nueva sesión; el equivalente es `make verificar` y `docker compose exec -T app vendor/bin/pint` antes.
-
-## Resumen del lote C2 (T08, T09, T11; T10 bloqueada)
-
-**El lote no está completo: T10 no se implementó** (condición de §0.4, `f1-h2-t10.md`). Se hizo T11 antes porque no depende de ella. La auditoría independiente del lote C2 (§0.5) debe decidirse con esto a la vista: faltan las rutas de inscripción y su prueba de la fila 23 de §7.10.
-
-- **Commits:** T08 `1a7b472`, T09 `324a977`, T11 `865c75f`; además los tres `F1-H2-FIX` previos (`e3e02be`, `143474e`, `752e4eb`) y los `F1-DOC` de documentación.
-- **`make verificar` (compuerta de cada tarea):** T08 6 min 0 s (701 pruebas; una primera corrida lenta de 17 min 16 s con 50 mutantes omitidos por una ralentización transitoria, repetida en 6 min), T09 5 min 51 s (720), T11 6 min 15 s (749).
-- **Medición por etapas al cierre del lote** (una corrida, sin otros procesos, 749 pruebas): Pint 8 s, PHPStan 7 s, Infection 64 s, Pest con cobertura 305 s (Pest informa 285,5 s), cobertura 3 s, auditoría 9 s. **Total 396 s (6 min 36 s)**, por debajo de los 15 min de §0.4 con holgura de 8 min 24 s.
-- **Cobertura por capa (T11):** Dominio 100,0 % (umbral 95), Aplicación 100,0 % (85), Infraestructura y HTTP 99,9 % (70).
-- **Mutación (Infection, solo `Dominio/`):** 331 mutantes eliminados, MSI 100 %, MSI cubierto 100 %.
-- **Rutas nuevas:** `PUT /materias/{materia}/criterio`. Cambia el contenido de `GET /materias` y `GET /materias/{materia}` (`criterio_aplicado` con el criterio propio). Documentadas y validadas contra respuestas reales. T08 solo actualizó descripciones de rutas de H1.
+- **Commits:** T08 `1a7b472`, T09 `324a977`, T11 `865c75f`, T10 `952150b`; los `F1-H2-FIX` `e3e02be` (reinicio por `DELETE`), `143474e` (PT-05), `752e4eb` (UUID no v7) y `aff1240` (Infection); y los `F1-DOC` de documentación.
+- **`make verificar` (compuerta de cada tarea):** T08 6 min 0 s (701 pruebas; una primera corrida lenta de 17 min 16 s por una ralentización transitoria, repetida en 6 min), T09 5 min 51 s (720), T11 6 min 15 s (749), T10 11 min 7 s (776; primera corrida tras apagar el equipo y levantar Docker), FIX de Infection 6 min 21 s (783).
+- **Medición por etapas al cierre del lote** (una corrida, sin otros procesos, 783 pruebas): Pint 6 s, PHPStan 3 s, Infection 60 s, verificación de mutación 1 s, Pest con cobertura 272 s (Pest informa 260,5 s), cobertura 1 s, auditoría 1 s. **Total 344 s (5 min 44 s)**, con 9 min 16 s de holgura frente a los 15 min de §0.4.
+- **Cobertura por capa:** Dominio 100,0 % (umbral 95), Aplicación 100,0 % (85), Infraestructura y HTTP 99,8 % (70).
+- **Mutación (Infection, solo `Dominio/`):** 335 mutantes eliminados, MSI 100 %, MSI cubierto 100 %, y ahora `verificar` falla si alguno se omite o agota el tiempo.
+- **Rutas nuevas del lote:** `PUT /materias/{materia}/criterio`, `GET` y `POST /materias/{materia}/inscripciones`. Cambia el contenido de `GET /materias` y `GET /materias/{materia}` (`criterio_aplicado` con el criterio propio). Todas documentadas en `openapi.yaml` y validadas contra respuestas reales. T08 solo actualizó descripciones de rutas de H1.
 - **Comando y planificador:** `alertas:recalcular` (diario 02:00 America/Mexico_City; sin texto en consola porque T09 no permitía `lang/es`).
-- **Decisiones del agente y de permisos:** **DA-10** (escrituras de plantel solo con alcance de entrenador; aprobada por el responsable). Ninguna otra decisión cambia privacidad o permisos.
-- **Para la auditoría (anotado por petición del responsable):** `estatus_deportivo` y `estatus_academico` siguen visibles en el recurso `Jugador` que ve un docente (fila 5 de §7.4, DD-30); `equipos` sale vacío para un docente puro.
-- **Rutas fuera de la especificación:** ninguna; `tests/Pest.php` y `tests/Ayudantes/**` se tocaron dentro de `tests/**`.
-- **Variabilidad:** dos ralentizaciones transitorias del entorno (495 s en una etapa de Pest del FIX de velocidad y 17 min 16 s en una corrida de T08), sin causa identificada; las repeticiones fueron normales (`f1-h2-t08.md`, «Variabilidad»).
-- **Pendiente de respuesta:** cómo resolver la búsqueda por matrícula de T10 (opciones A, B y C en `f1-h2-t10.md`; recomiendo A) y el texto de `jugador_en_baja`.
+- **Decisiones del agente y de permisos:** **DA-10** (escrituras de plantel solo con alcance de entrenador; aprobada) y **DA-11** (el 404 de matrícula inexistente usa `jugador_no_registrado` de la especificación, no el cuerpo de H1 que mencionó la instrucción; **requiere tu confirmación**, cambiarlo es una línea). Ninguna otra decisión cambia privacidad o permisos.
+- **Para la auditoría:** `estatus_deportivo` y `estatus_academico` siguen visibles en el recurso `Jugador` que ve un docente (fila 5 de §7.4, DD-30); `equipos` sale vacío para un docente puro. El puerto `LocalizadorDeJugadores` es una excepción de visibilidad acotada (solo `id` y baja), con prueba de arquitectura; la lista cerrada de `AlcanceDeJugadores` no cambió. El texto de `jugador_en_baja` cambió (H1, solo la prueba de `AsignacionDeJugadoresTest.php:160`).
+- **Rutas fuera de la especificación:** solo las autorizadas por el responsable para T10 (`src/Compartido/Aplicacion/**` y `src/Plantel/Infraestructura/**`); `tests/Pest.php` y `tests/Ayudantes/**` dentro de `tests/**`.
+- **Variabilidad del entorno:** tres ralentizaciones transitorias (495 s en una etapa de Pest, 17 min 16 s en una corrida de T08 y la primera corrida en frío de T10), sin causa identificada; las repeticiones fueron normales (`f1-h2-t08.md`, «Variabilidad»). Un hallazgo del FIX de Infection: los mutantes «omitidos» son los que tienen un tiempo nominal de pruebas ≥ el límite, no una ejecución lenta del mutante.
+- **Pendiente:** confirmar DA-11; decidir la auditoría de C2 (§0.5) y la autorización para iniciar el Lote D.
 
 ## Resumen del lote B (T04 a T07)
 
