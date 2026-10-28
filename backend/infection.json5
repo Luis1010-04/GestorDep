@@ -12,7 +12,10 @@
         "customPath": "tests/Ayudantes/AdaptadorPestParaInfection.php"
     },
     "threads": 4,
-    "timeout": 20,
+    // Límite explícito. Infection omite (Skipped) un mutante si el tiempo nominal de sus pruebas cubridoras, medido en la
+    // corrida inicial, llega a este valor; esos mutantes no cuentan en el MSI. Las pruebas de dominio tardan décimas de
+    // segundo, así que 60 s solo se alcanza ante una anomalía, y entonces bin/verificar-mutacion.php hace fallar `verificar`.
+    "timeout": 60,
     // Fuera del montaje de Windows: los archivos temporales de Infection desaparecen mientras los recorre.
     "tmpDir": "/tmp/infection",
     "logs": {
