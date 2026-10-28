@@ -17,6 +17,25 @@
 | T10 Inscripciones | **bloqueada (§0.4)** | (sin commit) | no se implementó; ver `f1-h2-t10.md` |
 | T11 Criterio por materia | hecha | `865c75f` | pasa; 749 pruebas; 6 min 15 s |
 
+## PUNTO DE REANUDACIÓN (la sesión se interrumpió a petición del responsable)
+
+**Último estado:** T10 está **implementada pero sin confirmar**: el código y las pruebas están en el árbol de trabajo (sin commit) y `make verificar` de T10 se estaba corriendo cuando se apagó el equipo, por lo que **no hay resultado**. Antes de apagarse: PHPStan sin errores y 294 pruebas verdes en la corrida estrecha (`tests/Feature/Academico`, `tests/Unit/Academico`, `tests/Arch` y `AsignacionDeJugadoresTest`). Último commit: `1dfe522`. No hay `git stash` pendiente.
+
+Opción A de T10 aprobada por el responsable (rutas adicionales solo para T10: `src/Compartido/Aplicacion/**` y `src/Plantel/Infraestructura/**`); condiciones: el puerto devuelve solo identificador y baja; prueba de arquitectura de que solo lo usa `InscribirJugador` sin tocar la lista cerrada; mensaje de `jugador_en_baja` = «El jugador está en baja: no se puede asignar ni inscribir.» (ya cambiado en `lang/es` y en `AsignacionDeJugadoresTest.php:160`).
+
+**Archivos sin commit de T10** (todos bajo `backend/` salvo `docs/api/openapi.yaml`): `app/Http/Controllers/InscripcionController.php`, `app/Http/Requests/SolicitudDeNuevaInscripcion.php`, `app/Http/Resources/InscripcionRecurso.php`, `app/Exceptions/FormatoDeError.php`, `lang/es/errores.php`, `routes/api.php`, `src/Academico/Aplicacion/{ConsultaDeInscripciones,InscribirJugador,InscripcionConJugador,JugadorEnBajaNoInscribible,JugadorNoRegistrado,JugadorYaInscrito,ListarInscripciones}.php`, `src/Academico/Dominio/{Inscripcion,RepositorioDeInscripciones}.php`, `src/Academico/Infraestructura/{ConsultaDeInscripcionesSql,RepositorioDeInscripcionesEloquent,AcademicoServiceProvider}.php`, `src/Compartido/Aplicacion/{JugadorLocalizado,LocalizadorDeJugadores}.php`, `src/Plantel/Infraestructura/{LocalizadorDeJugadoresPlantel,PlantelServiceProvider}.php`, y las pruebas `tests/Feature/Academico/{InscripcionesTest,ContratoDeAcademicoTest}.php`, `tests/Feature/Plantel/AsignacionDeJugadoresTest.php`, `tests/Arch/LocalizadorDeJugadoresTest.php`, `tests/Unit/Academico/InscripcionTest.php`.
+
+**Qué falta, en orden:**
+1. Correr `make verificar` (sin otros procesos). Si falla, corregir (PHPStan/Pint se corrigen con `vendor/bin/pint` y revisión de tipos). Si pasa, anotar duración y número de pruebas.
+2. **Reescribir `docs/reportes/f1-h2-t10.md`**: hoy describe el bloqueo y está obsoleto. Debe llevar archivos, pruebas (§7.5 filas 1 a 12 y §7.10 fila 23), fallo previo (6 pruebas de 201→404, 5 de 422→404, 2 de 409→404, 2 de 200→404 y las de arquitectura), `verificar`, y registrar **DA-11** (ver abajo). Quitar la fila «bloqueada» de la tabla de arriba y poner el commit.
+3. Commit `F1-H2-T10: inscripciones` (con `Co-Authored-By`), y actualizar la fila de T10 de esta tabla.
+4. **`F1-H2-FIX`**: `make verificar` debe fallar si Infection omite o descarta mutantes por tiempo, o fijar un tiempo límite explícito que no se alcance. Reportar **antes y después con un mutante forzado a timeout**. Contexto: en una corrida de T08 hubo «50 mutants required more time than configured» (símbolo `S`) y `verificar` pasó igual; `infection.json5` ya tiene `"timeout": 20`.
+5. Medir `make verificar` por etapas (`scratchpad/etapas.sh` o equivalente), reescribir el resumen del lote C2 (con T11 hecha antes que T10) y **detenerse: no iniciar el Lote D**. Los commits de documentación llevan `F1-DOC`.
+
+**DA-11 pendiente de escribir:** la instrucción del responsable para T10 dice que la matrícula inexistente da 404 «con los mismos cuerpos que en H1», pero §6.3 y §7.5 fila 3 de la especificación piden `404 jugador_no_registrado` (H1 responde `recurso_no_encontrado`). Se implementó la especificación (`jugador_no_registrado`, formato estándar de error, sin datos de nadie) y `jugador_en_baja` con el mismo código y cuerpo que H1 (texto nuevo). Si el responsable prefiere el cuerpo `recurso_no_encontrado`, el cambio es una línea en `FormatoDeError` (`JugadorNoRegistrado`) y el texto esperado de la prueba de la fila 3. Hay que avisarlo en el reporte.
+
+**Pendientes de decisión del responsable:** ninguno bloqueante, salvo la nota de DA-11. Datos útiles: los scripts de medición están en el directorio temporal de la sesión (`scratchpad/verificar.sh`, `etapas.sh`) y pueden no existir en la nueva sesión; el equivalente es `make verificar` y `docker compose exec -T app vendor/bin/pint` antes.
+
 ## Resumen del lote C2 (T08, T09, T11; T10 bloqueada)
 
 **El lote no está completo: T10 no se implementó** (condición de §0.4, `f1-h2-t10.md`). Se hizo T11 antes porque no depende de ella. La auditoría independiente del lote C2 (§0.5) debe decidirse con esto a la vista: faltan las rutas de inscripción y su prueba de la fila 23 de §7.10.
