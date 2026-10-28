@@ -1,7 +1,7 @@
 # Registro de decisiones tomadas por defecto tras la auditoría
 
-**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026)
-**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04)
+**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026; DD-42 a DD-55, AB-22 a AB-27 y la sección 4, al cerrar H2, el 28 de octubre de 2026)
+**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04). Cambios del 28 de octubre de 2026 (F1-H2-T15): se registran DD-42 a DD-55 (decisiones de H2), las validaciones pendientes con la institución y las dudas de H2 (AB-22 a AB-27) y las decisiones del agente en H2 (sección 4)
 
 La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los documentos. Para trabajar con lo que se tiene, el equipo de análisis aplicó la **recomendación de la auditoría** en cada una y las registró aquí. Ninguna cuenta como validada por la institución. Cada una indica antes de qué hito debe confirmarse; si se cambia, se corrige el documento afectado y se anota en este registro.
 
@@ -50,6 +50,20 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-39 | En el historial, `datos_anteriores` y `datos_nuevos` de una acción `actualizar` llevan la instantánea completa de la fila (misma forma que `crear`), no solo los campos cambiados. Excepción: `usuarios_historial` (DD-33) | H1 §3 | H1 | F1-H1 |
 | DD-40 | Un jugador en baja **sí** puede cambiar de posición y actualizar su expediente: ninguna regla lo impide y RN-17 conserva sus membresías. `PATCH /jugadores/{id}` rechaza los campos no permitidos (422 `prohibited`); `PATCH /equipos/.../jugadores/...` ignora los desconocidos. *Validar con la institución:* si un expediente en baja debe quedar congelado | H1 §3; `docs/convenciones-api.md` | Institución (sin hito fijado) | F1-H1 |
 | DD-41 | En la baja: la `fecha` es la que envía el usuario (no usa `HoyDeNegocio`) y se acepta una fecha futura; el `motivo` se recorta y tiene un tope de 500 caracteres solo en la API; un motivo ausente o en blanco responde `motivo_obligatorio` solo cuando la fecha es válida (si la fecha falla, `validacion_fallida`) | H1 §3; `POST /jugadores/{jugador}/baja` | H1 | F1-H1 |
+| DD-42 | La tabla `parametros_institucionales` se crea en H2 (grupo de migraciones 035, carpeta `academico/`), con el seeder `ParametrosInstitucionalesSeeder` que siembra solo la clave `riesgo_academico`. H6 solo crea `alertas` | H2 §3; Arq 7.9 y 11 | H2 | F1-H2 |
+| DD-43 | La calificación de una materia es la final si existe; si no, la media de sus parciales, redondeada `HALF_UP` a dos decimales antes de compararla con el criterio. El promedio general es la media de las calificaciones de las materias calificadas, redondeada igual. `dato_incompleto` es verdadero si hay materias sin calificar o ninguna tiene calificación. *Validar con la coordinación académica* | Req RN-02, RN-04; H2 §3 | Institución (no bloquea H2) | F1-H2 |
+| DD-44 | Porcentaje de asistencia = (presentes + faltas justificadas) ÷ registros × 100, a dos decimales `HALF_UP`, sumando todas las inscripciones del jugador en el periodo vigente; sin registros, nulo. *Validar con la coordinación académica* | Req RN-05; H2 §3 | Institución (no bloquea H2) | F1-H2 |
+| DD-45 | Periodo vigente: el no eliminado cuyo rango contiene el día de negocio; con varios, el de `fecha_inicio` más reciente (desempate por `id`); sin ninguno, la situación responde con periodo y valores nulos | Req RN-04; H2 §3 | H2 | F1-H2 |
+| DD-46 | El resumen se recalcula con los eventos `CalificacionRegistrada`, `AsistenciaDeClaseRegistrada`, `CriterioDeMateriaModificado` y `JugadorInscrito` (escucha en cola, `afterCommit`, idempotente) y con `alertas:recalcular`, programado a diario a las 02:00 America/Mexico_City; en H2 el comando solo concilia resúmenes | Arq 11; H2 §3 | H2 | F1-H2 |
+| DD-47 | La materia se evalúa con el criterio vigente al calcular; `calificaciones.criterio_id` guarda el vigente al capturar y no cambia después | Req RN-03, HU-08; H2 §3 | H2 | F1-H2 |
+| DD-48 | El entrenador ve solo el resumen académico; el docente ve el resumen y el detalle solo de sus propias materias; un usuario con los dos roles recibe ambas cosas (ver DA-15) | Req RN-13, RN-14; Arq 10; H2 §3 | H2 | F1-H2 |
+| DD-49 | Periodos escolares y asignaturas los gestionan los docentes; sin el rol docente, 403 (también en el listado) | Req HU-28; H2 §3 | H2 | F1-H2 |
+| DD-50 | Solo el docente dueño de la materia captura y corrige calificaciones y asistencias; un recurso ajeno responde 404 idéntico al de uno inexistente, antes de validar el cuerpo | Req RNF-01; H2 §3 y §6.1 | H2 | F1-H2 |
+| DD-51 | `numero_parcial` de 1 a 10; `grado` de 1 a 12; los decimales viajan como cadena con hasta dos decimales y un número JSON se rechaza | `docs/convenciones-api.md`; H2 §3 | H2 | F1-H2 |
+| DD-52 | Inscribir o capturar calificaciones o asistencias de un jugador en baja responde 409 `jugador_en_baja`; un inscrito que pasa a baja conserva inscripción y resumen y sigue visible para quien ya lo tenía. **Consecuencia anotada (auditoría de C2, M-8):** el 409 al inscribir revela a cualquier docente que una matrícula ajena está en baja; es comportamiento exigido por esta decisión (y equivale al de la asignación de H1 para entrenadores). Se revisa en la seguridad de H7 (AB-26). Ver también DA-12 a DA-14 | Req RN-23; H2 §3 | H2 | F1-H2 |
+| DD-53 | PHPStan nivel 7 (nunca se baja) e Infection con MSI ≥ 80 % y MSI de código cubierto ≥ 85 %, solo sobre `src/*/Dominio/` | `docs/estrategia-pruebas.md` §2 y §4; H2 §3 | H2 | F1-H2 |
+| DD-54 | `NumeroDecimal` (Compartido, `bcmath`) es el único tipo para promedios, umbrales y porcentajes; nunca `float` | Arq 7.1; H2 §3 | H2 | F1-H2 |
+| DD-55 | Calificaciones y asistencias admiten `fecha` opcional (por defecto, hoy de negocio) y no se valida que no sea futura | H2 §2.3 y §3 | H2 | F1-H2 |
 
 ## 2. Decisiones que siguen abiertas
 
@@ -78,6 +92,12 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 | AB-19 | Revisión de seguridad: una petición sin `Origin` ni `Referer` de un dominio con estado no abre sesión y `regenerate()` falla con 500 en lugar de un error controlado | Responsable (revisión de seguridad) | H7 |
 | AB-20 | Revisión de seguridad: asignación y baja simultáneas pueden dejar una membresía vigente de un jugador en baja y romper el 409 `jugador_ya_en_baja`/`jugador_en_baja` (solución probable: `lockForUpdate` sobre el jugador) | Responsable (revisión de seguridad) | H7 |
 | AB-21 | Revisión de seguridad: desfase de reloj en `usuarios` (ver PT-04) | Responsable (revisión de seguridad) | H7 |
+| AB-22 | Validar RN-01: calificación mínima aprobatoria general de 7.0 (sembrada en `CriterioGeneralSeeder`) | Institución (coordinación académica) | Sin hito fijado; no bloquea H2 |
+| AB-23 | Validar RN-04: niveles y umbrales de riesgo académico (sembrados en `parametros_institucionales`, clave `riesgo_academico`) | Institución (coordinación académica) | Sin hito fijado; no bloquea H2 |
+| AB-24 | Validar DD-43 (calificación de la materia, promedio y `dato_incompleto`) y DD-44 (fórmula del porcentaje de asistencia) | Institución (coordinación académica) | Sin hito fijado; no bloquea H2 |
+| AB-25 | DD-20 (redondeo al medio hacia arriba) y AB-08 (origen de la retícula y quién verifica la carga inicial) siguen pendientes (ver AB-14 y AB-08) | Institución | Sin hito fijado; no bloquea H2 |
+| AB-26 | Revisión de seguridad: el 409 `jugador_en_baja` al inscribir revela a un docente que una matrícula ajena está en baja (DD-52, auditoría de C2 M-8); y la captura académica no bloquea la fila del jugador ante una baja simultánea (`docs/hitos/f1-h2.md` §11) | Responsable (revisión de seguridad) | H7 |
+| AB-27 | Confirmar DA-15 (la situación académica lista solo las materias del docente del periodo vigente) | Responsable | Antes de H6 |
 
 ## 3. Pendientes técnicos tras H1
 
@@ -89,3 +109,18 @@ Anotados al cerrar H1; ninguno bloquea el hito. Los decide el responsable.
 | PT-02 | `bin/verificar-cobertura.php` debe rechazar un `clover.xml` anterior a la ejecución de las pruebas. Se vio que leía uno antiguo cuando Pest falló por falta de memoria y el guion evaluó un reporte viejo | H2 |
 | PT-03 | Un arranque con el servicio `db` en estado "unhealthy", visto una sola vez con un volumen nuevo. No se reprodujo; vigilar y, si reaparece, revisar el `healthcheck` y los tiempos de `docker-compose.yml` | H2 |
 | PT-04 | `usuarios.actualizado_en` y `bloqueado_hasta` no salen de `Reloj` (usan `now()` de la base o microsegundos), a diferencia del resto de las tablas tras `F1-H1-FIX`. Es el mismo desfase que anota `docs/hitos/f1-h1.md` §11 | H7 |
+
+## 4. Decisiones del agente en H2 (DA)
+
+Decisiones que tomó el agente donde la especificación de H2 callaba (`docs/hitos/f1-h2.md` §0.3). El detalle de cada una (qué faltaba, qué se eligió, por qué y cómo se revierte) está en `docs/reportes/f1-h2-decisiones-del-agente.md`. Se registran aquí las que afectan el comportamiento o la privacidad; DA-01 a DA-07 son de herramientas y configuración (rutas de T01, adaptador de Pest para Infection, `--with-uncovered`, fila 7 de §7.12 en dos niveles, carpeta de `parametros_institucionales`, `Identificador` sin `floor`, `bcmath` en CI).
+
+| ID | Decisión | Privacidad o permisos | Estado |
+|---|---|---|---|
+| DA-08 | Respuestas a las preguntas del plan de T04: `AmbitoDeCriterio` y `NivelDeRiesgo` como enumeraciones; asistencia como conteos; invariantes de `ParametrosDeRiesgo`; escala 2 en el código; media de calificaciones ya redondeadas; `aprobada()` nula sin calificación | No | Aceptada por el responsable |
+| DA-09 | `GET /materias` se ordena por clave de asignatura y `id`, sin parámetro `orden` | No | Vigente |
+| DA-10 | Las escrituras de plantel (expediente, baja, posición, asignación) usan solo el alcance de entrenador; un docente-entrenador recibe 404 sobre un jugador que solo enseña | **Sí** (restringe escrituras) | Aprobada por el responsable |
+| DA-11 | Matrícula sin expediente al inscribir: 404 `jugador_no_registrado` (§6.3), sin datos de nadie | No | Confirmada por el responsable |
+| DA-12 | El texto de `jugador_en_baja` cubre asignar, inscribir y capturar; el código no cambia | No | Vigente |
+| DA-13 | Corregir una calificación o una asistencia de un jugador en baja también da 409 | No (restringe escrituras) | Vigente |
+| DA-14 | El docente dueño sigue viendo calificaciones y asistencias de un alumno ya en baja | **Sí** (lectura) | Vigente; para revisión del responsable |
+| DA-15 | La situación académica lista solo las materias del docente **del periodo vigente**; sin periodo vigente, arreglo vacío | **Sí** (lectura, restrictiva) | **Pendiente de confirmación del responsable** (AB-27) |

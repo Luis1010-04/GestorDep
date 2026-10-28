@@ -21,6 +21,18 @@
 | T12 Calificaciones | hecha | `74226f4` | pasa; 836 pruebas; 8 min 31 s |
 | T13 Asistencia a clase | hecha | `6184d2f` | pasa; 860 pruebas; 7 min 49 s |
 | T14 Situación académica | hecha | `859984a` | pasa; 889 pruebas; 8 min 9 s |
+| FIX dependencias: `symfony/mime` por CVE-2026-45070 | hecho | `9d931b6` | pasa; 889 pruebas; 9 min 39 s (`f1-h2-fix-dependencias.md`) |
+| FIX M-3 (la materia muestra el catálogo eliminado por la API) | hecho | `1982976` | pasa; 889 pruebas; 9 min 7 s (`f1-h2-fix-m3.md`) |
+| FIX M-6 (§7.6 fila 9 después del commit) | hecho | `b9aa299` | pasa; 889 pruebas; 8 min 35 s (`f1-h2-fix-m6.md`) |
+| FIX M-10 (configuración de mutación) | hecho | `bc9d01f` | pasa; 892 pruebas; 8 min 8 s (`f1-h2-fix-m10.md`) |
+| T15 Humo de H2 y cierre documental | hecha | ver `git log` | pasa; 897 pruebas; 8 min 22 s (`f1-h2-reporte.md`) |
+
+## Resumen del FIX de la deuda de C2 y del lote E (T15) — completo; queda la auditoría del lote E
+
+- **Deuda de C2:** M-3 `1982976`, M-6 `b9aa299` y M-10 `bc9d01f`, solo pruebas y sin cambios de comportamiento (plan `f1-h2-plan-fix-deuda-c2.md`, un reporte por hallazgo, `make verificar` completo en cada uno: 9 min 7 s, 8 min 35 s y 8 min 8 s). Las pruebas endurecidas se demostraron con mutaciones.
+- **T15:** humo de H2 con los 16 pasos de §9 (`HUMO H2 OK: 16 pasos`), segundo docente de demostración, `GuionDeHumoTest`, trazabilidad, registro de decisiones (DD-42 a DD-55, AB-22 a AB-27 y las DA en §4; DA-15 pendiente de confirmación; M-8 como comportamiento exigido por DD-52) y reporte de cierre `f1-h2-reporte.md` con la compuerta §10 punto por punto.
+- **Medición final de `make verificar`** (sin nada más corriendo): **502 s (8 min 22 s)**, 897 pruebas, cobertura 100 / 100 / 99,7 %, 362 mutantes eliminados.
+- **Compuerta:** puntos 2 a 9 cumplidos; el 1, cumplido en local y pendiente de comprobar en CI (sin push); el 10, pendiente de la auditoría del lote E; el 11, del responsable.
 
 ## Resumen del lote D (T12, T13, T14) — completo. No se inició T15
 
@@ -65,15 +77,15 @@ Los que tocan privacidad se corrigen de inmediato, antes del Lote D, en un `F1-H
 | # | Hallazgo | Privacidad | Estado |
 |---|---|---|---|
 | M-1 | Evidencia de «pruebas primero» de T05 a T07 incompleta | no | Resuelto con documentación (punto 4) |
-| M-2 | T08 tocó `openapi.yaml` | no | Aceptado; se anota en T15 (punto 3) |
-| M-3 | §7.1 fila 8 y §7.2 fila 6 comprueban «la materia lo sigue mostrando» por `join` y no por la API | no | Pendiente (FIX antes de T15) |
+| M-2 | T08 tocó `openapi.yaml` | no | Aceptado; registrado en las rutas fuera de la especificación de `f1-h2-reporte.md` (T15) |
+| M-3 | §7.1 fila 8 y §7.2 fila 6 comprueban «la materia lo sigue mostrando» por `join` y no por la API | no | Resuelto (`1982976`, `f1-h2-fix-m3.md`) |
 | M-4 | §7.4 fila 9 inscribe además a J4 en M3: no prueba la rama del entrenador del usuario con dos roles | **sí** | Resuelto (`f1-h2-fix-07.md`) |
 | M-5 | 404 comparados solo por código: `GET` de §7.5 fila 6 y DA-10 | **sí** | Resuelto (`f1-h2-fix-07.md`) |
-| M-6 | §7.6 fila 9 no prueba «después del commit» por sí sola | no | Pendiente (FIX antes de T15) |
+| M-6 | §7.6 fila 9 no prueba «después del commit» por sí sola | no | Resuelto (`b9aa299`, `f1-h2-fix-m6.md`) |
 | M-7 | La prueba de arquitectura del localizador no detecta el adaptador ni el nombre en cadenas | **sí** | Resuelto (`f1-h2-fix-07.md`) |
-| M-8 | El 409 `jugador_en_baja` al inscribir revela a un docente que una matrícula está en baja | **sí**, pero lo exige DD-52 | Sin cambio de código; se registra en T15 (DD-52) y para la revisión de H7 |
+| M-8 | El 409 `jugador_en_baja` al inscribir revela a un docente que una matrícula está en baja | **sí**, pero lo exige DD-52 | Sin cambio de código; registrado en DD-52 y AB-26 (`registro-decisiones.md`, T15) |
 | M-9 | Holgura de tiempo de `verificar` menor que la informada | no | Medido antes de T12: 7 min 0 s (`f1-h2-medicion-verificar.md`); el límite de 15 min detiene el lote |
-| M-10 | `verificar-mutacion.php` no comprueba la vigencia del resumen; `Errored`/`Ignored` no fallan; `composer.lock` no listado | no | Pendiente (FIX antes de T15) |
+| M-10 | `verificar-mutacion.php` no comprueba la vigencia del resumen; `Errored`/`Ignored` no fallan; `composer.lock` no listado | no | Resuelto (`bc9d01f`, `f1-h2-fix-m10.md`; la parte (c) se registra en `f1-h2-reporte.md`) |
 
 ## Resumen del lote C2 (T08, T09, T10, T11) — completo; T11 se hizo antes que T10
 

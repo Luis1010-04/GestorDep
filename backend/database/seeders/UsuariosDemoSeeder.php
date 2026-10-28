@@ -8,12 +8,16 @@ use Src\Identidad\Aplicacion\CrearUsuario;
 use Src\Identidad\Dominio\RepositorioDeUsuarios;
 
 /**
- * Usuarios de demostracion (docs/hitos/f1-h1.md §5.6): un docente y dos entrenadores. Solo desarrollo y pruebas.
+ * Usuarios de demostracion (docs/hitos/f1-h1.md §5.6; el segundo docente, docs/hitos/f1-h2.md T15): dos docentes y dos
+ * entrenadores. Solo desarrollo y pruebas.
  * Estas constantes son la unica fuente de las credenciales: el guion de humo las lee de aqui.
  */
 class UsuariosDemoSeeder extends Seeder
 {
     public const CORREO_DOCENTE = 'docente@example.test';
+
+    /** Segundo docente (docs/hitos/f1-h2.md §9 paso 13): comprueba que un docente no ve a los alumnos de otro. */
+    public const CORREO_DOCENTE_2 = 'docente2@example.test';
 
     public const CORREO_ENTRENADOR_1 = 'entrenador1@example.test';
 
@@ -44,6 +48,7 @@ class UsuariosDemoSeeder extends Seeder
 
         $demo = [
             [self::CORREO_DOCENTE, 'Docente de demostración', 'docente'],
+            [self::CORREO_DOCENTE_2, 'Docente 2 de demostración', 'docente'],
             [self::CORREO_ENTRENADOR_1, 'Entrenador 1 de demostración', 'entrenador'],
             [self::CORREO_ENTRENADOR_2, 'Entrenador 2 de demostración', 'entrenador'],
         ];
