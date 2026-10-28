@@ -20,7 +20,34 @@
 | FIX pruebas de privacidad de la auditoría de C2 (M-4, M-5, M-7) | hecho | `8e084ae` | pasa; 785 pruebas; 7 min 0 s, que es también la medición antes de T12 (`f1-h2-fix-07.md`, `f1-h2-medicion-verificar.md`) |
 | T12 Calificaciones | hecha | `74226f4` | pasa; 836 pruebas; 8 min 31 s |
 | T13 Asistencia a clase | hecha | `6184d2f` | pasa; 860 pruebas; 7 min 49 s |
-| T14 Situación académica | hecha | ver `git log` | pasa; 889 pruebas; 8 min 9 s |
+| T14 Situación académica | hecha | `859984a` | pasa; 889 pruebas; 8 min 9 s |
+
+## Resumen del lote D (T12, T13, T14) — completo. No se inició T15
+
+- **Commits:** antes del lote, `e30e54f` (F1-DOC: auditoría de C2, decisiones del responsable y evidencia de T05 a T07) y `8e084ae` (F1-H2-FIX: pruebas de privacidad M-4, M-5 y M-7). Lote: T12 `74226f4`, T13 `6184d2f`, T14 `859984a`.
+- **Medición antes de T12** (sin nada más corriendo, por etapas): **420 s (7 min 0 s)**, 785 pruebas (`f1-h2-medicion-verificar.md`).
+- **`make verificar` por tarea** (una corrida cada una, todas pasaron a la primera): T12 **511 s** (836 pruebas), T13 **469 s** (860), T14 **489 s** (889). Ninguna pasó de 15 min; la más lenta dejó 6 min 29 s de holgura.
+- **Cobertura por capa (T14):** Dominio 100,0 % (umbral 95), Aplicación 100,0 % (85), Infraestructura y HTTP 99,7 % (70).
+- **Mutación (Infection, solo `Dominio/`):** 362 mutantes eliminados, MSI 100 %, MSI cubierto 100 %, ninguno omitido ni con tiempo agotado.
+- **PHPStan nivel 7:** sin errores ni línea base en las tres corridas.
+- **Rutas nuevas** (todas en `openapi.yaml`, validadas contra respuestas reales en `ContratoDeAcademicoTest`):
+  - `GET`/`POST /inscripciones/{inscripcion}/calificaciones` y `PATCH /calificaciones/{calificacion}`;
+  - `GET`/`POST /inscripciones/{inscripcion}/asistencias` y `PATCH /asistencias-clase/{asistencia}`;
+  - `GET /jugadores/{jugador}/situacion-academica`.
+- **Pruebas primero:** cada reporte pega el fallo real antes de implementar. Las pruebas de privacidad que esperan 404, que pasan solas sin ruta, se demostraron **con mutaciones** en copias temporales (filtro por docente, alcance del jugador, «docente del jugador»): todas fallaron por la razón correcta.
+- **Recorrido de seguridad de H2** (`tests/Feature/Seguridad/AcademicoSeguridadTest.php`): con cada ruta nueva prueba un recurso ajeno con cuerpos válidos e inválidos, ids inexistentes y v4 (404 byte a byte), el rol equivocado (403 idéntico) y sin sesión (401).
+- **Decisiones del agente nuevas** (`f1-h2-decisiones-del-agente.md`):
+  - **DA-12:** texto de `jugador_en_baja` generalizado para la captura; el código no cambia; se ajustó la cadena exacta en una prueba de H1 y una de T10.
+  - **DA-13:** corregir la calificación o la asistencia de un jugador en baja también da 409.
+  - **DA-14 (lectura, para revisión):** el docente dueño sigue viendo calificaciones y asistencias de un alumno ya en baja.
+  - **DA-15 (lectura, restrictiva, para revisión):** en la situación, `materias` del docente solo del periodo vigente.
+- **Decisión de ubicación (T14):** la situación académica vive en `src/Academico` y no en `src/Consultas`, porque necesita el dominio de T04 y la arquitectura prohíbe que Consultas importe dominio ajeno. Está dentro de las rutas base.
+- **Rutas fuera de la especificación en el lote:** ninguna. Todas dentro de las rutas base: `src/Academico`, `app/Http`, `FormatoDeError`, `routes/api.php`, `lang/es`, `openapi.yaml`, `tests/**` y reportes. La lista cerrada de `AlcanceDeJugadores` no creció.
+- **Pendiente para el responsable:**
+  1. Revisar DA-12 a DA-15, en especial DA-14 y DA-15, que afectan lecturas.
+  2. El `F1-H2-FIX` único con la deuda de C2 (M-3, M-6, M-10) antes de T15.
+  3. Para T15: registrar en el reporte de cierre que T08 tocó `openapi.yaml` (auditoría de C2) y M-8 en DD-52.
+  4. La autorización para iniciar el Lote E (T15) y su auditoría.
 
 ## Auditoría de C2 y decisiones del responsable
 
