@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AsignaturaController;
+use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
@@ -45,6 +46,10 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/inscripciones/{inscripcion}/calificaciones', [CalificacionController::class, 'listar'])->whereUuid('inscripcion');
         Route::post('/inscripciones/{inscripcion}/calificaciones', [CalificacionController::class, 'crear'])->whereUuid('inscripcion');
         Route::patch('/calificaciones/{calificacion}', [CalificacionController::class, 'corregir'])->whereUuid('calificacion');
+
+        Route::get('/inscripciones/{inscripcion}/asistencias', [AsistenciaController::class, 'listar'])->whereUuid('inscripcion');
+        Route::post('/inscripciones/{inscripcion}/asistencias', [AsistenciaController::class, 'crear'])->whereUuid('inscripcion');
+        Route::patch('/asistencias-clase/{asistencia}', [AsistenciaController::class, 'corregir'])->whereUuid('asistencia');
     });
 
     Route::middleware('rol:entrenador')->group(function () {

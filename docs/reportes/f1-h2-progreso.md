@@ -18,7 +18,8 @@
 | T11 Criterio por materia | hecha | `865c75f` | pasa; 749 pruebas; 6 min 15 s |
 | FIX `verificar` falla si Infection omite mutantes por tiempo | hecho | `aff1240` | pasa; 783 pruebas; 6 min 21 s (`f1-h2-fix-06.md`) |
 | FIX pruebas de privacidad de la auditoría de C2 (M-4, M-5, M-7) | hecho | `8e084ae` | pasa; 785 pruebas; 7 min 0 s, que es también la medición antes de T12 (`f1-h2-fix-07.md`, `f1-h2-medicion-verificar.md`) |
-| T12 Calificaciones | hecha | ver `git log` | pasa; 836 pruebas; 8 min 31 s |
+| T12 Calificaciones | hecha | `74226f4` | pasa; 836 pruebas; 8 min 31 s |
+| T13 Asistencia a clase | hecha | ver `git log` | pasa; 860 pruebas; 7 min 49 s |
 
 ## Auditoría de C2 y decisiones del responsable
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Src\Academico\Aplicacion\AsignaturaDuplicada;
+use Src\Academico\Aplicacion\AsistenciaDuplicada;
 use Src\Academico\Aplicacion\CalificacionDuplicada;
 use Src\Academico\Aplicacion\CalificacionFueraDeRango;
 use Src\Academico\Aplicacion\JugadorEnBajaNoInscribible;
@@ -57,7 +58,7 @@ final class FormatoDeError
             $e instanceof ContrasenaNuevaMuyCorta => self::contrasenaNuevaMuyCorta($e),
             $e instanceof CalificacionFueraDeRango => self::calificacionFueraDeRango($e),
             $e instanceof CategoriaDuplicada, $e instanceof PeriodoDuplicado, $e instanceof AsignaturaDuplicada, $e instanceof MateriaDuplicada, $e instanceof JugadorYaInscrito, $e instanceof JugadorEnBajaNoInscribible => self::reglaDeNegocio($e, 409),
-            $e instanceof CalificacionDuplicada, $e instanceof JugadorEnBajaSinCaptura => self::reglaDeNegocio($e, 409),
+            $e instanceof CalificacionDuplicada, $e instanceof AsistenciaDuplicada, $e instanceof JugadorEnBajaSinCaptura => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),

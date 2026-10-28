@@ -118,6 +118,46 @@ test('HU-07: las respuestas de calificaciones cumplen el contrato', function () 
     }
 });
 
+test('HU-07: las respuestas de asistencias cumplen el contrato', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    $sesion = sesionesIniciar($this, 'd1@x.com');
+    $ruta = '/api/v1/inscripciones/'.$m['i1'].'/asistencias';
+    $inexistente = Identificador::generar()->valor();
+
+    $creada = sesionesPeticion($this, 'POST', $ruta, ['fecha' => '2026-03-09', 'estado' => 'falta'], $sesion)->assertCreated();
+    $id = $creada->json('datos.id');
+    $listado = [
+        ['post', $creada],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['fecha' => '2026-03-09', 'estado' => 'presente'], $sesion)->assertStatus(409)],
+        ['post', sesionesPeticion($this, 'POST', '/api/v1/inscripciones/'.$m['i5'].'/asistencias', ['estado' => 'presente'], $sesion)->assertStatus(409)],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['estado' => 'tarde'], $sesion)->assertUnprocessable()],
+        ['post', sesionesPeticion($this, 'POST', "/api/v1/inscripciones/$inexistente/asistencias", ['estado' => 'presente'], $sesion)->assertNotFound()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['estado' => 'presente'])->assertUnauthorized()],
+        ['post', sesionesPeticion($this, 'POST', $ruta, ['estado' => 'presente'], sesionesIniciar($this, 'a@x.com'))->assertForbidden()],
+        ['get', sesionesPeticion($this, 'GET', $ruta, idDeSesion: $sesion)->assertOk()],
+        ['get', sesionesPeticion($this, 'GET', $ruta.'?pagina=0', idDeSesion: $sesion)->assertUnprocessable()],
+        ['get', sesionesPeticion($this, 'GET', "/api/v1/inscripciones/$inexistente/asistencias", idDeSesion: $sesion)->assertNotFound()],
+    ];
+    foreach ($listado as [$metodo, $respuesta]) {
+        expect($validador->validate($respuesta->baseResponse, '/inscripciones/{inscripcion}/asistencias', $metodo))->toBeTrue("$metodo {$respuesta->getStatusCode()}");
+    }
+
+    $previa = mundoAsistir($m['i5'], '2026-03-02', 'falta');
+    $correccion = [
+        sesionesPeticion($this, 'PATCH', "/api/v1/asistencias-clase/$id", ['estado' => 'falta_justificada'], $sesion)->assertOk(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/asistencias-clase/$id", ['estado' => 'presente', 'fecha' => '2026-03-08'], $sesion)->assertUnprocessable(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/asistencias-clase/$inexistente", ['estado' => 'presente'], $sesion)->assertNotFound(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/asistencias-clase/$previa", ['estado' => 'presente'], $sesion)->assertStatus(409),
+        sesionesPeticion($this, 'PATCH', "/api/v1/asistencias-clase/$id", ['estado' => 'presente'])->assertUnauthorized(),
+        sesionesPeticion($this, 'PATCH', "/api/v1/asistencias-clase/$id", ['estado' => 'presente'], sesionesIniciar($this, 'a@x.com'))->assertForbidden(),
+    ];
+    foreach ($correccion as $respuesta) {
+        expect($validador->validate($respuesta->baseResponse, '/asistencias-clase/{asistencia}', 'patch'))->toBeTrue("patch {$respuesta->getStatusCode()}");
+    }
+});
+
 test('HU-28: las respuestas de asignaturas cumplen el contrato', function () {
     /** @var TestCase $this */
     $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();

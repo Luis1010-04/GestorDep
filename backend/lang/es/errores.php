@@ -40,6 +40,7 @@ return [
         'asignatura_duplicada' => 'Ya existe una asignatura con esa clave.',
         'calificacion_fuera_de_rango' => 'La calificación debe estar entre 0 y 10.',
         'calificacion_duplicada' => 'Ya existe esa calificación para la inscripción.',
+        'asistencia_duplicada' => 'Ya existe una asistencia de esa inscripción en esa fecha.',
         'materia_duplicada' => 'Ya tiene una materia con esa asignatura en ese periodo.',
         'asignatura_inexistente' => 'La asignatura indicada no existe.',
         'periodo_inexistente' => 'El periodo escolar indicado no existe.',

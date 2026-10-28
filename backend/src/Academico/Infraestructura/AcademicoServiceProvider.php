@@ -4,11 +4,13 @@ namespace Src\Academico\Infraestructura;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Src\Academico\Aplicacion\ConsultaDeAsistencias;
 use Src\Academico\Aplicacion\ConsultaDeCalificaciones;
 use Src\Academico\Aplicacion\ConsultaDeInscripciones;
 use Src\Academico\Aplicacion\ConsultaDeMaterias;
 use Src\Academico\Aplicacion\FuenteDeDatosAcademicos;
 use Src\Academico\Dominio\RepositorioDeAsignaturas;
+use Src\Academico\Dominio\RepositorioDeAsistencias;
 use Src\Academico\Dominio\RepositorioDeCalificaciones;
 use Src\Academico\Dominio\RepositorioDeCriterios;
 use Src\Academico\Dominio\RepositorioDeInscripciones;
@@ -27,11 +29,13 @@ class AcademicoServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(ConsultaDeAsistencias::class, ConsultaDeAsistenciasSql::class);
         $this->app->bind(ConsultaDeCalificaciones::class, ConsultaDeCalificacionesSql::class);
         $this->app->bind(ConsultaDeInscripciones::class, ConsultaDeInscripcionesSql::class);
         $this->app->bind(ConsultaDeMaterias::class, ConsultaDeMateriasSql::class);
         $this->app->bind(FuenteDeDatosAcademicos::class, FuenteDeDatosAcademicosSql::class);
         $this->app->bind(RepositorioDeAsignaturas::class, RepositorioDeAsignaturasEloquent::class);
+        $this->app->bind(RepositorioDeAsistencias::class, RepositorioDeAsistenciasEloquent::class);
         $this->app->bind(RepositorioDeCalificaciones::class, RepositorioDeCalificacionesEloquent::class);
         $this->app->bind(RepositorioDeCriterios::class, RepositorioDeCriteriosEloquent::class);
         $this->app->bind(RepositorioDeInscripciones::class, RepositorioDeInscripcionesEloquent::class);

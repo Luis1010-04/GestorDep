@@ -1197,6 +1197,215 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /inscripciones/{inscripcion}/asistencias:
+    get:
+      operationId: listarAsistencias
+      summary: Lista las asistencias a clase de una inscripcion del docente
+      description: >-
+        Solo el docente dueño de la materia de la inscripcion (HU-07, DD-50). Orden por fecha descendente. Las
+        asistencias de un jugador en baja siguen visibles (DD-52). Una inscripcion ajena, inexistente o con id que no es
+        v7 responde el mismo 404 antes de validar los parametros.
+      tags: [Asistencias]
+      parameters:
+        - name: inscripcion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de asistencias.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Asistencia'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La inscripcion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarAsistencia
+      summary: Registra la asistencia a clase de una inscripcion
+      description: >-
+        Solo el docente dueño de la materia de la inscripcion (HU-07 criterio 3, DD-50). Escribe el registro crear en
+        asistencias_clase_historial en la misma transaccion y publica AsistenciaDeClaseRegistrada, que recalcula el
+        porcentaje de asistencia (RN-05). La fecha es opcional (por defecto, hoy de negocio) y no se valida que no sea
+        futura (DD-55). Una inscripcion ajena o inexistente responde el mismo 404 antes de validar el cuerpo.
+      tags: [Asistencias]
+      parameters:
+        - name: inscripcion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [estado]
+              properties:
+                fecha:
+                  type: string
+                  format: date
+                estado:
+                  type: string
+                  enum: [presente, falta, falta_justificada]
+      responses:
+        '201':
+          description: Asistencia registrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Asistencia'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La inscripcion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Ya existe una asistencia de la inscripcion en esa fecha (asistencia_duplicada) o el jugador esta en baja
+            (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Estado ausente o invalido, o fecha con formato invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asistencias-clase/{asistencia}:
+    patch:
+      operationId: corregirAsistencia
+      summary: Corrige el estado de una asistencia a clase
+      description: >-
+        Solo el docente dueño de la materia (HU-07, DD-50). El estado es la unica modificacion permitida: cualquier otro
+        campo se rechaza (prohibited). Un estado igual al guardado responde 200 sin escribir historial ni cambiar
+        actualizado_en; uno distinto escribe el registro actualizar con los datos anteriores y nuevos y publica
+        AsistenciaDeClaseRegistrada. Un jugador en baja no admite correcciones (409). Una asistencia ajena,
+        inexistente o con id que no es v7 responde el mismo 404 antes de validar el cuerpo.
+      tags: [Asistencias]
+      parameters:
+        - name: asistencia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [estado]
+              properties:
+                estado:
+                  type: string
+                  enum: [presente, falta, falta_justificada]
+      responses:
+        '200':
+          description: La asistencia corregida (o sin cambios).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Asistencia'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La asistencia no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador esta en baja (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Estado ausente o invalido, u otro campo enviado (validacion_fallida, con codigo prohibited en el campo).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos:
     get:
       operationId: listarEquipos
@@ -1957,6 +2166,26 @@ components:
               type: string
             matricula:
               type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Asistencia:
+      type: object
+      additionalProperties: false
+      required: [id, inscripcion_id, fecha, estado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        inscripcion_id:
+          type: string
+          format: uuid
+        fecha:
+          type: string
+          format: date
+        estado:
+          type: string
+          enum: [presente, falta, falta_justificada]
         actualizado_en:
           type: string
           format: date-time
