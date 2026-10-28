@@ -81,3 +81,44 @@ test('HERRAMIENTAS mutación: falla si Infection no generó ningún mutante', fu
 
     expect($codigo)->not->toBe(0)->and($salida)->toContain('ningún mutante');
 });
+
+/**
+ * `infection.json5` sin sus comentarios de línea, decodificado (el archivo no usa otras extensiones de JSON5).
+ *
+ * @return array<string, mixed>
+ */
+function configuracionDeInfection(): array
+{
+    $lineas = preg_grep('/^\s*\/\//', file(dirname(__DIR__, 3).'/infection.json5', FILE_IGNORE_NEW_LINES) ?: [], PREG_GREP_INVERT);
+
+    /** @var array<string, mixed> */
+    return json_decode(implode("\n", $lineas ?: []), true, flags: JSON_THROW_ON_ERROR);
+}
+
+test('HERRAMIENTAS mutación (M-10 a): Infection escribe el resumen en la ruta que lee la verificación, justo después en el script', function () {
+    /** @var array{scripts: array{verificar: list<string>}} $composer */
+    $composer = json_decode((string) file_get_contents(dirname(__DIR__, 3).'/composer.json'), true, flags: JSON_THROW_ON_ERROR);
+    $pasos = $composer['scripts']['verificar'];
+    $infection = array_key_first(array_filter($pasos, fn (string $paso): bool => str_contains($paso, 'vendor/bin/infection')));
+
+    // Si el resumen dejara de escribirse aquí, la verificación podría leer uno viejo de otra corrida.
+    expect(configuracionDeInfection()['logs'] ?? null)->toMatchArray(['summary' => 'build/infection/resumen.log'])
+        ->and($infection)->not->toBeNull()
+        ->and($pasos[$infection + 1] ?? null)->toBe('@php bin/verificar-mutacion.php build/infection/resumen.log');
+});
+
+test('HERRAMIENTAS mutación (M-10 b): los mutantes con error se cuentan como eliminados, como hace Infection, y no hacen fallar', function () {
+    [$codigo] = ejecutarVerificacionDeMutacion(escribirResumenDeMutacion([...resumenDeMutacionLimpio(), 'Killed by Test Framework' => 332, 'Errored' => 3]));
+
+    expect($codigo)->toBe(0);
+});
+
+test('HERRAMIENTAS mutación (M-10 b): los ignorados no hacen fallar, y la configuración no ignora ningún mutador', function () {
+    [$codigo] = ejecutarVerificacionDeMutacion(escribirResumenDeMutacion([...resumenDeMutacionLimpio(), 'Ignored' => 4]));
+    $configuracion = (string) json_encode(configuracionDeInfection());
+
+    // `Ignored` solo puede salir de un `ignore` o `ignoreSourceCodeByRegex` en `mutators`: aquí no hay ninguno.
+    expect($codigo)->toBe(0)
+        ->and(configuracionDeInfection())->not->toHaveKey('mutators')
+        ->and($configuracion)->not->toContain('"ignore');
+});
