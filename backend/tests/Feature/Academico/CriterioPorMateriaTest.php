@@ -150,15 +150,24 @@ test('HU-01 (§7.6 fila 8): un entrenador sin el rol docente recibe 403 al defin
     expect(DB::table('criterios_aprobacion')->where('ambito', 'materia')->count())->toBe(0);
 });
 
-test('DD-46 (§7.6 fila 9): al confirmarse el PUT se publica CriterioDeMateriaModificado con el id de la materia', function () {
+test('DD-46 (§7.6 fila 9): al confirmarse el PUT se publica CriterioDeMateriaModificado con el id de la materia, ya confirmado', function () {
     /** @var TestCase $this */
     $m = mundoDeDocentes();
-    Event::fake([CriterioDeMateriaModificado::class]);
+    // En el momento del despacho: la materia del evento, el nivel de transacción de la aplicación y el criterio vigente
+    // visto desde OTRA conexión, que solo ve lo confirmado (auditoría de C2, M-6). Ver también la fila 10 y la prueba del
+    // publicador en RecalculoDelResumenTest.
+    $observado = [];
+    Event::listen(CriterioDeMateriaModificado::class, function (CriterioDeMateriaModificado $e) use (&$observado): void {
+        $observado[] = [
+            $e->materiaId,
+            DB::transactionLevel(),
+            DB::connection('propietario')->table('criterios_aprobacion')->where('materia_id', $e->materiaId)->whereNull('vigente_hasta')->value('calificacion_minima'),
+        ];
+    });
 
     criterioDefinir($this, $m['m1'], ['calificacion_minima' => '6.00'])->assertOk();
 
-    Event::assertDispatchedTimes(CriterioDeMateriaModificado::class, 1);
-    Event::assertDispatched(CriterioDeMateriaModificado::class, fn (CriterioDeMateriaModificado $e) => $e->materiaId === $m['m1']);
+    expect($observado)->toBe([[$m['m1'], 0, '6.00']]);
 });
 
 test('RNF-02 (§7.6 fila 10): si falla el historial no queda criterio nuevo ni cierre del anterior, ni se publica el evento', function () {
