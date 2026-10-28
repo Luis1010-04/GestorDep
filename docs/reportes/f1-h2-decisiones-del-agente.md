@@ -107,3 +107,11 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué se eligió:** `GET /inscripciones/{id}/calificaciones` responde 200 al docente dueño aunque el jugador esté en baja (como el detalle de H1, DD-30). Lo mismo para las asistencias en T13.
 - **Cómo se revierte:** en el controlador, responder 404 si `InscripcionDelDocente::jugadorEnBaja`.
 - **Seguridad/privacidad:** **sí, de lectura**: el docente dueño sigue viendo las calificaciones que él mismo capturó de un alumno ya en baja. No amplía a nadie más. Para la revisión del responsable.
+
+## DA-15: la situación académica del docente lista solo sus materias del periodo vigente (T14)
+
+- **Qué faltaba:** §6.2 dice que quien es docente del jugador recibe `materias`: «arreglo de sus propias materias», sin decir de qué periodo. El resumen (promedio, reprobadas, nivel) es del periodo vigente (DD-45).
+- **Qué se eligió:** solo las materias del docente **del periodo vigente** en las que el jugador está inscrito (inscripción y materia sin eliminar); sin periodo vigente, arreglo vacío. La clave `materias` aparece si el usuario tiene el rol docente y una inscripción vigente del jugador en alguna materia suya de cualquier periodo («docente del jugador», §5.4); si no, no aparece.
+- **Por qué:** es coherente con el resumen y revela menos (§0.3, regla 1).
+- **Cómo se revierte:** quitar el filtro `materias.periodo_id` de `ConsultaDeSituacionAcademicaSql::materiasDelDocente` y la rama `periodoId === null` de `VerSituacionAcademica`, y la prueba `DA-15`.
+- **Seguridad/privacidad:** **sí, de lectura**, y restrictiva: el docente ve menos de sus propias materias (no las de periodos pasados). Ningún otro usuario ve más. Para la revisión del responsable.

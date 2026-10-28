@@ -13,6 +13,7 @@ use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PeriodoEscolarController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
+use App\Http\Controllers\SituacionAcademicaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/salud', SaludController::class);
@@ -26,6 +27,7 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/jugadores', [JugadorController::class, 'listar']);
     Route::get('/jugadores/busqueda', [JugadorController::class, 'buscar']);
     Route::get('/jugadores/{jugador}', [JugadorController::class, 'ver'])->whereUuid('jugador');
+    Route::get('/jugadores/{jugador}/situacion-academica', [SituacionAcademicaController::class, 'ver'])->whereUuid('jugador');
 
     Route::middleware('rol:docente')->group(function () {
         Route::get('/periodos-escolares', [PeriodoEscolarController::class, 'listar']);

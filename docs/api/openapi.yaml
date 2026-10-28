@@ -1818,6 +1818,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/situacion-academica:
+    get:
+      operationId: verSituacionAcademica
+      summary: Situacion academica del jugador en el periodo vigente
+      description: >-
+        Cualquier usuario con sesion que tenga al jugador en su alcance (HU-09; pasa por AlcanceDeJugadores, con los
+        jugadores en baja incluidos para quien ya los tenia, DD-52). Lee el resumen calculado del periodo vigente
+        (DD-45): sin periodo vigente, periodo nulo; sin resumen calculado, valores nulos, contadores en 0 y calculado_en
+        nulo. dato_incompleto es verdadero sin resumen, sin promedio o con materias sin calificar (DD-43). El entrenador
+        recibe solo el resumen (RN-13). Solo quien es docente del jugador recibe materias, y solo las suyas del periodo
+        vigente (DD-48). Un jugador fuera del alcance, inexistente o con id que no es v7 responde el mismo 404.
+      tags: [Jugadores]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: La situacion academica.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/SituacionAcademica'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /jugadores/{jugador}/baja:
     post:
       operationId: darDeBajaJugador
@@ -2169,6 +2210,91 @@ components:
         actualizado_en:
           type: string
           format: date-time
+    SituacionAcademica:
+      type: object
+      additionalProperties: false
+      required: [periodo, promedio, materias_reprobadas, materias_sin_calificar, dato_incompleto, porcentaje_asistencia, nivel_riesgo, calculado_en]
+      properties:
+        periodo:
+          type: object
+          nullable: true
+          additionalProperties: false
+          required: [id, nombre]
+          description: El periodo vigente (DD-45); nulo si hoy no cae en ningun periodo.
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombre:
+              type: string
+        promedio:
+          type: string
+          nullable: true
+          pattern: '^\d{1,2}\.\d{2}$'
+        materias_reprobadas:
+          type: integer
+        materias_sin_calificar:
+          type: integer
+        dato_incompleto:
+          type: boolean
+        porcentaje_asistencia:
+          type: string
+          nullable: true
+          pattern: '^\d{1,3}\.\d{2}$'
+        nivel_riesgo:
+          type: string
+          nullable: true
+          enum: [sin_riesgo, en_observacion, en_riesgo, null]
+        calculado_en:
+          type: string
+          nullable: true
+          format: date-time
+        materias:
+          type: array
+          description: >-
+            Solo para quien es docente del jugador, y solo sus propias materias del periodo vigente (DD-48). Ausente
+            para el entrenador.
+          items:
+            type: object
+            additionalProperties: false
+            required: [materia_id, asignatura, calificacion, criterio, aprobada, calificaciones]
+            properties:
+              materia_id:
+                type: string
+                format: uuid
+              asignatura:
+                type: object
+                additionalProperties: false
+                required: [clave, nombre]
+                properties:
+                  clave:
+                    type: string
+                  nombre:
+                    type: string
+              calificacion:
+                type: string
+                nullable: true
+                pattern: '^\d{1,2}\.\d{2}$'
+                description: La final si existe; si no, la media de los parciales (RN-02); nula sin calificaciones.
+              criterio:
+                type: object
+                additionalProperties: false
+                required: [ambito, calificacion_minima]
+                description: El criterio vigente de la materia (DD-47).
+                properties:
+                  ambito:
+                    type: string
+                    enum: [general, materia]
+                  calificacion_minima:
+                    type: string
+                    pattern: '^\d{1,2}\.\d{2}$'
+              aprobada:
+                type: boolean
+                nullable: true
+              calificaciones:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Calificacion'
     Asistencia:
       type: object
       additionalProperties: false

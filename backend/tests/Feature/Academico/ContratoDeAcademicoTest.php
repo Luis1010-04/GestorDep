@@ -3,6 +3,8 @@
 use Database\Seeders\CriterioGeneralSeeder;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Reloj;
+use Src\Compartido\Infraestructura\RelojFijo;
 use Tests\TestCase;
 
 /** Las respuestas reales de las rutas de Académico cumplen docs/api/openapi.yaml (como en H1). */
@@ -155,6 +157,32 @@ test('HU-07: las respuestas de asistencias cumplen el contrato', function () {
     ];
     foreach ($correccion as $respuesta) {
         expect($validador->validate($respuesta->baseResponse, '/asistencias-clase/{asistencia}', 'patch'))->toBeTrue("patch {$respuesta->getStatusCode()}");
+    }
+});
+
+test('HU-09: las respuestas de la situación académica cumplen el contrato', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    mundoCalificar($m['i1'], 'parcial', '8.00', 1);
+    mundoCalificar($m['i1'], 'final', '7.00');
+    mundoAsistir($m['i1'], '2026-03-09', 'presente');
+    $ruta = "/api/v1/jugadores/{$m['j1']}/situacion-academica";
+    $sinResumen = sesionesPeticion($this, 'GET', $ruta, idDeSesion: sesionesIniciar($this, 'a@x.com'))->assertOk();
+    consolaArtisan('alertas:recalcular')->assertSuccessful();
+
+    $respuestas = [
+        $sinResumen,
+        sesionesPeticion($this, 'GET', $ruta, idDeSesion: sesionesIniciar($this, 'a@x.com'))->assertOk(),
+        sesionesPeticion($this, 'GET', $ruta, idDeSesion: sesionesIniciar($this, 'd1@x.com'))->assertOk()->assertJsonCount(1, 'datos.materias'),
+        sesionesPeticion($this, 'GET', "/api/v1/jugadores/{$m['j2']}/situacion-academica", idDeSesion: sesionesIniciar($this, 'a@x.com'))->assertNotFound(),
+        sesionesPeticion($this, 'GET', $ruta)->assertUnauthorized(),
+    ];
+    app()->instance(Reloj::class, new RelojFijo(new DateTimeImmutable('2026-07-15 12:00:00', new DateTimeZone('UTC'))));
+    $respuestas[] = sesionesPeticion($this, 'GET', $ruta, idDeSesion: sesionesIniciar($this, 'd1@x.com'))->assertOk()->assertJsonPath('datos.periodo', null);
+
+    foreach ($respuestas as $respuesta) {
+        expect($validador->validate($respuesta->baseResponse, '/jugadores/{jugador}/situacion-academica', 'get'))->toBeTrue("get {$respuesta->getStatusCode()}");
     }
 });
 

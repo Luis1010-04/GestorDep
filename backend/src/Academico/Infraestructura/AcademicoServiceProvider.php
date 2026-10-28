@@ -8,6 +8,7 @@ use Src\Academico\Aplicacion\ConsultaDeAsistencias;
 use Src\Academico\Aplicacion\ConsultaDeCalificaciones;
 use Src\Academico\Aplicacion\ConsultaDeInscripciones;
 use Src\Academico\Aplicacion\ConsultaDeMaterias;
+use Src\Academico\Aplicacion\ConsultaDeSituacionAcademica;
 use Src\Academico\Aplicacion\FuenteDeDatosAcademicos;
 use Src\Academico\Dominio\RepositorioDeAsignaturas;
 use Src\Academico\Dominio\RepositorioDeAsistencias;
@@ -33,6 +34,7 @@ class AcademicoServiceProvider extends ServiceProvider
         $this->app->bind(ConsultaDeCalificaciones::class, ConsultaDeCalificacionesSql::class);
         $this->app->bind(ConsultaDeInscripciones::class, ConsultaDeInscripcionesSql::class);
         $this->app->bind(ConsultaDeMaterias::class, ConsultaDeMateriasSql::class);
+        $this->app->bind(ConsultaDeSituacionAcademica::class, ConsultaDeSituacionAcademicaSql::class);
         $this->app->bind(FuenteDeDatosAcademicos::class, FuenteDeDatosAcademicosSql::class);
         $this->app->bind(RepositorioDeAsignaturas::class, RepositorioDeAsignaturasEloquent::class);
         $this->app->bind(RepositorioDeAsistencias::class, RepositorioDeAsistenciasEloquent::class);

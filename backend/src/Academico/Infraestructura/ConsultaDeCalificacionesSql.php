@@ -39,18 +39,28 @@ final class ConsultaDeCalificacionesSql implements ConsultaDeCalificaciones
 
     public function listarDeLaInscripcion(Identificador $inscripcionId, int $pagina, int $porPagina): array
     {
-        $filas = $this->vigentes()
+        return $this->leer($this->ordenadas($inscripcionId)->offset(($pagina - 1) * $porPagina)->limit($porPagina));
+    }
+
+    public function deLaInscripcion(Identificador $inscripcionId): array
+    {
+        return $this->leer($this->ordenadas($inscripcionId));
+    }
+
+    /** Los parciales por número y la final al último. */
+    private function ordenadas(Identificador $inscripcionId): Builder
+    {
+        return $this->vigentes()
             ->where('calificaciones.inscripcion_id', $inscripcionId->valor())
             ->orderByRaw("case when calificaciones.tipo = 'final' then 1 else 0 end")
             ->orderBy('calificaciones.numero_parcial')
-            ->orderBy('calificaciones.id')
-            ->offset(($pagina - 1) * $porPagina)
-            ->limit($porPagina)
-            ->get($this->columnas())
-            ->map(fn (stdClass $fila): CalificacionLeida => $this->aCalificacion($fila))
-            ->all();
+            ->orderBy('calificaciones.id');
+    }
 
-        return array_values($filas);
+    /** @return list<CalificacionLeida> */
+    private function leer(Builder $consulta): array
+    {
+        return array_values($consulta->get($this->columnas())->map(fn (stdClass $fila): CalificacionLeida => $this->aCalificacion($fila))->all());
     }
 
     public function contarDeLaInscripcion(Identificador $inscripcionId): int

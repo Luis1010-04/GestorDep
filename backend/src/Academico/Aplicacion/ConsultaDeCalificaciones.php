@@ -20,4 +20,11 @@ interface ConsultaDeCalificaciones
     public function listarDeLaInscripcion(Identificador $inscripcionId, int $pagina, int $porPagina): array;
 
     public function contarDeLaInscripcion(Identificador $inscripcionId): int;
+
+    /**
+     * Todas las de la inscripción, en el mismo orden que el listado.
+     *
+     * @return list<CalificacionLeida>
+     */
+    public function deLaInscripcion(Identificador $inscripcionId): array;
 }
