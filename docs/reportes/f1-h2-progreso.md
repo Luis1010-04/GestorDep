@@ -18,6 +18,32 @@
 | T11 Criterio por materia | hecha | `865c75f` | pasa; 749 pruebas; 6 min 15 s |
 | FIX `verificar` falla si Infection omite mutantes por tiempo | hecho | `aff1240` | pasa; 783 pruebas; 6 min 21 s (`f1-h2-fix-06.md`) |
 
+## Auditoría de C2 y decisiones del responsable
+
+Auditoría aceptada sin bloqueantes (`f1-h2-auditoria-lote-c2.md`: 0 bloqueantes, 1 importante, 10 menores).
+
+1. **I-1:** la fila 6 de §7.1 se corrigió a «P2, P1, P0» en la especificación (lo hizo el responsable); la implementación ya era la correcta. En `f1-h2-t05.md` queda anotado que debí detenerme y anotarlo (§0.4).
+2. **DA-11 confirmada:** `jugador_no_registrado` con 404 (§6.3).
+3. **T08 tocó `docs/api/openapi.yaml`** (solo descripciones), ruta que no tenía permitida. Se acepta como omisión de la especificación. **Pendiente para T15:** registrarlo en la lista de rutas fuera de la especificación de `f1-h2-reporte.md`.
+4. **Evidencia de «pruebas primero» de T05 a T07** completada con el fallo real que demostró el auditor (`f1-h2-t05.md`, `f1-h2-t06.md`, `f1-h2-t07.md`).
+
+### Deuda de la auditoría (un único `F1-H2-FIX` antes de T15)
+
+Los que tocan privacidad se corrigen de inmediato, antes del Lote D, en un `F1-H2-FIX` propio: **M-4, M-5 y M-7**. M-8 es comportamiento exigido por DD-52: no lleva cambio de código y se registra en T15. El resto queda para el FIX único antes de T15:
+
+| # | Hallazgo | Privacidad | Estado |
+|---|---|---|---|
+| M-1 | Evidencia de «pruebas primero» de T05 a T07 incompleta | no | Resuelto con documentación (punto 4) |
+| M-2 | T08 tocó `openapi.yaml` | no | Aceptado; se anota en T15 (punto 3) |
+| M-3 | §7.1 fila 8 y §7.2 fila 6 comprueban «la materia lo sigue mostrando» por `join` y no por la API | no | Pendiente (FIX antes de T15) |
+| M-4 | §7.4 fila 9 inscribe además a J4 en M3: no prueba la rama del entrenador del usuario con dos roles | **sí** | Se corrige de inmediato |
+| M-5 | 404 comparados solo por código: `GET` de §7.5 fila 6 y DA-10 | **sí** | Se corrige de inmediato |
+| M-6 | §7.6 fila 9 no prueba «después del commit» por sí sola | no | Pendiente (FIX antes de T15) |
+| M-7 | La prueba de arquitectura del localizador no detecta el adaptador ni el nombre en cadenas | **sí** | Se corrige de inmediato |
+| M-8 | El 409 `jugador_en_baja` al inscribir revela a un docente que una matrícula está en baja | **sí**, pero lo exige DD-52 | Sin cambio de código; se registra en T15 (DD-52) y para la revisión de H7 |
+| M-9 | Holgura de tiempo de `verificar` menor que la informada | no | Medición antes de T12 (`f1-h2-medicion-verificar.md`); el límite de 15 min detiene el lote |
+| M-10 | `verificar-mutacion.php` no comprueba la vigencia del resumen; `Errored`/`Ignored` no fallan; `composer.lock` no listado | no | Pendiente (FIX antes de T15) |
+
 ## Resumen del lote C2 (T08, T09, T10, T11) — completo; T11 se hizo antes que T10
 
 T10 estuvo bloqueada por una condición de §0.4 (la búsqueda por matrícula antes de tener alcance) hasta que el responsable aprobó la opción A (puerto `LocalizadorDeJugadores` en Compartido y adaptador en Plantel). Como T11 no depende de T10, se hizo primero. **No se inició el Lote D.** Queda pendiente la auditoría independiente de C2 (§0.5).

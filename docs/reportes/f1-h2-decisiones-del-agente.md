@@ -85,3 +85,4 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué se eligió:** la especificación: código `jugador_no_registrado`, mensaje «No existe un expediente con esa matrícula: el jugador debe tener un expediente.», formato estándar `{codigo, mensaje, errores: []}`, sin datos de nadie. `jugador_en_baja` conserva código y cuerpo de H1 (solo cambia el texto, por decisión del responsable).
 - **Cómo se revierte:** en `FormatoDeError`, cambiar la rama de `JugadorNoRegistrado` a `self::respuesta(404, 'recurso_no_encontrado')` y ajustar el texto esperado de la prueba de la fila 3.
 - **Seguridad/privacidad:** ninguna: ambos cuerpos son iguales sea cual sea la matrícula inexistente y no revelan datos.
+- **Estado:** confirmada por el responsable tras la auditoría de C2 (`jugador_no_registrado` con 404, según §6.3).
