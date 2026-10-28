@@ -17,6 +17,7 @@
 | T10 Inscripciones | hecha (después de T11) | `952150b` | pasa; 776 pruebas; 11 min 7 s (primera corrida tras reiniciar el equipo, en frío) |
 | T11 Criterio por materia | hecha | `865c75f` | pasa; 749 pruebas; 6 min 15 s |
 | FIX `verificar` falla si Infection omite mutantes por tiempo | hecho | `aff1240` | pasa; 783 pruebas; 6 min 21 s (`f1-h2-fix-06.md`) |
+| FIX pruebas de privacidad de la auditoría de C2 (M-4, M-5, M-7) | hecho | ver `git log` | pasa; 785 pruebas; 7 min 0 s, que es también la medición antes de T12 (`f1-h2-fix-07.md`, `f1-h2-medicion-verificar.md`) |
 
 ## Auditoría de C2 y decisiones del responsable
 
@@ -36,12 +37,12 @@ Los que tocan privacidad se corrigen de inmediato, antes del Lote D, en un `F1-H
 | M-1 | Evidencia de «pruebas primero» de T05 a T07 incompleta | no | Resuelto con documentación (punto 4) |
 | M-2 | T08 tocó `openapi.yaml` | no | Aceptado; se anota en T15 (punto 3) |
 | M-3 | §7.1 fila 8 y §7.2 fila 6 comprueban «la materia lo sigue mostrando» por `join` y no por la API | no | Pendiente (FIX antes de T15) |
-| M-4 | §7.4 fila 9 inscribe además a J4 en M3: no prueba la rama del entrenador del usuario con dos roles | **sí** | Se corrige de inmediato |
-| M-5 | 404 comparados solo por código: `GET` de §7.5 fila 6 y DA-10 | **sí** | Se corrige de inmediato |
+| M-4 | §7.4 fila 9 inscribe además a J4 en M3: no prueba la rama del entrenador del usuario con dos roles | **sí** | Resuelto (`f1-h2-fix-07.md`) |
+| M-5 | 404 comparados solo por código: `GET` de §7.5 fila 6 y DA-10 | **sí** | Resuelto (`f1-h2-fix-07.md`) |
 | M-6 | §7.6 fila 9 no prueba «después del commit» por sí sola | no | Pendiente (FIX antes de T15) |
-| M-7 | La prueba de arquitectura del localizador no detecta el adaptador ni el nombre en cadenas | **sí** | Se corrige de inmediato |
+| M-7 | La prueba de arquitectura del localizador no detecta el adaptador ni el nombre en cadenas | **sí** | Resuelto (`f1-h2-fix-07.md`) |
 | M-8 | El 409 `jugador_en_baja` al inscribir revela a un docente que una matrícula está en baja | **sí**, pero lo exige DD-52 | Sin cambio de código; se registra en T15 (DD-52) y para la revisión de H7 |
-| M-9 | Holgura de tiempo de `verificar` menor que la informada | no | Medición antes de T12 (`f1-h2-medicion-verificar.md`); el límite de 15 min detiene el lote |
+| M-9 | Holgura de tiempo de `verificar` menor que la informada | no | Medido antes de T12: 7 min 0 s (`f1-h2-medicion-verificar.md`); el límite de 15 min detiene el lote |
 | M-10 | `verificar-mutacion.php` no comprueba la vigencia del resumen; `Errored`/`Ignored` no fallan; `composer.lock` no listado | no | Pendiente (FIX antes de T15) |
 
 ## Resumen del lote C2 (T08, T09, T10, T11) — completo; T11 se hizo antes que T10

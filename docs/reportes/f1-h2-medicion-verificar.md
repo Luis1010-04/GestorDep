@@ -1,5 +1,28 @@
 # Medición de `make verificar` (sin carga ajena)
 
+## Medición antes de T12 (pedida por el responsable tras la auditoría de C2)
+
+Una sola corrida el 28 de octubre de 2026, sobre `e30e54f` más las pruebas del FIX de privacidad (`F1-H2-FIX: pruebas de privacidad de la auditoria de C2`, 785 pruebas). Antes de empezar, `docker stats` daba app 0,73 %, db 0,03 %, worker 0,00 % y scheduler 0,12 % de CPU. Durante la corrida no se ejecutó nada más: ni lecturas de archivos ni otros comandos. Cada etapa se ejecutó con el mismo comando que `composer verificar`, dentro del contenedor `app` y con cronómetro propio (guion `bash -s`, una etapa tras otra; se detiene en la primera que falle).
+
+| Etapa | Comando | Segundos | Resultado |
+|---|---|---:|---|
+| Pint | `pint --test` | 4 | `PASS ... 356 files` |
+| PHPStan nivel 7 | `phpstan analyse --memory-limit=1G --no-progress` | 15 | `[OK] No errors` |
+| Infection | `infection --no-progress --with-uncovered` | 64 | 335 generados, 335 eliminados; MSI 100 %; MSI cubierto 100 % (Infection: `Time: 1m 3s`) |
+| Verificación de mutación | `bin/verificar-mutacion.php build/infection/resumen.log` | 0 | `Mutación completa: 335 mutantes evaluados, ninguno omitido ni con tiempo agotado.` |
+| Pest con cobertura | `pest --coverage …` | 332 | `Tests: 785 passed (4010 assertions)`, `Duration: 318.71s` |
+| Verificación de cobertura por capa | `bin/verificar-cobertura.php` | 0 | Dominio 100,0 % (95), Aplicación 100,0 % (85), Infraestructura y HTTP 99,8 % (70) |
+| Auditoría | `composer audit` | 5 | `No security vulnerability advisories found.` |
+| **Total** | | **420 (7 min 0 s)** | **pasa** |
+
+**Conclusiones.**
+
+- 7 min 0 s, con 8 min de holgura frente al límite de 15 min de §0.4. Pest es el 79 % del tiempo (~0,41 s por prueba).
+- Comparación: 344 s al cierre de C2 (783 pruebas) y 604 s en la corrida del auditor (con lecturas ligeras en paralelo, sin arranque en frío). La variabilidad del entorno sigue siendo de hasta 1,8 veces para el mismo código.
+- Proyección para el Lote D: T12 a T14 agregan del orden de 100 a 150 pruebas de ruta (~60 s más en condiciones normales). Una corrida con la variabilidad observada podría acercarse al límite. Regla del responsable: si una corrida de `make verificar` pasa de 15 minutos, el lote se detiene.
+
+## Medición de T04
+
 Una sola corrida, con el commit `5db7870` (T04), sin otros procesos ni lecturas por terminal durante la medición. Cada etapa se ejecutó con el mismo comando que `composer verificar`, dentro del contenedor `app`, con cronómetro por etapa. No se cambió código.
 
 | Etapa | Comando | Segundos | Tiempo | Resultado |

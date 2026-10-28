@@ -86,7 +86,6 @@ test('RNF-01 (§7.4 fila 8): J3 inscrito en dos materias de D1 sale una vez y me
 test('RNF-01 (§7.4 fila 9): DE con el equipo ED (J4) y la materia M3 (J1) lista a J1 y J4 sin duplicados', function () {
     /** @var TestCase $this */
     $m = mundoAgregarEquipoYMateriaDeDocenteEntrenador(mundoDeDocentes());
-    mundoInscribir($m['m3'], $m['j4']);
     $sesion = sesionesIniciar($this, 'de@x.com');
 
     $lista = sesionesPeticion($this, 'GET', '/api/v1/jugadores', idDeSesion: $sesion)->assertOk();
@@ -95,6 +94,17 @@ test('RNF-01 (§7.4 fila 9): DE con el equipo ED (J4) y la materia M3 (J1) lista
 
     sesionesPeticion($this, 'GET', '/api/v1/jugadores/'.$m['j1'], idDeSesion: $sesion)->assertOk()->assertJsonPath('datos.equipos', []);
     sesionesPeticion($this, 'GET', '/api/v1/jugadores/'.$m['j4'], idDeSesion: $sesion)->assertOk()->assertJsonPath('datos.equipos.0.equipo_id', $m['ed']);
+});
+
+test('RNF-01: un jugador que DE ve por las dos ramas (equipo ED y materia M3) sale una sola vez', function () {
+    /** @var TestCase $this */
+    $m = mundoAgregarEquipoYMateriaDeDocenteEntrenador(mundoDeDocentes());
+    mundoInscribir($m['m3'], $m['j4']);
+
+    $respuesta = sesionesPeticion($this, 'GET', '/api/v1/jugadores', idDeSesion: sesionesIniciar($this, 'de@x.com'))->assertOk();
+
+    expect(array_column($respuesta->json('datos'), 'id'))->toBe([$m['j1'], $m['j4']])
+        ->and($respuesta->json('meta.total'))->toBe(2);
 });
 
 test('HU-02 (§7.4 fila 10): A lista solo a los de sus equipos, sin cambios respecto a H1', function () {

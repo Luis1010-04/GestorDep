@@ -20,15 +20,25 @@ const USOS_AUTORIZADOS_DEL_LOCALIZADOR = [
 ];
 
 /**
+ * Detecta el puerto y su adaptador por nombre de clase, y también una cadena que los nombre (resolverlos con
+ * `app('...LocalizadorDeJugadores')` eludiría la detección por nombre). Los comentarios no cuentan.
+ *
  * @param  array<string, string>  $archivos  ruta relativa => código
- * @return list<string> rutas que nombran el puerto
+ * @return list<string> rutas que nombran el puerto o su adaptador
  */
 function archivosQueNombranElLocalizador(array $archivos): array
 {
     $rutas = [];
     foreach ($archivos as $ruta => $codigo) {
         foreach (token_get_all($codigo) as $token) {
-            if (is_array($token) && in_array($token[0], [T_STRING, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED], true) && preg_match('/(^|\\\\)LocalizadorDeJugadores$/', $token[1]) === 1) {
+            if (! is_array($token)) {
+                continue;
+            }
+            $esNombre = in_array($token[0], [T_STRING, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED], true)
+                && preg_match('/(^|\\\\)LocalizadorDeJugadores(Plantel)?$/', $token[1]) === 1;
+            $esCadena = in_array($token[0], [T_CONSTANT_ENCAPSED_STRING, T_ENCAPSED_AND_WHITESPACE], true)
+                && preg_match('/(^|[\\\\\'"])LocalizadorDeJugadores(Plantel)?([\'"]|$)/', $token[1]) === 1;
+            if ($esNombre || $esCadena) {
                 $rutas[] = $ruta;
                 break;
             }
@@ -38,14 +48,21 @@ function archivosQueNombranElLocalizador(array $archivos): array
     return $rutas;
 }
 
-test('RN-20: el detector encuentra los archivos que nombran el localizador y no confunde otros nombres', function () {
+test('RN-20: el detector encuentra los archivos que nombran el localizador o su adaptador y no confunde otros nombres', function () {
     $archivos = [
         'src/Academico/Aplicacion/Otro.php' => "<?php\nuse Src\\Compartido\\Aplicacion\\LocalizadorDeJugadores;",
-        'src/Plantel/Aplicacion/Distinto.php' => "<?php\nclass LocalizadorDeJugadoresPlantel {}",
+        'src/Academico/Aplicacion/Adaptador.php' => "<?php\n\$x = new \\Src\\Plantel\\Infraestructura\\LocalizadorDeJugadoresPlantel(\$r);",
+        'src/Academico/Aplicacion/Cadena.php' => "<?php\n\$x = app('Src\\\\Compartido\\\\Aplicacion\\\\LocalizadorDeJugadores');",
+        'src/Plantel/Aplicacion/Distinto.php' => "<?php\nclass LocalizadorDeJugadoresAntiguo {}",
+        'src/Plantel/Aplicacion/Texto.php' => "<?php\n\$x = 'el LocalizadorDeJugadores del manual';",
         'src/Plantel/Aplicacion/Comentario.php' => "<?php\n// LocalizadorDeJugadores en un comentario no cuenta",
     ];
 
-    expect(archivosQueNombranElLocalizador($archivos))->toBe(['src/Academico/Aplicacion/Otro.php']);
+    expect(archivosQueNombranElLocalizador($archivos))->toBe([
+        'src/Academico/Aplicacion/Otro.php',
+        'src/Academico/Aplicacion/Adaptador.php',
+        'src/Academico/Aplicacion/Cadena.php',
+    ]);
 });
 
 test('RN-20: solo la declaración, el adaptador, su enlace y el caso de uso de inscripción usan LocalizadorDeJugadores', function () {

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use Src\Compartido\Dominio\Identificador;
 use Tests\TestCase;
 
 /**
@@ -49,6 +50,28 @@ test('DA-10 / RN-20: DE asigna a J1 a su equipo ED por matrícula y la respuesta
         ->assertCreated()
         ->assertJsonPath('datos.id', $m['j1'])
         ->assertJsonPath('datos.equipos.0.equipo_id', $m['ed']);
+});
+
+test('DA-10: escribir sobre un jugador que DE solo enseña da un 404 byte a byte idéntico al de un jugador inexistente', function () {
+    /** @var TestCase $this */
+    $m = mundoAgregarEquipoYMateriaDeDocenteEntrenador(mundoDeDocentes());
+    $sesion = sesionesIniciar($this, 'de@x.com');
+    $inexistente = Identificador::generar()->valor();
+
+    $intentos = [
+        ['PATCH', '/api/v1/jugadores/{j}', ['nombres' => 'Cambiado']],
+        ['PATCH', '/api/v1/jugadores/{j}', ['nombres' => '']],
+        ['PATCH', '/api/v1/jugadores/{j}', ['matricula' => 'X']],
+        ['POST', '/api/v1/jugadores/{j}/baja', ['motivo' => 'x', 'fecha' => '2026-03-10']],
+        ['POST', '/api/v1/jugadores/{j}/baja', []],
+        ['PATCH', '/api/v1/equipos/'.$m['ed'].'/jugadores/{j}', ['posicion' => 'portero']],
+    ];
+    foreach ($intentos as [$metodo, $ruta, $cuerpo]) {
+        $referencia = sesionesPeticion($this, $metodo, str_replace('{j}', $inexistente, $ruta), $cuerpo, $sesion)->assertNotFound();
+        $ajeno = sesionesPeticion($this, $metodo, str_replace('{j}', $m['j1'], $ruta), $cuerpo, $sesion)->assertNotFound();
+        expect($ajeno->getContent())->toBe($referencia->getContent());
+    }
+    expect(DB::table('jugadores')->where('id', $m['j1'])->first())->toMatchObject(['nombres' => 'Uno', 'estatus_deportivo' => 'activo']);
 });
 
 test('DA-10: un docente puro no escribe sobre ningún jugador de plantel (403 antes de consultar nada)', function () {

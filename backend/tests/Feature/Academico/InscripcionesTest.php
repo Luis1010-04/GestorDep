@@ -95,8 +95,15 @@ test('RNF-01 (§7.5 fila 6): D1 inscribe en M2 (de D2) y recibe un 404 idéntico
         $respuesta = sesionesPeticion($this, 'POST', '/api/v1/materias/'.$m['m2'].'/inscripciones', $cuerpo, $sesion)->assertNotFound();
         expect($respuesta->getContent())->toBe($inexistente->getContent());
     }
-    sesionesPeticion($this, 'GET', '/api/v1/materias/'.$m['m2'].'/inscripciones', idDeSesion: $sesion)->assertNotFound();
-    sesionesPeticion($this, 'POST', '/api/v1/materias/123e4567-e89b-42d3-a456-426614174000/inscripciones', ['matricula' => 'M-4'], $sesion)->assertNotFound();
+    $noV7 = sesionesPeticion($this, 'POST', '/api/v1/materias/123e4567-e89b-42d3-a456-426614174000/inscripciones', ['matricula' => 'M-4'], $sesion)->assertNotFound();
+    expect($noV7->getContent())->toBe($inexistente->getContent());
+
+    $listadoInexistente = sesionesPeticion($this, 'GET', '/api/v1/materias/'.Identificador::generar()->valor().'/inscripciones', idDeSesion: $sesion)->assertNotFound();
+    expect($listadoInexistente->getContent())->toBe($inexistente->getContent());
+    foreach (['', '?por_pagina=abc', '?pagina=-1'] as $consulta) {
+        $listado = sesionesPeticion($this, 'GET', '/api/v1/materias/'.$m['m2'].'/inscripciones'.$consulta, idDeSesion: $sesion)->assertNotFound();
+        expect($listado->getContent())->toBe($listadoInexistente->getContent());
+    }
     expect(DB::table('inscripciones')->where('jugador_id', $m['j4'])->count())->toBe(0);
 });
 
