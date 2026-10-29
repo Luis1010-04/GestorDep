@@ -98,3 +98,16 @@ Las decisiones DA-16 a DA-22 son de T04. DA-20 restringe la privacidad: un docen
 Las decisiones DA-23 a DA-26 son de T05; DA-27 se retiró. La fila 6 de §7.4 queda **parcial** hasta T07: T05 prueba la cancelación por HTTP y el rechazo del resultado en el dominio, y T07 hará la prueba por HTTP del resultado.
 
 **Tiempo de `make verificar`:** T05 tardó 729 s, la primera corrida de H3 por encima de 12 minutos. Crece unos 20 s por tarea.
+
+**Tiempos de `make verificar` en H3**, todos con código 0:
+
+| Corrida | Tiempo |
+|---|---:|
+| T01 | 597 s |
+| T02 | 562 s |
+| T03 | 898 s, tras reiniciar Docker |
+| Medición antes del Lote B | 700 s |
+| T04 | 710 s |
+| T05 | **729 s (12 min 9 s)** |
+
+T05 es la primera que pasa de 12 minutos. Con unos 20 s más por tarea, T06 rondaría los 750 s y T07 los 770 s, así que **la holgura para T07 frente al límite de 15 min (900 s) queda por debajo de 2 minutos**. El responsable fijó que, si T06 pasa de 13 minutos (780 s), me detengo y aviso antes de T07. El desglose de T05 está en `f1-h3-t05.md`: solo Infection (105 s) y Pest (573 s) imprimen su duración.
