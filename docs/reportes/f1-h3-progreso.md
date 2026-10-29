@@ -179,3 +179,27 @@ Las de privacidad son DA-20 (el docente recibe 404 en el porcentaje de asistenci
 - T08: recorrido de seguridad. Ahí propongo cubrir la línea 42 de `SolicitudDeAlineacion` (campo extra al nivel raíz).
 - T09: humo y cierre documental.
 - La auditoría independiente.
+
+## 5. Cambio de compuerta tras el Lote B (29/10/2026)
+
+El responsable aprobó la opción (a): Infection sale de `make verificar` y pasa a `make mutacion` (enmienda a DD-53, especificación v1.0.2). Antes se corrigió DA-32 (ahora DA-34). Commits:
+
+- `478330d`: F1-H3-FIX, alineación con un jugador fuera de alcance responde 404 (DA-32);
+- `a15493d`: F1-H3-FIX, `make verificar` sin Infection y mutación en `make mutacion`;
+- `4b86c86`: F1-H3-FIX, quita un `??` que PHPStan marca en la prueba de mutación;
+- el F1-DOC de los reportes `f1-h3-fix-da32.md` y `f1-h3-fix-gate.md`.
+
+**`make verificar` sin Infection** (segunda corrida; la primera falló a los 24 s en PHPStan por un error mío en una prueba, corregido en `4b86c86`):
+
+| Etapa | Duración |
+|---|---:|
+| Arranque y Pint | 8 s |
+| PHPStan | 3 s |
+| Pest con cobertura | 629 s |
+| Informe de cobertura y cobertura por capa | 41 s |
+| `composer audit` | < 1 s |
+| **Total** | **681 s (11 min 21 s)**; 1 203 pruebas; código 0 |
+
+**`make mutacion`:** **166 s (2 min 46 s)**; 501 mutantes eliminados, MSI 100 %, MSI cubierto 100 %, ninguno omitido ni con tiempo agotado; código 0.
+
+Lo esperado eran unos 630 s. Pest tardó 52 s más que en T07 con el mismo código más 5 pruebas; parece variación del entorno (ver `f1-h3-fix-gate.md`). Holgura de `make verificar` frente a 15 min: 3 min 39 s.

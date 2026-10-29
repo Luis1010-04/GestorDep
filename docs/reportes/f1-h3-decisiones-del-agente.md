@@ -249,3 +249,15 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
   - Al final el rango: 422 `valor_fuera_de_rango`, con `goles_favor` antes que `goles_contra`. Los negativos también están fuera de rango.
 - **Por qué:** un partido cancelado o jugado no admite resultado sin importar los valores (§3.4), y un solo error por petición sigue el patrón de `calificacion_fuera_de_rango` (H2).
 - **Cómo se revierte:** reordenar las comprobaciones en `CapturarResultado`.
+
+## DA-34 (FIX tras T07): corrige DA-32; un jugador fuera del alcance en la alineación da 404 (indicada por el responsable)
+
+- **Qué cambia:** DA-32 respondía 422 `jugador_no_convocado` a cualquier jugador que no estuviera en la convocatoria visible, también a uno inexistente, de otro equipo o en baja. Eso revelaba la diferencia entre «existe y no lo ves» y «lo ves y no está convocado».
+- **Qué se eligió:**
+  - Un jugador fuera del alcance de entrenador sin bajas da 404, con el mismo cuerpo que un jugador inexistente. Son fuera del alcance: el inexistente, el de otro equipo, el que está en baja aunque haya estado convocado y el que tiene un UUID que no es v7.
+  - El 422 `jugador_no_convocado` queda solo para un jugador visible que no está convocado. Por ejemplo: un jugador del equipo cuya convocatoria se quitó, o J4 para E3, que entrena A y B.
+  - `VisibilidadDeJugador::esVisibleParaEntrenador` recibe ahora `incluirBajas` (verdadero por defecto, como en DA-20).
+  - El resto de DA-32 sigue igual: «convocado» es la convocatoria visible, la lista vacía quita toda la alineación y solo las filas que cambian escriben historial.
+- **Por qué:** revela menos (§0.3, regla 1) y aplica a la alineación el mismo 404 de la fila 3 de §7.5.
+- **Cómo se revierte:** volver a lanzar `JugadorNoConvocado` sin consultar la visibilidad.
+- **Revisión de DA-31:** el `catch` ya solo convertía el SQLSTATE 23503 cuyo mensaje nombra `fk_convocatorias_posicion_id`, y vuelve a lanzar cualquier otra excepción. No hubo que cambiarlo. Se agregó una prueba de que otra clave foránea inválida (`fk_convocatorias_actualizado_por`, con un autor inexistente) no se convierte en `posicion_inexistente`.
