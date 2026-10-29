@@ -214,3 +214,38 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué se eligió:** `id`, `partido_id`, `jugador_id`, `posicion_id`, `rol_alineacion` y `actualizado_en`. Va paginado y en el orden de la convocatoria, sin nombres (los da `jugadores_del_equipo` o, en H6, la vista consolidada de HU-24). Los convocados en baja no aparecen (fila 9), porque el listado pasa por `AlcanceDeJugadores` sin bajas.
 - **Por qué:** revela lo mínimo y no lee tablas de Plantel, como DA-19.
 - **Cómo se revierte:** unir los nombres por un puerto.
+
+## DA-30 (T07): el campo de `jugador_no_convocado` es `alineacion.N.jugador_id`
+
+- **Qué faltaba:** §6.3 dice «campo `jugador_id`», pero la alineación es una lista.
+- **Qué se eligió:** `alineacion.N.jugador_id`, el primero que falla, igual que DA-16 (aprobada) en la asistencia.
+- **Cómo se revierte:** cambiar el campo en `JugadorNoConvocado`.
+
+## DA-31 (T07): la posición se valida con la clave foránea de `convocatorias`
+
+- **Qué faltaba:** §3.4 pide que cada posición sea del catálogo `posiciones`, pero esa tabla es de Plantel. Competencia no la puede leer (§5.3), y T07 no puede crear un puerto en `src/Compartido` ni un adaptador en `src/Plantel`.
+- **Qué se eligió:** la escritura de la alineación va en una transacción. Si la clave foránea `fk_convocatorias_posicion_id` (de Competencia, creada en T01) rechaza una posición, se revierte todo y se responde 422 `posicion_inexistente`, sin campo y sin filas nuevas. Un `posicion_id` que no es UUID v7 cuenta como inexistente antes de llegar a la base.
+- **Por qué:** cumple §3.4 sin leer tablas de Plantel ni tocar rutas no permitidas. La base ya garantiza la integridad.
+- **Cómo se revierte:** un puerto `PosicionesDelCatalogo` en Compartido con su adaptador en Plantel, que necesita autorización de rutas.
+
+## DA-32 (T07): qué cuenta como convocado, y alineación vacía
+
+- **Qué faltaba:** §3.4 dice que cada jugador de la alineación debe estar convocado. No dice qué pasa con un convocado que después se dio de baja ni con una lista vacía.
+- **Qué se eligió:**
+  - «Convocado» es tener una convocatoria no eliminada visible en la lista del partido, que pasa por `AlcanceDeJugadores` sin bajas. Un convocado en baja cuenta como no convocado (422), coherente con la fila 9.
+  - `alineacion: []` deja a todos los convocados sin posición ni rol.
+  - Un jugador repetido en la lista da 422 `distinct`.
+  - El historial (`actualizar`) se escribe solo en las filas que cambian.
+  - La respuesta es la convocatoria visible completa, sin paginar.
+- **Por qué:** es lo más estricto y coherente con T06, y no revela a jugadores en baja.
+- **Cómo se revierte:** usar todas las convocatorias no eliminadas, sin el alcance.
+
+## DA-33 (T07): orden de los errores del resultado
+
+- **Qué faltaba:** §6.3 da `valor_fuera_de_rango` en `goles_favor` o `goles_contra`, pero no el orden respecto de `partido_no_programado` ni el caso de los dos fuera de rango.
+- **Qué se eligió:**
+  - Primero la forma: los dos campos obligatorios, enteros JSON (`3`, no `"3"` ni `3.5`), y cualquier otro campo se rechaza. Fallar aquí da 422 `validacion_fallida`.
+  - Después el estado: 409 `partido_no_programado`.
+  - Al final el rango: 422 `valor_fuera_de_rango`, con `goles_favor` antes que `goles_contra`. Los negativos también están fuera de rango.
+- **Por qué:** un partido cancelado o jugado no admite resultado sin importar los valores (§3.4), y un solo error por petición sigue el patrón de `calificacion_fuera_de_rango` (H2).
+- **Cómo se revierte:** reordenar las comprobaciones en `CapturarResultado`.
