@@ -200,3 +200,17 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué faltaba:** §6.1 nombra `filtro[temporada_id]` sin decir qué pasa con una temporada que no existe.
 - **Qué se eligió:** una lista vacía (200). Un texto que no es UUID da 422. `filtro[estado]` admite `programado`, `jugado` y `cancelado`.
 - **Cómo se revierte:** validar la existencia de la temporada en el controlador.
+
+## DA-28 (T06): solo se convoca a un jugador vigente del equipo del partido
+
+- **Qué faltaba:** §3.4 dice «Convocatoria: solo jugadores visibles por `AlcanceDeJugadores` (sin baja)». No dice si un entrenador de dos equipos (E3) puede convocar a un partido de A a un jugador que solo está en B.
+- **Qué se eligió:** el jugador debe estar en `JugadoresDelEquipo` del equipo del partido: membresía vigente en ese equipo y sin baja. El puerto pasa por `AlcanceDeJugadores` con `incluirBajas` falso, así que cumple §3.4 y T06. Si no está, 404, con el mismo cuerpo que un jugador inexistente (fila 3).
+- **Por qué:** es la lectura más estricta y no revela más. No es la elegibilidad de AB-07, que sigue sin validarse (RN-18): solo pide que el jugador sea del equipo que juega.
+- **Cómo se revierte:** cambiar la comprobación de `ConvocarJugador` por `VisibilidadDeJugador` sin bajas.
+
+## DA-29 (T06): el listado de la convocatoria no trae datos del jugador
+
+- **Qué faltaba:** §6.1 no dice qué campos tiene `GET /partidos/{partido}/convocatoria`.
+- **Qué se eligió:** `id`, `partido_id`, `jugador_id`, `posicion_id`, `rol_alineacion` y `actualizado_en`. Va paginado y en el orden de la convocatoria, sin nombres (los da `jugadores_del_equipo` o, en H6, la vista consolidada de HU-24). Los convocados en baja no aparecen (fila 9), porque el listado pasa por `AlcanceDeJugadores` sin bajas.
+- **Por qué:** revela lo mínimo y no lee tablas de Plantel, como DA-19.
+- **Cómo se revierte:** unir los nombres por un puerto.
