@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AsignaturaController;
 use App\Http\Controllers\AsistenciaController;
+use App\Http\Controllers\AsistenciaDeEntrenamientoController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
@@ -33,6 +34,7 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/jugadores/busqueda', [JugadorController::class, 'buscar']);
     Route::get('/jugadores/{jugador}', [JugadorController::class, 'ver'])->whereUuid('jugador');
     Route::get('/jugadores/{jugador}/situacion-academica', [SituacionAcademicaController::class, 'ver'])->whereUuid('jugador');
+    Route::get('/jugadores/{jugador}/asistencia-entrenamientos', [AsistenciaDeEntrenamientoController::class, 'delJugador'])->whereUuid('jugador');
 
     Route::middleware('rol:docente')->group(function () {
         Route::get('/periodos-escolares', [PeriodoEscolarController::class, 'listar']);
@@ -94,5 +96,10 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/equipos/{equipo}/entrenamientos', [EntrenamientoController::class, 'crear'])->whereUuid('equipo');
         Route::get('/entrenamientos/{entrenamiento}', [EntrenamientoController::class, 'ver'])->whereUuid('entrenamiento');
         Route::patch('/entrenamientos/{entrenamiento}', [EntrenamientoController::class, 'modificar'])->whereUuid('entrenamiento');
+
+        Route::get('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaDeEntrenamientoController::class, 'listar'])->whereUuid('entrenamiento');
+        Route::post('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaDeEntrenamientoController::class, 'crear'])->whereUuid('entrenamiento');
+        Route::patch('/asistencias-entrenamiento/{asistencia}', [AsistenciaDeEntrenamientoController::class, 'corregir'])->whereUuid('asistencia');
+        Route::get('/equipos/{equipo}/asistencia-entrenamientos', [AsistenciaDeEntrenamientoController::class, 'delEquipo'])->whereUuid('equipo');
     });
 });

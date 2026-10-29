@@ -56,5 +56,8 @@ return [
         'responsable_no_asignado' => 'El responsable debe ser un entrenador asignado al equipo.',
         'transicion_no_permitida' => 'El cambio de estado no está permitido.',
         'entrenamiento_no_programado' => 'El entrenamiento ya no está programado.',
+        'entrenamiento_no_realizado' => 'El entrenamiento no está realizado.',
+        'asistencia_ya_registrada' => 'Ya hay asistencia registrada para ese jugador en el entrenamiento.',
+        'jugador_no_pertenece_al_equipo' => 'El jugador no pertenece al equipo o está dado de baja.',
     ],
 ];

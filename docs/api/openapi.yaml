@@ -2940,6 +2940,338 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /entrenamientos/{entrenamiento}/asistencias:
+    get:
+      operationId: listarAsistenciasDeEntrenamiento
+      summary: Lista los registros de asistencia de un entrenamiento
+      description: >-
+        Solo entrenadores del equipo del entrenamiento (HU-11). Uno ajeno, inexistente o con un UUID que no es v7
+        responde el mismo 404, antes que el 422. Incluye los registros de jugadores ya dados de baja (DA-19).
+      tags: [Asistencia a entrenamientos]
+      parameters:
+        - name: entrenamiento
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de registros.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AsistenciaDeEntrenamiento'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El entrenamiento no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarAsistenciasDeEntrenamiento
+      summary: Captura la asistencia de un entrenamiento realizado, por lista
+      description: >-
+        Solo entrenadores del equipo (HU-11). Todo o nada (DA-17). Cada jugador debe tener membresia vigente en el
+        equipo y no estar en baja; se captura una sola vez por jugador (la correccion es PATCH). Cada registro escribe
+        su historial (RNF-02).
+      tags: [Asistencia a entrenamientos]
+      parameters:
+        - name: entrenamiento
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [registros]
+              properties:
+                registros:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required: [jugador_id, estado]
+                    properties:
+                      jugador_id:
+                        type: string
+                        format: uuid
+                      estado:
+                        type: string
+                        enum: [presente, falta, falta_justificada]
+      responses:
+        '201':
+          description: Registros creados, en el orden recibido.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AsistenciaDeEntrenamiento'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El entrenamiento no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El entrenamiento no esta realizado (entrenamiento_no_realizado) o algun jugador ya tiene asistencia
+            registrada en el (asistencia_ya_registrada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Lista ausente, vacia, con un jugador repetido o con formato invalido (validacion_fallida); jugador sin
+            membresia vigente en el equipo o en baja (jugador_no_pertenece_al_equipo, campo registros.N.jugador_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asistencias-entrenamiento/{asistencia}:
+    patch:
+      operationId: corregirAsistenciaDeEntrenamiento
+      summary: Corrige el estado de un registro de asistencia
+      description: >-
+        Solo entrenadores del equipo del entrenamiento (HU-11). El 404 gana al 422. Escribe el historial con la fila
+        previa. No exige que el jugador siga en el equipo (DA-18).
+      tags: [Asistencia a entrenamientos]
+      parameters:
+        - name: asistencia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [estado]
+              properties:
+                estado:
+                  type: string
+                  enum: [presente, falta, falta_justificada]
+      responses:
+        '200':
+          description: Registro corregido.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/AsistenciaDeEntrenamiento'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El registro no existe o el usuario no entrena el equipo del entrenamiento (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Estado ausente o invalido, o un campo no admitido (validacion_fallida, prohibited).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/asistencia-entrenamientos:
+    get:
+      operationId: verAsistenciaDelEquipo
+      summary: Porcentaje de asistencia del equipo y de sus jugadores
+      description: >-
+        Solo entrenadores del equipo (HU-11). Solo cuentan entrenamientos realizados. El total del equipo incluye los
+        registros de jugadores ya en baja; por_jugador lista a los jugadores vigentes (DA-21). Porcentaje con dos
+        decimales como cadena, o nulo sin registros.
+      tags: [Asistencia a entrenamientos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Asistencia del equipo.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: object
+                    additionalProperties: false
+                    required: [equipo_id, porcentaje, presentes, faltas, faltas_justificadas, por_jugador]
+                    properties:
+                      equipo_id:
+                        type: string
+                        format: uuid
+                      porcentaje:
+                        $ref: '#/components/schemas/PorcentajeDeAsistencia'
+                      presentes: {type: integer}
+                      faltas: {type: integer}
+                      faltas_justificadas: {type: integer}
+                      por_jugador:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: false
+                          required: [jugador_id, nombres, apellidos, porcentaje, presentes, faltas, faltas_justificadas]
+                          properties:
+                            jugador_id:
+                              type: string
+                              format: uuid
+                            nombres: {type: string}
+                            apellidos: {type: string}
+                            porcentaje:
+                              $ref: '#/components/schemas/PorcentajeDeAsistencia'
+                            presentes: {type: integer}
+                            faltas: {type: integer}
+                            faltas_justificadas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/asistencia-entrenamientos:
+    get:
+      operationId: verAsistenciaDelJugador
+      summary: Porcentaje de asistencia de un jugador en los equipos de quien consulta
+      description: >-
+        Con sesion y alcance de entrenador (HU-11, DA-20): un docente o un entrenador sin alcance recibe el mismo 404
+        que un jugador inexistente. Solo cuentan los entrenamientos realizados de equipos que el usuario entrena:
+        un jugador en dos equipos no revela la asistencia del otro (§3.4).
+      tags: [Asistencia a entrenamientos]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Asistencia del jugador.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: object
+                    additionalProperties: false
+                    required: [jugador_id, porcentaje, presentes, faltas, faltas_justificadas]
+                    properties:
+                      jugador_id:
+                        type: string
+                        format: uuid
+                      porcentaje:
+                        $ref: '#/components/schemas/PorcentajeDeAsistencia'
+                      presentes: {type: integer}
+                      faltas: {type: integer}
+                      faltas_justificadas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance de entrenador del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Baja:
@@ -3457,6 +3789,31 @@ components:
                 enum: [empalme_de_lugar]
               mensaje:
                 type: string
+    AsistenciaDeEntrenamiento:
+      type: object
+      additionalProperties: false
+      required: [id, entrenamiento_id, jugador_id, estado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        entrenamiento_id:
+          type: string
+          format: uuid
+        jugador_id:
+          type: string
+          format: uuid
+        estado:
+          type: string
+          enum: [presente, falta, falta_justificada]
+        actualizado_en:
+          type: string
+          format: date-time
+    PorcentajeDeAsistencia:
+      type: string
+      nullable: true
+      pattern: '^[0-9]{1,3}\.[0-9]{2}$'
+      description: Presentes entre todos los registros por 100, HALF_UP a dos decimales; nulo sin registros (§3.4).
     Usuario:
       type: object
       additionalProperties: false
