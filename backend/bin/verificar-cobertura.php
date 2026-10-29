@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Verifica la cobertura de lineas por capa a partir de un reporte Clover.
- * Umbrales: docs/estrategia-pruebas.md §4. Uso: php bin/verificar-cobertura.php <clover.xml>
+ * Umbrales: docs/estrategia-pruebas.md §4. Uso: php bin/verificar-cobertura.php <clover.xml>. El reporte se borra tras leerlo (PT-02).
  */
 $capas = [
     'Dominio' => ['umbral' => 95, 'patron' => '#^src/[^/]+/Dominio/#'],
@@ -19,7 +19,12 @@ if ($reporte === '' || ! is_file($reporte)) {
     exit(1);
 }
 
-$xml = @simplexml_load_file($reporte);
+// PT-02: el reporte se consume. Se lee y se borra antes de validarlo, también si luego falla: una corrida que no
+// regenere el clover no puede aprobar con uno viejo, porque la siguiente verificación lo encontrará ausente.
+$contenido = (string) file_get_contents($reporte);
+unlink($reporte);
+
+$xml = @simplexml_load_string($contenido);
 
 if ($xml === false) {
     fwrite(STDERR, "El reporte Clover no se puede leer: {$reporte}\n");
