@@ -29,7 +29,7 @@
 
 ## Correcciones de la auditoría del Lote E — completas (I-1 e I-2 decididas por el responsable el 29/10/2026)
 
-Instrucción del responsable del 28/10/2026 (sobre `1145c77`): primero los FIX, un commit por hallazgo, cada uno con `make verificar` completo sin nada más corriendo; después la documentación (F1-DOC). I-1 e I-2 esperan la decisión del responsable: no se tocan. Sin push, PR ni etiqueta. **No hay ningún commit todavía:** todo lo de abajo está sin confirmar en el árbol de trabajo.
+Instrucción del responsable del 28/10/2026 (sobre `1145c77`): primero los FIX, un commit por hallazgo, cada uno con `make verificar` completo sin nada más corriendo; después la documentación (F1-DOC). Sin push, PR ni etiqueta.
 
 | # | Hallazgo | Estado | Archivos o commit |
 |---|---|---|---|

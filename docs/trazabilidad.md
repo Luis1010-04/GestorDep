@@ -95,7 +95,7 @@ Origen de la columna **Hito**:
 
 ## Estado al cierre de H2
 
-- Total de la suite al cierre de H2: **917 pruebas, 5 558 aserciones** (`make verificar` del FIX PT-02, tras las correcciones de la auditoría del Lote E; en T15 eran 897 y 5 391). Ver `docs/reportes/f1-h2-reporte.md`.
+- Total de la suite al cierre de H2: **920 pruebas, 5 574 aserciones** (`make verificar` del FIX M-c, `e02a40b`, tras las correcciones de la auditoría corta; en T15 eran 897 y 5 391). Ver `docs/reportes/f1-h2-reporte.md`.
 - Criterios diferidos de `docs/hitos/f1-h2.md` §2.2: RN-21 (H6); HU-02 c2, lado deportivo del docente (H5); el resumen y el detalle en alertas, vista para convocar y gráficos (H6); HU-24 / RNF-04, marca «posiblemente desactualizado» (H6); historial de calificaciones y asistencia consultable por la API (H7, H2 solo lo escribe); HU-28, lugares, temporadas, torneos y rivales (H3). Ninguno se prueba en H2.
 - RN-12 sigue sin prueba con su identificador en H2 (ver su fila); su parte docente la cubren HU-28, DD-49 y HU-06.
 - RNF-11 tiene prueba con su identificador en H2 desde el FIX de M-1 del Lote E: las tres de `ConfiguracionDePhpstanTest` (`RNF-11 (M-1): …`). El resto lo cubren las pruebas `HERRAMIENTAS` y `PT-02` de `tests/Unit/Herramientas/` y la evidencia de §7.12 fila 1 en `docs/reportes/f1-h2-t01.md` (auditoría del Lote E, M-2).

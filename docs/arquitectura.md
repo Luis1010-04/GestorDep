@@ -1,8 +1,8 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.4 (ver sección 14)
-**Fecha:** 21 de octubre de 2026
+**Versión:** 1.4.1 (ver sección 14)
+**Fecha:** 29 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
 ## 1. Propósito y alcance
@@ -80,7 +80,7 @@ Cada evento dispara el recalculo de riesgos y alertas del jugador afectado. Los 
 - **Plantel** es contexto proveedor: los demás lo referencian por `jugador_id`, `equipo_id` y `usuario_id`.
 - Se permiten claves foráneas físicas hacia tablas de Plantel e Identidad para garantizar integridad; no se comparten objetos ni modelos entre contextos.
 - **Alertas** es consumidor: escucha eventos de Plantel, Académico, Competencia, Rendimiento y Salud.
-- Una consulta que cruza contextos vive en el contexto que la consume, nunca dentro de un agregado. El listado, la vista consolidada, los gráficos, los pendientes de captura y el historial viven en **Consultas**; la situación académica, en **Académico** (DA-17 de H2). La consulta lee el dato de otro contexto a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando clases de dominio de otro contexto.
+- Una consulta que cruza contextos vive en el contexto que la consume, nunca dentro de un agregado. El listado, la vista consolidada, los gráficos, los pendientes de captura y el historial viven en **Consultas**; la situación académica, en **Académico** (DA-17 de H2). La consulta lee el dato de otro contexto a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando clases de dominio de otro contexto. Consultas puede leer las tablas de otros contextos con SQL de solo lectura.
 - `AlcanceDeJugadores` es una interfaz de Compartido; su implementación SQL vive en la Infraestructura de Consultas y lee `jugador_equipo`, `entrenador_equipo` e `inscripciones`.
 
 ## 5. Estructura de carpetas
@@ -413,3 +413,4 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | 1.2.1 | 22/10/2026 | Sección 7.2 y grupo 000 de 8.2: la tabla `sessions` (driver `database`) y las tablas de cola de H0 |
 | 1.3 | 26/10/2026 | Sección 8.2: `parametros_institucionales` pasa del grupo 080 al grupo 035 y se crea en H2 (DD-42); el grupo 080 queda con `alertas`. Sección 7.1: el índice único de matrícula es sobre `lower(matricula)` (DD-37) |
 | 1.4 | 29/10/2026 | Sección 4.3: una consulta que cruza contextos vive en el contexto que la consume y lee el dato ajeno a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando dominio ajeno; la situación académica vive en Académico. Decisión del responsable tras la auditoría del Lote E de H2 (I-1, DA-17) |
+| 1.4.1 | 29/10/2026 | Sección 4.3: se restituye la frase «Consultas puede leer las tablas de otros contextos con SQL de solo lectura», que la versión 1.4 quitó sin que nadie lo decidiera (auditoría corta del rango `1145c77..4fb2fc5`, I-B). Lo demás de la 1.4 se mantiene |

@@ -7,14 +7,14 @@ Esta sección la agrega el agente al guardar la auditoría en el repositorio, po
 | B-1 | **Pendiente** del push del responsable; se cierra con CI en verde en el commit final | — |
 | I-1 | Resuelto (DA-17, `docs/arquitectura.md` v1.4) | `1fa94de` |
 | I-2 | Resuelto (DA-14 y DA-15 confirmadas) | `1fa94de` |
-| M-1 | Resuelto (`ConfiguracionDePhpstanTest`) | `ad8738b` |
+| M-1 | Resuelto (`ConfiguracionDePhpstanTest`). **Límite conocido** (auditoría corta, M-f): la prueba solo vigila `phpstan.neon`; no vigila la invocación de PHPStan en el script `verificar` de `composer.json` (por ejemplo, `--level` o `-c` añadidos, o que se quite el paso) ni las supresiones `@phpstan-ignore` en el código, que hoy no existen. Sin cambio de código | `ad8738b` |
 | M-2 | Resuelto (RNF-11 en la trazabilidad y en el punto 2 de la compuerta) | `97979da` |
-| M-3 | Resuelto (`AcademicoSeguridadTest`) | `6804a9f` |
+| M-3 | Resuelto (`AcademicoSeguridadTest`). El `DELETE` de catálogos con id no v7, que `6804a9f` no cubría, entró al recorrido en `e02a40b` (auditoría corta, M-c) | `6804a9f`, `e02a40b` |
 | M-4 | Resuelto (DA-16) | `97979da` |
 | M-5 | Resuelto (`docs/hitos/f1-h2.md` v1.1) | `97979da` |
 | M-6 | Resuelto (plazos del registro) | `97979da` |
 | M-7 | Resuelto (sin `->skip()` condicionales) | `632611f` |
-| M-8 | Sin cambio de código. La medición de la auditoría fue contaminada; se mantiene la medición limpia de 502 s (`f1-h2-reporte.md` §2) | — |
+| M-8 | Sin cambio de código. La medición de la auditoría fue contaminada; se mantiene la medición limpia de 502 s (`f1-h2-reporte.md` §2). Pero la corrida válida del FIX de M-3, sin nada más corriendo, tardó **752 s (12 min 32 s)**: 2 min 28 s de holgura frente al límite de 15 min, lo que respalda la preocupación de M-8 (`f1-h2-fix-e-m3.md`; auditoría corta, M-e). PT-07 (*lock* de `make verificar` y `composer` huérfano, `registro-decisiones.md` §3) queda sin implementar | — |
 | M-9 | **Pendiente.** Falta el enlace a la corrida de CI del commit final, que aporta el responsable | — |
 
 Mensaje del auditor antes del documento (28/10/2026), sin cambios:

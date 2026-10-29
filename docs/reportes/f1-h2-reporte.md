@@ -1,7 +1,7 @@
 # Reporte de cierre del hito F1-H2: Académico
 
-**Fecha:** 28 de octubre de 2026 · **Rama:** `hito/f1-h2` (desde `f1-h1`) · **Especificación:** `docs/hitos/f1-h2.md` v1.1 (§7.1 fila 6 corregida; ver su sección 12)
-**Estado:** construcción terminada. La auditoría independiente del Lote E (§0.5) está entregada y sus correcciones M-1 a M-7 y PT-02 están hechas (sección 3). El responsable decidió I-1 e I-2 el 29/10/2026: DA-17 registrada y DA-14 y DA-15 confirmadas (sección 5). Faltan la verificación de CI en el commit final, tras el push del responsable, y su aprobación (§10 puntos 1, 10 y 11). No se hizo push, PR, etiqueta ni fusión.
+**Fecha:** 28 de octubre de 2026 (actualizado el 29 de octubre de 2026) · **Rama:** `hito/f1-h2` (desde `f1-h1`) · **Especificación:** `docs/hitos/f1-h2.md` v1.1 (§7.1 fila 6 corregida; ver su sección 12)
+**Estado:** construcción terminada. La auditoría independiente del Lote E (§0.5) está entregada y sus correcciones M-1 a M-7 y PT-02 están hechas (sección 3). El responsable decidió I-1 e I-2 el 29/10/2026: DA-17 registrada y DA-14 y DA-15 confirmadas (sección 5). Los hallazgos de la auditoría corta del rango `1145c77..4fb2fc5` (29/10/2026) se corrigieron en `a51ee16` y `e02a40b` y en un F1-DOC (sección 3). Faltan la verificación de CI en el commit final, tras el push del responsable, y su aprobación (§10 puntos 1, 10 y 11). No se hizo push, PR, etiqueta ni fusión.
 
 ## 1. Resumen
 
@@ -40,7 +40,7 @@ Una corrida el 28 de octubre de 2026, sobre el árbol de T15, sin nada más corr
 | `composer audit` | 502 s | 1 s | `No security vulnerability advisories found.` |
 | **Total** | | **502 s (8 min 22 s)** | **pasa** |
 
-**Última corrida, tras las correcciones de la auditoría del Lote E** (FIX PT-02, `b010636`, sin nada más corriendo): **917 pruebas** (5 558 aserciones), Pint y PHPStan sin errores, 362 mutantes eliminados (MSI 100 %), cobertura 100,0 / 100,0 / 99,7 % y `composer audit` sin avisos; **486 s (8 min 6 s)**. Las corridas de M-3, M-7 y M-1 tardaron 752, 469 y 473 s. Durante esas correcciones, una corrida contaminada por otro proceso sobre la base de pruebas falló (570 fallos, 27 min 21 s) y se repitió una sola vez con autorización (`f1-h2-fix-e-m3.md`; ver PT-07).
+**Última corrida, tras las correcciones de la auditoría corta** (FIX M-c, `e02a40b`, sin nada más corriendo): **920 pruebas** (5 574 aserciones), Pint y PHPStan sin errores, 362 mutantes eliminados (MSI 100 %), cobertura 100,0 / 100,0 / 99,7 % y `composer audit` sin avisos; **467 s (7 min 47 s)**. Las corridas de M-3, M-7, M-1, PT-02 y M-g tardaron 752, 469, 473, 486 y 549 s. Durante esas correcciones, una corrida contaminada por otro proceso sobre la base de pruebas falló (570 fallos, 27 min 21 s) y se repitió una sola vez con autorización (`f1-h2-fix-e-m3.md`; ver PT-07).
 
 Holgura frente al límite de 15 min de §0.4 en la medición de T15: 6 min 38 s. Con el mismo código, el entorno mostró variaciones de hasta 1,8 veces (`f1-h2-medicion-verificar.md`). Las corridas de H2 fueron de 5 min 44 s a 13 min 57 s, salvo dos anomalías ya documentadas: la primera de T04, contaminada por lecturas en paralelo (31 min 04 s, repetida en 9 min 17 s), y una de T08 (17 min 16 s, repetida en 6 min 0 s).
 
@@ -84,6 +84,8 @@ Cada tarea tiene su reporte `docs/reportes/f1-h2-tNN.md` con el detalle completo
 - `632611f`: auditoría del Lote E, M-7: las pruebas de alcance ya no se saltan en ejecuciones parciales (`f1-h2-fix-e-m7.md`).
 - `ad8738b`: auditoría del Lote E, M-1: prueba de la configuración de PHPStan (`f1-h2-fix-e-m1.md`).
 - `b010636`: PT-02: el guion de cobertura borra el clover tras leerlo (`f1-h2-fix-pt02.md`).
+- `a51ee16`: auditoría corta, M-g: el guion de cobertura falla si no puede borrar el clover (`f1-h2-fix-corta-mg.md`).
+- `e02a40b`: auditoría corta, M-c: `DELETE` de catálogos con id no v7 en el recorrido de seguridad (`f1-h2-fix-corta-mc.md`).
 
 **Commits del Lote E** (desde el resumen del Lote D, `cc66784`), en orden, con su prefijo:
 
@@ -109,11 +111,14 @@ Cada tarea tiene su reporte `docs/reportes/f1-h2-tNN.md` con el detalle completo
 | 18 | `97979da` | F1-DOC | documentación de las correcciones de la auditoría del Lote E |
 | 19 | `1fa94de` | F1-DOC | decisiones del responsable sobre I-1, DA-14 y DA-15 |
 | 20 | `fed6ff4` | F1-DOC | auditoría del Lote E y estado de sus hallazgos |
-| 21 | ver `git log -1` | F1-DOC | corrección de la tabla de commits |
+| 21 | `4fb2fc5` | F1-DOC | corrección de la tabla de commits y registro de la auditoría |
+| 22 | `a51ee16` | F1-H2-FIX | M-g el guion de cobertura falla si no puede borrar el clover |
+| 23 | `e02a40b` | F1-H2-FIX | M-c DELETE de catálogos con id no v7 en el recorrido de seguridad |
+| 24 | ver `git log -1` | F1-DOC | correcciones de la auditoría corta del rango 1145c77..4fb2fc5 |
 
-Los commits 10 a 18 son las correcciones de la auditoría del Lote E; el 19 registra las decisiones del responsable del 29/10/2026 sobre I-1 e I-2. Cada `F1-H2-FIX` va con su `make verificar` completo y su reporte en un commit F1-DOC aparte.
+Los commits 10 a 18 son las correcciones de la auditoría del Lote E; el 19 registra las decisiones del responsable del 29/10/2026 sobre I-1 e I-2; el 20 guarda la auditoría del Lote E con la tabla de estado de sus hallazgos, y el 21 corrige esta tabla y agrega a la auditoría el mensaje del auditor. Los commits 22 a 24 corrigen los hallazgos de la auditoría corta del rango `1145c77..4fb2fc5` (29/10/2026). Cada `F1-H2-FIX` va con su `make verificar` completo y su reporte; los dos de la auditoría corta, en el F1-DOC 24.
 
-**Hash final:** el último código de la rama es `b010636` (FIX PT-02), sobre el que se midió la última corrida de `make verificar` (sección 2: 917 pruebas, 8 min 6 s). Después solo hay commits F1-DOC. El hash final de la rama: **ver `git log -1`** (un commit no puede contener su propio hash). Es el commit en el que CI debe quedar en verde (sección 6, punto 1).
+**Hash final:** el último código de la rama es `e02a40b` (FIX M-c), sobre el que se midió la última corrida de `make verificar` (sección 2: 920 pruebas, 7 min 47 s). Después solo hay commits F1-DOC. El hash final de la rama: **ver `git log -1`** (un commit no puede contener su propio hash). Es el commit en el que CI debe quedar en verde (sección 6, punto 1).
 
 ### T01 — PHPStan nivel 7 e Infection (`70ceea1`)
 
@@ -277,8 +282,9 @@ Los commits 10 a 18 son las correcciones de la auditoría del Lote E; el 19 regi
 | `1a7b472` (T08) | Casos de uso de escritura de `src/Plantel/Aplicacion` (más allá de «solo lo que las lecturas necesiten») | Autorizado (DA-10) |
 | `952150b` (T10) | `src/Compartido/Aplicacion/**`, `src/Plantel/Infraestructura/**` | Autorizado por el responsable (opción A) |
 | `b010636` (FIX PT-02) | `bin/verificar-cobertura.php` | FIX autorizado por el responsable (opción A, sin cambios en `composer.json`), con su reporte `f1-h2-fix-pt02.md` |
+| `a51ee16` (FIX M-g) | `bin/verificar-cobertura.php` | FIX pedido por el responsable tras la auditoría corta, con su reporte `f1-h2-fix-corta-mg.md` |
 
-T05 a T07, T09, T11 a T15 y los FIX de pruebas (`e3e02be`, `143474e`, `8e084ae`, `1982976`, `b9aa299`, `bc9d01f`, y los de la auditoría del Lote E `6804a9f`, `632611f` y `ad8738b`, solo en `tests/**`) no tocaron rutas fuera de las permitidas. T14 no usó `src/Consultas/**` (permitida); trabajó dentro de las rutas base.
+T05 a T07, T09, T11 a T15 y los FIX de pruebas (`e3e02be`, `143474e`, `8e084ae`, `1982976`, `b9aa299`, `bc9d01f`, los de la auditoría del Lote E `6804a9f`, `632611f` y `ad8738b`, y el de la auditoría corta `e02a40b`, solo en `tests/**`) no tocaron rutas fuera de las permitidas. T14 no usó `src/Consultas/**` (permitida); trabajó dentro de las rutas base.
 
 ## 5. Decisiones del agente (DA-nn)
 
@@ -310,7 +316,7 @@ M-8 de la auditoría de C2 (el 409 al inscribir revela a un docente que una matr
 | 7 | Criterios propios de H2 | Cumplido | El criterio propio prevalece e indica cuál se aplicó: `CriterioPorMateriaTest`, §7.9 RN-03, humo paso 11. Calificación fuera de 0 a 10 rechazada: §7.7 fila 3, humo paso 15. El docente ve solo a sus alumnos: §7.4, `AcademicoSeguridadTest`, humo paso 13. El entrenador no ve calificaciones individuales: §7.10 fila 9, humo paso 12. Recálculo tras cada captura: §7.10 filas 2 a 8 y 23. `alertas:recalcular` idempotente y programado: §7.10 filas 17 y 24 |
 | 8 | El reporte incluye por tarea commit, archivos, pruebas, `verificar`, lo no hecho, fuera de alcance y desviaciones; cobertura y mutación; rutas fuera de la especificación; DA | Cumplido | Secciones 1 a 5 de este reporte y los reportes por tarea |
 | 9 | DD-42 a DD-55 registradas y las validaciones pendientes anotadas | Cumplido | `registro-decisiones.md` §1 (DD-42 a DD-55) y §2 (AB-22 a AB-27: RN-01, RN-04, DD-43, DD-44, DD-20, AB-08, la revisión de seguridad de DD-52 y DA-15). AB-27 quedó cerrada: DA-15 confirmada por el responsable el 29/10/2026 |
-| 10 | Las dos auditorías independientes entregadas, sin hallazgos bloqueantes abiertos | **Parcial** | Auditoría de C2: `f1-h2-auditoria-lote-c2.md`, 0 bloqueantes; I-1 resuelto en la especificación y M-1 a M-10 resueltos o registrados (`f1-h2-progreso.md`). Auditoría del Lote E: `f1-h2-auditoria-lote-e.md` (1 bloqueante, 2 importantes y 9 menores), con una tabla de estado por hallazgo al inicio. B-1 y M-9 siguen pendientes del responsable: el push con CI en verde en el commit final y el enlace a esa corrida. M-8 no requiere cambio de código. Los demás están resueltos. Corregidos M-3 (`6804a9f`), M-7 (`632611f`), M-1 (`ad8738b`) y PT-02 (`b010636`), cada uno con su reporte y su `make verificar`. M-2 (RNF-11 en la trazabilidad), M-4 (DA-16), M-5 (`f1-h2.md` v1.1) y M-6 (plazos vencidos en el registro) se resolvieron en documentación. B-1, I-1 e I-2 resueltos en este commit y en el push del responsable: I-1 como DA-17 con `arquitectura.md` v1.4, e I-2 con DA-14 y DA-15 confirmadas el 29/10/2026. **Pendiente la verificación de CI en el commit final** |
+| 10 | Las dos auditorías independientes entregadas, sin hallazgos bloqueantes abiertos | **Parcial** | Auditoría de C2: `f1-h2-auditoria-lote-c2.md`, 0 bloqueantes; I-1 resuelto en la especificación y M-1 a M-10 resueltos o registrados (`f1-h2-progreso.md`). Auditoría del Lote E: `f1-h2-auditoria-lote-e.md` (1 bloqueante, 2 importantes y 9 menores), con una tabla de estado por hallazgo al inicio. B-1 y M-9 siguen pendientes del responsable: el push con CI en verde en el commit final y el enlace a esa corrida. M-8 no requiere cambio de código. Los demás están resueltos. Corregidos M-3 (`6804a9f`), M-7 (`632611f`), M-1 (`ad8738b`) y PT-02 (`b010636`), cada uno con su reporte y su `make verificar`. M-2 (RNF-11 en la trazabilidad), M-4 (DA-16), M-5 (`f1-h2.md` v1.1) y M-6 (plazos vencidos en el registro) se resolvieron en documentación. I-1 e I-2 resueltos en `1fa94de`: I-1 como DA-17 con `arquitectura.md` v1.4 (v1.4.1 tras la auditoría corta), e I-2 con DA-14 y DA-15 confirmadas el 29/10/2026. La auditoría corta del rango `1145c77..4fb2fc5` (29/10/2026, sin bloqueantes) se corrigió en `a51ee16` (M-g), `e02a40b` (M-c, completa M-3 del Lote E) y el F1-DOC siguiente. **B-1 y M-9 siguen pendientes del responsable** |
 | 11 | El responsable revisa, prueba `make humo` y aprueba; etiqueta `f1-h2` y fusión | **Pendiente del responsable** | No se creó la etiqueta ni se fusionó (regla vigente) |
 
 ## 7. Salida completa de `make humo` al cierre
