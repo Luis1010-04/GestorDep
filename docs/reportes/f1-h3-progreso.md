@@ -82,3 +82,15 @@ Una corrida de `make verificar` sobre `11bcd74` (especificación v1.0.1; mismo c
 | **Total** | **700 s (11 min 40 s)**; código 0 |
 
 Con el mismo código, la corrida de T03 (la primera tras reiniciar Docker Desktop) tardó 898 s. Pest tardó casi lo mismo en las dos (528 s y 524 s), así que la diferencia de unos 200 s está en las demás etapas, que en T03 corrieron con el entorno recién arrancado. Holgura frente al límite de 15 min de §0.4: 3 min 20 s.
+
+## 4. Lote B
+
+Al empezar, el responsable aceptó el Lote A y aprobó DA-01 a DA-15 (DA-09 queda registrada como decisión de privacidad). También resolvió §3.2: la asistencia y las convocatorias las ven todos los entrenadores del equipo.
+
+| Tarea | Estado | Commit | Reporte | `make verificar` |
+|---|---|---|---|---|
+| T04 Asistencia y porcentajes | hecha | `b2ba728` | `f1-h3-t04.md` | pasa; 1 095 pruebas; 710 s (11 min 50 s) |
+| T05 Partidos | **plan entregado; espera aprobación** | — | `f1-h3-plan-t05.md` | — |
+| T06, T07 | pendientes; no se empiezan sin aprobar T05 | | | |
+
+Las decisiones DA-16 a DA-22 son de T04. DA-20 restringe la privacidad: un docente recibe 404 en el porcentaje de asistencia de un jugador.
