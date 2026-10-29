@@ -141,3 +141,13 @@ test('PT-02: una segunda verificación sin regenerar el clover falla, aunque la 
         ->and($segunda)->toBe(1)
         ->and($salida)->toBe("El reporte Clover no existe: {$reporte}\n");
 });
+
+/**
+ * `/proc/version` es un archivo regular que se puede leer y que nadie puede borrar, ni siquiera root (el contenedor corre
+ * como root, así que quitar permisos a una carpeta no basta). Sin la comprobación, el guion seguiría y fallaría con otro mensaje.
+ */
+test('PT-02 (M-g): si el clover no se puede borrar, falla con «El reporte Clover no se pudo borrar»', function () {
+    [$codigo, $salida] = ejecutarVerificacion('/proc/version');
+
+    expect($codigo)->toBe(1)->and($salida)->toBe("El reporte Clover no se pudo borrar: /proc/version\n");
+});

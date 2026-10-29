@@ -20,9 +20,14 @@ if ($reporte === '' || ! is_file($reporte)) {
 }
 
 // PT-02: el reporte se consume. Se lee y se borra antes de validarlo, también si luego falla: una corrida que no
-// regenere el clover no puede aprobar con uno viejo, porque la siguiente verificación lo encontrará ausente.
+// regenere el clover no puede aprobar con uno viejo, porque la siguiente verificación lo encontrará ausente. Si no se
+// puede borrar, falla: un clover que sobrevive podría aprobar la siguiente corrida (auditoría corta, M-g).
 $contenido = (string) file_get_contents($reporte);
-unlink($reporte);
+
+if (! @unlink($reporte)) {
+    fwrite(STDERR, "El reporte Clover no se pudo borrar: {$reporte}\n");
+    exit(1);
+}
 
 $xml = @simplexml_load_string($contenido);
 
