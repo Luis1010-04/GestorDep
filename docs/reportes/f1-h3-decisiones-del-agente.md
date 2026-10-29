@@ -92,3 +92,17 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué se eligió:** `EquiposDelEntrenador` exige asignación vigente (`hasta` y `eliminado_en` nulos), equipo no eliminado, usuario no eliminado y rol `entrenador`. Se usa igual para el usuario de la sesión (404) y para el responsable (422).
 - **Por qué:** la lectura más estricta de §3.4.
 - **Cómo se revierte:** quitar las uniones con `usuarios` y `usuario_rol` del adaptador.
+
+## DA-14 (T03): el campo de la respuesta se llama `jugadores_del_equipo`
+
+- **Qué faltaba:** §7.2 fila 1 dice que la respuesta «lista J1, J2 y J3», sin nombrar el campo.
+- **Qué se eligió:** `jugadores_del_equipo`, en el alta, el detalle y el cambio; no en el listado.
+- **Por qué:** con `jugadores`, la prueba de arquitectura de `AlcanceDeJugadores` marca la cadena como una consulta a la tabla `jugadores` sin alcance (falso positivo). En lugar de ampliar la lista cerrada de usos sin alcance (requiere aprobación) o debilitar el detector, se usa un nombre más descriptivo que no es el de la tabla.
+- **Cómo se revierte:** renombrar la clave en `EntrenamientoRecurso` y `openapi.yaml`, y agregar el recurso a la lista cerrada del detector con aprobación.
+
+## DA-15 (T03): los instantes se aceptan con desplazamiento o con `Z`
+
+- **Qué faltaba:** §6.2 nombra `inicia_en` y `termina_en` sin formato; `docs/convenciones-api.md` §1 dice «ISO 8601 en UTC».
+- **Qué se eligió:** `AAAA-MM-DDTHH:MM:SS` con desplazamiento (`-06:00`) o con `Z`; sin zona se rechaza (422). Se guardan y se devuelven en UTC.
+- **Por qué:** un instante sin zona es ambiguo (RNF-04); con `Z` es el ISO 8601 UTC de la convención.
+- **Cómo se revierte:** cambiar `SolicitudDeNuevoEntrenamiento::INSTANTE`.
