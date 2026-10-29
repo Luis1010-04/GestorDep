@@ -92,7 +92,7 @@ Al empezar, el responsable aceptó el Lote A y aprobó DA-01 a DA-15 (DA-09 qued
 | T04 Asistencia y porcentajes | hecha | `b2ba728` | `f1-h3-t04.md` | pasa; 1 095 pruebas; 710 s (11 min 50 s) |
 | T05 Partidos | hecha (plan aprobado con ajustes) | `36acad8` | `f1-h3-t05.md` | pasa; 1 144 pruebas; **729 s (12 min 9 s), pasa de 12 min** |
 | T06 Convocatoria | hecha | `725a74b` | `f1-h3-t06.md` | pasa; 1 162 pruebas; 719 s (11 min 59 s), por debajo de 13 min |
-| T07 | pendiente; no se empieza sin indicación del responsable | | | |
+| T07 Alineación y resultado | hecha | `bbf708c` | `f1-h3-t07.md` | pasa; 1 198 pruebas; 745 s (12 min 25 s), por debajo de 13 min |
 
 Las decisiones DA-16 a DA-22 son de T04. DA-20 restringe la privacidad: un docente recibe 404 en el porcentaje de asistencia de un jugador.
 
@@ -127,3 +127,55 @@ T05 es la primera que pasa de 12 minutos. Con unos 20 s más por tarea, T06 rond
 Pest se queda con casi el 80 % del tiempo. Holgura para T07 frente al límite de 15 min: 3 min.
 
 Las decisiones DA-28 y DA-29 son de T06. Hallazgo: desde T03 hay un aviso de constante duplicada (`TABLAS_DE_PLANTEL`). No cambia ningún resultado y queda pendiente de un FIX que decide el responsable.
+
+### 4.1 Resumen del Lote B
+
+**Commits del lote**, en orden:
+
+| # | Hash | Prefijo | Mensaje |
+|---|---|---|---|
+| 1 | `11bcd74` | F1-DOC | especificación de H3 v1.0.1 y tabla de decisiones DA-01 a DA-15 |
+| 2 | `163d617` | F1-DOC | medición de make verificar antes del Lote B |
+| 3 | `b2ba68e` | F1-DOC | plan de T04 y decisiones DA-16 a DA-22 |
+| 4 | **`b2ba728`** | **F1-H3-T04** | asistencia a entrenamientos y porcentajes |
+| 5 | `6097635` | F1-DOC | reporte de T04 y plan de T05 para revisión |
+| 6 | **`36acad8`** | **F1-H3-T05** | partidos con temporada derivada de la fecha local |
+| 7 | `42163ed` | F1-DOC | reporte de T05 y decisiones DA-23 a DA-26 |
+| 8 | `582b89c` | F1-DOC | tiempos por etapa de T05 y holgura antes de T07 |
+| 9 | `e978a36` | F1-DOC | plan de T06 y decisiones DA-28 y DA-29 |
+| 10 | **`725a74b`** | **F1-H3-T06** | convocatoria de partidos sin jugadores en baja |
+| 11 | `9c050bd` | F1-DOC | reporte de T06 con el desglose de make verificar por etapa |
+| 12 | **`4b112df`** | **F1-H3-FIX** | renombra la constante de CompetenciaSinPlantelTest |
+| 13 | `35121f7` | F1-DOC | plan de T07 y decisiones DA-30 a DA-33 |
+| 14 | **`bbf708c`** | **F1-H3-T07** | alineación y resultado de partidos |
+| 15 | ver `git log -1` | F1-DOC | reporte de T07 y resumen del Lote B |
+
+**`make verificar`** (una corrida completa por tarea, sin nada más corriendo, con procesos revisados antes; todas con código 0):
+
+| Tarea | Pruebas | Mutantes (MSI) | Cobertura D / A / I | Infection | Pest | Total |
+|---|---:|---|---|---:|---:|---:|
+| T04 | 1 095 | 439 (100 %) | 100,0 / 100,0 / 99,4 % | 96 s | 510 s | 710 s (11 min 50 s) |
+| T05 | 1 144 | 473 (100 %) | 100,0 / 100,0 / 99,4 % | 105 s | 573 s | **729 s (12 min 9 s)**, más de 12 min |
+| T06 | 1 162 | 481 (100 %) | 100,0 / 100,0 / 99,4 % | 102 s | 567 s | 719 s (11 min 59 s) |
+| T07 | 1 198 | 501 (100 %) | 100,0 / 100,0 / 99,4 % | 114 s | 577 s | 745 s (12 min 25 s) |
+
+T06 y T07 tienen el desglose completo por etapa en su reporte. El FIX `4b112df` no tuvo corrida propia: por indicación del responsable, solo se ejecutaron las dos pruebas afectadas; la corrida de T07 lo incluye. Holgura frente al límite de 15 min tras T07: 2 min 35 s.
+
+**Decisiones del agente del lote:**
+
+- DA-16 a DA-22 (T04);
+- DA-23 a DA-26 (T05; DA-27 retirada);
+- DA-28 y DA-29 (T06);
+- DA-30 a DA-33 (T07), pendientes de revisión.
+
+Las de privacidad son DA-20 (el docente recibe 404 en el porcentaje de asistencia), DA-28 (solo se convoca a jugadores del equipo del partido) y DA-32 (un convocado en baja cuenta como no convocado). Las tres restringen.
+
+**Pruebas por tabla de §7:** §7.3 filas 1 a 11, §7.4 filas 1 a 8 (la 6 completa en T07), §7.5 filas 1 a 10, y §7.6 filas 1, 2, 3, 7 y 8. Cada tarea demostró sus filtros de privacidad con mutaciones (6 + 4 + 6 + 4).
+
+**Rutas fuera de las rutas base:** `docs/trazabilidad.md` en T07, pedido por el responsable. No se tocó `src/Compartido` ni `frontend/`. No hubo push, PR ni etiquetas.
+
+**Pendientes para el Lote C:**
+
+- T08: recorrido de seguridad. Ahí propongo cubrir la línea 42 de `SolicitudDeAlineacion` (campo extra al nivel raíz).
+- T09: humo y cierre documental.
+- La auditoría independiente.
