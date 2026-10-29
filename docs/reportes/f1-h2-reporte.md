@@ -107,11 +107,13 @@ Cada tarea tiene su reporte `docs/reportes/f1-h2-tNN.md` con el detalle completo
 | 16 | `b010636` | F1-H2-FIX | PT-02 el guion borra el clover tras leerlo |
 | 17 | `d60ef54` | F1-DOC | reporte del FIX PT-02 (el guion borra el clover tras leerlo) |
 | 18 | `97979da` | F1-DOC | documentación de las correcciones de la auditoría del Lote E |
-| 19 | ver `git log -1` | F1-DOC | decisiones del responsable sobre I-1, DA-14 y DA-15 |
+| 19 | `1fa94de` | F1-DOC | decisiones del responsable sobre I-1, DA-14 y DA-15 |
+| 20 | `fed6ff4` | F1-DOC | auditoría del Lote E y estado de sus hallazgos |
+| 21 | ver `git log -1` | F1-DOC | corrección de la tabla de commits |
 
 Los commits 10 a 18 son las correcciones de la auditoría del Lote E; el 19 registra las decisiones del responsable del 29/10/2026 sobre I-1 e I-2. Cada `F1-H2-FIX` va con su `make verificar` completo y su reporte en un commit F1-DOC aparte.
 
-**Hash final:** el último código de la rama es `b010636` (FIX PT-02), sobre el que se midió la última corrida de `make verificar` (sección 2: 917 pruebas, 8 min 6 s). Después solo hay commits F1-DOC. El hash final de la rama es el del commit 19: **ver `git log -1`** (un commit no puede contener su propio hash). Es el commit en el que CI debe quedar en verde (sección 6, punto 1).
+**Hash final:** el último código de la rama es `b010636` (FIX PT-02), sobre el que se midió la última corrida de `make verificar` (sección 2: 917 pruebas, 8 min 6 s). Después solo hay commits F1-DOC. El hash final de la rama: **ver `git log -1`** (un commit no puede contener su propio hash). Es el commit en el que CI debe quedar en verde (sección 6, punto 1).
 
 ### T01 — PHPStan nivel 7 e Infection (`70ceea1`)
 

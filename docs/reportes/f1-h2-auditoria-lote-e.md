@@ -17,6 +17,12 @@ Esta sección la agrega el agente al guardar la auditoría en el repositorio, po
 | M-8 | Sin cambio de código. La medición de la auditoría fue contaminada; se mantiene la medición limpia de 502 s (`f1-h2-reporte.md` §2) | — |
 | M-9 | **Pendiente.** Falta el enlace a la corrida de CI del commit final, que aporta el responsable | — |
 
+Mensaje del auditor antes del documento (28/10/2026), sin cambios:
+
+> Escrito para: el responsable del proyecto, que decide sobre la compuerta de H2.
+>
+> No modifiqué ningún archivo del repositorio: `git status` está limpio y no hice commits, push ni PR. Sí ejecuté `make fresh`, `make humo`, `make verificar` y un `migrate:rollback`. Los dos últimos solo tocan las bases de datos, no el repositorio, y al terminar dejé la base de desarrollo reconstruida con `make fresh`.
+
 ---
 
 # Auditoría independiente del Lote E de H2 (T15 y compuerta §10)
