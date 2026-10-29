@@ -281,6 +281,7 @@ test('HU-13: la alineación con forma inválida da 422', function (array $cuerpo
     'sin alineación' => [[], 'alineacion'],
     'rol inválido' => [['alineacion' => [['jugador_id' => '{j1}', 'posicion_id' => '{defensa}', 'rol_alineacion' => 'banca']]], 'alineacion.0.rol_alineacion'],
     'sin posición' => [['alineacion' => [['jugador_id' => '{j1}', 'rol_alineacion' => 'titular']]], 'alineacion.0.posicion_id'],
+    'campo extra en la raíz (T08)' => [['alineacion' => [], 'estado' => 'jugado'], 'estado'],
     'repetido' => [['alineacion' => [
         ['jugador_id' => '{j1}', 'posicion_id' => '{defensa}', 'rol_alineacion' => 'titular'],
         ['jugador_id' => '{j1}', 'posicion_id' => '{defensa}', 'rol_alineacion' => 'suplente'],
