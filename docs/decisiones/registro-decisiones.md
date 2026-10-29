@@ -65,6 +65,14 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-54 | `NumeroDecimal` (Compartido, `bcmath`) es el único tipo para promedios, umbrales y porcentajes; nunca `float` | Arq 7.1; H2 §3 | H2 | F1-H2 |
 | DD-55 | Calificaciones y asistencias admiten `fecha` opcional (por defecto, hoy de negocio) y no se valida que no sea futura | H2 §2.3 y §3 | H2 | F1-H2 |
 
+**Enmienda a DD-53 (29/10/2026, F1-H3; aprobada por el responsable).**
+
+- **Qué cambia:** Infection deja de correr dentro de `make verificar` (`composer verificar`) y pasa a `make mutacion` (`composer mutacion`). Ese comando corre Infection solo sobre `src/*/Dominio/` y después `bin/verificar-mutacion.php`.
+- **Qué no cambia:** los umbrales de DD-53 (MSI ≥ 80 %, MSI de código cubierto ≥ 85 %, ninguno omitido ni con tiempo agotado), PHPStan nivel 7 e `infection.json5`.
+- **Cuándo corre:** `make mutacion` al cerrar cada lote, y en la integración continua como paso propio después de `composer verificar`.
+- **Motivo:** el tiempo. En H3, `make verificar` llegó a 745 s con Infection (unos 115 s) y Pest (unos 577 s), y la holgura frente al límite de 15 minutos de `docs/hitos/f1-h2.md` §0.4 bajó de 3 minutos.
+- **Dónde:** `F1-H3-FIX` y `docs/hitos/f1-h3.md` v1.0.2.
+
 ## 2. Decisiones que siguen abiertas
 
 Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asumido.

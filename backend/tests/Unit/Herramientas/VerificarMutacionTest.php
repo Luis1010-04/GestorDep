@@ -95,16 +95,26 @@ function configuracionDeInfection(): array
     return json_decode(implode("\n", $lineas ?: []), true, flags: JSON_THROW_ON_ERROR);
 }
 
-test('HERRAMIENTAS mutación (M-10 a): Infection escribe el resumen en la ruta que lee la verificación, justo después en el script', function () {
-    /** @var array{scripts: array{verificar: list<string>}} $composer */
+test('HERRAMIENTAS mutación (M-10 a): Infection escribe el resumen en la ruta que lee la verificación, justo después en el script mutacion', function () {
+    /** @var array{scripts: array{mutacion: list<string>}} $composer */
     $composer = json_decode((string) file_get_contents(dirname(__DIR__, 3).'/composer.json'), true, flags: JSON_THROW_ON_ERROR);
-    $pasos = $composer['scripts']['verificar'];
+    $pasos = $composer['scripts']['mutacion'] ?? [];
     $infection = array_key_first(array_filter($pasos, fn (string $paso): bool => str_contains($paso, 'vendor/bin/infection')));
 
     // Si el resumen dejara de escribirse aquí, la verificación podría leer uno viejo de otra corrida.
     expect(configuracionDeInfection()['logs'] ?? null)->toMatchArray(['summary' => 'build/infection/resumen.log'])
         ->and($infection)->not->toBeNull()
         ->and($pasos[$infection + 1] ?? null)->toBe('@php bin/verificar-mutacion.php build/infection/resumen.log');
+});
+
+test('HERRAMIENTAS mutación (F1-H3-FIX, enmienda a DD-53): make verificar ya no corre Infection; make mutacion sí', function () {
+    /** @var array{scripts: array{verificar: list<string>, mutacion?: list<string>}} $composer */
+    $composer = json_decode((string) file_get_contents(dirname(__DIR__, 3).'/composer.json'), true, flags: JSON_THROW_ON_ERROR);
+    $verificar = implode("\n", $composer['scripts']['verificar']);
+
+    expect($verificar)->not->toContain('vendor/bin/infection')
+        ->and($verificar)->not->toContain('verificar-mutacion')
+        ->and($composer['scripts'])->toHaveKey('mutacion');
 });
 
 test('HERRAMIENTAS mutación (M-10 b): los mutantes con error se cuentan como eliminados, como hace Infection, y no hacen fallar', function () {
