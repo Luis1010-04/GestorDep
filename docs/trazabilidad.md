@@ -85,7 +85,7 @@ Origen de la columna **Hito**:
 | RNF-08 Idioma | H0 a H7 | H0: `TextosEnLangTest`, `FormatoDeErrorTest` |
 | RNF-09 Extensibilidad | H2, H4 | H2 (parámetros en tablas, no en el código): `RecalculoDelResumenTest` (sin `riesgo_academico` el recálculo falla), `RiesgoAcademicoTest` (§7.9 filas 12 y 13), `ParametrosDeRiesgoTest`, `MigracionesDeAcademicoTest` (§7.11 fila 15) |
 | RNF-10 Seguridad de acceso | H1 | H1: `IniciarSesionTest`, `CerrarSesionYContrasenaTest`, `PoliticaDeContrasenaTest`, `UsuarioTest`, `UsuarioActualDeSesionTest`, `MigracionesDeIdentidadTest` (tabla `sessions`) |
-| RNF-11 Mantenibilidad y pruebas | H0 a H7 | H1: `VerificarCoberturaTest` (umbral por capa). H2: PHPStan nivel 7 e Infection sobre `Dominio/` en `make verificar` (§7.12 filas 1 y 2: evidencia en `docs/reportes/f1-h2-t01.md`), `VerificarMutacionTest` (mutantes omitidos o con tiempo agotado y configuración del resumen, auditoría de C2 M-10), `DecimalesEnDominioTest` (Arch), `GuionDeHumoTest` (el humo se detiene ante un paso roto) |
+| RNF-11 Mantenibilidad y pruebas | H0 a H7 | H1: `VerificarCoberturaTest` (umbral por capa). H2: PHPStan nivel 7 e Infection sobre `Dominio/` en `make verificar` (§7.12 filas 1 y 2: evidencia en `docs/reportes/f1-h2-t01.md`), `VerificarMutacionTest` (mutantes omitidos o con tiempo agotado y configuración del resumen, auditoría de C2 M-10), `DecimalesEnDominioTest` (Arch), `GuionDeHumoTest` (el humo se detiene ante un paso roto), `ConfiguracionDePhpstanTest` (§7.12 fila 2: nivel 7, sin `ignoreErrors`, sin línea base ni exclusiones; sus tres pruebas llevan el identificador `RNF-11 (M-1)`; auditoría del Lote E, M-1), `VerificarCoberturaTest` (PT-02: el guion borra el clover tras leerlo y no aprueba con uno viejo). Las demás pruebas de herramientas usan el prefijo `HERRAMIENTAS`, `PT-02` o `F1-H2-T15` |
 
 ## Estado al cierre de H1
 
@@ -95,7 +95,8 @@ Origen de la columna **Hito**:
 
 ## Estado al cierre de H2
 
-- Total de la suite al cierre de H2: **897 pruebas, 5 391 aserciones** (`make verificar` de T15; ver `docs/reportes/f1-h2-reporte.md`).
+- Total de la suite al cierre de H2: **917 pruebas, 5 558 aserciones** (`make verificar` del FIX PT-02, tras las correcciones de la auditoría del Lote E; en T15 eran 897 y 5 391). Ver `docs/reportes/f1-h2-reporte.md`.
 - Criterios diferidos de `docs/hitos/f1-h2.md` §2.2: RN-21 (H6); HU-02 c2, lado deportivo del docente (H5); el resumen y el detalle en alertas, vista para convocar y gráficos (H6); HU-24 / RNF-04, marca «posiblemente desactualizado» (H6); historial de calificaciones y asistencia consultable por la API (H7, H2 solo lo escribe); HU-28, lugares, temporadas, torneos y rivales (H3). Ninguno se prueba en H2.
 - RN-12 sigue sin prueba con su identificador en H2 (ver su fila); su parte docente la cubren HU-28, DD-49 y HU-06.
+- RNF-11 tiene prueba con su identificador en H2 desde el FIX de M-1 del Lote E: las tres de `ConfiguracionDePhpstanTest` (`RNF-11 (M-1): …`). El resto lo cubren las pruebas `HERRAMIENTAS` y `PT-02` de `tests/Unit/Herramientas/` y la evidencia de §7.12 fila 1 en `docs/reportes/f1-h2-t01.md` (auditoría del Lote E, M-2).
 - Varias pruebas de H2 llevan en el nombre el identificador de la decisión que verifican (`DD-45`, `DD-47` a `DD-52`, `DD-55`, `DA-10`, `DA-15`) en lugar del de la historia; la historia correspondiente es la de su tabla de casos (§7 de la especificación).

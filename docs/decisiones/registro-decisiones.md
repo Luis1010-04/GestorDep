@@ -1,7 +1,7 @@
 # Registro de decisiones tomadas por defecto tras la auditoría
 
 **Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026; DD-42 a DD-55, AB-22 a AB-27 y la sección 4, al cerrar H2, el 28 de octubre de 2026)
-**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04). Cambios del 28 de octubre de 2026 (F1-H2-T15): se registran DD-42 a DD-55 (decisiones de H2), las validaciones pendientes con la institución y las dudas de H2 (AB-22 a AB-27) y las decisiones del agente en H2 (sección 4)
+**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04). Cambios del 28 de octubre de 2026 (F1-H2-T15): se registran DD-42 a DD-55 (decisiones de H2), las validaciones pendientes con la institución y las dudas de H2 (AB-22 a AB-27) y las decisiones del agente en H2 (sección 4). Cambios del 28 de octubre de 2026 tras la auditoría del Lote E: DA-16 (sección 4), la referencia de DD-45; los plazos vencidos en H2 de DD-20, AB-01, AB-08, AB-10, AB-14, PT-01 y PT-03; PT-02 resuelto (`b010636`); y PT-07 (lock de `make verificar` y procesos huérfanos), sin implementar
 
 La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los documentos. Para trabajar con lo que se tiene, el equipo de análisis aplicó la **recomendación de la auditoría** en cada una y las registró aquí. Ninguna cuenta como validada por la institución. Cada una indica antes de qué hito debe confirmarse; si se cambia, se corrige el documento afectado y se anota en este registro.
 
@@ -28,7 +28,7 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-17 | Entre entrenadores de un mismo equipo se aplica la regla estricta de RN-14 (cada uno ve solo lo que registró) | Req RN-22; Arq 13 | H3 | Arq 13 |
 | DD-18 | Un partido no incluye la categoría como campo propio (se toma del equipo) y el entrenamiento incluye hora de fin y responsable | Req HU-10, HU-12; Arq 7.5 | H3 | DA-06 |
 | DD-19 | La ventana de 30 días de RN-09 es móvil y termina en la fecha de cálculo, inclusive; cuando las faltas salen de la ventana o termina la temporada, la acumulación deja de estar activa. *Validar con la coordinación deportiva* | Req RN-09; Arq 11; Pruebas RN-09 | H6 | v1.2 §3.1 |
-| DD-20 | El promedio de RN-04 se redondea a dos decimales al medio hacia arriba (7.495 se vuelve 7.50). *Validar con la coordinación académica* | Req RN-04; Arq 7.1; Pruebas RN-04 | H2 | v1.2 §3.2 |
+| DD-20 | El promedio de RN-04 se redondea a dos decimales al medio hacia arriba (7.495 se vuelve 7.50). *Validar con la coordinación académica* | Req RN-04; Arq 7.1; Pruebas RN-04 | **Pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (§3 de H2); sin hito fijado, ver AB-14 y AB-25 | v1.2 §3.2 |
 | DD-21 | Técnica: cola `database` con servicio `worker`, y `alertas:recalcular` programado a diario a las 02:00 America/Mexico_City con el servicio `scheduler` | Arq 11; Plan 1.1; Alcance 5; Criterios H0 y H6 | H0 (servicios) y H6 (programación) | v1.2 §3.3 |
 | DD-22 | Técnica: los decimales viajan como cadena con dos decimales en el JSON de la API; los enteros, como número | Conv. API §1; Arq 7.1 | H2 | v1.2 §3.4 |
 | DD-23 | Técnica: las reglas del agente viven en `backend/.ai/guidelines/proyecto.md`; Laravel Boost genera `backend/CLAUDE.md` y `backend/AGENTS.md`; el `CLAUDE.md` y el `AGENTS.md` de la raíz son punteros escritos a mano | README §2; Plan 1.1 | H0 | v1.2 §3.5 |
@@ -53,7 +53,7 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-42 | La tabla `parametros_institucionales` se crea en H2 (grupo de migraciones 035, carpeta `academico/`), con el seeder `ParametrosInstitucionalesSeeder` que siembra solo la clave `riesgo_academico`. H6 solo crea `alertas` | H2 §3; Arq 7.9 y 11 | H2 | F1-H2 |
 | DD-43 | La calificación de una materia es la final si existe; si no, la media de sus parciales, redondeada `HALF_UP` a dos decimales antes de compararla con el criterio. El promedio general es la media de las calificaciones de las materias calificadas, redondeada igual. `dato_incompleto` es verdadero si hay materias sin calificar o ninguna tiene calificación. *Validar con la coordinación académica* | Req RN-02, RN-04; H2 §3 | Institución (no bloquea H2) | F1-H2 |
 | DD-44 | Porcentaje de asistencia = (presentes + faltas justificadas) ÷ registros × 100, a dos decimales `HALF_UP`, sumando todas las inscripciones del jugador en el periodo vigente; sin registros, nulo. *Validar con la coordinación académica* | Req RN-05; H2 §3 | Institución (no bloquea H2) | F1-H2 |
-| DD-45 | Periodo vigente: el no eliminado cuyo rango contiene el día de negocio; con varios, el de `fecha_inicio` más reciente (desempate por `id`); sin ninguno, la situación responde con periodo y valores nulos | Req RN-04; H2 §3 | H2 | F1-H2 |
+| DD-45 | Periodo vigente: el no eliminado cuyo rango contiene el día de negocio; con varios, el de `fecha_inicio` más reciente (con la misma `fecha_inicio`, el de `id` mayor: DA-16, no viene de la especificación); sin ninguno, la situación responde con periodo y valores nulos | Req RN-04; H2 §3; el desempate, DA-16 (sección 4) | H2 | F1-H2 |
 | DD-46 | El resumen se recalcula con los eventos `CalificacionRegistrada`, `AsistenciaDeClaseRegistrada`, `CriterioDeMateriaModificado` y `JugadorInscrito` (escucha en cola, `afterCommit`, idempotente) y con `alertas:recalcular`, programado a diario a las 02:00 America/Mexico_City; en H2 el comando solo concilia resúmenes | Arq 11; H2 §3 | H2 | F1-H2 |
 | DD-47 | La materia se evalúa con el criterio vigente al calcular; `calificaciones.criterio_id` guarda el vigente al capturar y no cambia después | Req RN-03, HU-08; H2 §3 | H2 | F1-H2 |
 | DD-48 | El entrenador ve solo el resumen académico; el docente ve el resumen y el detalle solo de sus propias materias; un usuario con los dos roles recibe ambas cosas (ver DA-15) | Req RN-13, RN-14; Arq 10; H2 §3 | H2 | F1-H2 |
@@ -71,20 +71,20 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 
 | ID | Pregunta | Quién decide | Antes de |
 |---|---|---|---|
-| AB-01 | Quién valida los valores marcados [Propuesta] (calificación mínima 7.0, niveles de riesgo, sanciones, umbral 6.0 con ventana de 5, escala de partido) | Institución (sugerido: coordinación académica y deportiva) | H2 (académicos) y H4 (deportivos) |
+| AB-01 | Quién valida los valores marcados [Propuesta] (calificación mínima 7.0, niveles de riesgo, sanciones, umbral 6.0 con ventana de 5, escala de partido) | Institución (sugerido: coordinación académica y deportiva) | H4 (deportivos). Académicos: **pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (`docs/hitos/f1-h2.md` §3) y sigue en AB-22 a AB-24 |
 | AB-02 | Cifra estimada de futbolistas para dimensionar | Institución | H7 |
 | AB-03 | Plazo de conservación del historial tras la baja de un jugador | Institución | H7 |
 | AB-04 | Respaldos y recuperación de la base (frecuencia y retención) | Responsable del proyecto | Antes de producción |
 | AB-05 | Librería de validación contra OpenAPI. **Resuelta en DD-24** | Responsable, a propuesta del agente | T09 de H0 |
 | AB-06 | Si habrá aplicación móvil (cambia el modo de Sanctum). **Resuelta el 21/10/2026: no habrá aplicación móvil; Sanctum en modo SPA con cookies** | Responsable | H1 |
 | AB-07 | Si existe reglamento de elegibilidad para convocar | Institución | H3 |
-| AB-08 | Origen de la retícula y quién verifica la carga inicial | Institución | H2 |
+| AB-08 | Origen de la retícula y quién verifica la carga inicial | Institución | **Pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (los docentes dan de alta las asignaturas por la API, §2.3 de H2); sin hito fijado, ver AB-25 |
 | AB-09 | Quién construye el frontend y cuándo | Responsable | Planificación de la Fase 2 |
-| AB-10 | Confirmar DD-24 (biblioteca `osteel/openapi-httpfoundation-testing` para validar contra OpenAPI) | Responsable | H2 |
+| AB-10 | Confirmar DD-24 (biblioteca `osteel/openapi-httpfoundation-testing` para validar contra OpenAPI) | Responsable | **Pendiente**; el plazo H2 venció sin cierre. La biblioteca se usa en las pruebas de contrato de H2, y DD-24 ya la da por aprobada en F1-H0-T09: el responsable puede cerrarla. Sugerido: cierre de H2 o H3 |
 | AB-11 | Validar DD-30 (la baja es global y la decidida por un entrenador afecta al otro) | Institución | Sin hito fijado (antes de que se use la baja en convocatorias, H3) |
 | AB-12 | Validar DD-40 (un expediente en baja se puede seguir actualizando y cambiar de posición) | Institución | Sin hito fijado |
 | AB-13 | Validar DD-19 (ventana móvil de 30 días de RN-09) con la coordinación deportiva | Institución | H6 |
-| AB-14 | Validar DD-20 (redondeo del promedio de RN-04 al medio hacia arriba) con la coordinación académica | Institución | H2 |
+| AB-14 | Validar DD-20 (redondeo del promedio de RN-04 al medio hacia arriba) con la coordinación académica | Institución | **Pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (§3 de H2: vive en el cálculo con `NumeroDecimal`); sin hito fijado, ver AB-25 |
 | AB-15 | Aceptación escrita del cliente de que la Fase 1 es solo API (DD-14) | Responsable, con el cliente | H3 |
 | AB-16 | Visor de OpenAPI (Swagger UI, Redoc u otro) para que el cliente lea `docs/api/openapi.yaml`: decidir si se agrega y cuál | Responsable | Sin hito fijado |
 | AB-17 | Revisión de seguridad: carrera en el bloqueo por intentos (dos fallos simultáneos pueden contar uno; solución probable: incremento atómico en SQL) | Responsable (revisión de seguridad) | H7 |
@@ -105,10 +105,11 @@ Anotados al cerrar H1; ninguno bloquea el hito. Los decide el responsable.
 
 | ID | Pendiente | Antes de (sugerido) |
 |---|---|---|
-| PT-01 | Las acciones de GitHub Actions emiten advertencias de obsolescencia: `actions/checkout@v4` corre en Node 20 y `ubuntu-latest` cambia de imagen. Actualizar las versiones en `.github/workflows/verificar.yml` | H2 |
-| PT-02 | `bin/verificar-cobertura.php` debe rechazar un `clover.xml` anterior a la ejecución de las pruebas. Se vio que leía uno antiguo cuando Pest falló por falta de memoria y el guion evaluó un reporte viejo | H2 |
-| PT-03 | Un arranque con el servicio `db` en estado "unhealthy", visto una sola vez con un volumen nuevo. No se reprodujo; vigilar y, si reaparece, revisar el `healthcheck` y los tiempos de `docker-compose.yml` | H2 |
+| PT-01 | Las acciones de GitHub Actions emiten advertencias de obsolescencia: `actions/checkout@v4` corre en Node 20 y `ubuntu-latest` cambia de imagen. Actualizar las versiones en `.github/workflows/verificar.yml` | **Pendiente**; el plazo H2 venció sin cierre (el flujo sigue en `actions/checkout@v4`). Sugerido: H3 |
+| PT-02 | `bin/verificar-cobertura.php` debe rechazar un `clover.xml` anterior a la ejecución de las pruebas. Se vio que leía uno antiguo cuando Pest falló por falta de memoria y el guion evaluó un reporte viejo | **Resuelto** en `b010636` (F1-H2-FIX, 28/10/2026): el guion lee el clover, lo borra antes de validarlo y una corrida que no lo regenere falla con «El reporte Clover no existe» (`docs/reportes/f1-h2-fix-pt02.md`) |
+| PT-03 | Un arranque con el servicio `db` en estado "unhealthy", visto una sola vez con un volumen nuevo. No se reprodujo; vigilar y, si reaparece, revisar el `healthcheck` y los tiempos de `docker-compose.yml` | **Pendiente (vigilancia)**; no se reprodujo en H2 (ningún reporte de H2 lo registra). Sin hito fijado |
 | PT-04 | `usuarios.actualizado_en` y `bloqueado_hasta` no salen de `Reloj` (usan `now()` de la base o microsegundos), a diferencia del resto de las tablas tras `F1-H1-FIX`. Es el mismo desfase que anota `docs/hitos/f1-h1.md` §11 | H7 |
+| PT-07 | Anotado en H2 (28/10/2026, correcciones de la auditoría del Lote E). `make verificar` debe tomar un *lock* exclusivo: dos corridas a la vez comparten la base de pruebas `gestordep_pruebas` y se rompen el esquema entre sí (se vio una corrida contaminada con 570 fallos y 27 min 21 s; `docs/reportes/f1-h2-fix-e-m3.md`). Además, un `composer verificar` huérfano no debe seguir corriendo dentro del contenedor después de cerrarse el cliente de `docker compose exec` (causa probable de esa contaminación). No implementado: decisión pendiente del responsable | Sugerido: H3 |
 
 ## 4. Decisiones del agente en H2 (DA)
 
@@ -124,3 +125,4 @@ Decisiones que tomó el agente donde la especificación de H2 callaba (`docs/hit
 | DA-13 | Corregir una calificación o una asistencia de un jugador en baja también da 409 | No (restringe escrituras) | Vigente |
 | DA-14 | El docente dueño sigue viendo calificaciones y asistencias de un alumno ya en baja | **Sí** (lectura) | Aceptada en revisión del 28/10; sujeta a confirmación del responsable |
 | DA-15 | La situación académica lista solo las materias del docente **del periodo vigente**; sin periodo vigente, arreglo vacío | **Sí** (lectura, restrictiva) | **Pendiente de confirmación del responsable** (AB-27) |
+| DA-16 | Periodo vigente: entre varios con la misma `fecha_inicio`, el de `id` mayor (UUID v7: el creado más recientemente). Completa DD-45; en T05 se omitió como DA (auditoría del Lote E, M-4) | No | Vigente; ninguna prueba fija el desempate |

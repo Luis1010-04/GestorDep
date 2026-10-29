@@ -27,6 +27,25 @@
 | FIX M-10 (configuración de mutación) | hecho | `bc9d01f` | pasa; 892 pruebas; 8 min 8 s (`f1-h2-fix-m10.md`) |
 | T15 Humo de H2 y cierre documental | hecha | ver `git log` | pasa; 897 pruebas; 8 min 22 s (`f1-h2-reporte.md`) |
 
+## Correcciones de la auditoría del Lote E — completas salvo I-1 e I-2 (en espera del responsable)
+
+Instrucción del responsable del 28/10/2026 (sobre `1145c77`): primero los FIX, un commit por hallazgo, cada uno con `make verificar` completo sin nada más corriendo; después la documentación (F1-DOC). I-1 e I-2 esperan la decisión del responsable: no se tocan. Sin push, PR ni etiqueta. **No hay ningún commit todavía:** todo lo de abajo está sin confirmar en el árbol de trabajo.
+
+| # | Hallazgo | Estado | Archivos o commit |
+|---|---|---|---|
+| 1 | M-3: recorrido de seguridad con alumnos compartidos | **Hecho.** `6804a9f` (F1-H2-FIX) y reporte `5ceaa73` (F1-DOC). La primera corrida de `make verificar` de esta sesión falló contaminada (570 fallos, 27 min 21 s); la repetición autorizada pasó: 909 pruebas, 12 min 32 s | — |
+| 2 | M-7: quitar los `->skip()` condicionales | **Hecho.** `632611f` (F1-H2-FIX) y reporte `d91c702` (F1-DOC). `make verificar`: 909 pruebas, 7 min 49 s | — |
+| 3 | M-1: prueba de `phpstan.neon` | **Hecho.** `ad8738b` (F1-H2-FIX) y reporte `6a6de06` (F1-DOC). `make verificar`: 912 pruebas, 7 min 53 s | — |
+| 4 | PT-02: `verificar-cobertura.php` rechaza un clover viejo | **Hecho** (opción A aprobada por el responsable). `b010636` (F1-H2-FIX) y reporte `d60ef54` (F1-DOC). `make verificar`: 917 pruebas, 8 min 6 s; el HTML sigue en `build/coverage/` y nada más lee el clover | — |
+| 5 | M-2: RNF-11 | **Hecho**: trazabilidad (ya con `RNF-11 (M-1)`) y punto 2 de la compuerta en `f1-h2-reporte.md` | F1-DOC final |
+| 6 | M-4: DA-16 | **Hecho** (DA-16 en el archivo de decisiones y en el registro §4; referencia de DD-45 corregida) | `docs/reportes/f1-h2-decisiones-del-agente.md`, `docs/decisiones/registro-decisiones.md` |
+| 7 | M-5: `f1-h2.md` v1.1 | **Hecho** (cabecera y sección 12 «Control de cambios») | `docs/hitos/f1-h2.md` |
+| 8 | M-6: plazos vencidos | **Hecho**: registro (DD-20, AB-01, AB-08, AB-10, AB-14, PT-01 y PT-03; PT-02 resuelto) y sección 8 del reporte | F1-DOC final |
+| 9 | Reporte §3: hashes del Lote E | **Hecho**: commits 1 a 18 en §3 de `f1-h2-reporte.md`; el 18, el F1-DOC final, como «ver `git log -1`» | F1-DOC final |
+| 10 | I-1 e I-2 | En espera de la decisión del responsable | — |
+
+**Resultado:** M-3, M-7, M-1 y PT-02 confirmados, cada uno con su `make verificar` completo (la primera corrida de M-3 se descartó por contaminación; ver `f1-h2-fix-e-m3.md`). Documentación de los puntos 5 a 9 en el commit F1-DOC final. PT-07 (lock de `make verificar` y `composer` huérfano) registrado en `registro-decisiones.md` §3, sin implementar. La observación sobre DD-20 se aplicó en el registro.
+
 ## Resumen del FIX de la deuda de C2 y del lote E (T15) — completo; queda la auditoría del lote E
 
 - **Deuda de C2:** M-3 `1982976`, M-6 `b9aa299` y M-10 `bc9d01f`, solo pruebas y sin cambios de comportamiento (plan `f1-h2-plan-fix-deuda-c2.md`, un reporte por hallazgo, `make verificar` completo en cada uno: 9 min 7 s, 8 min 35 s y 8 min 8 s). Las pruebas endurecidas se demostraron con mutaciones.

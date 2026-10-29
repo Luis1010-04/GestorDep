@@ -115,3 +115,12 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Por qué:** es coherente con el resumen y revela menos (§0.3, regla 1).
 - **Cómo se revierte:** quitar el filtro `materias.periodo_id` de `ConsultaDeSituacionAcademicaSql::materiasDelDocente` y la rama `periodoId === null` de `VerSituacionAcademica`, y la prueba `DA-15`.
 - **Seguridad/privacidad:** **sí, de lectura**, y restrictiva: el docente ve menos de sus propias materias (no las de periodos pasados). Ningún otro usuario ve más. Para la revisión del responsable.
+
+## DA-16: desempate del periodo vigente por `id` (T05; registrada tras la auditoría del Lote E, M-4)
+
+- **Qué faltaba:** DD-45 elige, entre varios periodos que contienen el día de negocio, «el de `fecha_inicio` más reciente», pero no dice qué hacer si dos comparten `fecha_inicio`.
+- **Qué se eligió:** el de `id` mayor. Los identificadores son UUID v7, así que es el creado más recientemente (`RepositorioDePeriodosEloquent::identificadorVigenteEn`, `orderByDesc('fecha_inicio')->orderByDesc('id')`). Así el resultado es determinista: sin desempate, PostgreSQL puede devolver cualquiera de los dos.
+- **Por qué:** es el criterio más cercano a «más reciente» que ya usa DD-45 y no agrega ninguna validación (§2.3 excluye validar traslapes).
+- **Cómo se revierte:** cambiar o quitar el segundo `orderByDesc` de esa consulta.
+- **Seguridad/privacidad:** ninguna. Decide qué periodo es el vigente, no quién ve qué.
+- **Nota:** en T05 se anotó en `f1-h2-t05.md:57` como «ninguna decisión DA nueva», y T15 la incluyó en DD-45 del registro como si viniera de §3 de la especificación. Ninguna prueba fija hoy el desempate: §7.1 fila 7 usa periodos con `fecha_inicio` distintas.
