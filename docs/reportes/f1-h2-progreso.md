@@ -27,7 +27,7 @@
 | FIX M-10 (configuración de mutación) | hecho | `bc9d01f` | pasa; 892 pruebas; 8 min 8 s (`f1-h2-fix-m10.md`) |
 | T15 Humo de H2 y cierre documental | hecha | ver `git log` | pasa; 897 pruebas; 8 min 22 s (`f1-h2-reporte.md`) |
 
-## Correcciones de la auditoría del Lote E — completas salvo I-1 e I-2 (en espera del responsable)
+## Correcciones de la auditoría del Lote E — completas (I-1 e I-2 decididas por el responsable el 29/10/2026)
 
 Instrucción del responsable del 28/10/2026 (sobre `1145c77`): primero los FIX, un commit por hallazgo, cada uno con `make verificar` completo sin nada más corriendo; después la documentación (F1-DOC). I-1 e I-2 esperan la decisión del responsable: no se tocan. Sin push, PR ni etiqueta. **No hay ningún commit todavía:** todo lo de abajo está sin confirmar en el árbol de trabajo.
 
@@ -42,7 +42,7 @@ Instrucción del responsable del 28/10/2026 (sobre `1145c77`): primero los FIX, 
 | 7 | M-5: `f1-h2.md` v1.1 | **Hecho** (cabecera y sección 12 «Control de cambios») | `docs/hitos/f1-h2.md` |
 | 8 | M-6: plazos vencidos | **Hecho**: registro (DD-20, AB-01, AB-08, AB-10, AB-14, PT-01 y PT-03; PT-02 resuelto) y sección 8 del reporte | F1-DOC final |
 | 9 | Reporte §3: hashes del Lote E | **Hecho**: commits 1 a 18 en §3 de `f1-h2-reporte.md`; el 18, el F1-DOC final, como «ver `git log -1`» | F1-DOC final |
-| 10 | I-1 e I-2 | En espera de la decisión del responsable | — |
+| 10 | I-1 e I-2 | **Decididas por el responsable el 29/10/2026:** I-1 como DA-17 (`arquitectura.md` v1.4, §4.3); I-2, DA-14 y DA-15 confirmadas (AB-27 cerrada) | F1-DOC «decisiones del responsable sobre I-1, DA-14 y DA-15» |
 
 **Resultado:** M-3, M-7, M-1 y PT-02 confirmados, cada uno con su `make verificar` completo (la primera corrida de M-3 se descartó por contaminación; ver `f1-h2-fix-e-m3.md`). Documentación de los puntos 5 a 9 en el commit F1-DOC final. PT-07 (lock de `make verificar` y `composer` huérfano) registrado en `registro-decisiones.md` §3, sin implementar. La observación sobre DD-20 se aplicó en el registro.
 

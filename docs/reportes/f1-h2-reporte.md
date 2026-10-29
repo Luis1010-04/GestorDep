@@ -1,7 +1,7 @@
 # Reporte de cierre del hito F1-H2: Académico
 
 **Fecha:** 28 de octubre de 2026 · **Rama:** `hito/f1-h2` (desde `f1-h1`) · **Especificación:** `docs/hitos/f1-h2.md` v1.1 (§7.1 fila 6 corregida; ver su sección 12)
-**Estado:** construcción terminada. La auditoría independiente del Lote E (§0.5) está entregada y sus correcciones M-1 a M-7 y PT-02 están hechas (sección 3). Faltan la decisión del responsable sobre I-1 e I-2 y su aprobación (§10 puntos 10 y 11). No se hizo push, PR, etiqueta ni fusión.
+**Estado:** construcción terminada. La auditoría independiente del Lote E (§0.5) está entregada y sus correcciones M-1 a M-7 y PT-02 están hechas (sección 3). El responsable decidió I-1 e I-2 el 29/10/2026: DA-17 registrada y DA-14 y DA-15 confirmadas (sección 5). Faltan la verificación de CI en el commit final, tras el push del responsable, y su aprobación (§10 puntos 1, 10 y 11). No se hizo push, PR, etiqueta ni fusión.
 
 ## 1. Resumen
 
@@ -106,11 +106,12 @@ Cada tarea tiene su reporte `docs/reportes/f1-h2-tNN.md` con el detalle completo
 | 15 | `6a6de06` | F1-DOC | reporte del FIX E M-1 (prueba de la configuracion de PHPStan) |
 | 16 | `b010636` | F1-H2-FIX | PT-02 el guion borra el clover tras leerlo |
 | 17 | `d60ef54` | F1-DOC | reporte del FIX PT-02 (el guion borra el clover tras leerlo) |
-| 18 | ver `git log -1` | F1-DOC | documentación de las correcciones de la auditoría del Lote E |
+| 18 | `97979da` | F1-DOC | documentación de las correcciones de la auditoría del Lote E |
+| 19 | ver `git log -1` | F1-DOC | decisiones del responsable sobre I-1, DA-14 y DA-15 |
 
-Los commits 10 a 18 son las correcciones de la auditoría del Lote E. Cada `F1-H2-FIX` va con su `make verificar` completo y su reporte en un commit F1-DOC aparte.
+Los commits 10 a 18 son las correcciones de la auditoría del Lote E; el 19 registra las decisiones del responsable del 29/10/2026 sobre I-1 e I-2. Cada `F1-H2-FIX` va con su `make verificar` completo y su reporte en un commit F1-DOC aparte.
 
-**Hash final:** el último código de la rama es `b010636` (FIX PT-02), sobre el que se midió la última corrida de `make verificar` (sección 2: 917 pruebas, 8 min 6 s). Después solo hay commits F1-DOC. El hash final de la rama es el del commit 18: **ver `git log -1`** (un commit no puede contener su propio hash). Es el commit en el que CI debe quedar en verde (sección 6, punto 1).
+**Hash final:** el último código de la rama es `b010636` (FIX PT-02), sobre el que se midió la última corrida de `make verificar` (sección 2: 917 pruebas, 8 min 6 s). Después solo hay commits F1-DOC. El hash final de la rama es el del commit 19: **ver `git log -1`** (un commit no puede contener su propio hash). Es el commit en el que CI debe quedar en verde (sección 6, punto 1).
 
 ### T01 — PHPStan nivel 7 e Infection (`70ceea1`)
 
@@ -226,8 +227,8 @@ Los commits 10 a 18 son las correcciones de la auditoría del Lote E. Cada `F1-H
   - Privacidad comprobada con tres mutaciones.
 - **No se hizo:** calificaciones individuales al entrenador; alertas; «posiblemente desactualizado».
 - **Desviaciones:**
-  - El caso de uso vive en `src/Academico` (rutas base), no en `src/Consultas`: la arquitectura prohíbe a Consultas importar dominio ajeno.
-  - DA-15, pendiente de confirmación.
+  - El caso de uso vive en `src/Academico` (rutas base), no en `src/Consultas`: la arquitectura prohíbe a Consultas importar dominio ajeno. Aceptada por el responsable el 29/10/2026 como DA-17.
+  - DA-15, confirmada por el responsable el 29/10/2026.
 
 ### T15 — Humo de H2 y cierre documental (`447adac`; plan `f1-h2-plan-t15.md`)
 
@@ -287,9 +288,10 @@ Detalle en `f1-h2-decisiones-del-agente.md`; registradas en `docs/decisiones/reg
 - **DA-11:** 404 `jugador_no_registrado`; confirmada.
 - **DA-12:** texto de `jugador_en_baja` que cubre la captura.
 - **DA-13:** corregir con el jugador en baja → 409.
-- **DA-14 (lectura):** el docente dueño sigue viendo calificaciones y asistencias de un alumno en baja. **Aceptada en revisión del 28/10; sujeta a confirmación del responsable.**
-- **DA-15 (lectura, restrictiva):** la situación lista solo las materias del docente del periodo vigente. **Pendiente de confirmación del responsable** (AB-27).
+- **DA-14 (lectura):** el docente dueño sigue viendo calificaciones y asistencias de un alumno en baja. **Confirmada por el responsable el 29/10/2026.**
+- **DA-15 (lectura, restrictiva):** la situación lista solo las materias del docente del periodo vigente. **Confirmada por el responsable el 29/10/2026** (cierra AB-27).
 - **DA-16:** periodo vigente: con la misma `fecha_inicio`, el de `id` mayor (completa DD-45). Se tomó en T05 sin registrarla como DA; se registró tras la auditoría del Lote E (M-4). No afecta la privacidad; ninguna prueba fija el desempate.
+- **DA-17:** la situación académica vive en `src/Academico` (rutas base), no en `src/Consultas`, porque Consultas no puede importar dominio de otro contexto. Era la desviación de T14; la auditoría del Lote E (sección 6, I-1) pidió registrarla. Aceptada por el responsable el 29/10/2026, que ajustó `docs/arquitectura.md` §4.3 (v1.4). No afecta la privacidad: la lectura pasa por `AlcanceDeJugadores`.
 
 M-8 de la auditoría de C2 (el 409 al inscribir revela a un docente que una matrícula está en baja) queda registrado como **comportamiento exigido por DD-52**, con su revisión en H7 (AB-26).
 
@@ -297,7 +299,7 @@ M-8 de la auditoría de C2 (el 409 al inscribir revela a un docente que una matr
 
 | # | Punto | Estado | Evidencia |
 |---|---|---|---|
-| 1 | `make verificar` pasa en local y en la integración continua, con umbrales por capa, PHPStan 7 e Infection (MSI ≥ 80, cubierto ≥ 85) | **Local: cumplido. CI: pendiente; el cierre depende de él** | Local: sección 2. CI: el responsable informó la falla de `composer audit` en `cc66784`, corregida en `9d931b6`; desde entonces no hubo push (regla vigente), así que el estado en CI de los commits posteriores no se ha observado. **El cierre de este punto depende de que CI quede en verde en el commit final de la rama, después del push del responsable** |
+| 1 | `make verificar` pasa en local y en la integración continua, con umbrales por capa, PHPStan 7 e Infection (MSI ≥ 80, cubierto ≥ 85) | **Local: cumplido. CI pendiente del push del responsable; el cierre depende de que verificar pase en el commit final.** Hash final: ver `git log -1` | Local: sección 2. CI: el responsable informó la falla de `composer audit` en `cc66784`, corregida en `9d931b6`; desde entonces no hubo push (regla vigente), así que el estado en CI de los commits posteriores no se ha observado. **El cierre de este punto depende de que CI quede en verde en el commit final de la rama, después del push del responsable** |
 | 2 | Cada historia del hito tiene pruebas con su identificador; los diferidos de §2.2 anotados en la trazabilidad | Cumplido, con la nota de RN-12 | `docs/trazabilidad.md`: HU-01, 02, 06, 07, 08, 09 y 28, RN-01 a 05, 13, 14 y 20 y RNF-01 a 04, 09 y 11 con sus pruebas; «Estado al cierre de H2» con los diferidos de §2.2. **RNF-11** (auditoría del Lote E, M-2) ya tiene pruebas con su identificador: las tres de `ConfiguracionDePhpstanTest` (`RNF-11 (M-1)`, FIX `ad8738b`); el resto de su cobertura son las pruebas `HERRAMIENTAS` y `PT-02` y la evidencia de §7.12 fila 1. **RN-12** sigue sin prueba con su identificador (igual que en H1); su parte docente la cubren HU-28, DD-49 y HU-06 |
 | 3 | `openapi.yaml` incluye las rutas de §6.1 y las respuestas reales coinciden | Cumplido | Las 19 operaciones de §6.1 están en `openapi.yaml` (comprobado por ruta y método) y en `route:list` (19). `ContratoDeAcademicoTest` valida respuestas reales de todas: 7 pruebas |
 | 4 | `make fresh` y `migrate:rollback` sin errores | Cumplido | `make fresh` con código 0 (36 migraciones y 5 seeders). Sobre la base de desarrollo, recién reconstruida: **antes** del rollback, `migrate:status` daba 36 migraciones ejecutadas y 0 pendientes. `migrate:rollback --database=propietario --force` salió con código 0 y **revirtió las 36** (36 líneas `DONE`, ninguna con error; `make fresh` las deja todas en el lote 1). **Después**, `migrate:status` dio 0 ejecutadas y 36 pendientes, y en el esquema solo quedó la tabla `migrations`. `make fresh` las volvió a ejecutar (36 ejecutadas, 0 pendientes). En la suite, §7.11 fila 14 (`MigracionesDeAcademicoTest`) |
@@ -305,8 +307,8 @@ M-8 de la auditoría de C2 (el 409 al inscribir revela a un docente que una matr
 | 6 | `make humo` sin fallas | Cumplido | Tras `make fresh`: `HUMO H0 OK`, `HUMO H1 OK: 14 pasos`, `HUMO H2 OK: 16 pasos`, código 0 (salida en la sección 7) |
 | 7 | Criterios propios de H2 | Cumplido | El criterio propio prevalece e indica cuál se aplicó: `CriterioPorMateriaTest`, §7.9 RN-03, humo paso 11. Calificación fuera de 0 a 10 rechazada: §7.7 fila 3, humo paso 15. El docente ve solo a sus alumnos: §7.4, `AcademicoSeguridadTest`, humo paso 13. El entrenador no ve calificaciones individuales: §7.10 fila 9, humo paso 12. Recálculo tras cada captura: §7.10 filas 2 a 8 y 23. `alertas:recalcular` idempotente y programado: §7.10 filas 17 y 24 |
 | 8 | El reporte incluye por tarea commit, archivos, pruebas, `verificar`, lo no hecho, fuera de alcance y desviaciones; cobertura y mutación; rutas fuera de la especificación; DA | Cumplido | Secciones 1 a 5 de este reporte y los reportes por tarea |
-| 9 | DD-42 a DD-55 registradas y las validaciones pendientes anotadas | Cumplido | `registro-decisiones.md` §1 (DD-42 a DD-55) y §2 (AB-22 a AB-27: RN-01, RN-04, DD-43, DD-44, DD-20, AB-08, la revisión de seguridad de DD-52 y DA-15) |
-| 10 | Las dos auditorías independientes entregadas, sin hallazgos bloqueantes abiertos | **Parcial: pendiente de la decisión del responsable sobre I-1 e I-2 del Lote E** | Auditoría de C2: `f1-h2-auditoria-lote-c2.md`, 0 bloqueantes; I-1 resuelto en la especificación y M-1 a M-10 resueltos o registrados (`f1-h2-progreso.md`). Auditoría del Lote E: entregada al responsable. Corregidos M-3 (`6804a9f`), M-7 (`632611f`), M-1 (`ad8738b`) y PT-02 (`b010636`), cada uno con su reporte y su `make verificar`. M-2 (RNF-11 en la trazabilidad), M-4 (DA-16), M-5 (`f1-h2.md` v1.1) y M-6 (plazos vencidos en el registro) se resolvieron en documentación. **I-1 e I-2 esperan la decisión del responsable**; se registran cuando decida |
+| 9 | DD-42 a DD-55 registradas y las validaciones pendientes anotadas | Cumplido | `registro-decisiones.md` §1 (DD-42 a DD-55) y §2 (AB-22 a AB-27: RN-01, RN-04, DD-43, DD-44, DD-20, AB-08, la revisión de seguridad de DD-52 y DA-15). AB-27 quedó cerrada: DA-15 confirmada por el responsable el 29/10/2026 |
+| 10 | Las dos auditorías independientes entregadas, sin hallazgos bloqueantes abiertos | **Parcial** | Auditoría de C2: `f1-h2-auditoria-lote-c2.md`, 0 bloqueantes; I-1 resuelto en la especificación y M-1 a M-10 resueltos o registrados (`f1-h2-progreso.md`). Auditoría del Lote E: entregada al responsable. Corregidos M-3 (`6804a9f`), M-7 (`632611f`), M-1 (`ad8738b`) y PT-02 (`b010636`), cada uno con su reporte y su `make verificar`. M-2 (RNF-11 en la trazabilidad), M-4 (DA-16), M-5 (`f1-h2.md` v1.1) y M-6 (plazos vencidos en el registro) se resolvieron en documentación. B-1, I-1 e I-2 resueltos en este commit y en el push del responsable: I-1 como DA-17 con `arquitectura.md` v1.4, e I-2 con DA-14 y DA-15 confirmadas el 29/10/2026. **Pendiente la verificación de CI en el commit final** |
 | 11 | El responsable revisa, prueba `make humo` y aprueba; etiqueta `f1-h2` y fusión | **Pendiente del responsable** | No se creó la etiqueta ni se fusionó (regla vigente) |
 
 ## 7. Salida completa de `make humo` al cierre
@@ -375,8 +377,6 @@ HUMO H2 OK: 16 pasos
 ## 8. Pendientes que H2 deja
 
 - **Para el responsable:**
-  - confirmar DA-15 y DA-14 (esta, aceptada en revisión del 28/10);
-  - decidir I-1 e I-2 de la auditoría del Lote E (se registran cuando decida);
   - hacer el push y comprobar que CI queda en verde en el commit final (condición del punto 1 de la compuerta);
   - aprobar, etiquetar `f1-h2` y fusionar.
 - **Plazos «H2» vencidos sin cierre** (auditoría del Lote E, M-6; detalle en `registro-decisiones.md`): DD-20, AB-01 (parte académica), AB-08, AB-10 y AB-14 siguen pendientes y no bloquean H2. AB-10 el responsable puede cerrarla ya, porque DD-24 está aplicada. PT-01 se sugiere para H3 y PT-03 queda en vigilancia. PT-02 quedó **resuelto** (`b010636`).

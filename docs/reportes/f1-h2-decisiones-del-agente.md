@@ -106,7 +106,7 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué faltaba:** DD-52 dice que un jugador inscrito que pasa a baja «sigue visible (detalle) para quien ya lo tenía», sin nombrar el listado de calificaciones.
 - **Qué se eligió:** `GET /inscripciones/{id}/calificaciones` responde 200 al docente dueño aunque el jugador esté en baja (como el detalle de H1, DD-30). Lo mismo para las asistencias en T13.
 - **Cómo se revierte:** en el controlador, responder 404 si `InscripcionDelDocente::jugadorEnBaja`.
-- **Seguridad/privacidad:** **sí, de lectura**: el docente dueño sigue viendo las calificaciones que él mismo capturó de un alumno ya en baja. No amplía a nadie más. Para la revisión del responsable.
+- **Seguridad/privacidad:** **sí, de lectura**: el docente dueño sigue viendo las calificaciones que él mismo capturó de un alumno ya en baja. No amplía a nadie más. **Confirmada por el responsable el 29/10/2026** (auditoría del Lote E, I-2).
 
 ## DA-15: la situación académica del docente lista solo sus materias del periodo vigente (T14)
 
@@ -114,7 +114,7 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Qué se eligió:** solo las materias del docente **del periodo vigente** en las que el jugador está inscrito (inscripción y materia sin eliminar); sin periodo vigente, arreglo vacío. La clave `materias` aparece si el usuario tiene el rol docente y una inscripción vigente del jugador en alguna materia suya de cualquier periodo («docente del jugador», §5.4); si no, no aparece.
 - **Por qué:** es coherente con el resumen y revela menos (§0.3, regla 1).
 - **Cómo se revierte:** quitar el filtro `materias.periodo_id` de `ConsultaDeSituacionAcademicaSql::materiasDelDocente` y la rama `periodoId === null` de `VerSituacionAcademica`, y la prueba `DA-15`.
-- **Seguridad/privacidad:** **sí, de lectura**, y restrictiva: el docente ve menos de sus propias materias (no las de periodos pasados). Ningún otro usuario ve más. Para la revisión del responsable.
+- **Seguridad/privacidad:** **sí, de lectura**, y restrictiva: el docente ve menos de sus propias materias (no las de periodos pasados). Ningún otro usuario ve más. **Confirmada por el responsable el 29/10/2026** (auditoría del Lote E, I-2; cierra AB-27).
 
 ## DA-16: desempate del periodo vigente por `id` (T05; registrada tras la auditoría del Lote E, M-4)
 
@@ -124,3 +124,15 @@ Cada decisión indica qué faltaba, qué se eligió, por qué y cómo se reviert
 - **Cómo se revierte:** cambiar o quitar el segundo `orderByDesc` de esa consulta.
 - **Seguridad/privacidad:** ninguna. Decide qué periodo es el vigente, no quién ve qué.
 - **Nota:** en T05 se anotó en `f1-h2-t05.md:57` como «ninguna decisión DA nueva», y T15 la incluyó en DD-45 del registro como si viniera de §3 de la especificación. Ninguna prueba fija hoy el desempate: §7.1 fila 7 usa periodos con `fecha_inicio` distintas.
+
+## DA-17: la situación académica vive en `src/Academico`, no en `src/Consultas` (T14; aceptada tras la auditoría del Lote E, I-1)
+
+- **Qué faltaba:** `docs/arquitectura.md` §4.3 (v1.3) decía que una consulta que cruza contextos vive en Consultas, y que Consultas no importa clases de dominio de otro contexto. La situación académica (`GET /jugadores/{jugador}/situacion-academica`) cruza contextos, porque lee al jugador de Plantel. Pero necesita el dominio de Académico: el criterio de aprobación, la calificación de la materia y el nivel de riesgo. Las dos reglas no se podían cumplir a la vez.
+- **Qué se eligió:** el caso de uso y su lectura viven en Académico, en las rutas base de T14:
+  - `VerSituacionAcademica` y `ConsultaDeSituacionAcademica`, en `src/Academico/Aplicacion/`;
+  - `ConsultaDeSituacionAcademicaSql`, en `src/Academico/Infraestructura/`.
+
+  Al jugador se llega solo por `AlcanceDeJugadores::restringir()`. En T14 se anotó como desviación; la auditoría del Lote E (sección 6, I-1) señaló que faltaba registrarla.
+- **Por qué:** Consultas no puede importar dominio de otro contexto, y copiar en Consultas las reglas de Académico duplicaría RN-03 y RN-04. El responsable la aceptó el 29/10/2026 y ajustó §4.3 de la arquitectura en su versión 1.4: una consulta que cruza contextos vive en el contexto que la consume, y lee el dato ajeno a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando dominio ajeno.
+- **Cómo se revierte:** mover el caso de uso a `src/Consultas` exigiría un puerto de Compartido para el cálculo de Académico, y volver a la redacción de §4.3 de la versión 1.3.
+- **Seguridad/privacidad:** ninguna. La lectura del jugador pasa por `AlcanceDeJugadores`, igual que en Consultas; el lugar del código no cambia quién ve qué.
