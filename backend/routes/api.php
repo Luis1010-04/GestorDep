@@ -5,6 +5,7 @@ use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
+use App\Http\Controllers\EntrenamientoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\InscripcionController;
@@ -88,5 +89,10 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/torneos', [TorneoController::class, 'listar']);
         Route::post('/torneos', [TorneoController::class, 'crear']);
         Route::delete('/torneos/{torneo}', [TorneoController::class, 'eliminar'])->whereUuid('torneo');
+
+        Route::get('/equipos/{equipo}/entrenamientos', [EntrenamientoController::class, 'listar'])->whereUuid('equipo');
+        Route::post('/equipos/{equipo}/entrenamientos', [EntrenamientoController::class, 'crear'])->whereUuid('equipo');
+        Route::get('/entrenamientos/{entrenamiento}', [EntrenamientoController::class, 'ver'])->whereUuid('entrenamiento');
+        Route::patch('/entrenamientos/{entrenamiento}', [EntrenamientoController::class, 'modificar'])->whereUuid('entrenamiento');
     });
 });

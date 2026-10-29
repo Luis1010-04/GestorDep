@@ -20,6 +20,11 @@ final class RepositorioDeLugaresEloquent implements RepositorioDeLugares
         private readonly EscrituraDeCatalogo $escritura,
     ) {}
 
+    public function existe(Identificador $id): bool
+    {
+        return $this->vigentes()->where('id', $id->valor())->exists();
+    }
+
     public function existeNombre(string $nombre): bool
     {
         return $this->vigentes()->where('nombre', $nombre)->exists();

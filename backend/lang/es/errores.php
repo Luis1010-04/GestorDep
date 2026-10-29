@@ -15,6 +15,7 @@ return [
 
     // Mensaje del error de campo "cuerpo" (PATCH sin ningún campo): no es un código de error sino un detalle de validación.
     'cuerpo_sin_campos' => 'Debe enviar al menos uno de: nombres, apellidos, fecha_nacimiento',
+    'cuerpo_sin_campos_entrenamiento' => 'Debe enviar al menos uno de: inicia_en, termina_en, lugar_id, responsable_id, estado',
 
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
     'reglas' => [
@@ -51,5 +52,9 @@ return [
         'temporada_solapada' => 'Las fechas se cruzan con otra temporada.',
         'torneo_duplicado' => 'Ya existe un torneo con ese nombre en la temporada.',
         'temporada_inexistente' => 'La temporada indicada no existe.',
+        'lugar_inexistente' => 'El lugar indicado no existe.',
+        'responsable_no_asignado' => 'El responsable debe ser un entrenador asignado al equipo.',
+        'transicion_no_permitida' => 'El cambio de estado no está permitido.',
+        'entrenamiento_no_programado' => 'El entrenamiento ya no está programado.',
     ],
 ];

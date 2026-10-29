@@ -2677,6 +2677,269 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/entrenamientos:
+    get:
+      operationId: listarEntrenamientosDelEquipo
+      summary: Lista los entrenamientos de un equipo
+      description: >-
+        Solo entrenadores del equipo (HU-10); un equipo ajeno o inexistente responde 404. filtro[desde] y filtro[hasta]
+        son dias AAAA-MM-DD en America/Mexico_City sobre inicia_en, extremos incluidos (DA-10). Orden por defecto
+        inicia_en. Los elementos no llevan jugadores_del_equipo.
+      tags: [Entrenamientos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: filtro[desde]
+          in: query
+          schema: {type: string, format: date}
+        - name: filtro[hasta]
+          in: query
+          schema: {type: string, format: date}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [inicia_en, '-inicia_en'], default: inicia_en}
+      responses:
+        '200':
+          description: Pagina de entrenamientos.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Entrenamiento'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Filtro, paginacion u orden invalidos, o filtro[hasta] anterior a filtro[desde] (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: programarEntrenamiento
+      summary: Programa un entrenamiento del equipo
+      description: >-
+        Solo entrenadores del equipo (HU-10). El 404 de un equipo ajeno gana al 422. El responsable debe entrenar el
+        equipo (DA-13). Si otro entrenamiento no cancelado usa el mismo lugar en un horario que se cruza, se guarda igual
+        y la respuesta lleva advertencias con empalme_de_lugar (DA-09). Escribe su historial (RNF-02).
+      tags: [Entrenamientos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [inicia_en, termina_en, lugar_id, responsable_id]
+              properties:
+                inicia_en:
+                  type: string
+                  format: date-time
+                  description: ISO 8601 con zona (desplazamiento o Z).
+                termina_en:
+                  type: string
+                  format: date-time
+                  description: Posterior a inicia_en.
+                lugar_id:
+                  type: string
+                  format: uuid
+                responsable_id:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Entrenamiento programado, con los jugadores del equipo listados para la asistencia.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaDeEntrenamiento'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente o con formato invalido, o termina_en no posterior a inicia_en (validacion_fallida); lugar
+            inexistente o eliminado (lugar_inexistente); responsable que no entrena el equipo (responsable_no_asignado,
+            campo responsable_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /entrenamientos/{entrenamiento}:
+    get:
+      operationId: verEntrenamiento
+      summary: Detalle de un entrenamiento con los jugadores del equipo
+      description: >-
+        Solo entrenadores del equipo del entrenamiento (HU-10). Lista los jugadores con membresia vigente y sin baja.
+        Uno ajeno, inexistente o con un UUID que no es v7 responde el mismo 404.
+      tags: [Entrenamientos]
+      parameters:
+        - name: entrenamiento
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: El entrenamiento.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaDeEntrenamiento'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El entrenamiento no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      operationId: modificarEntrenamiento
+      summary: Modifica o cambia el estado de un entrenamiento
+      description: >-
+        Solo entrenadores del equipo (HU-10). El 404 gana al 422. Hora, lugar y responsable solo cambian en un
+        entrenamiento programado (DA-08). El estado solo pasa de programado a realizado o cancelado. Los datos se
+        aplican antes que el estado, con una sola fila de historial. Si sigue sin cancelar y su lugar se empalma, la
+        respuesta lleva advertencias con empalme_de_lugar.
+      tags: [Entrenamientos]
+      parameters:
+        - name: entrenamiento
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                inicia_en:
+                  type: string
+                  format: date-time
+                termina_en:
+                  type: string
+                  format: date-time
+                lugar_id:
+                  type: string
+                  format: uuid
+                responsable_id:
+                  type: string
+                  format: uuid
+                estado:
+                  type: string
+                  enum: [realizado, cancelado]
+      responses:
+        '200':
+          description: El entrenamiento modificado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaDeEntrenamiento'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El entrenamiento no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Cambio de estado no permitido (transicion_no_permitida, campo estado), o cambio de datos de un entrenamiento
+            que ya no esta programado (entrenamiento_no_programado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Cuerpo vacio (campo cuerpo), campo no admitido (prohibited) o con formato invalido (validacion_fallida);
+            horario resultante invertido (rango_de_fechas_invalido); lugar_inexistente; responsable_no_asignado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Baja:
@@ -3128,6 +3391,72 @@ components:
         actualizado_en:
           type: string
           format: date-time
+    Entrenamiento:
+      type: object
+      additionalProperties: false
+      required: [id, equipo_id, lugar_id, inicia_en, termina_en, responsable_id, estado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+        lugar_id:
+          type: string
+          format: uuid
+        inicia_en:
+          type: string
+          format: date-time
+        termina_en:
+          type: string
+          format: date-time
+        responsable_id:
+          type: string
+          format: uuid
+        estado:
+          type: string
+          enum: [programado, realizado, cancelado]
+        actualizado_en:
+          type: string
+          format: date-time
+        jugadores_del_equipo:
+          type: array
+          description: Solo en el alta, el detalle y el cambio. Membresia vigente y sin baja (DA-12, DA-14).
+          items:
+            type: object
+            additionalProperties: false
+            required: [id, nombres, apellidos]
+            properties:
+              id:
+                type: string
+                format: uuid
+              nombres:
+                type: string
+              apellidos:
+                type: string
+    RespuestaDeEntrenamiento:
+      type: object
+      additionalProperties: false
+      required: [datos]
+      properties:
+        datos:
+          allOf:
+            - $ref: '#/components/schemas/Entrenamiento'
+            - type: object
+              required: [jugadores_del_equipo]
+        advertencias:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [codigo, mensaje]
+            properties:
+              codigo:
+                type: string
+                enum: [empalme_de_lugar]
+              mensaje:
+                type: string
     Usuario:
       type: object
       additionalProperties: false
