@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Src\Compartido\Dominio\Identificador;
 
-use function Pest\Laravel\artisan;
-
 const TABLAS_DE_PLANTEL = ['categorias', 'posiciones', 'jugadores', 'equipos', 'jugador_equipo', 'entrenador_equipo', 'bajas_jugador'];
 
 const HISTORIALES_DE_PLANTEL = [
@@ -122,7 +120,7 @@ test('RNF-03: revertir la migracion del indice restaura el indice anterior', fun
     $indiceNuevo = DB::connection('propietario')->scalar("select indexdef from pg_indexes where indexname = 'uq_jugadores_matricula'");
     expect($indiceNuevo)->toContain('lower(');
 
-    artisan('migrate:rollback', [
+    consolaArtisan('migrate:rollback', [
         '--database' => 'propietario',
         '--force' => true,
         '--path' => 'database/migrations/plantel/2026_10_21_020800_indice_de_matricula_sin_mayusculas.php',
@@ -280,20 +278,20 @@ test('RNF-03: migrate:rollback de Plantel no falla y se vuelve a aplicar', funct
     esquemaMarcarSucio();
     $tablas = [...TABLAS_DE_PLANTEL, ...array_keys(HISTORIALES_DE_PLANTEL)];
 
-    artisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     foreach ($tablas as $tabla) {
         expect(Schema::connection('propietario')->hasTable($tabla))->toBeFalse($tabla);
     }
 
-    artisan('migrate', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     foreach ($tablas as $tabla) {
         expect(Schema::connection('propietario')->hasTable($tabla))->toBeTrue($tabla);
     }
 });
 
 test('RNF-03: PosicionesSeeder dos veces no duplica filas', function () {
-    artisan('db:seed', ['--class' => 'PosicionesSeeder', '--force' => true])->assertSuccessful();
-    artisan('db:seed', ['--class' => 'PosicionesSeeder', '--force' => true])->assertSuccessful();
+    consolaArtisan('db:seed', ['--class' => 'PosicionesSeeder', '--force' => true])->assertSuccessful();
+    consolaArtisan('db:seed', ['--class' => 'PosicionesSeeder', '--force' => true])->assertSuccessful();
 
     $codigos = DB::connection('propietario')->table('posiciones')->orderBy('codigo')->pluck('codigo')->all();
 
@@ -301,7 +299,7 @@ test('RNF-03: PosicionesSeeder dos veces no duplica filas', function () {
 });
 
 test('RNF-03: DatabaseSeeder siembra roles y posiciones', function () {
-    artisan('db:seed', ['--force' => true])->assertSuccessful();
+    consolaArtisan('db:seed', ['--force' => true])->assertSuccessful();
 
     expect(DB::connection('propietario')->table('roles')->count())->toBe(2)
         ->and(DB::connection('propietario')->table('posiciones')->count())->toBe(4);

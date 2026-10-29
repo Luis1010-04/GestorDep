@@ -4,32 +4,30 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-use function Pest\Laravel\artisan;
-
 function citextHabilitada(): bool
 {
     return DB::connection('propietario')->scalar("select count(*) from pg_extension where extname = 'citext'") === 1;
 }
 
 test('F1-H0-T07: migrate:fresh con el rol propietario habilita citext', function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
 
     expect(citextHabilitada())->toBeTrue();
 });
 
 test('F1-H0-T07: la migracion de citext se revierte y se vuelve a aplicar', function () {
     esquemaMarcarSucio();
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
 
-    artisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate:rollback', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     expect(citextHabilitada())->toBeFalse();
 
-    artisan('migrate', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     expect(citextHabilitada())->toBeTrue();
 });
 
 test('F1-H0-EXTRA: migrate:fresh crea las tablas de la cola database que usa la configuracion', function () {
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
 
     $tablaDeTrabajos = config('queue.connections.database.table');
     $tablaDeFallidos = config('queue.failed.table');

@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesSeeder::class);
         $this->call(PosicionesSeeder::class);
+        $this->call(CriterioGeneralSeeder::class);
+        $this->call(ParametrosInstitucionalesSeeder::class);
 
         if (! app()->environment('production')) {
             $this->call(UsuariosDemoSeeder::class);

@@ -33,6 +33,6 @@ final class CambiarPosicionDeJugador
 
         $this->membresias->cambiarPosicion($jugadorId, $equipoId, $posicionId);
 
-        return $this->consulta->buscar($jugadorId) ?? throw new JugadorNoEncontrado;
+        return $this->consulta->buscarParaEscribir($jugadorId) ?? throw new JugadorNoEncontrado;
     }
 }

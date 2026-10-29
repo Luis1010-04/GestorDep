@@ -20,4 +20,10 @@ interface ConsultaDeJugadores
 
     /** Incluye a los jugadores en baja; nulo si el jugador no existe o no está en el alcance. */
     public function buscar(Identificador $jugadorId): ?JugadorConEquipos;
+
+    /**
+     * Como `buscar`, pero con el alcance del entrenador solamente: lo usan las escrituras de plantel (expediente, baja,
+     * asignar, cambiar posición). Quien solo ve al jugador porque lo enseña no puede modificarlo (DA-10).
+     */
+    public function buscarParaEscribir(Identificador $jugadorId): ?JugadorConEquipos;
 }

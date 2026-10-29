@@ -1,12 +1,19 @@
 <?php
 
+use App\Http\Controllers\AsignaturaController;
+use App\Http\Controllers\AsistenciaController;
+use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
+use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
+use App\Http\Controllers\MateriaController;
+use App\Http\Controllers\PeriodoEscolarController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
+use App\Http\Controllers\SituacionAcademicaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/salud', SaludController::class);
@@ -20,6 +27,32 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/jugadores', [JugadorController::class, 'listar']);
     Route::get('/jugadores/busqueda', [JugadorController::class, 'buscar']);
     Route::get('/jugadores/{jugador}', [JugadorController::class, 'ver'])->whereUuid('jugador');
+    Route::get('/jugadores/{jugador}/situacion-academica', [SituacionAcademicaController::class, 'ver'])->whereUuid('jugador');
+
+    Route::middleware('rol:docente')->group(function () {
+        Route::get('/periodos-escolares', [PeriodoEscolarController::class, 'listar']);
+        Route::post('/periodos-escolares', [PeriodoEscolarController::class, 'crear']);
+        Route::delete('/periodos-escolares/{id}', [PeriodoEscolarController::class, 'eliminar'])->whereUuid('id');
+
+        Route::get('/asignaturas', [AsignaturaController::class, 'listar']);
+        Route::post('/asignaturas', [AsignaturaController::class, 'crear']);
+        Route::delete('/asignaturas/{id}', [AsignaturaController::class, 'eliminar'])->whereUuid('id');
+
+        Route::get('/materias', [MateriaController::class, 'listar']);
+        Route::post('/materias', [MateriaController::class, 'crear']);
+        Route::get('/materias/{materia}', [MateriaController::class, 'ver'])->whereUuid('materia');
+        Route::put('/materias/{materia}/criterio', [MateriaController::class, 'definirCriterio'])->whereUuid('materia');
+        Route::get('/materias/{materia}/inscripciones', [InscripcionController::class, 'listar'])->whereUuid('materia');
+        Route::post('/materias/{materia}/inscripciones', [InscripcionController::class, 'crear'])->whereUuid('materia');
+
+        Route::get('/inscripciones/{inscripcion}/calificaciones', [CalificacionController::class, 'listar'])->whereUuid('inscripcion');
+        Route::post('/inscripciones/{inscripcion}/calificaciones', [CalificacionController::class, 'crear'])->whereUuid('inscripcion');
+        Route::patch('/calificaciones/{calificacion}', [CalificacionController::class, 'corregir'])->whereUuid('calificacion');
+
+        Route::get('/inscripciones/{inscripcion}/asistencias', [AsistenciaController::class, 'listar'])->whereUuid('inscripcion');
+        Route::post('/inscripciones/{inscripcion}/asistencias', [AsistenciaController::class, 'crear'])->whereUuid('inscripcion');
+        Route::patch('/asistencias-clase/{asistencia}', [AsistenciaController::class, 'corregir'])->whereUuid('asistencia');
+    });
 
     Route::middleware('rol:entrenador')->group(function () {
         Route::get('/categorias', [CategoriaController::class, 'listar']);

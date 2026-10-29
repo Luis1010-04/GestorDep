@@ -16,7 +16,7 @@ final class Identificador
 
     public static function generar(): self
     {
-        $milisegundos = (int) floor(microtime(true) * 1000);
+        $milisegundos = (int) (microtime(true) * 1000);
         $bytes = substr(pack('J', $milisegundos), 2).random_bytes(10);
 
         $bytes[6] = chr((ord($bytes[6]) & 0x0F) | 0x70);

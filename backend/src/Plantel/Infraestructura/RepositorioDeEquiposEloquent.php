@@ -17,6 +17,7 @@ use Src\Plantel\Aplicacion\EquipoConCategoria;
 use Src\Plantel\Aplicacion\EquipoDuplicado;
 use Src\Plantel\Dominio\Equipo;
 use Src\Plantel\Dominio\RepositorioDeEquipos;
+use stdClass;
 
 /** Escribe `equipos` y `entrenador_equipo`, cada uno con su historial, todo en una transacción (docs/arquitectura.md, sección 9.2). */
 final class RepositorioDeEquiposEloquent implements RepositorioDeEquipos
@@ -98,14 +99,16 @@ final class RepositorioDeEquiposEloquent implements RepositorioDeEquipos
 
     public function listarDelEntrenador(Identificador $entrenador, int $pagina, int $porPagina, bool $descendente): array
     {
-        return $this->delEntrenador($entrenador)
+        $equipos = $this->delEntrenador($entrenador)
             ->orderBy('equipos.nombre', $descendente ? 'desc' : 'asc')
             ->orderBy('equipos.id')
             ->offset(($pagina - 1) * $porPagina)
             ->limit($porPagina)
             ->get(self::COLUMNAS)
-            ->map(fn (object $fila) => $this->aEquipoConCategoria($fila))
+            ->map(fn (stdClass $fila) => $this->aEquipoConCategoria($fila))
             ->all();
+
+        return array_values($equipos);
     }
 
     public function buscarDelEntrenador(Identificador $equipoId, Identificador $entrenador): ?EquipoConCategoria
@@ -115,7 +118,7 @@ final class RepositorioDeEquiposEloquent implements RepositorioDeEquipos
         return $fila === null ? null : $this->aEquipoConCategoria($fila);
     }
 
-    private function aEquipoConCategoria(object $fila): EquipoConCategoria
+    private function aEquipoConCategoria(stdClass $fila): EquipoConCategoria
     {
         return new EquipoConCategoria(
             new Equipo(

@@ -302,6 +302,1110 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /periodos-escolares:
+    get:
+      operationId: listarPeriodosEscolares
+      summary: Lista los periodos escolares vigentes
+      description: >-
+        Solo docentes (HU-28, DD-49). Excluye los eliminados; orden por defecto -fecha_inicio. Solo uno tiene
+        vigente verdadero: el que contiene el dia de hoy y tiene la fecha_inicio mas reciente (DD-45).
+      tags: [Periodos escolares]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [fecha_inicio, '-fecha_inicio'], default: '-fecha_inicio'}
+      responses:
+        '200':
+          description: Pagina de periodos escolares.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PeriodoEscolar'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearPeriodoEscolar
+      summary: Da de alta un periodo escolar
+      description: Solo docentes (HU-28, DD-49). Se permite el traslape de periodos.
+      tags: [Periodos escolares]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre, fecha_inicio, fecha_fin]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+                fecha_inicio:
+                  type: string
+                  format: date
+                fecha_fin:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Periodo creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/PeriodoEscolar'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe un periodo vigente con ese nombre, sin distinguir mayusculas (periodo_duplicado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente o con formato invalido (validacion_fallida) o fecha_fin no posterior a
+            fecha_inicio (rango_de_fechas_invalido).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /periodos-escolares/{id}:
+    delete:
+      operationId: eliminarPeriodoEscolar
+      summary: Elimina logicamente un periodo escolar
+      description: >-
+        Solo docentes (HU-28, DD-49). Fija eliminado_en y eliminado_por; la fila se conserva y las materias que
+        lo usan siguen mostrandolo. El nombre puede darse de alta de nuevo.
+      tags: [Periodos escolares]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Periodo eliminado.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El periodo no existe o ya estaba eliminado (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asignaturas:
+    get:
+      operationId: listarAsignaturas
+      summary: Lista las asignaturas vigentes
+      description: Solo docentes (HU-28, DD-49). Excluye las eliminadas; orden por defecto clave.
+      tags: [Asignaturas]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [clave, '-clave'], default: clave}
+      responses:
+        '200':
+          description: Pagina de asignaturas.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Asignatura'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearAsignatura
+      summary: Da de alta una asignatura
+      description: Solo docentes (HU-28, DD-49).
+      tags: [Asignaturas]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [clave, nombre, grado]
+              properties:
+                clave:
+                  type: string
+                  maxLength: 20
+                nombre:
+                  type: string
+                  maxLength: 150
+                grado:
+                  type: integer
+                  minimum: 1
+                  maximum: 12
+      responses:
+        '201':
+          description: Asignatura creada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Asignatura'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe una asignatura vigente con esa clave, sin distinguir mayusculas (asignatura_duplicada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Campo ausente, vacio, demasiado largo o grado fuera de 1 a 12 (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asignaturas/{id}:
+    delete:
+      operationId: eliminarAsignatura
+      summary: Elimina logicamente una asignatura
+      description: >-
+        Solo docentes (HU-28, DD-49). Fija eliminado_en y eliminado_por; la fila se conserva y las materias que
+        la usan siguen mostrandola. La clave puede darse de alta de nuevo.
+      tags: [Asignaturas]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Asignatura eliminada.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La asignatura no existe o ya estaba eliminada (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /materias:
+    get:
+      operationId: listarMaterias
+      summary: Lista las materias del docente que consulta
+      description: >-
+        Solo docentes (HU-06, DD-49). Devuelve unicamente las materias cuyo docente es el usuario; orden por
+        clave de la asignatura. La asignatura y el periodo se muestran aunque esten eliminados.
+      tags: [Materias]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: filtro[periodo_id]
+          in: query
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Pagina de materias.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Materia'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion o filtro invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearMateria
+      summary: Da de alta una materia del docente que consulta
+      description: >-
+        Solo docentes (HU-06). El docente de la materia es el usuario actual. Escribe el registro crear en
+        materias_historial en la misma transaccion.
+      tags: [Materias]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [asignatura_id, periodo_id]
+              properties:
+                asignatura_id:
+                  type: string
+                  format: uuid
+                periodo_id:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Materia creada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Materia'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El docente ya tiene una materia con esa asignatura en ese periodo (materia_duplicada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente o UUID mal formado (validacion_fallida), asignatura inexistente o eliminada
+            (asignatura_inexistente) o periodo inexistente o eliminado (periodo_inexistente).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /materias/{materia}:
+    get:
+      operationId: verMateria
+      summary: Consulta una materia del docente que consulta
+      description: >-
+        Solo el docente dueño de la materia (HU-06, HU-08). Una materia ajena, inexistente o con id que no es v7
+        responde el mismo 404 (DD-50). criterio_aplicado es el criterio propio vigente de la materia si lo tiene y,
+        si no, el general vigente (RN-03).
+      tags: [Materias]
+      parameters:
+        - name: materia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: La materia.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Materia'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La materia no existe o no es del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /materias/{materia}/criterio:
+    put:
+      operationId: definirCriterioDeMateria
+      summary: Define el criterio de aprobacion propio de una materia
+      description: >-
+        Solo el docente dueño de la materia (HU-08, RN-03). Un valor distinto del vigente cierra el criterio propio
+        vigente (vigente_hasta = hoy) y crea el nuevo, con sus historiales, en una transaccion, y publica
+        CriterioDeMateriaModificado para recalcular los resumenes de los inscritos. Un valor igual al vigente
+        responde 200 sin escribir nada. Una materia ajena, inexistente o con id que no es v7 responde el mismo
+        404 antes de validar el cuerpo (DD-50).
+      tags: [Materias]
+      parameters:
+        - name: materia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [calificacion_minima]
+              properties:
+                calificacion_minima:
+                  type: string
+                  description: Cadena de 0.00 a 10.00 con hasta dos decimales; un numero JSON se rechaza (DD-51).
+                  pattern: '^-?\d+(\.\d{1,2})?$'
+      responses:
+        '200':
+          description: El criterio propio vigente.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Criterio'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La materia no existe o no es del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Valor ausente, no cadena o con formato invalido (validacion_fallida) o numerico fuera de 0 a 10
+            (calificacion_fuera_de_rango, campo calificacion_minima).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /materias/{materia}/inscripciones:
+    get:
+      operationId: listarInscripciones
+      summary: Lista los alumnos de una materia del docente
+      description: >-
+        Solo el docente dueño de la materia (HU-06). Pasa por AlcanceDeJugadores: los jugadores en baja no
+        aparecen (DD-30). Orden por apellidos y nombres. Una materia ajena, inexistente o con id que no es v7
+        responde el mismo 404 (DD-50).
+      tags: [Materias]
+      parameters:
+        - name: materia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de inscripciones.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Inscripcion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La materia no existe o no es del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: inscribirJugador
+      summary: Inscribe a un jugador en una materia del docente, por matricula
+      description: >-
+        Solo el docente dueño de la materia (HU-06, RN-20). La matricula se recorta y se compara sin distinguir
+        mayusculas (DD-37). Inscribir otorga al docente el alcance sobre el jugador. Escribe el registro crear en
+        inscripciones_historial en la misma transaccion y publica JugadorInscrito. Una materia ajena o
+        inexistente responde el mismo 404 antes de validar el cuerpo y de buscar la matricula (DD-50).
+      tags: [Materias]
+      parameters:
+        - name: materia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [matricula]
+              properties:
+                matricula:
+                  type: string
+                  maxLength: 30
+      responses:
+        '201':
+          description: Jugador inscrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Inscripcion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            La materia no existe o no es del usuario (recurso_no_encontrado), o no hay un expediente con esa
+            matricula (jugador_no_registrado; el cuerpo no incluye datos de nadie).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador ya esta inscrito en la materia (jugador_ya_inscrito) o esta en baja (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Matricula ausente, vacia, de solo espacios o de mas de 30 caracteres (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /inscripciones/{inscripcion}/calificaciones:
+    get:
+      operationId: listarCalificaciones
+      summary: Lista las calificaciones de una inscripcion del docente
+      description: >-
+        Solo el docente dueño de la materia de la inscripcion (HU-07, DD-50). Parciales por numero y la final al ultimo.
+        Las calificaciones de un jugador en baja siguen visibles (DD-52). Una inscripcion ajena, inexistente o con id
+        que no es v7 responde el mismo 404 antes de validar los parametros.
+      tags: [Calificaciones]
+      parameters:
+        - name: inscripcion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de calificaciones.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Calificacion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La inscripcion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarCalificacion
+      summary: Captura una calificacion parcial o final
+      description: >-
+        Solo el docente dueño de la materia de la inscripcion (HU-07, DD-50). Guarda el criterio de aprobacion vigente
+        al capturar (DD-47), escribe el registro crear en calificaciones_historial en la misma transaccion y publica
+        CalificacionRegistrada, que recalcula el resumen academico. La fecha es opcional (por defecto, hoy de negocio)
+        y no se valida que no sea futura (DD-55). Una inscripcion ajena o inexistente responde el mismo 404 antes de
+        validar el cuerpo.
+      tags: [Calificaciones]
+      parameters:
+        - name: inscripcion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tipo, valor]
+              properties:
+                tipo:
+                  type: string
+                  enum: [parcial, final]
+                numero_parcial:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                  description: Obligatorio si el tipo es parcial; ausente si es final.
+                valor:
+                  type: string
+                  description: Cadena de 0.00 a 10.00 con hasta dos decimales; un numero JSON se rechaza (DD-51).
+                  pattern: '^-?\d+(\.\d{1,2})?$'
+                fecha:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Calificacion capturada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Calificacion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La inscripcion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Ya existe una calificacion del mismo tipo y numero de parcial (calificacion_duplicada) o el jugador esta en
+            baja (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente o con formato invalido, numero_parcial con una final o sin el en un parcial, o fuera de 1 a 10
+            (validacion_fallida); valor numerico fuera de 0 a 10 (calificacion_fuera_de_rango, campo valor).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /calificaciones/{calificacion}:
+    patch:
+      operationId: corregirCalificacion
+      summary: Corrige el valor de una calificacion
+      description: >-
+        Solo el docente dueño de la materia (HU-07, DD-50). El valor es la unica modificacion permitida: cualquier otro
+        campo se rechaza (prohibited). El criterio guardado al capturar no cambia (DD-47). Un valor igual al guardado
+        responde 200 sin escribir historial ni cambiar actualizado_en; uno distinto escribe el registro actualizar con
+        los datos anteriores y nuevos y publica CalificacionRegistrada. Un jugador en baja no admite correcciones (409).
+        Una calificacion ajena, inexistente o con id que no es v7 responde el mismo 404 antes de validar el cuerpo.
+      tags: [Calificaciones]
+      parameters:
+        - name: calificacion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [valor]
+              properties:
+                valor:
+                  type: string
+                  pattern: '^-?\d+(\.\d{1,2})?$'
+      responses:
+        '200':
+          description: La calificacion corregida (o sin cambios).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Calificacion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La calificacion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador esta en baja (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Valor ausente o con formato invalido, u otro campo enviado (validacion_fallida, con codigo prohibited en el
+            campo); valor numerico fuera de 0 a 10 (calificacion_fuera_de_rango).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /inscripciones/{inscripcion}/asistencias:
+    get:
+      operationId: listarAsistencias
+      summary: Lista las asistencias a clase de una inscripcion del docente
+      description: >-
+        Solo el docente dueño de la materia de la inscripcion (HU-07, DD-50). Orden por fecha descendente. Las
+        asistencias de un jugador en baja siguen visibles (DD-52). Una inscripcion ajena, inexistente o con id que no es
+        v7 responde el mismo 404 antes de validar los parametros.
+      tags: [Asistencias]
+      parameters:
+        - name: inscripcion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de asistencias.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Asistencia'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La inscripcion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarAsistencia
+      summary: Registra la asistencia a clase de una inscripcion
+      description: >-
+        Solo el docente dueño de la materia de la inscripcion (HU-07 criterio 3, DD-50). Escribe el registro crear en
+        asistencias_clase_historial en la misma transaccion y publica AsistenciaDeClaseRegistrada, que recalcula el
+        porcentaje de asistencia (RN-05). La fecha es opcional (por defecto, hoy de negocio) y no se valida que no sea
+        futura (DD-55). Una inscripcion ajena o inexistente responde el mismo 404 antes de validar el cuerpo.
+      tags: [Asistencias]
+      parameters:
+        - name: inscripcion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [estado]
+              properties:
+                fecha:
+                  type: string
+                  format: date
+                estado:
+                  type: string
+                  enum: [presente, falta, falta_justificada]
+      responses:
+        '201':
+          description: Asistencia registrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Asistencia'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La inscripcion no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Ya existe una asistencia de la inscripcion en esa fecha (asistencia_duplicada) o el jugador esta en baja
+            (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Estado ausente o invalido, o fecha con formato invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asistencias-clase/{asistencia}:
+    patch:
+      operationId: corregirAsistencia
+      summary: Corrige el estado de una asistencia a clase
+      description: >-
+        Solo el docente dueño de la materia (HU-07, DD-50). El estado es la unica modificacion permitida: cualquier otro
+        campo se rechaza (prohibited). Un estado igual al guardado responde 200 sin escribir historial ni cambiar
+        actualizado_en; uno distinto escribe el registro actualizar con los datos anteriores y nuevos y publica
+        AsistenciaDeClaseRegistrada. Un jugador en baja no admite correcciones (409). Una asistencia ajena,
+        inexistente o con id que no es v7 responde el mismo 404 antes de validar el cuerpo.
+      tags: [Asistencias]
+      parameters:
+        - name: asistencia
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [estado]
+              properties:
+                estado:
+                  type: string
+                  enum: [presente, falta, falta_justificada]
+      responses:
+        '200':
+          description: La asistencia corregida (o sin cambios).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Asistencia'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La asistencia no existe o no es de una materia del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador esta en baja (jugador_en_baja, DD-52).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Estado ausente o invalido, u otro campo enviado (validacion_fallida, con codigo prohibited en el campo).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos:
     get:
       operationId: listarEquipos
@@ -426,9 +1530,10 @@ paths:
       operationId: listarJugadores
       summary: Lista los jugadores de los equipos del usuario
       description: >-
-        Con sesion (HU-02). Solo los jugadores con membresia vigente en un equipo donde el usuario tiene
-        asignacion vigente; los jugadores en baja no aparecen (DD-30). Un docente recibe lista vacia hasta H2.
-        El arreglo equipos de cada jugador contiene solo los equipos del usuario (RN-14). filtro[equipo_id] se
+        Con sesion (HU-02). Un entrenador ve a los jugadores con membresia vigente en un equipo donde tiene
+        asignacion vigente; un docente, a los jugadores inscritos en alguna de sus materias (en cualquier
+        periodo); un usuario con los dos roles, la union de ambos sin duplicados. Los jugadores en baja no
+        aparecen (DD-30). Un docente sin inscripciones recibe lista vacia con 200. El arreglo equipos de cada jugador contiene solo los equipos del usuario (RN-14). filtro[equipo_id] se
         cruza con los equipos del usuario: un equipo ajeno devuelve lista vacia con total 0 y nunca revela quien
         pertenece a el. Orden por defecto: apellidos y nombres.
       tags: [Jugadores]
@@ -612,10 +1717,11 @@ paths:
       operationId: verJugador
       summary: Consulta el expediente de un jugador del usuario
       description: >-
-        Con sesion (HU-02). Un jugador fuera del alcance del usuario, inexistente o con identificador mal
-        formado responde 404 con el mismo cuerpo, para no revelar que existe. Un jugador en baja sigue
-        respondiendo 200 con estatus baja a quien ya lo tenia asignado (DD-30). Es el mismo esquema Jugador que
-        el 201 de POST /jugadores.
+        Con sesion (HU-02). Un jugador fuera del alcance del usuario (como entrenador o como docente de una materia
+        en la que esta inscrito), inexistente o con identificador mal formado responde 404 con el mismo cuerpo,
+        para no revelar que existe. Un jugador en baja sigue respondiendo 200 con estatus baja a quien ya lo
+        tenia asignado o inscrito (DD-30). Un docente ve el arreglo equipos vacio (RN-13). Es el mismo esquema
+        Jugador que el 201 de POST /jugadores.
       tags: [Jugadores]
       parameters:
         - name: jugador
@@ -653,7 +1759,7 @@ paths:
         Solo entrenadores (HU-05, RNF-02). Acepta cualquiera de nombres, apellidos y fecha_nacimiento; cualquier
         otro campo (matricula, estatus_academico, estatus_deportivo, id...) se rechaza con 422 validacion_fallida
         senalandolo (codigo de campo prohibited). Un cuerpo sin campos responde 422 con el campo cuerpo. Los textos
-        se recortan antes de validar. Un jugador fuera del alcance, inexistente o con identificador que no es UUID v7
+        se recortan antes de validar. Un jugador fuera del alcance de entrenador (quien solo lo ve por ensenarlo no puede modificarlo, DA-10), inexistente o con identificador que no es UUID v7
         responde 404 con el mismo cuerpo, con cualquier cuerpo, valido o no, antes de validarlo. Sin cambios reales
         responde 200 sin escribir historial ni tocar actualizado_en. Con cambios escribe una fila actualizar en
         jugadores_historial con la instantanea completa antes y despues (DD-39), en la misma transaccion. Un jugador
@@ -712,6 +1818,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/situacion-academica:
+    get:
+      operationId: verSituacionAcademica
+      summary: Situacion academica del jugador en el periodo vigente
+      description: >-
+        Cualquier usuario con sesion que tenga al jugador en su alcance (HU-09; pasa por AlcanceDeJugadores, con los
+        jugadores en baja incluidos para quien ya los tenia, DD-52). Lee el resumen calculado del periodo vigente
+        (DD-45): sin periodo vigente, periodo nulo; sin resumen calculado, valores nulos, contadores en 0 y calculado_en
+        nulo. dato_incompleto es verdadero sin resumen, sin promedio o con materias sin calificar (DD-43). El entrenador
+        recibe solo el resumen (RN-13). Solo quien es docente del jugador recibe materias, y solo las suyas del periodo
+        vigente (DD-48). Un jugador fuera del alcance, inexistente o con id que no es v7 responde el mismo 404.
+      tags: [Jugadores]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: La situacion academica.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/SituacionAcademica'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /jugadores/{jugador}/baja:
     post:
       operationId: darDeBajaJugador
@@ -722,7 +1869,7 @@ paths:
         el detalle sigue respondiendo 200 con estatus baja. Se guarda la baja, los estatus y los historiales
         (actualizar del jugador con la instantanea completa y crear de la baja) en una transaccion, con el mismo
         instante. El motivo se recorta; la fecha es la que envia el usuario (AAAA-MM-DD, se acepta una fecha futura).
-        Un jugador fuera del alcance, inexistente o con identificador que no es UUID v7 responde 404 con el mismo
+        Un jugador fuera del alcance de entrenador (quien solo lo ve por ensenarlo no puede modificarlo, DA-10), inexistente o con identificador que no es UUID v7 responde 404 con el mismo
         cuerpo, con cualquier cuerpo, antes de validarlo. Orden: alcance (404), validacion de campos
         (422 validacion_fallida), motivo ausente o en blanco (422 motivo_obligatorio) y jugador ya en baja (409).
       tags: [Jugadores]
@@ -1032,6 +2179,278 @@ components:
           format: uuid
         nombre:
           type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Inscripcion:
+      type: object
+      additionalProperties: false
+      required: [id, materia_id, jugador, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        materia_id:
+          type: string
+          format: uuid
+        jugador:
+          type: object
+          additionalProperties: false
+          required: [id, nombres, apellidos, matricula]
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombres:
+              type: string
+            apellidos:
+              type: string
+            matricula:
+              type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    SituacionAcademica:
+      type: object
+      additionalProperties: false
+      required: [periodo, promedio, materias_reprobadas, materias_sin_calificar, dato_incompleto, porcentaje_asistencia, nivel_riesgo, calculado_en]
+      properties:
+        periodo:
+          type: object
+          nullable: true
+          additionalProperties: false
+          required: [id, nombre]
+          description: El periodo vigente (DD-45); nulo si hoy no cae en ningun periodo.
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombre:
+              type: string
+        promedio:
+          type: string
+          nullable: true
+          pattern: '^\d{1,2}\.\d{2}$'
+        materias_reprobadas:
+          type: integer
+        materias_sin_calificar:
+          type: integer
+        dato_incompleto:
+          type: boolean
+        porcentaje_asistencia:
+          type: string
+          nullable: true
+          pattern: '^\d{1,3}\.\d{2}$'
+        nivel_riesgo:
+          type: string
+          nullable: true
+          enum: [sin_riesgo, en_observacion, en_riesgo, null]
+        calculado_en:
+          type: string
+          nullable: true
+          format: date-time
+        materias:
+          type: array
+          description: >-
+            Solo para quien es docente del jugador, y solo sus propias materias del periodo vigente (DD-48). Ausente
+            para el entrenador.
+          items:
+            type: object
+            additionalProperties: false
+            required: [materia_id, asignatura, calificacion, criterio, aprobada, calificaciones]
+            properties:
+              materia_id:
+                type: string
+                format: uuid
+              asignatura:
+                type: object
+                additionalProperties: false
+                required: [clave, nombre]
+                properties:
+                  clave:
+                    type: string
+                  nombre:
+                    type: string
+              calificacion:
+                type: string
+                nullable: true
+                pattern: '^\d{1,2}\.\d{2}$'
+                description: La final si existe; si no, la media de los parciales (RN-02); nula sin calificaciones.
+              criterio:
+                type: object
+                additionalProperties: false
+                required: [ambito, calificacion_minima]
+                description: El criterio vigente de la materia (DD-47).
+                properties:
+                  ambito:
+                    type: string
+                    enum: [general, materia]
+                  calificacion_minima:
+                    type: string
+                    pattern: '^\d{1,2}\.\d{2}$'
+              aprobada:
+                type: boolean
+                nullable: true
+              calificaciones:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Calificacion'
+    Asistencia:
+      type: object
+      additionalProperties: false
+      required: [id, inscripcion_id, fecha, estado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        inscripcion_id:
+          type: string
+          format: uuid
+        fecha:
+          type: string
+          format: date
+        estado:
+          type: string
+          enum: [presente, falta, falta_justificada]
+        actualizado_en:
+          type: string
+          format: date-time
+    Calificacion:
+      type: object
+      additionalProperties: false
+      required: [id, inscripcion_id, tipo, numero_parcial, valor, criterio, fecha, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        inscripcion_id:
+          type: string
+          format: uuid
+        tipo:
+          type: string
+          enum: [parcial, final]
+        numero_parcial:
+          type: integer
+          nullable: true
+          minimum: 1
+          maximum: 10
+          description: Nulo si es la final.
+        valor:
+          type: string
+          pattern: '^\d{1,2}\.\d{2}$'
+        criterio:
+          type: object
+          additionalProperties: false
+          required: [ambito, calificacion_minima]
+          description: El criterio de aprobacion vigente al capturar (DD-47); no cambia si el criterio cambia despues.
+          properties:
+            ambito:
+              type: string
+              enum: [general, materia]
+            calificacion_minima:
+              type: string
+              pattern: '^\d{1,2}\.\d{2}$'
+        fecha:
+          type: string
+          format: date
+        actualizado_en:
+          type: string
+          format: date-time
+    Criterio:
+      type: object
+      additionalProperties: false
+      required: [ambito, calificacion_minima, vigente_desde]
+      properties:
+        ambito:
+          type: string
+          enum: [general, materia]
+        calificacion_minima:
+          type: string
+          pattern: '^\d{1,2}\.\d{2}$'
+        vigente_desde:
+          type: string
+          format: date
+    Materia:
+      type: object
+      additionalProperties: false
+      required: [id, asignatura, periodo, criterio_aplicado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        asignatura:
+          type: object
+          additionalProperties: false
+          required: [id, clave, nombre]
+          properties:
+            id:
+              type: string
+              format: uuid
+            clave:
+              type: string
+            nombre:
+              type: string
+        periodo:
+          type: object
+          additionalProperties: false
+          required: [id, nombre]
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombre:
+              type: string
+        criterio_aplicado:
+          type: object
+          additionalProperties: false
+          required: [ambito, calificacion_minima]
+          properties:
+            ambito:
+              type: string
+              enum: [general, materia]
+            calificacion_minima:
+              type: string
+              pattern: '^\d{1,2}\.\d{2}$'
+        actualizado_en:
+          type: string
+          format: date-time
+    Asignatura:
+      type: object
+      additionalProperties: false
+      required: [id, clave, nombre, grado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        clave:
+          type: string
+        nombre:
+          type: string
+        grado:
+          type: integer
+          minimum: 1
+          maximum: 12
+        actualizado_en:
+          type: string
+          format: date-time
+    PeriodoEscolar:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, fecha_inicio, fecha_fin, vigente, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        fecha_inicio:
+          type: string
+          format: date
+        fecha_fin:
+          type: string
+          format: date
+        vigente:
+          type: boolean
         actualizado_en:
           type: string
           format: date-time

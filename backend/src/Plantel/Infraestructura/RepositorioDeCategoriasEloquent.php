@@ -64,7 +64,7 @@ final class RepositorioDeCategoriasEloquent implements RepositorioDeCategorias
 
     public function listar(int $pagina, int $porPagina, bool $descendente): array
     {
-        return $this->vigentes()
+        $categorias = $this->vigentes()
             ->orderBy('nombre', $descendente ? 'desc' : 'asc')
             ->orderBy('id')
             ->offset(($pagina - 1) * $porPagina)
@@ -76,6 +76,8 @@ final class RepositorioDeCategoriasEloquent implements RepositorioDeCategorias
                 (new DateTimeImmutable($fila->actualizado_en))->setTimezone(new DateTimeZone('UTC')),
             ))
             ->all();
+
+        return array_values($categorias);
     }
 
     public function contar(): int

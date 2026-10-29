@@ -93,3 +93,37 @@ test('RN-19: un usuario nuevo nace activo, sin intentos y con sus roles', functi
         ->and($usuario->correo())->toBe('ana@example.test')
         ->and($usuario->contrasenaHash())->toBe('hash');
 });
+
+test('RN-19: un usuario reconstituido conserva todos sus datos', function () {
+    $id = Identificador::generar();
+    $bloqueadoHasta = instante('10:15:00');
+
+    $usuario = Usuario::reconstituir($id, 'Ana', 'ana@example.test', 'hash', false, ['docente', 'entrenador'], 3, $bloqueadoHasta);
+
+    expect($usuario->id()->igualA($id))->toBeTrue()
+        ->and($usuario->nombre())->toBe('Ana')
+        ->and($usuario->correo())->toBe('ana@example.test')
+        ->and($usuario->contrasenaHash())->toBe('hash')
+        ->and($usuario->activo())->toBeFalse()
+        ->and($usuario->roles())->toBe(['docente', 'entrenador'])
+        ->and($usuario->intentosFallidos())->toBe(3)
+        ->and($usuario->bloqueadoHasta())->toEqual($bloqueadoHasta);
+});
+
+test('RNF-10: cambiar la contraseña reemplaza el hash', function () {
+    $usuario = usuarioNuevo();
+
+    $usuario->cambiarContrasena('otro-hash');
+
+    expect($usuario->contrasenaHash())->toBe('otro-hash');
+});
+
+test('RNF-10: un acceso correcto reinicia el contador y levanta el bloqueo', function () {
+    $usuario = usuarioNuevo();
+    fallar($usuario, 5);
+
+    $usuario->registrarAcceso();
+
+    expect($usuario->intentosFallidos())->toBe(0)
+        ->and($usuario->bloqueadoHasta())->toBeNull();
+});

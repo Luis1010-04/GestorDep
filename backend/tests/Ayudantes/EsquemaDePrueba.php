@@ -11,7 +11,9 @@
  * con la que dejo la ultima migracion completa, tambien se reconstruye.
  */
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Testing\PendingCommand;
 
 use function Pest\Laravel\artisan;
 
@@ -57,20 +59,109 @@ function esquemaEstructura(): string
         SQL);
 }
 
+/**
+ * Borra las filas de las tablas dadas. `TRUNCATE` cuesta ~0,5 s por tabla en el volumen de Docker (crea archivos y los
+ * sincroniza), así que se usa `DELETE` en orden de claves foráneas (hijas antes que padres), con los disparadores de
+ * solo inserción de esas tablas desactivados dentro de la misma transacción. Si las claves foráneas forman un ciclo,
+ * se vuelve a `TRUNCATE`.
+ *
+ * @param  list<string>  $tablas
+ */
+function esquemaBorrarFilas(ConnectionInterface $conexion, array $tablas): void
+{
+    $orden = esquemaOrdenDeBorrado($tablas, $conexion->select(
+        "select conrelid::regclass::text as hija, confrelid::regclass::text as padre
+           from pg_constraint where contype = 'f' and connamespace = 'public'::regnamespace",
+    ));
+
+    if ($orden === null) {
+        $conexion->statement('truncate table "'.implode('", "', $tablas).'" restart identity cascade');
+
+        return;
+    }
+
+    $conDisparadores = array_map(
+        fn (stdClass $fila): string => $fila->tabla,
+        $conexion->select(
+            "select distinct c.relname as tabla from pg_trigger t join pg_class c on c.oid = t.tgrelid
+              where not t.tgisinternal and c.relnamespace = 'public'::regnamespace and c.relname in ('".implode("', '", $orden)."')",
+        ),
+    );
+
+    try {
+        $conexion->transaction(function () use ($conexion, $orden, $conDisparadores): void {
+            foreach ($conDisparadores as $tabla) {
+                $conexion->statement("alter table \"{$tabla}\" disable trigger user");
+            }
+            foreach ($orden as $tabla) {
+                $conexion->statement("delete from \"{$tabla}\"");
+            }
+            foreach ($conDisparadores as $tabla) {
+                $conexion->statement("alter table \"{$tabla}\" enable trigger user");
+            }
+        });
+    } catch (Throwable $fallo) {
+        // El DDL de PostgreSQL es transaccional: la reversión ya dejó los disparadores como estaban. Esto es el respaldo
+        // explícito (idempotente) para que ningún fallo deje un disparador de solo inserción desactivado.
+        foreach ($conDisparadores as $tabla) {
+            $conexion->statement("alter table \"{$tabla}\" enable trigger user");
+        }
+
+        throw $fallo;
+    }
+}
+
+/**
+ * @param  list<string>  $tablas
+ * @param  array<int, stdClass>  $dependencias  claves foráneas: la tabla `hija` referencia a `padre`
+ * @return list<string>|null las tablas con las hijas antes que sus padres; nulo si hay un ciclo
+ */
+function esquemaOrdenDeBorrado(array $tablas, array $dependencias): ?array
+{
+    $pendientes = array_fill_keys($tablas, true);
+    $orden = [];
+
+    while ($pendientes !== []) {
+        $libres = array_filter(
+            array_keys($pendientes),
+            function (string $tabla) use ($pendientes, $dependencias): bool {
+                foreach ($dependencias as $dependencia) {
+                    if ($dependencia->padre === $tabla && $dependencia->hija !== $tabla && isset($pendientes[$dependencia->hija])) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+        );
+
+        if ($libres === []) {
+            return null;
+        }
+
+        foreach ($libres as $tabla) {
+            $orden[] = $tabla;
+            unset($pendientes[$tabla]);
+        }
+    }
+
+    return $orden;
+}
+
 /** Vacia las tablas con filas y reinicia las secuencias que avanzaron; deja la base como la deja `migrate:fresh`. */
 function esquemaVaciarDatos(): void
 {
     $conexion = DB::connection('propietario');
 
     $tablas = array_map(
-        fn (object $fila): string => $fila->tablename,
+        fn (stdClass $fila): string => $fila->tablename,
         $conexion->select("select tablename from pg_tables where schemaname = 'public' and tablename <> 'migrations' order by tablename"),
     );
     $consultas = array_map(fn (string $tabla): string => "select '{$tabla}' as tabla where exists (select 1 from \"{$tabla}\")", $tablas);
-    $conDatos = array_map(fn (object $fila): string => '"'.$fila->tabla.'"', $conexion->select(implode(' union all ', $consultas)));
+    $conDatos = array_map(fn (stdClass $fila): string => '"'.$fila->tabla.'"', $conexion->select(implode(' union all ', $consultas)));
 
     if ($conDatos !== []) {
-        $conexion->statement('truncate table '.implode(', ', $conDatos).' restart identity cascade');
+        esquemaBorrarFilas($conexion, array_values(array_map(fn (string $tabla): string => trim($tabla, '"'), $conDatos)));
     }
 
     $secuencias = $conexion->select(
@@ -85,7 +176,7 @@ function esquemaVaciarDatos(): void
 function esquemaReconstruir(): void
 {
     esquemaMarcarSucio();
-    artisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    consolaArtisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
     esquemaEstadoDePrueba(['preparado' => true, 'sucio' => false, 'estructura' => esquemaEstructura()]);
 }
 
@@ -107,4 +198,17 @@ function esquemaReiniciar(): string
     esquemaReconstruir();
 
     return 'completo';
+}
+
+/**
+ * `artisan()` de Pest devuelve `PendingCommand|int`; las pruebas encadenan expectativas, así que aquí se acota el tipo.
+ *
+ * @param  array<string, mixed>  $parametros
+ */
+function consolaArtisan(string $comando, array $parametros = []): PendingCommand
+{
+    $pendiente = artisan($comando, $parametros);
+    assert($pendiente instanceof PendingCommand);
+
+    return $pendiente;
 }

@@ -43,6 +43,6 @@ final class AsignarJugadorAEquipo
 
         $this->membresias->asignar($jugador->id, $equipoId, $posicionId);
 
-        return $this->consulta->buscar($jugador->id) ?? throw new LogicException('jugador_sin_alcance_tras_asignar');
+        return $this->consulta->buscarParaEscribir($jugador->id) ?? throw new LogicException('jugador_sin_alcance_tras_asignar');
     }
 }

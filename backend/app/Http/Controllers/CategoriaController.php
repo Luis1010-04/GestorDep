@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SolicitudDeNuevaCategoria;
 use App\Http\Resources\CategoriaRecurso;
 use App\Http\Resources\ColeccionPaginada;
+use App\Http\Respuestas\IdentificadorDeRuta;
 use App\Http\Respuestas\Respuesta;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Src\Compartido\Dominio\Identificador;
 use Src\Plantel\Aplicacion\CrearCategoria;
 use Src\Plantel\Aplicacion\EliminarCategoria;
 use Src\Plantel\Aplicacion\ListarCategorias;
@@ -50,7 +50,7 @@ class CategoriaController extends Controller
 
     public function eliminar(string $id, EliminarCategoria $eliminarCategoria): Response
     {
-        if (! $eliminarCategoria->ejecutar(Identificador::desdeTexto($id))) {
+        if (! $eliminarCategoria->ejecutar(IdentificadorDeRuta::desde($id))) {
             throw new NotFoundHttpException;
         }
 

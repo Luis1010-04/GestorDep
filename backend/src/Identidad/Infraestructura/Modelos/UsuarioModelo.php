@@ -37,11 +37,14 @@ class UsuarioModelo extends Authenticatable
     /** @return list<string> */
     public function codigosDeRoles(): array
     {
-        return DB::table('usuario_rol')
+        /** @var list<string> $codigos */
+        $codigos = DB::table('usuario_rol')
             ->join('roles', 'roles.id', '=', 'usuario_rol.rol_id')
             ->where('usuario_rol.usuario_id', $this->getKey())
             ->orderBy('roles.codigo')
             ->pluck('roles.codigo')
             ->all();
+
+        return $codigos;
     }
 }
