@@ -45,5 +45,11 @@ return [
         'asignatura_inexistente' => 'La asignatura indicada no existe.',
         'periodo_inexistente' => 'El periodo escolar indicado no existe.',
         'rango_de_fechas_invalido' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
+        'lugar_duplicado' => 'Ya existe un lugar con ese nombre.',
+        'rival_duplicado' => 'Ya existe un rival con ese nombre.',
+        'temporada_duplicada' => 'Ya existe una temporada con ese nombre.',
+        'temporada_solapada' => 'Las fechas se cruzan con otra temporada.',
+        'torneo_duplicado' => 'Ya existe un torneo con ese nombre en la temporada.',
+        'temporada_inexistente' => 'La temporada indicada no existe.',
     ],
 ];

@@ -2087,6 +2087,596 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /lugares:
+    get:
+      operationId: listarLugares
+      summary: Lista lugares no eliminados
+      description: >-
+        Solo entrenadores (HU-28); el catalogo es comun a todos. Excluye los eliminados; orden por defecto nombre.
+      tags: [Lugares]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [nombre, '-nombre'], default: nombre}
+      responses:
+        '200':
+          description: Pagina de lugares.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Lugar'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearLugar
+      summary: Da de alta un lugar
+      description: Solo entrenadores (HU-28). Lo usan entrenamientos y partidos. El alta escribe su historial (RNF-02).
+      tags: [Lugares]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+      responses:
+        '201':
+          description: Creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Lugar'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe un lugar no eliminado con ese nombre, sin distinguir mayusculas (lugar_duplicado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Nombre ausente, vacio o de mas de 100 caracteres (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /lugares/{lugar}:
+    delete:
+      operationId: eliminarLugar
+      summary: Elimina logicamente un lugar
+      description: >-
+        Solo entrenadores (HU-28). Fija eliminado_en y eliminado_por y escribe el historial; la fila se conserva y lo que
+        ya la usa sigue mostrandola. El nombre puede darse de alta de nuevo. Un UUID que no es v7 responde 404.
+      tags: [Lugares]
+      parameters:
+        - name: lugar
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Eliminado.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El lugar no existe o ya estaba eliminado (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /rivales:
+    get:
+      operationId: listarRivales
+      summary: Lista rivales no eliminados
+      description: >-
+        Solo entrenadores (HU-28); el catalogo es comun a todos. Excluye los eliminados; orden por defecto nombre.
+      tags: [Rivales]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [nombre, '-nombre'], default: nombre}
+      responses:
+        '200':
+          description: Pagina de rivales.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Rival'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearRival
+      summary: Da de alta un rival
+      description: Solo entrenadores (HU-28). Lo usan los partidos. El alta escribe su historial (RNF-02).
+      tags: [Rivales]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+      responses:
+        '201':
+          description: Creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Rival'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe un rival no eliminado con ese nombre, sin distinguir mayusculas (rival_duplicado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Nombre ausente, vacio o de mas de 100 caracteres (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /rivales/{rival}:
+    delete:
+      operationId: eliminarRival
+      summary: Elimina logicamente un rival
+      description: >-
+        Solo entrenadores (HU-28). Fija eliminado_en y eliminado_por y escribe el historial; la fila se conserva y lo que
+        ya la usa sigue mostrandola. El nombre puede darse de alta de nuevo. Un UUID que no es v7 responde 404.
+      tags: [Rivales]
+      parameters:
+        - name: rival
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Eliminado.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El rival no existe o ya estaba eliminado (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /temporadas:
+    get:
+      operationId: listarTemporadas
+      summary: Lista temporadas no eliminadas
+      description: >-
+        Solo entrenadores (HU-28); el catalogo es comun a todos. Excluye los eliminados; orden por defecto '-fecha_inicio'.
+      tags: [Temporadas]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [fecha_inicio, '-fecha_inicio'], default: '-fecha_inicio'}
+      responses:
+        '200':
+          description: Pagina de temporadas.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Temporada'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearTemporada
+      summary: Da de alta una temporada
+      description: Solo entrenadores (HU-28). Un intervalo de dias; el partido pertenece a la temporada que contiene su fecha (DD-07). El alta escribe su historial (RNF-02).
+      tags: [Temporadas]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre, fecha_inicio, fecha_fin]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+                fecha_inicio:
+                  type: string
+                  format: date
+                fecha_fin:
+                  type: string
+                  format: date
+                  description: Posterior a fecha_inicio.
+      responses:
+        '201':
+          description: Creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Temporada'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe una temporada no eliminada con ese nombre (temporada_duplicada), o sus fechas se cruzan con las de otra temporada no eliminada, extremos incluidos (temporada_solapada, DD-07).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Campo ausente o con formato invalido, o fecha_fin no posterior a fecha_inicio (validacion_fallida, campo fecha_fin).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /temporadas/{temporada}:
+    delete:
+      operationId: eliminarTemporada
+      summary: Elimina logicamente una temporada
+      description: >-
+        Solo entrenadores (HU-28). Fija eliminado_en y eliminado_por y escribe el historial; la fila se conserva y lo que
+        ya la usa sigue mostrandola. El nombre puede darse de alta de nuevo. Un UUID que no es v7 responde 404.
+      tags: [Temporadas]
+      parameters:
+        - name: temporada
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Eliminado.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La temporada no existe o ya estaba eliminada (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /torneos:
+    get:
+      operationId: listarTorneos
+      summary: Lista torneos no eliminados
+      description: >-
+        Solo entrenadores (HU-28); el catalogo es comun a todos. Excluye los eliminados; orden por defecto nombre.
+      tags: [Torneos]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [nombre, '-nombre'], default: nombre}
+      responses:
+        '200':
+          description: Pagina de torneos.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Torneo'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion u orden invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearTorneo
+      summary: Da de alta un torneo
+      description: Solo entrenadores (HU-28). Pertenece a una temporada. El alta escribe su historial (RNF-02).
+      tags: [Torneos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre, temporada_id]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+                temporada_id:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Torneo'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Ya existe un torneo no eliminado con ese nombre en la temporada, sin distinguir mayusculas (torneo_duplicado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Campo ausente o con formato invalido (validacion_fallida), o la temporada no existe o esta eliminada (temporada_inexistente).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /torneos/{torneo}:
+    delete:
+      operationId: eliminarTorneo
+      summary: Elimina logicamente un torneo
+      description: >-
+        Solo entrenadores (HU-28). Fija eliminado_en y eliminado_por y escribe el historial; la fila se conserva y lo que
+        ya la usa sigue mostrandola. El nombre puede darse de alta de nuevo. Un UUID que no es v7 responde 404.
+      tags: [Torneos]
+      parameters:
+        - name: torneo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Eliminado.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El torneo no existe o ya estaba eliminado (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Baja:
@@ -2474,6 +3064,67 @@ components:
               format: uuid
             nombre:
               type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Lugar:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Rival:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        actualizado_en:
+          type: string
+          format: date-time
+    Temporada:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, fecha_inicio, fecha_fin, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        fecha_inicio:
+          type: string
+          format: date
+        fecha_fin:
+          type: string
+          format: date
+        actualizado_en:
+          type: string
+          format: date-time
+    Torneo:
+      type: object
+      additionalProperties: false
+      required: [id, nombre, temporada_id, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        temporada_id:
+          type: string
+          format: uuid
         actualizado_en:
           type: string
           format: date-time

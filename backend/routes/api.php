@@ -9,11 +9,15 @@ use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
+use App\Http\Controllers\LugarController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PeriodoEscolarController;
+use App\Http\Controllers\RivalController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\SituacionAcademicaController;
+use App\Http\Controllers\TemporadaController;
+use App\Http\Controllers\TorneoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/salud', SaludController::class);
@@ -68,5 +72,21 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/jugadores', [JugadorController::class, 'crear']);
         Route::patch('/jugadores/{jugador}', [JugadorController::class, 'actualizar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/baja', [JugadorController::class, 'darDeBaja'])->whereUuid('jugador');
+
+        Route::get('/lugares', [LugarController::class, 'listar']);
+        Route::post('/lugares', [LugarController::class, 'crear']);
+        Route::delete('/lugares/{lugar}', [LugarController::class, 'eliminar'])->whereUuid('lugar');
+
+        Route::get('/rivales', [RivalController::class, 'listar']);
+        Route::post('/rivales', [RivalController::class, 'crear']);
+        Route::delete('/rivales/{rival}', [RivalController::class, 'eliminar'])->whereUuid('rival');
+
+        Route::get('/temporadas', [TemporadaController::class, 'listar']);
+        Route::post('/temporadas', [TemporadaController::class, 'crear']);
+        Route::delete('/temporadas/{temporada}', [TemporadaController::class, 'eliminar'])->whereUuid('temporada');
+
+        Route::get('/torneos', [TorneoController::class, 'listar']);
+        Route::post('/torneos', [TorneoController::class, 'crear']);
+        Route::delete('/torneos/{torneo}', [TorneoController::class, 'eliminar'])->whereUuid('torneo');
     });
 });

@@ -18,6 +18,11 @@ use Src\Academico\Aplicacion\JugadorYaInscrito;
 use Src\Academico\Aplicacion\MateriaDuplicada;
 use Src\Academico\Aplicacion\PeriodoDuplicado;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
+use Src\Competencia\Aplicacion\LugarDuplicado;
+use Src\Competencia\Aplicacion\RivalDuplicado;
+use Src\Competencia\Aplicacion\TemporadaDuplicada;
+use Src\Competencia\Aplicacion\TemporadaSolapada;
+use Src\Competencia\Aplicacion\TorneoDuplicado;
 use Src\Identidad\Aplicacion\ContrasenaNuevaMuyCorta;
 use Src\Identidad\Aplicacion\CredencialesInvalidas;
 use Src\Identidad\Aplicacion\CuentaBloqueada;
@@ -60,6 +65,7 @@ final class FormatoDeError
             $e instanceof CategoriaDuplicada, $e instanceof PeriodoDuplicado, $e instanceof AsignaturaDuplicada, $e instanceof MateriaDuplicada, $e instanceof JugadorYaInscrito, $e instanceof JugadorEnBajaNoInscribible => self::reglaDeNegocio($e, 409),
             $e instanceof CalificacionDuplicada, $e instanceof AsistenciaDuplicada, $e instanceof JugadorEnBajaSinCaptura => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
+            $e instanceof LugarDuplicado, $e instanceof RivalDuplicado, $e instanceof TemporadaDuplicada, $e instanceof TemporadaSolapada, $e instanceof TorneoDuplicado => self::reglaDeNegocio($e, 409),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof JugadorNoRegistrado => self::reglaDeNegocio($e, 404),
