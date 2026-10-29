@@ -143,6 +143,22 @@ test('RNF-01 (§0.5.4): DE, docente de J1 en M3, recibe un 404 byte a byte idén
         ->and(DB::table('asistencias_clase')->where('id', $deI1['asistencia'])->value('estado'))->toBe('presente');
 })->with('rutas de una inscripción de H2');
 
+test('RNF-01 (§0.5.4): DELETE de un catálogo con un id inexistente o que no es v7 recibe un 404 byte a byte idéntico y no borra nada', function (string $catalogo) {
+    /** @var TestCase $this */
+    $m = seguridadAcademicaMundo();
+    $sesion = sesionesIniciar($this, 'd2@x.com');
+    $referencia = sesionesPeticion($this, 'GET', '/api/v1/materias/'.Identificador::generar()->valor(), idDeSesion: $sesion)->assertNotFound();
+    $tabla = str_replace('-', '_', $catalogo);
+    $antes = DB::table($tabla)->whereNull('eliminado_en')->count();
+
+    foreach ([Identificador::generar()->valor(), UUID_V4_ACADEMICO] as $id) {
+        $respuesta = sesionesPeticion($this, 'DELETE', "/api/v1/$catalogo/$id", idDeSesion: $sesion);
+        expect($respuesta->getStatusCode())->toBe(404, "DELETE /$catalogo/$id")
+            ->and($respuesta->getContent())->toBe($referencia->getContent());
+    }
+    expect(DB::table($tabla)->whereNull('eliminado_en')->count())->toBe($antes);
+})->with(['periodos-escolares', 'asignaturas']);
+
 test('RNF-01: la situación académica de un jugador ajeno es un 404 byte a byte idéntico para cada perfil', function () {
     /** @var TestCase $this */
     $m = seguridadAcademicaMundo();
