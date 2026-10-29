@@ -66,3 +66,19 @@
 **Rutas fuera de §8:** solo `app/Http/**` y `app/Exceptions/FormatoDeError.php`, autorizadas en R-1. No se tocó `frontend/`. No hubo push, PR, etiquetas ni fusiones.
 
 **Pendiente antes de T04:** la confirmación de §3.2 (asistencia y convocatorias visibles para todos los entrenadores del equipo, o regla estricta). Sin respuesta, T04 sigue la decisión por defecto.
+
+## 3. Medición antes del Lote B (29/10/2026)
+
+Una corrida de `make verificar` sobre `11bcd74` (especificación v1.0.1; mismo código que `f957122`), sin cambios de código y sin nada más corriendo. Antes de lanzarla: motor de Docker 29.7.2 respondiendo, `app` y `db` sanos, `worker` y `scheduler` arriba, y ningún proceso de pest, composer, phpstan ni infection en los contenedores ni en Windows.
+
+| Etapa | Resultado |
+|---|---|
+| Pint | `PASS … 504 files` |
+| PHPStan nivel 7 | `[OK] No errors` |
+| Infection | 411 mutantes eliminados; MSI 100 %; `Time: 1m 36s` |
+| Pest con cobertura | 1 055 pruebas (6 632 aserciones), `Duration: 523.70s` |
+| Cobertura por capa | 100,0 / 100,0 / 99,4 % |
+| `composer audit` | sin avisos |
+| **Total** | **700 s (11 min 40 s)**; código 0 |
+
+Con el mismo código, la corrida de T03 (la primera tras reiniciar Docker Desktop) tardó 898 s. Pest tardó casi lo mismo en las dos (528 s y 524 s), así que la diferencia de unos 200 s está en las demás etapas, que en T03 corrieron con el entorno recién arrancado. Holgura frente al límite de 15 min de §0.4: 3 min 20 s.
