@@ -3809,7 +3809,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '404':
-          description: El partido no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          description: >-
+            El partido no existe o el usuario no entrena su equipo; o un jugador de la alineacion esta fuera de su
+            alcance (inexistente, de otro equipo o en baja aunque haya estado convocado, DA-34). Mismo cuerpo
+            (codigo recurso_no_encontrado).
           content:
             application/json:
               schema:
@@ -3823,7 +3826,8 @@ paths:
         '422':
           description: >-
             Lista ausente, con formato invalido o un jugador repetido (validacion_fallida); jugador no convocado
-            (jugador_no_convocado, campo alineacion.N.jugador_id); posicion inexistente (posicion_inexistente).
+            (jugador_no_convocado, campo alineacion.N.jugador_id, solo para un jugador visible); posicion inexistente
+            (posicion_inexistente).
           content:
             application/json:
               schema:

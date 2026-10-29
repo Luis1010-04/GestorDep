@@ -13,7 +13,8 @@ use Src\Competencia\Dominio\RolDeAlineacion;
 
 /**
  * Reemplaza la alineación completa de un partido programado (HU-13, §3.4). Cada jugador debe estar en la convocatoria
- * visible (DA-32); quien no está en la lista queda sin posición ni rol. Solo las filas que cambian escriben historial.
+ * visible (DA-32); un jugador fuera del alcance da 404 (DA-34). Quien no está en la lista queda sin posición ni rol.
+ * Solo las filas que cambian escriben historial.
  */
 final class DefinirAlineacion
 {
@@ -21,6 +22,7 @@ final class DefinirAlineacion
         private readonly RepositorioDeConvocatorias $convocatorias,
         private readonly ConsultaDeConvocatoria $consulta,
         private readonly BuscarPartidoDelEntrenador $buscarPartido,
+        private readonly VisibilidadDeJugador $visibilidad,
         private readonly Reloj $reloj,
     ) {}
 
@@ -41,7 +43,7 @@ final class DefinirAlineacion
 
         $alineados = [];
         foreach ($alineacion as $indice => $entrada) {
-            $convocatoria = $convocados[strtolower($entrada['jugador_id'])] ?? throw new JugadorNoConvocado("alineacion.{$indice}.jugador_id");
+            $convocatoria = $convocados[strtolower($entrada['jugador_id'])] ?? throw $this->noConvocado($entrada['jugador_id'], $indice);
             $alineados[$convocatoria->id()->valor()] = ['posicion' => $this->posicion($entrada['posicion_id']), 'rol' => $entrada['rol_alineacion']];
         }
 
@@ -56,6 +58,23 @@ final class DefinirAlineacion
         $this->convocatorias->actualizarAlineacion($cambios);
 
         return $this->consulta->todasDelPartido($partidoId);
+    }
+
+    /**
+     * Un jugador fuera del alcance de entrenador sin bajas (inexistente, de otro equipo, en baja aunque haya estado
+     * convocado, o con un UUID que no es v7) da el mismo 404; solo un jugador visible que no está convocado da 422 (DA-34).
+     */
+    private function noConvocado(string $jugadorId, int $indice): RecursoNoEncontrado|JugadorNoConvocado
+    {
+        try {
+            $jugador = Identificador::desdeTexto($jugadorId);
+        } catch (InvalidArgumentException) {
+            return new RecursoNoEncontrado;
+        }
+
+        return $this->visibilidad->esVisibleParaEntrenador($jugador, incluirBajas: false)
+            ? new JugadorNoConvocado("alineacion.{$indice}.jugador_id")
+            : new RecursoNoEncontrado;
     }
 
     /** @throws PosicionInexistente si no es un UUID v7; la existencia la comprueba la clave foránea al escribir (DA-31) */

@@ -206,18 +206,46 @@ test('HU-13 (§3.4): la alineación reemplaza la anterior: quien sale queda sin 
         ->and(DB::table('convocatorias')->whereNotNull('posicion_id')->count())->toBe(0);
 });
 
-test('HU-13 (DA-32): un convocado que se dio de baja o cuya convocatoria se quitó cuenta como no convocado', function () {
+test('HU-13 (DA-34): un jugador visible cuya convocatoria se quitó da 422 jugador_no_convocado', function () {
     /** @var TestCase $this */
     $m = mundoDeCompetencia();
     $partido = alineacionPartido($m);
-    alineacionConvocar($partido, $m['j5']);
     alineacionConvocar($partido, $m['j2'], ['eliminado_en' => '2026-09-10 10:00:00+00']);
 
-    foreach ([$m['j5'], $m['j2']] as $jugador) {
-        alineacionPeticion($this, 'PUT', "/partidos/$partido/alineacion", ['alineacion' => [
-            ['jugador_id' => $jugador, 'posicion_id' => alineacionPosicion('medio'), 'rol_alineacion' => 'titular'],
-        ]])->assertUnprocessable()->assertJsonPath('codigo', 'jugador_no_convocado');
+    alineacionPeticion($this, 'PUT', "/partidos/$partido/alineacion", ['alineacion' => [
+        ['jugador_id' => $m['j2'], 'posicion_id' => alineacionPosicion('medio'), 'rol_alineacion' => 'titular'],
+    ]])->assertUnprocessable()->assertJsonPath('codigo', 'jugador_no_convocado')->assertJsonPath('errores.0.campo', 'alineacion.0.jugador_id');
+});
+
+test('RNF-01 (DA-34): un jugador fuera del alcance en la alineación, también uno en baja que estuvo convocado, da el mismo 404 que uno inexistente', function () {
+    /** @var TestCase $this */
+    $m = mundoDeCompetencia();
+    $partido = alineacionPartido($m);
+    alineacionConvocar($partido, $m['j1']);
+    alineacionConvocar($partido, $m['j5']);
+    $entrada = fn (string $jugador) => ['alineacion' => [
+        ['jugador_id' => $m['j1'], 'posicion_id' => alineacionPosicion('defensa'), 'rol_alineacion' => 'titular'],
+        ['jugador_id' => $jugador, 'posicion_id' => alineacionPosicion('medio'), 'rol_alineacion' => 'suplente'],
+    ]];
+    $inexistente = alineacionPeticion($this, 'PUT', "/partidos/$partido/alineacion", $entrada(Identificador::generar()->valor()))->assertNotFound();
+
+    foreach (['baja convocado' => $m['j5'], 'de otro equipo' => $m['j4'], 'v4' => '123e4567-e89b-42d3-a456-426614174000'] as $caso => $jugador) {
+        $respuesta = alineacionPeticion($this, 'PUT', "/partidos/$partido/alineacion", $entrada($jugador))->assertNotFound();
+        expect($respuesta->getContent())->toBe($inexistente->getContent(), $caso);
     }
+    expect($inexistente->json('codigo'))->toBe('recurso_no_encontrado')
+        ->and(DB::table('convocatorias')->whereNotNull('rol_alineacion')->count())->toBe(0)
+        ->and(DB::table('convocatorias_historial')->count())->toBe(0);
+});
+
+test('HU-13 (DA-34): para E3, que entrena A y B, J4 es visible y no está convocado: 422', function () {
+    /** @var TestCase $this */
+    $m = mundoDeCompetencia();
+    $partido = alineacionPartido($m);
+
+    alineacionPeticion($this, 'PUT', "/partidos/$partido/alineacion", ['alineacion' => [
+        ['jugador_id' => $m['j4'], 'posicion_id' => alineacionPosicion('portero'), 'rol_alineacion' => 'titular'],
+    ]], 'e3@x.com')->assertUnprocessable()->assertJsonPath('codigo', 'jugador_no_convocado');
 });
 
 test('HU-13 (DA-31): una posición inexistente o con UUID que no es v7 da 422 posicion_inexistente y no cambia nada', function (string $posicion) {
