@@ -98,7 +98,7 @@ function configuracionDeInfection(): array
 test('HERRAMIENTAS mutación (M-10 a): Infection escribe el resumen en la ruta que lee la verificación, justo después en el script mutacion', function () {
     /** @var array{scripts: array{mutacion: list<string>}} $composer */
     $composer = json_decode((string) file_get_contents(dirname(__DIR__, 3).'/composer.json'), true, flags: JSON_THROW_ON_ERROR);
-    $pasos = $composer['scripts']['mutacion'] ?? [];
+    $pasos = $composer['scripts']['mutacion'];
     $infection = array_key_first(array_filter($pasos, fn (string $paso): bool => str_contains($paso, 'vendor/bin/infection')));
 
     // Si el resumen dejara de escribirse aquí, la verificación podría leer uno viejo de otra corrida.
