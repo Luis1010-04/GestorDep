@@ -21,6 +21,6 @@
 
 | Tarea | Estado | Commit | Reporte |
 |---|---|---|---|
-| T01 Migraciones | en curso | | |
-| T02 Catálogos | pendiente | | |
+| T01 Migraciones | hecha | `16b4bfb` | `f1-h3-t01.md` |
+| T02 Catálogos | en curso | | |
 | T03 Entrenamientos y puertos | pendiente | | |
