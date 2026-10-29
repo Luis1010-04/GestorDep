@@ -175,3 +175,28 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué se eligió:** se devuelven también `presentes`, `faltas` y `faltas_justificadas` (enteros).
 - **Por qué:** sin ellos un `null` o un `0.00` no se pueden distinguir de un dato sin registros, y H6 los usará (RN-09).
 - **Cómo se revierte:** quitar los tres campos del recurso.
+
+## DA-23 (T05): la zona del día local sale de `HoyDeNegocio` (aprobada)
+
+- **Qué faltaba:** §3.4 dice que la temporada del partido es la que contiene la fecha de `inicia_en` en `America/Mexico_City`, sin decir cómo obtiene la zona la capa de aplicación.
+- **Qué se eligió:** el responsable pidió revisar primero `HoyDeNegocio`. Ese puerto solo da el día de hoy, no convierte un instante cualquiera, pero `hoy()` devuelve la medianoche en la zona de la institución. `ProgramarPartido` y `ModificarPartido` toman la zona de `hoy()->getTimezone()` y se la pasan al dominio (`Partido::diaLocal`). No se lee `config` en Aplicación, no se inyecta un `DateTimeZone` nuevo y no se toca `src/Compartido`.
+- **Por qué:** reutiliza la única fuente de la zona de negocio (`app.zona_presentacion`, por `CompartidoServiceProvider`).
+- **Cómo se revierte:** inyectar un `DateTimeZone` desde `CompetenciaServiceProvider`.
+
+## DA-24 (T05): `rival_inexistente` y `torneo_inexistente` (aprobada)
+
+- **Qué faltaba:** §6.3 no tiene código para un rival o un torneo que no existe.
+- **Qué se eligió:** 422 `rival_inexistente` y 422 `torneo_inexistente`, sin campo, como `lugar_inexistente` (DA-11). Un rival o un torneo eliminado cuenta como inexistente; también un id que no es UUID v7.
+- **Cómo se revierte:** cambiar el código y su mensaje.
+
+## DA-25 (T05): al cambiar fecha, tipo o torneo se revalida todo (aprobada)
+
+- **Qué faltaba:** §3.4 da las reglas del alta, pero no dice qué se revalida en un `PATCH`.
+- **Qué se eligió:** si cambia `inicia_en`, se vuelve a derivar la temporada (`sin_temporada` si ninguna contiene el nuevo día). Si cambian `inicia_en`, `tipo` o `torneo_id`, se reevalúan `torneo_obligatorio` y `torneo_de_otra_temporada` sobre el resultado final. `torneo_id: null` quita el torneo. Si no cambia la fecha, el partido conserva su `temporada_id` aunque la temporada se haya eliminado después.
+- **Cómo se revierte:** limitar la revalidación en `ModificarPartido`.
+
+## DA-26 (T05): un filtro de temporada inexistente devuelve una lista vacía (aprobada)
+
+- **Qué faltaba:** §6.1 nombra `filtro[temporada_id]` sin decir qué pasa con una temporada que no existe.
+- **Qué se eligió:** una lista vacía (200). Un texto que no es UUID da 422. `filtro[estado]` admite `programado`, `jugado` y `cancelado`.
+- **Cómo se revierte:** validar la existencia de la temporada en el controlador.

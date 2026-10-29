@@ -90,7 +90,11 @@ Al empezar, el responsable aceptó el Lote A y aprobó DA-01 a DA-15 (DA-09 qued
 | Tarea | Estado | Commit | Reporte | `make verificar` |
 |---|---|---|---|---|
 | T04 Asistencia y porcentajes | hecha | `b2ba728` | `f1-h3-t04.md` | pasa; 1 095 pruebas; 710 s (11 min 50 s) |
-| T05 Partidos | **plan entregado; espera aprobación** | — | `f1-h3-plan-t05.md` | — |
-| T06, T07 | pendientes; no se empiezan sin aprobar T05 | | | |
+| T05 Partidos | hecha (plan aprobado con ajustes) | `36acad8` | `f1-h3-t05.md` | pasa; 1 144 pruebas; **729 s (12 min 9 s), pasa de 12 min** |
+| T06, T07 | pendientes; no se empiezan sin indicación del responsable | | | |
 
 Las decisiones DA-16 a DA-22 son de T04. DA-20 restringe la privacidad: un docente recibe 404 en el porcentaje de asistencia de un jugador.
+
+Las decisiones DA-23 a DA-26 son de T05; DA-27 se retiró. La fila 6 de §7.4 queda **parcial** hasta T07: T05 prueba la cancelación por HTTP y el rechazo del resultado en el dominio, y T07 hará la prueba por HTTP del resultado.
+
+**Tiempo de `make verificar`:** T05 tardó 729 s, la primera corrida de H3 por encima de 12 minutos. Crece unos 20 s por tarea.
