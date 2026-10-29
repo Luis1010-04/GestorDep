@@ -75,7 +75,7 @@ test('RN-20: solo la declaración, el adaptador, su enlace y el caso de uso de i
     foreach (USOS_AUTORIZADOS_DEL_LOCALIZADOR as $ruta => $motivo) {
         expect(is_file(base_path($ruta)))->toBeTrue($ruta)->and($motivo)->not->toBeEmpty();
     }
-})->skip(fn () => ! function_exists('archivosPhpDeLaAplicacion'), 'Ejecución parcial sin tests/Arch/AlcanceDeJugadoresTest.php: la suite completa la corre.');
+});
 
 test('RN-20: el puerto devuelve solo el identificador y si el jugador está en baja', function () {
     $propiedades = array_map(fn (ReflectionProperty $p): string => $p->getName(), (new ReflectionClass(JugadorLocalizado::class))->getProperties());
