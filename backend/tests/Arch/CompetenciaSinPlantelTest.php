@@ -5,7 +5,7 @@
  * JugadoresDelEquipo de Compartido, con sus adaptadores en Plantel (docs/hitos/f1-h3.md §5.3).
  */
 
-const TABLAS_DE_PLANTEL = ['categorias', 'posiciones', 'jugadores', 'equipos', 'jugador_equipo', 'entrenador_equipo', 'bajas_jugador'];
+const TABLAS_QUE_COMPETENCIA_NO_LEE = ['categorias', 'posiciones', 'jugadores', 'equipos', 'jugador_equipo', 'entrenador_equipo', 'bajas_jugador'];
 
 /**
  * Archivos que importan `Src\Plantel` o nombran una tabla de Plantel en una cadena (también `tabla.columna` o
@@ -16,7 +16,7 @@ const TABLAS_DE_PLANTEL = ['categorias', 'posiciones', 'jugadores', 'equipos', '
  */
 function archivosQueTocanPlantel(array $archivos): array
 {
-    $patronTabla = '/^[\'"]('.implode('|', TABLAS_DE_PLANTEL).')([.\s][^\'"]*)?[\'"]$/';
+    $patronTabla = '/^[\'"]('.implode('|', TABLAS_QUE_COMPETENCIA_NO_LEE).')([.\s][^\'"]*)?[\'"]$/';
     $rutas = [];
     foreach ($archivos as $ruta => $codigo) {
         foreach (token_get_all($codigo) as $token) {
