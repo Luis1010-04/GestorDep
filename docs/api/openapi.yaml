@@ -3563,6 +3563,185 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /partidos/{partido}/convocatoria:
+    get:
+      operationId: listarConvocatoria
+      summary: Lista los convocados de un partido
+      description: >-
+        Solo entrenadores del equipo del partido (HU-12). Uno ajeno, inexistente o con un UUID que no es v7 responde
+        el mismo 404, antes que el 422. Pasa por AlcanceDeJugadores sin bajas: un jugador dado de baja no aparece
+        (HU-29 criterio 3). Sin datos del jugador (DA-29); en orden de convocatoria.
+      tags: [Convocatoria]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de convocados.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Convocatoria'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El partido no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: convocarJugador
+      summary: Convoca a un jugador al partido
+      description: >-
+        Solo entrenadores del equipo (HU-12). El jugador debe tener membresia vigente en el equipo del partido y no
+        estar en baja (DA-28); si no, el mismo 404 que un jugador inexistente. No valida elegibilidad (RN-18). Solo en
+        un partido programado. Escribe su historial (RNF-02).
+      tags: [Convocatoria]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [jugador_id]
+              properties:
+                jugador_id:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Jugador convocado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Convocatoria'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            El partido no existe o el usuario no entrena su equipo; o el jugador no existe, no es del equipo o esta en
+            baja (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El partido no esta programado (partido_no_programado) o el jugador ya esta convocado (jugador_ya_convocado,
+            campo jugador_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: jugador_id ausente o invalido, o un campo no admitido (validacion_fallida, prohibited).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /convocatorias/{convocatoria}:
+    delete:
+      operationId: quitarDeLaConvocatoria
+      summary: Quita a un jugador de la convocatoria
+      description: >-
+        Solo entrenadores del equipo del partido (HU-12). Borrado logico con historial; su alineacion desaparece. Solo
+        en un partido programado. Una convocatoria ajena, inexistente, ya quitada o con un UUID que no es v7 responde
+        el mismo 404.
+      tags: [Convocatoria]
+      parameters:
+        - name: convocatoria
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '204':
+          description: Jugador quitado.
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: La convocatoria no existe o el usuario no entrena el equipo del partido (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El partido no esta programado (partido_no_programado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Baja:
@@ -4152,6 +4331,31 @@ components:
           nullable: true
           minimum: 0
           maximum: 99
+        actualizado_en:
+          type: string
+          format: date-time
+    Convocatoria:
+      type: object
+      additionalProperties: false
+      required: [id, partido_id, jugador_id, posicion_id, rol_alineacion, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        partido_id:
+          type: string
+          format: uuid
+        jugador_id:
+          type: string
+          format: uuid
+        posicion_id:
+          type: string
+          format: uuid
+          nullable: true
+        rol_alineacion:
+          type: string
+          enum: [titular, suplente]
+          nullable: true
         actualizado_en:
           type: string
           format: date-time

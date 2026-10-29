@@ -66,5 +66,6 @@ return [
         'rival_inexistente' => 'El rival indicado no existe.',
         'torneo_inexistente' => 'El torneo indicado no existe.',
         'partido_no_programado' => 'El partido ya no está programado.',
+        'jugador_ya_convocado' => 'El jugador ya está convocado al partido.',
     ],
 ];

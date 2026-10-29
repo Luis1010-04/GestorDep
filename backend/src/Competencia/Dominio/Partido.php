@@ -83,7 +83,8 @@ final class Partido
         return $this->conEstado(EstadoDePartido::Jugado, $golesFavor, $golesContra, $instante);
     }
 
-    private function exigirProgramado(): void
+    /** @throws PartidoNoProgramado */
+    public function exigirProgramado(): void
     {
         if ($this->estado !== EstadoDePartido::Programado) {
             throw new PartidoNoProgramado;

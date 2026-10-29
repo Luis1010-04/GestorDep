@@ -311,6 +311,8 @@ test('HU-12 (DA-26): el listado de un equipo filtra por temporada y estado y ord
         ->and(partidoPeticion($this, 'GET', "$ruta?filtro[temporada_id]={$m['t1']}&filtro[estado]=programado")->json('datos.*.id'))->toBe([$primero])
         ->and(partidoPeticion($this, 'GET', "$ruta?filtro[temporada_id]=".Identificador::generar()->valor())->assertOk()->json('datos'))->toBe([]);
     partidoPeticion($this, 'GET', "$ruta?filtro[temporada_id]=x")->assertUnprocessable()->assertJsonPath('errores.0.campo', 'filtro.temporada_id');
+    expect(partidoPeticion($this, 'GET', "$ruta?filtro[temporada_id]=123e4567-e89b-42d3-a456-426614174000")->assertOk()->json())
+        ->toMatchArray(['datos' => [], 'meta' => ['pagina' => 1, 'por_pagina' => 15, 'total' => 0, 'total_paginas' => 1]]);
     partidoPeticion($this, 'GET', "$ruta?filtro[estado]=suspendido")->assertUnprocessable()->assertJsonPath('errores.0.campo', 'filtro.estado');
 });
 

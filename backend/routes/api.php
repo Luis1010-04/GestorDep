@@ -6,6 +6,7 @@ use App\Http\Controllers\AsistenciaDeEntrenamientoController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
+use App\Http\Controllers\ConvocatoriaController;
 use App\Http\Controllers\EntrenamientoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
@@ -107,5 +108,9 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/equipos/{equipo}/partidos', [PartidoController::class, 'crear'])->whereUuid('equipo');
         Route::get('/partidos/{partido}', [PartidoController::class, 'ver'])->whereUuid('partido');
         Route::patch('/partidos/{partido}', [PartidoController::class, 'modificar'])->whereUuid('partido');
+
+        Route::get('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'listar'])->whereUuid('partido');
+        Route::post('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'crear'])->whereUuid('partido');
+        Route::delete('/convocatorias/{convocatoria}', [ConvocatoriaController::class, 'eliminar'])->whereUuid('convocatoria');
     });
 });

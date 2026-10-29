@@ -20,6 +20,7 @@ use Src\Academico\Aplicacion\PeriodoDuplicado;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
 use Src\Competencia\Aplicacion\AsistenciaYaRegistrada;
 use Src\Competencia\Aplicacion\EntrenamientoNoRealizado;
+use Src\Competencia\Aplicacion\JugadorYaConvocado;
 use Src\Competencia\Aplicacion\LugarDuplicado;
 use Src\Competencia\Aplicacion\RecursoNoEncontrado;
 use Src\Competencia\Aplicacion\RivalDuplicado;
@@ -74,7 +75,7 @@ final class FormatoDeError
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
             $e instanceof LugarDuplicado, $e instanceof RivalDuplicado, $e instanceof TemporadaDuplicada, $e instanceof TemporadaSolapada, $e instanceof TorneoDuplicado => self::reglaDeNegocio($e, 409),
             $e instanceof EntrenamientoNoProgramado, $e instanceof EntrenamientoNoRealizado, $e instanceof AsistenciaYaRegistrada, $e instanceof PartidoNoProgramado => self::reglaDeNegocio($e, 409),
-            $e instanceof ReglaDeCampoViolada => self::reglaDeCampo($e, $e instanceof TransicionNoPermitida ? 409 : 422),
+            $e instanceof ReglaDeCampoViolada => self::reglaDeCampo($e, $e instanceof TransicionNoPermitida || $e instanceof JugadorYaConvocado ? 409 : 422),
             $e instanceof RecursoNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
