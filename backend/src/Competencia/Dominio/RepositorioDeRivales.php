@@ -7,6 +7,8 @@ use Src\Compartido\Dominio\Identificador;
 /** Persistencia de rivales. Solo ve los no eliminados; el borrado es lógico y cada cambio escribe su historial. */
 interface RepositorioDeRivales
 {
+    public function existe(Identificador $id): bool;
+
     public function existeNombre(string $nombre): bool;
 
     /** Si otra petición registró el mismo nombre entre la comprobación y la escritura, lanza RivalDuplicado (Aplicacion). */

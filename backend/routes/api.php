@@ -13,6 +13,7 @@ use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\LugarController;
 use App\Http\Controllers\MateriaController;
+use App\Http\Controllers\PartidoController;
 use App\Http\Controllers\PeriodoEscolarController;
 use App\Http\Controllers\RivalController;
 use App\Http\Controllers\SaludController;
@@ -101,5 +102,10 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaDeEntrenamientoController::class, 'crear'])->whereUuid('entrenamiento');
         Route::patch('/asistencias-entrenamiento/{asistencia}', [AsistenciaDeEntrenamientoController::class, 'corregir'])->whereUuid('asistencia');
         Route::get('/equipos/{equipo}/asistencia-entrenamientos', [AsistenciaDeEntrenamientoController::class, 'delEquipo'])->whereUuid('equipo');
+
+        Route::get('/equipos/{equipo}/partidos', [PartidoController::class, 'listar'])->whereUuid('equipo');
+        Route::post('/equipos/{equipo}/partidos', [PartidoController::class, 'crear'])->whereUuid('equipo');
+        Route::get('/partidos/{partido}', [PartidoController::class, 'ver'])->whereUuid('partido');
+        Route::patch('/partidos/{partido}', [PartidoController::class, 'modificar'])->whereUuid('partido');
     });
 });

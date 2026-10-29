@@ -25,6 +25,13 @@ final class RepositorioDeTorneosEloquent implements RepositorioDeTorneos
         return $this->vigentes()->where('nombre', $nombre)->where('temporada_id', $temporadaId->valor())->exists();
     }
 
+    public function temporadaDe(Identificador $torneoId): ?Identificador
+    {
+        $temporada = $this->vigentes()->where('id', $torneoId->valor())->value('temporada_id');
+
+        return $temporada === null ? null : Identificador::desdeTexto($temporada);
+    }
+
     public function guardarNuevo(Torneo $torneo): void
     {
         try {

@@ -2,6 +2,7 @@
 
 namespace Src\Competencia\Dominio;
 
+use DateTimeImmutable;
 use Src\Compartido\Dominio\Identificador;
 
 /** Persistencia de temporadas. Solo ve las no eliminadas; el borrado es lógico y cada cambio escribe su historial. */
@@ -10,6 +11,9 @@ interface RepositorioDeTemporadas
     public function existe(Identificador $id): bool;
 
     public function existeNombre(string $nombre): bool;
+
+    /** La temporada no eliminada que contiene el día, extremos incluidos (DD-07); a lo más una. */
+    public function queContiene(DateTimeImmutable $dia): ?Identificador;
 
     /**
      * Comprueba el cruce con otra temporada y escribe en la misma transacción, con un candado que impide que dos

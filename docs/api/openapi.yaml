@@ -3272,6 +3272,297 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/partidos:
+    get:
+      operationId: listarPartidosDelEquipo
+      summary: Lista los partidos de un equipo
+      description: >-
+        Solo entrenadores del equipo (HU-12); un equipo ajeno o inexistente responde 404, antes que el 422. Orden por
+        defecto inicia_en. Un filtro[temporada_id] que no es de ninguna temporada da una lista vacia (DA-26).
+      tags: [Partidos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: filtro[temporada_id]
+          in: query
+          schema: {type: string, format: uuid}
+        - name: filtro[estado]
+          in: query
+          schema: {type: string, enum: [programado, jugado, cancelado]}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: orden
+          in: query
+          schema: {type: string, enum: [inicia_en, '-inicia_en'], default: inicia_en}
+      responses:
+        '200':
+          description: Pagina de partidos.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Partido'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Filtro, paginacion u orden invalidos (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: programarPartido
+      summary: Programa un partido del equipo
+      description: >-
+        Solo entrenadores del equipo (HU-12). La temporada no se envia: es la que contiene el dia local de inicia_en en
+        America/Mexico_City (§3.4, DD-07). El torneo es obligatorio en oficial y torneo y, si se indica, debe ser de esa
+        temporada. La categoria se toma del equipo (DD-18). Escribe su historial (RNF-02).
+      tags: [Partidos]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [inicia_en, lugar_id, rival_id, tipo, condicion]
+              properties:
+                inicia_en:
+                  type: string
+                  format: date-time
+                  description: ISO 8601 con zona (desplazamiento o Z).
+                lugar_id:
+                  type: string
+                  format: uuid
+                rival_id:
+                  type: string
+                  format: uuid
+                torneo_id:
+                  type: string
+                  format: uuid
+                  nullable: true
+                tipo:
+                  type: string
+                  enum: [amistoso, oficial, interno, torneo]
+                condicion:
+                  type: string
+                  enum: [local, visitante]
+      responses:
+        '201':
+          description: Partido programado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Partido'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Campo ausente, con formato invalido o no admitido (validacion_fallida); sin_temporada (campo inicia_en);
+            torneo_obligatorio o torneo_de_otra_temporada (campo torneo_id); lugar_inexistente, rival_inexistente o
+            torneo_inexistente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /partidos/{partido}:
+    get:
+      operationId: verPartido
+      summary: Detalle de un partido
+      description: >-
+        Solo entrenadores del equipo del partido (HU-12). Uno ajeno, inexistente o con un UUID que no es v7 responde
+        el mismo 404.
+      tags: [Partidos]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: El partido.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Partido'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El partido no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      operationId: modificarPartido
+      summary: Modifica o cancela un partido
+      description: >-
+        Solo entrenadores del equipo (HU-12). El 404 gana al 422. Los datos solo cambian en un partido programado. Al
+        cambiar inicia_en se vuelve a derivar la temporada; al cambiar inicia_en, tipo o torneo_id se revalida el
+        torneo sobre el resultado final (DA-25); torneo_id null quita el torneo. estado solo admite cancelado, desde
+        programado. Una sola fila de historial.
+      tags: [Partidos]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                inicia_en:
+                  type: string
+                  format: date-time
+                lugar_id:
+                  type: string
+                  format: uuid
+                rival_id:
+                  type: string
+                  format: uuid
+                torneo_id:
+                  type: string
+                  format: uuid
+                  nullable: true
+                tipo:
+                  type: string
+                  enum: [amistoso, oficial, interno, torneo]
+                condicion:
+                  type: string
+                  enum: [local, visitante]
+                estado:
+                  type: string
+                  enum: [cancelado]
+      responses:
+        '200':
+          description: El partido modificado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Partido'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El partido no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Cambio de datos de un partido que no esta programado (partido_no_programado), o cancelacion de un partido
+            jugado o ya cancelado (transicion_no_permitida, campo estado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Cuerpo vacio (campo cuerpo), campo no admitido (prohibited) o con formato invalido (validacion_fallida);
+            sin_temporada; torneo_obligatorio; torneo_de_otra_temporada; lugar_inexistente; rival_inexistente;
+            torneo_inexistente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Baja:
@@ -3814,6 +4105,56 @@ components:
       nullable: true
       pattern: '^[0-9]{1,3}\.[0-9]{2}$'
       description: Presentes entre todos los registros por 100, HALF_UP a dos decimales; nulo sin registros (§3.4).
+    Partido:
+      type: object
+      additionalProperties: false
+      description: Sin categoria, que se toma del equipo (DD-18).
+      required: [id, equipo_id, temporada_id, torneo_id, rival_id, lugar_id, inicia_en, tipo, condicion, estado, goles_favor, goles_contra, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+        temporada_id:
+          type: string
+          format: uuid
+        torneo_id:
+          type: string
+          format: uuid
+          nullable: true
+        rival_id:
+          type: string
+          format: uuid
+        lugar_id:
+          type: string
+          format: uuid
+        inicia_en:
+          type: string
+          format: date-time
+        tipo:
+          type: string
+          enum: [amistoso, oficial, interno, torneo]
+        condicion:
+          type: string
+          enum: [local, visitante]
+        estado:
+          type: string
+          enum: [programado, jugado, cancelado]
+        goles_favor:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 99
+        goles_contra:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 99
+        actualizado_en:
+          type: string
+          format: date-time
     Usuario:
       type: object
       additionalProperties: false

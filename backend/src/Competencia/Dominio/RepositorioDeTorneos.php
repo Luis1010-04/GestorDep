@@ -9,6 +9,9 @@ interface RepositorioDeTorneos
 {
     public function existeNombre(string $nombre, Identificador $temporadaId): bool;
 
+    /** La temporada del torneo; nulo si el torneo no existe o está eliminado. */
+    public function temporadaDe(Identificador $torneoId): ?Identificador;
+
     /** Si otra petición registró el mismo nombre en la temporada entre la comprobación y la escritura, lanza TorneoDuplicado (Aplicacion). */
     public function guardarNuevo(Torneo $torneo): void;
 

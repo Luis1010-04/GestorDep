@@ -34,6 +34,18 @@ final class RepositorioDeTemporadasEloquent implements RepositorioDeTemporadas
         return $this->vigentes()->where('nombre', $nombre)->exists();
     }
 
+    public function queContiene(DateTimeImmutable $dia): ?Identificador
+    {
+        $id = $this->vigentes()
+            ->where('fecha_inicio', '<=', $dia->format('Y-m-d'))
+            ->where('fecha_fin', '>=', $dia->format('Y-m-d'))
+            ->orderBy('fecha_inicio')
+            ->orderBy('id')
+            ->value('id');
+
+        return $id === null ? null : Identificador::desdeTexto($id);
+    }
+
     public function guardarNueva(Temporada $temporada): void
     {
         $inicio = $temporada->fechaInicio()->format('Y-m-d');
