@@ -203,3 +203,7 @@ El responsable aprobó la opción (a): Infection sale de `make verificar` y pasa
 **`make mutacion`:** **166 s (2 min 46 s)**; 501 mutantes eliminados, MSI 100 %, MSI cubierto 100 %, ninguno omitido ni con tiempo agotado; código 0.
 
 Lo esperado eran unos 630 s. Pest tardó 52 s más que en T07 con el mismo código más 5 pruebas; parece variación del entorno (ver `f1-h3-fix-gate.md`). Holgura de `make verificar` frente a 15 min: 3 min 39 s.
+
+## 6. Lote C
+
+**Inicio de T08 (29/10/2026):** tras `git fetch`, `origin/hito/f1-h3` y la rama local apuntan a **`40acdd6`** (`F1-DOC: reportes de los FIX de DA-32 y de la compuerta de mutación`), el push que hizo el responsable. Un primer `git fetch` no mostró la rama remota, porque el push aún no estaba hecho; tras el aviso del responsable coincidió.
