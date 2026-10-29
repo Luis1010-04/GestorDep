@@ -2,6 +2,26 @@
 
 Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicable a H3 por `docs/hitos/f1-h3.md` §0). Cada una dice qué faltaba, qué se eligió, por qué y cómo se revierte.
 
+## Resumen (al cierre del Lote A)
+
+| DA | Tarea | Qué es | ¿Cambia permisos o privacidad? | ¿Necesita aprobación? |
+|---|---|---|---|---|
+| DA-01 | T01 | La columna del autor en los historiales es `usuario_id` (macro de Compartido), no `autor_id` | No | No |
+| DA-02 | T01 | El resultado de un partido existe si y solo si está `jugado`, y nunca un gol sin el otro (`CHECK`) | No | No |
+| DA-03 | T01 | `convocatorias.posicion_id` admite nulo hasta que haya alineación | No | No |
+| DA-04 | T02 | Código propio por catálogo duplicado (`lugar_duplicado`, `rival_duplicado`, `temporada_duplicada`, `torneo_duplicado`) | No | No |
+| DA-05 | T02 | `temporada_solapada` responde 409 sin detalle por campo | No | No |
+| DA-06 | T02 | Dos temporadas se cruzan si comparten un día; el alta va bajo un candado consultivo | No | No |
+| DA-07 | T03 | Horario invertido: 422 en `termina_en` al crear, `rango_de_fechas_invalido` al modificar | No | No |
+| DA-08 | T03 | Código nuevo `entrenamiento_no_programado` (409, sin campo): no se cambian hora, lugar ni responsable fuera de `programado` | No | **Aprobada** el 29/10/2026 (especificación v1.0.1, §6.3) |
+| DA-09 | T03 | Empalme de lugar: intervalos que se cruzan (tocarse no cuenta), de cualquier equipo, sin cancelados, al crear y al modificar; la advertencia no dice con cuál choca | Sí: no revela el entrenamiento ajeno con el que choca (restringe) | No |
+| DA-10 | T03 | Los filtros del listado son días locales de America/Mexico_City sobre `inicia_en` | No | No |
+| DA-11 | T03 | Lugar inexistente o eliminado: 422 `lugar_inexistente` | No | No |
+| DA-12 | T03 | `JugadoresDelEquipo` pasa por el alcance, exige además la asignación del usuario al equipo y devuelve solo id, nombres y apellidos | **Sí** (restringe: no revela que un jugador visible por otro equipo está en este) | **Aprobada** el 29/10/2026 (especificación v1.0.1, §5.3) |
+| DA-13 | T03 | «Entrenar un equipo» exige asignación vigente, rol `entrenador` y equipo y usuario no eliminados | **Sí** (restringe quién accede al equipo y quién puede ser responsable) | **Aprobada** el 29/10/2026 (especificación v1.0.1, §3.4 y §5.3) |
+| DA-14 | T03 | El campo de la respuesta es `jugadores_del_equipo`, para no dar un falso positivo en el detector de consultas sin alcance | No | **Aprobada** el 29/10/2026 (especificación v1.0.1, §6.1 y §6.2) |
+| DA-15 | T03 | Los instantes se aceptan con desplazamiento o con `Z`; sin zona, 422 | No | No |
+
 ## DA-01 (T01): la columna del autor en los historiales es `usuario_id`
 
 - **Qué faltaba:** §5.1 dice que cada historial guarda «`autor_id` y `ocurrido_en` (`docs/arquitectura.md` §9)», pero §9 y la macro `historial()` de Compartido llaman `usuario_id` al autor.
