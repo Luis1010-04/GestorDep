@@ -91,7 +91,8 @@ Al empezar, el responsable aceptó el Lote A y aprobó DA-01 a DA-15 (DA-09 qued
 |---|---|---|---|---|
 | T04 Asistencia y porcentajes | hecha | `b2ba728` | `f1-h3-t04.md` | pasa; 1 095 pruebas; 710 s (11 min 50 s) |
 | T05 Partidos | hecha (plan aprobado con ajustes) | `36acad8` | `f1-h3-t05.md` | pasa; 1 144 pruebas; **729 s (12 min 9 s), pasa de 12 min** |
-| T06, T07 | pendientes; no se empiezan sin indicación del responsable | | | |
+| T06 Convocatoria | hecha | `725a74b` | `f1-h3-t06.md` | pasa; 1 162 pruebas; 719 s (11 min 59 s), por debajo de 13 min |
+| T07 | pendiente; no se empieza sin indicación del responsable | | | |
 
 Las decisiones DA-16 a DA-22 son de T04. DA-20 restringe la privacidad: un docente recibe 404 en el porcentaje de asistencia de un jugador.
 
@@ -111,3 +112,18 @@ Las decisiones DA-23 a DA-26 son de T05; DA-27 se retiró. La fila 6 de §7.4 qu
 | T05 | **729 s (12 min 9 s)** |
 
 T05 es la primera que pasa de 12 minutos. Con unos 20 s más por tarea, T06 rondaría los 750 s y T07 los 770 s, así que **la holgura para T07 frente al límite de 15 min (900 s) queda por debajo de 2 minutos**. El responsable fijó que, si T06 pasa de 13 minutos (780 s), me detengo y aviso antes de T07. El desglose de T05 está en `f1-h3-t05.md`: solo Infection (105 s) y Pest (573 s) imprimen su duración.
+
+**T06:** `make verificar` tardó 719 s. Es la primera corrida con el desglose por etapa medido (`f1-h3-t06.md`):
+
+| Etapa | Tiempo |
+|---|---:|
+| Pint | 10 s |
+| PHPStan | 3 s |
+| Infection | 102 s |
+| Pest | 567 s |
+| Informe de cobertura y cobertura por capa | 37 s |
+| Verificación de mutación y `composer audit` | < 1 s cada uno |
+
+Pest se queda con casi el 80 % del tiempo. Holgura para T07 frente al límite de 15 min: 3 min.
+
+Las decisiones DA-28 y DA-29 son de T06. Hallazgo: desde T03 hay un aviso de constante duplicada (`TABLAS_DE_PLANTEL`). No cambia ningún resultado y queda pendiente de un FIX que decide el responsable.
