@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
@@ -13,6 +14,7 @@ use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Competencia\Aplicacion\JugadorYaConvocado;
+use Src\Competencia\Aplicacion\PosicionInexistente;
 use Src\Competencia\Dominio\Convocatoria;
 use Src\Competencia\Dominio\RepositorioDeConvocatorias;
 use Src\Competencia\Dominio\RolDeAlineacion;
@@ -68,6 +70,36 @@ final class RepositorioDeConvocatoriasEloquent implements RepositorioDeConvocato
         $fila = $this->vigentes()->where('id', $id->valor())->first(self::COLUMNAS);
 
         return $fila === null ? null : self::aConvocatoria($fila);
+    }
+
+    public function actualizarAlineacion(array $cambios): void
+    {
+        $autor = $this->usuarioActual->identificador()?->valor();
+
+        try {
+            $this->conexion->transaction(function () use ($cambios, $autor): void {
+                foreach ($cambios as ['anterior' => $anterior, 'nueva' => $nueva]) {
+                    $this->historial->registrar(
+                        'convocatorias',
+                        'convocatoria_id',
+                        $nueva->id(),
+                        'actualizar',
+                        self::instantanea($anterior),
+                        self::instantanea($nueva),
+                        fn () => $this->conexion->table('convocatorias')->where('id', $nueva->id()->valor())->update([
+                            'posicion_id' => $nueva->posicionId()?->valor(),
+                            'rol_alineacion' => $nueva->rolAlineacion()?->value,
+                            'actualizado_en' => $nueva->actualizadoEn()->format('Y-m-d H:i:sP'),
+                            'actualizado_por' => $autor,
+                        ]),
+                        instante: $nueva->actualizadoEn(),
+                    );
+                }
+            });
+        } catch (QueryException $e) {
+            // SQLSTATE 23503: la posición no está en el catálogo; la transacción ya revirtió todos los cambios (DA-31).
+            throw $e->getCode() === '23503' && str_contains($e->getMessage(), 'fk_convocatorias_posicion_id') ? new PosicionInexistente : $e;
+        }
     }
 
     public function eliminar(Convocatoria $convocatoria): void

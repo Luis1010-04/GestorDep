@@ -12,6 +12,11 @@ use Src\Compartido\Dominio\Identificador;
  */
 final class Partido
 {
+    /** Los goles van de 0 a 99 (§3.4); es un límite de forma del dato, como el CHECK de la tabla, no un parámetro de cálculo. */
+    private const GOLES_MINIMOS = 0;
+
+    private const GOLES_MAXIMOS = 99;
+
     public function __construct(
         private readonly Identificador $id,
         private readonly Identificador $equipoId,
@@ -71,14 +76,19 @@ final class Partido
     }
 
     /**
-     * El resultado pasa el partido a `jugado`; un partido jugado o cancelado no lo admite (§3.4). La captura por la
-     * API llega en T07.
+     * El resultado pasa el partido a `jugado`; un partido jugado o cancelado no lo admite (§3.4). Primero el estado y
+     * después el rango, con `goles_favor` antes que `goles_contra` (DA-33).
      *
-     * @throws PartidoNoProgramado
+     * @throws PartidoNoProgramado|ValorFueraDeRango
      */
     public function conResultado(int $golesFavor, int $golesContra, DateTimeImmutable $instante): self
     {
         $this->exigirProgramado();
+        foreach (['goles_favor' => $golesFavor, 'goles_contra' => $golesContra] as $campo => $goles) {
+            if ($goles < self::GOLES_MINIMOS || $goles > self::GOLES_MAXIMOS) {
+                throw new ValorFueraDeRango($campo);
+            }
+        }
 
         return $this->conEstado(EstadoDePartido::Jugado, $golesFavor, $golesContra, $instante);
     }

@@ -25,6 +25,20 @@ final class Convocatoria
         return new self(Identificador::generar(), $partidoId, $jugadorId, null, null, $instante);
     }
 
+    /** Fija la posición y el rol de la alineación, o los quita con nulos (HU-13). */
+    public function conAlineacion(?Identificador $posicionId, ?RolDeAlineacion $rol, DateTimeImmutable $instante): self
+    {
+        return new self($this->id, $this->partidoId, $this->jugadorId, $posicionId, $rol, $instante);
+    }
+
+    /** Si la posición y el rol son los mismos que `$posicionId` y `$rol`: un reemplazo sin cambio no escribe historial. */
+    public function tieneAlineacion(?Identificador $posicionId, ?RolDeAlineacion $rol): bool
+    {
+        $mismaPosicion = $posicionId === null ? $this->posicionId === null : $this->posicionId?->igualA($posicionId) === true;
+
+        return $mismaPosicion && $this->rolAlineacion === $rol;
+    }
+
     public function id(): Identificador
     {
         return $this->id;

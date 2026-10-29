@@ -15,4 +15,7 @@ interface ConsultaDeConvocatoria
     public function delPartido(Identificador $partidoId, int $pagina, int $porPagina): array;
 
     public function contarDelPartido(Identificador $partidoId): int;
+
+    /** @return list<Convocatoria> toda la convocatoria visible, sin paginar, en orden de convocatoria */
+    public function todasDelPartido(Identificador $partidoId): array;
 }

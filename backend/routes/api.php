@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlineacionYResultadoController;
 use App\Http\Controllers\AsignaturaController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\AsistenciaDeEntrenamientoController;
@@ -112,5 +113,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'listar'])->whereUuid('partido');
         Route::post('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'crear'])->whereUuid('partido');
         Route::delete('/convocatorias/{convocatoria}', [ConvocatoriaController::class, 'eliminar'])->whereUuid('convocatoria');
+
+        Route::put('/partidos/{partido}/alineacion', [AlineacionYResultadoController::class, 'alineacion'])->whereUuid('partido');
+        Route::put('/partidos/{partido}/resultado', [AlineacionYResultadoController::class, 'resultado'])->whereUuid('partido');
     });
 });

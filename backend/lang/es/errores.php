@@ -67,5 +67,8 @@ return [
         'torneo_inexistente' => 'El torneo indicado no existe.',
         'partido_no_programado' => 'El partido ya no está programado.',
         'jugador_ya_convocado' => 'El jugador ya está convocado al partido.',
+        'jugador_no_convocado' => 'El jugador no está convocado al partido.',
+        'posicion_inexistente' => 'La posición indicada no existe.',
+        'valor_fuera_de_rango' => 'Los goles deben estar entre 0 y 99.',
     ],
 ];

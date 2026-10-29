@@ -21,10 +21,10 @@ Origen de la columna **Hito**:
 | HU-07 Capturar calificaciones y asistencia a clases | H2 | H2: `CalificacionesTest` (criterios 1 y 2, §7.7 y §7.10 filas 2, 3, 4 y 7), `AsistenciasTest` (criterio 3, §7.8 y §7.10 fila 8), `RecalculoDelResumenTest` (recálculo por eventos, §7.10 filas 15 a 19, 22 y 24), `CalificacionTest`, `AsistenciaDeClaseTest`, `ContratoDeAcademicoTest`; humo `humo-h2.sh` pasos 8, 9 y 15 |
 | HU-08 Definir criterio de aprobación por materia | H2 | H2: `CriterioPorMateriaTest` (§7.6 y §7.10 filas 5 y 6; la fila 9 «después del commit» se cubre junto con la fila 10 y `arquitectura §11: el publicador despacha después del commit` de `RecalculoDelResumenTest`, auditoría de C2 M-6), `CriterioDeAprobacionTest`, `EscalaDeCalificacionesTest`, `ContratoDeAcademicoTest`; humo `humo-h2.sh` paso 11 |
 | HU-09 Ver riesgo académico calculado | H2 | H2: `SituacionAcademicaTest` (§7.10 filas 1 a 16, 20, 21 y 22 por HTTP; criterio 3 en la fila 9), `RecalculoDelResumenTest`, `ResumenAcademicoTest`, `RiesgoAcademicoTest`, `ContratoDeAcademicoTest`; humo `humo-h2.sh` pasos 10 a 13. **Diferido a H6:** el resumen en alertas, convocatoria y gráficos y la marca «posiblemente desactualizado» (§2.2) |
-| HU-10 Programar entrenamientos | H3 | |
-| HU-11 Registrar asistencia a entrenamientos | H3 (criterio 2 en H5) | |
-| HU-12 Programar partidos y armar convocatoria | H3 (criterio 3 en H5, criterio 2 en H6) | |
-| HU-13 Registrar alineación y resultado | H3 | |
+| HU-10 Programar entrenamientos | H3 | H3: `EntrenamientosTest` (§7.2 filas 1 a 7; empalme, transiciones, DA-08, filtros por día local, 404 byte a byte), `EntrenamientoTest` (unitarias), `PuertosDeEquipoTest` (DA-12, DA-13), `CompetenciaSinPlantelTest` (Arch), `ContratoDeEntrenamientosTest` |
+| HU-11 Registrar asistencia a entrenamientos | H3 (criterio 2 en H5) | H3: `AsistenciaDeEntrenamientosTest` (§7.3 filas 1 a 11; §7.6 filas 1, 2 y 8), `AsistenciaDeEntrenamientoTest` (unitarias: fórmula y redondeo), `ContratoDeAsistenciaTest`. **Diferido a H5:** criterio 2 (jugador lesionado al capturar) |
+| HU-12 Programar partidos y armar convocatoria | H3 (criterio 3 en H5, criterio 2 en H6) | H3: `PartidosTest` (§7.4 filas 1 a 8; frontera del día local, DA-24 a DA-26), `PartidoTest` (unitarias), `ConvocatoriaTest` (§7.5 filas 1, 2, 3 y 10; §7.6 fila 3; DA-28), `ContratoDePartidosTest`, `ContratoDeConvocatoriaTest`. La fila 6 de §7.4 queda **completa**: la cancelación por HTTP y el rechazo del resultado en el dominio en T05 (`PartidosTest`, `PartidoTest`), y el rechazo del resultado por HTTP en T07 (`AlineacionYResultadoTest`). **Diferido a H6:** criterio 2 (vista consolidada, HU-24). **Diferido a H5:** criterio 3 (advertencia por lesionado) |
+| HU-13 Registrar alineación y resultado | H3 | H3: `AlineacionYResultadoTest` (§7.5 filas 4 a 8; DA-30 a DA-33; 404 byte a byte), `PartidoTest` y `ConvocatoriaTest` (unitarias), `ContratoDeAlineacionYResultadoTest`. **Diferido a H4:** criterio 2, la parte de habilitar la captura de rendimiento (§2.2) |
 | HU-14 Capturar rendimiento después del partido | H4 | |
 | HU-15 Gestionar plantillas y umbrales | H4 | |
 | HU-16 Evaluar si el jugador pasa o no pasa | H4 | |
@@ -39,8 +39,8 @@ Origen de la columna **Hito**:
 | HU-25 Ver gráficos de historial individual y grupal | H6 | |
 | HU-26 Consultar el historial de cambios | H7 | |
 | HU-27 Cerrar sesión y cambiar contraseña | H1 | H1: `CerrarSesionYContrasenaTest`; humo paso 14 |
-| HU-28 Gestionar catálogos | H1 (categorías), H2 (periodos y asignaturas), H3 (lugares, temporadas, torneos y rivales) | H1 (categorías): `CategoriasTest`, `EquiposTest`. H2 (periodos y asignaturas): `PeriodosEscolaresTest` (§7.1), `AsignaturasTest` (§7.2; «la materia lo sigue mostrando» por la API en §7.1 fila 8 y §7.2 fila 6, y en `MateriasTest` §7.3 fila 8, auditoría de C2 M-3), `PeriodoEscolarTest`, `MateriaYAsignaturaTest`, `ContratoDeAcademicoTest`; humo `humo-h2.sh` pasos 3 y 4. **Diferido a H3:** lugares, temporadas, torneos y rivales |
-| HU-29 Registrar la baja de un jugador | H1 (criterio 3 en H3 y H6) | H1: `BajaDeJugadorTest`; humo paso 13. **Diferido a H3 (convocatorias) y H6 (listado y alertas):** criterio 3; en H1 solo se prueba que el jugador en baja no aparece en `GET /jugadores` |
+| HU-28 Gestionar catálogos | H1 (categorías), H2 (periodos y asignaturas), H3 (lugares, temporadas, torneos y rivales) | H1 (categorías): `CategoriasTest`, `EquiposTest`. H2 (periodos y asignaturas): `PeriodosEscolaresTest` (§7.1), `AsignaturasTest` (§7.2; «la materia lo sigue mostrando» por la API en §7.1 fila 8 y §7.2 fila 6, y en `MateriasTest` §7.3 fila 8, auditoría de C2 M-3), `PeriodoEscolarTest`, `MateriaYAsignaturaTest`, `ContratoDeAcademicoTest`; humo `humo-h2.sh` pasos 3 y 4. H3 (lugares, temporadas, torneos y rivales): `CatalogosTest` (§7.1 filas 1 a 7; DD-07), `CatalogosDeCompetenciaTest`, `ContratoDeCompetenciaTest` |
+| HU-29 Registrar la baja de un jugador | H1 (criterio 3 en H3 y H6) | H1: `BajaDeJugadorTest`; humo paso 13. H3 (convocatorias): `ConvocatoriaTest` (§7.5 fila 9: el jugador dado de baja después de convocarlo no aparece). **Diferido a H6 (listado y alertas):** el resto del criterio 3; en H1 solo se prueba que el jugador en baja no aparece en `GET /jugadores` |
 | HU-30 Actualizar o descartar la disponibilidad | H5 | |
 
 ## Reglas de negocio
@@ -57,14 +57,14 @@ Origen de la columna **Hito**:
 | RN-08 Bajo rendimiento | H4 | |
 | RN-09 Acumulación de sanciones deportivas | H6 | |
 | RN-10 Riesgo de baja deportiva | H4, H6 | |
-| RN-11 Asistencia a entrenamientos | H3 | |
+| RN-11 Asistencia a entrenamientos | H3 | H3: `AsistenciaDeEntrenamientosTest` (presente, falta y falta justificada; §7.3), `MigracionesDeCompetenciaTest` (`CHECK` de estado) |
 | RN-12 Carga inicial y catálogos | H1, H2, H3 | H1: ninguna prueba lleva el identificador RN-12; las categorías, que son el único catálogo de H1, las cubre HU-28 (`CategoriasTest`). H2: tampoco hay prueba con el identificador RN-12; la parte docente (periodos y asignaturas como catálogo común, materias e inscripción por docentes) la cubren HU-28 y DD-49 (`PeriodosEscolaresTest`, `AsignaturasTest`) y HU-06 (`MateriasTest`, `InscripcionesTest`) |
 | RN-13 Detalle propio y resumen del resto | H2, H6 | H2: `AlcanceDelDocenteTest` (§7.4 filas 2 y 5: `equipos` vacío para el docente), `SituacionAcademicaTest` (§7.10 filas 9, 10 y 14: el entrenador ve solo el resumen); humo `humo-h2.sh` paso 12. **Diferido a H6:** el lado deportivo del docente (disponibilidad) |
 | RN-14 Jugador en dos equipos | H1 (equipos propios); H3, H4 y H5 (datos que cada entrenador registra) | H1: `ConsultaDeJugadoresTest`, `ExpedienteDeJugadorTest`, `JugadoresSeguridadTest`. H2 (resumen académico visible para todos sus entrenadores; el docente sin datos deportivos): `InscripcionesTest` (§7.5 fila 10), `SituacionAcademicaTest` (§7.10 fila 14) |
 | RN-15 Detalle de lesión solo para quien la registró | H5 | |
 | RN-16 Aviso pendiente de confirmación | H5 | |
 | RN-17 Conservación del historial y borrado lógico | H1 (borrado lógico e historial), H7 (consulta) | H1: `AlcanceDeJugadoresTest`, `BajaDeJugadorTest`, `MigracionesDePlantelTest`, `BorradoLogicoTest`, `HistorialDeTablasTest` |
-| RN-18 Criterios de convocatoria y prioridad por desempeño | H3, H6 | |
+| RN-18 Criterios de convocatoria y prioridad por desempeño | H3, H6 | H3: `ConvocatoriaTest` (la convocatoria no valida elegibilidad; solo exige un jugador vigente del equipo, DA-28). **Diferido a H4 y H6:** la prioridad por desempeño |
 | RN-19 Usuarios creados por el equipo del proyecto | H1 | H1: `CrearUsuarioComandoTest` (prefijo `CONSOLA usuarios:crear`), `UsuarioTest`, `UsuariosDemoSeederTest` |
 | RN-20 Búsqueda por matrícula | H1 | H1: `ConsultaDeJugadoresTest`, `AsignacionDeJugadoresTest`, `JugadoresSeguridadTest`; humo pasos 9 y 10. H2 (búsqueda del docente e inscripción que otorga el alcance): `AlcanceDelDocenteTest` (§7.4 fila 6), `InscripcionesTest` (§7.5 filas 1 a 3), `LocalizadorDeJugadoresTest` (Arch); humo `humo-h2.sh` paso 7 |
 | RN-21 Alerta de riesgo de baja académica | H6 | |

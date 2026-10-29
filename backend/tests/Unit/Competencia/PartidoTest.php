@@ -7,6 +7,7 @@ use Src\Competencia\Dominio\Partido;
 use Src\Competencia\Dominio\PartidoNoProgramado;
 use Src\Competencia\Dominio\TipoDePartido;
 use Src\Competencia\Dominio\TransicionNoPermitida;
+use Src\Competencia\Dominio\ValorFueraDeRango;
 
 function partidoDePrueba(EstadoDePartido $estado = EstadoDePartido::Programado, TipoDePartido $tipo = TipoDePartido::Oficial, string $inicia = '2026-09-12 23:00:00'): Partido
 {
@@ -81,4 +82,32 @@ test('HU-12 (§7.4 fila 6, parcial hasta T07): un partido cancelado no admite re
         ->and($jugado->actualizadoEn())->toEqual(instanteDePartido())
         ->and(fn () => partidoDePrueba(EstadoDePartido::Cancelado)->conResultado(3, 1, instanteDePartido()))->toThrow(PartidoNoProgramado::class)
         ->and(fn () => $jugado->conResultado(2, 2, instanteDePartido()))->toThrow(PartidoNoProgramado::class);
+});
+
+test('HU-13 (§7.5 fila 8, DA-33): el resultado acepta 0 y 99 y rechaza lo que sale de ese rango, primero en goles_favor', function (int $favor, int $contra, ?string $campo) {
+    $lanzada = null;
+    $jugado = null;
+    try {
+        $jugado = partidoDePrueba()->conResultado($favor, $contra, instanteDePartido());
+    } catch (ValorFueraDeRango $e) {
+        $lanzada = $e;
+    }
+
+    if ($campo === null) {
+        expect($lanzada)->toBeNull()->and([$jugado?->golesFavor(), $jugado?->golesContra()])->toBe([$favor, $contra]);
+    } else {
+        expect($lanzada?->codigo())->toBe('valor_fuera_de_rango')->and($lanzada?->campo())->toBe($campo);
+    }
+})->with([
+    'límites' => [0, 99, null],
+    'otros límites' => [99, 0, null],
+    'favor 100' => [100, 0, 'goles_favor'],
+    'favor -1' => [-1, 0, 'goles_favor'],
+    'contra 100' => [0, 100, 'goles_contra'],
+    'contra -1' => [0, -1, 'goles_contra'],
+    'los dos fuera' => [100, 100, 'goles_favor'],
+]);
+
+test('HU-13 (DA-33): un partido cancelado rechaza el resultado por su estado antes que por el rango', function () {
+    expect(fn () => partidoDePrueba(EstadoDePartido::Cancelado)->conResultado(100, 0, instanteDePartido()))->toThrow(PartidoNoProgramado::class);
 });

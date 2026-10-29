@@ -3742,6 +3742,166 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /partidos/{partido}/alineacion:
+    put:
+      operationId: definirAlineacion
+      summary: Reemplaza la alineacion completa de un partido
+      description: >-
+        Solo entrenadores del equipo del partido (HU-13), en un partido programado. Cada jugador debe estar en la
+        convocatoria visible (DA-32) y cada posicion en el catalogo posiciones (DA-31). Quien no esta en la lista queda
+        sin posicion ni rol; una lista vacia deja a todos sin alineacion. Responde la convocatoria visible completa.
+        Una sola transaccion, con historial por fila que cambia.
+      tags: [Convocatoria]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [alineacion]
+              properties:
+                alineacion:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required: [jugador_id, posicion_id, rol_alineacion]
+                    properties:
+                      jugador_id:
+                        type: string
+                        format: uuid
+                      posicion_id:
+                        type: string
+                        format: uuid
+                      rol_alineacion:
+                        type: string
+                        enum: [titular, suplente]
+      responses:
+        '200':
+          description: La convocatoria con la alineacion.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Convocatoria'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El partido no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El partido no esta programado (partido_no_programado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Lista ausente, con formato invalido o un jugador repetido (validacion_fallida); jugador no convocado
+            (jugador_no_convocado, campo alineacion.N.jugador_id); posicion inexistente (posicion_inexistente).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /partidos/{partido}/resultado:
+    put:
+      operationId: capturarResultado
+      summary: Captura el resultado de un partido programado
+      description: >-
+        Solo entrenadores del equipo del partido (HU-13). El partido pasa a jugado. Un partido jugado o cancelado no
+        admite resultado (409); el resultado no se corrige (§2.3). Primero el estado y despues el rango (DA-33).
+      tags: [Partidos]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [goles_favor, goles_contra]
+              properties:
+                goles_favor:
+                  type: integer
+                  minimum: 0
+                  maximum: 99
+                goles_contra:
+                  type: integer
+                  minimum: 0
+                  maximum: 99
+      responses:
+        '200':
+          description: El partido jugado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Partido'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El partido no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El partido no esta programado (partido_no_programado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Goles ausentes o que no son enteros, o un campo no admitido (validacion_fallida); goles fuera de 0 a 99
+            (valor_fuera_de_rango, campo goles_favor o goles_contra).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Baja:

@@ -33,6 +33,11 @@ final class ConsultaDeConvocatoriaSql implements ConsultaDeConvocatoria
         return array_values($convocatorias);
     }
 
+    public function todasDelPartido(Identificador $partidoId): array
+    {
+        return $this->delPartido($partidoId, 1, max(1, $this->contarDelPartido($partidoId)));
+    }
+
     public function contarDelPartido(Identificador $partidoId): int
     {
         return $this->visibles($partidoId)->count();
