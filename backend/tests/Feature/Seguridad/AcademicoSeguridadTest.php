@@ -71,6 +71,78 @@ test('RNF-01: D2 sobre cada recurso de D1, con cualquier cuerpo, recibe un 404 b
     expect($despues)->toBe($antes);
 });
 
+/** Filas que una petición atacante no debe crear. */
+function seguridadFilasAcademicas(): int
+{
+    return DB::table('calificaciones')->count() + DB::table('asistencias_clase')->count() + DB::table('inscripciones')->count() + DB::table('criterios_aprobacion')->count();
+}
+
+/**
+ * Ataca con `$sesion` una ruta de `seguridadRutasConRecurso($m)`, con cada uno de sus cuerpos, y exige el 404 byte a byte
+ * idéntico al de una materia inexistente, sin filas nuevas.
+ *
+ * @param  array<string, string>  $m
+ */
+function seguridadAtacarConCadaCuerpo(TestCase $prueba, string $sesion, array $m, string $ruta): void
+{
+    $referencia = sesionesPeticion($prueba, 'GET', '/api/v1/materias/'.Identificador::generar()->valor(), idDeSesion: $sesion)->assertNotFound();
+    $antes = seguridadFilasAcademicas();
+    [$metodo, $plantilla, $recurso, $cuerpos] = seguridadRutasConRecurso($m)[$ruta];
+
+    foreach ($cuerpos as $cuerpo) {
+        $respuesta = sesionesPeticion($prueba, $metodo, str_replace('{v}', $recurso, $plantilla), $cuerpo, $sesion);
+        expect($respuesta->getStatusCode())->toBe(404, "$ruta con ".json_encode($cuerpo))
+            ->and($respuesta->getContent())->toBe($referencia->getContent());
+    }
+    expect(seguridadFilasAcademicas())->toBe($antes);
+}
+
+dataset('rutas de una inscripción de H2', [
+    'GET /inscripciones/{inscripcion}/calificaciones',
+    'POST /inscripciones/{inscripcion}/calificaciones',
+    'PATCH /calificaciones/{calificacion}',
+    'GET /inscripciones/{inscripcion}/asistencias',
+    'POST /inscripciones/{inscripcion}/asistencias',
+    'PATCH /asistencias-clase/{asistencia}',
+]);
+
+test('RNF-01 (§0.5.4): D2, docente de J3 en M2, recibe un 404 byte a byte idéntico sobre I3a (J3 en M1, de D1)', function (string $ruta) {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    $deI3a = [
+        ...$m,
+        'i1' => $m['i3a'],
+        'calificacion' => mundoCalificar($m['i3a'], 'final', '8.00'),
+        'asistencia' => mundoAsistir($m['i3a'], '2026-03-09', 'presente'),
+    ];
+    $sesion = sesionesIniciar($this, 'd2@x.com');
+    // J3 está en el alcance de D2 (por I3b): solo la pertenencia de la materia separa a D2 de I3a.
+    sesionesPeticion($this, 'GET', "/api/v1/jugadores/{$m['j3']}", idDeSesion: $sesion)->assertOk();
+
+    seguridadAtacarConCadaCuerpo($this, $sesion, $deI3a, $ruta);
+
+    expect(DB::table('calificaciones')->where('id', $deI3a['calificacion'])->value('valor'))->toBe('8.00')
+        ->and(DB::table('asistencias_clase')->where('id', $deI3a['asistencia'])->value('estado'))->toBe('presente');
+})->with('rutas de una inscripción de H2');
+
+test('RNF-01 (§0.5.4): DE, docente de J1 en M3, recibe un 404 byte a byte idéntico sobre I1 (J1 en M1, de D1)', function (string $ruta) {
+    /** @var TestCase $this */
+    $m = mundoAgregarEquipoYMateriaDeDocenteEntrenador(mundoDeDocentes());
+    $deI1 = [
+        ...$m,
+        'calificacion' => mundoCalificar($m['i1'], 'final', '8.00'),
+        'asistencia' => mundoAsistir($m['i1'], '2026-03-09', 'presente'),
+    ];
+    $sesion = sesionesIniciar($this, 'de@x.com');
+    // DE es docente de J1 (por M3) y ve su propia inscripción: solo la pertenencia de la materia lo separa de I1.
+    sesionesPeticion($this, 'GET', "/api/v1/inscripciones/{$m['i1m3']}/calificaciones", idDeSesion: $sesion)->assertOk();
+
+    seguridadAtacarConCadaCuerpo($this, $sesion, $deI1, $ruta);
+
+    expect(DB::table('calificaciones')->where('id', $deI1['calificacion'])->value('valor'))->toBe('8.00')
+        ->and(DB::table('asistencias_clase')->where('id', $deI1['asistencia'])->value('estado'))->toBe('presente');
+})->with('rutas de una inscripción de H2');
+
 test('RNF-01: la situación académica de un jugador ajeno es un 404 byte a byte idéntico para cada perfil', function () {
     /** @var TestCase $this */
     $m = seguridadAcademicaMundo();
