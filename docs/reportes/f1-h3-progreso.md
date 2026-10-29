@@ -207,3 +207,20 @@ Lo esperado eran unos 630 s. Pest tardó 52 s más que en T07 con el mismo códi
 ## 6. Lote C
 
 **Inicio de T08 (29/10/2026):** tras `git fetch`, `origin/hito/f1-h3` y la rama local apuntan a **`40acdd6`** (`F1-DOC: reportes de los FIX de DA-32 y de la compuerta de mutación`), el push que hizo el responsable. Un primer `git fetch` no mostró la rama remota, porque el push aún no estaba hecho; tras el aviso del responsable coincidió.
+
+| Tarea | Estado | Commit | Reporte | `make verificar` |
+|---|---|---|---|---|
+| T08 Seguridad y alcance | hecha | `98c70a7` | `f1-h3-t08.md` | pasa; 1 218 pruebas; **696 s (11 min 36 s)**, por debajo de 13 min |
+| T09 | pendiente; no se empieza sin indicación del responsable | | | |
+
+**Desglose de T08:**
+
+| Etapa | Tiempo |
+|---|---:|
+| Arranque y Pint | 12 s |
+| PHPStan | 3 s |
+| Pest | 639 s |
+| Informe de cobertura y cobertura por capa | 42 s |
+| `composer audit` | < 1 s |
+
+Infection ya no corre en `make verificar`. **No hay huecos de seguridad**: las 12 mutaciones de los filtros de alcance (entrenamientos, asistencias, partidos y convocatorias) hacen fallar al menos una prueba, y no se tocó código de producción. No hubo DA nuevas.
