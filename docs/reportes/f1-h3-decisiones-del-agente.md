@@ -126,3 +126,52 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué se eligió:** `AAAA-MM-DDTHH:MM:SS` con desplazamiento (`-06:00`) o con `Z`; sin zona se rechaza (422). Se guardan y se devuelven en UTC.
 - **Por qué:** un instante sin zona es ambiguo (RNF-04); con `Z` es el ISO 8601 UTC de la convención.
 - **Cómo se revierte:** cambiar `SolicitudDeNuevoEntrenamiento::INSTANTE`.
+
+## DA-16 (T04): el campo de `jugador_no_pertenece_al_equipo` es `registros.N.jugador_id`
+
+- **Qué faltaba:** §6.3 dice «campo `jugador_id`», pero el alta recibe una lista: hay que decir cuál de los registros falla.
+- **Qué se eligió:** `registros.N.jugador_id` (N desde 0), como nombra Laravel los errores de un arreglo; el primero que falla.
+- **Por qué:** señala el registro exacto y conserva `jugador_id` como nombre del campo.
+- **Cómo se revierte:** cambiar el campo en `JugadorNoPerteneceAlEquipo`.
+
+## DA-17 (T04): la captura por lista es todo o nada
+
+- **Qué faltaba:** §3.4 dice que la asistencia se captura una vez por jugador, pero no qué pasa si un registro de la lista falla.
+- **Qué se eligió:** si un registro falla (jugador ajeno o en baja, ya registrado, o repetido en la misma lista), no se guarda ninguno. Orden: 404 → 422 de forma (incluido `distinct`) → 409 `entrenamiento_no_realizado` → 422 `jugador_no_pertenece_al_equipo` → 409 `asistencia_ya_registrada`. La pertenencia se evalúa al capturar (membresía vigente y sin baja hoy).
+- **Por qué:** la más estricta, y evita listas a medias que el entrenador no sabría completar.
+- **Cómo se revierte:** guardar los válidos y devolver los errores de los demás.
+
+## DA-18 (T04): la corrección no exige que el jugador siga en el equipo
+
+- **Qué faltaba:** §3.4 limita la captura a jugadores vigentes y sin baja, pero no dice nada de la corrección.
+- **Qué se eligió:** un entrenador del equipo del entrenamiento puede corregir el estado aunque el jugador haya salido del equipo o esté en baja. Queda el historial `actualizar`.
+- **Por qué:** es una corrección del historial, que sigue siendo del equipo (arquitectura §10: la baja conserva el historial para quien ya tenía al jugador), y H6 calcula sanciones (RN-09) con esos datos. No revela nada nuevo: el registro ya era visible.
+- **Cómo se revierte:** comprobar la pertenencia en `CorregirAsistencia` (como H2 DA-13).
+
+## DA-19 (T04): el listado de asistencias no trae datos del jugador
+
+- **Qué faltaba:** §6.1 no dice qué campos tiene el listado.
+- **Qué se eligió:** `id`, `entrenamiento_id`, `jugador_id`, `estado`, `actualizado_en`; incluye los registros de jugadores ya en baja (historial). Los nombres están en el detalle del entrenamiento (`jugadores_del_equipo`). Orden por `creado_en` e `id`, paginado.
+- **Por qué:** revela lo mínimo y no lee tablas de Plantel.
+- **Cómo se revierte:** unir los nombres por un puerto.
+
+## DA-20 (T04): el porcentaje de un jugador usa el alcance de entrenador
+
+- **Qué faltaba:** §6.1 dice «con sesión y alcance» para `GET /jugadores/{jugador}/asistencia-entrenamientos`, sin decir qué rama del alcance.
+- **Qué se eligió:** `AlcanceDeJugadores` con `soloEntrenador` e `incluirBajas`. Un docente recibe 404 aunque enseñe al jugador; un jugador en baja sigue visible para su entrenador (historial). La ruta no lleva el middleware de rol: un usuario sin alcance recibe 404, no 403.
+- **Por qué:** RN-13: el docente, del lado deportivo, solo ve el estado oficial. Es lo que revela menos.
+- **Cómo se revierte:** quitar `soloEntrenador` en `VisibilidadDeJugadorSql`.
+
+## DA-21 (T04): forma del porcentaje por equipo
+
+- **Qué faltaba:** §3.4 da la fórmula, pero no la forma de la respuesta ni qué jugadores lista.
+- **Qué se eligió:** `{equipo_id, porcentaje, presentes, faltas, faltas_justificadas, por_jugador: [{jugador_id, nombres, apellidos, porcentaje, presentes, faltas, faltas_justificadas}]}`. El total del equipo cuenta todos los registros de sus entrenamientos realizados (también los de jugadores ya en baja); `por_jugador` lista solo a los jugadores vigentes del equipo (`JugadoresDelEquipo`), incluso los que no tienen registros (porcentaje `null`). El campo es `por_jugador` y no `jugadores` (DA-14).
+- **Por qué:** el total es un dato agregado del equipo y no se altera al dar de baja a alguien; la lista solo muestra a quien el entrenador puede ver hoy.
+- **Cómo se revierte:** filtrar el total por los jugadores vigentes.
+
+## DA-22 (T04): los conteos acompañan al porcentaje
+
+- **Qué faltaba:** §6.1 solo nombra el porcentaje.
+- **Qué se eligió:** se devuelven también `presentes`, `faltas` y `faltas_justificadas` (enteros).
+- **Por qué:** sin ellos un `null` o un `0.00` no se pueden distinguir de un dato sin registros, y H6 los usará (RN-09).
+- **Cómo se revierte:** quitar los tres campos del recurso.
