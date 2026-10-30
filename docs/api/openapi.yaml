@@ -4500,7 +4500,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '409':
-          description: Otro cambio simultaneo del mismo umbral (codigo conflicto).
+          description: >-
+            Otro cambio simultaneo del umbral del mismo jugador, equipo y entrenador choco con el indice del umbral
+            vigente; no se escribe nada (codigo conflicto, sin campo; §6.3 v1.0.5, DA-27).
           content:
             application/json:
               schema:
