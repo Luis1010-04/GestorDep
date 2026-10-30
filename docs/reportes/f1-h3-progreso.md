@@ -211,7 +211,7 @@ Lo esperado eran unos 630 s. Pest tardó 52 s más que en T07 con el mismo códi
 | Tarea | Estado | Commit | Reporte | `make verificar` |
 |---|---|---|---|---|
 | T08 Seguridad y alcance | hecha | `98c70a7` | `f1-h3-t08.md` | pasa; 1 218 pruebas; **696 s (11 min 36 s)**, por debajo de 13 min |
-| T09 | pendiente; no se empieza sin indicación del responsable | | | |
+| T09 Humo y cierre documental | hecha | `2aa6936` | `f1-h3-reporte.md` | pasa; 1 224 pruebas; **615 s (10 min 15 s)**; `make mutacion` 112 s |
 
 **Desglose de T08:**
 
@@ -224,3 +224,22 @@ Lo esperado eran unos 630 s. Pest tardó 52 s más que en T07 con el mismo códi
 | `composer audit` | < 1 s |
 
 Infection ya no corre en `make verificar`. **No hay huecos de seguridad**: las 12 mutaciones de los filtros de alcance (entrenamientos, asistencias, partidos y convocatorias) hacen fallar al menos una prueba, y no se tocó código de producción. No hubo DA nuevas.
+
+**T09 (29/10/2026):** el responsable aceptó T08; la evidencia de regresión son las 12 mutaciones (`6add674`). Antes de empezar se revirtió, con su autorización, un cambio ajeno en `backend/tests/Feature/SaludTest.php`: una línea de cuatro espacios al final, sin salto de línea. Commits: `2aa6936` (F1-H3-T09: guion y su prueba) y los F1-DOC de trazabilidad (`97cbb5e`), registro de decisiones (`f8e3833`) y reporte de cierre. Migración: fresh, rollback de las 52 y fresh, sin errores. `make humo-h3` pasa los 16 pasos y `make humo` (H0 a H2) pasa, cada uno tras un `make fresh`.
+
+**Desglose de T09:**
+
+| Corrida | Etapa | Tiempo |
+|---|---|---:|
+| `make verificar` | Arranque y Pint | 10 s |
+| | PHPStan | 14 s |
+| | Pest | 555 s |
+| | Informe de cobertura y cobertura por capa | 36 s |
+| | `composer audit` | < 1 s |
+| | **Total** | **615 s** |
+| `make mutacion` | Pruebas iniciales | 16 s |
+| | Mutantes (501, MSI 100 %) | 95 s |
+| | `bin/verificar-mutacion.php` | < 1 s |
+| | **Total** | **112 s** |
+
+Falta la auditoría independiente del Lote C (§10 punto 10) y la revisión del responsable (punto 11). No hubo push, PR ni etiquetas.
