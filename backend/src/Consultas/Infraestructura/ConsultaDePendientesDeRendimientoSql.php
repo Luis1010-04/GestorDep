@@ -32,11 +32,11 @@ final class ConsultaDePendientesDeRendimientoSql implements ConsultaDePendientes
     {
         $usuario = $this->usuarioActual->identificador();
         $equipos = $usuario === null ? [] : array_map(fn (Identificador $equipo) => $equipo->valor(), $this->equipos->equiposDe($usuario));
-        if ($equipos === []) {
+        if ($usuario === null || $equipos === []) {
             return ['elementos' => [], 'total' => 0];
         }
 
-        $pendientes = $this->pendientes($equipos);
+        $pendientes = $this->pendientes($equipos, $usuario);
         $elementos = (clone $pendientes)
             ->orderByDesc('partidos.inicia_en')
             ->orderBy('partidos.id')
@@ -57,8 +57,13 @@ final class ConsultaDePendientesDeRendimientoSql implements ConsultaDePendientes
         ];
     }
 
-    /** @param  list<string>  $equipos */
-    private function pendientes(array $equipos): Builder
+    /**
+     * Un convocado cuenta como pendiente si el entrenador que consulta no le registró rendimiento; el de otro entrenador
+     * no cuenta (v1.0.8, RN-14).
+     *
+     * @param  list<string>  $equipos
+     */
+    private function pendientes(array $equipos, Identificador $entrenador): Builder
     {
         $convocados = $this->conexion->table('partidos')
             ->join('convocatorias', 'convocatorias.partido_id', '=', 'partidos.id')
@@ -69,6 +74,7 @@ final class ConsultaDePendientesDeRendimientoSql implements ConsultaDePendientes
             ->whereNotExists(fn (Builder $rendimiento) => $rendimiento->from('rendimientos_partido')
                 ->whereColumn('rendimientos_partido.partido_id', 'partidos.id')
                 ->whereColumn('rendimientos_partido.jugador_id', 'convocatorias.jugador_id')
+                ->where('rendimientos_partido.registrado_por', $entrenador->valor())
                 ->whereNull('rendimientos_partido.eliminado_en'));
 
         return $this->alcance->restringir($this->usuarioActual, $convocados, 'convocatorias.jugador_id', incluirBajas: false, soloEntrenador: true)

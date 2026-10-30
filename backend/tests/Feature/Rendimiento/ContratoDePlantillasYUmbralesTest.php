@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use Tests\TestCase;
 
@@ -44,6 +45,13 @@ test('HU-15: las respuestas de plantillas y umbral cumplen el contrato', functio
         ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'get', sesionesPeticion($this, 'GET', $umbral, idDeSesion: $docente)->assertForbidden()],
         ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral, [], $docente)->assertForbidden()],
     ];
+
+    // 409 sin_umbral_aplicable (DA-33, v1.0.6): un portero sin umbral propio cuando no hay plantilla de fábrica de portero.
+    $portero = mundoJugador('M-SINP', 'Sin plantilla', [$m['a'] => 'portero'], nombres: 'SP');
+    DB::connection('propietario')->table('plantillas_evaluacion')->where('id', umbralPlantillaDeFabrica('portero'))->update(['eliminado_en' => '2026-09-30 10:00:00+00']);
+    $sinPlantilla = "/api/v1/equipos/{$m['a']}/jugadores/{$portero}/umbral";
+    $respuestas[] = ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'get', sesionesPeticion($this, 'GET', $sinPlantilla, idDeSesion: $sesion)->assertStatus(409)->assertJsonPath('codigo', 'sin_umbral_aplicable')];
+    $respuestas[] = ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $sinPlantilla, [], $sesion)->assertStatus(409)->assertJsonPath('codigo', 'sin_umbral_aplicable')];
 
     foreach ($respuestas as [$ruta, $metodo, $respuesta]) {
         expect($validador->validate($respuesta->baseResponse, $ruta, $metodo))->toBeTrue("$metodo $ruta {$respuesta->getStatusCode()}");

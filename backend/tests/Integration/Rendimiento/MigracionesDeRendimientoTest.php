@@ -227,11 +227,12 @@ test('RNF-03: la clave foránea compuesta impide un rendimiento con un equipo di
     expect(rendimientoRechazo(fn () => rendimientoInsertar('rendimientos_partido', rendimientoDatosDeCaptura(['equipo_id' => rendimientoEquipo()]))))->toBe('23503');
 });
 
-test('RNF-03: un jugador tiene un solo rendimiento por partido, y el borrado lógico libera el índice', function () {
+test('RNF-03 (v1.0.8): un jugador tiene un solo rendimiento por partido y registrante, otro entrenador puede tener el suyo, y el borrado lógico libera el índice', function () {
     $datos = rendimientoDatosDeCaptura();
     $primero = rendimientoInsertar('rendimientos_partido', $datos);
 
-    expect(rendimientoRechazo(fn () => rendimientoInsertar('rendimientos_partido', $datos)))->toBe('23505');
+    expect(rendimientoRechazo(fn () => rendimientoInsertar('rendimientos_partido', $datos)))->toBe('23505')
+        ->and(rendimientoRechazo(fn () => rendimientoInsertar('rendimientos_partido', [...$datos, 'registrado_por' => rendimientoUsuario()])))->toBeNull();
 
     rendimientoEliminar('rendimientos_partido', $primero);
 
@@ -376,7 +377,8 @@ test('RNF-03: los índices de §5.1 existen con sus columnas', function () {
         "select indexname, indexdef from pg_indexes where schemaname = 'public' and tablename in ('rendimientos_partido', 'valores_metrica', 'plantillas_evaluacion', 'umbrales_rendimiento', 'evaluaciones_rendimiento')",
     ))->pluck('indexdef', 'indexname');
 
-    expect($indices['uq_rendimientos_partido_partido_jugador'])->toContain('(partido_id, jugador_id) WHERE (eliminado_en IS NULL)')
+    expect($indices['uq_rendimientos_partido_partido_jugador_registrado_por'])->toContain('(partido_id, jugador_id, registrado_por) WHERE (eliminado_en IS NULL)')
+        ->and($indices->has('uq_rendimientos_partido_partido_jugador'))->toBeFalse()
         ->and($indices['ix_rendimientos_partido_jugador_partido'])->toContain('(jugador_id, partido_id)')
         ->and($indices['ix_rendimientos_partido_registrado_por'])->toContain('(registrado_por)')
         ->and($indices['uq_valores_metrica_rendimiento_metrica'])->toContain('(rendimiento_id, metrica_id) WHERE (eliminado_en IS NULL)')

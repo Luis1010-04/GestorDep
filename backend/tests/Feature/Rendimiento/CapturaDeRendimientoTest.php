@@ -5,7 +5,9 @@ use Illuminate\Testing\TestResponse;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
+use Src\Rendimiento\Dominio\EvaluacionDeRendimiento;
 use Src\Rendimiento\Dominio\RendimientoDePartido;
+use Src\Rendimiento\Dominio\RepositorioDeEvaluaciones;
 use Src\Rendimiento\Dominio\RepositorioDeRendimientos;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -80,7 +82,7 @@ test('HU-14 (§7.1 fila 2): una segunda captura de P1 en PJ1 da 409 rendimiento_
     expect(capturaFilas())->toBe($antes);
 });
 
-test('HU-14 (DA-22): la carrera de dos capturas que choca con el índice único da 409 rendimiento_duplicado y no escribe nada', function () {
+test('HU-14 (DA-22, v1.0.8): la carrera de dos capturas del mismo entrenador que choca con el índice único da 409 rendimiento_duplicado y no escribe nada', function () {
     /** @var TestCase $this */
     $m = capturaMundo();
     capturaDeP1($this, $m);
@@ -89,7 +91,7 @@ test('HU-14 (DA-22): la carrera de dos capturas que choca con el índice único 
     {
         public function __construct(private readonly RepositorioDeRendimientos $real) {}
 
-        public function existeDe(Identificador $partidoId, Identificador $jugadorId): bool
+        public function existeDe(Identificador $partidoId, Identificador $jugadorId, Identificador $registradoPor): bool
         {
             return false;
         }
@@ -117,6 +119,61 @@ test('HU-14 (DA-22): la carrera de dos capturas que choca con el índice único 
         ->assertJsonPath('errores.0.campo', 'jugador_id');
 
     expect(capturaFilas())->toBe($antes);
+});
+
+test('RN-14 (v1.0.8): E1 y E3 capturan al mismo jugador en el mismo partido sin error, y cada uno ve solo el suyo', function () {
+    /** @var TestCase $this */
+    $m = capturaMundo();
+    $deE1 = capturaDeP1($this, $m);
+
+    $deE3 = (string) capturaPeticion($this, 'POST', "/partidos/{$m['pj1']}/rendimientos", capturaCuerpo($m['p1'], 'portero', ['calificacion_general' => 4]), correo: 'e3@x.com')
+        ->assertCreated()->json('datos.id');
+
+    expect(array_column(capturaPeticion($this, 'GET', "/partidos/{$m['pj1']}/rendimientos")->assertOk()->json('datos'), 'id'))->toBe([$deE1])
+        ->and(array_column(capturaPeticion($this, 'GET', "/partidos/{$m['pj1']}/rendimientos", correo: 'e3@x.com')->assertOk()->json('datos'), 'id'))->toBe([$deE3])
+        ->and(capturaFilas()['rendimientos'])->toBe(2);
+    capturaPeticion($this, 'POST', "/partidos/{$m['pj1']}/rendimientos", capturaCuerpo($m['p1'], 'portero'), correo: 'e3@x.com')
+        ->assertStatus(409)->assertJsonPath('codigo', 'rendimiento_duplicado')->assertJsonPath('errores.0.campo', 'jugador_id');
+});
+
+test('HU-14 (v1.0.8): los pendientes cuentan solo los rendimientos del entrenador que consulta', function () {
+    /** @var TestCase $this */
+    $m = capturaMundo();
+    capturaDeP1($this, $m);
+    foreach (['d1' => 'defensa', 'm1' => 'medio', 'f1' => 'delantero'] as $jugador => $posicion) {
+        capturaPeticion($this, 'POST', "/partidos/{$m['pj1']}/rendimientos", capturaCuerpo($m[$jugador], $posicion))->assertCreated();
+    }
+
+    expect(capturaPeticion($this, 'GET', '/partidos/pendientes-de-rendimiento')->assertOk()->json('datos'))->toBe([])
+        ->and(capturaPeticion($this, 'GET', '/partidos/pendientes-de-rendimiento', correo: 'e3@x.com')->assertOk()->json('datos'))->toBe([[
+            'partido_id' => $m['pj1'], 'equipo_id' => $m['a'], 'inicia_en' => '2026-09-12T23:00:00+00:00', 'convocados_sin_rendimiento' => 4,
+        ]]);
+});
+
+test('HU-16 (M-1 de la auditoría del Lote C): si falla la inserción de la evaluación, la captura se deshace completa, sin rendimiento, valores ni historial', function () {
+    /** @var TestCase $this */
+    // Con las plantillas de fábrica sembradas, la captura sí inserta evaluación: sin ellas la prueba no forzaría nada.
+    $m = umbralMundo();
+    app()->instance(RepositorioDeEvaluaciones::class, new class implements RepositorioDeEvaluaciones
+    {
+        public function insertar(EvaluacionDeRendimiento $evaluacion): void
+        {
+            throw new RuntimeException('falla forzada al insertar la evaluación');
+        }
+
+        public function ultimaDe(Identificador $jugador, Identificador $equipo, Identificador $entrenador): ?EvaluacionDeRendimiento
+        {
+            return null;
+        }
+    });
+
+    capturaPeticion($this, 'POST', "/partidos/{$m['pj1']}/rendimientos", capturaCuerpo($m['p1'], 'portero'))
+        ->assertStatus(500)
+        ->assertJsonPath('codigo', 'error_interno');
+
+    expect(capturaFilas())->toBe(['rendimientos' => 0, 'valores' => 0, 'historial' => 0, 'historial_valores' => 0])
+        ->and(DB::table('rendimientos_partido')->count())->toBe(0)
+        ->and(DB::table('evaluaciones_rendimiento')->count())->toBe(0);
 });
 
 test('RN-06 (v1.0.4): la captura, la corrección y la lista devuelven categoria_calificacion según la calificación general', function () {

@@ -4153,8 +4153,9 @@ paths:
                 $ref: '#/components/schemas/Error'
         '409':
           description: >-
-            El partido no esta jugado (partido_no_jugado) o el jugador ya tiene un rendimiento en el partido
-            (rendimiento_duplicado, campo jugador_id).
+            El partido no esta jugado (partido_no_jugado) o el usuario ya capturo a ese jugador en el partido
+            (rendimiento_duplicado, campo jugador_id). El rendimiento que capturo otro entrenador no cuenta ni se revela
+            (v1.0.8, RN-14).
           content:
             application/json:
               schema:
@@ -4327,7 +4328,9 @@ paths:
       summary: Crea una plantilla propia para una posicion
       description: >-
         Solo entrenadores (HU-15, RN-07). La plantilla queda a nombre del usuario (creada_por) y nunca es de fabrica.
-        No hay ruta para editarla ni borrarla (v1.0.4 §2.3). Escribe el historial (RNF-02).
+        No hay ruta para editarla ni borrarla (v1.0.4 §2.3). Escribe el historial (RNF-02). El codigo
+        plantilla_de_fabrica queda reservado: en H4 no hay ningun caso que lo devuelva, porque ninguna ruta edita ni borra
+        plantillas (§6.3).
       tags: [Rendimiento]
       requestBody:
         required: true

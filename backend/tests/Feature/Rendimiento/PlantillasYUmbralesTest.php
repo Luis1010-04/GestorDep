@@ -164,6 +164,20 @@ test('HU-15 (criterio 2): el umbral de E1 se aplica solo a F1, en A, y para E1; 
     umbralPeticion($this, 'GET', "/equipos/{$m['a']}/jugadores/{$m['f1']}/umbral")->assertOk()->assertJsonPath('datos.origen', 'umbral');
 });
 
+test('RN-07: cada posición tiene su plantilla de fábrica, y el umbral de un jugador sin umbral propio es la de su posición en ese equipo', function () {
+    /** @var TestCase $this */
+    $m = umbralMundo();
+    $posicionDe = fn (string $jugador, string $equipo, string $correo = 'e1@x.com') => umbralPeticion($this, 'GET', "/equipos/{$equipo}/jugadores/{$jugador}/umbral", correo: $correo)
+        ->assertOk()->assertJsonPath('datos.origen', 'plantilla')->json('datos.plantilla_id');
+
+    expect(DB::table('plantillas_evaluacion')->whereNull('creada_por')->whereNull('eliminado_en')->distinct()->count('posicion_id'))->toBe(DB::table('posiciones')->count())
+        ->and($posicionDe($m['p1'], $m['a']))->toBe(umbralPlantillaDeFabrica('portero'))
+        ->and($posicionDe($m['d1'], $m['a']))->toBe(umbralPlantillaDeFabrica('defensa'))
+        ->and($posicionDe($m['m1'], $m['a']))->toBe(umbralPlantillaDeFabrica('medio'))
+        ->and($posicionDe($m['f1'], $m['a']))->toBe(umbralPlantillaDeFabrica('delantero'))
+        ->and($posicionDe($m['f1'], $m['b'], 'e3@x.com'))->toBe(umbralPlantillaDeFabrica('delantero'));
+});
+
 test('HU-15: el primer PUT no cierra nada; sin cuerpo copia la plantilla de fábrica de la posición', function () {
     /** @var TestCase $this */
     $m = umbralMundo();

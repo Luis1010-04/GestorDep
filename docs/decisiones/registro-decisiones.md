@@ -179,7 +179,7 @@ Decisiones que tomó el agente donde la especificación de H3 callaba (`docs/hit
 
 ## 6. Decisiones del agente en H4 (DA)
 
-Decisiones que tomó el agente donde la especificación de H4 callaba, y las que indicó el responsable durante el hito (`docs/hitos/f1-h4.md` §0, v1.0.7). El detalle de cada una está en `docs/reportes/f1-h4-decisiones-del-agente.md`. Se registran DA-01 a DA-35; **DA-28 queda retirada** (F1-H4-FIX del Lote B: no hay fuente en `docs/requisitos.md`). La numeración es propia de H4; las DA de H3 se citan como «DA-nn de H3».
+Decisiones que tomó el agente donde la especificación de H4 callaba, y las que indicó el responsable durante el hito (`docs/hitos/f1-h4.md` §0, v1.0.7). El detalle de cada una está en `docs/reportes/f1-h4-decisiones-del-agente.md`. Se registran DA-01 a DA-36; **DA-28 queda retirada** y DA-13 sustituida por DA-36 (F1-H4-FIX del Lote B: no hay fuente en `docs/requisitos.md`). La numeración es propia de H4; las DA de H3 se citan como «DA-nn de H3».
 
 | ID | Decisión | Privacidad o permisos | Estado |
 |---|---|---|---|
@@ -195,7 +195,7 @@ Decisiones que tomó el agente donde la especificación de H4 callaba, y las que
 | DA-10 | `evaluaciones_rendimiento` de solo inserción con la macro de Compartido | No | Aprobada (Lote A) |
 | DA-11 | Orden de las comprobaciones de la captura: 404 antes que `jugador_no_convocado` | **Sí** (no revela jugadores fuera del alcance) | Aprobada (Lote A) |
 | DA-12 | Capturar excluye a los jugadores en baja; leer y corregir los incluye | **Sí** | Aprobada (Lote A) |
-| DA-13 | Un partido está pendiente si tiene un convocado visible sin baja y sin ningún rendimiento | No | Aprobada (Lote A) |
+| DA-13 | Un partido está pendiente si tiene un convocado visible sin baja y sin ningún rendimiento | **Sí** (revelaba que otro entrenador capturó; auditoría del Lote C, m-7) | **Sustituida por DA-36** |
 | DA-14 | Valores de métrica como enteros JSON (todas las sembradas son enteras) | No | Aprobada (Lote A) |
 | DA-15 | Mensaje propio de `valor_fuera_de_rango` en Rendimiento | No | Aprobada (Lote A) |
 | DA-16 | Pendientes de captura en `src/Consultas` | No | Indicada por el responsable; en v1.0.3 |
@@ -215,6 +215,7 @@ Decisiones que tomó el agente donde la especificación de H4 callaba, y las que
 | DA-30 | El historial del cierre del umbral guarda la fila completa (el valor anterior); el primer PUT no cierra nada | No | Aprobada (Lote B) |
 | DA-31 | Campos desconocidos y tipos estrictos en plantillas y umbral | No | Aprobada (Lote B) |
 | DA-32 | Puerto `Transaccion`: la escritura y la evaluación van en la misma transacción | No | Aprobada (Lote B) |
-| DA-33 | Sin criterio aplicable no se inserta evaluación; la lectura responde 409 `sin_umbral_aplicable` | No | Corregida por el responsable (F1-H4-FIX del Lote B); en v1.0.6 |
+| DA-33 | Sin criterio aplicable no se inserta evaluación; la lectura responde 409 `sin_umbral_aplicable` | No | Corregida por el responsable (F1-H4-FIX del Lote B); en v1.0.6. La extensión al umbral la propuso el agente y la aprobó el responsable (m-3) |
 | DA-34 | El rendimiento de un partido eliminado lógicamente no cuenta; H3 no elimina partidos | No | Acotada por el responsable (F1-H4-FIX del Lote B) |
 | DA-35 | Decisiones menores del plan de T04 (corrección sin cambio inserta evaluación; recálculo solo del entrenador que cambia el umbral; desempeño sin procedencia) | No | Aprobada (Lote B) |
+| DA-36 | Un rendimiento por partido, jugador y registrante; los pendientes cuentan solo lo del entrenador que consulta | **Sí** (no revela capturas de otro entrenador) | Indicada por el responsable tras la auditoría del Lote C (m-7); en v1.0.8 |

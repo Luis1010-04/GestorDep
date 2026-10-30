@@ -87,10 +87,10 @@ function ejecutarHumoH3ConCurlFalso(int $codigo, string $cuerpo, string $guion =
     return [$codigoDeSalida, (string) $salida];
 }
 
-/** La función `humo_igual` de humo-h3.sh (comparación byte a byte del paso 12), para cargarla junto a lib.sh. */
-function funcionHumoIgual(): string
+/** La función `humo_igual` del guion (humo-h3.sh por omisión: comparación byte a byte del paso 12), para cargarla junto a lib.sh. */
+function funcionHumoIgual(string $guion = 'humo-h3.sh'): string
 {
-    preg_match('/^humo_igual\(\) \{.*?^\}/ms', (string) file_get_contents(carpetaDeHumo().'/humo-h3.sh'), $funcion);
+    preg_match('/^humo_igual\(\) \{.*?^\}/ms', (string) file_get_contents(carpetaDeHumo().'/'.$guion), $funcion);
 
     return $funcion[0] ?? '';
 }
@@ -158,6 +158,27 @@ test('F1-H4-T06: humo-h4.sh se detiene en el paso 2 con FALLA y código 1 si el 
         ->and($salida)->toContain('FALLA  paso 2: E1 consulta el catálogo: las nueve métricas sembradas -> HTTP 200 (el cuerpo no cumple')
         ->and($salida)->not->toContain('paso 3')
         ->and($salida)->not->toContain('HUMO H4 OK');
+});
+
+test('F1-H4-T06 (m-6): el humo_igual de humo-h4.sh se detiene con FALLA y código 1 si el 404 no es igual byte a byte, o si el código no es 404', function () {
+    $funcion = funcionHumoIgual('humo-h4.sh');
+    expect($funcion)->not->toBe('');
+
+    [$codigoCuerpo, $salidaCuerpo] = ejecutarConLibreriaDeHumo($funcion."\n".'HUMO_CODIGO=404; HUMO_CUERPO=\'{"codigo":"recurso_no_encontrado","mensaje":"otro"}\'; humo_igual 9 "ajeno" 404 \'{"codigo":"recurso_no_encontrado","mensaje":"uno"}\'; echo SIGUIO');
+    [$codigoEstado, $salidaEstado] = ejecutarConLibreriaDeHumo($funcion."\n".'HUMO_CODIGO=200; HUMO_CUERPO=\'{"datos":[]}\'; humo_igual 10 "ajeno" 404 \'{"codigo":"recurso_no_encontrado"}\'; echo SIGUIO');
+
+    expect($codigoCuerpo)->toBe(1)
+        ->and($salidaCuerpo)->toContain('FALLA  paso 9: ajeno -> HTTP 404 (el cuerpo no es igual byte a byte al de referencia)')
+        ->and($salidaCuerpo)->not->toContain('SIGUIO')
+        ->and($codigoEstado)->toBe(1)
+        ->and($salidaEstado)->toContain('FALLA  paso 10: ajeno -> HTTP 200 (se esperaba 404)')
+        ->and($salidaEstado)->not->toContain('SIGUIO');
+});
+
+test('F1-H4-T06 (m-6): el humo_igual de humo-h4.sh imprime OK y el guion sigue si el 404 es igual byte a byte', function () {
+    [$codigo, $salida] = ejecutarConLibreriaDeHumo(funcionHumoIgual('humo-h4.sh')."\n".'HUMO_CODIGO=404; HUMO_CUERPO=\'{"codigo":"recurso_no_encontrado"}\'; humo_igual 9 "ajeno" 404 \'{"codigo":"recurso_no_encontrado"}\'; echo SIGUIO');
+
+    expect($codigo)->toBe(0)->and($salida)->toContain('OK     paso 9: ajeno -> HTTP 404')->and($salida)->toContain('SIGUIO');
 });
 
 test('F1-H4-T06: humo-h4.sh se detiene ante cualquier error y recorre los 14 pasos de §9 en orden, con los 404 de los pasos 9 y 10 byte a byte', function () {

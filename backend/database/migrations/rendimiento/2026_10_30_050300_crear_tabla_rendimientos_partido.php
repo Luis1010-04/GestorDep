@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Rendimiento de un jugador en un partido jugado (HU-14). La clave foránea compuesta (`partido_id`, `equipo_id`)
  * obliga a que el equipo sea el del partido; `posicion_id` es la posición con la que jugó, para que las estadísticas
- * pasadas no cambien; `registrado_por` decide quién lo ve (RN-14).
+ * pasadas no cambien; `registrado_por` decide quién lo ve (RN-14). Un rendimiento por partido, jugador y registrante
+ * (v1.0.8): el de un entrenador no impide ni revela el de otro.
  */
 return new class extends Migration
 {
@@ -41,7 +42,7 @@ return new class extends Migration
         DB::statement('alter table rendimientos_partido add constraint ck_rendimientos_partido_minutos check (minutos between 0 and 150)');
         DB::statement('alter table rendimientos_partido add constraint ck_rendimientos_partido_calificacion_general check (calificacion_general between 1 and 10)');
         DB::statement('alter table rendimientos_partido add constraint ck_rendimientos_partido_tarjetas check (tarjetas_amarillas between 0 and 2 and tarjetas_rojas between 0 and 1)');
-        DB::statement('create unique index uq_rendimientos_partido_partido_jugador on rendimientos_partido (partido_id, jugador_id) where eliminado_en is null');
+        DB::statement('create unique index uq_rendimientos_partido_partido_jugador_registrado_por on rendimientos_partido (partido_id, jugador_id, registrado_por) where eliminado_en is null');
     }
 
     public function down(): void

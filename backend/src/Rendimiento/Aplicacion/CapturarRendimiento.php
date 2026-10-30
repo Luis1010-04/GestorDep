@@ -18,7 +18,7 @@ use Src\Rendimiento\Dominio\RepositorioDeRendimientos;
 /**
  * Captura el rendimiento de un jugador convocado a un partido jugado (HU-14, §3.3). Comprueba en este orden (DA-11):
  * partido del entrenador (404), partido jugado (409), jugador en su alcance y sin baja (404), convocado (422), sin
- * captura previa (409), datos de juego y métricas de la posición del jugador en el equipo (422). La captura y la
+ * captura previa del mismo entrenador (409; la de otro entrenador no cuenta, v1.0.8), datos de juego y métricas de la posición del jugador en el equipo (422). La captura y la
  * evaluación que provoca van en la misma transacción (§3.3).
  */
 final class CapturarRendimiento
@@ -52,11 +52,11 @@ final class CapturarRendimiento
         if (! $partido->convoca($jugador)) {
             throw new JugadorNoConvocado;
         }
-        if ($this->rendimientos->existeDe($partidoId, $jugador)) {
+        $registrante = $this->usuarioActual->identificador() ?? throw new RecursoNoEncontrado;
+        if ($this->rendimientos->existeDe($partidoId, $jugador, $registrante)) {
             throw new RendimientoDuplicado;
         }
         $posicion = $this->posiciones->de($jugador, $partido->equipoId) ?? throw new RecursoNoEncontrado;
-        $registrante = $this->usuarioActual->identificador() ?? throw new RecursoNoEncontrado;
 
         $juego = new DatosDeJuego(
             $datos['minutos'], $datos['fue_titular'], $datos['tarjetas_amarillas'], $datos['tarjetas_rojas'],

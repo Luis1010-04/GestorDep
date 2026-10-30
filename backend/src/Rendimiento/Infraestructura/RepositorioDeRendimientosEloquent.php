@@ -36,12 +36,13 @@ final class RepositorioDeRendimientosEloquent implements RepositorioDeRendimient
         private readonly UsuarioActual $usuarioActual,
     ) {}
 
-    public function existeDe(Identificador $partidoId, Identificador $jugadorId): bool
+    public function existeDe(Identificador $partidoId, Identificador $jugadorId, Identificador $registradoPor): bool
     {
         return $this->conexion->table('rendimientos_partido')
             ->whereNull('eliminado_en')
             ->where('partido_id', $partidoId->valor())
             ->where('jugador_id', $jugadorId->valor())
+            ->where('registrado_por', $registradoPor->valor())
             ->exists();
     }
 

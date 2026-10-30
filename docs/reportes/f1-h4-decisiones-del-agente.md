@@ -124,6 +124,7 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué se eligió:** un convocado no eliminado, visible por `AlcanceDeJugadores` sin bajas, está pendiente si no tiene **ningún** rendimiento no eliminado en el partido. Si E3 ya capturó a un jugador, E1 no puede capturarlo (409), así que para E1 tampoco queda pendiente. La lista solo trae partidos jugados de los equipos que entrena el usuario (`EquiposDelEntrenador`), del más reciente al más antiguo, con el número de convocados pendientes.
 - **Privacidad:** el conteo no dice quién capturó ni qué capturó (RN-14).
 - **Cómo se revierte:** se agrega `registrado_por = usuario` a la subconsulta `not exists`.
+- **Sustituida por DA-36 (F1-H4-FIX de la auditoría del Lote C, m-7):** la auditoría señaló que esta regla sí tocaba la privacidad, porque E1 veía bajar sus pendientes cuando E3 capturaba. Hoy un convocado está pendiente si no tiene rendimiento **del entrenador que consulta**; la subconsulta filtra por `registrado_por`.
 
 ## DA-14 (T02): valores de métrica como enteros JSON
 
@@ -244,7 +245,10 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 
 - **Qué faltaba:** si un jugador no tiene umbral propio y no hay plantilla de fábrica para su posición (ni la actual ni la guardada en el rendimiento), no hay criterio con qué calcular.
 - **Qué se eligió:** la captura y la corrección se guardan igual y no se inserta evaluación. Con los seeders de fábrica no ocurre.
-- **Corrección del responsable (F1-H4-FIX del Lote B):** la lectura del desempeño responde **409 `sin_umbral_aplicable`**, no 404, porque el recurso existe y lo que falta es configuración. Por coherencia, el GET del umbral y el PUT sin cuerpo responden lo mismo (DA-26). El código está en §6.3 (v1.0.6) y en `openapi.yaml`, y lo prueba `DesempenoTest` («HU-16 (DA-33)»), además del contrato.
+- **Corrección del responsable (F1-H4-FIX del Lote B):** la lectura del desempeño responde **409 `sin_umbral_aplicable`**, no 404, porque el recurso existe y lo que falta es configuración. Por coherencia, el GET del umbral y el PUT sin cuerpo responden lo mismo (DA-26). Esa extensión fue decisión del agente y el responsable la aprobó en la revisión del Lote B (v1.0.6, atribución corregida en v1.0.8). El código está en §6.3 (v1.0.6) y en `openapi.yaml`, y lo prueba `DesempenoTest` («HU-16 (DA-33)»), además de los contratos del desempeño y del umbral.
+- **Cómo se revierte:**
+  - Para volver a omitir la evaluación en silencio, se lanza una excepción en `RecalcularEvaluacion::ejecutar`.
+  - Para volver al 404, se cambia `SinUmbralAplicable` por `RecursoNoEncontrado` en `ConsultarDesempeno` y, para la extensión, en `ConsultarUmbral` y `FijarUmbral`.
 
 ## DA-34 (T04): el rendimiento de un partido eliminado lógicamente no cuenta
 
@@ -261,3 +265,19 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Alcance del recálculo:** el cambio de umbral recalcula solo para el entrenador que lo hizo.
 - **`ResultadoDeRendimiento`:** es una enumeración nueva con los tres valores que ya fija el `CHECK` de T01.
 - **Recurso del desempeño:** no incluye `umbral_id` ni `plantilla_id` (DA-19); son procedencia interna.
+
+## DA-36 (F1-H4-FIX de la auditoría del Lote C): un rendimiento por partido, jugador y registrante (indicada por el responsable)
+
+- **Qué se cambió:**
+  - La UQ parcial de `rendimientos_partido` pasa de (`partido_id`, `jugador_id`) a (`partido_id`, `jugador_id`, `registrado_por`), editando la migración `050300` porque H4 no se ha fusionado. Se llama `uq_rendimientos_partido_partido_jugador_registrado_por`.
+  - `RepositorioDeRendimientos::existeDe` recibe el registrante.
+  - `CapturarRendimiento` comprueba el duplicado del entrenador de la sesión.
+  - Los pendientes cuentan solo los rendimientos del entrenador que consulta (sustituye a DA-13).
+- **Efecto:** un duplicado del mismo entrenador responde 409 `rendimiento_duplicado`. Entre entrenadores no hay caso: E1 y E3 capturan al mismo jugador en el mismo partido sin error, y ninguno sabe que el otro capturó. La carrera de T02 (DA-22) es ahora del mismo entrenador.
+- **Privacidad:** **sí**, porque deja de revelar que otro entrenador capturó un rendimiento (m-7).
+- **Especificación:** v1.0.8 (§3.3, §5.1, §6.3 y §7.1 filas 2 y 9).
+- **Pruebas:**
+  - `CapturaDeRendimientoTest`: «RN-14 (v1.0.8)», «HU-14 (v1.0.8): los pendientes…» y la carrera DA-22.
+  - `MigracionesDeRendimientoTest`: el índice nuevo y la inserción de otro registrante.
+  - Mutaciones X2 y X3 en copia temporal (`f1-h4-fix-auditoria-lote-c.md`).
+- **Riesgo:** una base local migrada antes de este cambio conserva el índice viejo. Se arregla con `make fresh`.
