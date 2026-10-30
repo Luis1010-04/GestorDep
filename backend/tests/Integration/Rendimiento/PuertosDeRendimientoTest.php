@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\DB;
 use Src\Compartido\Aplicacion\ConvocatoriaDePartido;
+use Src\Compartido\Aplicacion\InicioDePartidos;
 use Src\Compartido\Aplicacion\PosicionEnEquipo;
 use Src\Compartido\Dominio\Identificador;
 
@@ -52,6 +53,23 @@ test('HU-14: ConvocatoriaDePartido devuelve el equipo, si está jugado y los con
         ->and($dePartidoProgramado?->jugado)->toBeFalse()
         ->and($dePartidoProgramado?->convocados)->toBe([])
         ->and($convocatoria->de(Identificador::generar()))->toBeNull();
+});
+
+test('RN-08 (v1.0.5): InicioDePartidos devuelve el inicio de cada partido no eliminado, por identificador', function () {
+    $m = mundoDeCompetencia();
+    $datos = ['equipo_id' => $m['a'], 'temporada_id' => $m['t1'], 'rival_id' => $m['r1'], 'lugar_id' => $m['l1'], 'tipo' => 'amistoso', 'condicion' => 'local', 'estado' => 'programado'];
+    $primero = mundoInsertar('partidos', [...$datos, 'inicia_en' => '2026-09-12 23:00:00+00']);
+    $segundo = mundoInsertar('partidos', [...$datos, 'inicia_en' => '2026-09-19 18:30:00+00']);
+    $eliminado = mundoInsertar('partidos', [...$datos, 'inicia_en' => '2026-09-26 23:00:00+00', 'eliminado_en' => '2026-09-10 10:00:00+00']);
+    $inicios = app(InicioDePartidos::class);
+
+    $resultado = $inicios->de(array_map(fn (string $id) => Identificador::desdeTexto($id), [$primero, $segundo, $eliminado]));
+    $resultado += $inicios->de([Identificador::generar()]);
+
+    expect(array_map(fn (DateTimeImmutable $inicio) => $inicio->format(DateTimeInterface::ATOM), $resultado))->toEqualCanonicalizing([
+        $primero => '2026-09-12T23:00:00+00:00', $segundo => '2026-09-19T18:30:00+00:00',
+    ])
+        ->and($inicios->de([]))->toBe([]);
 });
 
 test('HU-14: ConvocatoriaDePartido no devuelve un partido eliminado', function () {

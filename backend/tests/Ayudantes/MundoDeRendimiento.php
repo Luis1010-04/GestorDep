@@ -88,6 +88,26 @@ function umbralPlantillaDeFabrica(string $posicion): string
 }
 
 /**
+ * Un partido jugado más del equipo, con los convocados indicados, en la temporada, contra el rival y en el lugar del
+ * mundo de §7.0.
+ *
+ * @param  list<string>  $convocados
+ */
+function desempenoPartidoJugado(string $equipo, string $iniciaEn, array $convocados): string
+{
+    $partido = mundoInsertar('partidos', [
+        'equipo_id' => $equipo, 'temporada_id' => (string) DB::table('temporadas')->value('id'), 'rival_id' => (string) DB::table('rivales')->value('id'),
+        'lugar_id' => (string) DB::table('lugares')->value('id'), 'inicia_en' => $iniciaEn, 'tipo' => 'amistoso', 'condicion' => 'local',
+        'estado' => 'jugado', 'goles_favor' => 1, 'goles_contra' => 0,
+    ]);
+    foreach ($convocados as $jugador) {
+        mundoInsertar('convocatorias', ['partido_id' => $partido, 'jugador_id' => $jugador]);
+    }
+
+    return $partido;
+}
+
+/**
  * @param  array<string, mixed>  $cambios
  * @return array<string, mixed>
  */

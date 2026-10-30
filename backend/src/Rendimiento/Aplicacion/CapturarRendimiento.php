@@ -18,7 +18,8 @@ use Src\Rendimiento\Dominio\RepositorioDeRendimientos;
 /**
  * Captura el rendimiento de un jugador convocado a un partido jugado (HU-14, §3.3). Comprueba en este orden (DA-11):
  * partido del entrenador (404), partido jugado (409), jugador en su alcance y sin baja (404), convocado (422), sin
- * captura previa (409), datos de juego y métricas de la posición del jugador en el equipo (422).
+ * captura previa (409), datos de juego y métricas de la posición del jugador en el equipo (422). La captura y la
+ * evaluación que provoca van en la misma transacción (§3.3).
  */
 final class CapturarRendimiento
 {
@@ -30,6 +31,8 @@ final class CapturarRendimiento
         private readonly RepositorioDeRendimientos $rendimientos,
         private readonly UsuarioActual $usuarioActual,
         private readonly Reloj $reloj,
+        private readonly Transaccion $transaccion,
+        private readonly RecalcularEvaluacion $recalcular,
     ) {}
 
     /**
@@ -65,7 +68,10 @@ final class CapturarRendimiento
             Identificador::generar(), $partidoId, $jugador, $partido->equipoId, $registrante, $posicion, $juego, $valores,
             Instante::truncadoASegundos($this->reloj->ahora()),
         );
-        $this->rendimientos->guardarNuevo($rendimiento);
+        $this->transaccion->ejecutar(function () use ($rendimiento, $jugador, $partido, $registrante, $posicion): void {
+            $this->rendimientos->guardarNuevo($rendimiento);
+            $this->recalcular->ejecutar($jugador, $partido->equipoId, $registrante, $posicion);
+        });
 
         return $rendimiento;
     }

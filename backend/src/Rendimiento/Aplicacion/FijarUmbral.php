@@ -17,7 +17,8 @@ use Src\Rendimiento\Dominio\ValorFueraDeRango;
 /**
  * Fija el umbral de un jugador en un equipo para el entrenador de la sesión (HU-15, criterios 2 y 3): con una plantilla
  * visible de su posición, con valores propios o, sin nada, con la plantilla de fábrica de la posición. Cierra el vigente
- * y abre uno nuevo; el primero no cierra nada (v1.0.4 §6.2).
+ * y abre uno nuevo; el primero no cierra nada (v1.0.4 §6.2). En la misma transacción inserta la evaluación con el
+ * umbral nuevo, solo para el entrenador que lo cambió (§3.3, §7.3 fila 7).
  */
 final class FijarUmbral
 {
@@ -26,6 +27,8 @@ final class FijarUmbral
         private readonly RepositorioDeUmbrales $umbrales,
         private readonly RepositorioDePlantillas $plantillas,
         private readonly Reloj $reloj,
+        private readonly Transaccion $transaccion,
+        private readonly RecalcularEvaluacion $recalcular,
     ) {}
 
     /**
@@ -57,7 +60,10 @@ final class FijarUmbral
         $nuevo = new UmbralDeRendimiento(
             Identificador::generar(), $jugador, $equipo, $entrenador, $plantillaId, $criterio, Instante::truncadoASegundos($this->reloj->ahora()),
         );
-        $this->umbrales->reemplazar($this->umbrales->vigenteDe($jugador, $equipo, $entrenador), $nuevo);
+        $this->transaccion->ejecutar(function () use ($jugador, $equipo, $entrenador, $nuevo): void {
+            $this->umbrales->reemplazar($this->umbrales->vigenteDe($jugador, $equipo, $entrenador), $nuevo);
+            $this->recalcular->ejecutar($jugador, $equipo, $entrenador);
+        });
 
         return UmbralAplicable::desdeUmbral($nuevo);
     }

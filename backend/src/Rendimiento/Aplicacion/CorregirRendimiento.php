@@ -11,7 +11,9 @@ use Src\Rendimiento\Dominio\RepositorioDeRendimientos;
 
 /**
  * Corrige un rendimiento que registró el usuario (HU-14, §3.3). `metricas` reemplaza la lista y se valida contra la
- * posición con la que se capturó. Un rendimiento ajeno da el mismo 404 que uno inexistente (RN-14).
+ * posición con la que se capturó. Un rendimiento ajeno da el mismo 404 que uno inexistente (RN-14). La corrección y la
+ * evaluación que provoca van en la misma transacción; la posición guardada solo elige la plantilla de fábrica si el
+ * jugador ya no está en el equipo (§3.3, v1.0.5).
  */
 final class CorregirRendimiento
 {
@@ -20,6 +22,8 @@ final class CorregirRendimiento
         private readonly CatalogoDeMetricas $catalogo,
         private readonly RepositorioDeRendimientos $rendimientos,
         private readonly Reloj $reloj,
+        private readonly Transaccion $transaccion,
+        private readonly RecalcularEvaluacion $recalcular,
     ) {}
 
     /**
@@ -35,7 +39,10 @@ final class CorregirRendimiento
         $valores = $metricas === null ? null : $this->catalogo->deLaPosicion($anterior->posicionId())->valores(CapturarRendimiento::entradas($metricas));
 
         $nuevo = $anterior->corregido($datos, $valores, Instante::truncadoASegundos($this->reloj->ahora()));
-        $this->rendimientos->actualizar($anterior, $nuevo);
+        $this->transaccion->ejecutar(function () use ($anterior, $nuevo): void {
+            $this->rendimientos->actualizar($anterior, $nuevo);
+            $this->recalcular->ejecutar($nuevo->jugadorId(), $nuevo->equipoId(), $nuevo->registradoPor(), $anterior->posicionId());
+        });
 
         return $nuevo;
     }

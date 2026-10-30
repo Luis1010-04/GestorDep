@@ -230,3 +230,31 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
   - `calificacion_minima` viaja como cadena con hasta dos decimales (DD-51), con la misma expresión que Académico.
   - `ventana_partidos`, como entero JSON estricto.
   - En el PUT, la calificación y la ventana van juntas (`required_with`). `umbral_ambiguo` lo decide el caso de uso después de validar los tipos.
+
+## DA-32 (T04): puerto `Transaccion` para escribir y evaluar juntos
+
+- **Qué faltaba:** §3.3 pide que la evaluación se inserte en la misma transacción que la captura, la corrección o el cambio de umbral, y cada repositorio ya abría su propia transacción.
+- **Qué se eligió:**
+  - Un puerto `Transaccion` en `src/Rendimiento/Aplicacion`, con su adaptador `TransaccionSql` (`ConnectionInterface::transaction`). `CapturarRendimiento`, `CorregirRendimiento` y `FijarUmbral` envuelven la escritura y `RecalcularEvaluacion`.
+  - Las transacciones de los repositorios quedan anidadas como puntos de guardado. Las carreras de T02 y T03 (`rendimiento_duplicado`, `conflicto`) siguen deshaciendo todo; sus pruebas pasan sin cambios.
+  - Una captura rechazada (422) no deja evaluación, y hay prueba de ello.
+- **Cómo se revierte:** se mueve la inserción de la evaluación dentro de cada repositorio.
+
+## DA-33 (T04): sin criterio aplicable no se inserta evaluación
+
+- **Qué faltaba:** si un jugador no tiene umbral propio y no hay plantilla de fábrica para su posición (ni la actual ni la guardada en el rendimiento), no hay criterio con qué calcular.
+- **Qué se eligió:** la captura, la corrección o el cambio de umbral se guardan igual y no se inserta evaluación; la lectura del desempeño responde 404, como el GET del umbral (DA-26). Con los seeders de fábrica no ocurre.
+- **Cómo se revierte:** se lanza una excepción en `RecalcularEvaluacion::ejecutar` en lugar de omitir la inserción.
+
+## DA-34 (T04): un rendimiento sin fecha de partido no cuenta
+
+- **Qué faltaba:** `InicioDePartidos` no devuelve partidos eliminados ni inexistentes, así que su rendimiento no tiene fecha con que ordenarse.
+- **Qué se eligió:** ese rendimiento no cuenta en el promedio. En H3 un partido no se elimina desde la API, así que hoy no ocurre.
+- **Cómo se revierte:** en `CalificacionesDelEntrenadorSql`, se ordena al final en lugar de descartarlo.
+
+## DA-35 (T04): decisiones menores del plan, sin objeción del responsable
+
+- **Corrección sin cambio:** una corrección que no cambia la calificación también inserta evaluación, porque §3.3 dice «cada captura o corrección».
+- **Alcance del recálculo:** el cambio de umbral recalcula solo para el entrenador que lo hizo.
+- **`ResultadoDeRendimiento`:** es una enumeración nueva con los tres valores que ya fija el `CHECK` de T01.
+- **Recurso del desempeño:** no incluye `umbral_id` ni `plantilla_id` (DA-19); son procedencia interna.

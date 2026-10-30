@@ -4517,6 +4517,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/jugadores/{jugador}/desempeno:
+    get:
+      operationId: consultarDesempeno
+      summary: Pasa, no pasa o datos insuficientes del jugador en el equipo
+      description: >-
+        Solo un entrenador del equipo (HU-16, RN-08). Devuelve la ultima evaluacion guardada para el usuario (cada
+        captura, correccion o cambio de umbral inserta una) o, si no hay ninguna, la calcula sin guardarla, con
+        calculado_en a la hora actual. Solo cuentan las calificaciones que el usuario registro del jugador en ese
+        equipo, ordenadas por fecha del partido; el promedio de las ultimas N (N es la ventana) se redondea a dos
+        decimales y ese promedio redondeado se compara con la calificacion minima (§3.3, v1.0.5). Un equipo que no
+        entrena, un jugador fuera de su alcance o sin posicion en el equipo, o un UUID que no es v7, responden el mismo
+        404 (RN-14).
+      tags: [Rendimiento]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: El desempeno.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Desempeno'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Equipo, jugador o plantilla de fabrica no encontrados para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Baja:
@@ -5267,6 +5319,34 @@ components:
         convocados_sin_rendimiento:
           type: integer
           minimum: 1
+    Desempeno:
+      type: object
+      additionalProperties: false
+      description: Resultado de RN-08 con el criterio aplicado (HU-16, §6.2). Sin identificadores de umbral ni de plantilla.
+      required: [resultado, promedio, calificacion_minima, ventana_partidos, partidos_considerados, calculado_en]
+      properties:
+        resultado:
+          type: string
+          enum: [pasa, no_pasa, datos_insuficientes]
+        promedio:
+          type: string
+          pattern: '^[0-9]+\.[0-9]{2}$'
+          nullable: true
+          description: Nulo si y solo si el resultado es datos_insuficientes.
+        calificacion_minima:
+          type: string
+          pattern: '^[0-9]+\.[0-9]{2}$'
+        ventana_partidos:
+          type: integer
+          minimum: 1
+          maximum: 32767
+        partidos_considerados:
+          type: integer
+          minimum: 0
+        calculado_en:
+          type: string
+          format: date-time
+          description: Nunca nulo; sin evaluaciones guardadas es la hora actual (v1.0.5).
     CalificacionMinimaEntrada:
       type: string
       pattern: '^-?\d+(\.\d{1,2})?$'

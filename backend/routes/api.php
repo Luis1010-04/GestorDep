@@ -8,6 +8,7 @@ use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\ConvocatoriaController;
+use App\Http\Controllers\DesempenoController;
 use App\Http\Controllers\EntrenamientoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
@@ -129,5 +130,6 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/plantillas-evaluacion', [PlantillaEvaluacionController::class, 'crear']);
         Route::get('/equipos/{equipo}/jugadores/{jugador}/umbral', [UmbralController::class, 'consultar'])->whereUuid(['equipo', 'jugador']);
         Route::put('/equipos/{equipo}/jugadores/{jugador}/umbral', [UmbralController::class, 'fijar'])->whereUuid(['equipo', 'jugador']);
+        Route::get('/equipos/{equipo}/jugadores/{jugador}/desempeno', [DesempenoController::class, 'consultar'])->whereUuid(['equipo', 'jugador']);
     });
 });

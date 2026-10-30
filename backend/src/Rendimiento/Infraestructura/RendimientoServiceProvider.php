@@ -3,11 +3,14 @@
 namespace Src\Rendimiento\Infraestructura;
 
 use Illuminate\Support\ServiceProvider;
+use Src\Rendimiento\Aplicacion\CalificacionesDelEntrenador;
 use Src\Rendimiento\Aplicacion\ConsultaDeMetricas;
 use Src\Rendimiento\Aplicacion\ConsultaDePlantillas;
 use Src\Rendimiento\Aplicacion\ConsultaDeRendimientos;
+use Src\Rendimiento\Aplicacion\Transaccion;
 use Src\Rendimiento\Aplicacion\VisibilidadDeJugador;
 use Src\Rendimiento\Dominio\CatalogoDeMetricas;
+use Src\Rendimiento\Dominio\RepositorioDeEvaluaciones;
 use Src\Rendimiento\Dominio\RepositorioDePlantillas;
 use Src\Rendimiento\Dominio\RepositorioDeRendimientos;
 use Src\Rendimiento\Dominio\RepositorioDeUmbrales;
@@ -16,13 +19,16 @@ class RendimientoServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(CalificacionesDelEntrenador::class, CalificacionesDelEntrenadorSql::class);
         $this->app->bind(CatalogoDeMetricas::class, CatalogoDeMetricasSql::class);
         $this->app->bind(ConsultaDeMetricas::class, CatalogoDeMetricasSql::class);
         $this->app->bind(ConsultaDePlantillas::class, RepositorioDePlantillasSql::class);
         $this->app->bind(ConsultaDeRendimientos::class, ConsultaDeRendimientosSql::class);
+        $this->app->bind(RepositorioDeEvaluaciones::class, RepositorioDeEvaluacionesSql::class);
         $this->app->bind(RepositorioDePlantillas::class, RepositorioDePlantillasSql::class);
         $this->app->bind(RepositorioDeRendimientos::class, RepositorioDeRendimientosEloquent::class);
         $this->app->bind(RepositorioDeUmbrales::class, RepositorioDeUmbralesSql::class);
+        $this->app->bind(Transaccion::class, TransaccionSql::class);
         $this->app->bind(VisibilidadDeJugador::class, VisibilidadDeJugadorSql::class);
     }
 }
