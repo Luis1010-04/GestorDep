@@ -1,6 +1,6 @@
 # Registro de decisiones tomadas por defecto tras la auditoría
 
-**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026; DD-42 a DD-55, AB-22 a AB-27 y la sección 4, al cerrar H2, el 28 de octubre de 2026; DA-17 y las confirmaciones de DA-14 y DA-15, el 29 de octubre de 2026; la enmienda a DD-53, PT-08 y la sección 5, al cerrar H3, el 29 de octubre de 2026)
+**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026; DD-42 a DD-55, AB-22 a AB-27 y la sección 4, al cerrar H2, el 28 de octubre de 2026; DA-17 y las confirmaciones de DA-14 y DA-15, el 29 de octubre de 2026; la enmienda a DD-53, PT-08 y la sección 5, al cerrar H3, el 29 de octubre de 2026; DD-09 y DD-10 confirmadas, AB-01 deportivo por validar, PT-08 resuelto y la sección 6, al cerrar H4, el 30 de octubre de 2026)
 **Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04). Cambios del 28 de octubre de 2026 (F1-H2-T15): se registran DD-42 a DD-55 (decisiones de H2), las validaciones pendientes con la institución y las dudas de H2 (AB-22 a AB-27) y las decisiones del agente en H2 (sección 4). Cambios del 28 de octubre de 2026 tras la auditoría del Lote E: DA-16 (sección 4), la referencia de DD-45; los plazos vencidos en H2 de DD-20, AB-01, AB-08, AB-10, AB-14, PT-01 y PT-03; PT-02 resuelto (`b010636`); y PT-07 (lock de `make verificar` y procesos huérfanos), sin implementar. Cambios del 29 de octubre de 2026 (decisiones del responsable sobre la auditoría del Lote E): DA-17 (I-1, sección 4); DA-14 y DA-15 confirmadas (I-2), con lo que se cierra AB-27. Cambios del 29 de octubre de 2026 tras la auditoría corta del rango `1145c77..4fb2fc5`: DA-17 nombra también T10 y anota la frase de `docs/arquitectura.md` §4.3 que la versión 1.4 quitó y la 1.4.1 restituyó. Cambios del 29 de octubre de 2026 (F1-H3-T09): DD-07, DD-17 y DD-18 quedan confirmadas por el responsable (`docs/hitos/f1-h3.md` §3.1); AB-07 y AB-15 siguen por validar; se registra PT-08 (tiempo de `make verificar`), pendiente obligatorio antes de H4, y las decisiones del agente en H3 (sección 5)
 
 La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los documentos. Para trabajar con lo que se tiene, el equipo de análisis aplicó la **recomendación de la auditoría** en cada una y las registró aquí. Ninguna cuenta como validada por la institución. Cada una indica antes de qué hito debe confirmarse; si se cambia, se corrige el documento afectado y se anota en este registro.
@@ -17,8 +17,8 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-06 | La alerta de riesgo de baja académica se activa en el nivel "en riesgo"; "en observación" no genera alerta | Req RN-21; Arq 7.9 | H2 | OM-04 |
 | DD-07 | Una temporada es un intervalo de fechas de un catálogo; el partido pertenece a la que contiene su fecha | Req 1.5, RN-09; Arq 7.5 | **Confirmada** por el responsable el 29/10/2026 (`docs/hitos/f1-h3.md` §3.1). Aplicación en H3: el alta de una temporada que se cruza con otra no eliminada responde 409 `temporada_solapada` (DA-05, DA-06) | OM-05 |
 | DD-08 | El docente no ve el riesgo deportivo; del lado deportivo ve solo el estado oficial de disponibilidad | Req RN-13, sección 7; Arq 10 | H6 | OM-07, DA-05 |
-| DD-09 | La calificación general de partido es un entero de 1 a 10 | Req RN-06; Arq 7.6 | H4 | DA-08 |
-| DD-10 | "Datos insuficientes" aparece con menos de N calificaciones y no activa alerta | Req RN-08, RN-10; Arq 7.6 | H4 | OM-05 |
+| DD-09 | La calificación general de partido es un entero de 1 a 10 | Req RN-06; Arq 7.6 | **Confirmada** por el responsable el 30/10/2026 (`docs/hitos/f1-h4.md` §3.1). Las categorías de RN-06 son una constante del dominio y salen en `categoria_calificacion`, sin cambiar el número que se guarda (v1.0.4) | DA-08 |
+| DD-10 | "Datos insuficientes" aparece con menos de N calificaciones y no activa alerta | Req RN-08, RN-10; Arq 7.6 | **Confirmada** por el responsable el 30/10/2026 (`docs/hitos/f1-h4.md` §3.1). N es la ventana del umbral o de la plantilla (5 en «Desarrollo»); las alertas son de H6 | OM-05 |
 | DD-11 | El riesgo académico se calcula sobre el periodo escolar vigente | Req RN-04; Arq 7.4 | H2 | OM-04 |
 | DD-12 | "Mejor desempeño" es el promedio de las últimas N calificaciones generales; sin datos, al final | Req RN-18, 1.5; Arq 4.1 | H6 | OM-06 |
 | DD-13 | Dar de baja a un jugador exige motivo y fecha, y lo saca de listados, convocatorias y alertas | Req RN-23, HU-29; Arq 7.3 | H1 | OM-03 |
@@ -79,7 +79,7 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 
 | ID | Pregunta | Quién decide | Antes de |
 |---|---|---|---|
-| AB-01 | Quién valida los valores marcados [Propuesta] (calificación mínima 7.0, niveles de riesgo, sanciones, umbral 6.0 con ventana de 5, escala de partido) | Institución (sugerido: coordinación académica y deportiva) | H4 (deportivos). Académicos: **pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (`docs/hitos/f1-h2.md` §3) y sigue en AB-22 a AB-24 |
+| AB-01 | Quién valida los valores marcados [Propuesta] (calificación mínima 7.0, niveles de riesgo, sanciones, umbral 6.0 con ventana de 5, escala de partido) | Institución (sugerido: coordinación académica y deportiva) | Deportivos: **por validar** al cierre de H4 (30/10/2026): plantilla «Desarrollo» 6.00 con ventana 5 por posición, rangos de las métricas y de tarjetas (`docs/hitos/f1-h4.md` §3.2 y §5.2); se cambian en la base, no en el código. Académicos: **pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (`docs/hitos/f1-h2.md` §3) y sigue en AB-22 a AB-24 |
 | AB-02 | Cifra estimada de futbolistas para dimensionar | Institución | H7 |
 | AB-03 | Plazo de conservación del historial tras la baja de un jugador | Institución | H7 |
 | AB-04 | Respaldos y recuperación de la base (frecuencia y retención) | Responsable del proyecto | Antes de producción |
@@ -118,7 +118,7 @@ Anotados al cerrar H1; ninguno bloquea el hito. Los decide el responsable.
 | PT-03 | Un arranque con el servicio `db` en estado "unhealthy", visto una sola vez con un volumen nuevo. No se reprodujo; vigilar y, si reaparece, revisar el `healthcheck` y los tiempos de `docker-compose.yml` | **Pendiente (vigilancia)**; no se reprodujo en H2 (ningún reporte de H2 lo registra). Sin hito fijado |
 | PT-04 | `usuarios.actualizado_en` y `bloqueado_hasta` no salen de `Reloj` (usan `now()` de la base o microsegundos), a diferencia del resto de las tablas tras `F1-H1-FIX`. Es el mismo desfase que anota `docs/hitos/f1-h1.md` §11 | H7 |
 | PT-07 | Anotado en H2 (28/10/2026, correcciones de la auditoría del Lote E). `make verificar` debe tomar un *lock* exclusivo: dos corridas a la vez comparten la base de pruebas `gestordep_pruebas` y se rompen el esquema entre sí (se vio una corrida contaminada con 570 fallos y 27 min 21 s; `docs/reportes/f1-h2-fix-e-m3.md`). Además, un `composer verificar` huérfano no debe seguir corriendo dentro del contenedor después de cerrarse el cliente de `docker compose exec` (causa probable de esa contaminación). No implementado: decisión pendiente del responsable | Sugerido: H3 |
-| PT-08 | Anotado en H3 (29/10/2026). El tiempo de `make verificar` se acerca al límite de 15 min de `docs/hitos/f1-h2.md` §0.4 (aviso del responsable a los 13 min) y crece con cada tarea; Pest se lleva entre el 77 y el 79 % de la corrida con Infection y entre el 90 y el 92 % sin ella (auditoría del Lote C, m-1). Tiempos medidos, todos con código 0 y sin nada más corriendo: con Infection, T05 729 s (Pest 573 s), T06 719 s (Pest 567 s) y T07 745 s (Pest 577 s); sin Infection (enmienda a DD-53), el FIX de la compuerta 681 s (Pest 629 s), T08 696 s (Pest 639 s) y T09 615 s (Pest 555 s, 1 224 pruebas). La enmienda a DD-53 ganó unos 100 s, pero H4 suma pruebas. Hay que decidir cómo mantener la corrida por debajo del límite. No implementado: decisión del responsable | **Pendiente obligatorio antes de H4** |
+| PT-08 | Anotado en H3 (29/10/2026). El tiempo de `make verificar` se acerca al límite de 15 min de `docs/hitos/f1-h2.md` §0.4 (aviso del responsable a los 13 min) y crece con cada tarea; Pest se lleva entre el 77 y el 79 % de la corrida con Infection y entre el 90 y el 92 % sin ella (auditoría del Lote C, m-1). Tiempos medidos, todos con código 0 y sin nada más corriendo: con Infection, T05 729 s (Pest 573 s), T06 719 s (Pest 567 s) y T07 745 s (Pest 577 s); sin Infection (enmienda a DD-53), el FIX de la compuerta 681 s (Pest 629 s), T08 696 s (Pest 639 s) y T09 615 s (Pest 555 s, 1 224 pruebas). La enmienda a DD-53 ganó unos 100 s, pero H4 suma pruebas. Hay que decidir cómo mantener la corrida por debajo del límite. No implementado: decisión del responsable. **Resuelto en H4 (F1-H4-T00, `7b4303e`):** `synchronous_commit = off` en las conexiones de prueba desde `tests/TestCase.php` (opción B aprobada; DA-02 de H4 registra el riesgo de durabilidad, solo en pruebas). Pest bajó de 618 s a 410 y 417 s con las mismas 1 225 pruebas. En las tareas de H4, con 1 314 a más de 1 420 pruebas, Pest tardó entre 495 y 595 s y `make verificar` entre 538 y 686 s, siempre por debajo del aviso de 13 min (`docs/reportes/f1-h4-progreso.md`) | **Resuelto** en H4 (T00) |
 
 ## 4. Decisiones del agente en H2 (DA)
 
@@ -176,3 +176,45 @@ Decisiones que tomó el agente donde la especificación de H3 callaba (`docs/hit
 | DA-32 | «Convocado» es la convocatoria visible (sin bajas); la lista vacía quita toda la alineación | **Sí** (un convocado en baja no cuenta) | Corregida por DA-34 en lo que respondía a un jugador fuera del alcance; el resto sigue vigente |
 | DA-33 | Orden de los errores del resultado: forma (422), estado (409), rango (422, `goles_favor` antes que `goles_contra`) | No | Vigente; sin observación del responsable |
 | DA-34 | Un jugador fuera del alcance de entrenador sin bajas en la alineación da 404 igual al de uno inexistente; el 422 `jugador_no_convocado` queda para un jugador visible no convocado | **Sí** (no distingue «existe y no lo ves» de «no está convocado») | Indicada por el responsable (FIX `478330d`) |
+
+## 6. Decisiones del agente en H4 (DA)
+
+Decisiones que tomó el agente donde la especificación de H4 callaba, y las que indicó el responsable durante el hito (`docs/hitos/f1-h4.md` §0, v1.0.7). El detalle de cada una está en `docs/reportes/f1-h4-decisiones-del-agente.md`. Se registran DA-01 a DA-35; **DA-28 queda retirada** (F1-H4-FIX del Lote B: no hay fuente en `docs/requisitos.md`). La numeración es propia de H4; las DA de H3 se citan como «DA-nn de H3».
+
+| ID | Decisión | Privacidad o permisos | Estado |
+|---|---|---|---|
+| DA-01 | `synchronous_commit = off` en las conexiones de prueba, en lugar de transacciones por prueba (PT-08) | No | Aprobada (plan de T00) |
+| DA-02 | Riesgo de durabilidad de DA-01: solo afecta a la base de pruebas (ventana de unos 600 ms) | No | Aprobada (T00) |
+| DA-03 | Los commits llevan `Co-Authored-By: Claude Haiku 5.5` por indicación expresa, aunque la sesión es Opus 5.5 | No | Indicada por el responsable |
+| DA-04 | `entrenador_id` en umbrales y evaluaciones, porque RN-08 y HU-16 son por entrenador | **Sí** (cada entrenador tiene su umbral y su evaluación) | Aprobada (Lote A) |
+| DA-05 | La evaluación guarda la calificación mínima y la ventana aplicadas, y su procedencia (`umbral_id` o `plantilla_id`) | No | Aprobada; en v1.0.2 |
+| DA-06 | `CHECK` de origen de la plantilla y de promedio nulo con datos insuficientes | No | Aprobada; en v1.0.2 |
+| DA-07 | Rangos de fábrica de las métricas: 0 a 99, pases completados hasta 300 | No | Aprobada; en v1.0.2; AB-01 por validar |
+| DA-08 | Los seeders de Rendimiento solo insertan lo que falta y no deshacen ajustes | No | Aprobada (Lote A) |
+| DA-09 | Vigencias del umbral como instantes (`timestamptz`) | No | Aprobada (Lote A) |
+| DA-10 | `evaluaciones_rendimiento` de solo inserción con la macro de Compartido | No | Aprobada (Lote A) |
+| DA-11 | Orden de las comprobaciones de la captura: 404 antes que `jugador_no_convocado` | **Sí** (no revela jugadores fuera del alcance) | Aprobada (Lote A) |
+| DA-12 | Capturar excluye a los jugadores en baja; leer y corregir los incluye | **Sí** | Aprobada (Lote A) |
+| DA-13 | Un partido está pendiente si tiene un convocado visible sin baja y sin ningún rendimiento | No | Aprobada (Lote A) |
+| DA-14 | Valores de métrica como enteros JSON (todas las sembradas son enteras) | No | Aprobada (Lote A) |
+| DA-15 | Mensaje propio de `valor_fuera_de_rango` en Rendimiento | No | Aprobada (Lote A) |
+| DA-16 | Pendientes de captura en `src/Consultas` | No | Indicada por el responsable; en v1.0.3 |
+| DA-17 | Puerto `PosicionEnEquipo` en Compartido con adaptador en Plantel; prueba de arquitectura de Rendimiento sin Plantel | No | Indicada por el responsable; en v1.0.3 |
+| DA-18 | Un rendimiento ajeno da 404; `rendimiento_no_editable` reservado | **Sí** (RN-14) | Indicada por el responsable; en v1.0.3 |
+| DA-19 | Las respuestas revelan lo mínimo (sin `registrado_por`, sin nombres de posición, sin `creada_por`) | **Sí** (revela lo mínimo) | Aprobada (Lote A) |
+| DA-20 | Un convocado sin membresía vigente en el equipo da 404 | **Sí** | Aprobada (Lote A) |
+| DA-21 | El enlace del adaptador de Competencia vive en `CompetenciaServiceProvider` | No | Aprobada (Lote A) |
+| DA-22 | Prueba de la carrera de dos capturas: 409 `rendimiento_duplicado` | No | Indicada por el responsable |
+| DA-23 | Migración `050500` corregida en su lugar, con dos UQ parciales que no revelan plantillas de otro entrenador | **Sí** (un 409 no revela plantillas ajenas) | Autorizada por el responsable; en v1.0.4 |
+| DA-24 | RN-06 como enumeración del dominio y `categoria_calificacion` de solo lectura | No | Indicada por el responsable; en v1.0.4 |
+| DA-25 | Ventana de 1 a 32 767: límite técnico de `smallint`, no regla de negocio | No | Aprobada; en v1.0.4 |
+| DA-26 | Plantilla de fábrica aplicable: la más antigua; sin ninguna, 409 `sin_umbral_aplicable` | No | Vigente; alineada con DA-33 en v1.0.6 |
+| DA-27 | Carrera de dos cambios del mismo umbral: 409 `conflicto` | No | Aprobada; en §6.3 de v1.0.5 |
+| DA-28 | ~~El PUT del umbral trata a un jugador en baja como fuera del alcance~~ | — | **Retirada** (F1-H4-FIX, `245c44c`) |
+| DA-29 | Cualquier entrenador crea plantillas para cualquier posición | **Sí** (quién crea plantillas) | Aprobada; en v1.0.5 |
+| DA-30 | El historial del cierre del umbral guarda la fila completa (el valor anterior); el primer PUT no cierra nada | No | Aprobada (Lote B) |
+| DA-31 | Campos desconocidos y tipos estrictos en plantillas y umbral | No | Aprobada (Lote B) |
+| DA-32 | Puerto `Transaccion`: la escritura y la evaluación van en la misma transacción | No | Aprobada (Lote B) |
+| DA-33 | Sin criterio aplicable no se inserta evaluación; la lectura responde 409 `sin_umbral_aplicable` | No | Corregida por el responsable (F1-H4-FIX del Lote B); en v1.0.6 |
+| DA-34 | El rendimiento de un partido eliminado lógicamente no cuenta; H3 no elimina partidos | No | Acotada por el responsable (F1-H4-FIX del Lote B) |
+| DA-35 | Decisiones menores del plan de T04 (corrección sin cambio inserta evaluación; recálculo solo del entrenador que cambia el umbral; desempeño sin procedencia) | No | Aprobada (Lote B) |

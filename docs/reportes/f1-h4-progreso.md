@@ -40,6 +40,7 @@ Lo pidió el responsable al aprobar el Lote A: el tiempo de Pest de la corrida d
 | T04 | 1 407 | 531 s | 574 s (9 min 34 s) | +36 s frente a T03 con 26 pruebas más |
 | F1-H4-FIX del Lote B | 1 410 | 508 s | 562 s (9 min 22 s) | −23 s con 3 pruebas más (variación de la medición) |
 | T05 | 1 421 | 530 s | 610 s (10 min 10 s) | +22 s con 11 pruebas más; una corrida previa falló en PHPStan (116 s) |
+| T06 | 1 424 | 512 s | 675 s (11 min 15 s) | −18 s con 3 pruebas más (variación de la medición) |
 
 En T03 hubo además una corrida fallida (`TextosEnLangTest`, Pest 516 s) y una correcta antes de la del commit (Pest 507 s); el detalle está en `f1-h4-t03.md` §4. `make mutacion` en T03: 663 de 663 mutantes eliminados.
 
