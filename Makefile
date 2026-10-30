@@ -43,6 +43,7 @@ humo:
 	docker compose exec -T app bash -s < scripts/humo/humo-h0.sh
 	docker compose exec -T app bash /scripts/humo/humo-h1.sh
 	docker compose exec -T app bash /scripts/humo/humo-h2.sh
+	docker compose exec -T app bash /scripts/humo/humo-h3.sh
 
 humo-h3:
 	docker compose exec -T app bash /scripts/humo/humo-h3.sh
