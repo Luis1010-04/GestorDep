@@ -43,8 +43,10 @@ use Src\Plantel\Aplicacion\JugadorYaEnBaja;
 use Src\Plantel\Aplicacion\JugadorYaEnEquipo;
 use Src\Plantel\Aplicacion\MatriculaDuplicada;
 use Src\Rendimiento\Aplicacion\PartidoNoJugado;
+use Src\Rendimiento\Aplicacion\PlantillaDuplicada;
 use Src\Rendimiento\Aplicacion\RecursoNoEncontrado as RendimientoNoEncontrado;
 use Src\Rendimiento\Aplicacion\RendimientoDuplicado;
+use Src\Rendimiento\Aplicacion\UmbralConcurrente;
 use Src\Rendimiento\Dominio\ReglaDeCampoViolada as ReglaDeCampoDeRendimiento;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
@@ -82,7 +84,8 @@ final class FormatoDeError
             $e instanceof ReglaDeCampoViolada => self::reglaDeCampo($e, $e instanceof TransicionNoPermitida || $e instanceof JugadorYaConvocado ? 409 : 422),
             $e instanceof RecursoNoEncontrado, $e instanceof RendimientoNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof PartidoNoJugado => self::reglaDeNegocio($e, 409),
-            $e instanceof ReglaDeCampoDeRendimiento => self::reglaDeCampoDeRendimiento($e, $e instanceof RendimientoDuplicado ? 409 : 422),
+            $e instanceof ReglaDeCampoDeRendimiento => self::reglaDeCampoDeRendimiento($e, $e instanceof RendimientoDuplicado || $e instanceof PlantillaDuplicada ? 409 : 422),
+            $e instanceof UmbralConcurrente => self::respuesta(409, 'conflicto'),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof JugadorNoRegistrado => self::reglaDeNegocio($e, 404),

@@ -7,6 +7,7 @@
  */
 
 use Database\Seeders\MetricasSeeder;
+use Database\Seeders\PlantillasDeFabricaSeeder;
 use Database\Seeders\PosicionesSeeder;
 use Illuminate\Support\Facades\DB;
 
@@ -65,6 +66,25 @@ function capturaMetricasDe(string $posicion): array
 function capturaMetrica(string $codigo): string
 {
     return (string) DB::table('metricas')->where('codigo', $codigo)->value('id');
+}
+
+/** @return array<string, string> el mundo de §7.0 con las plantillas «Desarrollo» de fábrica sembradas */
+function umbralMundo(): array
+{
+    $m = capturaMundo();
+    (new PlantillasDeFabricaSeeder)->run();
+
+    return $m;
+}
+
+function umbralPosicion(string $codigo): string
+{
+    return (string) DB::table('posiciones')->where('codigo', $codigo)->value('id');
+}
+
+function umbralPlantillaDeFabrica(string $posicion): string
+{
+    return (string) DB::table('plantillas_evaluacion')->whereNull('creada_por')->where('posicion_id', umbralPosicion($posicion))->value('id');
 }
 
 /**

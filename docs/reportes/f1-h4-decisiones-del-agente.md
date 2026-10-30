@@ -171,3 +171,62 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué faltaba:** las rutas de T02 permiten en `src/Competencia/Infraestructura/**` «solo el adaptador», y no mencionan su enlace en el contenedor.
 - **Qué se eligió:** una línea en `CompetenciaServiceProvider` (`ConvocatoriaDePartido` → `ConvocatoriaDePartidoCompetencia`), como hizo H3 con los adaptadores de Plantel. Si el enlace fuera en `RendimientoServiceProvider`, Rendimiento importaría una clase de Competencia.
 - **Cómo se revierte:** se mueve el enlace al proveedor que el responsable indique.
+
+## DA-22 (T03): prueba de la carrera de dos capturas (indicada por el responsable)
+
+- **Decisión:** `CapturaDeRendimientoTest` reemplaza en el contenedor `RepositorioDeRendimientos` por un decorador cuyo `existeDe` siempre devuelve falso. Así la segunda captura llega al `insert`, choca con `uq_rendimientos_partido_partido_jugador` y debe responder 409 `rendimiento_duplicado` en `jugador_id`, sin escribir nada. Cubre las líneas 64 y 65 de `RepositorioDeRendimientosEloquent` que T02 dejó sin cubrir.
+- **Nota:** la prueba pasó desde la primera corrida, porque el código que atrapa la violación ya existía desde T02; no cambia código de producción.
+
+## DA-23 (T03): migración `050500` corregida en su lugar (autorizada por el responsable)
+
+- **Decisión:** como H4 no se ha fusionado, se editó `2026_10_30_050500_crear_tabla_plantillas_evaluacion.php` en lugar de crear una migración nueva. `uq_plantillas_evaluacion_nombre_posicion` se reemplazó por `uq_plantillas_evaluacion_propia` (`nombre`, `posicion_id`, `creada_por`, donde `creada_por` no es nulo) y `uq_plantillas_evaluacion_fabrica` (`nombre`, `posicion_id`, donde `creada_por` es nulo), ambos con `eliminado_en is null`. Especificación v1.0.4 §5.1.
+- **Verificación:** las pruebas de cada índice (una inserción que falla y otra que pasa) y la prueba de `migrate:rollback` existente, que deshace y vuelve a aplicar el grupo de Rendimiento.
+- **Riesgo:** una base local migrada antes de este cambio conserva el índice viejo. Se arregla con `make fresh`.
+
+## DA-24 (T03): RN-06 como enumeración del dominio (indicada por el responsable)
+
+- **Decisión:** `src/Rendimiento/Dominio/CategoriaDeCalificacion.php` es una enumeración con `deficiente`, `regular`, `bueno` y `sobresaliente`, y `de(int)` aplica los cortes de RN-06. Fuera de 1 a 10 lanza `InvalidArgumentException`, porque `DatosDeJuego` ya garantiza el rango. `RendimientoRecurso` agrega `categoria_calificacion`, de solo lectura, así que el campo sale en la captura, la corrección y la lista por partido. Sin tabla nueva. Especificación v1.0.4 §3.1 y §6.2.
+
+## DA-25 (T03): límite técnico de la ventana
+
+- **Decisión, del responsable:** `ventana_partidos` acepta de 1 a 32 767. El máximo es el de la columna `smallint`; existe para que un valor mayor dé `valor_fuera_de_rango` y no un 500. **No es una regla de negocio** ni un parámetro de RNF-09. Vive como constante privada de `CriterioDeEvaluacion`.
+- **Cómo se revierte:** si la institución fija una ventana máxima, se lee de una tabla y la constante queda solo como tope técnico.
+
+## DA-26 (T03): qué plantilla de fábrica se aplica
+
+- **Qué faltaba:** §3.3 habla de «la plantilla de fábrica de su posición», en singular, pero el índice de fábrica admite varias con distinto nombre en una posición.
+- **Qué se eligió:**
+  - Se aplica la más antigua (`creado_en`, después `id`). Hoy solo existe «Desarrollo».
+  - Si una posición no tiene ninguna, el GET del umbral y el PUT sin cuerpo responden 404, porque no hay umbral que aplicar. `PlantillasDeFabricaSeeder` siembra una en cada posición.
+- **Cómo se revierte:** se cambia el orden en `RepositorioDePlantillasSql::deFabricaDe`.
+
+## DA-27 (T03): carrera de dos cambios del mismo umbral
+
+- **Qué faltaba:** dos PUT simultáneos pueden chocar con `uq_umbrales_rendimiento_vigente`.
+- **Qué se eligió:** el repositorio convierte la violación en `UmbralConcurrente` y la API responde 409 `conflicto`, el código genérico que ya existía, sin campo. La transacción se deshace completa y no quedan dos umbrales vigentes. Así estaba en el plan aprobado.
+
+## DA-28 (T03): jugador en baja en el umbral
+
+- **Qué faltaba:** §6.1 no dice qué pasa con el umbral de un jugador en baja.
+- **Qué se eligió:** el GET lo consulta, igual que la lectura de lo ya capturado (DA-12). El PUT lo trata como fuera del alcance (404), igual que la captura.
+- **Cómo se revierte:** se cambia `incluirBajas` en `SolicitudDeUmbral::authorize` y en `FijarUmbral`.
+
+## DA-29 (T03): «su posición» en las plantillas propias
+
+- **Qué faltaba:** §3.3 y §6.1 dicen que el entrenador crea plantillas «de su posición», pero un entrenador no tiene posición.
+- **Qué se eligió:** se lee como la posición de la plantilla (`posicion_id` del cuerpo). Cualquier entrenador crea plantillas de cualquier posición. Una posición inexistente o con UUID no v7 da 422 `posicion_inexistente`, con el código de Competencia. La existencia la comprueba la clave foránea al escribir, como DA-31 de H3, porque Rendimiento no lee `posiciones`.
+
+## DA-30 (T03): historial del cambio de umbral
+
+- **Qué se eligió:**
+  - **Cierre del vigente:** historial `actualizar`, con la instantánea completa del umbral en `datos_anteriores` (calificación y ventana incluidas, que son «el valor anterior» de HU-15). `datos_nuevos` lleva la misma instantánea con `vigente_hasta`.
+  - **Umbral nuevo:** historial `crear`. El cierre y el alta comparten el instante, así que `vigente_hasta` del anterior es igual a `vigente_desde` del nuevo.
+  - **Primer PUT:** no cierra nada, por decisión del responsable. La plantilla de fábrica que se aplicaba antes no cambia, así que no tiene historial.
+  - **Autor y fecha:** son `usuario_id` y `ocurrido_en` del historial.
+
+## DA-31 (T03): campos desconocidos y tipos en plantillas y umbral
+
+- **Qué se eligió:** como la captura de T02, `SolicitudDePlantilla` y `SolicitudDeUmbral` rechazan cualquier campo no admitido con `validacion_fallida` (por ejemplo, `es_de_fabrica` o `jugador_id`).
+  - `calificacion_minima` viaja como cadena con hasta dos decimales (DD-51), con la misma expresión que Académico.
+  - `ventana_partidos`, como entero JSON estricto.
+  - En el PUT, la calificación y la ventana van juntas (`required_with`). `umbral_ambiguo` lo decide el caso de uso después de validar los tipos.

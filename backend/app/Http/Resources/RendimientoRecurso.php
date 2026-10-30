@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Src\Compartido\Dominio\NumeroDecimal;
+use Src\Rendimiento\Dominio\CategoriaDeCalificacion;
 use Src\Rendimiento\Dominio\RendimientoDePartido;
 use Src\Rendimiento\Dominio\TipoDeDato;
 use Src\Rendimiento\Dominio\ValorDeMetrica;
@@ -13,6 +14,7 @@ use Src\Rendimiento\Dominio\ValorDeMetrica;
 /**
  * Un rendimiento capturado (HU-14). No incluye `registrado_por`: solo lo ve quien lo registró (RN-14). Cada valor de
  * métrica viaja como número si la métrica es entera y como cadena con dos decimales si es decimal (DD-22).
+ * `categoria_calificacion` es de solo lectura y se deriva de la calificación general (RN-06, v1.0.4).
  *
  * @property RendimientoDePartido $resource
  */
@@ -36,6 +38,7 @@ class RendimientoRecurso extends JsonResource
             'tarjetas_amarillas' => $datos->tarjetasAmarillas(),
             'tarjetas_rojas' => $datos->tarjetasRojas(),
             'calificacion_general' => $datos->calificacionGeneral(),
+            'categoria_calificacion' => CategoriaDeCalificacion::de($datos->calificacionGeneral())->value,
             'observacion' => $datos->observacion(),
             'metricas' => array_map(fn (ValorDeMetrica $valor) => [
                 'metrica_id' => $valor->metricaId()->valor(),

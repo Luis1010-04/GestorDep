@@ -6,7 +6,7 @@
 - Sin PATCH de plantillas: §7.2 fila 4 queda reservada y `plantilla_de_fabrica` también (opción b de §3.1).
 - `plantilla_duplicada` 409 en `nombre`, también cuando el nombre coincide con una plantilla de fábrica de la misma posición y cuando choca el índice único en una carrera.
 - `plantilla_inexistente` 422 en `plantilla_id`, con el mismo cuerpo para una inexistente y una ajena.
-- Forma del umbral: la de §3.4.
+- Forma del umbral: la del punto 4 de §3.
 - El filtro de posición no v7 sigue DA-26 (lista vacía); `{posicion_id}` sale de la regla de UUID de §6.1.
 - `umbral_ambiguo` 422 en `plantilla_id` cuando llegan `plantilla_id` y valores propios a la vez (reemplaza el `validacion_fallida` de §3).
 - Límite técnico de la ventana: 32 767, con `valor_fuera_de_rango`.

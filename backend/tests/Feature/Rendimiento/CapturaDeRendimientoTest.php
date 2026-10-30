@@ -5,6 +5,8 @@ use Illuminate\Testing\TestResponse;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
+use Src\Rendimiento\Dominio\RendimientoDePartido;
+use Src\Rendimiento\Dominio\RepositorioDeRendimientos;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -57,7 +59,7 @@ test('HU-14 (§7.1 fila 1): E1 captura a P1 en PJ1 con sus métricas obligatoria
         'id' => $id, 'partido_id' => $m['pj1'], 'jugador_id' => $m['p1'], 'equipo_id' => $m['a'],
         'posicion_id' => (string) DB::table('posiciones')->where('codigo', 'portero')->value('id'),
         'minutos' => 90, 'fue_titular' => true, 'tarjetas_amarillas' => 0, 'tarjetas_rojas' => 0, 'calificacion_general' => 7,
-        'observacion' => 'Buen partido', 'metricas' => $metricas, 'actualizado_en' => '2026-09-20T15:00:00+00:00',
+        'categoria_calificacion' => 'bueno', 'observacion' => 'Buen partido', 'metricas' => $metricas, 'actualizado_en' => '2026-09-20T15:00:00+00:00',
     ])
         ->and(DB::table('rendimientos_partido')->where('id', $id)->value('registrado_por'))->toBe($m['e1'])
         ->and(capturaFilas())->toBe(['rendimientos' => 1, 'valores' => 4, 'historial' => 1, 'historial_valores' => 4])
@@ -76,6 +78,57 @@ test('HU-14 (§7.1 fila 2): una segunda captura de P1 en PJ1 da 409 rendimiento_
         ->assertJsonPath('errores.0.campo', 'jugador_id');
 
     expect(capturaFilas())->toBe($antes);
+});
+
+test('HU-14 (DA-22): la carrera de dos capturas que choca con el índice único da 409 rendimiento_duplicado y no escribe nada', function () {
+    /** @var TestCase $this */
+    $m = capturaMundo();
+    capturaDeP1($this, $m);
+    $real = app(RepositorioDeRendimientos::class);
+    app()->instance(RepositorioDeRendimientos::class, new class($real) implements RepositorioDeRendimientos
+    {
+        public function __construct(private readonly RepositorioDeRendimientos $real) {}
+
+        public function existeDe(Identificador $partidoId, Identificador $jugadorId): bool
+        {
+            return false;
+        }
+
+        public function guardarNuevo(RendimientoDePartido $rendimiento): void
+        {
+            $this->real->guardarNuevo($rendimiento);
+        }
+
+        public function buscar(Identificador $id): ?RendimientoDePartido
+        {
+            return $this->real->buscar($id);
+        }
+
+        public function actualizar(RendimientoDePartido $anterior, RendimientoDePartido $nuevo): void
+        {
+            $this->real->actualizar($anterior, $nuevo);
+        }
+    });
+    $antes = capturaFilas();
+
+    capturaPeticion($this, 'POST', "/partidos/{$m['pj1']}/rendimientos", capturaCuerpo($m['p1'], 'portero'))
+        ->assertStatus(409)
+        ->assertJsonPath('codigo', 'rendimiento_duplicado')
+        ->assertJsonPath('errores.0.campo', 'jugador_id');
+
+    expect(capturaFilas())->toBe($antes);
+});
+
+test('RN-06 (v1.0.4): la captura, la corrección y la lista devuelven categoria_calificacion según la calificación general', function () {
+    /** @var TestCase $this */
+    $m = capturaMundo();
+    $id = capturaDeP1($this, $m);
+
+    capturaPeticion($this, 'PATCH', "/rendimientos/{$id}", ['calificacion_general' => 4])->assertOk()->assertJsonPath('datos.categoria_calificacion', 'deficiente');
+    capturaPeticion($this, 'PATCH', "/rendimientos/{$id}", ['calificacion_general' => 9])->assertOk()->assertJsonPath('datos.categoria_calificacion', 'sobresaliente');
+    capturaPeticion($this, 'GET', "/partidos/{$m['pj1']}/rendimientos")->assertOk()->assertJsonPath('datos.0.categoria_calificacion', 'sobresaliente');
+
+    expect(DB::table('rendimientos_partido')->where('id', $id)->value('calificacion_general'))->toBe(9);
 });
 
 test('HU-14 (§7.1 fila 3): capturar en un partido programado da 409 partido_no_jugado', function () {

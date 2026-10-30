@@ -264,16 +264,30 @@ test('RNF-03 (RNF-09): la calificación mínima de una plantilla va de 1 a 10 y 
         ->and($plantilla(['ventana_partidos' => 0]))->toBe('23514');
 });
 
-test('RNF-03: el nombre de una plantilla es único en su posición, y el borrado lógico lo libera', function () {
-    $datos = rendimientoDatosDePlantilla(['nombre' => 'Desarrollo']);
+test('RNF-03 (v1.0.4): el nombre de una plantilla propia es único por posición y entrenador, y el borrado lógico lo libera', function () {
+    $datos = rendimientoDatosDePlantilla(['nombre' => 'Mia']);
     $primera = rendimientoInsertar('plantillas_evaluacion', $datos);
 
     expect(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', $datos)))->toBe('23505')
-        ->and(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', [...$datos, 'posicion_id' => rendimientoPosicion('portero')])))->toBeNull();
+        ->and(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', [...$datos, 'posicion_id' => rendimientoPosicion('portero')])))->toBeNull()
+        ->and(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', [...$datos, 'creada_por' => rendimientoUsuario()])))->toBeNull();
 
     rendimientoEliminar('plantillas_evaluacion', $primera);
 
     expect(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', $datos)))->toBeNull();
+});
+
+test('RNF-03 (v1.0.4): el nombre de una plantilla de fábrica es único en su posición, y no choca con una propia del mismo nombre', function () {
+    $fabrica = rendimientoDatosDePlantilla(['nombre' => 'Desarrollo', 'creada_por' => null, 'es_de_fabrica' => true]);
+    $primera = rendimientoInsertar('plantillas_evaluacion', $fabrica);
+
+    expect(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', $fabrica)))->toBe('23505')
+        ->and(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', [...$fabrica, 'posicion_id' => rendimientoPosicion('portero')])))->toBeNull()
+        ->and(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', rendimientoDatosDePlantilla(['nombre' => 'Desarrollo']))))->toBeNull();
+
+    rendimientoEliminar('plantillas_evaluacion', $primera);
+
+    expect(rendimientoRechazo(fn () => rendimientoInsertar('plantillas_evaluacion', $fabrica)))->toBeNull();
 });
 
 test('RNF-03 (DA-06): creada_por es nulo si y solo si la plantilla es de fábrica', function () {
@@ -366,7 +380,9 @@ test('RNF-03: los índices de §5.1 existen con sus columnas', function () {
         ->and($indices['ix_rendimientos_partido_jugador_partido'])->toContain('(jugador_id, partido_id)')
         ->and($indices['ix_rendimientos_partido_registrado_por'])->toContain('(registrado_por)')
         ->and($indices['uq_valores_metrica_rendimiento_metrica'])->toContain('(rendimiento_id, metrica_id) WHERE (eliminado_en IS NULL)')
-        ->and($indices['uq_plantillas_evaluacion_nombre_posicion'])->toContain('(nombre, posicion_id) WHERE (eliminado_en IS NULL)')
+        ->and($indices['uq_plantillas_evaluacion_propia'])->toContain('(nombre, posicion_id, creada_por) WHERE ((creada_por IS NOT NULL) AND (eliminado_en IS NULL))')
+        ->and($indices['uq_plantillas_evaluacion_fabrica'])->toContain('(nombre, posicion_id) WHERE ((creada_por IS NULL) AND (eliminado_en IS NULL))')
+        ->and($indices->has('uq_plantillas_evaluacion_nombre_posicion'))->toBeFalse()
         ->and($indices['uq_umbrales_rendimiento_vigente'])->toContain('(jugador_id, equipo_id, entrenador_id) WHERE ((vigente_hasta IS NULL) AND (eliminado_en IS NULL))')
         ->and($indices['ix_evaluaciones_rendimiento_jugador_equipo_entrenador'])->toContain('(jugador_id, equipo_id, entrenador_id, calculado_en DESC)');
 });

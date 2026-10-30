@@ -17,6 +17,7 @@ use App\Http\Controllers\LugarController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PartidoController;
 use App\Http\Controllers\PeriodoEscolarController;
+use App\Http\Controllers\PlantillaEvaluacionController;
 use App\Http\Controllers\RendimientoController;
 use App\Http\Controllers\RivalController;
 use App\Http\Controllers\SaludController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\SesionController;
 use App\Http\Controllers\SituacionAcademicaController;
 use App\Http\Controllers\TemporadaController;
 use App\Http\Controllers\TorneoController;
+use App\Http\Controllers\UmbralController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/salud', SaludController::class);
@@ -123,5 +125,9 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/partidos/{partido}/rendimientos', [RendimientoController::class, 'listar'])->whereUuid('partido');
         Route::post('/partidos/{partido}/rendimientos', [RendimientoController::class, 'crear'])->whereUuid('partido');
         Route::patch('/rendimientos/{rendimiento}', [RendimientoController::class, 'corregir'])->whereUuid('rendimiento');
+        Route::get('/plantillas-evaluacion', [PlantillaEvaluacionController::class, 'listar']);
+        Route::post('/plantillas-evaluacion', [PlantillaEvaluacionController::class, 'crear']);
+        Route::get('/equipos/{equipo}/jugadores/{jugador}/umbral', [UmbralController::class, 'consultar'])->whereUuid(['equipo', 'jugador']);
+        Route::put('/equipos/{equipo}/jugadores/{jugador}/umbral', [UmbralController::class, 'fijar'])->whereUuid(['equipo', 'jugador']);
     });
 });

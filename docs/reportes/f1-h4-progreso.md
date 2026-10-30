@@ -28,6 +28,17 @@
 
 El tiempo está por debajo del aviso de 13 minutos. Pest creció 94 s desde T00 con 89 pruebas más.
 
+### Tiempo de Pest por tarea (Lote B)
+
+Lo pidió el responsable al aprobar el Lote A: el tiempo de Pest de la corrida de `make verificar` del commit de cada tarea.
+
+| Tarea | Pruebas | Pest | `make verificar` | Diferencia de Pest frente a la tarea anterior |
+|---|---:|---:|---:|---:|
+| T02 (referencia) | 1 314 | 504 s | 546 s | — |
+| T03 | 1 381 | 495 s | 538 s (8 min 58 s) | −9 s con 67 pruebas más (variación de la medición) |
+
+En T03 hubo además una corrida fallida (`TextosEnLangTest`, Pest 516 s) y una correcta antes de la del commit (Pest 507 s); el detalle está en `f1-h4-t03.md` §4. `make mutacion` en T03: 663 de 663 mutantes eliminados.
+
 ## 3. Cobertura al cierre del lote
 
 Dominio 100,0 %, Aplicación 100,0 %, Infraestructura y HTTP 99,4 % (total 99,5 %). Sin cubrir en T02: la carrera de dos capturas simultáneas, líneas 64 y 65 de `RepositorioDeRendimientosEloquent`.

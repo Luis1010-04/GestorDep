@@ -80,5 +80,9 @@ return [
         'rendimiento_duplicado' => 'Ya hay un rendimiento capturado de ese jugador en el partido.',
         'metrica_no_aplica_a_posicion' => 'La métrica no corresponde a la posición del jugador.',
         'metrica_obligatoria_faltante' => 'Falta una métrica obligatoria de la posición del jugador.',
+        'plantilla_duplicada' => 'Ya existe una plantilla con ese nombre en la posición.',
+        'plantilla_inexistente' => 'La plantilla indicada no existe.',
+        'plantilla_de_otra_posicion' => 'La plantilla no corresponde a la posición del jugador en el equipo.',
+        'umbral_ambiguo' => 'Envíe una plantilla o una calificación mínima con su ventana, no ambas.',
     ],
 ];

@@ -1,0 +1,51 @@
+<?php
+
+use Osteel\OpenApi\Testing\ValidatorBuilder;
+use Tests\TestCase;
+
+/** Las respuestas reales de las rutas de plantillas y umbral cumplen docs/api/openapi.yaml (HU-15). */
+beforeEach(function () {
+    sesionesPrepararBase();
+});
+
+test('HU-15: las respuestas de plantillas y umbral cumplen el contrato', function () {
+    /** @var TestCase $this */
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    $m = umbralMundo();
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+    $ajena = sesionesIniciar($this, 'e2@x.com');
+    $docente = sesionesIniciar($this, 'd@x.com');
+    $plantilla = ['nombre' => 'Exigente', 'posicion_id' => umbralPosicion('delantero'), 'calificacion_minima' => '7.50', 'ventana_partidos' => 4];
+    $umbral = "/api/v1/equipos/{$m['a']}/jugadores/{$m['f1']}/umbral";
+
+    $creada = sesionesPeticion($this, 'POST', '/api/v1/plantillas-evaluacion', $plantilla, $sesion)->assertCreated();
+    $respuestas = [
+        ['/plantillas-evaluacion', 'post', $creada],
+        ['/plantillas-evaluacion', 'post', sesionesPeticion($this, 'POST', '/api/v1/plantillas-evaluacion', $plantilla, $sesion)->assertStatus(409)],
+        ['/plantillas-evaluacion', 'post', sesionesPeticion($this, 'POST', '/api/v1/plantillas-evaluacion', [...$plantilla, 'ventana_partidos' => 0], $sesion)->assertUnprocessable()],
+        ['/plantillas-evaluacion', 'post', sesionesPeticion($this, 'POST', '/api/v1/plantillas-evaluacion', [], $sesion)->assertUnprocessable()],
+        ['/plantillas-evaluacion', 'post', sesionesPeticion($this, 'POST', '/api/v1/plantillas-evaluacion', $plantilla)->assertUnauthorized()],
+        ['/plantillas-evaluacion', 'post', sesionesPeticion($this, 'POST', '/api/v1/plantillas-evaluacion', $plantilla, $docente)->assertForbidden()],
+        ['/plantillas-evaluacion', 'get', sesionesPeticion($this, 'GET', '/api/v1/plantillas-evaluacion', idDeSesion: $sesion)->assertOk()],
+        ['/plantillas-evaluacion', 'get', sesionesPeticion($this, 'GET', '/api/v1/plantillas-evaluacion?filtro[posicion_id]='.umbralPosicion('delantero'), idDeSesion: $sesion)->assertOk()],
+        ['/plantillas-evaluacion', 'get', sesionesPeticion($this, 'GET', '/api/v1/plantillas-evaluacion?filtro[posicion_id]=x', idDeSesion: $sesion)->assertUnprocessable()],
+        ['/plantillas-evaluacion', 'get', sesionesPeticion($this, 'GET', '/api/v1/plantillas-evaluacion')->assertUnauthorized()],
+        ['/plantillas-evaluacion', 'get', sesionesPeticion($this, 'GET', '/api/v1/plantillas-evaluacion', idDeSesion: $docente)->assertForbidden()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'get', sesionesPeticion($this, 'GET', $umbral, idDeSesion: $sesion)->assertOk()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral, ['calificacion_minima' => '7.00', 'ventana_partidos' => 3], $sesion)->assertOk()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'get', sesionesPeticion($this, 'GET', $umbral, idDeSesion: $sesion)->assertOk()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral, ['plantilla_id' => $creada->json('datos.id')], $sesion)->assertOk()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral, ['plantilla_id' => umbralPlantillaDeFabrica('portero')], $sesion)->assertUnprocessable()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral, ['calificacion_minima' => '7.00'], $sesion)->assertUnprocessable()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'get', sesionesPeticion($this, 'GET', $umbral, idDeSesion: $ajena)->assertNotFound()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral, [], $ajena)->assertNotFound()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'get', sesionesPeticion($this, 'GET', $umbral)->assertUnauthorized()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral)->assertUnauthorized()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'get', sesionesPeticion($this, 'GET', $umbral, idDeSesion: $docente)->assertForbidden()],
+        ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral, [], $docente)->assertForbidden()],
+    ];
+
+    foreach ($respuestas as [$ruta, $metodo, $respuesta]) {
+        expect($validador->validate($respuesta->baseResponse, $ruta, $metodo))->toBeTrue("$metodo $ruta {$respuesta->getStatusCode()}");
+    }
+});

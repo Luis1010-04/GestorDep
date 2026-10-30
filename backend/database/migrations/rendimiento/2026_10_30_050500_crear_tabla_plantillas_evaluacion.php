@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * Plantillas de evaluación por posición (RN-07, HU-15): las de fábrica (`creada_por` nulo) y las propias de un
- * entrenador. `ck_plantillas_evaluacion_origen` (DA-06): `creada_por` es nulo si y solo si es de fábrica.
+ * entrenador. `ck_plantillas_evaluacion_origen` (DA-06): `creada_por` es nulo si y solo si es de fábrica. El nombre es
+ * único por posición entre las de fábrica, y por posición y autor entre las propias, para que un 409 no revele las
+ * plantillas de otro entrenador (v1.0.4, DA-23).
  */
 return new class extends Migration
 {
@@ -31,7 +33,8 @@ return new class extends Migration
         DB::statement('alter table plantillas_evaluacion add constraint ck_plantillas_evaluacion_calificacion_minima check (calificacion_minima between 1 and 10)');
         DB::statement('alter table plantillas_evaluacion add constraint ck_plantillas_evaluacion_ventana_partidos check (ventana_partidos > 0)');
         DB::statement('alter table plantillas_evaluacion add constraint ck_plantillas_evaluacion_origen check ((creada_por is null) = es_de_fabrica)');
-        DB::statement('create unique index uq_plantillas_evaluacion_nombre_posicion on plantillas_evaluacion (nombre, posicion_id) where eliminado_en is null');
+        DB::statement('create unique index uq_plantillas_evaluacion_propia on plantillas_evaluacion (nombre, posicion_id, creada_por) where creada_por is not null and eliminado_en is null');
+        DB::statement('create unique index uq_plantillas_evaluacion_fabrica on plantillas_evaluacion (nombre, posicion_id) where creada_por is null and eliminado_en is null');
     }
 
     public function down(): void
