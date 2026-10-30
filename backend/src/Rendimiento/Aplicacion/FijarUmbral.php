@@ -34,7 +34,7 @@ final class FijarUmbral
     /**
      * @param  array{plantilla_id?: string, calificacion_minima?: string, ventana_partidos?: int}  $datos  la calificación y la ventana llegan juntas
      *
-     * @throws RecursoNoEncontrado|UmbralAmbiguo|PlantillaInexistente|PlantillaDeOtraPosicion|ValorFueraDeRango|UmbralConcurrente
+     * @throws RecursoNoEncontrado|UmbralAmbiguo|PlantillaInexistente|PlantillaDeOtraPosicion|ValorFueraDeRango|UmbralConcurrente|SinUmbralAplicable
      */
     public function ejecutar(Identificador $equipo, Identificador $jugador, array $datos): UmbralAplicable
     {
@@ -53,7 +53,7 @@ final class FijarUmbral
         } elseif (isset($datos['calificacion_minima'], $datos['ventana_partidos'])) {
             [$plantillaId, $criterio] = [null, new CriterioDeEvaluacion(NumeroDecimal::desdeTexto($datos['calificacion_minima']), $datos['ventana_partidos'])];
         } else {
-            $plantilla = $this->plantillas->deFabricaDe($posicion) ?? throw new RecursoNoEncontrado;
+            $plantilla = $this->plantillas->deFabricaDe($posicion) ?? throw new SinUmbralAplicable;
             [$plantillaId, $criterio] = [$plantilla->id(), $plantilla->criterio()];
         }
 

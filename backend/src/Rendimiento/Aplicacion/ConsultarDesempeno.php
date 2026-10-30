@@ -18,13 +18,13 @@ final class ConsultarDesempeno
         private readonly RecalcularEvaluacion $recalcular,
     ) {}
 
-    /** @throws RecursoNoEncontrado también si la posición no tiene plantilla de fábrica (DA-26) */
+    /** @throws RecursoNoEncontrado|SinUmbralAplicable si no hay umbral propio ni plantilla de fábrica de la posición (DA-33) */
     public function ejecutar(Identificador $equipo, Identificador $jugador): EvaluacionDeRendimiento
     {
         ['entrenador' => $entrenador] = $this->comprobar->ejecutar($equipo, $jugador);
 
         return $this->evaluaciones->ultimaDe($jugador, $equipo, $entrenador)
             ?? $this->recalcular->calcular($jugador, $equipo, $entrenador)
-            ?? throw new RecursoNoEncontrado;
+            ?? throw new SinUmbralAplicable;
     }
 }

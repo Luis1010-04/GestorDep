@@ -217,6 +217,23 @@ test('HU-16 (v1.0.5): sin evaluaciones guardadas, la lectura calcula sin guardar
     expect(desempenoEvaluaciones())->toBe(0);
 });
 
+test('HU-16 (DA-33): sin umbral propio y sin plantilla de fábrica de la posición, desempeño y umbral dan 409 sin_umbral_aplicable; la captura se guarda sin evaluación', function () {
+    /** @var TestCase $this */
+    $m = umbralMundo();
+    DB::connection('propietario')->table('plantillas_evaluacion')->where('id', umbralPlantillaDeFabrica('delantero'))->update(['eliminado_en' => '2026-09-30 10:00:00+00']);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+    $esperado = ['codigo' => 'sin_umbral_aplicable', 'mensaje' => __('errores.reglas.sin_umbral_aplicable'), 'errores' => []];
+
+    desempenoCapturar($this, $m['a'], [7]);
+    sesionesPeticion($this, 'GET', "/api/v1/equipos/{$m['a']}/jugadores/{$m['f1']}/desempeno", idDeSesion: $sesion)->assertStatus(409)->assertExactJson($esperado);
+    sesionesPeticion($this, 'GET', "/api/v1/equipos/{$m['a']}/jugadores/{$m['f1']}/umbral", idDeSesion: $sesion)->assertStatus(409)->assertExactJson($esperado);
+    sesionesPeticion($this, 'PUT', "/api/v1/equipos/{$m['a']}/jugadores/{$m['f1']}/umbral", [], $sesion)->assertStatus(409)->assertExactJson($esperado);
+
+    expect(DB::table('rendimientos_partido')->count())->toBe(1)
+        ->and(desempenoEvaluaciones())->toBe(0)
+        ->and(DB::table('umbrales_rendimiento')->count())->toBe(0);
+});
+
 test('RNF-01 (§7.4 fila 5): un jugador ajeno al alcance de E2 da el 404 de uno inexistente, como un UUID no v7 o un equipo que no entrena', function () {
     /** @var TestCase $this */
     $m = umbralMundo();

@@ -10,7 +10,7 @@ use stdClass;
 
 /**
  * Lee `rendimientos_partido` y ordena con la fecha de inicio que da `InicioDePartidos`, sin leer tablas de Competencia
- * (v1.0.5). Un rendimiento cuyo partido ya no existe o está eliminado no cuenta (DA-34).
+ * (v1.0.5). El rendimiento de un partido eliminado lógicamente no cuenta; H3 no elimina partidos (DA-34).
  */
 final class CalificacionesDelEntrenadorSql implements CalificacionesDelEntrenador
 {

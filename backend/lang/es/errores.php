@@ -83,6 +83,7 @@ return [
         'plantilla_duplicada' => 'Ya existe una plantilla con ese nombre en la posición.',
         'plantilla_inexistente' => 'La plantilla indicada no existe.',
         'plantilla_de_otra_posicion' => 'La plantilla no corresponde a la posición del jugador en el equipo.',
+        'sin_umbral_aplicable' => 'El jugador no tiene umbral propio y su posición no tiene plantilla de fábrica.',
         'umbral_ambiguo' => 'Envíe una plantilla o una calificación mínima con su ventana, no ambas.',
     ],
 ];

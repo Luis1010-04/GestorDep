@@ -15,7 +15,7 @@ final class ConsultarUmbral
         private readonly RepositorioDePlantillas $plantillas,
     ) {}
 
-    /** @throws RecursoNoEncontrado también si la posición no tiene plantilla de fábrica (DA-26) */
+    /** @throws RecursoNoEncontrado|SinUmbralAplicable si no hay umbral propio ni plantilla de fábrica de la posición (DA-33) */
     public function ejecutar(Identificador $equipo, Identificador $jugador): UmbralAplicable
     {
         ['entrenador' => $entrenador, 'posicion' => $posicion] = $this->comprobar->ejecutar($equipo, $jugador);
@@ -25,6 +25,6 @@ final class ConsultarUmbral
             return UmbralAplicable::desdeUmbral($umbral);
         }
 
-        return UmbralAplicable::desdePlantilla($this->plantillas->deFabricaDe($posicion) ?? throw new RecursoNoEncontrado);
+        return UmbralAplicable::desdePlantilla($this->plantillas->deFabricaDe($posicion) ?? throw new SinUmbralAplicable);
     }
 }

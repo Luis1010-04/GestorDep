@@ -28,7 +28,7 @@ final class RecalcularEvaluacion
         private readonly Reloj $reloj,
     ) {}
 
-    /** Calcula e inserta la evaluación. Sin criterio que aplicar no inserta nada (DA-33). */
+    /** Calcula e inserta la evaluación. Sin criterio que aplicar no inserta nada; la lectura responde sin_umbral_aplicable (DA-33). */
     public function ejecutar(Identificador $jugador, Identificador $equipo, Identificador $entrenador, ?Identificador $posicionGuardada = null): void
     {
         $evaluacion = $this->calcular($jugador, $equipo, $entrenador, $posicionGuardada);

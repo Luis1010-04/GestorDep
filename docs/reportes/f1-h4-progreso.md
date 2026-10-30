@@ -38,6 +38,7 @@ Lo pidió el responsable al aprobar el Lote A: el tiempo de Pest de la corrida d
 | T03 | 1 381 | 495 s | 538 s (8 min 58 s) | −9 s con 67 pruebas más (variación de la medición) |
 | F1-H4-FIX (DA-28 retirada) | 1 381 | 595 s | 686 s (11 min 26 s) | +100 s con las mismas pruebas (variación de la medición; el cambio de código fue mínimo) |
 | T04 | 1 407 | 531 s | 574 s (9 min 34 s) | +36 s frente a T03 con 26 pruebas más |
+| F1-H4-FIX del Lote B | 1 410 | 508 s | 562 s (9 min 22 s) | −23 s con 3 pruebas más (variación de la medición) |
 
 En T03 hubo además una corrida fallida (`TextosEnLangTest`, Pest 516 s) y una correcta antes de la del commit (Pest 507 s); el detalle está en `f1-h4-t03.md` §4. `make mutacion` en T03: 663 de 663 mutantes eliminados.
 

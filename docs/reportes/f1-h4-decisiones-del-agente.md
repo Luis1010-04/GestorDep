@@ -197,7 +197,7 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué faltaba:** §3.3 habla de «la plantilla de fábrica de su posición», en singular, pero el índice de fábrica admite varias con distinto nombre en una posición.
 - **Qué se eligió:**
   - Se aplica la más antigua (`creado_en`, después `id`). Hoy solo existe «Desarrollo».
-  - Si una posición no tiene ninguna, el GET del umbral y el PUT sin cuerpo responden 404, porque no hay umbral que aplicar. `PlantillasDeFabricaSeeder` siembra una en cada posición.
+  - Si una posición no tiene ninguna, el GET del umbral y el PUT sin cuerpo respondían 404. **Cambio en el F1-H4-FIX del Lote B:** ahora responden 409 `sin_umbral_aplicable`, como el desempeño (DA-33), porque es la misma situación. `PlantillasDeFabricaSeeder` siembra una en cada posición.
 - **Cómo se revierte:** se cambia el orden en `RepositorioDePlantillasSql::deFabricaDe`.
 
 ## DA-27 (T03): carrera de dos cambios del mismo umbral
@@ -243,13 +243,16 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 ## DA-33 (T04): sin criterio aplicable no se inserta evaluación
 
 - **Qué faltaba:** si un jugador no tiene umbral propio y no hay plantilla de fábrica para su posición (ni la actual ni la guardada en el rendimiento), no hay criterio con qué calcular.
-- **Qué se eligió:** la captura, la corrección o el cambio de umbral se guardan igual y no se inserta evaluación; la lectura del desempeño responde 404, como el GET del umbral (DA-26). Con los seeders de fábrica no ocurre.
-- **Cómo se revierte:** se lanza una excepción en `RecalcularEvaluacion::ejecutar` en lugar de omitir la inserción.
+- **Qué se eligió:** la captura y la corrección se guardan igual y no se inserta evaluación. Con los seeders de fábrica no ocurre.
+- **Corrección del responsable (F1-H4-FIX del Lote B):** la lectura del desempeño responde **409 `sin_umbral_aplicable`**, no 404, porque el recurso existe y lo que falta es configuración. Por coherencia, el GET del umbral y el PUT sin cuerpo responden lo mismo (DA-26). El código está en §6.3 (v1.0.6) y en `openapi.yaml`, y lo prueba `DesempenoTest` («HU-16 (DA-33)»), además del contrato.
 
-## DA-34 (T04): un rendimiento sin fecha de partido no cuenta
+## DA-34 (T04): el rendimiento de un partido eliminado lógicamente no cuenta
 
-- **Qué faltaba:** `InicioDePartidos` no devuelve partidos eliminados ni inexistentes, así que su rendimiento no tiene fecha con que ordenarse.
-- **Qué se eligió:** ese rendimiento no cuenta en el promedio. En H3 un partido no se elimina desde la API, así que hoy no ocurre.
+- **Verificación (F1-H4-FIX del Lote B):**
+  - Un partido jugado no puede quedar sin fecha: `partidos.inicia_en` es `NOT NULL`.
+  - Un partido inexistente tampoco es posible, porque `rendimientos_partido` tiene clave foránea compuesta hacia `partidos`.
+  - El único caso que queda es un partido **eliminado lógicamente**. H3 no lo permite: no hay ruta ni código que escriba `partidos.eliminado_en`. Por eso no se agregó nota en §3.3.
+- **Qué se eligió:** el rendimiento de un partido eliminado lógicamente no cuenta en el promedio, porque `InicioDePartidos` no devuelve partidos eliminados. Las evaluaciones ya guardadas no cambian hasta el siguiente recálculo.
 - **Cómo se revierte:** en `CalificacionesDelEntrenadorSql`, se ordena al final en lugar de descartarlo.
 
 ## DA-35 (T04): decisiones menores del plan, sin objeción del responsable
