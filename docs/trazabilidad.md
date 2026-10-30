@@ -118,7 +118,7 @@ Origen de la columna **Hito**:
 
 ## Estado al cierre de H4
 
-- Total de la suite al cierre de H4: ver `docs/reportes/f1-h4-reporte.md` §2 (`make verificar` de T06). `make mutacion`: 687 mutantes, MSI 100 %.
+- Total de la suite al cierre de H4: **1 424 pruebas, 9 738 aserciones** (`make verificar` de cierre sobre `51b5fe6`; H3 cerró con 1 224). `make mutacion`: 687 mutantes, MSI 100 %. Ver `docs/reportes/f1-h4-reporte.md`.
 - Cada historia de H4 (HU-14, HU-15, HU-16 y HU-04 c2) tiene pruebas con su identificador. Las filas de §7 están todas probadas, salvo §7.1 fila 12 (eliminada en v1.0.3) y §7.2 fila 4 (reservada en v1.0.4, sin ruta de edición de plantillas).
 - HU-13 c2 (habilitar la captura de rendimiento), diferido desde H3, queda cubierto: solo un partido `jugado` admite captura (`CapturaDeRendimientoTest`, §7.1 fila 3).
 - Criterios diferidos de `docs/hitos/f1-h4.md` §2.2, ninguno se prueba en H4:
