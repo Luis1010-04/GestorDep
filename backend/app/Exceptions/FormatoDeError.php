@@ -42,6 +42,10 @@ use Src\Plantel\Aplicacion\JugadorNoEncontrado;
 use Src\Plantel\Aplicacion\JugadorYaEnBaja;
 use Src\Plantel\Aplicacion\JugadorYaEnEquipo;
 use Src\Plantel\Aplicacion\MatriculaDuplicada;
+use Src\Rendimiento\Aplicacion\PartidoNoJugado;
+use Src\Rendimiento\Aplicacion\RecursoNoEncontrado as RendimientoNoEncontrado;
+use Src\Rendimiento\Aplicacion\RendimientoDuplicado;
+use Src\Rendimiento\Dominio\ReglaDeCampoViolada as ReglaDeCampoDeRendimiento;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -76,7 +80,9 @@ final class FormatoDeError
             $e instanceof LugarDuplicado, $e instanceof RivalDuplicado, $e instanceof TemporadaDuplicada, $e instanceof TemporadaSolapada, $e instanceof TorneoDuplicado => self::reglaDeNegocio($e, 409),
             $e instanceof EntrenamientoNoProgramado, $e instanceof EntrenamientoNoRealizado, $e instanceof AsistenciaYaRegistrada, $e instanceof PartidoNoProgramado => self::reglaDeNegocio($e, 409),
             $e instanceof ReglaDeCampoViolada => self::reglaDeCampo($e, $e instanceof TransicionNoPermitida || $e instanceof JugadorYaConvocado ? 409 : 422),
-            $e instanceof RecursoNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
+            $e instanceof RecursoNoEncontrado, $e instanceof RendimientoNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
+            $e instanceof PartidoNoJugado => self::reglaDeNegocio($e, 409),
+            $e instanceof ReglaDeCampoDeRendimiento => self::reglaDeCampoDeRendimiento($e, $e instanceof RendimientoDuplicado ? 409 : 422),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof JugadorNoRegistrado => self::reglaDeNegocio($e, 404),
@@ -113,6 +119,20 @@ final class FormatoDeError
     private static function reglaDeCampo(ReglaDeCampoViolada $e, int $estado): JsonResponse
     {
         $mensaje = __('errores.reglas.'.$e->codigo());
+
+        return self::json($estado, $e->codigo(), $mensaje, [
+            ['campo' => $e->campo(), 'codigo' => $e->codigo(), 'mensaje' => $mensaje],
+        ]);
+    }
+
+    /**
+     * Como `reglaDeCampo`, pero el mensaje se busca primero en `errores.rendimiento`: `valor_fuera_de_rango` de
+     * Rendimiento no habla de goles, como el de Competencia (DA-15).
+     */
+    private static function reglaDeCampoDeRendimiento(ReglaDeCampoDeRendimiento $e, int $estado): JsonResponse
+    {
+        $clave = 'errores.rendimiento.'.$e->codigo();
+        $mensaje = Lang::has($clave) ? __($clave) : __('errores.reglas.'.$e->codigo());
 
         return self::json($estado, $e->codigo(), $mensaje, [
             ['campo' => $e->campo(), 'codigo' => $e->codigo(), 'mensaje' => $mensaje],

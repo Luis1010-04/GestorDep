@@ -17,6 +17,12 @@ return [
     'cuerpo_sin_campos' => 'Debe enviar al menos uno de: nombres, apellidos, fecha_nacimiento',
     'cuerpo_sin_campos_entrenamiento' => 'Debe enviar al menos uno de: inicia_en, termina_en, lugar_id, responsable_id, estado',
     'cuerpo_sin_campos_partido' => 'Debe enviar al menos uno de: inicia_en, lugar_id, rival_id, torneo_id, tipo, condicion, estado',
+    'cuerpo_sin_campos_rendimiento' => 'Debe enviar al menos uno de: minutos, fue_titular, tarjetas_amarillas, tarjetas_rojas, calificacion_general, observacion, metricas',
+
+    // Mensajes de Rendimiento que tienen el mismo código que otro contexto con distinto significado (DA-15).
+    'rendimiento' => [
+        'valor_fuera_de_rango' => 'El valor está fuera del rango permitido.',
+    ],
 
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
     'reglas' => [
@@ -70,5 +76,9 @@ return [
         'jugador_no_convocado' => 'El jugador no está convocado al partido.',
         'posicion_inexistente' => 'La posición indicada no existe.',
         'valor_fuera_de_rango' => 'Los goles deben estar entre 0 y 99.',
+        'partido_no_jugado' => 'El partido no está jugado: no admite captura de rendimiento.',
+        'rendimiento_duplicado' => 'Ya hay un rendimiento capturado de ese jugador en el partido.',
+        'metrica_no_aplica_a_posicion' => 'La métrica no corresponde a la posición del jugador.',
+        'metrica_obligatoria_faltante' => 'Falta una métrica obligatoria de la posición del jugador.',
     ],
 ];

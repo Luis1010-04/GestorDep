@@ -3,6 +3,7 @@
 namespace Src\Competencia\Infraestructura;
 
 use Illuminate\Support\ServiceProvider;
+use Src\Compartido\Aplicacion\ConvocatoriaDePartido;
 use Src\Competencia\Aplicacion\ConsultaDeAsistencia;
 use Src\Competencia\Aplicacion\ConsultaDeConvocatoria;
 use Src\Competencia\Aplicacion\VisibilidadDeJugador;
@@ -21,6 +22,7 @@ class CompetenciaServiceProvider extends ServiceProvider
     {
         $this->app->bind(ConsultaDeAsistencia::class, ConsultaDeAsistenciaSql::class);
         $this->app->bind(ConsultaDeConvocatoria::class, ConsultaDeConvocatoriaSql::class);
+        $this->app->bind(ConvocatoriaDePartido::class, ConvocatoriaDePartidoCompetencia::class);
         $this->app->bind(RepositorioDeAsistenciasDeEntrenamiento::class, RepositorioDeAsistenciasDeEntrenamientoEloquent::class);
         $this->app->bind(RepositorioDeConvocatorias::class, RepositorioDeConvocatoriasEloquent::class);
         $this->app->bind(RepositorioDeEntrenamientos::class, RepositorioDeEntrenamientosEloquent::class);

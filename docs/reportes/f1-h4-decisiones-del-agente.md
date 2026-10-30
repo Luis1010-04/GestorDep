@@ -16,6 +16,17 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 | DA-08 | T01 | Los seeders de Rendimiento solo insertan lo que falta: no deshacen un ajuste hecho en la base | No | No |
 | DA-09 | T01 | `vigente_desde` y `vigente_hasta` del umbral son instantes (`timestamptz`), no fechas | No | No |
 | DA-10 | T01 | `evaluaciones_rendimiento` usa la macro `soloInsercion` de Compartido | No | No |
+| DA-11 | T02 | Orden de las comprobaciones de la captura; tipos en la solicitud y rangos en el dominio | Sí: un jugador fuera del alcance da 404 antes que `jugador_no_convocado` (restringe) | No |
+| DA-12 | T02 | Capturar excluye a los jugadores en baja; leer y corregir lo ya capturado los incluye | Sí (restringe la captura) | No |
+| DA-13 | T02 | Un convocado deja de estar pendiente si tiene cualquier rendimiento, de cualquier entrenador | No (no revela de quién) | No |
+| DA-14 | T02 | Los valores de métrica se reciben como enteros JSON y se devuelven según el tipo de la métrica | No | No |
+| DA-15 | T02 | Mensaje propio de `valor_fuera_de_rango` en Rendimiento (`errores.rendimiento`) | No | No |
+| DA-16 | T02 | Los pendientes de captura viven en `src/Consultas` (arquitectura §4.3) | No | **Indicada** por el responsable el 30/10/2026 (v1.0.3) |
+| DA-17 | T02 | Puerto `PosicionEnEquipo` con adaptador en Plantel, y prueba de arquitectura de Rendimiento sin Plantel | No | **Indicada** por el responsable el 30/10/2026 (v1.0.3) |
+| DA-18 | T02 | Un rendimiento ajeno responde 404; `rendimiento_no_editable` queda reservado | Sí (restringe: no revela que existe) | **Indicada** por el responsable el 30/10/2026 (v1.0.3) |
+| DA-19 | T02 | Campos de las respuestas: rendimiento sin `registrado_por`, catálogo sin nombres de posición, pendientes con su conteo | Sí (revela lo mínimo) | No |
+| DA-20 | T02 | Un jugador visible y convocado pero sin membresía vigente en el equipo del partido da 404 | Sí (restringe) | No |
+| DA-21 | T02 | El enlace del adaptador `ConvocatoriaDePartido` va en `CompetenciaServiceProvider` | No | No |
 
 ## DA-01 (T00): `synchronous_commit = off` en lugar de transacciones por prueba
 
@@ -84,3 +95,79 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué se eligió:** `Schema::soloInsercion('evaluaciones_rendimiento')`: un disparador que rechaza `UPDATE` y `DELETE` incluso al propietario, más la revocación de esos permisos al rol de la aplicación.
 - **Efecto visible:** el error del disparador dice `historial_solo_insercion: evaluaciones_rendimiento`, porque la función de la macro es compartida. No llega al usuario: ninguna ruta actualiza evaluaciones.
 - **Cómo se revierte:** una migración nueva que quite el disparador y devuelva los permisos.
+
+## DA-11 (T02): orden de las comprobaciones de la captura
+
+- **Qué faltaba:** §3.3 y §6.3 dan los códigos, pero no su orden cuando hay más de un error.
+- **Qué se eligió:**
+  1. Partido ajeno o inexistente: 404, en `authorize()` (§6.1).
+  2. Tipos del cuerpo: 422 `validacion_fallida`.
+  3. Partido no jugado: 409 `partido_no_jugado`.
+  4. Jugador inexistente, fuera del alcance o en baja: el mismo 404.
+  5. Jugador no convocado: 422 `jugador_no_convocado`.
+  6. Captura previa: 409 `rendimiento_duplicado`.
+  7. Rangos de los datos de juego, en el orden de los campos: minutos, amarillas, rojas, calificación y observación.
+  8. Métricas: primero que cada una sea de la posición (`metricas.N.metrica_id`), después que estén todas las obligatorias (`metricas`) y al final el rango de cada valor (`metricas.N.valor`).
+- **Detalles:** la solicitud valida solo los tipos (`integer:strict`, `boolean:strict`); los rangos los valida el dominio, para responder `valor_fuera_de_rango` y no el código de la regla de Laravel. La observación no lleva `max` en la solicitud: más de 500 caracteres es `valor_fuera_de_rango`, como pide §6.3.
+- **Por qué:** es el patrón de H3 (estado antes que rango, DA-33) y de DA-32 (404 antes que `jugador_no_convocado`, para no revelar a un jugador ajeno).
+- **Cómo se revierte:** se reordenan las comprobaciones en `CapturarRendimiento` y en `MetricasDeLaPosicion`.
+
+## DA-12 (T02): capturar excluye a los jugadores en baja; leer y corregir los incluye
+
+- **Qué faltaba:** la especificación no dice qué pasa con un jugador convocado que después se da de baja.
+- **Qué se eligió:** `VisibilidadDeJugador` sin bajas para capturar (404, como la alineación en DA-34 de H3), y con bajas para listar y corregir un rendimiento ya capturado (como el historial de asistencia en DA-20 de H3).
+- **Cómo se revierte:** se cambia el argumento `incluirBajas` en `CapturarRendimiento`, `BuscarRendimientoDelRegistrante` y `ConsultaDeRendimientosSql`.
+
+## DA-13 (T02): cuándo un convocado está pendiente
+
+- **Qué faltaba:** §3.3 dice «al menos un convocado sin rendimiento registrado», sin decir registrado por quién. La UQ parcial (`partido_id`, `jugador_id`) permite una sola captura por jugador y partido, sea del entrenador que sea.
+- **Qué se eligió:** un convocado no eliminado, visible por `AlcanceDeJugadores` sin bajas, está pendiente si no tiene **ningún** rendimiento no eliminado en el partido. Si E3 ya capturó a un jugador, E1 no puede capturarlo (409), así que para E1 tampoco queda pendiente. La lista solo trae partidos jugados de los equipos que entrena el usuario (`EquiposDelEntrenador`), del más reciente al más antiguo, con el número de convocados pendientes.
+- **Privacidad:** el conteo no dice quién capturó ni qué capturó (RN-14).
+- **Cómo se revierte:** se agrega `registrado_por = usuario` a la subconsulta `not exists`.
+
+## DA-14 (T02): valores de métrica como enteros JSON
+
+- **Qué faltaba:** §6.2 dice `{metrica_id, valor}` sin tipo. DD-22 manda decimales como cadena y enteros como número.
+- **Qué se eligió:** la solicitud exige `valor` entero (`integer:strict`), porque las nueve métricas sembradas son enteras (DA-07). La respuesta y el catálogo devuelven el valor, el mínimo y el máximo como entero si la métrica es entera y como cadena con dos decimales si es decimal (esquema `NumeroDeMetrica`).
+- **Límite:** una métrica decimal sembrada en el futuro no se podría capturar hasta aceptar también cadenas en la solicitud. El dominio ya maneja decimales (`Metrica::admite`).
+- **Cómo se revierte:** se acepta un entero o una cadena decimal en `metricas.*.valor`.
+
+## DA-15 (T02): mensaje propio de `valor_fuera_de_rango` en Rendimiento
+
+- **Qué faltaba:** `lang/es/errores.php` tiene `valor_fuera_de_rango` = «Los goles deben estar entre 0 y 99.» (H3). Una prueba de H3 (`AlineacionYResultadoTest`, fila 8) comprueba ese mensaje, así que no se puede generalizar sin cambiar una aserción.
+- **Qué se eligió:** el código sigue siendo `valor_fuera_de_rango` (§6.3). `FormatoDeError` busca el mensaje de las reglas de campo de Rendimiento primero en `errores.rendimiento.{codigo}` («El valor está fuera del rango permitido.») y, si no existe, en `errores.reglas.{codigo}`.
+- **Cómo se revierte:** se borra la clave `errores.rendimiento` y el método `reglaDeCampoDeRendimiento`.
+
+## DA-16 (T02): pendientes de captura en Consultas (indicada por el responsable)
+
+- **Decisión:** `GET /partidos/pendientes-de-rendimiento` es una sola consulta en `src/Consultas`, según `docs/arquitectura.md` §4.3: `ConsultaDePendientesDeRendimiento` (Aplicación) y `ConsultaDePendientesDeRendimientoSql` (Infraestructura), con `AlcanceDeJugadores` y filtro por los equipos del entrenador. Especificación v1.0.3, rutas de T02.
+
+## DA-17 (T02): puerto `PosicionEnEquipo` (indicada por el responsable)
+
+- **Decisión:** el puerto `PosicionEnEquipo` en `src/Compartido/Aplicacion` devuelve la posición de la membresía vigente y no eliminada (DD-05). Su adaptador, `PosicionEnEquipoPlantel`, vive en `src/Plantel/Infraestructura`, con su enlace en `PlantelServiceProvider`. `tests/Arch/RendimientoSinPlantelTest.php` comprueba que Rendimiento no importa Plantel ni nombra sus tablas, como `CompetenciaSinPlantelTest`. Especificación v1.0.3.
+
+## DA-18 (T02): un rendimiento ajeno da 404 (indicada por el responsable)
+
+- **Decisión:** corregir un rendimiento de otro entrenador, aunque entrene el mismo equipo, responde 404 con el mismo cuerpo que uno inexistente (§3.3, RN-14). `rendimiento_no_editable` queda reservado en §6.3, sin caso de prueba en H4. La fila 12 de §7.1 se eliminó (en H3 un partido `jugado` no cambia de estado) y se agregó la fila 13 (E3 corrige el de E1, 404). Especificación v1.0.3.
+
+## DA-19 (T02): campos de las respuestas
+
+- **Qué faltaba:** §6.2 solo da los campos del desempeño.
+- **Qué se eligió:**
+  - **Rendimiento:** `id`, `partido_id`, `jugador_id`, `equipo_id`, `posicion_id`, los datos de juego, `observacion`, `metricas` (`{metrica_id, valor}`, en el orden de la posición) y `actualizado_en`. Sin `registrado_por`, que siempre es quien consulta.
+  - **Catálogo:** solo las métricas activas, ordenadas por código, con `posiciones` (`posicion_id`, `obligatoria`, `orden`), sin nombres de posición, porque Rendimiento no lee Plantel (DA-17).
+  - **Pendientes:** `partido_id`, `equipo_id`, `inicia_en` y `convocados_sin_rendimiento`, sin datos de jugadores.
+  - **Paginación:** la lista por partido y los pendientes, 15 por página (como el resto); el catálogo no se pagina.
+- **Cómo se revierte:** se agregan campos en los recursos y en `openapi.yaml`.
+
+## DA-20 (T02): convocado sin membresía vigente en el equipo
+
+- **Qué faltaba:** un jugador puede seguir convocado y visible (por otro equipo del entrenador) después de dejar el equipo del partido. Entonces no tiene posición en ese equipo (DD-05) y no hay métricas que pedirle.
+- **Qué se eligió:** 404, el mismo cuerpo que un jugador fuera del alcance.
+- **Cómo se revierte:** se cambia la excepción en `CapturarRendimiento` cuando `PosicionEnEquipo` devuelve nulo.
+
+## DA-21 (T02): enlace del adaptador de Competencia
+
+- **Qué faltaba:** las rutas de T02 permiten en `src/Competencia/Infraestructura/**` «solo el adaptador», y no mencionan su enlace en el contenedor.
+- **Qué se eligió:** una línea en `CompetenciaServiceProvider` (`ConvocatoriaDePartido` → `ConvocatoriaDePartidoCompetencia`), como hizo H3 con los adaptadores de Plantel. Si el enlace fuera en `RendimientoServiceProvider`, Rendimiento importaría una clase de Competencia.
+- **Cómo se revierte:** se mueve el enlace al proveedor que el responsable indique.

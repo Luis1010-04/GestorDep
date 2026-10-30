@@ -17,6 +17,7 @@ use App\Http\Controllers\LugarController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PartidoController;
 use App\Http\Controllers\PeriodoEscolarController;
+use App\Http\Controllers\RendimientoController;
 use App\Http\Controllers\RivalController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
@@ -116,5 +117,11 @@ Route::middleware('auth:web')->group(function () {
 
         Route::put('/partidos/{partido}/alineacion', [AlineacionYResultadoController::class, 'alineacion'])->whereUuid('partido');
         Route::put('/partidos/{partido}/resultado', [AlineacionYResultadoController::class, 'resultado'])->whereUuid('partido');
+
+        Route::get('/metricas', [RendimientoController::class, 'metricas']);
+        Route::get('/partidos/pendientes-de-rendimiento', [RendimientoController::class, 'pendientes']);
+        Route::get('/partidos/{partido}/rendimientos', [RendimientoController::class, 'listar'])->whereUuid('partido');
+        Route::post('/partidos/{partido}/rendimientos', [RendimientoController::class, 'crear'])->whereUuid('partido');
+        Route::patch('/rendimientos/{rendimiento}', [RendimientoController::class, 'corregir'])->whereUuid('rendimiento');
     });
 });
