@@ -1,7 +1,7 @@
 # Reporte de cierre del hito F1-H3: Competencia
 
 **Fecha:** 29 de octubre de 2026 · **Rama:** `hito/f1-h3` (desde `main`, `dd85aa1`, etiqueta `f1-h2`) · **Especificación:** `docs/hitos/f1-h3.md` v1.0.2
-**Estado:** construcción terminada (T01 a T09). Falta la auditoría independiente del Lote C (§10 punto 10) y la revisión del responsable (punto 11). No hubo push, PR ni etiquetas en esta sesión.
+**Estado:** construcción terminada (T01 a T09). Auditoría independiente del Lote C entregada, sin bloqueantes; I-1 y los menores m-1, m-2, m-3, m-5, m-6, m-8 y m-9 están corregidos (sección 9). Falta la revisión del responsable (punto 11), con dos autorizaciones pendientes (sección 4). No hubo push, PR ni etiquetas en esta sesión.
 
 ## 1. Resumen
 
@@ -24,7 +24,7 @@ Un entrenador ve solo sus equipos: fuera de ellos recibe 404, byte a byte igual 
 | Duración de `make verificar` | **615 s (10 min 15 s)**, sin Infection (enmienda a DD-53) |
 | Duración de `make mutacion` | **112 s (1 min 52 s)** |
 | `make humo-h3` | 16 pasos con OK |
-| `make humo` | H0, H1 (14 pasos) y H2 (16 pasos) con OK |
+| `make humo` | H0, H1 (14 pasos) y H2 (16 pasos) con OK. Desde el FIX `6ae0a0b` (I-1) incluye H3: H0 a H3 pasan tras un solo `make fresh` (sección 9) |
 
 ## 2. Corridas de cierre (T09)
 
@@ -61,6 +61,8 @@ PHPStan tardó 14 s, cuando en las corridas anteriores tardaba 3 s. Pest tardó 
 ### 2.4 Humo (§10 punto 6)
 
 `make humo-h3` corrió tras un `make fresh` y pasó los 16 pasos. Después vino otro `make fresh` y `make humo` (H0 a H2), que pasó. El `make fresh` intermedio es necesario porque `humo-h1.sh` exige una base recién sembrada (lo dice su cabecera): en su paso 11 cuenta los jugadores que ve el entrenador 2, y en el 13 los que ve el entrenador 1, y `humo-h3.sh` deja jugadores en equipos de los dos. La salida completa está en la sección 8.
+
+**Corrección tras la auditoría (I-1):** ese razonamiento solo vale si H3 corre antes de H1. El FIX `6ae0a0b` agrega `humo-h3.sh` al final del destino `humo`, y tras un solo `make fresh` pasan H0, H1, H2 y H3 (sección 9 y `f1-h3-fix-humo.md`).
 
 ## 3. Por tarea
 
@@ -156,7 +158,9 @@ Todas las corridas de `make verificar` pasaron con código 0, sin nada más corr
 - **Archivos:** `tests/Feature/Seguridad/CompetenciaSeguridadTest.php` (nuevo) y un caso en `AlineacionYResultadoTest`.
 - **Pruebas:** 15 ejecuciones nuevas (RNF-01, §7.6 filas 1 a 8; RN-22, fila 7; DA-20; HU-13, campo extra en la raíz, línea 42 de `SolicitudDeAlineacion`).
 - **Resultado:** no se encontró ningún hueco y no se tocó código de producción. La evidencia de regresión son las 12 mutaciones de los filtros del alcance (entrenamientos, asistencias, partidos y convocatorias): todas hacen fallar al menos una prueba. Así lo aceptó el responsable.
-- **Desviaciones:** el plan decía 28 rutas de entrenador; son 29.
+- **Desviaciones:**
+  - el plan decía 28 rutas de entrenador; son 29;
+  - las 12 mutaciones se aplicaron sobre el propio archivo, con un respaldo que después se restauró, y no en una copia temporal como pide §8 (auditoría del Lote C, m-6).
 
 ### T09 — Humo de H3 y cierre documental (`2aa6936` y los F1-DOC de cierre)
 
@@ -170,7 +174,10 @@ Todas las corridas de `make verificar` pasaron con código 0, sin nada más corr
   - `humo_igual` se detiene si el cuerpo difiere o si el código no es 404, y sigue si son iguales;
   - el guion tiene `set -euo pipefail`, carga `lib.sh` y recorre los pasos 1 a 16 en orden.
   - Sin el guion, las 6 fallaban y las 4 de H2 seguían pasando. Con el guion, pasan las 10.
-- **Desviaciones:** el Makefile recibe el destino `humo-h3` con su receta (dos líneas) y `humo-h3` en `.PHONY`, no una sola línea. `make humo` no cambió.
+- **Desviaciones:**
+  - El Makefile recibe tres líneas (una en blanco, el destino `humo-h3` y su receta) y la entrada `humo-h3` en `.PHONY`, no una sola línea. **Pendiente de autorización del responsable.**
+  - En `2aa6936`, `make humo` no cambió. El FIX `6ae0a0b` (I-1) le agrega `humo-h3.sh` al final; esa es la línea que permite §8.
+  - Antes de empezar se revirtió un cambio ajeno, sin commit, en `backend/tests/Feature/SaludTest.php`: una línea de cuatro espacios al final, sin salto de línea. El archivo quedó igual que en `main`, y ningún commit del hito lo toca. **Pendiente de autorización del responsable** (auditoría del Lote C, m-5).
 
 ## 4. Rutas tocadas que la especificación no permitía
 
@@ -180,7 +187,8 @@ Todas las corridas de `make verificar` pasaron con código 0, sin nada más corr
 | `docs/trazabilidad.md` | T07 | Pedido por el responsable en el prompt de T07 (§8 lo reservaba a T09) |
 | `backend/composer.json`, `Makefile`, `.github/workflows/verificar.yml`, `docs/decisiones/registro-decisiones.md`, `docs/hitos/f1-h3.md` | FIX de la compuerta | Opción (a), aprobada por el responsable |
 | `tests/Unit/Herramientas/VerificarMutacionTest.php` | FIX de la compuerta | Autorizado por el responsable (la prueba M-10 apunta al script `mutacion`) |
-| `Makefile`, dos líneas más el `.PHONY` en vez de una | T09 | Ver desviaciones de T09 |
+| `Makefile`, tres líneas (una en blanco, el destino y la receta) más la entrada en `.PHONY`, en vez de una | T09 | **Pendiente de autorización del responsable** |
+| `backend/tests/Feature/SaludTest.php`, reversión de un cambio ajeno sin commit (el archivo queda igual que en `main`) | T09 | **Pendiente de autorización del responsable** |
 
 No se tocó `frontend/`. Ninguna ruta de §6.1 cambió, salvo las de la especificación, ni se agregó ningún permiso. No hubo push, PR, etiquetas ni fusiones.
 
@@ -207,17 +215,17 @@ DA-01 a DA-34 en `docs/reportes/f1-h3-decisiones-del-agente.md`, registradas en 
 | 2 | Cada historia con pruebas por identificador; criterios diferidos de §2.2 anotados | Cumple | `docs/trazabilidad.md`: HU-10 a HU-13, HU-28 y HU-29 con pruebas por identificador. Los siete criterios diferidos de §2.2 están en «Estado al cierre de H3». RN-11, RN-14, RN-18 y RNF-04 no tienen prueba con su identificador; los cubren las pruebas de sus HU (como RN-12 en H1 y H2) |
 | 3 | `openapi.yaml` incluye las rutas de §6.1 y las respuestas reales coinciden | Cumple | Las 20 rutas de §6.1 (30 operaciones) están en `docs/api/openapi.yaml`. Las validan contra el esquema `ContratoDeCompetenciaTest`, `ContratoDeEntrenamientosTest`, `ContratoDeAsistenciaTest`, `ContratoDePartidosTest`, `ContratoDeConvocatoriaTest` y `ContratoDeAlineacionYResultadoTest` |
 | 4 | `make fresh` y `migrate:rollback` sin errores | Cumple | Sección 2.3: fresh (52 migraciones), rollback (52) y fresh, todo con código 0 |
-| 5 | Tablas de §7, una prueba por fila | Cumple | §7.1 filas 1 a 7 (`CatalogosTest`), §7.2 filas 1 a 7 (`EntrenamientosTest`), §7.3 filas 1 a 11 (`AsistenciaDeEntrenamientosTest`), §7.4 filas 1 a 8 (`PartidosTest`; la 6 completa con `AlineacionYResultadoTest`), §7.5 filas 1 a 10 (`ConvocatoriaTest` y `AlineacionYResultadoTest`), §7.6 filas 1 a 8 (`CompetenciaSeguridadTest`, más las de T04 a T07). Cada prueba lleva la fila en el nombre |
-| 6 | `make humo` sin fallas (16 pasos de §9) | Cumple | `make humo-h3`: 16 pasos con OK; `make humo` (H0 a H2) con OK (sección 8) |
+| 5 | Tablas de §7, una prueba por fila | Cumple | §7.1 filas 1 a 7 (`CatalogosTest`), §7.2 filas 1 a 7 (`EntrenamientosTest`), §7.3 filas 1 a 11 (`AsistenciaDeEntrenamientosTest`), §7.4 filas 1 a 8 (`PartidosTest`; la 6 completa con `AlineacionYResultadoTest`), §7.5 filas 1 a 10 (`ConvocatoriaTest` y `AlineacionYResultadoTest`), §7.6 filas 1 a 8 (`CompetenciaSeguridadTest`, más las de T04 a T07). Cada fila tiene su propia prueba, con la fila en el nombre, **salvo §7.3 filas 8 y 9, que comparten una** (`AsistenciaDeEntrenamientosTest.php:185`, `HU-11 (§7.3 filas 8 y 9)`; declarado en T04) |
+| 6 | `make humo` sin fallas (16 pasos de §9) | Cumple | Desde el FIX `6ae0a0b` (I-1), `make humo` corre H0, H1, H2 y H3; tras un solo `make fresh` pasan los cuatro, con los 16 pasos de §9 (sección 9 y `f1-h3-fix-humo.md`). Antes del FIX, la evidencia era `make humo-h3` aparte (sección 8) |
 | 7 | Criterios propios de H3 | Cumple | Un entrenador ve solo sus equipos: `CompetenciaSeguridadTest`, las 12 mutaciones de T08 y el humo, paso 12. Una asistencia no se registra dos veces: §7.3 fila 3 y la UQ parcial (`MigracionesDeCompetenciaTest`). Un jugador dado de baja no aparece en convocatorias: §7.5 fila 9 y el humo, paso 14. Porcentaje según §3.4: §7.3 filas 6, 7 y 10, `AsistenciaDeEntrenamientoTest` y el humo, paso 8 (100.00 y 33.33) |
 | 8 | Este reporte con lo pedido | Cumple | Secciones 3 (por tarea: commit, archivos, pruebas, `make verificar`, no hecho, fuera de alcance y desviaciones), 4 (rutas fuera de lo permitido) y 5 (DA) |
 | 9 | DD-07, DD-17 y DD-18 confirmadas; AB-07 y AB-15 por validar | Cumple | `docs/decisiones/registro-decisiones.md`: DD-07, DD-17 y DD-18 «Confirmada por el responsable el 29/10/2026»; AB-07 y AB-15 «Por validar» |
-| 10 | Auditoría independiente del Lote C, sin bloqueantes | **Pendiente de la auditoría del Lote C** | — |
+| 10 | Auditoría independiente del Lote C, sin bloqueantes | Entregada, sin bloqueantes | Un importante (I-1) y menores, corregidos en la sección 9. m-4 no exige acción; m-7 (resultado de la CI) queda para el responsable |
 | 11 | El responsable revisa, prueba `make humo` y aprueba; etiqueta `f1-h3` y fusión | **Del responsable** | — |
 
 ## 7. Pendientes que H3 deja
 
-- **PT-08 (obligatorio antes de H4):** el tiempo de `make verificar`. Medido de T05 a T09: 729, 719 y 745 s con Infection; 681, 696 y 615 s sin ella. Pest se lleva entre el 80 y el 90 %. Ver el registro de decisiones §3.
+- **PT-08 (obligatorio antes de H4):** el tiempo de `make verificar`. Medido de T05 a T09: 729, 719 y 745 s con Infection; 681, 696 y 615 s sin ella. Pest se lleva entre el 77 y el 79 % con Infection (573/729, 567/719 y 577/745) y entre el 90 y el 92 % sin ella (629/681, 639/696 y 555/615). Ver el registro de decisiones §3.
 - **PT-07 y PT-01:** siguen pendientes de decisión del responsable.
 - **§11 de la especificación:**
   - AB-07, antes de H6 si la institución lo exige;
@@ -335,3 +343,33 @@ OK     paso 16: el docente 1 cierra sesión -> HTTP 204
 OK     paso 16: la misma cookie responde 401 -> HTTP 401
 HUMO H2 OK: 16 pasos
 ```
+
+## 9. Correcciones de la auditoría del Lote C
+
+| Hallazgo | Corrección | Dónde |
+|---|---|---|
+| I-1 | `make humo` corre H0, H1, H2 y H3. Tras un solo `make fresh` pasan los cuatro (H3, 16 pasos) en 30 s, sin cambiar los guiones | FIX `6ae0a0b`; `f1-h3-fix-humo.md` (salida completa); §10 punto 6 en la sección 6 |
+| m-1 | Pest se lleva entre el 77 y el 79 % con Infection y entre el 90 y el 92 % sin ella | Sección 7 y `registro-decisiones.md`, PT-08 |
+| m-2 | El Makefile de T09 son tres líneas más la entrada en `.PHONY`; pendiente de autorización | Secciones 3 (T09) y 4 |
+| m-3 | §7.3 filas 8 y 9 comparten una prueba | Sección 6, punto 5 |
+| m-5 | Reversión de `SaludTest.php`; pendiente de autorización | Secciones 3 (T09) y 4 |
+| m-6 | Las mutaciones de T08 se hicieron sobre el archivo, con respaldo, y no en copia temporal | Sección 3 (T08) y `f1-h3-t08.md` |
+| m-8 | DA-09 revela que un lugar está reservado a esa hora, sin decir qué equipo ni quién | `registro-decisiones.md` §5 |
+| m-9 | Plan retrospectivo de T09 | `f1-h3-plan-t09.md` |
+
+Sin DA nuevas. m-4 (reglas sin identificador en el nombre) ya estaba anotado en `docs/trazabilidad.md`. m-7 (resultado de la CI tras el push) queda para el responsable.
+
+### 9.1 `make verificar` tras las correcciones (sobre `6ae0a0b`)
+
+Antes se revisaron los procesos de `app`, `worker` y `scheduler` (`/proc`) y de Windows (`tasklist`): no había ningún `pest`, `composer`, `phpstan`, `infection` ni `php -S`. Los cuatro contenedores estaban arriba; `app` y `db`, sanos. Durante la corrida no se lanzó nada más.
+
+| Etapa | Llegó al segundo | Duración | Resultado |
+|---|---:|---:|---|
+| Arranque de `docker compose exec` y Pint | 10 | 10 s | `PASS … 585 files` |
+| PHPStan nivel 7 | 13 | 3 s | `[OK] No errors` |
+| Pest con cobertura, hasta el resumen | 571 | 558 s (`Duration: 556.79s`) | **1 224 pruebas** (8 285 aserciones) |
+| Informe de cobertura y cobertura por capa | 613 | 42 s | 100,0 / 100,0 / 99,4 % (total 99,5 %) |
+| `composer audit` | 613 | < 1 s | `No security vulnerability advisories found.` |
+| **Total** | | **613 s (10 min 13 s)**; código 0 | por debajo de 13 min |
+
+Pest se lleva el 91 % de la corrida (558/613), dentro del rango corregido en m-1. `make mutacion` no se repitió: el FIX solo toca el Makefile y nada de `src/*/Dominio/`.
