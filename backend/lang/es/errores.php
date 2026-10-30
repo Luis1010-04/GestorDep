@@ -15,6 +15,8 @@ return [
 
     // Mensaje del error de campo "cuerpo" (PATCH sin ningún campo): no es un código de error sino un detalle de validación.
     'cuerpo_sin_campos' => 'Debe enviar al menos uno de: nombres, apellidos, fecha_nacimiento',
+    'cuerpo_sin_campos_entrenamiento' => 'Debe enviar al menos uno de: inicia_en, termina_en, lugar_id, responsable_id, estado',
+    'cuerpo_sin_campos_partido' => 'Debe enviar al menos uno de: inicia_en, lugar_id, rival_id, torneo_id, tipo, condicion, estado',
 
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
     'reglas' => [
@@ -45,5 +47,28 @@ return [
         'asignatura_inexistente' => 'La asignatura indicada no existe.',
         'periodo_inexistente' => 'El periodo escolar indicado no existe.',
         'rango_de_fechas_invalido' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
+        'lugar_duplicado' => 'Ya existe un lugar con ese nombre.',
+        'rival_duplicado' => 'Ya existe un rival con ese nombre.',
+        'temporada_duplicada' => 'Ya existe una temporada con ese nombre.',
+        'temporada_solapada' => 'Las fechas se cruzan con otra temporada.',
+        'torneo_duplicado' => 'Ya existe un torneo con ese nombre en la temporada.',
+        'temporada_inexistente' => 'La temporada indicada no existe.',
+        'lugar_inexistente' => 'El lugar indicado no existe.',
+        'responsable_no_asignado' => 'El responsable debe ser un entrenador asignado al equipo.',
+        'transicion_no_permitida' => 'El cambio de estado no está permitido.',
+        'entrenamiento_no_programado' => 'El entrenamiento ya no está programado.',
+        'entrenamiento_no_realizado' => 'El entrenamiento no está realizado.',
+        'asistencia_ya_registrada' => 'Ya hay asistencia registrada para ese jugador en el entrenamiento.',
+        'jugador_no_pertenece_al_equipo' => 'El jugador no pertenece al equipo o está dado de baja.',
+        'sin_temporada' => 'Ninguna temporada contiene la fecha del partido.',
+        'torneo_obligatorio' => 'El partido oficial o de torneo debe indicar el torneo.',
+        'torneo_de_otra_temporada' => 'El torneo no es de la temporada del partido.',
+        'rival_inexistente' => 'El rival indicado no existe.',
+        'torneo_inexistente' => 'El torneo indicado no existe.',
+        'partido_no_programado' => 'El partido ya no está programado.',
+        'jugador_ya_convocado' => 'El jugador ya está convocado al partido.',
+        'jugador_no_convocado' => 'El jugador no está convocado al partido.',
+        'posicion_inexistente' => 'La posición indicada no existe.',
+        'valor_fuera_de_rango' => 'Los goles deben estar entre 0 y 99.',
     ],
 ];

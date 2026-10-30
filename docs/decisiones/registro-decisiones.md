@@ -1,7 +1,7 @@
 # Registro de decisiones tomadas por defecto tras la auditoría
 
-**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026; DD-42 a DD-55, AB-22 a AB-27 y la sección 4, al cerrar H2, el 28 de octubre de 2026; DA-17 y las confirmaciones de DA-14 y DA-15, el 29 de octubre de 2026)
-**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04). Cambios del 28 de octubre de 2026 (F1-H2-T15): se registran DD-42 a DD-55 (decisiones de H2), las validaciones pendientes con la institución y las dudas de H2 (AB-22 a AB-27) y las decisiones del agente en H2 (sección 4). Cambios del 28 de octubre de 2026 tras la auditoría del Lote E: DA-16 (sección 4), la referencia de DD-45; los plazos vencidos en H2 de DD-20, AB-01, AB-08, AB-10, AB-14, PT-01 y PT-03; PT-02 resuelto (`b010636`); y PT-07 (lock de `make verificar` y procesos huérfanos), sin implementar. Cambios del 29 de octubre de 2026 (decisiones del responsable sobre la auditoría del Lote E): DA-17 (I-1, sección 4); DA-14 y DA-15 confirmadas (I-2), con lo que se cierra AB-27. Cambios del 29 de octubre de 2026 tras la auditoría corta del rango `1145c77..4fb2fc5`: DA-17 nombra también T10 y anota la frase de `docs/arquitectura.md` §4.3 que la versión 1.4 quitó y la 1.4.1 restituyó
+**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026; DD-42 a DD-55, AB-22 a AB-27 y la sección 4, al cerrar H2, el 28 de octubre de 2026; DA-17 y las confirmaciones de DA-14 y DA-15, el 29 de octubre de 2026; la enmienda a DD-53, PT-08 y la sección 5, al cerrar H3, el 29 de octubre de 2026)
+**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04). Cambios del 28 de octubre de 2026 (F1-H2-T15): se registran DD-42 a DD-55 (decisiones de H2), las validaciones pendientes con la institución y las dudas de H2 (AB-22 a AB-27) y las decisiones del agente en H2 (sección 4). Cambios del 28 de octubre de 2026 tras la auditoría del Lote E: DA-16 (sección 4), la referencia de DD-45; los plazos vencidos en H2 de DD-20, AB-01, AB-08, AB-10, AB-14, PT-01 y PT-03; PT-02 resuelto (`b010636`); y PT-07 (lock de `make verificar` y procesos huérfanos), sin implementar. Cambios del 29 de octubre de 2026 (decisiones del responsable sobre la auditoría del Lote E): DA-17 (I-1, sección 4); DA-14 y DA-15 confirmadas (I-2), con lo que se cierra AB-27. Cambios del 29 de octubre de 2026 tras la auditoría corta del rango `1145c77..4fb2fc5`: DA-17 nombra también T10 y anota la frase de `docs/arquitectura.md` §4.3 que la versión 1.4 quitó y la 1.4.1 restituyó. Cambios del 29 de octubre de 2026 (F1-H3-T09): DD-07, DD-17 y DD-18 quedan confirmadas por el responsable (`docs/hitos/f1-h3.md` §3.1); AB-07 y AB-15 siguen por validar; se registra PT-08 (tiempo de `make verificar`), pendiente obligatorio antes de H4, y las decisiones del agente en H3 (sección 5)
 
 La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los documentos. Para trabajar con lo que se tiene, el equipo de análisis aplicó la **recomendación de la auditoría** en cada una y las registró aquí. Ninguna cuenta como validada por la institución. Cada una indica antes de qué hito debe confirmarse; si se cambia, se corrige el documento afectado y se anota en este registro.
 
@@ -15,7 +15,7 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-04 | Categorías, periodos, asignaturas, lugares, torneos, rivales y temporadas son catálogos con alta por quien los usa | Req HU-28, RN-12; Arq 7.3 a 7.5 | H1 (categorías), H2, H3 | OM-01 |
 | DD-05 | La posición es de cada equipo (`jugador_equipo.posicion_id`); la categoría se deduce del equipo | Req HU-03, HU-05; Arq 7.3 | H1 | IC-09 |
 | DD-06 | La alerta de riesgo de baja académica se activa en el nivel "en riesgo"; "en observación" no genera alerta | Req RN-21; Arq 7.9 | H2 | OM-04 |
-| DD-07 | Una temporada es un intervalo de fechas de un catálogo; el partido pertenece a la que contiene su fecha | Req 1.5, RN-09; Arq 7.5 | H3 | OM-05 |
+| DD-07 | Una temporada es un intervalo de fechas de un catálogo; el partido pertenece a la que contiene su fecha | Req 1.5, RN-09; Arq 7.5 | **Confirmada** por el responsable el 29/10/2026 (`docs/hitos/f1-h3.md` §3.1). Aplicación en H3: el alta de una temporada que se cruza con otra no eliminada responde 409 `temporada_solapada` (DA-05, DA-06) | OM-05 |
 | DD-08 | El docente no ve el riesgo deportivo; del lado deportivo ve solo el estado oficial de disponibilidad | Req RN-13, sección 7; Arq 10 | H6 | OM-07, DA-05 |
 | DD-09 | La calificación general de partido es un entero de 1 a 10 | Req RN-06; Arq 7.6 | H4 | DA-08 |
 | DD-10 | "Datos insuficientes" aparece con menos de N calificaciones y no activa alerta | Req RN-08, RN-10; Arq 7.6 | H4 | OM-05 |
@@ -25,8 +25,8 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-14 | La Fase 1 es solo API; RNF-05 (captura en menos de 2 minutos) se verifica en la fase del frontend y RNF-07 en el despliegue | Req RNF-05, RNF-07; Arq ADR-13 | H0 | OM-09 |
 | DD-15 | Un dato se marca como desactualizado tras 30 días sin captura (parámetro configurable); zona de presentación America/Mexico_City | Req RNF-04; Arq 7.1 y 7.9 | H6 | OM-08 |
 | DD-16 | Seguridad de acceso: contraseña de al menos 10 caracteres, bloqueo de 15 minutos tras 5 intentos fallidos, sesión de 120 minutos de inactividad | Req RNF-10; Arq ADR-14 | H1 | OM-10 |
-| DD-17 | Entre entrenadores de un mismo equipo se aplica la regla estricta de RN-14 (cada uno ve solo lo que registró) | Req RN-22; Arq 13 | H3 | Arq 13 |
-| DD-18 | Un partido no incluye la categoría como campo propio (se toma del equipo) y el entrenamiento incluye hora de fin y responsable | Req HU-10, HU-12; Arq 7.5 | H3 | DA-06 |
+| DD-17 | Entre entrenadores de un mismo equipo se aplica la regla estricta de RN-14 (cada uno ve solo lo que registró) | Req RN-22; Arq 13 | **Confirmada** por el responsable el 29/10/2026 (`docs/hitos/f1-h3.md` §3.1). Se aplica a los datos con registrante; en H3 no hay ninguno, y la asistencia y las convocatorias las ven todos los entrenadores del equipo (§3.2, decisión del responsable antes de T04) | Arq 13 |
+| DD-18 | Un partido no incluye la categoría como campo propio (se toma del equipo) y el entrenamiento incluye hora de fin y responsable | Req HU-10, HU-12; Arq 7.5 | **Confirmada** por el responsable el 29/10/2026 (`docs/hitos/f1-h3.md` §3.1) | DA-06 |
 | DD-19 | La ventana de 30 días de RN-09 es móvil y termina en la fecha de cálculo, inclusive; cuando las faltas salen de la ventana o termina la temporada, la acumulación deja de estar activa. *Validar con la coordinación deportiva* | Req RN-09; Arq 11; Pruebas RN-09 | H6 | v1.2 §3.1 |
 | DD-20 | El promedio de RN-04 se redondea a dos decimales al medio hacia arriba (7.495 se vuelve 7.50). *Validar con la coordinación académica* | Req RN-04; Arq 7.1; Pruebas RN-04 | **Pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (§3 de H2); sin hito fijado, ver AB-14 y AB-25 | v1.2 §3.2 |
 | DD-21 | Técnica: cola `database` con servicio `worker`, y `alertas:recalcular` programado a diario a las 02:00 America/Mexico_City con el servicio `scheduler` | Arq 11; Plan 1.1; Alcance 5; Criterios H0 y H6 | H0 (servicios) y H6 (programación) | v1.2 §3.3 |
@@ -65,6 +65,14 @@ La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los
 | DD-54 | `NumeroDecimal` (Compartido, `bcmath`) es el único tipo para promedios, umbrales y porcentajes; nunca `float` | Arq 7.1; H2 §3 | H2 | F1-H2 |
 | DD-55 | Calificaciones y asistencias admiten `fecha` opcional (por defecto, hoy de negocio) y no se valida que no sea futura | H2 §2.3 y §3 | H2 | F1-H2 |
 
+**Enmienda a DD-53 (29/10/2026, F1-H3; aprobada por el responsable).**
+
+- **Qué cambia:** Infection deja de correr dentro de `make verificar` (`composer verificar`) y pasa a `make mutacion` (`composer mutacion`). Ese comando corre Infection solo sobre `src/*/Dominio/` y después `bin/verificar-mutacion.php`.
+- **Qué no cambia:** los umbrales de DD-53 (MSI ≥ 80 %, MSI de código cubierto ≥ 85 %, ninguno omitido ni con tiempo agotado), PHPStan nivel 7 e `infection.json5`.
+- **Cuándo corre:** `make mutacion` al cerrar cada lote, y en la integración continua como paso propio después de `composer verificar`.
+- **Motivo:** el tiempo. En H3, `make verificar` llegó a 745 s con Infection (unos 115 s) y Pest (unos 577 s), y la holgura frente al límite de 15 minutos de `docs/hitos/f1-h2.md` §0.4 bajó de 3 minutos.
+- **Dónde:** `F1-H3-FIX` y `docs/hitos/f1-h3.md` v1.0.2.
+
 ## 2. Decisiones que siguen abiertas
 
 Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asumido.
@@ -77,7 +85,7 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 | AB-04 | Respaldos y recuperación de la base (frecuencia y retención) | Responsable del proyecto | Antes de producción |
 | AB-05 | Librería de validación contra OpenAPI. **Resuelta en DD-24** | Responsable, a propuesta del agente | T09 de H0 |
 | AB-06 | Si habrá aplicación móvil (cambia el modo de Sanctum). **Resuelta el 21/10/2026: no habrá aplicación móvil; Sanctum en modo SPA con cookies** | Responsable | H1 |
-| AB-07 | Si existe reglamento de elegibilidad para convocar | Institución | H3 |
+| AB-07 | Si existe reglamento de elegibilidad para convocar | Institución | **Por validar**; no bloqueó H3: la convocatoria no valida elegibilidad (RN-18, `docs/hitos/f1-h3.md` §3.3). Sugerido: antes de H6, si la institución lo exige para convocar |
 | AB-08 | Origen de la retícula y quién verifica la carga inicial | Institución | **Pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (los docentes dan de alta las asignaturas por la API, §2.3 de H2); sin hito fijado, ver AB-25 |
 | AB-09 | Quién construye el frontend y cuándo | Responsable | Planificación de la Fase 2 |
 | AB-10 | Confirmar DD-24 (biblioteca `osteel/openapi-httpfoundation-testing` para validar contra OpenAPI) | Responsable | **Pendiente**; el plazo H2 venció sin cierre. La biblioteca se usa en las pruebas de contrato de H2, y DD-24 ya la da por aprobada en F1-H0-T09: el responsable puede cerrarla. Sugerido: cierre de H2 o H3 |
@@ -85,7 +93,7 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 | AB-12 | Validar DD-40 (un expediente en baja se puede seguir actualizando y cambiar de posición) | Institución | Sin hito fijado |
 | AB-13 | Validar DD-19 (ventana móvil de 30 días de RN-09) con la coordinación deportiva | Institución | H6 |
 | AB-14 | Validar DD-20 (redondeo del promedio de RN-04 al medio hacia arriba) con la coordinación académica | Institución | **Pendiente**; el plazo H2 venció sin cierre. No bloquea H2 (§3 de H2: vive en el cálculo con `NumeroDecimal`); sin hito fijado, ver AB-25 |
-| AB-15 | Aceptación escrita del cliente de que la Fase 1 es solo API (DD-14) | Responsable, con el cliente | H3 |
+| AB-15 | Aceptación escrita del cliente de que la Fase 1 es solo API (DD-14) | Responsable, con el cliente | **Por validar**; pendiente con el cliente. No bloqueó la construcción de H3 (`docs/hitos/f1-h3.md` §3.3) |
 | AB-16 | Visor de OpenAPI (Swagger UI, Redoc u otro) para que el cliente lea `docs/api/openapi.yaml`: decidir si se agrega y cuál | Responsable | Sin hito fijado |
 | AB-17 | Revisión de seguridad: carrera en el bloqueo por intentos (dos fallos simultáneos pueden contar uno; solución probable: incremento atómico en SQL) | Responsable (revisión de seguridad) | H7 |
 | AB-18 | Revisión de seguridad: el tiempo de respuesta del inicio de sesión distingue cuentas existentes de inexistentes (no se calcula un hash ficticio) | Responsable (revisión de seguridad) | H7 |
@@ -110,6 +118,7 @@ Anotados al cerrar H1; ninguno bloquea el hito. Los decide el responsable.
 | PT-03 | Un arranque con el servicio `db` en estado "unhealthy", visto una sola vez con un volumen nuevo. No se reprodujo; vigilar y, si reaparece, revisar el `healthcheck` y los tiempos de `docker-compose.yml` | **Pendiente (vigilancia)**; no se reprodujo en H2 (ningún reporte de H2 lo registra). Sin hito fijado |
 | PT-04 | `usuarios.actualizado_en` y `bloqueado_hasta` no salen de `Reloj` (usan `now()` de la base o microsegundos), a diferencia del resto de las tablas tras `F1-H1-FIX`. Es el mismo desfase que anota `docs/hitos/f1-h1.md` §11 | H7 |
 | PT-07 | Anotado en H2 (28/10/2026, correcciones de la auditoría del Lote E). `make verificar` debe tomar un *lock* exclusivo: dos corridas a la vez comparten la base de pruebas `gestordep_pruebas` y se rompen el esquema entre sí (se vio una corrida contaminada con 570 fallos y 27 min 21 s; `docs/reportes/f1-h2-fix-e-m3.md`). Además, un `composer verificar` huérfano no debe seguir corriendo dentro del contenedor después de cerrarse el cliente de `docker compose exec` (causa probable de esa contaminación). No implementado: decisión pendiente del responsable | Sugerido: H3 |
+| PT-08 | Anotado en H3 (29/10/2026). El tiempo de `make verificar` se acerca al límite de 15 min de `docs/hitos/f1-h2.md` §0.4 (aviso del responsable a los 13 min) y crece con cada tarea; Pest se lleva entre el 77 y el 79 % de la corrida con Infection y entre el 90 y el 92 % sin ella (auditoría del Lote C, m-1). Tiempos medidos, todos con código 0 y sin nada más corriendo: con Infection, T05 729 s (Pest 573 s), T06 719 s (Pest 567 s) y T07 745 s (Pest 577 s); sin Infection (enmienda a DD-53), el FIX de la compuerta 681 s (Pest 629 s), T08 696 s (Pest 639 s) y T09 615 s (Pest 555 s, 1 224 pruebas). La enmienda a DD-53 ganó unos 100 s, pero H4 suma pruebas. Hay que decidir cómo mantener la corrida por debajo del límite. No implementado: decisión del responsable | **Pendiente obligatorio antes de H4** |
 
 ## 4. Decisiones del agente en H2 (DA)
 
@@ -127,3 +136,43 @@ Decisiones que tomó el agente donde la especificación de H2 callaba (`docs/hit
 | DA-15 | La situación académica lista solo las materias del docente **del periodo vigente**; sin periodo vigente, arreglo vacío | **Sí** (lectura, restrictiva) | Confirmada por el responsable el 29/10/2026 (auditoría del Lote E, I-2; cierra AB-27) |
 | DA-16 | Periodo vigente: entre varios con la misma `fecha_inicio`, el de `id` mayor (UUID v7: el creado más recientemente). Completa DD-45; en T05 se omitió como DA (auditoría del Lote E, M-4) | No | Vigente; ninguna prueba fija el desempate |
 | DA-17 | La situación académica (`GET /jugadores/{jugador}/situacion-academica`, T14) vive en `src/Academico` (rutas base), no en `src/Consultas`. Usa el dominio de Académico (criterio y calificación de la materia, nivel de riesgo), y Consultas no puede importar dominio de otro contexto. Lo mismo vale para T10: `ConsultaDeInscripcionesSql` (`src/Academico/Infraestructura/`) une `jugadores` y la restringe con `AlcanceDeJugadores::restringir()`. Motivo y detalle: auditoría del Lote E, sección 6, I-1. `docs/arquitectura.md` §4.3 se ajustó en su versión 1.4; esa versión quitó, sin que nadie lo decidiera, la frase «Consultas puede leer las tablas de otros contextos con SQL de solo lectura», que se restituyó en la 1.4.1 (auditoría corta, I-B) | No: la lectura del jugador pasa por `AlcanceDeJugadores::restringir()` | Aceptada por el responsable el 29/10/2026 |
+
+## 5. Decisiones del agente en H3 (DA)
+
+Decisiones que tomó el agente donde la especificación de H3 callaba (`docs/hitos/f1-h3.md` §0, con las reglas de `docs/hitos/f1-h2.md` §0.3). El detalle de cada una (qué faltaba, qué se eligió, por qué y cómo se revierte) está en `docs/reportes/f1-h3-decisiones-del-agente.md`. Se registran DA-01 a DA-34; **DA-27 queda fuera**, porque se retiró en el plan de T05. Las que tocan permisos o privacidad van marcadas en la tercera columna. Todas restringen salvo DA-09, que revela algo: que un lugar está reservado a esa hora, sin decir qué equipo ni quién (auditoría del Lote C, m-8).
+
+| ID | Decisión | Privacidad o permisos | Estado |
+|---|---|---|---|
+| DA-01 | La columna del autor en los historiales es `usuario_id` (macro de Compartido), no `autor_id` | No | Aprobada por el responsable (Lote A) |
+| DA-02 | El resultado de un partido existe si y solo si está `jugado`, y nunca un gol sin el otro (`CHECK`) | No | Aprobada (Lote A) |
+| DA-03 | `convocatorias.posicion_id` admite nulo hasta que haya alineación | No | Aprobada (Lote A) |
+| DA-04 | Código propio por catálogo duplicado (`lugar_duplicado`, `rival_duplicado`, `temporada_duplicada`, `torneo_duplicado`) | No | Aprobada (Lote A) |
+| DA-05 | `temporada_solapada` responde 409 sin detalle por campo | No | Aprobada (Lote A) |
+| DA-06 | Dos temporadas se cruzan si comparten un día; el alta va bajo un candado consultivo | No | Aprobada (Lote A) |
+| DA-07 | Horario invertido de un entrenamiento: 422 en `termina_en` al crear, `rango_de_fechas_invalido` al modificar | No | Aprobada (Lote A) |
+| DA-08 | Código nuevo `entrenamiento_no_programado` (409, sin campo): no se cambian hora, lugar ni responsable fuera de `programado` | No | Aprobada; en la especificación v1.0.1, §6.3 |
+| DA-09 | Empalme de lugar: intervalos que se cruzan (tocarse no cuenta), de cualquier equipo, sin cancelados, al crear y al modificar; la advertencia no dice con cuál choca | **Sí** (revela que el lugar está reservado a esa hora, aunque sea por otro equipo, sin decir qué equipo ni quién; no restringe) | Aprobada y registrada por el responsable como decisión de privacidad (Lote A) |
+| DA-10 | Los filtros del listado de entrenamientos son días locales de America/Mexico_City sobre `inicia_en` | No | Aprobada (Lote A) |
+| DA-11 | Lugar inexistente o eliminado: 422 `lugar_inexistente` | No | Aprobada (Lote A) |
+| DA-12 | `JugadoresDelEquipo` pasa por el alcance, exige además la asignación del usuario al equipo y devuelve solo id, nombres y apellidos | **Sí** (no revela que un jugador visible por otro equipo está en este) | Aprobada; en la especificación v1.0.1, §5.3 |
+| DA-13 | «Entrenar un equipo» exige asignación vigente, rol `entrenador` y equipo y usuario no eliminados | **Sí** (quién accede al equipo y quién puede ser responsable) | Aprobada; en la especificación v1.0.1, §3.4 y §5.3 |
+| DA-14 | El campo de la respuesta es `jugadores_del_equipo` | No | Aprobada; en la especificación v1.0.1, §6.1 y §6.2 |
+| DA-15 | Los instantes se aceptan con desplazamiento o con `Z`; sin zona, 422 | No | Aprobada (Lote A) |
+| DA-16 | El campo de `jugador_no_pertenece_al_equipo` es `registros.N.jugador_id` | No | Vigente; T04 aceptada |
+| DA-17 | La captura de asistencia por lista es todo o nada, con un orden fijo de errores | No | Vigente; T04 aceptada |
+| DA-18 | La corrección de una asistencia no exige que el jugador siga en el equipo | No (el registro ya era visible para el equipo) | Vigente; T04 aceptada |
+| DA-19 | El listado de asistencias no trae datos del jugador | No (revela lo mínimo) | Vigente; T04 aceptada |
+| DA-20 | El porcentaje de un jugador usa el alcance de entrenador: un docente recibe 404 aunque enseñe al jugador; un jugador en baja sigue visible para su entrenador | **Sí** (lectura) | Vigente; T04 aceptada |
+| DA-21 | Forma del porcentaje por equipo: el total cuenta todos los registros; `por_jugador` lista solo a los jugadores vigentes del equipo | No | Vigente; T04 aceptada |
+| DA-22 | Los conteos (`presentes`, `faltas`, `faltas_justificadas`) acompañan al porcentaje | No | Vigente; T04 aceptada |
+| DA-23 | La zona del día local sale de `HoyDeNegocio` | No | Aprobada en el plan de T05 |
+| DA-24 | `rival_inexistente` y `torneo_inexistente` (422, sin campo) | No | Aprobada en el plan de T05 |
+| DA-25 | Al cambiar fecha, tipo o torneo de un partido se revalida todo; sin cambio de fecha se conserva la temporada aunque esté eliminada | No | Aprobada en el plan de T05 |
+| DA-26 | Un filtro de temporada inexistente devuelve una lista vacía | No | Aprobada en el plan de T05 |
+| DA-28 | Solo se convoca a un jugador vigente del equipo del partido; si no, 404 igual al de uno inexistente. No es la elegibilidad de AB-07 | **Sí** (quién puede ser convocado) | Vigente; T06 aceptada |
+| DA-29 | El listado de la convocatoria no trae datos del jugador | No (revela lo mínimo) | Vigente; T06 aceptada |
+| DA-30 | El campo de `jugador_no_convocado` es `alineacion.N.jugador_id` | No | Vigente; sin observación del responsable |
+| DA-31 | La posición de la alineación se valida con la clave foránea `fk_convocatorias_posicion_id`; error 422 `posicion_inexistente` | No | Vigente; revisada en el FIX de DA-34 (el `catch` solo convierte esa clave) |
+| DA-32 | «Convocado» es la convocatoria visible (sin bajas); la lista vacía quita toda la alineación | **Sí** (un convocado en baja no cuenta) | Corregida por DA-34 en lo que respondía a un jugador fuera del alcance; el resto sigue vigente |
+| DA-33 | Orden de los errores del resultado: forma (422), estado (409), rango (422, `goles_favor` antes que `goles_contra`) | No | Vigente; sin observación del responsable |
+| DA-34 | Un jugador fuera del alcance de entrenador sin bajas en la alineación da 404 igual al de uno inexistente; el 422 `jugador_no_convocado` queda para un jugador visible no convocado | **Sí** (no distingue «existe y no lo ves» de «no está convocado») | Indicada por el responsable (FIX `478330d`) |

@@ -18,6 +18,19 @@ use Src\Academico\Aplicacion\JugadorYaInscrito;
 use Src\Academico\Aplicacion\MateriaDuplicada;
 use Src\Academico\Aplicacion\PeriodoDuplicado;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
+use Src\Competencia\Aplicacion\AsistenciaYaRegistrada;
+use Src\Competencia\Aplicacion\EntrenamientoNoRealizado;
+use Src\Competencia\Aplicacion\JugadorYaConvocado;
+use Src\Competencia\Aplicacion\LugarDuplicado;
+use Src\Competencia\Aplicacion\RecursoNoEncontrado;
+use Src\Competencia\Aplicacion\RivalDuplicado;
+use Src\Competencia\Aplicacion\TemporadaDuplicada;
+use Src\Competencia\Aplicacion\TemporadaSolapada;
+use Src\Competencia\Aplicacion\TorneoDuplicado;
+use Src\Competencia\Dominio\EntrenamientoNoProgramado;
+use Src\Competencia\Dominio\PartidoNoProgramado;
+use Src\Competencia\Dominio\ReglaDeCampoViolada;
+use Src\Competencia\Dominio\TransicionNoPermitida;
 use Src\Identidad\Aplicacion\ContrasenaNuevaMuyCorta;
 use Src\Identidad\Aplicacion\CredencialesInvalidas;
 use Src\Identidad\Aplicacion\CuentaBloqueada;
@@ -60,6 +73,10 @@ final class FormatoDeError
             $e instanceof CategoriaDuplicada, $e instanceof PeriodoDuplicado, $e instanceof AsignaturaDuplicada, $e instanceof MateriaDuplicada, $e instanceof JugadorYaInscrito, $e instanceof JugadorEnBajaNoInscribible => self::reglaDeNegocio($e, 409),
             $e instanceof CalificacionDuplicada, $e instanceof AsistenciaDuplicada, $e instanceof JugadorEnBajaSinCaptura => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoDuplicado => self::reglaDeNegocio($e, 409),
+            $e instanceof LugarDuplicado, $e instanceof RivalDuplicado, $e instanceof TemporadaDuplicada, $e instanceof TemporadaSolapada, $e instanceof TorneoDuplicado => self::reglaDeNegocio($e, 409),
+            $e instanceof EntrenamientoNoProgramado, $e instanceof EntrenamientoNoRealizado, $e instanceof AsistenciaYaRegistrada, $e instanceof PartidoNoProgramado => self::reglaDeNegocio($e, 409),
+            $e instanceof ReglaDeCampoViolada => self::reglaDeCampo($e, $e instanceof TransicionNoPermitida || $e instanceof JugadorYaConvocado ? 409 : 422),
+            $e instanceof RecursoNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof JugadorNoRegistrado => self::reglaDeNegocio($e, 404),
@@ -89,6 +106,15 @@ final class FormatoDeError
         $mensaje = __('errores.reglas.'.$e->codigo());
 
         return self::json(422, $e->codigo(), $mensaje, [
+            ['campo' => $e->campo(), 'codigo' => $e->codigo(), 'mensaje' => $mensaje],
+        ]);
+    }
+
+    private static function reglaDeCampo(ReglaDeCampoViolada $e, int $estado): JsonResponse
+    {
+        $mensaje = __('errores.reglas.'.$e->codigo());
+
+        return self::json($estado, $e->codigo(), $mensaje, [
             ['campo' => $e->campo(), 'codigo' => $e->codigo(), 'mensaje' => $mensaje],
         ]);
     }

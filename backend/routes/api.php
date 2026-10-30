@@ -1,19 +1,28 @@
 <?php
 
+use App\Http\Controllers\AlineacionYResultadoController;
 use App\Http\Controllers\AsignaturaController;
 use App\Http\Controllers\AsistenciaController;
+use App\Http\Controllers\AsistenciaDeEntrenamientoController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContrasenaController;
+use App\Http\Controllers\ConvocatoriaController;
+use App\Http\Controllers\EntrenamientoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
+use App\Http\Controllers\LugarController;
 use App\Http\Controllers\MateriaController;
+use App\Http\Controllers\PartidoController;
 use App\Http\Controllers\PeriodoEscolarController;
+use App\Http\Controllers\RivalController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\SituacionAcademicaController;
+use App\Http\Controllers\TemporadaController;
+use App\Http\Controllers\TorneoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/salud', SaludController::class);
@@ -28,6 +37,7 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/jugadores/busqueda', [JugadorController::class, 'buscar']);
     Route::get('/jugadores/{jugador}', [JugadorController::class, 'ver'])->whereUuid('jugador');
     Route::get('/jugadores/{jugador}/situacion-academica', [SituacionAcademicaController::class, 'ver'])->whereUuid('jugador');
+    Route::get('/jugadores/{jugador}/asistencia-entrenamientos', [AsistenciaDeEntrenamientoController::class, 'delJugador'])->whereUuid('jugador');
 
     Route::middleware('rol:docente')->group(function () {
         Route::get('/periodos-escolares', [PeriodoEscolarController::class, 'listar']);
@@ -68,5 +78,43 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/jugadores', [JugadorController::class, 'crear']);
         Route::patch('/jugadores/{jugador}', [JugadorController::class, 'actualizar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/baja', [JugadorController::class, 'darDeBaja'])->whereUuid('jugador');
+
+        Route::get('/lugares', [LugarController::class, 'listar']);
+        Route::post('/lugares', [LugarController::class, 'crear']);
+        Route::delete('/lugares/{lugar}', [LugarController::class, 'eliminar'])->whereUuid('lugar');
+
+        Route::get('/rivales', [RivalController::class, 'listar']);
+        Route::post('/rivales', [RivalController::class, 'crear']);
+        Route::delete('/rivales/{rival}', [RivalController::class, 'eliminar'])->whereUuid('rival');
+
+        Route::get('/temporadas', [TemporadaController::class, 'listar']);
+        Route::post('/temporadas', [TemporadaController::class, 'crear']);
+        Route::delete('/temporadas/{temporada}', [TemporadaController::class, 'eliminar'])->whereUuid('temporada');
+
+        Route::get('/torneos', [TorneoController::class, 'listar']);
+        Route::post('/torneos', [TorneoController::class, 'crear']);
+        Route::delete('/torneos/{torneo}', [TorneoController::class, 'eliminar'])->whereUuid('torneo');
+
+        Route::get('/equipos/{equipo}/entrenamientos', [EntrenamientoController::class, 'listar'])->whereUuid('equipo');
+        Route::post('/equipos/{equipo}/entrenamientos', [EntrenamientoController::class, 'crear'])->whereUuid('equipo');
+        Route::get('/entrenamientos/{entrenamiento}', [EntrenamientoController::class, 'ver'])->whereUuid('entrenamiento');
+        Route::patch('/entrenamientos/{entrenamiento}', [EntrenamientoController::class, 'modificar'])->whereUuid('entrenamiento');
+
+        Route::get('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaDeEntrenamientoController::class, 'listar'])->whereUuid('entrenamiento');
+        Route::post('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaDeEntrenamientoController::class, 'crear'])->whereUuid('entrenamiento');
+        Route::patch('/asistencias-entrenamiento/{asistencia}', [AsistenciaDeEntrenamientoController::class, 'corregir'])->whereUuid('asistencia');
+        Route::get('/equipos/{equipo}/asistencia-entrenamientos', [AsistenciaDeEntrenamientoController::class, 'delEquipo'])->whereUuid('equipo');
+
+        Route::get('/equipos/{equipo}/partidos', [PartidoController::class, 'listar'])->whereUuid('equipo');
+        Route::post('/equipos/{equipo}/partidos', [PartidoController::class, 'crear'])->whereUuid('equipo');
+        Route::get('/partidos/{partido}', [PartidoController::class, 'ver'])->whereUuid('partido');
+        Route::patch('/partidos/{partido}', [PartidoController::class, 'modificar'])->whereUuid('partido');
+
+        Route::get('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'listar'])->whereUuid('partido');
+        Route::post('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'crear'])->whereUuid('partido');
+        Route::delete('/convocatorias/{convocatoria}', [ConvocatoriaController::class, 'eliminar'])->whereUuid('convocatoria');
+
+        Route::put('/partidos/{partido}/alineacion', [AlineacionYResultadoController::class, 'alineacion'])->whereUuid('partido');
+        Route::put('/partidos/{partido}/resultado', [AlineacionYResultadoController::class, 'resultado'])->whereUuid('partido');
     });
 });

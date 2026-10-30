@@ -1,4 +1,4 @@
-# Integracion continua (F1-H0-T10): migraciones y `composer verificar` contra PostgreSQL 16.
+# Integracion continua (F1-H0-T10): migraciones, `composer verificar` y `composer mutacion` contra PostgreSQL 16.
 # Las claves son solo de prueba para este flujo; no hay secretos.
 name: verificar
 
@@ -71,3 +71,7 @@ jobs:
 
       - name: Verificar
         run: composer verificar
+
+      - name: Mutacion
+        # Infection sobre src/*/Dominio/ con los umbrales de infection.json5 y bin/verificar-mutacion.php (enmienda a DD-53)
+        run: composer mutacion

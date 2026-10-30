@@ -1,4 +1,4 @@
-.PHONY: levantar bajar consola dependencias vendor-local verificar pruebas migrar fresh humo
+.PHONY: levantar bajar consola dependencias vendor-local verificar mutacion pruebas migrar fresh humo humo-h3
 
 # `vendor` vive en un volumen nombrado: si esta vacio (primer arranque o tras `docker compose down -v`) se instala solo.
 # El worker y el scheduler arrancan despues, cuando ya hay dependencias.
@@ -25,6 +25,11 @@ vendor-local:
 verificar:
 	docker compose exec -T app composer verificar
 
+# Prueba de mutación (Infection sobre src/*/Dominio/), fuera de `verificar` por tiempo: se corre al cerrar cada lote
+# y en CI (enmienda a DD-53).
+mutacion:
+	docker compose exec -T app composer mutacion
+
 pruebas:
 	docker compose exec -T app php vendor/bin/pest
 
@@ -38,3 +43,7 @@ humo:
 	docker compose exec -T app bash -s < scripts/humo/humo-h0.sh
 	docker compose exec -T app bash /scripts/humo/humo-h1.sh
 	docker compose exec -T app bash /scripts/humo/humo-h2.sh
+	docker compose exec -T app bash /scripts/humo/humo-h3.sh
+
+humo-h3:
+	docker compose exec -T app bash /scripts/humo/humo-h3.sh
