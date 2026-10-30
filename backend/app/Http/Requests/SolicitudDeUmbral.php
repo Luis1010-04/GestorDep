@@ -21,7 +21,6 @@ class SolicitudDeUmbral extends FormRequest
         $comprobar->ejecutar(
             IdentificadorDeRuta::desde((string) $this->route('equipo')),
             IdentificadorDeRuta::desde((string) $this->route('jugador')),
-            incluirBajas: false,
         );
 
         return true;

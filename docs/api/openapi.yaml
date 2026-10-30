@@ -4493,8 +4493,8 @@ paths:
                 $ref: '#/components/schemas/Error'
         '404':
           description: >-
-            El usuario no entrena el equipo, el jugador esta fuera de su alcance, en baja o sin posicion en el equipo, o
-            un UUID no es v7 (codigo recurso_no_encontrado).
+            El usuario no entrena el equipo, el jugador esta fuera de su alcance o sin posicion en el equipo, o un UUID
+            no es v7 (codigo recurso_no_encontrado). Un jugador en baja no da 404.
           content:
             application/json:
               schema:

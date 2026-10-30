@@ -21,18 +21,19 @@ final class ComprobarJugadorDelEquipo
     ) {}
 
     /**
-     * @param  bool  $incluirBajas  verdadero para consultar; falso para cambiar el umbral, como en la captura (DA-12, DA-28)
+     * Un jugador en baja sigue visible: ningún requisito impide consultar o cambiar su umbral (F1-H4-FIX).
+     *
      * @return array{entrenador: Identificador, posicion: Identificador}
      *
      * @throws RecursoNoEncontrado
      */
-    public function ejecutar(Identificador $equipo, Identificador $jugador, bool $incluirBajas): array
+    public function ejecutar(Identificador $equipo, Identificador $jugador): array
     {
         $entrenador = $this->usuarioActual->identificador();
         if ($entrenador === null || ! $this->equipos->entrena($entrenador, $equipo)) {
             throw new RecursoNoEncontrado;
         }
-        if (! $this->visibilidad->esVisibleParaEntrenador($jugador, $incluirBajas)) {
+        if (! $this->visibilidad->esVisibleParaEntrenador($jugador, incluirBajas: true)) {
             throw new RecursoNoEncontrado;
         }
 

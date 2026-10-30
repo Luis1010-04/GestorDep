@@ -205,11 +205,11 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Qué faltaba:** dos PUT simultáneos pueden chocar con `uq_umbrales_rendimiento_vigente`.
 - **Qué se eligió:** el repositorio convierte la violación en `UmbralConcurrente` y la API responde 409 `conflicto`, el código genérico que ya existía, sin campo. La transacción se deshace completa y no quedan dos umbrales vigentes. Así estaba en el plan aprobado.
 
-## DA-28 (T03): jugador en baja en el umbral
+## DA-28 (T03): jugador en baja en el umbral — **RETIRADA en F1-H4-FIX**
 
-- **Qué faltaba:** §6.1 no dice qué pasa con el umbral de un jugador en baja.
-- **Qué se eligió:** el GET lo consulta, igual que la lectura de lo ya capturado (DA-12). El PUT lo trata como fuera del alcance (404), igual que la captura.
-- **Cómo se revierte:** se cambia `incluirBajas` en `SolicitudDeUmbral::authorize` y en `FijarUmbral`.
+- **Qué se había elegido en T03:** el GET consultaba el umbral de un jugador en baja, pero el PUT lo trataba como fuera del alcance (404).
+- **Por qué se retiró:** el responsable pidió quitarla salvo que hubiera una fuente en `docs/requisitos.md`, y no la hay. RN-23 y HU-29 solo sacan al jugador en baja de convocatorias, listados y alertas; nada impide fijar su umbral.
+- **Estado actual:** `ComprobarJugadorDelEquipo` incluye siempre a los jugadores en baja, en el GET y en el PUT; se quitó el parámetro `incluirBajas`. Ninguna prueba ejercía el bloqueo, así que no hubo prueba que quitar. La captura (DA-12) no cambia.
 
 ## DA-29 (T03): «su posición» en las plantillas propias
 

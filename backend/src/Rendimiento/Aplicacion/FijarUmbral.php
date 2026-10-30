@@ -35,7 +35,7 @@ final class FijarUmbral
      */
     public function ejecutar(Identificador $equipo, Identificador $jugador, array $datos): UmbralAplicable
     {
-        ['entrenador' => $entrenador, 'posicion' => $posicion] = $this->comprobar->ejecutar($equipo, $jugador, incluirBajas: false);
+        ['entrenador' => $entrenador, 'posicion' => $posicion] = $this->comprobar->ejecutar($equipo, $jugador);
 
         if (isset($datos['plantilla_id'], $datos['calificacion_minima'])) {
             throw new UmbralAmbiguo;

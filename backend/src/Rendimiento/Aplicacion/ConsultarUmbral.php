@@ -18,7 +18,7 @@ final class ConsultarUmbral
     /** @throws RecursoNoEncontrado también si la posición no tiene plantilla de fábrica (DA-26) */
     public function ejecutar(Identificador $equipo, Identificador $jugador): UmbralAplicable
     {
-        ['entrenador' => $entrenador, 'posicion' => $posicion] = $this->comprobar->ejecutar($equipo, $jugador, incluirBajas: true);
+        ['entrenador' => $entrenador, 'posicion' => $posicion] = $this->comprobar->ejecutar($equipo, $jugador);
 
         $umbral = $this->umbrales->vigenteDe($jugador, $equipo, $entrenador);
         if ($umbral !== null) {
