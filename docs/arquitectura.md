@@ -1,8 +1,8 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.4.1 (ver sección 14)
-**Fecha:** 29 de octubre de 2026
+**Versión:** 1.5 (ver sección 14)
+**Fecha:** 31 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
 ## 1. Propósito y alcance
@@ -82,6 +82,7 @@ Cada evento dispara el recalculo de riesgos y alertas del jugador afectado. Los 
 - **Alertas** es consumidor: escucha eventos de Plantel, Académico, Competencia, Rendimiento y Salud.
 - Una consulta que cruza contextos vive en el contexto que la consume, nunca dentro de un agregado. El listado, la vista consolidada, los gráficos, los pendientes de captura y el historial viven en **Consultas**; la situación académica, en **Académico** (DA-17 de H2). La consulta lee el dato de otro contexto a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando clases de dominio de otro contexto. Consultas puede leer las tablas de otros contextos con SQL de solo lectura.
 - `AlcanceDeJugadores` es una interfaz de Compartido; su implementación SQL vive en la Infraestructura de Consultas y lee `jugador_equipo`, `entrenador_equipo` e `inscripciones`.
+- Rendimiento no lee las tablas de Plantel ni de Competencia: usa dos puertos de `src/Compartido/Aplicacion/`. `PosicionEnEquipo` da la posición de un jugador en un equipo según su membresía vigente, y su adaptador vive en la Infraestructura de Plantel. `InicioDePartidos` da la fecha de inicio de los partidos para ordenar las últimas N calificaciones (RN-08), y su adaptador vive en la Infraestructura de Competencia.
 
 ## 5. Estructura de carpetas
 
@@ -216,13 +217,20 @@ El empalme de entrenamientos se **advierte** (HU-10) y no se impide, por lo que 
 |---|---|---|
 | `metricas` | codigo, nombre, tipo_dato (entero/decimal), minimo, maximo, activa | UQ `codigo` |
 | `metricas_posicion` *(sin auditoría)* | metrica_id, posicion_id, obligatoria, orden | PK compuesta |
-| `rendimientos_partido` (H) | partido_id, jugador_id, equipo_id, registrado_por, posicion_id, minutos, fue_titular, tarjetas_amarillas, tarjetas_rojas, calificacion_general `smallint`, observacion | `CHECK` de minutos 0 a 150 y calificación entera de 1 a 10; FK compuesta (`partido_id`, `equipo_id`) hacia `partidos` (`id`, `equipo_id`) para que el equipo coincida; UQ parcial (`partido_id`, `jugador_id`); IX (`jugador_id`, `partido_id`); IX (`registrado_por`) |
+| `rendimientos_partido` (H) | partido_id, jugador_id, equipo_id, registrado_por, posicion_id, minutos, fue_titular, tarjetas_amarillas, tarjetas_rojas, calificacion_general `smallint`, observacion | `CHECK` de minutos 0 a 150 y calificación entera de 1 a 10; FK compuesta (`partido_id`, `equipo_id`) hacia `partidos` (`id`, `equipo_id`) para que el equipo coincida; UQ parcial (`partido_id`, `jugador_id`, `registrado_por`) donde `eliminado_en IS NULL`; IX (`jugador_id`, `partido_id`); IX (`registrado_por`) |
 | `valores_metrica` (H) | rendimiento_id, metrica_id, valor `numeric(10,2)` | `id uuid` como clave primaria; UQ parcial (`rendimiento_id`, `metrica_id`); la aplicación valida que la métrica pertenezca a la posición |
-| `plantillas_evaluacion` (H) | nombre, posicion_id, creada_por (nulo si es de fábrica), calificacion_minima `numeric(4,2)`, ventana_partidos, es_de_fabrica | `CHECK` de 1 a 10; `CHECK ventana_partidos > 0` |
-| `umbrales_rendimiento` (H) | jugador_id, equipo_id, entrenador_id, plantilla_id (opcional), calificacion_minima `numeric(4,2)`, ventana_partidos, vigente_desde, vigente_hasta | `CHECK` de 1 a 10 y `CHECK ventana_partidos > 0` (igual que la plantilla); UQ parcial (`jugador_id`, `equipo_id`) donde `vigente_hasta IS NULL` |
-| `evaluaciones_rendimiento` *(persistente, solo inserción, sin auditoría)* | jugador_id, equipo_id, umbral_id, promedio `numeric(4,2)`, partidos_considerados, resultado (pasa/no_pasa/datos_insuficientes), calculado_en | IX (`jugador_id`, `equipo_id`, `calculado_en` descendente) |
+| `plantillas_evaluacion` (H) | nombre, posicion_id, creada_por (nulo si es de fábrica), calificacion_minima `numeric(4,2)`, ventana_partidos, es_de_fabrica | `CHECK` de 1 a 10; `CHECK ventana_partidos > 0`; `CHECK` de que `creada_por` es nulo si y solo si `es_de_fabrica`; dos UQ parciales donde `eliminado_en IS NULL`: (`nombre`, `posicion_id`, `creada_por`) para las de cada entrenador, donde `creada_por` no es nulo, y (`nombre`, `posicion_id`) para las de fábrica, donde `creada_por` es nulo |
+| `umbrales_rendimiento` (H) | jugador_id, equipo_id, entrenador_id, plantilla_id (opcional), calificacion_minima `numeric(4,2)`, ventana_partidos, vigente_desde, vigente_hasta | `CHECK` de 1 a 10 y `CHECK ventana_partidos > 0` (igual que la plantilla); UQ parcial (`jugador_id`, `equipo_id`, `entrenador_id`) donde `vigente_hasta IS NULL` |
+| `evaluaciones_rendimiento` *(persistente, solo inserción, sin auditoría)* | jugador_id, equipo_id, entrenador_id, umbral_id (opcional), plantilla_id (opcional), calificacion_minima `numeric(4,2)` y ventana_partidos (obligatorias, copiadas del umbral o de la plantilla aplicada al calcular), promedio `numeric(4,2)` (nulo con datos insuficientes), partidos_considerados, resultado (pasa/no_pasa/datos_insuficientes), calculado_en | `CHECK` de que `promedio` es nulo si y solo si `resultado = 'datos_insuficientes'`; `umbral_id` y `plantilla_id` son referencias de procedencia, sin `CHECK` de exclusión; IX (`jugador_id`, `equipo_id`, `entrenador_id`, `calculado_en` descendente) |
 
 El mínimo de calificaciones para evaluar es `ventana_partidos` (RN-08): con menos, el resultado es `datos_insuficientes`. `rendimientos_partido` y `valores_metrica` son la base de los gráficos de historial (HU-25). Para mostrar al entrenador solo lo que él registró (RN-14) se filtra por `registrado_por`.
+
+Notas de H4:
+
+- **Unicidad de `rendimientos_partido`:** es por registrante. Dos entrenadores del mismo equipo pueden registrar, cada uno, su propia calificación de un mismo jugador en un mismo partido, y cada uno ve y promedia solo la suya. La UQ por (`partido_id`, `jugador_id`, `registrado_por`) sustituye a la anterior por (`partido_id`, `jugador_id`) por DD-17 y DA-36 (`docs/hitos/f1-h4.md` v1.0.8).
+- **`entrenador_id`:** está en `umbrales_rendimiento` y en `evaluaciones_rendimiento` porque RN-08 y HU-16 son por entrenador (DA-04 de H4).
+- **Las dos UQ de `plantillas_evaluacion`:** con ellas, un nombre repetido no revela las plantillas de otro entrenador (`docs/hitos/f1-h4.md` v1.0.4). La aplicación rechaza además una plantilla propia con el nombre de una de fábrica de la misma posición.
+- **Lo que guarda cada evaluación:** copia la calificación mínima y la ventana con que se calculó, para que lo que vio el entrenador se conserve aunque cambien el umbral o la plantilla (`docs/hitos/f1-h4.md` v1.0.2).
 
 ### 7.7 Condición Física
 
@@ -315,7 +323,7 @@ public function up(): void
 | `CriterioGeneralSeeder` | Calificación mínima aprobatoria 7.0 | **[Propuesta]**: validar |
 | `ParametrosInstitucionalesSeeder` | Niveles de riesgo académico, reglas de sanción deportiva y niveles de calificación de partido | **[Propuesta]**: validar |
 | `UsuariosDemoSeeder` | Un docente y dos entrenadores de prueba | Solo desarrollo y pruebas; nunca en producción |
-| `PlantillasEvaluacionSeeder` | Una plantilla de fábrica por posición (últimas 5 calificaciones, mínimo 6.0) | **[Propuesta]**: validar |
+| `PlantillasDeFabricaSeeder` | Una plantilla de fábrica «Desarrollo» por posición (últimas 5 calificaciones, mínimo 6.0) | **[Propuesta]**: validar |
 
 El catálogo de métricas es el punto de crecimiento principal: agregar una estadística del backlog del PDF es insertar una fila en `metricas` y `metricas_posicion`, sin migración de esquema.
 
@@ -414,3 +422,4 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | 1.3 | 26/10/2026 | Sección 8.2: `parametros_institucionales` pasa del grupo 080 al grupo 035 y se crea en H2 (DD-42); el grupo 080 queda con `alertas`. Sección 7.1: el índice único de matrícula es sobre `lower(matricula)` (DD-37) |
 | 1.4 | 29/10/2026 | Sección 4.3: una consulta que cruza contextos vive en el contexto que la consume y lee el dato ajeno a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando dominio ajeno; la situación académica vive en Académico. Decisión del responsable tras la auditoría del Lote E de H2 (I-1, DA-17) |
 | 1.4.1 | 29/10/2026 | Sección 4.3: se restituye la frase «Consultas puede leer las tablas de otros contextos con SQL de solo lectura», que la versión 1.4 quitó sin que nadie lo decidiera (auditoría corta del rango `1145c77..4fb2fc5`, I-B). Lo demás de la 1.4 se mantiene |
+| 1.5 | 31/10/2026 | Se alinea con lo construido en H4 (`docs/hitos/f1-h4.md` v1.0.8, §5.1), por decisión del responsable. Sección 4.3: puertos `PosicionEnEquipo` (adaptador en Plantel) e `InicioDePartidos` (adaptador en Competencia), en Compartido. Sección 7.6: unicidad de `rendimientos_partido` por (`partido_id`, `jugador_id`, `registrado_por`), que sustituye a la de (`partido_id`, `jugador_id`) (DD-17, DA-36); dos UQ parciales y el `CHECK` de origen en `plantillas_evaluacion`; `entrenador_id` en umbrales y evaluaciones, con la UQ del umbral vigente y el índice de evaluaciones que lo incluyen (DA-04); `evaluaciones_rendimiento` con `calificacion_minima` y `ventana_partidos` copiadas y obligatorias, `plantilla_id` anulable junto a `umbral_id` y el `CHECK` de promedio nulo. Sección 8.4: el seeder de plantillas se llama `PlantillasDeFabricaSeeder`. Sin cambios de código |
