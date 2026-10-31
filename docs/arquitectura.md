@@ -1,7 +1,7 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.5 (ver sección 14)
+**Versión:** 1.5.1 (ver sección 14)
 **Fecha:** 31 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
@@ -402,7 +402,7 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 
 | Tema | Riesgo o duda | Propuesta |
 |---|---|---|
-| Co-entrenadores | Si un equipo tiene dos entrenadores, RN-14 ("solo lo que él registró") impediría que se vean entre sí | Confirmar si los entrenadores de un mismo equipo comparten datos. Hasta definirlo se aplica la regla estricta |
+| Co-entrenadores | Si un equipo tiene dos entrenadores, RN-14 ("solo lo que él registró") impide que se vean entre sí | **Resuelto:** DD-17 está confirmada y se aplica la regla estricta. Cada entrenador registra su propia calificación de un jugador en un partido, y ve y promedia solo lo que él registró; la unicidad de `rendimientos_partido` es por registrante (sección 7.6; DA-36 de H4) |
 | Reglas de sanción | RN-09 y RN-10 son propuestas, no valores institucionales | Validar antes de sembrar |
 | Retención | El historial se conserva mientras el jugador esté en la institución; falta definir qué ocurre al darse de baja | Mantenerlo sin borrar y definir con la institución un plazo posterior |
 | Aviso del jugador | `reportado_por_jugador` asume que otro usuario lo registra | Se reemplaza por un perfil de futbolista en la fase siguiente |
@@ -423,3 +423,4 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | 1.4 | 29/10/2026 | Sección 4.3: una consulta que cruza contextos vive en el contexto que la consume y lee el dato ajeno a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando dominio ajeno; la situación académica vive en Académico. Decisión del responsable tras la auditoría del Lote E de H2 (I-1, DA-17) |
 | 1.4.1 | 29/10/2026 | Sección 4.3: se restituye la frase «Consultas puede leer las tablas de otros contextos con SQL de solo lectura», que la versión 1.4 quitó sin que nadie lo decidiera (auditoría corta del rango `1145c77..4fb2fc5`, I-B). Lo demás de la 1.4 se mantiene |
 | 1.5 | 31/10/2026 | Se alinea con lo construido en H4 (`docs/hitos/f1-h4.md` v1.0.8, §5.1), por decisión del responsable. Sección 4.3: puertos `PosicionEnEquipo` (adaptador en Plantel) e `InicioDePartidos` (adaptador en Competencia), en Compartido. Sección 7.6: unicidad de `rendimientos_partido` por (`partido_id`, `jugador_id`, `registrado_por`), que sustituye a la de (`partido_id`, `jugador_id`) (DD-17, DA-36); dos UQ parciales y el `CHECK` de origen en `plantillas_evaluacion`; `entrenador_id` en umbrales y evaluaciones, con la UQ del umbral vigente y el índice de evaluaciones que lo incluyen (DA-04); `evaluaciones_rendimiento` con `calificacion_minima` y `ventana_partidos` copiadas y obligatorias, `plantilla_id` anulable junto a `umbral_id` y el `CHECK` de promedio nulo. Sección 8.4: el seeder de plantillas se llama `PlantillasDeFabricaSeeder`. Sin cambios de código |
+| 1.5.1 | 31/10/2026 | Sección 13: la fila «Co-entrenadores» queda resuelta, porque DD-17 está confirmada (DA-36 de H4). Decisión del responsable |
