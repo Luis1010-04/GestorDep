@@ -156,6 +156,7 @@ Las que tocan permisos o privacidad son:
 - DA-20: un convocado sin membresía da 404.
 - DA-23: las UQ de plantillas no revelan plantillas ajenas.
 - DA-29: cualquier entrenador crea plantillas de cualquier posición.
+- DA-36: la unicidad de `rendimientos_partido` es por registrante, para no revelar el rendimiento de otro entrenador (DD-17; sustituye a DA-13).
 
 ## 6. Compuerta de H4 (§10), punto por punto
 
