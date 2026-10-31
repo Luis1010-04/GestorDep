@@ -18,7 +18,7 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 | DA-10 | T01 | `evaluaciones_rendimiento` usa la macro `soloInsercion` de Compartido | No | No |
 | DA-11 | T02 | Orden de las comprobaciones de la captura; tipos en la solicitud y rangos en el dominio | Sí: un jugador fuera del alcance da 404 antes que `jugador_no_convocado` (restringe) | No |
 | DA-12 | T02 | Capturar excluye a los jugadores en baja; leer y corregir lo ya capturado los incluye | Sí (restringe la captura) | No |
-| DA-13 | T02 | Un convocado deja de estar pendiente si tiene cualquier rendimiento, de cualquier entrenador | No (no revela de quién) | No |
+| DA-13 | T02 | ~~Un convocado deja de estar pendiente si tiene cualquier rendimiento, de cualquier entrenador~~ **Sustituida por DA-36** (F1-H4-FIX de la auditoría del Lote C, v1.0.8) | Sí: revelaba que otro entrenador había capturado (m-7) | No |
 | DA-14 | T02 | Los valores de métrica se reciben como enteros JSON y se devuelven según el tipo de la métrica | No | No |
 | DA-15 | T02 | Mensaje propio de `valor_fuera_de_rango` en Rendimiento (`errores.rendimiento`) | No | No |
 | DA-16 | T02 | Los pendientes de captura viven en `src/Consultas` (arquitectura §4.3) | No | **Indicada** por el responsable el 30/10/2026 (v1.0.3) |
@@ -27,6 +27,7 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 | DA-19 | T02 | Campos de las respuestas: rendimiento sin `registrado_por`, catálogo sin nombres de posición, pendientes con su conteo | Sí (revela lo mínimo) | No |
 | DA-20 | T02 | Un jugador visible y convocado pero sin membresía vigente en el equipo del partido da 404 | Sí (restringe) | No |
 | DA-21 | T02 | El enlace del adaptador `ConvocatoriaDePartido` va en `CompetenciaServiceProvider` | No | No |
+| DA-36 | FIX del Lote C | Un rendimiento por partido, jugador y registrante (DD-17); los pendientes cuentan solo lo del entrenador que consulta. Sustituye a DA-13 | Sí: no revela capturas de otro entrenador | **Indicada** por el responsable tras la auditoría del Lote C (v1.0.8); DD-17 ampliada el 31/10/2026 |
 
 ## DA-01 (T00): `synchronous_commit = off` en lugar de transacciones por prueba
 
@@ -267,6 +268,8 @@ Decisiones que la especificación no cubre (`docs/hitos/f1-h2.md` §0.3, aplicab
 - **Recurso del desempeño:** no incluye `umbral_id` ni `plantilla_id` (DA-19); son procedencia interna.
 
 ## DA-36 (F1-H4-FIX de la auditoría del Lote C): un rendimiento por partido, jugador y registrante (indicada por el responsable)
+
+- **Fuente:** DD-17, la regla estricta de RN-14 entre entrenadores de un mismo equipo. Su redacción, aprobada por el responsable el 31/10/2026, dice: «Dos entrenadores del mismo equipo pueden registrar, cada uno, su propia calificación de un mismo jugador en un mismo partido. Cada entrenador ve y promedia solo lo que él registró (RN-14). La unicidad de `rendimientos_partido` es por (`partido_id`, `jugador_id`, `registrado_por`). Ver DA-36.» El responsable la indicó tras la auditoría del Lote C (m-7).
 
 - **Qué se cambió:**
   - La UQ parcial de `rendimientos_partido` pasa de (`partido_id`, `jugador_id`) a (`partido_id`, `jugador_id`, `registrado_por`), editando la migración `050300` porque H4 no se ha fusionado. Se llama `uq_rendimientos_partido_partido_jugador_registrado_por`.

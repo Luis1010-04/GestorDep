@@ -20,7 +20,7 @@ Por la API ya se puede:
 
 | Métrica al cierre | Valor |
 |---|---|
-| Pruebas | **1 424** (9 738 aserciones); H3 cerró con 1 224 |
+| Pruebas | **1 430** tras los FIX de la auditoría del Lote C (9 812 aserciones en `0cccd14`; ver `f1-h4-fix-auditoria-lote-c.md`). Las corridas de cierre de §2, sobre `51b5fe6`, dieron 1 424. H3 cerró con 1 224 |
 | Cobertura por capa | Dominio **100,0 %** (umbral 95) · Aplicación **100,0 %** (85) · Infraestructura y HTTP **99,5 %** (70); total 99,6 % |
 | Mutación (`make mutacion`, solo `src/*/Dominio/`) | **687** mutantes, 687 eliminados; MSI **100 %**, MSI cubierto **100 %**; ninguno omitido ni con tiempo agotado |
 | PHPStan | Nivel 7, sin línea base ni `ignoreErrors` |
@@ -144,7 +144,7 @@ No se tocó `docs/arquitectura.md`, `docs/requisitos.md`, `frontend/`, `backend/
 
 ## 5. Decisiones del agente (DA-nn)
 
-DA-01 a DA-35 en `f1-h4-decisiones-del-agente.md`, resumidas en la sección 6 de `docs/decisiones/registro-decisiones.md`. **DA-28 está retirada.**
+DA-01 a DA-36 en `f1-h4-decisiones-del-agente.md`, resumidas en la sección 6 de `docs/decisiones/registro-decisiones.md`. **DA-28 está retirada**, y DA-13 está sustituida por DA-36 (DD-17; F1-H4-FIX de la auditoría del Lote C, v1.0.8).
 
 Las que tocan permisos o privacidad son:
 

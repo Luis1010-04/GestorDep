@@ -3947,8 +3947,9 @@ paths:
       summary: Partidos jugados con convocados sin rendimiento
       description: >-
         Solo entrenadores (HU-14). Partidos jugados de los equipos del entrenador con al menos un convocado visible
-        (AlcanceDeJugadores, sin bajas) que no tiene ningun rendimiento capturado (DA-13). Del mas reciente al mas
-        antiguo. Vive en Consultas (docs/arquitectura.md §4.3).
+        (AlcanceDeJugadores, sin bajas) al que el entrenador que consulta no le ha registrado rendimiento; los
+        rendimientos de otro entrenador no cuentan (v1.0.8, DA-36, DD-17). Del mas reciente al mas antiguo. Vive en
+        Consultas (docs/arquitectura.md §4.3).
       tags: [Rendimiento]
       parameters:
         - name: pagina

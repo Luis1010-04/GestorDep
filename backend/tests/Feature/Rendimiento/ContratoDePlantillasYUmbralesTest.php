@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\DB;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
+use Src\Compartido\Dominio\Identificador;
+use Src\Rendimiento\Dominio\RepositorioDeUmbrales;
+use Src\Rendimiento\Dominio\UmbralDeRendimiento;
 use Tests\TestCase;
 
 /** Las respuestas reales de las rutas de plantillas y umbral cumplen docs/api/openapi.yaml (HU-15). */
@@ -52,6 +55,24 @@ test('HU-15: las respuestas de plantillas y umbral cumplen el contrato', functio
     $sinPlantilla = "/api/v1/equipos/{$m['a']}/jugadores/{$portero}/umbral";
     $respuestas[] = ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'get', sesionesPeticion($this, 'GET', $sinPlantilla, idDeSesion: $sesion)->assertStatus(409)->assertJsonPath('codigo', 'sin_umbral_aplicable')];
     $respuestas[] = ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $sinPlantilla, [], $sesion)->assertStatus(409)->assertJsonPath('codigo', 'sin_umbral_aplicable')];
+
+    // 409 conflicto (DA-27): la carrera de dos PUT, forzada con un repositorio que no ve el umbral vigente que ya existe.
+    $real = app(RepositorioDeUmbrales::class);
+    app()->instance(RepositorioDeUmbrales::class, new class($real) implements RepositorioDeUmbrales
+    {
+        public function __construct(private readonly RepositorioDeUmbrales $real) {}
+
+        public function vigenteDe(Identificador $jugador, Identificador $equipo, Identificador $entrenador): ?UmbralDeRendimiento
+        {
+            return null;
+        }
+
+        public function reemplazar(?UmbralDeRendimiento $anterior, UmbralDeRendimiento $nuevo): void
+        {
+            $this->real->reemplazar($anterior, $nuevo);
+        }
+    });
+    $respuestas[] = ['/equipos/{equipo}/jugadores/{jugador}/umbral', 'put', sesionesPeticion($this, 'PUT', $umbral, ['calificacion_minima' => '8.00', 'ventana_partidos' => 3], $sesion)->assertStatus(409)->assertJsonPath('codigo', 'conflicto')];
 
     foreach ($respuestas as [$ruta, $metodo, $respuesta]) {
         expect($validador->validate($respuesta->baseResponse, $ruta, $metodo))->toBeTrue("$metodo $ruta {$respuesta->getStatusCode()}");

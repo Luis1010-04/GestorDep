@@ -16,8 +16,9 @@ use stdClass;
 
 /**
  * SQL de solo lectura sobre `partidos`, `convocatorias` y `rendimientos_partido` (§4.3). Cuenta los convocados no
- * eliminados, visibles por `AlcanceDeJugadores` sin bajas (como DA-32 de H3), que no tienen ningún rendimiento no
- * eliminado en el partido: si otro entrenador ya lo capturó, no se puede capturar de nuevo y no queda pendiente (DA-13).
+ * eliminados, visibles por `AlcanceDeJugadores` sin bajas (como DA-32 de H3), a los que el entrenador que consulta no
+ * les ha registrado un rendimiento no eliminado en el partido. Lo que capture otro entrenador no cuenta ni se revela
+ * (v1.0.8, DA-36, DD-17).
  */
 final class ConsultaDePendientesDeRendimientoSql implements ConsultaDePendientesDeRendimiento
 {
