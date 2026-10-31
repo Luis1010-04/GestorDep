@@ -1,7 +1,7 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.5.1 (ver sección 14)
+**Versión:** 1.5.2 (ver sección 14)
 **Fecha:** 31 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
@@ -63,7 +63,7 @@ Este documento define la arquitectura lógica (DDD), el modelo de datos en Postg
 |---|---|---|
 | `CalculadorDeRiesgoAcademico` | Académico | RN-04 |
 | `ResolvedorDeCriterioDeAprobacion` | Académico | RN-03 (materia sobre general, y registra cuál se aplicó) |
-| `EvaluadorDeRendimiento` | Rendimiento | RN-08 (promedio de la ventana contra el umbral; "datos insuficientes" si hay menos de N) |
+| `CalculoDeDesempeno` | Rendimiento | RN-08 (promedio de la ventana contra el umbral; "datos insuficientes" si hay menos de N) |
 | `DetectorDeSancionesDeportivas` | Alertas | RN-09 (por equipo) |
 | `CalculadorDeRiesgoDeBajaDeportiva` | Alertas | RN-10 |
 | `ConstructorDeVistaParaConvocar` | Consultas | HU-24 (cinco dimensiones, disponibilidad y aviso pendiente) |
@@ -424,3 +424,4 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | 1.4.1 | 29/10/2026 | Sección 4.3: se restituye la frase «Consultas puede leer las tablas de otros contextos con SQL de solo lectura», que la versión 1.4 quitó sin que nadie lo decidiera (auditoría corta del rango `1145c77..4fb2fc5`, I-B). Lo demás de la 1.4 se mantiene |
 | 1.5 | 31/10/2026 | Se alinea con lo construido en H4 (`docs/hitos/f1-h4.md` v1.0.8, §5.1), por decisión del responsable. Sección 4.3: puertos `PosicionEnEquipo` (adaptador en Plantel) e `InicioDePartidos` (adaptador en Competencia), en Compartido. Sección 7.6: unicidad de `rendimientos_partido` por (`partido_id`, `jugador_id`, `registrado_por`), que sustituye a la de (`partido_id`, `jugador_id`) (DD-17, DA-36); dos UQ parciales y el `CHECK` de origen en `plantillas_evaluacion`; `entrenador_id` en umbrales y evaluaciones, con la UQ del umbral vigente y el índice de evaluaciones que lo incluyen (DA-04); `evaluaciones_rendimiento` con `calificacion_minima` y `ventana_partidos` copiadas y obligatorias, `plantilla_id` anulable junto a `umbral_id` y el `CHECK` de promedio nulo. Sección 8.4: el seeder de plantillas se llama `PlantillasDeFabricaSeeder`. Sin cambios de código |
 | 1.5.1 | 31/10/2026 | Sección 13: la fila «Co-entrenadores» queda resuelta, porque DD-17 está confirmada (DA-36 de H4). Decisión del responsable |
+| 1.5.2 | 31/10/2026 | Sección 4.1: el servicio de RN-08 se llama `CalculoDeDesempeno` (`src/Rendimiento/Dominio/`), como en el código. `EvaluadorDeRendimiento` no existe y se quita. Decisión del responsable |
