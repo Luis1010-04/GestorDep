@@ -3906,6 +3906,690 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /metricas:
+    get:
+      operationId: listarMetricas
+      summary: Catalogo de metricas activas con sus posiciones
+      description: >-
+        Solo entrenadores (HU-14). Metricas activas ordenadas por codigo, con las posiciones en que se capturan (por
+        identificador; sin nombres de posicion) y si son obligatorias. Minimo y maximo como enteros en una metrica
+        entera y como cadena con dos decimales en una decimal (DD-22). No se editan desde la API (§2.3).
+      tags: [Rendimiento]
+      responses:
+        '200':
+          description: El catalogo, sin paginar.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MetricaDelCatalogo'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /partidos/pendientes-de-rendimiento:
+    get:
+      operationId: listarPendientesDeRendimiento
+      summary: Partidos jugados con convocados sin rendimiento
+      description: >-
+        Solo entrenadores (HU-14). Partidos jugados de los equipos del entrenador con al menos un convocado visible
+        (AlcanceDeJugadores, sin bajas) al que el entrenador que consulta no le ha registrado rendimiento; los
+        rendimientos de otro entrenador no cuentan (v1.0.8, DA-36, DD-17). Del mas reciente al mas antiguo. Vive en
+        Consultas (docs/arquitectura.md §4.3).
+      tags: [Rendimiento]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de partidos pendientes.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PartidoPendienteDeRendimiento'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /partidos/{partido}/rendimientos:
+    get:
+      operationId: listarRendimientosDelPartido
+      summary: Lista los rendimientos del partido que registro el usuario
+      description: >-
+        Solo entrenadores del equipo del partido (HU-14). Un partido ajeno, inexistente o con un UUID que no es v7
+        responde el mismo 404, antes que el 422. Solo los rendimientos que registro el usuario, de jugadores en su
+        alcance (con bajas, DA-12): otro entrenador del mismo equipo no ve los suyos (RN-14). En orden de captura.
+      tags: [Rendimiento]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de rendimientos.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Rendimiento'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El partido no existe o el usuario no entrena su equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: capturarRendimiento
+      summary: Captura el rendimiento de un jugador en un partido jugado
+      description: >-
+        Solo entrenadores del equipo (HU-14). El orden de las comprobaciones es (DA-11): partido ajeno o inexistente
+        (404, antes de validar el cuerpo); tipos del cuerpo (422); partido no jugado (409); jugador fuera del alcance,
+        inexistente o en baja (el mismo 404); jugador no convocado (422); captura previa del jugador en el partido
+        (409); rangos de los datos de juego, en el orden de los campos; metricas de la posicion del jugador en el
+        equipo (DD-05): que apliquen, que esten las obligatorias y que cada valor este en el rango de su metrica.
+        Escribe el rendimiento, sus valores y el historial de cada fila en una transaccion (RNF-02).
+      tags: [Rendimiento]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [jugador_id, minutos, fue_titular, tarjetas_amarillas, tarjetas_rojas, calificacion_general, metricas]
+              properties:
+                jugador_id:
+                  type: string
+                  format: uuid
+                minutos:
+                  type: integer
+                  minimum: 0
+                  maximum: 150
+                fue_titular:
+                  type: boolean
+                tarjetas_amarillas:
+                  type: integer
+                  minimum: 0
+                  maximum: 2
+                tarjetas_rojas:
+                  type: integer
+                  minimum: 0
+                  maximum: 1
+                calificacion_general:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                observacion:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                metricas:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ValorDeMetricaEntrada'
+      responses:
+        '201':
+          description: Rendimiento capturado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Rendimiento'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            El partido no existe o el usuario no entrena su equipo; o el jugador no existe, esta fuera de su alcance o
+            en baja. Mismo cuerpo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El partido no esta jugado (partido_no_jugado) o el usuario ya capturo a ese jugador en el partido
+            (rendimiento_duplicado, campo jugador_id). El rendimiento que capturo otro entrenador no cuenta ni se revela
+            (v1.0.8, RN-14).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Un campo ausente, con tipo invalido, una metrica repetida o un campo no admitido (validacion_fallida);
+            jugador visible no convocado (jugador_no_convocado, campo jugador_id); un valor fuera de rango
+            (valor_fuera_de_rango, campo minutos, tarjetas_amarillas, tarjetas_rojas, calificacion_general, observacion
+            o metricas.N.valor); una metrica que no es de la posicion (metrica_no_aplica_a_posicion, campo
+            metricas.N.metrica_id); falta una obligatoria (metrica_obligatoria_faltante, campo metricas).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /rendimientos/{rendimiento}:
+    patch:
+      operationId: corregirRendimiento
+      summary: Corrige un rendimiento que registro el usuario
+      description: >-
+        Solo quien lo registro (HU-14, §3.3). Un rendimiento de otro entrenador, aunque sea del mismo equipo, uno
+        inexistente o con un UUID que no es v7 responden el mismo 404, antes que el 422 (RN-14). Acepta cualquier campo
+        de la captura salvo jugador_id; metricas reemplaza la lista y se valida contra la posicion con que se capturo.
+        Escribe el historial de cada fila que cambia (RNF-02). El codigo rendimiento_no_editable queda reservado: en H4
+        no hay ningun caso que lo devuelva (§6.3).
+      tags: [Rendimiento]
+      parameters:
+        - name: rendimiento
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                minutos:
+                  type: integer
+                  minimum: 0
+                  maximum: 150
+                fue_titular:
+                  type: boolean
+                tarjetas_amarillas:
+                  type: integer
+                  minimum: 0
+                  maximum: 2
+                tarjetas_rojas:
+                  type: integer
+                  minimum: 0
+                  maximum: 1
+                calificacion_general:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                observacion:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                metricas:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ValorDeMetricaEntrada'
+      responses:
+        '200':
+          description: El rendimiento corregido.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Rendimiento'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            El rendimiento no existe, lo registro otro entrenador, el usuario no entrena el equipo o el jugador esta
+            fuera de su alcance (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Cuerpo vacio (campo cuerpo), tipo invalido o campo no admitido, como jugador_id (validacion_fallida); un
+            valor fuera de rango (valor_fuera_de_rango); una metrica que no es de la posicion
+            (metrica_no_aplica_a_posicion); falta una obligatoria (metrica_obligatoria_faltante).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /plantillas-evaluacion:
+    get:
+      operationId: listarPlantillasEvaluacion
+      summary: Plantillas de fabrica y propias del entrenador
+      description: >-
+        Solo entrenadores (HU-15). Las de fabrica y las que creo el usuario, nunca las de otro entrenador (§5.3). Las de
+        fabrica primero, despues por nombre. Un filtro[posicion_id] con UUID valido que no es v7 da una lista vacia;
+        uno que no es UUID, 422 (DA-26 de H3, v1.0.4 §6.1).
+      tags: [Rendimiento]
+      parameters:
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+        - name: filtro[posicion_id]
+          in: query
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Pagina de plantillas.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PlantillaEvaluacion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Paginacion o filtro invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearPlantillaEvaluacion
+      summary: Crea una plantilla propia para una posicion
+      description: >-
+        Solo entrenadores (HU-15, RN-07). La plantilla queda a nombre del usuario (creada_por) y nunca es de fabrica.
+        No hay ruta para editarla ni borrarla (v1.0.4 §2.3). Escribe el historial (RNF-02). El codigo
+        plantilla_de_fabrica queda reservado: en H4 no hay ningun caso que lo devuelva, porque ninguna ruta edita ni borra
+        plantillas (§6.3).
+      tags: [Rendimiento]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nombre, posicion_id, calificacion_minima, ventana_partidos]
+              properties:
+                nombre:
+                  type: string
+                  maxLength: 100
+                posicion_id:
+                  type: string
+                  format: uuid
+                calificacion_minima:
+                  $ref: '#/components/schemas/CalificacionMinimaEntrada'
+                ventana_partidos:
+                  type: integer
+                  minimum: 1
+                  maximum: 32767
+                  description: El maximo es un limite tecnico (smallint), no una regla de negocio (v1.0.4 §6.2).
+      responses:
+        '201':
+          description: La plantilla creada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/PlantillaEvaluacion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El usuario ya tiene una plantilla con ese nombre en la posicion, o hay una de fabrica con ese nombre en la
+            posicion (plantilla_duplicada, campo nombre). Las plantillas de otros entrenadores no cuentan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Tipo invalido o campo no admitido (validacion_fallida); posicion inexistente o con UUID que no es v7
+            (posicion_inexistente); calificacion o ventana fuera de rango (valor_fuera_de_rango).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/jugadores/{jugador}/umbral:
+    parameters:
+      - name: equipo
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+      - name: jugador
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    get:
+      operationId: consultarUmbral
+      summary: Umbral del jugador en el equipo para el entrenador
+      description: >-
+        Solo un entrenador del equipo (HU-15). Devuelve su umbral vigente para el jugador en ese equipo o, si no tiene,
+        la plantilla de fabrica de la posicion del jugador en el equipo (DD-05). Un equipo que no entrena, un jugador
+        fuera de su alcance o sin posicion en el equipo, o un UUID que no es v7, responden el mismo 404.
+      tags: [Rendimiento]
+      responses:
+        '200':
+          description: El umbral que se aplica.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Umbral'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Equipo o jugador no encontrados para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Sin umbral propio y sin plantilla de fabrica para la posicion del jugador (codigo sin_umbral_aplicable;
+            §6.3 v1.0.6, DA-33).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: fijarUmbral
+      summary: Fija el umbral del jugador en el equipo
+      description: >-
+        Solo un entrenador del equipo (HU-15). Con plantilla_id copia los valores de una plantilla visible de la
+        posicion del jugador; con calificacion_minima y ventana_partidos (juntas) usa valores propios; sin nada copia la
+        plantilla de fabrica de la posicion. Cierra el umbral vigente (vigente_hasta) y abre uno nuevo, cada uno con su
+        historial, en una transaccion; el primero no cierra nada. Solo afecta al jugador, en ese equipo, para el
+        usuario. El 404 va antes que el 422 (§6.1).
+      tags: [Rendimiento]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                plantilla_id:
+                  type: string
+                  format: uuid
+                calificacion_minima:
+                  $ref: '#/components/schemas/CalificacionMinimaEntrada'
+                ventana_partidos:
+                  type: integer
+                  minimum: 1
+                  maximum: 32767
+                  description: El maximo es un limite tecnico (smallint), no una regla de negocio (v1.0.4 §6.2).
+      responses:
+        '200':
+          description: El umbral nuevo.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Umbral'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: >-
+            El usuario no entrena el equipo, el jugador esta fuera de su alcance o sin posicion en el equipo, o un UUID
+            no es v7 (codigo recurso_no_encontrado). Un jugador en baja no da 404.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Otro cambio simultaneo del umbral del mismo jugador, equipo y entrenador choco con el indice del umbral
+            vigente; no se escribe nada (codigo conflicto, sin campo; §6.3 v1.0.5, DA-27). Sin cuerpo y sin plantilla
+            de fabrica para la posicion del jugador (codigo sin_umbral_aplicable; §6.3 v1.0.6, DA-33).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Tipo invalido, calificacion sin ventana o al reves, o campo no admitido (validacion_fallida); plantilla_id
+            junto con valores propios (umbral_ambiguo); plantilla inexistente, de otro entrenador o con UUID que no es
+            v7 (plantilla_inexistente); plantilla de otra posicion (plantilla_de_otra_posicion); calificacion o ventana
+            fuera de rango (valor_fuera_de_rango).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/jugadores/{jugador}/desempeno:
+    get:
+      operationId: consultarDesempeno
+      summary: Pasa, no pasa o datos insuficientes del jugador en el equipo
+      description: >-
+        Solo un entrenador del equipo (HU-16, RN-08). Devuelve la ultima evaluacion guardada para el usuario (cada
+        captura, correccion o cambio de umbral inserta una) o, si no hay ninguna, la calcula sin guardarla, con
+        calculado_en a la hora actual. Solo cuentan las calificaciones que el usuario registro del jugador en ese
+        equipo, ordenadas por fecha del partido; el promedio de las ultimas N (N es la ventana) se redondea a dos
+        decimales y ese promedio redondeado se compara con la calificacion minima (§3.3, v1.0.5). Un equipo que no
+        entrena, un jugador fuera de su alcance o sin posicion en el equipo, o un UUID que no es v7, responden el mismo
+        404 (RN-14).
+      tags: [Rendimiento]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: El desempeno.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Desempeno'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Equipo o jugador no encontrados para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            Sin evaluacion guardada, sin umbral propio y sin plantilla de fabrica para la posicion del jugador (codigo
+            sin_umbral_aplicable; §6.3 v1.0.6, DA-33).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Baja:
@@ -4523,6 +5207,222 @@ components:
         actualizado_en:
           type: string
           format: date-time
+    ValorDeMetricaEntrada:
+      type: object
+      additionalProperties: false
+      required: [metrica_id, valor]
+      properties:
+        metrica_id:
+          type: string
+          format: uuid
+        valor:
+          type: integer
+          description: Entero JSON; todas las metricas sembradas son enteras (DA-14). El rango es el de la metrica.
+    Rendimiento:
+      type: object
+      additionalProperties: false
+      description: Sin registrado_por; solo lo ve quien lo registro (RN-14).
+      required: [id, partido_id, jugador_id, equipo_id, posicion_id, minutos, fue_titular, tarjetas_amarillas, tarjetas_rojas, calificacion_general, categoria_calificacion, observacion, metricas, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        partido_id:
+          type: string
+          format: uuid
+        jugador_id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+        posicion_id:
+          type: string
+          format: uuid
+          description: La posicion del jugador en el equipo al capturar (DD-05); no cambia con la membresia.
+        minutos:
+          type: integer
+          minimum: 0
+          maximum: 150
+        fue_titular:
+          type: boolean
+        tarjetas_amarillas:
+          type: integer
+          minimum: 0
+          maximum: 2
+        tarjetas_rojas:
+          type: integer
+          minimum: 0
+          maximum: 1
+        calificacion_general:
+          type: integer
+          minimum: 1
+          maximum: 10
+        categoria_calificacion:
+          type: string
+          readOnly: true
+          enum: [deficiente, regular, bueno, sobresaliente]
+          description: >-
+            Solo lectura, derivada de calificacion_general (RN-06, DD-09; v1.0.4): de 1 a 4 deficiente, de 5 a 6
+            regular, de 7 a 8 bueno y de 9 a 10 sobresaliente.
+        observacion:
+          type: string
+          nullable: true
+        metricas:
+          type: array
+          description: En el orden de la posicion (metricas_posicion.orden).
+          items:
+            type: object
+            additionalProperties: false
+            required: [metrica_id, valor]
+            properties:
+              metrica_id:
+                type: string
+                format: uuid
+              valor:
+                $ref: '#/components/schemas/NumeroDeMetrica'
+        actualizado_en:
+          type: string
+          format: date-time
+    NumeroDeMetrica:
+      description: Entero JSON en una metrica entera; cadena con dos decimales en una decimal (DD-22).
+      oneOf:
+        - type: integer
+        - type: string
+          pattern: '^-?[0-9]+\.[0-9]{2}$'
+    MetricaDelCatalogo:
+      type: object
+      additionalProperties: false
+      required: [id, codigo, nombre, tipo_dato, minimo, maximo, posiciones]
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+        nombre:
+          type: string
+        tipo_dato:
+          type: string
+          enum: [entero, decimal]
+        minimo:
+          $ref: '#/components/schemas/NumeroDeMetrica'
+        maximo:
+          $ref: '#/components/schemas/NumeroDeMetrica'
+        posiciones:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [posicion_id, obligatoria, orden]
+            properties:
+              posicion_id:
+                type: string
+                format: uuid
+              obligatoria:
+                type: boolean
+              orden:
+                type: integer
+    PartidoPendienteDeRendimiento:
+      type: object
+      additionalProperties: false
+      required: [partido_id, equipo_id, inicia_en, convocados_sin_rendimiento]
+      properties:
+        partido_id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+        inicia_en:
+          type: string
+          format: date-time
+        convocados_sin_rendimiento:
+          type: integer
+          minimum: 1
+    Desempeno:
+      type: object
+      additionalProperties: false
+      description: Resultado de RN-08 con el criterio aplicado (HU-16, §6.2). Sin identificadores de umbral ni de plantilla.
+      required: [resultado, promedio, calificacion_minima, ventana_partidos, partidos_considerados, calculado_en]
+      properties:
+        resultado:
+          type: string
+          enum: [pasa, no_pasa, datos_insuficientes]
+        promedio:
+          type: string
+          pattern: '^[0-9]+\.[0-9]{2}$'
+          nullable: true
+          description: Nulo si y solo si el resultado es datos_insuficientes.
+        calificacion_minima:
+          type: string
+          pattern: '^[0-9]+\.[0-9]{2}$'
+        ventana_partidos:
+          type: integer
+          minimum: 1
+          maximum: 32767
+        partidos_considerados:
+          type: integer
+          minimum: 0
+        calculado_en:
+          type: string
+          format: date-time
+          description: Nunca nulo; sin evaluaciones guardadas es la hora actual (v1.0.5).
+    CalificacionMinimaEntrada:
+      type: string
+      pattern: '^-?\d+(\.\d{1,2})?$'
+      description: Cadena con hasta dos decimales (DD-51). El rango, de 1 a 10, lo valida el dominio (valor_fuera_de_rango).
+    PlantillaEvaluacion:
+      type: object
+      additionalProperties: false
+      description: Sin creada_por; el entrenador solo ve las de fabrica y las suyas (§5.3, DA-19).
+      required: [id, nombre, posicion_id, calificacion_minima, ventana_partidos, es_de_fabrica]
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+          maxLength: 100
+        posicion_id:
+          type: string
+          format: uuid
+        calificacion_minima:
+          type: string
+          pattern: '^[0-9]+\.[0-9]{2}$'
+        ventana_partidos:
+          type: integer
+          minimum: 1
+          maximum: 32767
+        es_de_fabrica:
+          type: boolean
+    Umbral:
+      type: object
+      additionalProperties: false
+      description: >-
+        El criterio que se aplica al jugador para el entrenador de la sesion (HU-15, v1.0.4 §6.2): su umbral vigente
+        (origen umbral) o la plantilla de fabrica de su posicion (origen plantilla, con vigente_desde nulo).
+      required: [origen, plantilla_id, calificacion_minima, ventana_partidos, vigente_desde]
+      properties:
+        origen:
+          type: string
+          enum: [umbral, plantilla]
+        plantilla_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Nulo en un umbral con valores propios; en uno con plantilla, la plantilla de la que se copiaron.
+        calificacion_minima:
+          type: string
+          pattern: '^[0-9]+\.[0-9]{2}$'
+        ventana_partidos:
+          type: integer
+          minimum: 1
+          maximum: 32767
+        vigente_desde:
+          type: string
+          format: date-time
+          nullable: true
     Usuario:
       type: object
       additionalProperties: false

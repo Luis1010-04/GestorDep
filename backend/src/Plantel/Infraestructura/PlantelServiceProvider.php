@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Src\Compartido\Aplicacion\EquiposDelEntrenador;
 use Src\Compartido\Aplicacion\JugadoresDelEquipo;
 use Src\Compartido\Aplicacion\LocalizadorDeJugadores;
+use Src\Compartido\Aplicacion\PosicionEnEquipo;
 use Src\Plantel\Aplicacion\BuscadorDeJugadorPorMatricula;
 use Src\Plantel\Aplicacion\ConsultaDeJugadores;
 use Src\Plantel\Dominio\RepositorioDeCategorias;
@@ -23,6 +24,7 @@ class PlantelServiceProvider extends ServiceProvider
         $this->app->bind(EquiposDelEntrenador::class, EquiposDelEntrenadorPlantel::class);
         $this->app->bind(JugadoresDelEquipo::class, JugadoresDelEquipoPlantel::class);
         $this->app->bind(LocalizadorDeJugadores::class, LocalizadorDeJugadoresPlantel::class);
+        $this->app->bind(PosicionEnEquipo::class, PosicionEnEquipoPlantel::class);
         $this->app->bind(RepositorioDeCategorias::class, RepositorioDeCategoriasEloquent::class);
         $this->app->bind(RepositorioDeEquipos::class, RepositorioDeEquiposEloquent::class);
         $this->app->bind(RepositorioDeJugadores::class, RepositorioDeJugadoresEloquent::class);

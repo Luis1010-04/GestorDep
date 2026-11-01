@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PosicionesSeeder::class);
         $this->call(CriterioGeneralSeeder::class);
         $this->call(ParametrosInstitucionalesSeeder::class);
+        $this->call(MetricasSeeder::class);
+        $this->call(PlantillasDeFabricaSeeder::class);
 
         if (! app()->environment('production')) {
             $this->call(UsuariosDemoSeeder::class);
