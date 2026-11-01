@@ -11,6 +11,7 @@ use Src\Plantel\Aplicacion\RegistrarJugador;
 use Src\Plantel\Dominio\Jugador;
 use Src\Plantel\Dominio\RepositorioDeJugadores;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 beforeEach(function () {
@@ -95,29 +96,29 @@ test('HU-03: un entrenador registra un jugador y se crean su expediente, su memb
         ]);
 
     $usuarioId = DB::table('usuarios')->where('correo', 'a@x.com')->value('id');
-    $jugador = DB::table('jugadores')->where('id', $datos['id'])->first();
+    $jugador = NoNulo::exigir(DB::table('jugadores')->where('id', $datos['id'])->first(), 'el jugador creado');
     expect($jugador->matricula)->toBe('M-001')
         ->and($jugador->creado_por)->toBe($usuarioId);
 
     $membresias = DB::table('jugador_equipo')->where('jugador_id', $datos['id'])->get();
     expect($membresias)->toHaveCount(1)
-        ->and($membresias[0]->equipo_id)->toBe($equipo['id'])
-        ->and($membresias[0]->posicion_id)->toBe(DB::table('posiciones')->where('codigo', 'medio')->value('id'))
-        ->and($membresias[0]->hasta)->toBeNull()
-        ->and($membresias[0]->creado_por)->toBe($usuarioId);
+        ->and(NoNulo::exigir($membresias[0], 'la fila 0 de $membresias')->equipo_id)->toBe($equipo['id'])
+        ->and(NoNulo::exigir($membresias[0], 'la fila 0 de $membresias')->posicion_id)->toBe(DB::table('posiciones')->where('codigo', 'medio')->value('id'))
+        ->and(NoNulo::exigir($membresias[0], 'la fila 0 de $membresias')->hasta)->toBeNull()
+        ->and(NoNulo::exigir($membresias[0], 'la fila 0 de $membresias')->creado_por)->toBe($usuarioId);
 
     $historialJugador = DB::table('jugadores_historial')->where('jugador_id', $datos['id'])->get();
     expect($historialJugador)->toHaveCount(1)
-        ->and($historialJugador[0]->operacion)->toBe('crear')
-        ->and($historialJugador[0]->usuario_id)->toBe($usuarioId)
-        ->and($historialJugador[0]->datos_anteriores)->toBeNull()
-        ->and(json_decode($historialJugador[0]->datos_nuevos, true))->toMatchArray(['matricula' => 'M-001', 'nombres' => 'Luis Ángel']);
+        ->and(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->usuario_id)->toBe($usuarioId)
+        ->and(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->datos_anteriores)->toBeNull()
+        ->and(json_decode(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->datos_nuevos, true))->toMatchArray(['matricula' => 'M-001', 'nombres' => 'Luis Ángel']);
 
-    $historialMembresia = DB::table('jugador_equipo_historial')->where('jugador_equipo_id', $membresias[0]->id)->get();
+    $historialMembresia = DB::table('jugador_equipo_historial')->where('jugador_equipo_id', NoNulo::exigir($membresias[0], 'la fila 0 de $membresias')->id)->get();
     expect($historialMembresia)->toHaveCount(1)
-        ->and($historialMembresia[0]->operacion)->toBe('crear')
-        ->and($historialMembresia[0]->usuario_id)->toBe($usuarioId)
-        ->and(json_decode($historialMembresia[0]->datos_nuevos, true))->toMatchArray(['jugador_id' => $datos['id'], 'equipo_id' => $equipo['id'], 'hasta' => null]);
+        ->and(NoNulo::exigir($historialMembresia[0], 'la fila 0 de $historialMembresia')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historialMembresia[0], 'la fila 0 de $historialMembresia')->usuario_id)->toBe($usuarioId)
+        ->and(json_decode(NoNulo::exigir($historialMembresia[0], 'la fila 0 de $historialMembresia')->datos_nuevos, true))->toMatchArray(['jugador_id' => $datos['id'], 'equipo_id' => $equipo['id'], 'hasta' => null]);
 });
 
 test('HU-03: la membresía empieza el día de hoy en America/Mexico_City', function () {

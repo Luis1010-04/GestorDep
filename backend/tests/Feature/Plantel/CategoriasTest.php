@@ -8,6 +8,7 @@ use Src\Plantel\Aplicacion\CategoriaDuplicada;
 use Src\Plantel\Dominio\Categoria;
 use Src\Plantel\Dominio\RepositorioDeCategorias;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 beforeEach(function () {
@@ -35,7 +36,7 @@ test('HU-28: un entrenador crea "Sub-17" y cualquier entrenador la ve', function
         ->assertJsonPath('datos.0.id', $respuesta->json('datos.id'))
         ->assertJsonPath('meta.total', 1);
 
-    $fila = DB::table('categorias')->where('id', $respuesta->json('datos.id'))->first();
+    $fila = NoNulo::exigir(DB::table('categorias')->where('id', $respuesta->json('datos.id'))->first(), 'la categoría creada');
     expect($fila->creado_por)->toBe(DB::table('usuarios')->where('correo', 'a@x.com')->value('id'))->and($fila->eliminado_en)->toBeNull();
 });
 
@@ -70,7 +71,7 @@ test('HU-28: borrar una categoría sin equipos da 204 y deja de listarse', funct
     sesionesPeticion($this, 'DELETE', "/api/v1/categorias/$id", idDeSesion: $sesionB)->assertNoContent();
 
     sesionesPeticion($this, 'GET', '/api/v1/categorias', idDeSesion: $sesionB)->assertOk()->assertJsonPath('meta.total', 0)->assertJsonPath('datos', []);
-    $fila = DB::table('categorias')->where('id', $id)->first();
+    $fila = NoNulo::exigir(DB::table('categorias')->where('id', $id)->first(), 'la categoría borrada');
     expect($fila)->not->toBeNull()
         ->and($fila->eliminado_en)->not->toBeNull()
         ->and($fila->eliminado_por)->toBe(DB::table('usuarios')->where('correo', 'b@x.com')->value('id'));

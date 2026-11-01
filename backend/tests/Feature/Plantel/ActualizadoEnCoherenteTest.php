@@ -4,6 +4,7 @@ use Database\Seeders\PosicionesSeeder;
 use Illuminate\Support\Facades\DB;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 beforeEach(function () {
@@ -92,7 +93,7 @@ test('RNF-02: el historial de equipos y jugadores comparte el instante de la ope
     foreach (['equipos', 'entrenador_equipo', 'jugadores', 'jugador_equipo'] as $tabla) {
         $historial = DB::table("{$tabla}_historial")->get();
         expect($historial)->toHaveCount(1)
-            ->and(coherenciaComoAtom($historial[0]->ocurrido_en))->toBe('2026-03-15T12:00:00+00:00', $tabla)
+            ->and(coherenciaComoAtom(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->ocurrido_en))->toBe('2026-03-15T12:00:00+00:00', $tabla)
             ->and(coherenciaComoAtom(DB::table($tabla)->value('actualizado_en')))->toBe('2026-03-15T12:00:00+00:00', $tabla);
     }
 });
@@ -101,8 +102,8 @@ test('RNF-02: con el reloj real, ocurrido_en y actualizado_en guardados coincide
     /** @var TestCase $this */
     coherenciaCrearEquipo($this);
 
-    $equipo = DB::table('equipos')->first();
-    $asignacion = DB::table('entrenador_equipo')->first();
+    $equipo = NoNulo::exigir(DB::table('equipos')->first(), 'el equipo');
+    $asignacion = NoNulo::exigir(DB::table('entrenador_equipo')->first(), 'la asignación del entrenador');
     $actualizado = coherenciaComoAtom($equipo->actualizado_en);
 
     expect(coherenciaComoAtom(DB::table('equipos_historial')->value('ocurrido_en')))->toBe($actualizado)
@@ -119,7 +120,7 @@ test('RNF-02: el borrado lógico de una categoría guarda el mismo instante trun
 
     sesionesPeticion($this, 'DELETE', "/api/v1/categorias/$id", idDeSesion: $sesion)->assertNoContent();
 
-    $fila = DB::table('categorias')->where('id', $id)->first();
+    $fila = NoNulo::exigir(DB::table('categorias')->where('id', $id)->first(), 'la categoría borrada');
     expect(coherenciaComoAtom($fila->eliminado_en))->toBe('2026-03-15T12:00:00+00:00')
         ->and(coherenciaComoAtom($fila->actualizado_en))->toBe('2026-03-15T12:00:00+00:00');
 });

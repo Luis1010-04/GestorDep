@@ -11,6 +11,7 @@ use Src\Plantel\Aplicacion\CambiarPosicionDeJugador;
 use Src\Plantel\Aplicacion\JugadorYaEnEquipo;
 use Src\Plantel\Dominio\RepositorioDeMembresias;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /**
@@ -78,7 +79,7 @@ test('HU-04: la asignación escribe la membresía y su historial crear con el mi
     asignacionAsignar($this, 'b@x.com', $m['eb'], ['matricula' => 'M-1', 'posicion' => 'defensa'])->assertCreated();
 
     $usuarioId = DB::table('usuarios')->where('correo', 'b@x.com')->value('id');
-    $membresia = DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->where('equipo_id', $m['eb'])->first();
+    $membresia = NoNulo::exigir(DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->where('equipo_id', $m['eb'])->first(), 'la membresía en EB');
     expect($membresia->desde)->toBe('2026-03-09')
         ->and($membresia->hasta)->toBeNull()
         ->and($membresia->posicion_id)->toBe(DB::table('posiciones')->where('codigo', 'defensa')->value('id'))
@@ -86,14 +87,14 @@ test('HU-04: la asignación escribe la membresía y su historial crear con el mi
 
     $historial = DB::table('jugador_equipo_historial')->where('jugador_equipo_id', $membresia->id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->version)->toBe(1)
-        ->and($historial[0]->usuario_id)->toBe($usuarioId)
-        ->and($historial[0]->datos_anteriores)->toBeNull()
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqual([
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->version)->toBe(1)
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($usuarioId)
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_anteriores)->toBeNull()
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqual([
             'jugador_id' => $m['j1'], 'equipo_id' => $m['eb'], 'posicion_id' => $membresia->posicion_id, 'desde' => '2026-03-09', 'hasta' => null,
         ])
-        ->and((new DateTimeImmutable($historial[0]->ocurrido_en))->getTimestamp())->toBe((new DateTimeImmutable($membresia->creado_en))->getTimestamp());
+        ->and((new DateTimeImmutable(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->ocurrido_en))->getTimestamp())->toBe((new DateTimeImmutable($membresia->creado_en))->getTimestamp());
 });
 
 test('RN-20: la matrícula se busca sin distinguir mayúsculas ni espacios alrededor', function (string $matricula) {
@@ -234,7 +235,7 @@ test('HU-05: A cambia la posición de J1 en EA de medio a defensa y el historial
     /** @var TestCase $this */
     $m = mundoDeJugadores();
     $usuarioId = DB::table('usuarios')->where('correo', 'a@x.com')->value('id');
-    $membresia = DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->where('equipo_id', $m['ea'])->first();
+    $membresia = NoNulo::exigir(DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->where('equipo_id', $m['ea'])->first(), 'la membresía en EA');
     $medio = DB::table('posiciones')->where('codigo', 'medio')->value('id');
     $defensa = DB::table('posiciones')->where('codigo', 'defensa')->value('id');
 
@@ -242,16 +243,16 @@ test('HU-05: A cambia la posición de J1 en EA de medio a defensa y el historial
 
     expect($respuesta->json('datos.id'))->toBe($m['j1'])
         ->and($respuesta->json('datos.equipos'))->toBe([['equipo_id' => $m['ea'], 'nombre' => 'EA', 'categoria' => ['id' => $m['categoria'], 'nombre' => 'Sub-17'], 'posicion' => 'defensa']]);
-    $actual = DB::table('jugador_equipo')->where('id', $membresia->id)->first();
+    $actual = NoNulo::exigir(DB::table('jugador_equipo')->where('id', $membresia->id)->first(), 'la membresía actualizada');
     expect($actual->posicion_id)->toBe($defensa)
         ->and($actual->actualizado_por)->toBe($usuarioId);
 
     $historial = DB::table('jugador_equipo_historial')->where('jugador_equipo_id', $membresia->id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('actualizar')
-        ->and($historial[0]->usuario_id)->toBe($usuarioId)
-        ->and(json_decode($historial[0]->datos_anteriores, true))->toEqual(['jugador_id' => $m['j1'], 'equipo_id' => $m['ea'], 'posicion_id' => $medio, 'desde' => '2026-01-01', 'hasta' => null])
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqual(['jugador_id' => $m['j1'], 'equipo_id' => $m['ea'], 'posicion_id' => $defensa, 'desde' => '2026-01-01', 'hasta' => null]);
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('actualizar')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($usuarioId)
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_anteriores, true))->toEqual(['jugador_id' => $m['j1'], 'equipo_id' => $m['ea'], 'posicion_id' => $medio, 'desde' => '2026-01-01', 'hasta' => null])
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqual(['jugador_id' => $m['j1'], 'equipo_id' => $m['ea'], 'posicion_id' => $defensa, 'desde' => '2026-01-01', 'hasta' => null]);
 });
 
 test('HU-05: dos cambios seguidos dejan versiones consecutivas', function () {
@@ -268,7 +269,7 @@ test('HU-05: dos cambios seguidos dejan versiones consecutivas', function () {
 test('HU-05: la posición es de cada equipo: cambiar la de J3 en EA no toca su membresía en EB', function () {
     /** @var TestCase $this */
     $m = mundoDeJugadores();
-    $enEb = DB::table('jugador_equipo')->where('jugador_id', $m['j3'])->where('equipo_id', $m['eb'])->first();
+    $enEb = NoNulo::exigir(DB::table('jugador_equipo')->where('jugador_id', $m['j3'])->where('equipo_id', $m['eb'])->first(), 'la membresía de J3 en EB');
 
     asignacionCambiar($this, 'a@x.com', $m['ea'], $m['j3'], ['posicion' => 'medio'])->assertOk();
 
@@ -281,7 +282,7 @@ test('HU-05: la posición es de cada equipo: cambiar la de J3 en EA no toca su m
 test('HU-05: un cambio sin diferencia real responde 200 sin escribir historial ni tocar la fila', function () {
     /** @var TestCase $this */
     $m = mundoDeJugadores();
-    $antes = DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->first();
+    $antes = NoNulo::exigir(DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->first(), 'la membresía de J1');
 
     asignacionCambiar($this, 'a@x.com', $m['ea'], $m['j1'], ['posicion' => 'medio'])->assertOk()->assertJsonPath('datos.equipos.0.posicion', 'medio');
 
@@ -378,7 +379,7 @@ test('RNF-02: si falla el historial, el cambio de posición no se guarda', funct
     /** @var TestCase $this */
     $m = mundoDeJugadores();
     $sesion = sesionesIniciar($this, 'a@x.com');
-    $antes = DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->first();
+    $antes = NoNulo::exigir(DB::table('jugador_equipo')->where('jugador_id', $m['j1'])->first(), 'la membresía de J1');
     $propietario = DB::connection('propietario');
     esquemaMarcarSucio();
     $propietario->unprepared("create or replace function falla_historial_de_prueba() returns trigger language plpgsql as \$\$ begin raise exception 'historial_de_prueba_falla'; end \$\$");
