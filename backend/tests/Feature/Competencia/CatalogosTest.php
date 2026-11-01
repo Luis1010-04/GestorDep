@@ -6,6 +6,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Catálogos de Competencia (HU-28, docs/hitos/f1-h3.md §7.1). E1 y E2 son entrenadores; D es docente. */
@@ -180,7 +181,7 @@ test('HU-28 (§7.1 fila 7): E1 borra L1, que tiene un partido; el partido sigue 
 
     catalogoPeticion($this, 'DELETE', '/lugares/'.$c['l1'])->assertNoContent();
 
-    $lugar = DB::table('lugares')->where('id', $c['l1'])->first();
+    $lugar = NoNulo::exigir(DB::table('lugares')->where('id', $c['l1'])->first(), 'el lugar borrado');
     expect(DB::table('partidos')->where('id', $partido)->value('lugar_id'))->toBe($c['l1'])
         ->and($lugar->nombre)->toBe('Cancha norte')
         ->and($lugar->eliminado_en)->toBe('2026-09-01 15:00:00+00')
@@ -297,12 +298,12 @@ test('RNF-02: cada alta y cada borrado de catálogo escriben su historial con au
 
     $filas = DB::table("{$tabla}_historial")->where($columna, $id)->orderBy('version')->get();
     expect($filas)->toHaveCount(2)
-        ->and($filas[0]->operacion)->toBe('crear')
-        ->and($filas[0]->datos_anteriores)->toBeNull()
-        ->and(json_decode($filas[0]->datos_nuevos, true))->toMatchArray($cuerpo)
-        ->and($filas[1]->operacion)->toBe('eliminar')
-        ->and(json_decode($filas[1]->datos_anteriores, true))->toMatchArray($cuerpo)
-        ->and($filas[1]->datos_nuevos)->toBeNull();
+        ->and(NoNulo::exigir($filas[0], 'la fila 0 de $filas')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($filas[0], 'la fila 0 de $filas')->datos_anteriores)->toBeNull()
+        ->and(json_decode(NoNulo::exigir($filas[0], 'la fila 0 de $filas')->datos_nuevos, true))->toMatchArray($cuerpo)
+        ->and(NoNulo::exigir($filas[1], 'la fila 1 de $filas')->operacion)->toBe('eliminar')
+        ->and(json_decode(NoNulo::exigir($filas[1], 'la fila 1 de $filas')->datos_anteriores, true))->toMatchArray($cuerpo)
+        ->and(NoNulo::exigir($filas[1], 'la fila 1 de $filas')->datos_nuevos)->toBeNull();
     foreach ($filas as $fila) {
         expect($fila->usuario_id)->toBe($e1)
             ->and($fila->ocurrido_en)->toBe('2026-09-01 15:00:00+00');

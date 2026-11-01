@@ -6,6 +6,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Entrenamientos (HU-10, docs/hitos/f1-h3.md §7.2). Las horas locales son de America/Mexico_City (UTC-6). */
@@ -66,9 +67,9 @@ test('HU-10 (§7.2 fila 1): E1 crea un entrenamiento de A con L1 y responsable E
     ]]);
     $historial = DB::table('entrenamientos_historial')->where('entrenamiento_id', $id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->usuario_id)->toBe($m['e1'])
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toMatchArray(['equipo_id' => $m['a'], 'estado' => 'programado', 'responsable_id' => $m['e1']]);
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['e1'])
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toMatchArray(['equipo_id' => $m['a'], 'estado' => 'programado', 'responsable_id' => $m['e1']]);
 });
 
 test('HU-10 (§7.2 fila 2): otro entrenamiento en L1 de 17:30 a 18:30 se guarda con la advertencia empalme_de_lugar', function () {
@@ -96,7 +97,7 @@ test('HU-10 (§7.2 fila 3): E1 cambia la hora y entrenamientos_historial registr
     expect($respuesta->json('datos.inicia_en'))->toBe('2026-09-11T00:00:00+00:00')
         ->and($respuesta->json('datos.termina_en'))->toBe('2026-09-11T01:30:00+00:00')
         ->and($respuesta->json('datos.jugadores_del_equipo'))->toHaveCount(3);
-    $fila = DB::table('entrenamientos_historial')->where('entrenamiento_id', $id)->first();
+    $fila = NoNulo::exigir(DB::table('entrenamientos_historial')->where('entrenamiento_id', $id)->first(), 'el historial del entrenamiento');
     expect($fila->operacion)->toBe('actualizar')
         ->and($fila->usuario_id)->toBe($m['e1'])
         ->and($fila->ocurrido_en)->toBe('2026-09-01 15:00:00+00')

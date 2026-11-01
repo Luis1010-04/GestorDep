@@ -7,6 +7,7 @@ use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Compartido\Infraestructura\RelojFijo;
+use Tests\Ayudantes\NoNulo;
 
 const TABLAS_DE_COMPETENCIA = [
     'lugares', 'rivales', 'temporadas', 'torneos', 'entrenamientos', 'asistencias_entrenamiento', 'partidos', 'convocatorias',
@@ -386,7 +387,7 @@ test('RNF-02: el cambio en una tabla de Competencia y su historial se escriben e
 
     $escritor->registrar('lugares', 'lugar_id', $id, 'crear', null, ['nombre' => 'Cancha sur'], $alta('Cancha sur'));
 
-    $fila = DB::table('lugares_historial')->where('lugar_id', $id->valor())->first();
+    $fila = NoNulo::exigir(DB::table('lugares_historial')->where('lugar_id', $id->valor())->first(), 'el historial del lugar');
     expect($fila->usuario_id)->toBe($autor)
         ->and($fila->version)->toBe(1)
         ->and(json_decode($fila->datos_nuevos, true))->toBe(['nombre' => 'Cancha sur']);

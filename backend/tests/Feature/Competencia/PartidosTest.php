@@ -6,6 +6,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Partidos (HU-12 criterio 1, docs/hitos/f1-h3.md §7.4). La hora local es la de America/Mexico_City (UTC-6). */
@@ -78,9 +79,9 @@ test('HU-12 (§7.4 fila 1): E1 crea un partido oficial en T1 con TO1; temporada_
     ]]);
     $historial = DB::table('partidos_historial')->where('partido_id', $id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->usuario_id)->toBe($m['e1'])
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toMatchArray(['temporada_id' => $m['t1'], 'estado' => 'programado', 'tipo' => 'oficial']);
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['e1'])
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toMatchArray(['temporada_id' => $m['t1'], 'estado' => 'programado', 'tipo' => 'oficial']);
 });
 
 test('HU-12 (§7.4 fila 2): sin temporada que contenga la fecha, crear un partido da 422 sin_temporada en inicia_en', function () {
@@ -140,7 +141,7 @@ test('HU-12 (§7.4 fila 6, parcial hasta T07): E1 cancela un partido de A; el hi
 
     partidoPeticion($this, 'PATCH', "/partidos/$id", ['estado' => 'cancelado'])->assertOk()->assertJsonPath('datos.estado', 'cancelado');
 
-    $fila = DB::table('partidos_historial')->where('partido_id', $id)->first();
+    $fila = NoNulo::exigir(DB::table('partidos_historial')->where('partido_id', $id)->first(), 'el historial del partido');
     expect($fila->operacion)->toBe('actualizar')
         ->and($fila->usuario_id)->toBe($m['e1'])
         ->and(json_decode($fila->datos_anteriores, true)['estado'])->toBe('programado')
