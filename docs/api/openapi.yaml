@@ -3044,7 +3044,11 @@ paths:
                         enum: [presente, falta, falta_justificada]
       responses:
         '201':
-          description: Registros creados, en el orden recibido.
+          description: >-
+            Registros creados, en el orden recibido. Desde H5 (HU-11 c2) puede llevar advertencias
+            jugador_lesionado, una por cada jugador de la lista con estado oficial lesionado; su campo senala el
+            elemento de la lista (registros.N.jugador_id) y el mensaje no lleva datos del jugador
+            (docs/convenciones-api.md §4).
           content:
             application/json:
               schema:
@@ -3056,6 +3060,21 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/AsistenciaDeEntrenamiento'
+                  advertencias:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      required: [codigo, mensaje]
+                      properties:
+                        codigo:
+                          type: string
+                          enum: [jugador_lesionado]
+                        mensaje:
+                          type: string
+                        campo:
+                          type: string
+                          description: Elemento de la lista al que se refiere (por ejemplo, registros.0.jugador_id).
         '401':
           description: No hay sesion (codigo no_autenticado).
           content:
@@ -3657,7 +3676,10 @@ paths:
                   format: uuid
       responses:
         '201':
-          description: Jugador convocado.
+          description: >-
+            Jugador convocado. Desde H5 (HU-12 c3) puede llevar la advertencia jugador_lesionado si el jugador tiene
+            estado oficial lesionado, con campo jugador_id; la convocatoria se guarda igual y el mensaje no lleva
+            datos del jugador (docs/convenciones-api.md §4).
           content:
             application/json:
               schema:
@@ -3667,6 +3689,21 @@ paths:
                 properties:
                   datos:
                     $ref: '#/components/schemas/Convocatoria'
+                  advertencias:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      required: [codigo, mensaje]
+                      properties:
+                        codigo:
+                          type: string
+                          enum: [jugador_lesionado]
+                        mensaje:
+                          type: string
+                        campo:
+                          type: string
+                          description: Campo de la peticion al que se refiere (jugador_id).
         '401':
           description: No hay sesion (codigo no_autenticado).
           content:
@@ -5107,6 +5144,11 @@ components:
                 enum: [empalme_de_lugar]
               mensaje:
                 type: string
+              campo:
+                type: string
+                description: >-
+                  Opcional (docs/convenciones-api.md §4, desde H5). empalme_de_lugar no lo usa: la advertencia es de
+                  todo el entrenamiento.
     AsistenciaDeEntrenamiento:
       type: object
       additionalProperties: false
