@@ -4,6 +4,7 @@ use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsuariosDemoSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Tests\Ayudantes\NoNulo;
 
 beforeEach(function () {
     esquemaReiniciar();
@@ -39,7 +40,7 @@ test('CONSOLA: UsuariosDemoSeeder crea dos docentes y dos entrenadores y es idem
     (new UsuariosDemoSeeder)->run();
 
     $roles = DB::table('usuario_rol')->join('roles', 'roles.id', '=', 'usuario_rol.rol_id')->pluck('roles.codigo')->sort()->values()->all();
-    $usuario = DB::table('usuarios')->where('correo', UsuariosDemoSeeder::CORREO_ENTRENADOR_1)->first();
+    $usuario = NoNulo::exigir(DB::table('usuarios')->where('correo', UsuariosDemoSeeder::CORREO_ENTRENADOR_1)->first(), 'el entrenador 1 sembrado');
 
     expect(DB::table('usuarios')->count())->toBe(4)
         ->and($roles)->toBe(['docente', 'docente', 'entrenador', 'entrenador'])

@@ -12,6 +12,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 const CLAVE_CORRECTA = 'una-clave-larga-1';
@@ -100,7 +101,7 @@ test('HU-01: credenciales válidas devuelven el usuario y regeneran la sesión',
     $autenticada = DB::table('sessions')->where('user_id', $id)->first();
 
     expect($autenticada)->not->toBeNull()
-        ->and($autenticada->id)->not->toBe($idPrevio)
+        ->and(NoNulo::exigir($autenticada, 'la sesión autenticada')->id)->not->toBe($idPrevio)
         ->and(DB::table('sessions')->where('id', $idPrevio)->value('user_id'))->toBeNull();
 });
 
