@@ -10,6 +10,7 @@ use Src\Rendimiento\Dominio\RendimientoDePartido;
 use Src\Rendimiento\Dominio\RepositorioDeEvaluaciones;
 use Src\Rendimiento\Dominio\RepositorioDeRendimientos;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /**
@@ -306,7 +307,7 @@ test('HU-14 (§7.1 fila 11): E1 corrige la calificación de su rendimiento y el 
         ->assertJsonPath('datos.calificacion_general', 9)
         ->assertJsonPath('datos.minutos', 90);
 
-    $historial = DB::table('rendimientos_partido_historial')->where('rendimiento_id', $id)->where('operacion', 'actualizar')->first();
+    $historial = NoNulo::exigir(DB::table('rendimientos_partido_historial')->where('rendimiento_id', $id)->where('operacion', 'actualizar')->first(), 'el historial de la corrección');
     expect(DB::table('rendimientos_partido')->where('id', $id)->value('calificacion_general'))->toBe(9)
         ->and(json_decode($historial->datos_anteriores, true)['calificacion_general'])->toBe(7)
         ->and(json_decode($historial->datos_nuevos, true)['calificacion_general'])->toBe(9)
@@ -353,8 +354,8 @@ test('HU-14: E1 consulta el catálogo de métricas con sus posiciones, sin ver n
 
     /** @var list<array<string, mixed>> $metricas */
     $metricas = capturaPeticion($this, 'GET', '/metricas')->assertOk()->json('datos');
-    $goles = collect($metricas)->firstWhere('codigo', 'goles');
-    $pases = collect($metricas)->firstWhere('codigo', 'pases_completados');
+    $goles = NoNulo::exigir(collect($metricas)->firstWhere('codigo', 'goles'), 'la métrica goles');
+    $pases = NoNulo::exigir(collect($metricas)->firstWhere('codigo', 'pases_completados'), 'la métrica pases_completados');
 
     expect(array_column($metricas, 'codigo'))->toBe(['asistencias', 'atajadas', 'balones_perdidos', 'faltas_cometidas', 'goles', 'goles_recibidos', 'pases_completados', 'recuperaciones', 'tiros_a_porteria'])
         ->and($goles['tipo_dato'])->toBe('entero')
@@ -488,7 +489,7 @@ test('RNF-02: corregir quitando y volviendo a poner una métrica opcional borra 
 
     capturaPeticion($this, 'PATCH', "/rendimientos/$id", ['metricas' => array_slice($completas, 0, 3)])->assertOk()->assertJsonCount(3, 'datos.metricas');
 
-    $eliminado = DB::table('valores_metrica')->where('rendimiento_id', $id)->where('metrica_id', capturaMetrica('goles_recibidos'))->first();
+    $eliminado = NoNulo::exigir(DB::table('valores_metrica')->where('rendimiento_id', $id)->where('metrica_id', capturaMetrica('goles_recibidos'))->first(), 'el valor borrado');
     expect($eliminado->eliminado_en)->not->toBeNull()
         ->and($eliminado->eliminado_por)->toBe($m['e1'])
         ->and(DB::table('valores_metrica_historial')->where('valor_metrica_id', $eliminado->id)->where('operacion', 'eliminar')->count())->toBe(1);

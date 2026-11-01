@@ -6,6 +6,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /**
@@ -117,12 +118,12 @@ test('HU-16 (§7.3 fila 6): una captura que cambia el resultado inserta una eval
     /** @var TestCase $this */
     $m = umbralMundo();
     desempenoCapturar($this, $m['a'], [7, 7, 8, 6]);
-    $ultimaAntes = DB::table('evaluaciones_rendimiento')->orderByDesc('calculado_en')->orderByDesc('id')->first();
+    $ultimaAntes = NoNulo::exigir(DB::table('evaluaciones_rendimiento')->orderByDesc('calculado_en')->orderByDesc('id')->first(), 'la evaluación anterior');
     desempenoReloj('2026-10-02 09:30:00');
 
     desempenoCapturar($this, $m['a'], [5], diaInicial: 20);
 
-    $ultima = DB::table('evaluaciones_rendimiento')->orderByDesc('calculado_en')->orderByDesc('id')->first();
+    $ultima = NoNulo::exigir(DB::table('evaluaciones_rendimiento')->orderByDesc('calculado_en')->orderByDesc('id')->first(), 'la última evaluación');
     expect(desempenoEvaluaciones())->toBe(5)
         ->and($ultimaAntes->resultado)->toBe('datos_insuficientes')
         ->and($ultimaAntes->promedio)->toBeNull()
@@ -143,7 +144,7 @@ test('HU-16 (§7.3 fila 7): un cambio de umbral inserta una evaluación con el u
     sesionesPeticion($this, 'PUT', "/api/v1/equipos/{$m['a']}/jugadores/{$m['f1']}/umbral", ['calificacion_minima' => '7.00', 'ventana_partidos' => 3], sesionesIniciar($this, 'e1@x.com'))
         ->assertOk();
 
-    $ultima = DB::table('evaluaciones_rendimiento')->orderByDesc('calculado_en')->orderByDesc('id')->first();
+    $ultima = NoNulo::exigir(DB::table('evaluaciones_rendimiento')->orderByDesc('calculado_en')->orderByDesc('id')->first(), 'la última evaluación');
     expect(desempenoEvaluaciones())->toBe($antes + 1)
         ->and([$ultima->umbral_id, $ultima->calificacion_minima, $ultima->ventana_partidos, $ultima->resultado, $ultima->promedio])
         ->toBe([(string) DB::table('umbrales_rendimiento')->whereNull('vigente_hasta')->value('id'), '7.00', 3, 'no_pasa', '6.67']);
@@ -200,7 +201,7 @@ test('HU-16 (v1.0.5): al corregir el rendimiento de un jugador que ya no está e
 
     sesionesPeticion($this, 'PATCH', "/api/v1/rendimientos/{$id}", ['calificacion_general' => 8], sesionesIniciar($this, 'e3@x.com'))->assertOk();
 
-    $ultima = DB::table('evaluaciones_rendimiento')->orderByDesc('calculado_en')->orderByDesc('id')->first();
+    $ultima = NoNulo::exigir(DB::table('evaluaciones_rendimiento')->orderByDesc('calculado_en')->orderByDesc('id')->first(), 'la última evaluación');
     expect(desempenoEvaluaciones())->toBe(2)
         ->and([$ultima->plantilla_id, $ultima->umbral_id, $ultima->partidos_considerados])->toBe([umbralPlantillaDeFabrica('delantero'), null, 1]);
 });
