@@ -1,7 +1,7 @@
 # Progreso de H5
 
 **Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.3
-**Estado:** T00 terminada; espera aprobación del responsable antes de T01. Sin push, PR ni etiquetas.
+**Estado:** T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó: la segunda corrida de `make verificar` duró 955 s, más de 15 minutos. **T01 no empieza** hasta que el responsable elija una opción de §1.10. Sin push, PR ni etiquetas.
 
 ## 1. F1-H5-T00: PHPStan nivel 8
 
@@ -52,7 +52,7 @@ Antes de las corridas se bajaron los contenedores que habían quedado levantados
 | Referencia: última fila de `f1-h4-progreso.md` (T06) | 1 424 | 512 s | 675 s |
 | Cierre de T00 | 1 432 | **647 s** | 990 s |
 
-Pest tardó 135 s más que la referencia de H4. Las pruebas son las mismas salvo las 2 del ayudante y las que se hayan agregado al cierre de H4, y el cambio de T00 no agrega consultas: solo envuelve valores. La diferencia cae en la variación ya observada en H4, donde la misma suite osciló entre 495 y 595 s. Aun así, 990 s de `make verificar` superan el aviso de 13 minutos que usa `f1-h4-progreso.md`. La parte que no es Pest también subió (343 s frente a 163 s); ahí corre PHPStan, que esta vez arrancó sin caché tras recrear los contenedores. Queda para vigilar en T01.
+Pest tardó 135 s más que la referencia de H4. La explicación, con datos, está en §1.9.
 
 Corridas parciales de Pest (con `bin/con-candado.sh`, cada una por separado), hechas después de corregir cada contexto:
 
@@ -79,3 +79,88 @@ Corridas parciales de Pest (con `bin/con-candado.sh`, cada una por separado), he
 ### 1.7 Fuera de alcance
 
 - Nota de RNF-02 para la auditoría: los catálogos `rangos_mediciones_corporales` y `tipos_prueba` no tienen historial (`f1-h5-plan-t00.md` §5).
+
+### 1.8 Segunda medición de `make verificar`
+
+Por decisión del responsable, esta corrida se hizo **sin bajar los contenedores**, para medir con la caché de PHPStan de la primera corrida. Bajarlos la habría borrado (§1.8.2). Antes se confirmó que los cuatro contenedores seguían arriba desde la primera corrida y que `/tmp/phpstan/cache` existía (43 MB, 2 657 archivos). No hubo nada en paralelo.
+
+#### 1.8.1 Tiempos por etapa
+
+Cada línea de la salida llevó una marca de tiempo. Las fronteras se toman de la primera y la última línea de cada etapa.
+
+| Etapa | Desde → hasta | Tiempo |
+|---|---|---:|
+| Arranque (`docker compose exec`, candado) | inicio → aviso del vigilante | 8 s |
+| Pint (`--test`, 704 archivos) | → `PASS … 704 files` | 70 s |
+| **PHPStan** | → `[OK] No errors` | **114 s** |
+| **Pest** (1 432 pruebas, con cobertura) | → `Duration: 710.60s` | **712 s** |
+| Informe de cobertura de Pest (HTML, Clover y texto) | → tabla final | 50 s |
+| `bin/verificar-cobertura.php` y `composer audit` | → fin | 0,4 s |
+| **Total** | | **955 s (15 min 55 s)**, código 0 |
+
+Pest es el 75 % del total y PHPStan el 12 %.
+
+#### 1.8.2 Caché de PHPStan
+
+- **El log de `make verificar` no dice si se usó la caché:** `composer verificar` corre PHPStan con `--no-progress` y sin `-v`, y PHPStan solo informa de la caché en modo detallado.
+- **La caché no es persistente:** vive en `/tmp/phpstan` (`sys_get_temp_dir()`), dentro de la capa del contenedor `app`, sin volumen. `make bajar` (`docker compose down`) borra el contenedor y con él la caché, así que cada corrida que empieza después de bajar los contenedores arranca en frío.
+- **Dentro de un mismo contenedor, la caché funciona.** Tras la segunda corrida, una ejecución de diagnóstico con `-vv` dio «Result cache restored. 0 files will be reanalysed» y tardó 5 s. Con un archivo cambiado, 11 s.
+- **En la segunda corrida no sirvió:** PHPStan tardó 114 s, lo mismo que un análisis completo (95 s y 114 s en frío), aunque la caché de la primera corrida estaba en el contenedor. Durante esa etapa, a las 19:39:10, PHPStan escribió el marcador `cache/PHPStan/cache-cleared`, y al terminar reescribió `resultCache.php`. **No encontré qué la invalidó.** Descarté cuatro causas con corridas de diagnóstico:
+  - cambiar la fecha de `phpstan.neon`: 0 archivos reanalizados;
+  - correr PHPStan a través de Composer: 0;
+  - editar `ConfiguracionDePhpstanTest.php`: 1;
+  - regenerar los manifiestos de `bootstrap/cache/`: 1.
+
+  Entre las dos corridas también pasaron `make mutacion`, `make fresh` y `make humo`, y no se probaron una por una.
+
+#### 1.8.3 Tope del candado
+
+`bin/con-candado.sh` corta `make verificar` a los 20 minutos (PT-07). Con la variación de Pest de §1.9, el total pudo haber llegado a unos 1 040 s: 798 s de Pest en la corrida B, más 245 s del resto. Eso deja menos de 3 minutos de margen.
+
+### 1.9 Por qué Pest subió de 512 s a 647 s
+
+**Corridas de hoy**, todas con 1 430 o 1 432 pruebas y cobertura:
+
+| Corrida | Código | Pest |
+|---|---|---:|
+| `make verificar` 1 (contenedores recién creados) | rama | 647 s |
+| `make verificar` 2 | rama | 711 s |
+| A: mismo comando de Pest que `verificar` | `main` (`a34283e`, la base de H5 sin T00) | **547 s** |
+| B: el mismo comando, justo después de A | rama (`510a0e3`) | **798 s** |
+
+Entre H4-T06 (512 s) y `main` solo cambió en `backend/` el guion `bin/con-candado.sh`. El guion no consume recursos durante la corrida: el vigilante se desactiva en cuanto ve la entrada cerrada. Las pruebas de `main` son las de H4.
+
+**Separación por archivo.** Los tiempos por prueba del log se sumaron por archivo de prueba y se separaron en dos grupos:
+
+- los 39 o 40 archivos que T00 cambió;
+- los 80 que no tocó, con el mismo código en las dos ramas.
+
+| Comparación | Archivos cambiados | Archivos sin cambios |
+|---|---|---|
+| A (`main`) → B (rama) | 341 → 505 s (×1,48) | 199 → 283 s (×1,42) |
+| A (`main`) → `verificar` 1 | 341 → 390 s (×1,14) | 199 → 241 s (×1,21) |
+| `verificar` 1 → `verificar` 2 (mismo código) | 390 → 431 s (×1,10) | 241 → 266 s (×1,11) |
+
+**Conclusión, con estos datos:**
+
+1. **Los archivos que T00 no tocó, con el mismo código, también se volvieron más lentos.** Subieron entre un 11 % y un 42 % de una corrida a otra; `ArquitecturaTest`, que solo recorre archivos y no usa la base, osciló entre 32,5 y 50,9 s. El aumento viene del entorno de ejecución (Docker Desktop sobre Windows, con el código en un montaje del anfitrión), no del código.
+2. **Los archivos cambiados suben en la misma proporción que los demás:** ×1,48 frente a ×1,42 en A→B y ×1,14 frente a ×1,21 en A→`verificar` 1. Si siguieran el factor de los archivos sin cambios, el efecto de T00 queda entre −23 s y +21 s, dentro de lo que el mismo código varía de una corrida a otra (+64 s entre `verificar` 1 y 2).
+3. `main` tardó 547 s hoy frente a 512 s en H4-T06 con el mismo código de pruebas. El entorno también explica esa parte.
+
+No identifiqué qué hace más lento al entorno de una corrida a otra (carga del anfitrión, la máquina virtual de Docker o el montaje de Windows); eso requeriría medirlo fuera de Pest.
+
+### 1.10 Condición de parada: opciones para el responsable
+
+La segunda corrida duró 955 s, por encima de 15 minutos, así que **no empiezo T01**. Estas son las opciones que pidió el responsable, con los datos de §1.8 y §1.9; no elijo ninguna.
+
+| Opción | Qué cambia | Efecto esperado según las mediciones | Qué hay que tener en cuenta |
+|---|---|---|---|
+| (i) Persistir la caché de PHPStan en un volumen del contenedor | Un volumen para el `tmpDir` de PHPStan en `docker-compose.yml` (o un `tmpDir` en `phpstan.neon` que apunte a él) | Hasta unos 110 s menos por corrida (de 114 s a 5–11 s), **solo si** la caché sigue siendo válida de una corrida a la siguiente | En la segunda corrida la caché no sirvió dentro del mismo contenedor y no se sabe por qué (§1.8.2). Hay que encontrar la causa, o el volumen no ahorra nada. Toca `docker-compose.yml`, que no está en las rutas de T00. No reduce Pest, que es el 75 % |
+| (ii) Mover PHPStan a un job separado en CI | El workflow de CI corre PHPStan en paralelo con Pest | En CI, el tiempo de pared baja en lo que dura PHPStan (unos 114 s en frío). En local no cambia nada, salvo que también se separe `composer verificar` | `make verificar` dejaría de ser el árbitro único en local si PHPStan sale de él. Toca `.github/workflows/` y quizá `composer.json` |
+| (iii) Subir el límite | La condición de parada de 15 minutos (y el aviso de 13) | Ningún ahorro. El total medido osciló entre 955 y 990 s, y con la variación de Pest (547–798 s) podría llegar a unos 1 050 s | El tope de 20 minutos de `bin/con-candado.sh` queda a unos 2,5 minutos. Un límite nuevo debería contar con esa variación, o tocar también el tope |
+
+Ninguna de las tres ataca la causa principal: la variación de Pest según el entorno, de 547 a 798 s con casi el mismo código.
+
+### 1.11 Incidencia durante la medición A/B
+
+Para la medición A, la copia de trabajo se pasó a `a34283e` en modo detached y después se volvió a `hito/f1-h5`. En esa corrida, Git Bash convirtió la ruta `/tmp/ab-main.xml` del argumento `--coverage-clover` en una ruta de Windows y la cobertura se escribió en una carpeta nueva dentro de `backend/`. La carpeta se revisó (solo contenía ese XML) y se borró por su nombre exacto; la corrida B se hizo con `MSYS_NO_PATHCONV=1`. Al revisar la carpeta, un `du` con un glob mal formado empezó a recorrer la raíz `C:\` de Windows. Era solo lectura y se detuvo; no se borró nada fuera de esa carpeta. Al terminar, `git status` estaba limpio.
