@@ -8,7 +8,8 @@ on:
 
 jobs:
   verificar:
-    runs-on: ubuntu-latest
+    # Version fija (PT-01): `ubuntu-latest` pasa a Ubuntu 26.04 en noviembre de 2026; cambiarla es una decision aparte
+    runs-on: ubuntu-24.04
 
     services:
       db:
@@ -39,7 +40,7 @@ jobs:
         working-directory: backend
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: shivammathur/setup-php@v2
         with:
