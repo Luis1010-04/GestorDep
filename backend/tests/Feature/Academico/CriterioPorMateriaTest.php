@@ -6,6 +6,7 @@ use Illuminate\Testing\TestResponse;
 use Src\Compartido\Dominio\Eventos\CriterioDeMateriaModificado;
 use Src\Compartido\Dominio\Identificador;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Criterio de aprobación por materia (HU-08, RN-03, DD-47). Datos de partida de docs/hitos/f1-h2.md §7.0. */
@@ -39,12 +40,12 @@ test('HU-08 (§7.6 fila 2): D1 define 6.00, queda ámbito materia con historial 
     $respuesta = criterioDefinir($this, $m['m1'], ['calificacion_minima' => '6.00'])->assertOk();
 
     expect($respuesta->json('datos'))->toBe(['ambito' => 'materia', 'calificacion_minima' => '6.00', 'vigente_desde' => '2026-03-10']);
-    $criterio = DB::table('criterios_aprobacion')->where('materia_id', $m['m1'])->first();
+    $criterio = NoNulo::exigir(DB::table('criterios_aprobacion')->where('materia_id', $m['m1'])->first(), 'el criterio de la materia');
     $historial = DB::table('criterios_aprobacion_historial')->where('criterio_aprobacion_id', $criterio->id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->usuario_id)->toBe($m['d1'])
-        ->and($historial[0]->ocurrido_en)->toStartWith('2026-03-10 12:00:00')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['d1'])
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->ocurrido_en)->toStartWith('2026-03-10 12:00:00')
         ->and($criterio->creado_por)->toBe($m['d1']);
     sesionesPeticion($this, 'GET', '/api/v1/materias/'.$m['m1'], idDeSesion: sesionesIniciar($this, 'd1@x.com'))
         ->assertJsonPath('datos.criterio_aplicado', ['ambito' => 'materia', 'calificacion_minima' => '6.00']);
@@ -58,8 +59,8 @@ test('HU-08 (§7.6 fila 3): un segundo PUT cierra el anterior y crea el nuevo, c
 
     criterioDefinir($this, $m['m1'], ['calificacion_minima' => '8.00'])->assertOk()->assertJsonPath('datos.calificacion_minima', '8.00');
 
-    $cerrado = DB::table('criterios_aprobacion')->where('id', $primero)->first();
-    $nuevo = DB::table('criterios_aprobacion')->where('materia_id', $m['m1'])->whereNull('vigente_hasta')->first();
+    $cerrado = NoNulo::exigir(DB::table('criterios_aprobacion')->where('id', $primero)->first(), 'el criterio cerrado');
+    $nuevo = NoNulo::exigir(DB::table('criterios_aprobacion')->where('materia_id', $m['m1'])->whereNull('vigente_hasta')->first(), 'el criterio vigente');
     expect($cerrado->vigente_hasta)->toBe('2026-03-10')
         ->and($nuevo->calificacion_minima)->toBe('8.00')->and($nuevo->vigente_desde)->toBe('2026-03-10')
         ->and(criterioVigentesDe($m['m1']))->toBe(1)
@@ -67,8 +68,8 @@ test('HU-08 (§7.6 fila 3): un segundo PUT cierra el anterior y crea el nuevo, c
     $deCerrado = DB::table('criterios_aprobacion_historial')->where('criterio_aprobacion_id', $primero)->orderBy('version')->pluck('operacion')->all();
     $deNuevo = DB::table('criterios_aprobacion_historial')->where('criterio_aprobacion_id', $nuevo->id)->pluck('operacion')->all();
     expect($deCerrado)->toBe(['crear', 'actualizar'])->and($deNuevo)->toBe(['crear']);
-    $cierre = DB::table('criterios_aprobacion_historial')->where('criterio_aprobacion_id', $primero)->where('operacion', 'actualizar')->first();
-    $alta = DB::table('criterios_aprobacion_historial')->where('criterio_aprobacion_id', $nuevo->id)->first();
+    $cierre = NoNulo::exigir(DB::table('criterios_aprobacion_historial')->where('criterio_aprobacion_id', $primero)->where('operacion', 'actualizar')->first(), 'el historial del cierre');
+    $alta = NoNulo::exigir(DB::table('criterios_aprobacion_historial')->where('criterio_aprobacion_id', $nuevo->id)->first(), 'el historial del alta');
     expect($cierre->ocurrido_en)->toBe($alta->ocurrido_en)
         ->and(json_decode($cierre->datos_anteriores, true)['vigente_hasta'])->toBeNull()
         ->and(json_decode($cierre->datos_nuevos, true)['vigente_hasta'])->toBe('2026-03-10');
@@ -182,7 +183,7 @@ test('RNF-02 (§7.6 fila 10): si falla el historial no queda criterio nuevo ni c
     sesionesPeticion($this, 'PUT', '/api/v1/materias/'.$m['m1'].'/criterio', ['calificacion_minima' => '8.00'], $sesion)
         ->assertStatus(500)->assertJsonPath('codigo', 'error_interno');
 
-    $vigente = DB::table('criterios_aprobacion')->where('materia_id', $m['m1'])->whereNull('vigente_hasta')->first();
+    $vigente = NoNulo::exigir(DB::table('criterios_aprobacion')->where('materia_id', $m['m1'])->whereNull('vigente_hasta')->first(), 'el criterio vigente');
     expect(DB::table('criterios_aprobacion')->where('materia_id', $m['m1'])->count())->toBe(1)
         ->and($vigente->calificacion_minima)->toBe('6.00')
         ->and(DB::table('criterios_aprobacion_historial')->count())->toBe(1);

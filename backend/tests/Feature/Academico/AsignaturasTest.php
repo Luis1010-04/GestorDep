@@ -9,6 +9,7 @@ use Src\Academico\Dominio\RepositorioDeAsignaturas;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 beforeEach(function () {
@@ -32,7 +33,7 @@ test('HU-28 (§7.2 fila 1): un docente crea MAT-101 Matemáticas grado 1', funct
 
     expect($respuesta->json('datos'))->toMatchArray(['clave' => 'MAT-101', 'nombre' => 'Matemáticas', 'grado' => 1])
         ->and(array_keys($respuesta->json('datos')))->toBe(['id', 'clave', 'nombre', 'grado', 'actualizado_en']);
-    $fila = DB::table('asignaturas')->where('id', $respuesta->json('datos.id'))->first();
+    $fila = NoNulo::exigir(DB::table('asignaturas')->where('id', $respuesta->json('datos.id'))->first(), 'la asignatura creada');
     expect($fila->creado_por)->toBe(DB::table('usuarios')->where('correo', 'd1@x.com')->value('id'));
 });
 
@@ -110,7 +111,7 @@ test('HU-28 (§7.2 fila 6): borrar da 204, se puede crear la misma clave y una m
     sesionesPeticion($this, 'DELETE', "/api/v1/asignaturas/$id", idDeSesion: $sesion)->assertNoContent();
 
     sesionesPeticion($this, 'GET', '/api/v1/asignaturas', idDeSesion: $sesion)->assertJsonPath('meta.total', 0);
-    $fila = DB::table('asignaturas')->where('id', $id)->first();
+    $fila = NoNulo::exigir(DB::table('asignaturas')->where('id', $id)->first(), 'la asignatura borrada');
     expect($fila->eliminado_en)->not->toBeNull()->and($fila->eliminado_por)->toBe($docente)
         ->and(DB::table('materias')->join('asignaturas', 'asignaturas.id', '=', 'materias.asignatura_id')->value('asignaturas.clave'))->toBe('MAT-101');
     // La materia que la usa la sigue mostrando por la API (auditoría de C2, M-3).

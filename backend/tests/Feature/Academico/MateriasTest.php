@@ -7,6 +7,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /**
@@ -67,16 +68,16 @@ test('HU-06 (§7.3 fila 1): D1 crea una materia para S2 y P1 y queda como su doc
     ])->and(array_keys($respuesta->json('datos')))->toBe(['id', 'asignatura', 'periodo', 'criterio_aplicado', 'actualizado_en']);
 
     $id = $respuesta->json('datos.id');
-    $fila = DB::table('materias')->where('id', $id)->first();
+    $fila = NoNulo::exigir(DB::table('materias')->where('id', $id)->first(), 'la materia creada');
     expect($fila->docente_id)->toBe($m['d1'])->and($fila->creado_por)->toBe($m['d1']);
 
     $historial = DB::table('materias_historial')->where('materia_id', $id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->version)->toBe(1)
-        ->and($historial[0]->usuario_id)->toBe($m['d1'])
-        ->and($historial[0]->datos_anteriores)->toBeNull()
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqual(['asignatura_id' => $m['s2'], 'periodo_id' => $m['p1'], 'docente_id' => $m['d1']]);
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->version)->toBe(1)
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['d1'])
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_anteriores)->toBeNull()
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqual(['asignatura_id' => $m['s2'], 'periodo_id' => $m['p1'], 'docente_id' => $m['d1']]);
 });
 
 test('HU-06 (§7.3 fila 2): repetir asignatura y periodo da 409 materia_duplicada y no deja historial', function () {

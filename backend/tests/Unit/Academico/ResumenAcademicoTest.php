@@ -7,6 +7,7 @@ use Src\Academico\Dominio\MateriaEvaluada;
 use Src\Academico\Dominio\NivelDeRiesgo;
 use Src\Academico\Dominio\ResumenAcademico;
 use Src\Compartido\Dominio\NumeroDecimal;
+use Tests\Ayudantes\NoNulo;
 
 /**
  * @param  list<string|null>  $calificaciones
@@ -25,7 +26,7 @@ function resumenDePrueba(array $calificaciones, ?ConteoDeAsistencia $asistencia 
 test('RN-04 (§7.9 promedio fila 1): 8.00 y 9.00 dan 8.50 y el dato está completo', function () {
     $resumen = resumenDePrueba(['8.00', '9.00']);
 
-    expect($resumen->promedio()->comoCadena())->toBe('8.50')
+    expect(NoNulo::exigir($resumen->promedio(), 'el promedio')->comoCadena())->toBe('8.50')
         ->and($resumen->materiasSinCalificar())->toBe(0)
         ->and($resumen->datoIncompleto())->toBeFalse();
 });
@@ -33,7 +34,7 @@ test('RN-04 (§7.9 promedio fila 1): 8.00 y 9.00 dan 8.50 y el dato está comple
 test('RN-04 (§7.9 promedio fila 2): una materia sin calificar deja el dato incompleto', function () {
     $resumen = resumenDePrueba(['8.00', '9.00', null]);
 
-    expect($resumen->promedio()->comoCadena())->toBe('8.50')
+    expect(NoNulo::exigir($resumen->promedio(), 'el promedio')->comoCadena())->toBe('8.50')
         ->and($resumen->materiasSinCalificar())->toBe(1)
         ->and($resumen->datoIncompleto())->toBeTrue();
 });
@@ -51,7 +52,7 @@ test('RN-04 (§7.9 promedio fila 3): sin calificaciones el promedio y el nivel s
 test('RN-02 (§7.9 promedio fila 4): 7.49 y 7.50 dan 7.50 y ninguna reprobada', function () {
     $resumen = resumenDePrueba(['7.49', '7.50']);
 
-    expect($resumen->promedio()->comoCadena())->toBe('7.50')
+    expect(NoNulo::exigir($resumen->promedio(), 'el promedio')->comoCadena())->toBe('7.50')
         ->and($resumen->materiasReprobadas())->toBe(0)
         ->and($resumen->datoIncompleto())->toBeFalse();
 });
@@ -59,14 +60,14 @@ test('RN-02 (§7.9 promedio fila 4): 7.49 y 7.50 dan 7.50 y ninguna reprobada', 
 test('RN-02 (§7.9 promedio fila 5): 7.00, 7.00 y 8.00 dan 7.33', function () {
     $resumen = resumenDePrueba(['7.00', '7.00', '8.00']);
 
-    expect($resumen->promedio()->comoCadena())->toBe('7.33')
+    expect(NoNulo::exigir($resumen->promedio(), 'el promedio')->comoCadena())->toBe('7.33')
         ->and($resumen->datoIncompleto())->toBeFalse();
 });
 
 test('RN-02 (§7.9 promedio fila 6): una sola materia con 6.00 da 6.00, una reprobada y en_riesgo', function () {
     $resumen = resumenDePrueba(['6.00']);
 
-    expect($resumen->promedio()->comoCadena())->toBe('6.00')
+    expect(NoNulo::exigir($resumen->promedio(), 'el promedio')->comoCadena())->toBe('6.00')
         ->and($resumen->materiasReprobadas())->toBe(1)
         ->and($resumen->nivelRiesgo())->toBe(NivelDeRiesgo::EnRiesgo);
 });
@@ -97,11 +98,11 @@ test('RN-04: dos reprobadas con buen promedio dan en_riesgo y una da en_observac
 test('RN-05: la asistencia no entra en el nivel de riesgo', function () {
     $resumen = resumenDePrueba(['9.00'], new ConteoDeAsistencia(0, 0, 10));
 
-    expect($resumen->porcentajeAsistencia()->comoCadena())->toBe('0.00')
+    expect(NoNulo::exigir($resumen->porcentajeAsistencia(), 'el porcentaje de asistencia')->comoCadena())->toBe('0.00')
         ->and($resumen->nivelRiesgo())->toBe(NivelDeRiesgo::SinRiesgo);
 });
 
 test('RN-05: el resumen copia el porcentaje de asistencia y es nulo sin registros', function () {
-    expect(resumenDePrueba(['9.00'], new ConteoDeAsistencia(8, 0, 2))->porcentajeAsistencia()->comoCadena())->toBe('80.00')
+    expect(NoNulo::exigir(resumenDePrueba(['9.00'], new ConteoDeAsistencia(8, 0, 2))->porcentajeAsistencia(), 'el porcentaje de asistencia')->comoCadena())->toBe('80.00')
         ->and(resumenDePrueba(['9.00'])->porcentajeAsistencia())->toBeNull();
 });

@@ -12,6 +12,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Asistencia a clase (HU-07 criterio 3, RN-05, DD-44, DD-50, DD-52, DD-55). Datos de partida de docs/hitos/f1-h2.md §7.0. */
@@ -48,10 +49,10 @@ test('HU-07 (§7.8 fila 1): D1 registra presente el 2026-03-09 en I1, con histor
     expect(DB::table('asistencias_clase')->where('id', $id)->value('creado_por'))->toBe($m['d1']);
     $historial = DB::table('asistencias_clase_historial')->where('asistencia_clase_id', $id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->version)->toBe(1)
-        ->and($historial[0]->usuario_id)->toBe($m['d1'])
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqual(['inscripcion_id' => $m['i1'], 'fecha' => '2026-03-09', 'estado' => 'presente']);
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->version)->toBe(1)
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['d1'])
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqual(['inscripcion_id' => $m['i1'], 'fecha' => '2026-03-09', 'estado' => 'presente']);
     Event::assertDispatchedTimes(AsistenciaDeClaseRegistrada::class, 1);
     Event::assertDispatched(AsistenciaDeClaseRegistrada::class, fn (AsistenciaDeClaseRegistrada $e) => $e->inscripcionId === $m['i1'] && $e->materiaId === $m['m1'] && $e->jugadorId === $m['j1']);
 });
@@ -100,11 +101,11 @@ test('HU-07 (§7.8 fila 4): PATCH a falta_justificada responde 200 y escribe act
 
     $historial = DB::table('asistencias_clase_historial')->where('asistencia_clase_id', $id)->orderBy('version')->get();
     expect($historial)->toHaveCount(2)
-        ->and($historial[1]->operacion)->toBe('actualizar')
-        ->and($historial[1]->version)->toBe(2)
-        ->and($historial[1]->usuario_id)->toBe($m['d1'])
-        ->and(json_decode($historial[1]->datos_anteriores, true))->toEqual(['inscripcion_id' => $m['i1'], 'fecha' => '2026-03-09', 'estado' => 'falta'])
-        ->and(json_decode($historial[1]->datos_nuevos, true))->toEqual(['inscripcion_id' => $m['i1'], 'fecha' => '2026-03-09', 'estado' => 'falta_justificada']);
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->operacion)->toBe('actualizar')
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->version)->toBe(2)
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->usuario_id)->toBe($m['d1'])
+        ->and(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_anteriores, true))->toEqual(['inscripcion_id' => $m['i1'], 'fecha' => '2026-03-09', 'estado' => 'falta'])
+        ->and(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_nuevos, true))->toEqual(['inscripcion_id' => $m['i1'], 'fecha' => '2026-03-09', 'estado' => 'falta_justificada']);
     Event::assertDispatchedTimes(AsistenciaDeClaseRegistrada::class, 1);
 });
 

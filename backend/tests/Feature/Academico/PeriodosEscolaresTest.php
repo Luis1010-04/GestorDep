@@ -11,6 +11,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 beforeEach(function () {
@@ -49,7 +50,7 @@ test('HU-28 (§7.1 fila 1): un docente crea un periodo futuro, no vigente, con e
         'nombre' => '2026-2', 'fecha_inicio' => '2026-08-03', 'fecha_fin' => '2026-12-18', 'vigente' => false,
         'actualizado_en' => '2026-03-10T12:00:00+00:00',
     ])->and(array_keys($respuesta->json('datos')))->toBe(['id', 'nombre', 'fecha_inicio', 'fecha_fin', 'vigente', 'actualizado_en']);
-    $fila = DB::table('periodos_escolares')->where('id', $respuesta->json('datos.id'))->first();
+    $fila = NoNulo::exigir(DB::table('periodos_escolares')->where('id', $respuesta->json('datos.id'))->first(), 'el periodo creado');
     expect($fila->creado_por)->toBe(DB::table('usuarios')->where('correo', 'd1@x.com')->value('id'));
 });
 
@@ -164,7 +165,7 @@ test('HU-28 (§7.1 fila 8): borrar P0 da 204, deja de listarse y una materia que
     sesionesPeticion($this, 'DELETE', '/api/v1/periodos-escolares/'.$ids['p0'], idDeSesion: $sesion)->assertNoContent();
 
     sesionesPeticion($this, 'GET', '/api/v1/periodos-escolares', idDeSesion: $sesion)->assertJsonPath('meta.total', 2);
-    $fila = DB::table('periodos_escolares')->where('id', $ids['p0'])->first();
+    $fila = NoNulo::exigir(DB::table('periodos_escolares')->where('id', $ids['p0'])->first(), 'el periodo borrado');
     expect($fila->eliminado_en)->not->toBeNull()
         ->and($fila->eliminado_por)->toBe($docente)
         ->and(DB::table('materias')->join('periodos_escolares', 'periodos_escolares.id', '=', 'materias.periodo_id')->value('periodos_escolares.nombre'))->toBe('2025-2');

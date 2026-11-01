@@ -5,6 +5,7 @@ use Src\Academico\Dominio\CalificacionDeMateria;
 use Src\Academico\Dominio\CriterioDeAprobacion;
 use Src\Academico\Dominio\MateriaEvaluada;
 use Src\Compartido\Dominio\NumeroDecimal;
+use Tests\Ayudantes\NoNulo;
 
 function dMat(string $texto): NumeroDecimal
 {
@@ -27,7 +28,7 @@ test('RN-01 (§7.9 aprobada fila 2): 7.00 con criterio general 7.00 aprueba', fu
     $materia = new MateriaEvaluada(dMat('7.00'), criterioDeMateria(AmbitoDeCriterio::General, '7.00'));
 
     expect($materia->aprobada())->toBeTrue()
-        ->and($materia->calificacion()->comoCadena())->toBe('7.00');
+        ->and(NoNulo::exigir($materia->calificacion(), 'la calificación')->comoCadena())->toBe('7.00');
 });
 
 test('RN-03 (§7.9 aprobada fila 3): 6.50 con criterio propio 6.00 aprueba', function () {
@@ -54,6 +55,6 @@ test('DD-43 (§7.9 aprobada fila 6): parciales 6.99 y 7.00 dan 6.995, que se red
     $calificacion = CalificacionDeMateria::calcular(null, [dMat('6.99'), dMat('7.00')]);
     $materia = new MateriaEvaluada($calificacion, criterioDeMateria(AmbitoDeCriterio::General, '7.00'));
 
-    expect($materia->calificacion()->comoCadena())->toBe('7.00')
+    expect(NoNulo::exigir($materia->calificacion(), 'la calificación')->comoCadena())->toBe('7.00')
         ->and($materia->aprobada())->toBeTrue();
 });

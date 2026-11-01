@@ -7,6 +7,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Src\Compartido\Dominio\Identificador;
+use Tests\Ayudantes\NoNulo;
 
 const TABLAS_DE_ACADEMICO = [
     'periodos_escolares', 'asignaturas', 'materias', 'inscripciones', 'criterios_aprobacion',
@@ -307,7 +308,7 @@ test('RNF-03: las materias, inscripciones y asistencias eliminadas lógicamente 
     $jugador = academicoJugador();
     $inscripcion = academicoInsertar('inscripciones', ['materia_id' => $materia, 'jugador_id' => $jugador]);
     $asistencia = academicoInsertar('asistencias_clase', ['inscripcion_id' => $inscripcion, 'fecha' => '2026-03-09', 'estado' => 'presente']);
-    $datos = DB::connection('propietario')->table('materias')->where('id', $materia)->first();
+    $datos = NoNulo::exigir(DB::connection('propietario')->table('materias')->where('id', $materia)->first(), 'la materia');
 
     academicoEliminar('asistencias_clase', $asistencia);
     academicoEliminar('inscripciones', $inscripcion);
@@ -323,7 +324,7 @@ test('RNF-03: las claves foráneas de Académico no borran en cascada', function
     $inscripcion = academicoInscripcion();
     $calificacion = academicoInsertar('calificaciones', academicoCalificacion($inscripcion, $criterio));
     $materia = DB::connection('propietario')->table('inscripciones')->where('id', $inscripcion)->value('materia_id');
-    $datos = DB::connection('propietario')->table('materias')->where('id', $materia)->first();
+    $datos = NoNulo::exigir(DB::connection('propietario')->table('materias')->where('id', $materia)->first(), 'la materia');
     $borrar = fn (string $tabla, string $id) => academicoRechazo(fn () => DB::connection('propietario')->table($tabla)->where('id', $id)->delete());
 
     expect($borrar('criterios_aprobacion', $criterio))->toBe('23503')
@@ -388,7 +389,7 @@ test('RNF-04 (§7.11 fila 13): una fila de resumenes_academicos se puede actuali
     expect($resumen())->toBeNull()
         ->and($resumen())->toBe('23505')
         ->and(DB::table('resumenes_academicos')->where('jugador_id', $jugador)->update(['promedio' => '7.50']))->toBe(1)
-        ->and(DB::table('resumenes_academicos')->where('jugador_id', $jugador)->first()->promedio)->toBe('7.50')
+        ->and(NoNulo::exigir(DB::table('resumenes_academicos')->where('jugador_id', $jugador)->first(), 'el resumen actualizado')->promedio)->toBe('7.50')
         ->and(DB::table('resumenes_academicos')->where('jugador_id', $jugador)->delete())->toBe(1)
         ->and(DB::table('resumenes_academicos')->count())->toBe(0);
 });
@@ -406,7 +407,7 @@ test('RNF-03: resumenes_academicos acepta los tres niveles de riesgo y nulo, y r
         ->and($nivel(null))->toBeNull()
         ->and($nivel('grave'))->toBe('23514');
 
-    $fila = DB::table('resumenes_academicos')->whereNull('nivel_riesgo')->first();
+    $fila = NoNulo::exigir(DB::table('resumenes_academicos')->whereNull('nivel_riesgo')->first(), 'el resumen sin nivel de riesgo');
     expect($fila->materias_reprobadas)->toBe(0)
         ->and($fila->materias_sin_calificar)->toBe(0)
         ->and($fila->promedio)->toBeNull()
@@ -500,11 +501,11 @@ test('RN-01: CriterioGeneralSeeder siembra un criterio general vigente de 7.00 y
     $criterios = DB::connection('propietario')->table('criterios_aprobacion')->get();
 
     expect($criterios)->toHaveCount(1)
-        ->and($criterios[0]->ambito)->toBe('general')
-        ->and($criterios[0]->materia_id)->toBeNull()
-        ->and($criterios[0]->calificacion_minima)->toBe('7.00')
-        ->and($criterios[0]->vigente_desde)->toBe('2026-01-01')
-        ->and($criterios[0]->vigente_hasta)->toBeNull()
+        ->and(NoNulo::exigir($criterios[0], 'la fila 0 de $criterios')->ambito)->toBe('general')
+        ->and(NoNulo::exigir($criterios[0], 'la fila 0 de $criterios')->materia_id)->toBeNull()
+        ->and(NoNulo::exigir($criterios[0], 'la fila 0 de $criterios')->calificacion_minima)->toBe('7.00')
+        ->and(NoNulo::exigir($criterios[0], 'la fila 0 de $criterios')->vigente_desde)->toBe('2026-01-01')
+        ->and(NoNulo::exigir($criterios[0], 'la fila 0 de $criterios')->vigente_hasta)->toBeNull()
         ->and(DB::connection('propietario')->table('criterios_aprobacion_historial')->count())->toBe(0);
 });
 
@@ -523,9 +524,9 @@ test('RN-04: ParametrosInstitucionalesSeeder siembra solo riesgo_academico con l
     $parametros = DB::connection('propietario')->table('parametros_institucionales')->get();
 
     expect($parametros)->toHaveCount(1)
-        ->and($parametros[0]->clave)->toBe('riesgo_academico')
-        ->and($parametros[0]->vigente_hasta)->toBeNull()
-        ->and(json_decode($parametros[0]->valor, true))->toEqual([
+        ->and(NoNulo::exigir($parametros[0], 'la fila 0 de $parametros')->clave)->toBe('riesgo_academico')
+        ->and(NoNulo::exigir($parametros[0], 'la fila 0 de $parametros')->vigente_hasta)->toBeNull()
+        ->and(json_decode(NoNulo::exigir($parametros[0], 'la fila 0 de $parametros')->valor, true))->toEqual([
             'promedio_sin_riesgo_minimo' => '7.50',
             'promedio_observacion_minimo' => '7.00',
             'reprobadas_observacion' => 1,
