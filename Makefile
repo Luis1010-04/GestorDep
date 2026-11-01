@@ -23,17 +23,18 @@ vendor-local:
 	docker compose cp app:/var/www/html/vendor ./backend/
 
 # verificar, pruebas y mutacion comparten la base de pruebas: pasan por bin/con-candado.sh, que toma un candado
-# exclusivo y termina la corrida si muere el cliente de `docker compose exec` (PT-07). El bucle envia el pulso cada 5 s.
+# exclusivo y termina la corrida si muere el cliente de `docker compose exec` (PT-07). Cada receta es un solo comando,
+# sin sintaxis de shell: make la ejecuta con cmd.exe en PowerShell y con sh en Git Bash.
 verificar:
-	while echo; do sleep 5; done | docker compose exec -T app bash bin/con-candado.sh composer verificar
+	docker compose exec -T app bash bin/con-candado.sh composer verificar
 
 # Prueba de mutación (Infection sobre src/*/Dominio/), fuera de `verificar` por tiempo: se corre al cerrar cada lote
 # y en CI (enmienda a DD-53).
 mutacion:
-	while echo; do sleep 5; done | docker compose exec -T app bash bin/con-candado.sh composer mutacion
+	docker compose exec -T app bash bin/con-candado.sh composer mutacion
 
 pruebas:
-	while echo; do sleep 5; done | docker compose exec -T app bash bin/con-candado.sh php vendor/bin/pest
+	docker compose exec -T app bash bin/con-candado.sh php vendor/bin/pest
 
 migrar:
 	docker compose exec -T app php artisan migrate --database=propietario --force
