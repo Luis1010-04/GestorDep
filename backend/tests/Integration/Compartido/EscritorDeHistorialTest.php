@@ -8,6 +8,7 @@ use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Compartido\Infraestructura\RelojFijo;
+use Tests\Ayudantes\NoNulo;
 
 /*
  * Las tablas de estas pruebas se crean y confirman con el rol propietario, para que la conexion
@@ -137,16 +138,16 @@ test('F1-H0-T08: un cambio genera su registro de historial con version consecuti
 
     expect(DB::table('prueba_registros')->where('id', $id->valor())->value('nombre'))->toBe('cambiado')
         ->and($historial)->toHaveCount(2)
-        ->and($historial[0]->version)->toBe(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->datos_anteriores)->toBeNull()
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toBe(['nombre' => 'inicial'])
-        ->and($historial[0]->motivo)->toBeNull()
-        ->and($historial[1]->version)->toBe(2)
-        ->and($historial[1]->operacion)->toBe('actualizar')
-        ->and(json_decode($historial[1]->datos_anteriores, true))->toBe(['nombre' => 'inicial'])
-        ->and(json_decode($historial[1]->datos_nuevos, true))->toBe(['nombre' => 'cambiado'])
-        ->and($historial[1]->motivo)->toBe('correccion');
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->version)->toBe(1)
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_anteriores)->toBeNull()
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toBe(['nombre' => 'inicial'])
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->motivo)->toBeNull()
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->version)->toBe(2)
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->operacion)->toBe('actualizar')
+        ->and(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_anteriores, true))->toBe(['nombre' => 'inicial'])
+        ->and(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_nuevos, true))->toBe(['nombre' => 'cambiado'])
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->motivo)->toBe('correccion');
 
     foreach ($historial as $registro) {
         expect(Identificador::desdeTexto($registro->id)->valor())->toBe($registro->id)
@@ -242,7 +243,7 @@ test('F1-H1-T04: sin usuario actual el historial se escribe con usuario_id nulo'
     $escritor->registrar('prueba_registros', 'prueba_registro_id', $id, 'crear', null, ['nombre' => 'inicial'],
         fn () => DB::table('prueba_registros')->insert(['id' => $id->valor(), 'nombre' => 'inicial']));
 
-    $registro = DB::table('prueba_registros_historial')->where('prueba_registro_id', $id->valor())->first();
+    $registro = NoNulo::exigir(DB::table('prueba_registros_historial')->where('prueba_registro_id', $id->valor())->first(), 'el historial del registro');
 
     expect($registro->usuario_id)->toBeNull()
         ->and($registro->operacion)->toBe('crear');
