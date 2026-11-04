@@ -353,3 +353,24 @@ Detalle en `docs/reportes/f1-h5-t01.md`.
 `make mutacion`: 124 s, 687 de 687 mutantes eliminados. `make fresh` + `make humo`: código 0, 39 s el humo.
 
 La validación de peso y estatura en la solicitud pasó a T05 por decisión del responsable (`docs/hitos/f1-h5.md` v1.0.4, T05).
+
+### 2.1 Cierre de pendientes del Lote A (3/11/2026)
+
+**Auditoría de los catálogos: verificada, sin cambios.** `f1-h5-t01.md` §3 dice que los seeders dejan con valor `creado_en` y `actualizado_en`, aunque no los escriben. Es cierto:
+
+- **Macro:** `auditoriaBasica()` define las dos columnas con `timestampTz(...)->useCurrent()`. Las migraciones de `tipos_prueba` y `rangos_mediciones_corporales` solo llaman al macro.
+- **Esquema, en la base de desarrollo `gestordep` tras `make fresh`:** en las dos tablas, `creado_en` y `actualizado_en` son `NOT NULL` con `column_default = CURRENT_TIMESTAMP`. `creado_por` y `actualizado_por` son opcionales y sin valor por defecto.
+- **Datos, con una sesión de solo lectura del rol de aplicación:**
+
+| Tabla | Filas | Con `creado_en` | Con `actualizado_en` |
+|---|---:|---:|---:|
+| `tipos_prueba` | 3 | 3 | 3 |
+| `rangos_mediciones_corporales` | 2 | 2 | 2 |
+
+Las cinco filas tienen `2026-11-04 04:56:22+00` en las dos columnas, y `creado_por` y `actualizado_por` nulos. Ese valor es el del momento de la siembra: no dice quién ni cuándo cambia un dato después, así que la excepción de RNF-02 sigue igual. No se cambió ninguna migración.
+
+**DA-21 y DA-22:** confirmadas por el responsable el 3/11/2026 (`f1-h5-decisiones-del-agente.md`).
+
+**Coautoría:** el responsable pidió confirmar el modelo. Los commits de esta sesión los hizo Claude Opus 5.5 (`claude-opus-5-5`), y su línea `Co-Authored-By` es la correcta.
+
+**Identidad:** los commits F1-DOC de este cierre usan, con `-c` y por autorización expresa para ellos, la misma identidad de `0143d6c`. No se guardó configuración.
