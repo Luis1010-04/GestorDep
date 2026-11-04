@@ -1,7 +1,7 @@
 # Progreso de H5
 
-**Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.3
-**Estado:** T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó en la laptop anterior (§1.8) y el responsable la cerró el 3/11/2026 sin cambios de configuración, con las corridas de la laptop nueva (§1.13). **T01 queda destrabada:** su plan espera aprobación. La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); sin PR ni etiquetas.
+**Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.4
+**Estado:** Lote A terminado, a la espera de revisión del responsable. T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó en la laptop anterior (§1.8) y el responsable la cerró el 3/11/2026 sin cambios de configuración, con las corridas de la laptop nueva (§1.13). T01 terminada (§2). La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); los commits posteriores son locales; sin PR ni etiquetas.
 
 ## 1. F1-H5-T00: PHPStan nivel 8
 
@@ -340,3 +340,16 @@ En serie y sin nada en paralelo.
 #### 1.13.3 Incidencia
 
 La primera `make levantar` falló al construir la imagen: `pecl install pcov` tardó unos 60 s y terminó con «Package "pcov" does not have REST info xml available». `pecl.php.net` respondía desde Windows y desde un contenedor, y el reintento pasó sin cambiar nada. La causa no se identificó; lo observado apunta a un fallo momentáneo de red.
+
+## 2. F1-H5-T01: migraciones, historiales y seeders
+
+Detalle en `docs/reportes/f1-h5-t01.md`.
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Antes de T01 (§1.13, corrida 2) | 1 432 | 420 s | 507 s |
+| Cierre de T01, sin bajar los contenedores | 1 504 | **440 s** | **487 s** |
+
+`make mutacion`: 124 s, 687 de 687 mutantes eliminados. `make fresh` + `make humo`: código 0, 39 s el humo.
+
+La validación de peso y estatura en la solicitud pasó a T05 por decisión del responsable (`docs/hitos/f1-h5.md` v1.0.4, T05).
