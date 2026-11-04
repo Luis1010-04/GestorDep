@@ -14,7 +14,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** §5.1 exige la columna `nombre` en `tipos_prueba` y `rangos_mediciones_corporales`, pero §5.2 no da sus valores.
 - **Qué se eligió:** `Velocidad`, `Resistencia`, `Tiempo de prueba`, `Peso` y `Estatura`, en los seeders, como los nombres de `MetricasSeeder` y `PosicionesSeeder`.
-- **Estado:** por confirmar por el responsable.
+- **Estado:** confirmada por el responsable (3/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cambiar el dato en la base. El seeder no deshace un ajuste.
 
@@ -22,6 +22,6 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** §5.1 no da el tamaño de estas columnas.
 - **Qué se eligió:** `codigo` 50 y `nombre` 100, como `metricas`; `unidad` 20; `mejor_resultado` 10; `causa` y `estado` 20.
-- **Estado:** por confirmar por el responsable.
+- **Estado:** confirmada por el responsable (3/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** una migración nueva que cambie el tipo.
