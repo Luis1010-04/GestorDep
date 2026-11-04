@@ -1,7 +1,7 @@
 # Progreso de H5
 
 **Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.3
-**Estado:** T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó: `make verificar` pasó de 15 minutos en tres de seis corridas, y una de ellas la cortó el tope de 20 minutos (§1.8). **T01 no empieza** hasta que el responsable elija una opción de §1.10. La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); sin PR ni etiquetas.
+**Estado:** T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó en la laptop anterior (§1.8) y el responsable la cerró el 3/11/2026 sin cambios de configuración, con las corridas de la laptop nueva (§1.13). **T01 queda destrabada:** su plan espera aprobación. La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); sin PR ni etiquetas.
 
 ## 1. F1-H5-T00: PHPStan nivel 8
 
@@ -311,3 +311,32 @@ Además de `backend/CLAUDE.md`:
 2. Al agente: «Lee `docs/reportes/f1-h5-progreso.md` §1.12 y §1.10. T01 sigue detenida hasta que yo elija».
 3. Decidir entre (i), (ii) y (iii), con o sin una medición en la laptop nueva.
 4. Pedir el plan de T01 según `docs/hitos/f1-h5.md`.
+
+### 1.13 Laptop nueva: corridas y cierre de la condición de parada (3/11/2026)
+
+#### 1.13.1 Corridas
+
+En serie y sin nada en paralelo.
+
+| Corrida | Código | Qué la precedió | Pest | `make verificar` | Resultado |
+|---|---|---|---:|---:|---|
+| 1 | `main` (`a34283e`) | `make levantar` con imagen y contenedores recién creados, y `make fresh` | 413 s | **510 s** | Código 0; 1 430 pruebas (9 815 aserciones), sin avisos de seguridad |
+| 2 | `hito/f1-h5` (`2853587`) | La corrida 1 y `make humo`, sin bajar los contenedores | 420 s | **507 s** | Código 0; PHPStan nivel 8 «No errors», 1 432 pruebas (9 821 aserciones), cobertura de 100 %, 100 % y 99,5 %, sin avisos de seguridad |
+
+`make humo` se corrió tras la corrida 1, sobre `main`: código 0, 34 s. En esta rama todavía no se ha corrido en la laptop nueva.
+
+**Límites de estas medidas:**
+
+- La corrida 2 no fue en frío estricto: el contenedor conservaba las cachés de la corrida 1. No se midió cuánto de esas cachés aprovechó.
+- La corrida 1 sí empezó con las cachés vacías, pero sobre `main`, sin el nivel 8 de PHPStan.
+- No se hizo en esta rama la prueba `make bajar`, `make levantar` y `make verificar`. La primera corrida en frío de esta rama sigue sin medirse aquí.
+- Son dos corridas: no demuestran que el entorno nuevo sea estable, ni explican la lentitud de la laptop anterior (§1.8.4 sigue sin demostrarse).
+
+#### 1.13.2 Decisiones del responsable
+
+1. **Condición de parada (§1.10): sin cambios.** No se aplica ninguna de las opciones (i), (ii) y (iii). Se atribuye la lentitud al entorno de la laptop anterior y siguen vigentes el aviso de 13 minutos, el alto de 15 y el tope de 20. **T01 puede empezar**, con su plan aprobado.
+2. **Rutas base.** Se confirma la lista que H4 tomó de H3, pendiente desde el Lote A (`f1-h4-reporte.md` §4 y §7), y se usa igual en las tareas de H5 que citan «rutas base»: `app/Http/Controllers/**`, `app/Http/Requests/**`, `app/Http/Resources/**`, `app/Exceptions/FormatoDeError.php`, `lang/es/errores.php` y `routes/api.php`. `f1-h4-reporte.md` no se modificó.
+
+#### 1.13.3 Incidencia
+
+La primera `make levantar` falló al construir la imagen: `pecl install pcov` tardó unos 60 s y terminó con «Package "pcov" does not have REST info xml available». `pecl.php.net` respondía desde Windows y desde un contenedor, y el reintento pasó sin cambiar nada. La causa no se identificó; lo observado apunta a un fallo momentáneo de red.
