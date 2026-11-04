@@ -374,3 +374,29 @@ Las cinco filas tienen `2026-11-04 04:56:22+00` en las dos columnas, y `creado_p
 **Coautoría:** el responsable pidió confirmar el modelo. Los commits de esta sesión los hizo Claude Opus 5.5 (`claude-opus-5-5`), y su línea `Co-Authored-By` es la correcta.
 
 **Identidad:** los commits F1-DOC de este cierre usan, con `-c` y por autorización expresa para ellos, la misma identidad de `0143d6c`. No se guardó configuración.
+
+### 2.2 Identidad y modelo de cada commit de esta laptop
+
+Por decisión del responsable, se documenta y no se reescribe: ningún autor ni hash cambia.
+
+| Commit | Fecha (`-06:00`) | Autor y confirmador | Cómo se aplicó la identidad | Modelo |
+|---|---|---|---|---|
+| `0143d6c` | 3/11/2026 22:23:06 | Luis Angel Gonzalez Yudho `<a22021318@iteshu.edu.mx>` | `-c`, sin autorización previa; el responsable decidió después dejarlo así | Claude Opus 5.5 |
+| `f41318a` | 3/11/2026 22:38:37 | La misma | `-c`, autorizada para los commits de T01 | Claude Opus 5.5 |
+| `b9c75b6` | 3/11/2026 22:58:26 | La misma | `-c`, autorizada para los commits de T01 | Claude Opus 5.5 |
+| `7cebe5d` | 3/11/2026 23:26:55 | La misma | `-c`, autorizada para ese commit y el siguiente | Claude Opus 5.5 |
+| `a2e4b08` | 3/11/2026 23:26:58 | La misma | `-c`, autorizada para ese commit y el anterior | Claude Opus 5.5 |
+
+**Evidencia:**
+
+- **Autor, confirmador y fecha:** `git log`, sobre cada commit.
+- **Línea de coautoría:** `%(trailers:key=Co-Authored-By)`. Los cinco dicen `Claude Opus 5.5 <noreply@anthropic.com>`.
+- **Modelo:** el registro de la sesión en esta laptop, `29bb72b4-2578-49c6-93d8-a12ba4593eba.jsonl`, es el único de este proyecto aquí. Todas sus entradas con campo `model`, 275 al revisarlo, dicen `claude-opus-5-5`, y las fechas de los cinco commits caen dentro de la sesión.
+- **Uso de `-c`:** los comandos están en ese registro. Ninguna identidad quedó guardada entonces: `git config` estaba vacío en ese momento.
+
+**Lo que no se puede comprobar:**
+
+- **Commits de la laptop anterior:** su registro no viajó. Eso incluye `2853587` y todos los anteriores. Solo se ve lo que dicen sus metadatos y su línea de coautoría; no el modelo que trabajó en ellos.
+- **Que la línea de coautoría sea por sí misma una prueba:** es texto del commit. La prueba del modelo es el registro de la sesión.
+
+Desde el commit que agrega esta sección, la identidad sale de `.git/config`, configurada por el responsable.
