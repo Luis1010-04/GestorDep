@@ -4627,8 +4627,244 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/avisos-lesion:
+    get:
+      operationId: listarAvisosDeLesion
+      summary: Lista los avisos de lesion de un jugador
+      description: >-
+        Entrenador o docente del jugador (HU-19, DD-56). Quien lo entrena ve todos sus avisos; quien solo le da clase,
+        los que el creo, aunque tenga tambien el rol entrenador (§5.3, DA-25). Ordenados por fecha_aviso y por id,
+        descendentes. Sigue disponible con el jugador en baja (DA-12). La nota solo la ven quien la escribio y quien
+        confirmo el aviso (DD-58); la nota del descarte, quien descarto y quien creo el aviso (DA-11); a los demas se
+        les devuelven nulas. Un jugador fuera del alcance, inexistente o con un UUID que no es v7 responde el mismo 404,
+        tambien para un docente que creo un aviso y perdio el alcance.
+      tags: [Salud]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de avisos.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AvisoDeLesion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearAvisoDeLesion
+      summary: Crea un aviso de molestia o lesion
+      description: >-
+        Entrenador o docente del jugador (HU-19). El aviso queda pendiente y el estado oficial no cambia. La fecha puede
+        ser futura (DA-23). El 404 gana sobre el 422, y el 422 sobre el 409 jugador_en_baja (DA-24). Escribe su historial
+        (RNF-02).
+      tags: [Salud]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nota, fecha]
+              properties:
+                nota: {type: string, maxLength: 500}
+                fecha: {type: string, format: date}
+                reportado_por_jugador: {type: boolean, default: false}
+      responses:
+        '201':
+          description: El aviso creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/AvisoDeLesion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador esta en baja (jugador_en_baja, DD-60).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Cuerpo invalido o con campos desconocidos (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /avisos-lesion/{aviso}/descarte:
+    post:
+      operationId: descartarAvisoDeLesion
+      summary: Descarta un aviso pendiente
+      description: >-
+        Solo un entrenador del jugador (HU-30 c3, DD-61). El estado oficial no cambia. Se permite con el jugador en baja
+        (DA-12). Un aviso ajeno, inexistente o con un UUID que no es v7 responde el mismo 404, antes que el 422. Escribe
+        su historial (RNF-02).
+      tags: [Salud]
+      parameters:
+        - name: aviso
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nota_descarte]
+              properties:
+                nota_descarte: {type: string, maxLength: 500}
+      responses:
+        '200':
+          description: El aviso descartado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/AvisoDeLesion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Aviso no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El aviso ya no esta pendiente (aviso_no_pendiente).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Cuerpo invalido o con campos desconocidos (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    AvisoDeLesion:
+      type: object
+      additionalProperties: false
+      required: [id, estado, fecha_aviso, reportado_por_jugador, nota, nota_descarte, es_propio, creado_en, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        estado:
+          type: string
+          enum: [pendiente, confirmado, descartado]
+        fecha_aviso:
+          type: string
+          format: date
+        reportado_por_jugador:
+          type: boolean
+        nota:
+          type: string
+          nullable: true
+          description: Nula para quien no la escribio ni confirmo el aviso (DD-58).
+        nota_descarte:
+          type: string
+          nullable: true
+          description: Nula para quien no descarto ni creo el aviso (DA-11).
+        es_propio:
+          type: boolean
+          description: Si el usuario creo el aviso.
+        creado_en:
+          type: string
+          format: date-time
+        actualizado_en:
+          type: string
+          format: date-time
     Baja:
       type: object
       additionalProperties: false

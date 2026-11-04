@@ -49,6 +49,8 @@ use Src\Rendimiento\Aplicacion\RendimientoDuplicado;
 use Src\Rendimiento\Aplicacion\SinUmbralAplicable;
 use Src\Rendimiento\Aplicacion\UmbralConcurrente;
 use Src\Rendimiento\Dominio\ReglaDeCampoViolada as ReglaDeCampoDeRendimiento;
+use Src\Salud\Aplicacion\RecursoNoEncontrado as RecursoDeSaludNoEncontrado;
+use Src\Salud\Dominio\AvisoNoPendiente;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -87,6 +89,8 @@ final class FormatoDeError
             $e instanceof PartidoNoJugado, $e instanceof SinUmbralAplicable => self::reglaDeNegocio($e, 409),
             $e instanceof ReglaDeCampoDeRendimiento => self::reglaDeCampoDeRendimiento($e, $e instanceof RendimientoDuplicado || $e instanceof PlantillaDuplicada ? 409 : 422),
             $e instanceof UmbralConcurrente => self::respuesta(409, 'conflicto'),
+            $e instanceof RecursoDeSaludNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
+            $e instanceof AvisoNoPendiente => self::reglaDeNegocio($e, 409),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof JugadorNoRegistrado => self::reglaDeNegocio($e, 404),

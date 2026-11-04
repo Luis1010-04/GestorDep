@@ -24,8 +24,14 @@ return [
         'valor_fuera_de_rango' => 'El valor está fuera del rango permitido.',
     ],
 
+    // Mensajes de los avisos de lesión que tienen el mismo código que otra captura con distinto significado (DA-27).
+    'avisos' => [
+        'jugador_en_baja' => 'El jugador está en baja: no se pueden crear avisos.',
+    ],
+
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
     'reglas' => [
+        'aviso_no_pendiente' => 'El aviso ya no está pendiente de confirmación.',
         'credenciales_invalidas' => 'Las credenciales no son válidas.',
         'cuenta_bloqueada' => 'La cuenta está bloqueada temporalmente por intentos fallidos.',
         'contrasena_actual_incorrecta' => 'La contraseña actual no es correcta.',

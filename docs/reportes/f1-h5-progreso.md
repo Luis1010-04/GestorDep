@@ -400,3 +400,16 @@ Por decisión del responsable, se documenta y no se reescribe: ningún autor ni 
 - **Que la línea de coautoría sea por sí misma una prueba:** es texto del commit. La prueba del modelo es el registro de la sesión.
 
 Desde el commit que agrega esta sección, la identidad sale de `.git/config`, configurada por el responsable.
+
+## 3. F1-H5-T02: avisos de lesión
+
+Detalle en `docs/reportes/f1-h5-t02.md`.
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Cierre de T01, sin bajar los contenedores | 1 504 | 440 s | 487 s |
+| Cierre de T02, primera corrida completa tras `make levantar` | 1 569 | **628 s** | **747 s** |
+
+`make mutacion`: 176 s, 724 de 724 mutantes eliminados. `make fresh` + `make humo`: código 0, 45 s el humo.
+
+**Aviso:** 747 s queda a 33 s del aviso de 13 minutos. Pest subió 188 s; las pruebas de T02 explican unos 25 s y el resto no se midió. El contenedor estaba recién creado, pero PHPStan ya tenía caché por las corridas previas.
