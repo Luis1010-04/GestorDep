@@ -525,3 +525,30 @@ DA-31 a DA-34 confirmadas por el responsable. El orden completo de confirmar y l
 - Lesión anterior tras DD-63 sin alta: anotada para la auditoría.
 
 **T04 espera** la orden del responsable tras medir `make verificar` con la laptop sin carga.
+
+### 5.2 Medición de `make verificar` con la laptop sin carga (5/11/2026)
+
+Pedida por el responsable, con OneDrive en pausa y sin bajar los contenedores, sobre `c27d523`. Marca de tiempo en cada línea y `docker stats` cada 15 s (34 muestras).
+
+**Resultado: 571 s (9 min 31 s), código 0.** 1 703 pruebas (11 048 aserciones), PHPStan «No errors», cobertura de 100 %, 100 % y 99,5 %, sin avisos de seguridad. No hizo falta una segunda corrida, porque no pasó de 13 minutos.
+
+| Etapa | Tiempo |
+|---|---:|
+| Arranque y Pint | 50 s |
+| PHPStan | 4 s |
+| Pest | 489 s |
+| Informe de cobertura | 27 s |
+| `verificar-cobertura` y `composer audit` | 1 s |
+
+**PHPStan usó la caché:** `resultCache.php` tuvo la misma sha1 (`b71aa29b3112`) y la misma hora antes y después, y la etapa tardó 4 s. Esa caché la había calentado una corrida previa de PHPStan el mismo día. Pint no tenía caché de todo el proyecto.
+
+**Comparación:** 871 s en T03, con 4 pruebas menos, y 571 s aquí. Con las mismas pruebas casi, la diferencia de 300 s es del entorno. Coincide con tener OneDrive en pausa y la laptop sin carga, pero una corrida no demuestra cuál de los dos pesó, ni si el repositorio se ve afectado por OneDrive.
+
+**CPU y memoria de Docker** (100 % equivale a un núcleo; Docker tiene 8 CPU y 15,47 GiB):
+
+| Contenedor | CPU promedio | CPU máxima | Memoria promedio | Memoria máxima |
+|---|---:|---:|---:|---:|
+| `app` | 41,5 % | 99,9 % | 387 MiB | 451 MiB |
+| `db` | 23,4 % | 43,0 % | 125 MiB | 160 MiB |
+
+Ni la CPU ni la memoria de Docker llegaron a su límite: `app` usó como máximo un núcleo de 8 y menos de 500 MiB.
