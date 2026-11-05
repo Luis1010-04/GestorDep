@@ -123,3 +123,27 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** confirmada por el responsable (5/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cambiar el texto en `lang/es/errores.php`.
+
+## DA-35. Tipo que devuelve `EstadoDeDisponibilidadOficial` (T04)
+
+- **Qué faltaba:** §8 pide el estado por identificador, sin fijar su tipo.
+- **Qué se eligió:** cadenas (`apto`, `con_molestia`, `lesionado`), porque Compartido no debe importar `TipoDeEstado` de Salud.
+- **Estado:** aprobada por el responsable con el plan de T04 (5/11/2026).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** mover el enum a Compartido.
+
+## DA-36. Identificador sin registro en el puerto (T04)
+
+- **Qué faltaba:** `InicioDePartidos` omite lo que no existe, pero DA-01 dice que sin registro el jugador está apto.
+- **Qué se eligió:** devolver cada identificador pedido, con `apto` si no tiene estado, incluso sin jugador, porque Salud no puede leer Plantel.
+- **Estado:** aprobada por el responsable con el plan de T04 (5/11/2026).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** omitir los identificadores sin registro y tratar la ausencia en Competencia.
+
+## DA-37. `eliminado_en` en el puerto (T04)
+
+- **Qué faltaba:** `InicioDePartidos` filtra por `eliminado_en`, pero `RepositorioDeEstadosSql` no.
+- **Qué se eligió:** no filtrar, igual que el repositorio: no hay ruta de borrado y el índice de estado vigente tampoco lo considera.
+- **Estado:** aprobada por el responsable con el plan de T04 (5/11/2026).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** filtrar en el adaptador y en el repositorio a la vez.

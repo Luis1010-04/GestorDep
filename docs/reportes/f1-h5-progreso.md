@@ -542,7 +542,9 @@ Pedida por el responsable, con OneDrive en pausa y sin bajar los contenedores, s
 
 **PHPStan usó la caché:** `resultCache.php` tuvo la misma sha1 (`b71aa29b3112`) y la misma hora antes y después, y la etapa tardó 4 s. Esa caché la había calentado una corrida previa de PHPStan el mismo día. Pint no tenía caché de todo el proyecto.
 
-**Comparación:** 871 s en T03, con 4 pruebas menos, y 571 s aquí. Con las mismas pruebas casi, la diferencia de 300 s es del entorno. Coincide con tener OneDrive en pausa y la laptop sin carga, pero una corrida no demuestra cuál de los dos pesó, ni si el repositorio se ve afectado por OneDrive.
+**Comparación:** 871 s en T03, con 4 pruebas menos, y 571 s aquí. Con casi las mismas pruebas, la diferencia de 300 s no viene del código, pero **su causa no está comprobada**. Que OneDrive influyera es una hipótesis no verificada: el responsable confirmó que el repositorio está en `C:\Users\LOQ\Documents\repos\GestorDep`, fuera de OneDrive y sin iconos de sincronización.
+
+**Siguiente hipótesis, sin verificar:** el análisis en tiempo real de Microsoft Defender. No se cambió esa configuración.
 
 **CPU y memoria de Docker** (100 % equivale a un núcleo; Docker tiene 8 CPU y 15,47 GiB):
 
@@ -552,3 +554,24 @@ Pedida por el responsable, con OneDrive en pausa y sin bajar los contenedores, s
 | `db` | 23,4 % | 43,0 % | 125 MiB | 160 MiB |
 
 Ni la CPU ni la memoria de Docker llegaron a su límite: `app` usó como máximo un núcleo de 8 y menos de 500 MiB.
+
+## 6. F1-H5-T04: puerto `EstadoDeDisponibilidadOficial`
+
+Detalle en `docs/reportes/f1-h5-t04.md`.
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Medición sin carga (§5.2) | 1 703 | 489 s | 571 s |
+| Cierre de T04, sin bajar los contenedores | 1 717 | **488 s** | **526 s** |
+
+`make mutacion`: 117 s, 796 de 796 mutantes eliminados. `make fresh` + `make humo`: código 0, 32 s el humo.
+
+## 7. Resumen del Lote B
+
+| Tarea | Qué entrega | Commits |
+|---|---|---|
+| T02 | Crear, listar y descartar avisos | `04cfc9c` |
+| T03 | Confirmación, estado oficial, cambio de estado, alta y lesión | `455720e`, `c27d523` |
+| T04 | Puerto hacia Competencia | Este commit |
+
+**Pendientes para el cierre de H5:** concurrencia real con dos peticiones simultáneas; lesión anterior tras DD-63 sin alta; revisión de DA-30 en T08 o H7; el par fechas y `conflicto` de DA-33 sin prueba combinada.
