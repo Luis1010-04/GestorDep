@@ -13,8 +13,10 @@ use App\Http\Controllers\DesempenoController;
 use App\Http\Controllers\EntrenamientoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
+use App\Http\Controllers\EstadoDeDisponibilidadController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
+use App\Http\Controllers\LesionController;
 use App\Http\Controllers\LugarController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PartidoController;
@@ -47,6 +49,7 @@ Route::middleware('auth:web')->group(function () {
     Route::middleware('rol:entrenador,docente')->group(function () {
         Route::get('/jugadores/{jugador}/avisos-lesion', [AvisoDeLesionController::class, 'listar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/avisos-lesion', [AvisoDeLesionController::class, 'crear'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/estado-disponibilidad', [EstadoDeDisponibilidadController::class, 'consultar'])->whereUuid('jugador');
     });
 
     Route::middleware('rol:docente')->group(function () {
@@ -139,5 +142,11 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/equipos/{equipo}/jugadores/{jugador}/desempeno', [DesempenoController::class, 'consultar'])->whereUuid(['equipo', 'jugador']);
 
         Route::post('/avisos-lesion/{aviso}/descarte', [AvisoDeLesionController::class, 'descartar'])->whereUuid('aviso');
+        Route::post('/avisos-lesion/{aviso}/confirmacion', [AvisoDeLesionController::class, 'confirmar'])->whereUuid('aviso');
+        Route::patch('/jugadores/{jugador}/estado-disponibilidad', [EstadoDeDisponibilidadController::class, 'cambiar'])->whereUuid('jugador');
+        Route::post('/jugadores/{jugador}/estado-disponibilidad/alta', [EstadoDeDisponibilidadController::class, 'darDeAlta'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/lesiones', [LesionController::class, 'listar'])->whereUuid('jugador');
+        Route::get('/lesiones/{lesion}', [LesionController::class, 'ver'])->whereUuid('lesion');
+        Route::patch('/lesiones/{lesion}', [LesionController::class, 'corregir'])->whereUuid('lesion');
     });
 });

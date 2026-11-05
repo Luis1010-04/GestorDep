@@ -68,3 +68,74 @@ function avisoDescarteRuta(string $aviso): string
 {
     return "/api/v1/avisos-lesion/$aviso/descarte";
 }
+
+function avisoConfirmacionRuta(string $aviso): string
+{
+    return "/api/v1/avisos-lesion/$aviso/confirmacion";
+}
+
+function estadoRuta(string $jugador): string
+{
+    return "/api/v1/jugadores/$jugador/estado-disponibilidad";
+}
+
+function altaRuta(string $jugador): string
+{
+    return estadoRuta($jugador).'/alta';
+}
+
+function lesionRuta(string $lesion): string
+{
+    return "/api/v1/lesiones/$lesion";
+}
+
+function lesionesRuta(string $jugador): string
+{
+    return "/api/v1/jugadores/$jugador/lesiones";
+}
+
+/**
+ * @param  array<string, mixed>  $cambios
+ * @return array<string, mixed>
+ */
+function confirmacionCuerpo(array $cambios = []): array
+{
+    return [
+        'estado' => 'lesionado', 'tipo' => 'Esguince', 'zona' => 'Tobillo', 'causa' => 'partido',
+        'fecha_estimada_regreso' => '2026-11-30', ...$cambios,
+    ];
+}
+
+/** Adelanta el reloj: la vigencia guarda segundos y un estado no se abre y se cierra en el mismo segundo (DA-30). */
+function relojAdelantar(string $instante): void
+{
+    app()->instance(Reloj::class, new RelojFijo(new DateTimeImmutable($instante, new DateTimeZone('UTC'))));
+}
+
+/**
+ * Inserta una lesión directo en la base.
+ *
+ * @param  array<string, mixed>  $atributos
+ */
+function lesionInsertar(string $jugador, string $registradaPor, array $atributos = []): string
+{
+    return mundoInsertar('lesiones', [
+        'jugador_id' => $jugador, 'registrada_por' => $registradaPor, 'tipo' => 'Esguince', 'zona' => 'Tobillo', 'causa' => 'partido',
+        'fecha_inicio' => '2026-11-10', 'fecha_estimada_regreso' => '2026-11-30', ...$atributos,
+    ]);
+}
+
+/**
+ * Inserta un estado vigente con su lesión; sin `$tipo`, un `apto` explícito.
+ *
+ * @return array{estado: string, lesion: string|null}
+ */
+function estadoInsertar(string $jugador, string $confirmadoPor, ?string $tipo = 'lesionado', string $regreso = '2026-11-30'): array
+{
+    $lesion = $tipo === null ? null : lesionInsertar($jugador, $confirmadoPor, ['fecha_estimada_regreso' => $regreso]);
+
+    return ['lesion' => $lesion, 'estado' => mundoInsertar('estados_disponibilidad', [
+        'jugador_id' => $jugador, 'estado' => $tipo ?? 'apto', 'lesion_id' => $lesion, 'fecha_estimada_regreso' => $tipo === null ? null : $regreso,
+        'confirmado_por' => $confirmadoPor, 'vigente_desde' => '2026-11-10 10:00:00+00',
+    ])];
+}

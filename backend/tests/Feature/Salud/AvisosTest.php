@@ -452,3 +452,29 @@ test('RNF-02: crear escribe la auditoría y el historial con su autor', function
         ->and($historial->usuario_id)->toBe($m['d1'])
         ->and(DB::table('avisos_lesion')->where('id', $id)->value('actualizado_por'))->toBe($m['d1']);
 });
+
+test('DA-26 (§7.1 fila 1): tras crear un aviso, la API sigue dando a F1 apto implícito', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    sesionesPeticion($this, 'POST', avisosRuta($m['f1']), avisoCuerpo(), $sesion)->assertCreated();
+
+    sesionesPeticion($this, 'GET', estadoRuta($m['f1']), idDeSesion: $sesion)
+        ->assertOk()
+        ->assertJsonPath('datos.estado', 'apto')
+        ->assertJsonPath('datos.es_implicito', true);
+});
+
+test('DA-26 (§7.1 fila 7): tras descartar un aviso, la API da el mismo estado oficial', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    estadoInsertar($m['f1'], $m['e1']);
+    $aviso = avisoInsertar($m['f1'], $m['d1']);
+    $sesion = sesionesIniciar($this, 'e2@x.com');
+    $antes = sesionesPeticion($this, 'GET', estadoRuta($m['f1']), idDeSesion: $sesion)->assertOk()->json('datos');
+
+    sesionesPeticion($this, 'POST', avisoDescarteRuta($aviso), ['nota_descarte' => 'No aplica'], $sesion)->assertOk();
+
+    expect(sesionesPeticion($this, 'GET', estadoRuta($m['f1']), idDeSesion: $sesion)->assertOk()->json('datos'))->toBe($antes);
+});

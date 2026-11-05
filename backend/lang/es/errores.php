@@ -19,6 +19,9 @@ return [
     'cuerpo_sin_campos_partido' => 'Debe enviar al menos uno de: inicia_en, lugar_id, rival_id, torneo_id, tipo, condicion, estado',
     'cuerpo_sin_campos_rendimiento' => 'Debe enviar al menos uno de: minutos, fue_titular, tarjetas_amarillas, tarjetas_rojas, calificacion_general, observacion, metricas',
 
+    'cuerpo_sin_campos_estado' => 'Debe enviar al menos uno de: estado, fecha_estimada_regreso',
+    'cuerpo_sin_campos_lesion' => 'Debe enviar al menos uno de: tipo, zona, causa, nota',
+
     // Mensajes de Rendimiento que tienen el mismo código que otro contexto con distinto significado (DA-15).
     'rendimiento' => [
         'valor_fuera_de_rango' => 'El valor está fuera del rango permitido.',
@@ -27,11 +30,15 @@ return [
     // Mensajes de los avisos de lesión que tienen el mismo código que otra captura con distinto significado (DA-27).
     'avisos' => [
         'jugador_en_baja' => 'El jugador está en baja: no se pueden crear avisos.',
+        'jugador_en_baja_estado' => 'El jugador está en baja: no se puede confirmar el aviso ni cambiar su estado.',
+        'rango_de_fechas_invalido' => 'La fecha no puede ser anterior al inicio de la lesión.',
     ],
 
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
     'reglas' => [
         'aviso_no_pendiente' => 'El aviso ya no está pendiente de confirmación.',
+        'sin_lesion_vigente' => 'El jugador no tiene una lesión vigente.',
+        'no_es_registrante' => 'Solo quien registró el estado oficial puede modificarlo.',
         'credenciales_invalidas' => 'Las credenciales no son válidas.',
         'cuenta_bloqueada' => 'La cuenta está bloqueada temporalmente por intentos fallidos.',
         'contrasena_actual_incorrecta' => 'La contraseña actual no es correcta.',

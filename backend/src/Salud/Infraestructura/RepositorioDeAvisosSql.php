@@ -57,6 +57,21 @@ final class RepositorioDeAvisosSql implements RepositorioDeAvisos
         );
     }
 
+    public function guardarConfirmacion(AvisoDeLesion $anterior, AvisoDeLesion $confirmado, ?Identificador $lesionId): void
+    {
+        $this->historial->registrar(
+            'avisos_lesion', 'aviso_id', $confirmado->id(), 'actualizar', self::instantanea($anterior), [...self::instantanea($confirmado), 'lesion_id' => $lesionId?->valor()],
+            fn () => $this->conexion->table('avisos_lesion')->where('id', $confirmado->id()->valor())->update([
+                'estado' => $confirmado->estado()->value,
+                'lesion_id' => $lesionId?->valor(),
+                'confirmado_por' => $confirmado->confirmadoPor()?->valor(),
+                'actualizado_en' => $confirmado->actualizadoEn()->format('Y-m-d H:i:sP'),
+                'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
+            ]),
+            instante: $confirmado->actualizadoEn(),
+        );
+    }
+
     public function buscar(Identificador $id): ?AvisoDeLesion
     {
         $fila = $this->vigentes()->where('id', $id->valor())->first(self::COLUMNAS);

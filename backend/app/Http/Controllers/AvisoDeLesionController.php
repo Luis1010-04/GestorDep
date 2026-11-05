@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SolicitudDeConfirmacionDeAviso;
 use App\Http\Requests\SolicitudDeDescarteDeAviso;
 use App\Http\Requests\SolicitudDeNuevoAvisoDeLesion;
 use App\Http\Resources\AvisoDeLesionRecurso;
@@ -13,12 +14,12 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Src\Salud\Aplicacion\AvisoVisible;
 use Src\Salud\Aplicacion\ComprobarJugadorVisible;
+use Src\Salud\Aplicacion\ConfirmarAviso;
 use Src\Salud\Aplicacion\CrearAviso;
 use Src\Salud\Aplicacion\DescartarAviso;
-use Src\Salud\Aplicacion\JugadorEnBajaSinAviso;
 use Src\Salud\Aplicacion\ListarAvisos;
 
-class AvisoDeLesionController extends Controller
+class AvisoDeLesionController extends ControladorDeSalud
 {
     /** [Decisión por defecto] 15 por página, como en el resto de listados; docs/convenciones-api.md solo fija el máximo de 100. */
     private const POR_PAGINA_PREDETERMINADO = 15;
@@ -43,19 +44,16 @@ class AvisoDeLesionController extends Controller
         ));
     }
 
-    /** El `jugador_en_baja` de un aviso lleva su propio mensaje (DA-27): el de `errores.reglas` habla de otras capturas y no cambia. */
     public function crear(SolicitudDeNuevoAvisoDeLesion $solicitud, string $jugador, CrearAviso $crearAviso): JsonResponse
     {
         /** @var array{nota: string, fecha: string, reportado_por_jugador?: bool} $datos */
         $datos = $solicitud->validated();
 
-        try {
+        return $this->conMensajesDeSalud(function () use ($solicitud, $jugador, $crearAviso, $datos): JsonResponse {
             $aviso = $crearAviso->ejecutar(IdentificadorDeRuta::desde($jugador), $datos['nota'], $datos['fecha'], $datos['reportado_por_jugador'] ?? false);
-        } catch (JugadorEnBajaSinAviso $e) {
-            return new JsonResponse(['codigo' => $e->codigo(), 'mensaje' => __('errores.avisos.jugador_en_baja'), 'errores' => []], 409);
-        }
 
-        return Respuesta::conDatos((new AvisoDeLesionRecurso($aviso))->resolve($solicitud), estado: 201);
+            return Respuesta::conDatos((new AvisoDeLesionRecurso($aviso))->resolve($solicitud), estado: 201);
+        });
     }
 
     public function descartar(SolicitudDeDescarteDeAviso $solicitud, string $aviso, DescartarAviso $descartarAviso): JsonResponse
@@ -63,5 +61,17 @@ class AvisoDeLesionController extends Controller
         $descartado = $descartarAviso->ejecutar(IdentificadorDeRuta::desde($aviso), (string) $solicitud->validated('nota_descarte'));
 
         return Respuesta::conDatos((new AvisoDeLesionRecurso($descartado))->resolve($solicitud));
+    }
+
+    public function confirmar(SolicitudDeConfirmacionDeAviso $solicitud, string $aviso, ConfirmarAviso $confirmarAviso): JsonResponse
+    {
+        /** @var array{estado: string, tipo?: string, zona?: string, causa?: string, fecha_estimada_regreso?: string, nota?: string} $datos */
+        $datos = $solicitud->validated();
+
+        return $this->conMensajesDeSalud(function () use ($solicitud, $aviso, $confirmarAviso, $datos): JsonResponse {
+            $confirmado = $confirmarAviso->ejecutar(IdentificadorDeRuta::desde($aviso), $datos);
+
+            return Respuesta::conDatos((new AvisoDeLesionRecurso($confirmado))->resolve($solicitud));
+        });
     }
 }

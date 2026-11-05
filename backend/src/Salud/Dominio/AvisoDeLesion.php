@@ -40,11 +40,20 @@ final class AvisoDeLesion
     }
 
     /** @throws AvisoNoPendiente */
+    public function confirmar(Identificador $autor, DateTimeImmutable $instante): self
+    {
+        $this->exigirPendiente();
+
+        return new self(
+            $this->id, $this->jugadorId, $this->creadoPor, $this->reportadoPorJugador, $this->nota, EstadoDeAviso::Confirmado,
+            $this->fechaAviso, $autor, null, null, $this->creadoEn, $instante,
+        );
+    }
+
+    /** @throws AvisoNoPendiente */
     public function descartar(Identificador $autor, string $nota, DateTimeImmutable $instante): self
     {
-        if ($this->estado !== EstadoDeAviso::Pendiente) {
-            throw new AvisoNoPendiente;
-        }
+        $this->exigirPendiente();
 
         return new self(
             $this->id, $this->jugadorId, $this->creadoPor, $this->reportadoPorJugador, $this->nota, EstadoDeAviso::Descartado,
@@ -125,6 +134,14 @@ final class AvisoDeLesion
     public function actualizadoEn(): DateTimeImmutable
     {
         return $this->actualizadoEn;
+    }
+
+    /** @throws AvisoNoPendiente */
+    private function exigirPendiente(): void
+    {
+        if ($this->estado !== EstadoDeAviso::Pendiente) {
+            throw new AvisoNoPendiente;
+        }
     }
 
     private static function coincide(?Identificador $usuario, Identificador $lector): bool

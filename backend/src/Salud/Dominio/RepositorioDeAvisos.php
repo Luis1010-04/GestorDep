@@ -12,6 +12,9 @@ interface RepositorioDeAvisos
     /** Escribe el descarte; `$anterior` es la instantánea que queda en el historial. */
     public function guardarDescarte(AvisoDeLesion $anterior, AvisoDeLesion $descartado): void;
 
+    /** Escribe la confirmación; `$lesionId` es nulo si se confirmó `apto`. */
+    public function guardarConfirmacion(AvisoDeLesion $anterior, AvisoDeLesion $confirmado, ?Identificador $lesionId): void;
+
     public function buscar(Identificador $id): ?AvisoDeLesion;
 
     /** Bloquea la fila hasta el fin de la transacción: de dos descartes simultáneos, solo uno lo encuentra pendiente. */

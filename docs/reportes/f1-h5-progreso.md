@@ -501,3 +501,16 @@ En serie, con `docker compose top` limpio antes de cada una, sin bajar los conte
 | `make fresh` + `make humo` | Código 0. H0 a H4 OK | 40 s el humo |
 
 `main` tiene el `composer.lock` anterior: su próxima corrida de CI fallará igual hasta que reciba este cambio.
+
+## 5. F1-H5-T03: confirmación, estado oficial y lesión
+
+Detalle en `docs/reportes/f1-h5-t03.md`.
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Actualización de Symfony (§4.2) | 1 569 | 573 s | 677 s |
+| Cierre de T03, sin bajar los contenedores | 1 699 | **800 s** | **871 s** |
+
+`make mutacion`: 230 s, 796 de 796 mutantes eliminados. `make fresh` + `make humo`: código 0, 85 s el humo.
+
+**Aviso: 871 s pasa de 13 minutos y queda a 29 s del alto de 15.** Los archivos sin pruebas nuevas subieron ×1,33 y las 130 pruebas nuevas sumaron 42,4 s. `make humo` y `make mutacion` también subieron. Apunta al entorno, pero la causa no está demostrada (`f1-h5-t03.md` §7).

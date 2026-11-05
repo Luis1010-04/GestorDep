@@ -144,3 +144,34 @@ test('§6.2: es_propio solo para quien creó el aviso', function () {
 test('§5.1: los valores de EstadoDeAviso son los de la tabla', function () {
     expect(array_map(fn (EstadoDeAviso $estado) => $estado->value, EstadoDeAviso::cases()))->toBe(['pendiente', 'confirmado', 'descartado']);
 });
+
+test('HU-20 c1: confirmar deja el aviso confirmado con su autor y el instante, sin tocar el original', function () {
+    $aviso = avisoNuevoDePrueba(reportadoPorJugador: true);
+    $autor = Identificador::generar();
+    $instante = new DateTimeImmutable('2026-11-16 09:00:00+00:00');
+
+    $confirmado = $aviso->confirmar($autor, $instante);
+
+    expect($confirmado->estado())->toBe(EstadoDeAviso::Confirmado)
+        ->and($confirmado->confirmadoPor())->toBe($autor)
+        ->and($confirmado->descartadoPor())->toBeNull()
+        ->and($confirmado->notaDescarte())->toBeNull()
+        ->and($confirmado->actualizadoEn())->toBe($instante)
+        ->and($confirmado->creadoEn())->toBe($aviso->creadoEn())
+        ->and($confirmado->id())->toBe($aviso->id())
+        ->and($confirmado->jugadorId())->toBe($aviso->jugadorId())
+        ->and($confirmado->creadoPor())->toBe($aviso->creadoPor())
+        ->and($confirmado->reportadoPorJugador())->toBeTrue()
+        ->and($confirmado->nota())->toBe($aviso->nota())
+        ->and($confirmado->fechaAviso())->toBe($aviso->fechaAviso())
+        ->and($aviso->estado())->toBe(EstadoDeAviso::Pendiente)
+        ->and($aviso->confirmadoPor())->toBeNull();
+});
+
+test('§6.3: un aviso que ya no está pendiente no se confirma', function (Closure $aviso) {
+    expect(fn () => $aviso()->confirmar(Identificador::generar(), new DateTimeImmutable('2026-11-16 09:00:00+00:00')))
+        ->toThrow(AvisoNoPendiente::class);
+})->with([
+    'descartado' => fn () => avisoNuevoDePrueba()->descartar(Identificador::generar(), 'Primera', new DateTimeImmutable('2026-11-16 08:00:00+00:00')),
+    'confirmado' => fn () => avisoConfirmadoDePrueba(Identificador::generar(), Identificador::generar()),
+]);

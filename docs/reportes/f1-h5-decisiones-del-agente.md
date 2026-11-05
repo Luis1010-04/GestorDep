@@ -91,3 +91,35 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Privacidad o permisos:** no.
 - **Límite para revisión posterior (T08 o H7):** quien confirma un aviso y cambia el estado o da de alta en el mismo segundo recibe 409 y debe repetir la operación. Falta comprobar que esto no llegue al usuario como 500 y decidir si el caso merece otra solución.
 - **Cómo se revierte:** una migración nueva que cambie el `CHECK` a `>=` o la precisión de las columnas.
+
+## DA-31. Orden del listado de lesiones (T03)
+
+- **Qué faltaba:** §6.1 no dice en qué orden se devuelven las lesiones del jugador.
+- **Qué se eligió:** por `fecha_inicio` y por `id`, descendentes, como los avisos (DD-56).
+- **Estado:** por confirmar por el responsable.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cambiar el orden en `RepositorioDeLesionesSql::delRegistrante`.
+
+## DA-32. `nota` nula o vacía en la lesión (T03)
+
+- **Qué faltaba:** §6.2 dice que la `nota` es opcional, pero no qué pasa si llega nula o vacía.
+- **Qué se eligió:** responde 422, al confirmar y en `PATCH /lesiones/{lesion}`. Una nota ya guardada no se puede borrar, solo reemplazar.
+- **Estado:** por confirmar por el responsable.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** agregar `nullable` a la regla y distinguir en `Lesion::corregir` entre campo ausente y nulo.
+
+## DA-33. Orden de los 409 al confirmar (T03)
+
+- **Qué faltaba:** el punto 2 del plan fija el orden en `PATCH` y alta, pero no al confirmar.
+- **Qué se eligió:** después del 422 por cuerpo: 409 `aviso_no_pendiente`, 409 `jugador_en_baja`, 422 `rango_de_fechas_invalido`, 409 `conflicto`.
+- **Estado:** por confirmar por el responsable.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** reordenar las comprobaciones en `ConfirmarAviso`.
+
+## DA-34. Textos nuevos de T03 (T03)
+
+- **Qué faltaba:** §6.3 define los códigos, pero no sus mensajes.
+- **Qué se eligió:** `sin_lesion_vigente`: «El jugador no tiene una lesión vigente.»; `no_es_registrante`: «Solo quien registró el estado oficial puede modificarlo.»; y dos `cuerpo_sin_campos` con la forma de los existentes.
+- **Estado:** por confirmar por el responsable.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cambiar el texto en `lang/es/errores.php`.
