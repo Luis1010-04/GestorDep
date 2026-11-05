@@ -412,4 +412,45 @@ Detalle en `docs/reportes/f1-h5-t02.md`.
 
 `make mutacion`: 176 s, 724 de 724 mutantes eliminados. `make fresh` + `make humo`: código 0, 45 s el humo.
 
-**Aviso:** 747 s queda a 33 s del aviso de 13 minutos. Pest subió 188 s; las pruebas de T02 explican unos 25 s y el resto no se midió. El contenedor estaba recién creado, pero PHPStan ya tenía caché por las corridas previas.
+**Aviso:** 747 s queda a 33 s del aviso de 13 minutos. Pest subió 188 s. El contenedor estaba recién creado, pero PHPStan ya tenía caché por las corridas previas. §3.1 detalla el aumento.
+
+### 3.1 Verificaciones antes de T03 (4/11/2026)
+
+Pedidas por el responsable, sin cambiar código de producción.
+
+#### Tiempos por archivo, T01 frente a T02
+
+Salen de los tiempos por prueba del log de cada `make verificar`. Suman 435,5 s y 621,3 s, frente a los 440 s y 628 s de Pest.
+
+| Grupo | Pruebas | T01 | T02 | Cambio |
+|---|---:|---:|---:|---:|
+| Archivos existentes, sin cambios en T02 | 1 504 | 435,5 s | 601,8 s | ×1,38 |
+| Archivos nuevos de T02 | 65 | — | 19,4 s | — |
+
+| Archivo que más creció | T01 | T02 | Diferencia |
+|---|---:|---:|---:|
+| `ArquitecturaTest`, que no usa la base | 31,4 s | 50,6 s | +19,3 s |
+| `AvisosTest`, nuevo | — | 13,7 s | +13,7 s |
+| `PartidosTest` | 10,1 s | 16,3 s | +6,1 s |
+| `CalificacionesTest` | 13,9 s | 19,9 s | +6,0 s |
+| `MigracionesDeAcademicoTest` | 18,4 s | 24,5 s | +6,0 s |
+
+**Conclusión, con estos datos:** las pruebas nuevas explican 19,4 s de los 188 s. El resto está en archivos que T02 no cambió, incluido uno que no usa la base. Eso apunta al entorno o a que era la primera corrida tras recrear los contenedores, no al código. La causa no está demostrada: es una sola comparación. `f1-h5-t02.md` §7 daba unos 25 s como estimación; el dato medido es 19,4 s.
+
+#### Mutación de los filtros de alcance de T02
+
+En una copia temporal dentro del contenedor (`/tmp/mut`), borrada al terminar, con `tests/Feature/Salud/AvisosTest.php`. El repositorio no cambió. El control sin mutar dio 42 pruebas pasadas antes y después.
+
+| Mutación | Cambio | Pruebas que fallan |
+|---|---|---:|
+| M1 | `ComprobarJugadorVisible`: `if (false)` en lugar de comprobar el alcance | 4 |
+| M2 | `ComprobarAvisoDelEntrenador`: solo `$aviso === null` | 3 |
+| M3 | `ListarAvisos`: `$creadoPor = null` | 2 |
+| M4 | `VisibilidadDeJugadorSql::esVisibleComoEntrenador`: sin `soloEntrenador: true` | 3 |
+
+M1 a M3 son los tres filtros; M4 es adicional, porque M2 y M3 dependen de él. Las pruebas de 404 que pasaban antes de crear las rutas (`f1-h5-t02.md` §3) fallan con estas mutaciones. T08 sigue debiendo la mutación de todos los filtros de H5.
+
+#### Decisiones
+
+- **Confirmadas por el responsable (4/11/2026):** DA-23, DA-25, DA-28 y DA-29.
+- **Decidida por el responsable (5/11/2026):** DA-30, opción A, con su límite anotado para T08 o H7.

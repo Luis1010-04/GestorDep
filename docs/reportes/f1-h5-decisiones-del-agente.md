@@ -30,7 +30,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** §6.2 hace obligatoria la `fecha` del aviso, pero no dice si puede ser futura.
 - **Qué se eligió:** no se valida que no sea futura, como DD-55 y DA-03.
-- **Estado:** aprobada por el responsable con el plan de T02 (3/11/2026). T02 aún no se implementa.
+- **Estado:** confirmada por el responsable (4/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** agregar la regla a la solicitud.
 
@@ -46,7 +46,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** §5.3 define la unión de alcances para ver el estado oficial y crear avisos, pero no para listarlos.
 - **Qué se eligió:** si el usuario entrena al jugador, ve todos sus avisos; si solo le da clase, ve los que él creó.
-- **Estado:** aprobada por el responsable con el plan de T02 (3/11/2026). T02 aún no se implementa.
+- **Estado:** confirmada por el responsable (4/11/2026).
 - **Privacidad o permisos:** **sí** (lectura).
 - **Cómo se revierte:** cambiar la condición del listado.
 
@@ -70,7 +70,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** DA-24 fija el orden para `jugador_en_baja` al crear, pero nada lo fija al descartar.
 - **Qué se eligió:** primero la validación del cuerpo (422) y después el 409 `aviso_no_pendiente`, por coherencia con DA-24.
-- **Estado:** por confirmar por el responsable.
+- **Estado:** confirmada por el responsable (4/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** comprobar el estado del aviso en `authorize()`.
 
@@ -78,6 +78,16 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** §6.3 define el código, pero no su mensaje.
 - **Qué se eligió:** «El aviso ya no está pendiente de confirmación.», en `lang/es/errores.php`.
-- **Estado:** por confirmar por el responsable.
+- **Estado:** confirmada por el responsable (4/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cambiar el texto en `lang/es/errores.php`.
+
+## DA-30. Estado abierto y cerrado en el mismo segundo (T03)
+
+- **Qué faltaba:** `estados_disponibilidad` exige `vigente_hasta > vigente_desde`, y las dos columnas guardan segundos. Un estado que se abre y se cierra en el mismo segundo viola el `CHECK`, y §5.1 no dice qué responder.
+- **De dónde viene el límite:** de la columna, no de `Reloj`. Las dos son `timestamptz(0)` (`datetime_precision = 0`), que redondea la fracción. `RelojDelSistema` entrega microsegundos. `Instante::truncadoASegundos` trunca en el código, para que lo guardado y lo devuelto sean el mismo valor, pero no crea el límite: sin él, dos instantes del mismo segundo también podrían coincidir al redondear.
+- **Qué se eligió:** responder 409 `conflicto`, que §6.3 ya prevé para escrituras que chocan. El esquema no cambia. Las pruebas con reloj fijo adelantan el reloj entre una operación y otra.
+- **Estado:** decidida por el responsable (opción A, 5/11/2026). T03 aún no se implementa.
+- **Privacidad o permisos:** no.
+- **Límite para revisión posterior (T08 o H7):** quien confirma un aviso y cambia el estado o da de alta en el mismo segundo recibe 409 y debe repetir la operación. Falta comprobar que esto no llegue al usuario como 500 y decidir si el caso merece otra solución.
+- **Cómo se revierte:** una migración nueva que cambie el `CHECK` a `>=` o la precisión de las columnas.
