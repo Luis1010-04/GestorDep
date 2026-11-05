@@ -514,3 +514,14 @@ Detalle en `docs/reportes/f1-h5-t03.md`.
 `make mutacion`: 230 s, 796 de 796 mutantes eliminados. `make fresh` + `make humo`: código 0, 85 s el humo.
 
 **Aviso: 871 s pasa de 13 minutos y queda a 29 s del alto de 15.** Los archivos sin pruebas nuevas subieron ×1,33 y las 130 pruebas nuevas sumaron 42,4 s. `make humo` y `make mutacion` también subieron. Apunta al entorno, pero la causa no está demostrada (`f1-h5-t03.md` §7).
+
+### 5.1 Revisión de T03 y lista de cierre de H5 (5/11/2026)
+
+DA-31 a DA-34 confirmadas por el responsable. El orden completo de confirmar y los textos exactos están en `f1-h5-t03.md` §13 y §14.
+
+**Pendientes para el cierre de H5, sin bloquear T04:**
+
+- Concurrencia real con dos peticiones simultáneas.
+- Lesión anterior tras DD-63 sin alta: anotada para la auditoría.
+
+**T04 espera** la orden del responsable tras medir `make verificar` con la laptop sin carga.
