@@ -844,3 +844,43 @@ test('RN-15: las lesiones del jugador siguen disponibles con el jugador en baja'
     sesionesPeticion($this, 'GET', lesionesRuta($m['jb']), idDeSesion: sesionesIniciar($this, 'e1@x.com'))
         ->assertOk()->assertJsonCount(1, 'datos');
 });
+
+test('DA-33: un aviso ya confirmado de un jugador en baja responde 409 aviso_no_pendiente, no jugador_en_baja', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['jb'], $m['e1'], ['estado' => 'confirmado', 'confirmado_por' => $m['e2']]);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), confirmacionCuerpo(), sesionesIniciar($this, 'e1@x.com'))
+        ->assertConflict()
+        ->assertJsonPath('codigo', 'aviso_no_pendiente');
+});
+
+test('DA-33: con el jugador en baja, un cuerpo inválido responde 422 validacion_fallida, no 409', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['jb'], $m['e1']);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), [], sesionesIniciar($this, 'e1@x.com'))
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'validacion_fallida');
+});
+
+test('DA-33: con el aviso ya confirmado, un cuerpo inválido responde 422 validacion_fallida, no 409', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['f1'], $m['e1'], ['estado' => 'confirmado', 'confirmado_por' => $m['e2']]);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), [], sesionesIniciar($this, 'e1@x.com'))
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'validacion_fallida');
+});
+
+test('DA-33: con el jugador en baja y el regreso anterior al aviso, responde 409 jugador_en_baja, no 422 de fechas', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['jb'], $m['e1'], ['fecha_aviso' => '2026-11-14']);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), confirmacionCuerpo(['fecha_estimada_regreso' => '2026-11-13']), sesionesIniciar($this, 'e1@x.com'))
+        ->assertConflict()
+        ->assertJsonPath('codigo', 'jugador_en_baja');
+});
