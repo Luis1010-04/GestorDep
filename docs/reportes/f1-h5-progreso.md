@@ -454,3 +454,50 @@ M1 a M3 son los tres filtros; M4 es adicional, porque M2 y M3 dependen de él. L
 
 - **Confirmadas por el responsable (4/11/2026):** DA-23, DA-25, DA-28 y DA-29.
 - **Decidida por el responsable (5/11/2026):** DA-30, opción A, con su límite anotado para T08 o H7.
+
+## 4. Actualización de Symfony por los avisos de seguridad del 4/11/2026
+
+**Causa.** La corrida #63 de CI falló en `composer audit` sobre `9dccf68`, con Pest y la cobertura en verde. `composer audit` falló igual en local, con 8 avisos en 5 paquetes, todos con fecha 4/11/2026. `composer.lock` no cambió entre `a34283e` y `9dccf68`: el fallo vino de los avisos publicados, no de T02.
+
+**Cambio.** Solo `backend/composer.lock`. `composer.json` y su `content-hash` no cambiaron. El `--dry-run` mostró 5 paquetes y la actualización cambió esos 5:
+
+| Paquete | Sección | Antes | Después |
+|---|---|---|---|
+| `symfony/http-foundation` | `packages` | 8.1.9 | 8.1.11 |
+| `symfony/http-kernel` | `packages` | 8.1.9 | 8.1.11 |
+| `symfony/routing` | `packages` | 8.1.9 | 8.1.11 |
+| `symfony/filesystem` | `packages-dev` | 8.1.9 | 8.1.11 |
+| `symfony/yaml` | `packages-dev` | 8.1.9 | 8.1.11 |
+
+### 4.1 Notas de versión de 8.1.9 a 8.1.11
+
+Fuente: `CHANGELOG-8.1.md` de `symfony/symfony` (rama 8.1), secciones 8.1.10 y 8.1.11. Se revisó además qué archivos cambiaron en `vendor`: 19 en `http-foundation`, 16 en `http-kernel` y 6 en `routing`.
+
+| Paquete | Qué cambió | Por qué no afecta al proyecto |
+|---|---|---|
+| `http-foundation` | `RequestMatcher` y `MethodRequestMatcher` coinciden con HEAD si listan GET (CVE-2026-118514) | El proyecto no usa `symfony/security` ni `access_control`: no está en `composer.lock` |
+| `http-foundation` | Rangos privados para proxies de confianza (`private_ranges`) | `app/`, `src/`, `bootstrap/`, `routes/` y `config/` no configuran proxies de confianza |
+| `http-foundation` | `Request::getBaseUrl()`: no empieza con un host del cliente, ni coincide con un nombre de script parcial, codificado o fuera de la ruta | **Sí se ejecuta en cada petición**, pero corrige casos con prefijo o alias. El repositorio no configura ninguno. Las pruebas de rutas siguen pasando |
+| `http-foundation` | `HeaderUtils::split()` sin retroceso (CVE-2026-108082); nombres de cookies y análisis de cabeceras | **También se ejecuta**, por ejemplo en la cookie de sesión. Las pruebas de sesión siguen pasando |
+| `http-foundation` | `BinaryFileResponse`, `UrlHelper`, `getPreferredLanguage()`, manejadores de sesión de Redis, Memcached, MongoDB y PDO, `MigratingSessionHandler` | El proyecto no los usa: solo devuelve JSON y sus sesiones van por el manejador `database` de Laravel |
+| `http-kernel` | Contexto del router tras una subpetición; carga de CSV y YAML en `#[MapRequestPayload]`; `#[Cache]`, `#[RateLimit]`, perfilador, reconstrucción del contenedor | El código del proyecto solo importa de `HttpKernel` `HttpExceptionInterface`, `NotFoundHttpException` y `AccessDeniedHttpException`. Esas clases no aparecen en las notas |
+| `routing` | Marcadores de host en los matchers compilados (CVE-2026-118516) | Ninguna ruta usa `domain()`, y el `Makefile`, el `Dockerfile` y `composer.json` no ejecutan `route:cache` |
+| `routing` | Condiciones de ruta `"0"`, rutas solo HEAD, esquema JSON | El proyecto no define condiciones de ruta ni rutas solo HEAD |
+
+`filesystem` y `yaml` están en `packages-dev`: los usan Infection, la validación de `docs/api/openapi.yaml` y Boost. No llegan a producción con una instalación sin dependencias de desarrollo.
+
+**Límite de esta revisión.** Se revisaron las notas, los archivos cambiados y el uso en el repositorio, no cada línea del código de Symfony. El repositorio no define un servidor web de producción, así que la conclusión sobre prefijos y proxies vale mientras no se agreguen. Si el despliegue los usa, conviene revisarlo en la revisión de seguridad de H7.
+
+### 4.2 Corridas
+
+En serie, con `docker compose top` limpio antes de cada una, sin bajar los contenedores.
+
+| Corrida | Resultado | Tiempo |
+|---|---|---:|
+| `composer audit` | Código 0, sin avisos | — |
+| PHPStan | «No errors» | 53 s |
+| `make verificar` | Código 0. 1 569 pruebas (10 374 aserciones), las mismas cifras que T02; cobertura de 100 %, 100 % y 99,5 %; sin avisos de seguridad | **677 s** (Pest 573 s) |
+| `make mutacion` | Código 0. 724 de 724 mutantes eliminados; MSI 100 %, MSI cubierto 100 % | 160 s |
+| `make fresh` + `make humo` | Código 0. H0 a H4 OK | 40 s el humo |
+
+`main` tiene el `composer.lock` anterior: su próxima corrida de CI fallará igual hasta que reciba este cambio.
