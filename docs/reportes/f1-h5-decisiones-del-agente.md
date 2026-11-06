@@ -303,7 +303,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 ## DA-57. Tiempo de `make verificar` en H5
 
-- **Qué faltaba:** `make verificar` varió entre 526 y 871 s en H5, y T06 agrega más pruebas.
+- **Qué faltaba:** `make verificar` varió entre 487 y 871 s en H5, en la laptop actual, y T06 agrega más pruebas.
 - **Qué se eligió:** primero medir y resolver las cachés. Pest en paralelo queda fuera de H5 y requiere un plan aparte.
 - **Estado:** aprobada por Luis (6/11/2026). La medición y las cachés aún no se hacen.
 - **Privacidad o permisos:** no.
