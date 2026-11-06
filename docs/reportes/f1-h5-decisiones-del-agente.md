@@ -268,3 +268,27 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por el responsable (5/11/2026). Implementada en T03 (`455720e`).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar la clave y usar la existente.
+
+## DA-53. Mensaje de `valor_fuera_de_rango` en mediciones (T05)
+
+- **Qué faltaba:** el texto de `errores.reglas.valor_fuera_de_rango` habla de goles.
+- **Qué se eligió:** clave propia en `errores.condicion_fisica`, con «El valor está fuera del rango permitido.».
+- **Estado:** aprobada por Luis (6/11/2026). Implementada en T05.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la clave y usar otra.
+
+## DA-54. Textos nuevos de T05 (T05)
+
+- **Qué faltaba:** §6.3 define los códigos, pero no sus mensajes.
+- **Qué se eligió:** `medicion_ya_registrada`: «Ya hay una medición registrada en ese periodo. Si quieres reemplazarla, confírmalo como corrección.»; `nada_que_corregir`: «No hay nada que corregir en ese periodo.»; `equipo_inexistente`: «El equipo indicado no existe.».
+- **Estado:** propuesta del agente, **pendiente de confirmación del responsable**. Implementada en T05.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cambiar el texto en `lang/es/errores.php`.
+
+## DA-55. Forma de `equipo_id` en mediciones (T05)
+
+- **Qué faltaba:** DA-13 fija la respuesta para un equipo inexistente, pero no para un valor que no identifica a ninguno.
+- **Qué se eligió:** un texto que no es UUID responde 422 `validacion_fallida`. Un UUID válido que no es v7 responde 422 `equipo_inexistente`, con el mismo cuerpo que un equipo inexistente, como la captura de rendimiento con `metrica_id`.
+- **Estado:** propuesta del agente, **pendiente de confirmación del responsable**. Implementada en T05.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** usar la regla `uuid:7` en `SolicitudDeMedicion`.

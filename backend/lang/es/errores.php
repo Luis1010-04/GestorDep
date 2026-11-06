@@ -34,10 +34,19 @@ return [
         'rango_de_fechas_invalido' => 'La fecha no puede ser anterior al inicio de la lesión.',
     ],
 
+    // Mensajes de Condición física con el mismo código que otra captura con distinto significado (DA-41).
+    'condicion_fisica' => [
+        'valor_fuera_de_rango' => 'El valor está fuera del rango permitido.',
+        'jugador_en_baja' => 'El jugador está en baja: no se pueden registrar ni corregir mediciones.',
+    ],
+
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
     'reglas' => [
         'aviso_no_pendiente' => 'El aviso ya no está pendiente de confirmación.',
         'sin_lesion_vigente' => 'El jugador no tiene una lesión vigente.',
+        'medicion_ya_registrada' => 'Ya hay una medición registrada en ese periodo. Si quieres reemplazarla, confírmalo como corrección.',
+        'nada_que_corregir' => 'No hay nada que corregir en ese periodo.',
+        'equipo_inexistente' => 'El equipo indicado no existe.',
         'no_es_registrante' => 'Solo quien registró el estado oficial puede modificarlo.',
         'credenciales_invalidas' => 'Las credenciales no son válidas.',
         'cuenta_bloqueada' => 'La cuenta está bloqueada temporalmente por intentos fallidos.',

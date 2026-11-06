@@ -634,3 +634,13 @@ Sustituye a §8.2. Los logs completos van en `docs/reportes/logs/` solo si respa
 Log completo: `docs/reportes/logs/verificar/f1-h5-preT05-20261106-1138.log`.
 
 CI: el push de `126a567` disparó el run #67, que terminó en `success`.
+
+## 10. F1-H5-T05: mediciones corporales
+
+Detalle en `f1-h5-t05.md`.
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Cierre de T05 | 1 835 | 596 s | 661 s |
+
+Log: `docs/reportes/logs/verificar/f1-h5-t05-20261106-1259.log`. Pendientes para T08: rango faltante (500) y DA-45.

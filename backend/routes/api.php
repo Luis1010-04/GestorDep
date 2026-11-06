@@ -19,6 +19,7 @@ use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\LesionController;
 use App\Http\Controllers\LugarController;
 use App\Http\Controllers\MateriaController;
+use App\Http\Controllers\MedicionController;
 use App\Http\Controllers\PartidoController;
 use App\Http\Controllers\PeriodoEscolarController;
 use App\Http\Controllers\PlantillaEvaluacionController;
@@ -148,5 +149,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/jugadores/{jugador}/lesiones', [LesionController::class, 'listar'])->whereUuid('jugador');
         Route::get('/lesiones/{lesion}', [LesionController::class, 'ver'])->whereUuid('lesion');
         Route::patch('/lesiones/{lesion}', [LesionController::class, 'corregir'])->whereUuid('lesion');
+
+        Route::get('/jugadores/{jugador}/mediciones', [MedicionController::class, 'listar'])->whereUuid('jugador');
+        Route::post('/jugadores/{jugador}/mediciones', [MedicionController::class, 'registrar'])->whereUuid('jugador');
     });
 });

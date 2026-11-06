@@ -5088,6 +5088,176 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/mediciones:
+    get:
+      operationId: listarMediciones
+      summary: Lista las mediciones del jugador que registro el usuario
+      description: >-
+        Entrenador del jugador (HU-17 c3, DD-59). Solo las que el usuario registro, por periodo ascendente (DA-06). Sigue
+        disponible con el jugador en baja.
+      tags: [Condicion fisica]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de mediciones.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Medicion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarMedicion
+      summary: Registra una medicion o la corrige con confirmacion
+      description: >-
+        Entrenador del jugador (HU-17, docs/convenciones-api.md 4.1). El periodo se deriva de fecha (DA-03) y el IMC se
+        calcula (DA-05). Orden de errores (DA-38): 403 rol, 404 alcance, 422 cuerpo, 409 jugador_en_baja, 422
+        equipo_inexistente, 422 valor_fuera_de_rango, 422 nada_que_corregir, 409 medicion_ya_registrada, 409 conflicto.
+      tags: [Condicion fisica]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [equipo_id, peso_kg, estatura_cm]
+              properties:
+                equipo_id:
+                  type: string
+                  format: uuid
+                  description: Equipo que el usuario entrena y donde el jugador tiene membresia vigente (DA-13).
+                peso_kg:
+                  type: string
+                  description: Hasta dos decimales. El rango sale de rangos_mediciones_corporales (DA-16).
+                  example: '70.00'
+                estatura_cm:
+                  type: string
+                  description: Hasta un decimal. El rango sale de rangos_mediciones_corporales (DA-16).
+                  example: '175.0'
+                fecha:
+                  type: string
+                  format: date
+                  description: Opcional; por defecto, el hoy de negocio. Puede ser futura (DA-03).
+                es_correccion:
+                  type: boolean
+                  default: false
+                motivo:
+                  type: string
+                  maxLength: 255
+                  description: >-
+                    Obligatorio con es_correccion; hasta 255 caracteres (DA-44). Sin es_correccion responde 422 prohibited
+                    (DA-39).
+      responses:
+        '200':
+          description: Correccion confirmada. Con valores identicos no escribe historial (DA-40).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Medicion'
+        '201':
+          description: Medicion registrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Medicion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            jugador_en_baja (DD-60, DA-12), medicion_ya_registrada (ya hay una del usuario en el periodo, sin es_correccion)
+            o conflicto (dos registros simultaneos).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            validacion_fallida, equipo_inexistente (mismo cuerpo si no existe, esta eliminado, es ajeno o no tiene al
+            jugador; DA-13), valor_fuera_de_rango en peso_kg o estatura_cm, o nada_que_corregir en es_correccion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /jugadores/{jugador}/lesiones:
     get:
       operationId: listarLesiones
@@ -5287,6 +5457,39 @@ components:
           format: uuid
           nullable: true
           description: Solo para el registrante; a los demas se les devuelve nulo (DA-18).
+    Medicion:
+      type: object
+      additionalProperties: false
+      required: [id, equipo_id, fecha, periodo, peso_kg, estatura_cm, imc, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+        fecha:
+          type: string
+          format: date
+        periodo:
+          type: string
+          description: AAAA-MM, derivado de fecha (DA-03).
+          example: 2026-11
+        peso_kg:
+          type: string
+          description: Dos decimales.
+          example: '70.00'
+        estatura_cm:
+          type: string
+          description: Un decimal.
+          example: '175.0'
+        imc:
+          type: string
+          description: Calculado, a dos decimales HALF_UP (DA-05).
+          example: '22.86'
+        actualizado_en:
+          type: string
+          format: date-time
     Lesion:
       type: object
       additionalProperties: false
