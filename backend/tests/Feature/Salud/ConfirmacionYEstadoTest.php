@@ -359,6 +359,44 @@ test('DD-63: confirmar sustituye también un estado propio o un apto explícito'
         ->and(estadoVigente($m['f1'])->confirmado_por)->toBe($m['e2']);
 })->with(['propio', 'apto']);
 
+test('DA-45: confirmar otro aviso deja sin alta la lesión propia anterior; el alta solo cierra la vigente', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $anterior = estadoInsertar($m['f1'], $m['e2'])['lesion'];
+    $aviso = avisoInsertar($m['f1'], $m['d1']);
+    $sesion = sesionesIniciar($this, 'e2@x.com');
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), confirmacionCuerpo(), $sesion)->assertOk();
+    $vigente = estadoVigente($m['f1'])->lesion_id;
+
+    expect($vigente)->not->toBe($anterior)
+        ->and(DB::table('lesiones')->where('id', $anterior)->value('fecha_alta'))->toBeNull();
+
+    relojAdelantar('2026-11-15 18:00:01');
+    sesionesPeticion($this, 'POST', altaRuta($m['f1']), [], $sesion)->assertOk();
+
+    expect(DB::table('lesiones')->where('id', $vigente)->value('fecha_alta'))->not->toBeNull()
+        ->and(DB::table('lesiones')->where('id', $anterior)->value('fecha_alta'))->toBeNull();
+});
+
+test('DA-45: confirmar apto deja sin alta la lesión propia anterior, y el alta responde 409 sin_lesion_vigente', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $anterior = estadoInsertar($m['f1'], $m['e2'])['lesion'];
+    $aviso = avisoInsertar($m['f1'], $m['d1']);
+    $sesion = sesionesIniciar($this, 'e2@x.com');
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), ['estado' => 'apto'], $sesion)->assertOk();
+
+    expect(estadoVigente($m['f1'])->estado)->toBe('apto')
+        ->and(DB::table('lesiones')->where('id', $anterior)->value('fecha_alta'))->toBeNull();
+
+    relojAdelantar('2026-11-15 18:00:01');
+    sesionesPeticion($this, 'POST', altaRuta($m['f1']), [], $sesion)
+        ->assertConflict()
+        ->assertJsonPath('codigo', 'sin_lesion_vigente');
+});
+
 test('RNF-02: confirmar escribe el historial del aviso, de la lesión y del estado', function () {
     /** @var TestCase $this */
     $m = avisosMundo();
