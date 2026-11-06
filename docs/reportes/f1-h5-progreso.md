@@ -1,7 +1,7 @@
 # Progreso de H5
 
 **Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.4
-**Estado:** Lote A terminado, a la espera de revisión del responsable. T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó en la laptop anterior (§1.8) y el responsable la cerró el 3/11/2026 sin cambios de configuración, con las corridas de la laptop nueva (§1.13). T01 terminada (§2). La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); los commits posteriores son locales; sin PR ni etiquetas.
+**Estado:** Lote A terminado, a la espera de revisión del responsable. T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó en la laptop anterior (§1.8) y el responsable la cerró el 3/11/2026 sin cambios de configuración, con las corridas de la laptop nueva (§1.13). T01 terminada (§2). La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); los commits hasta `18db0da` se publicaron después, también por orden suya (el último push es del 5/11/2026); lo posterior es local. Sin PR ni etiquetas.
 
 ## 1. F1-H5-T00: PHPStan nivel 8
 

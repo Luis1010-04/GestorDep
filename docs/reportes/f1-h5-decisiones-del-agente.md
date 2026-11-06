@@ -2,6 +2,8 @@
 
 Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hitos/f1-h5.md` §0). La numeración sigue a las DA-01 a DA-19 de §3.3. Se registran en `docs/decisiones/registro-decisiones.md` al cerrar el hito (T09).
 
+DA-38 a DA-41 quedan reservadas para las propuestas del plan de T05, que aún no están aprobadas ni registradas.
+
 ## DA-20. Columnas de entidad de los historiales (T01)
 
 - **Qué faltaba:** §5.1 nombra las cinco tablas de historial, pero no su columna de entidad.
@@ -38,7 +40,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** §6.1 fija el 404 antes del 422, pero no el orden entre el 422 y el 409 `jugador_en_baja`.
 - **Qué se eligió:** primero la validación del cuerpo (422) y después el 409, como en H2.
-- **Estado:** aprobada por el responsable con el plan de T02 (3/11/2026). T02 aún no se implementa.
+- **Estado:** aprobada por el responsable con el plan de T02 (3/11/2026). Implementada en T02 (`04cfc9c`).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** comprobar la baja en `authorize()`.
 
@@ -54,7 +56,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** §7.1 filas 1 y 7 piden comprobar que el estado oficial no cambia, pero `GET /jugadores/{jugador}/estado-disponibilidad` llega hasta T03.
 - **Qué se eligió:** T02 comprueba que `estados_disponibilidad` no cambia, y T03 agrega la comprobación por la API.
-- **Estado:** aprobada por el responsable con el plan de T02 (3/11/2026). T02 aún no se implementa.
+- **Estado:** aprobada por el responsable con el plan de T02 (3/11/2026). Implementada en T02 (`04cfc9c`); T03 agregó la comprobación por la API (`455720e`).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** no aplica: T03 completa la comprobación.
 
@@ -62,7 +64,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** el mensaje existente dice «no se puede asignar, inscribir ni capturar calificaciones o asistencias», que no describe un aviso, y T02 solo puede agregar claves nuevas en `lang/es`.
 - **Qué se eligió:** una clave nueva, solo para avisos, con el texto «El jugador está en baja: no se pueden crear avisos.». La clave existente no cambia y el código de la respuesta sigue siendo `jugador_en_baja`. El texto se elige en un punto local del módulo de avisos. Si hay que tocar `FormatoDeError.php`, las pruebas de H2 a H4 deben demostrar que sus respuestas siguen idénticas.
-- **Estado:** aprobada por el responsable con el plan de T02 (3/11/2026). T02 aún no se implementa.
+- **Estado:** aprobada por el responsable con el plan de T02 (3/11/2026). Implementada en T02 (`04cfc9c`).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar la clave nueva y usar la existente.
 
@@ -87,7 +89,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** `estados_disponibilidad` exige `vigente_hasta > vigente_desde`, y las dos columnas guardan segundos. Un estado que se abre y se cierra en el mismo segundo viola el `CHECK`, y §5.1 no dice qué responder.
 - **De dónde viene el límite:** de la columna, no de `Reloj`. Las dos son `timestamptz(0)` (`datetime_precision = 0`), que redondea la fracción. `RelojDelSistema` entrega microsegundos. `Instante::truncadoASegundos` trunca en el código, para que lo guardado y lo devuelto sean el mismo valor, pero no crea el límite: sin él, dos instantes del mismo segundo también podrían coincidir al redondear.
 - **Qué se eligió:** responder 409 `conflicto`, que §6.3 ya prevé para escrituras que chocan. El esquema no cambia. Las pruebas con reloj fijo adelantan el reloj entre una operación y otra.
-- **Estado:** decidida por el responsable (opción A, 5/11/2026). T03 aún no se implementa.
+- **Estado:** decidida por el responsable (opción A, 5/11/2026). Implementada en T03 (`455720e`).
 - **Privacidad o permisos:** no.
 - **Límite para revisión posterior (T08 o H7):** quien confirma un aviso y cambia el estado o da de alta en el mismo segundo recibe 409 y debe repetir la operación. Falta comprobar que esto no llegue al usuario como 500 y decidir si el caso merece otra solución.
 - **Cómo se revierte:** una migración nueva que cambie el `CHECK` a `>=` o la precisión de las columnas.
@@ -147,3 +149,19 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por el responsable con el plan de T04 (5/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** filtrar en el adaptador y en el repositorio a la vez.
+
+## DA-42. Docente que creó un aviso y perdió el alcance (T02)
+
+- **Qué faltaba:** RN-16 dice que los avisos pendientes los ven los entrenadores del jugador y quien los creó. §6.1 dice que un jugador fuera del alcance responde 404. Los dos chocan cuando un docente crea un aviso y después pierde el alcance sobre el jugador, por ejemplo si se elimina la inscripción.
+- **Qué se eligió:** gana §6.1 (opción A). Ese docente recibe el mismo 404 que con un jugador inexistente, no ve sus avisos y no recibe datos extra. RN-16 queda sin cumplirse en ese caso y `docs/requisitos.md` no cambió.
+- **Estado:** decidida por el responsable (opción A, 3/11/2026). Implementada en T02 (`04cfc9c`). La fija la prueba `RN-16 frente a §6.1 (opción A)`. Detalle en `f1-h5-t02.md` §1.
+- **Privacidad o permisos:** **sí** (lectura).
+- **Cómo se revierte:** dar al creador acceso a sus avisos en `ComprobarJugadorVisible` y `ListarAvisos`, y resolver antes el choque con §6.1.
+
+## DA-43. Registrante que perdió el alcance sobre el jugador (T03)
+
+- **Qué faltaba:** RN-15 reserva el detalle de la lesión a quien la registró, y §6.1 responde 404 fuera del alcance, pero nada dice qué pasa cuando quien la registró deja de entrenar al jugador.
+- **Qué se eligió:** responde 404, igual que una lesión inexistente, en `GET` y `PATCH /lesiones/{lesion}` y en `GET` de las lesiones del jugador. Mientras no recupere el alcance, esa persona no ve ni corrige la lesión que registró.
+- **Estado:** aprobada por el responsable (punto 1 del plan de T03, 5/11/2026). Implementada en T03 (`455720e`), en `BuscarLesionDelRegistrante`. La fija la prueba `Punto 1 del plan`.
+- **Privacidad o permisos:** **sí** (lectura y escritura).
+- **Cómo se revierte:** quitar la comprobación de `esVisibleComoEntrenador` en `BuscarLesionDelRegistrante` y permitir el listado sin alcance de entrenador.
