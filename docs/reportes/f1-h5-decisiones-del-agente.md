@@ -2,8 +2,6 @@
 
 Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hitos/f1-h5.md` §0). La numeración sigue a las DA-01 a DA-19 de §3.3. Se registran en `docs/decisiones/registro-decisiones.md` al cerrar el hito (T09).
 
-DA-38 a DA-41 quedan reservadas para las propuestas del plan de T05, que aún no están aprobadas ni registradas.
-
 ## DA-20. Columnas de entidad de los historiales (T01)
 
 - **Qué faltaba:** §5.1 nombra las cinco tablas de historial, pero no su columna de entidad.
@@ -149,6 +147,38 @@ DA-38 a DA-41 quedan reservadas para las propuestas del plan de T05, que aún no
 - **Estado:** aprobada por el responsable con el plan de T04 (5/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** filtrar en el adaptador y en el repositorio a la vez.
+
+## DA-38. Orden de los errores en mediciones (T05)
+
+- **Qué faltaba:** §6.1 fija el 404 antes del 422, pero no el orden entre los demás errores de T05.
+- **Qué se eligió:** 403 por rol, 404 por alcance, 422 por cuerpo, 409 `jugador_en_baja`, 422 `equipo_inexistente`, 422 `valor_fuera_de_rango`, 422 `nada_que_corregir`, 409 `medicion_ya_registrada`, 409 `conflicto`.
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T05.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** reordenar las comprobaciones del caso de uso de T05.
+
+## DA-39. `motivo` sin `es_correccion` (T05)
+
+- **Qué faltaba:** §6.2 hace obligatorio `motivo` con `es_correccion`, pero no dice qué pasa si llega sin él.
+- **Qué se eligió:** responde 422 `prohibited`, para no perder un motivo en silencio.
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T05.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la regla de la solicitud e ignorar el campo.
+
+## DA-40. Corrección con valores idénticos (T05)
+
+- **Qué faltaba:** `docs/convenciones-api.md` define la corrección, pero no qué responder si los valores no cambian.
+- **Qué se eligió:** responde 200 sin historial, como en T03 (DA-48).
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T05.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** escribir historial también sin cambios reales.
+
+## DA-41. Mensaje de `jugador_en_baja` en mediciones (T05)
+
+- **Qué faltaba:** los mensajes existentes de `jugador_en_baja` no describen las mediciones.
+- **Qué se eligió:** clave propia, con «El jugador está en baja: no se pueden registrar ni corregir mediciones.». El código sigue siendo `jugador_en_baja`.
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T05.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la clave y usar una existente.
 
 ## DA-42. Docente que creó un aviso y perdió el alcance (T02)
 
