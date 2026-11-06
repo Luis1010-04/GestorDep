@@ -209,7 +209,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** DD-63 dice que la lesión de otro registrante sigue sin alta cuando un estado nuevo sustituye al suyo, pero nada dice qué pasa con la lesión de quien confirma.
 - **Qué se eligió:** se deja sin alta, con el mismo criterio que DD-63. Confirmar no toca la lesión anterior y el alta solo cierra la lesión del estado vigente. Si el estado nuevo es `apto`, el alta responde 409 `sin_lesion_vigente`, así que ninguna ruta cierra esa lesión anterior.
-- **Estado:** aprobada por Luis (6/11/2026), con el criterio de DD-63: la lesión propia anterior no admite alta por la ruta del jugador. Es el comportamiento de `ConfirmarAviso` desde T03 (`455720e`); lo fijan las dos pruebas `DA-45`. **Pendiente para la revisión de T08.**
+- **Estado:** aprobada por Luis (6/11/2026), con el criterio de DD-63: la lesión propia no admite alta por la ruta del jugador. Es el comportamiento de `ConfirmarAviso` desde T03 (`455720e`); lo fijan las dos pruebas `DA-45`. **Pendiente para la revisión de T08.**
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cerrar la lesión propia en `ConfirmarAviso`, con su historial, y cambiar las pruebas `DA-45`.
 
@@ -297,7 +297,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** RNF-04 pide que todo dato muestre su fecha de última actualización, pero §6.2 no da ese campo al estado oficial. `vigente_desde` no cambia cuando solo cambia la fecha estimada, así que ese cambio no deja nada visible.
 - **Qué se eligió:** el estado oficial muestra la fecha y hora de su última actualización. Solo el momento, nunca el contenido del cambio.
-- **Estado:** aprobada por Luis (6/11/2026). **Sin implementar.** Falta fijar el nombre del campo, corregir §6.2 y `docs/api/openapi.yaml`, y asignarla a una tarea: cambia un contrato ya publicado en T03, y ninguna tarea pendiente la incluye.
+- **Estado:** aprobada por Luis (6/11/2026). **Sin implementar.** Asignada por Luis a T03b, antes de T06, con §6.2 y `docs/api/openapi.yaml` actualizados. Falta fijar el nombre del campo.
 - **Privacidad o permisos:** **sí** (lectura: quien ve el estado oficial ve el momento, nunca qué cambió).
 - **Cómo se revierte:** quitar el campo del recurso y del contrato.
 
@@ -305,6 +305,22 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** `make verificar` varió entre 487 y 871 s en H5, en la laptop actual, y T06 agrega más pruebas.
 - **Qué se eligió:** primero medir y resolver las cachés. Pest en paralelo queda fuera de H5 y requiere un plan aparte.
-- **Estado:** aprobada por Luis (6/11/2026). La medición y las cachés aún no se hacen.
+- **Estado:** aprobada por Luis (6/11/2026). La medición se hace después de la auditoría de T05.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** no aplica: fija un orden de trabajo.
+
+## DA-58. Orden de los errores en pruebas físicas (T06)
+
+- **Qué faltaba:** DA-38 solo cubre las mediciones.
+- **Qué se eligió:** 403 por rol, 404 por alcance, 422 por cuerpo, 409 `jugador_en_baja`, 422 `equipo_inexistente`, 422 `tipo_prueba_inexistente`, 422 `valor_fuera_de_rango`, 422 `nada_que_corregir`, 409 `prueba_ya_registrada`, 409 `conflicto`.
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** reordenar las comprobaciones del caso de uso de T06.
+
+## DA-62. Los dos filtros juntos en pruebas físicas (T06)
+
+- **Qué faltaba:** §6.1 no dice qué pasa con `filtro[periodo]` y `filtro[tipo_prueba_id]` a la vez.
+- **Qué se eligió:** la vista del periodo, solo con ese tipo. Con un UUID no v7, lista vacía, como DA-26 de H3.
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** rechazar la combinación con 422.
