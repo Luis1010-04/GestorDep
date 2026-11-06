@@ -668,4 +668,13 @@ Estas cifras vienen de la salida de cada corrida en la sesión, no de un log con
 
 §8 decía que el rango se rechaza en la solicitud. T05 lo valida en el caso de uso, por el orden de DA-38. El responsable corrigió §8 en la v1.0.6. El código no cambió.
 
-Queda desactualizado el comentario de la migración `060100`, que dice que «la solicitud valida el rango». No se toca, porque una migración integrada no se edita.
+Queda desactualizado el comentario de la migración `060100`, que dice que «la solicitud valida el rango». No se modifica, por orden del responsable. La regla de no editar migraciones no es el motivo: esa regla se refiere a las integradas en `main`, y `060100` no está en `main`, solo en `hito/f1-h5`.
+
+## 13. Antes de T06 (6/11/2026)
+
+Orden del responsable:
+
+1. Auditoría de T05 en una sesión de solo lectura.
+2. Plan de T06 para su aprobación, con pruebas primero: `f1-h5-plan-t06.md`.
+
+Mientras trabaje la sesión auditora no se ejecuta `make verificar`. No se publica, ni se abre PR, ni se etiqueta sin su orden expresa.
