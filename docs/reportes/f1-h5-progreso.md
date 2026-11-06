@@ -663,3 +663,9 @@ Estas cifras vienen de la salida de cada corrida en la sesión, no de un log con
 **Efecto.** Las corridas finales sí tienen su log (`f1-h5-t05.md` §6). Lo perdido es la evidencia intermedia y la comparación de tiempos con el mismo código.
 
 **Regla nueva, indicada por el responsable.** Ningún log se borra: si se reemplaza, se mueve a `backend/build/` o a `docs/reportes/logs/`.
+
+## 12. Desviación de T05 corregida en la especificación (6/11/2026)
+
+§8 decía que el rango se rechaza en la solicitud. T05 lo valida en el caso de uso, por el orden de DA-38. El responsable corrigió §8 en la v1.0.6. El código no cambió.
+
+Queda desactualizado el comentario de la migración `060100`, que dice que «la solicitud valida el rango». No se toca, porque una migración integrada no se edita.
