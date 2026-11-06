@@ -138,6 +138,29 @@ test('§6.3: descartar un aviso confirmado responde 409 aviso_no_pendiente', fun
         ->assertJsonPath('codigo', 'aviso_no_pendiente');
 });
 
+test('DA-28: descartar un aviso no pendiente con el cuerpo inválido responde 422, no 409', function (string $estado, array $cuerpo, string $campo) {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $atributos = $estado === 'descartado'
+        ? ['estado' => 'descartado', 'descartado_por' => $m['e2'], 'nota_descarte' => 'No aplica']
+        : ['estado' => 'confirmado', 'confirmado_por' => $m['e2']];
+    $aviso = avisoInsertar($m['f1'], $m['e1'], $atributos);
+    $antes = (array) DB::table('avisos_lesion')->where('id', $aviso)->first();
+
+    sesionesPeticion($this, 'POST', avisoDescarteRuta($aviso), $cuerpo, sesionesIniciar($this, 'e1@x.com'))
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'validacion_fallida')
+        ->assertJsonPath('errores.0.campo', $campo);
+    expect((array) DB::table('avisos_lesion')->where('id', $aviso)->first())->toBe($antes);
+})->with([
+    'descartado sin nota' => ['descartado', [], 'nota_descarte'],
+    'descartado con nota larga' => ['descartado', ['nota_descarte' => str_repeat('a', 501)], 'nota_descarte'],
+    'descartado con campo desconocido' => ['descartado', ['nota_descarte' => 'No aplica', 'estado' => 'apto'], 'estado'],
+    'confirmado sin nota' => ['confirmado', [], 'nota_descarte'],
+    'confirmado con nota larga' => ['confirmado', ['nota_descarte' => str_repeat('a', 501)], 'nota_descarte'],
+    'confirmado con campo desconocido' => ['confirmado', ['nota_descarte' => 'No aplica', 'estado' => 'apto'], 'estado'],
+]);
+
 test('§7.1 fila 9 (DD-61): D1 no descarta: 403 sin_permiso, también con un aviso inexistente', function () {
     /** @var TestCase $this */
     $m = avisosMundo();
