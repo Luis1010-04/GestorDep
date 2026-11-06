@@ -678,3 +678,7 @@ Orden del responsable:
 2. Plan de T06 para su aprobación, con pruebas primero: `f1-h5-plan-t06.md`.
 
 Mientras trabaje la sesión auditora no se ejecuta `make verificar`. No se publica, ni se abre PR, ni se etiqueta sin su orden expresa.
+
+## 14. Committer de los commits publicados el 6/11/2026
+
+Por orden del responsable, `3b578f3`, `7be89b0`, `8a0dedf` y `9899254` tienen `noreply@anthropic.com` como correo del committer. El autor sigue siendo el de `.git/config`, que no cambió. Se reescribieron antes de publicarlos, sin cambiar su contenido, y el push fue sin `--force`. Es una excepción a §2.2 solo para esos cuatro commits.
