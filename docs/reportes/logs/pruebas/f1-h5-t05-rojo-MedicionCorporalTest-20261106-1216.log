@@ -1,0 +1,425 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Unit\CondicionFisica\MedicionCorporalTest
+  ⨯ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a… 0.01s  
+  ⨯ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "§7.5 fila 2"
+  ⨯ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "§7.5 fila 3, HALF_UP sobre 12.505"
+  ⨯ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "justo debajo del medio"
+  ⨯ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "límites del rango"
+  ⨯ DA-03: el periodo se deriva de la fecha with dataset "noviembre"
+  ⨯ DA-03: el periodo se deriva de la fecha with dataset "enero"
+  ⨯ DA-03: el periodo se deriva de la fecha with dataset "fin de mes"
+  ⨯ HU-17 c2: corregir reemplaza equipo, fecha y valores, y conserva lo demás
+  ⨯ DA-40: dos mediciones con los mismos valores son iguales, aunque se escriban distinto
+  ⨯ DA-40: cualquier valor distinto hace que la medición cambie with ('equipo')
+  ⨯ DA-40: cualquier valor distinto hace que la medición cambie with ('fecha')
+  ⨯ DA-40: cualquier valor distinto hace que la medición cambie with ('peso')
+  ⨯ DA-40: cualquier valor distinto hace que la medición cambie with ('estatura')
+  ⨯ DA-16: el rango admite sus dos límites with ('20.00')                0.01s  
+  ⨯ DA-16: el rango admite sus dos límites with ('200.00')
+  ⨯ DA-16: el rango admite sus dos límites with ('100.50')
+  ⨯ DA-16: fuera del rango se señala el campo with ('19.99')
+  ⨯ DA-16: fuera del rango se señala el campo with ('200.01')
+  ⨯ DA-16: fuera del rango se señala el campo with ('0')
+  ⨯ DA-16: fuera del rango se señala el campo with ('-1')
+  ⨯ DA-16: fuera del rango se señala el campo with ('99999.99')
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-05: e…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-05: e…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-05: e…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-05: e…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-05: e…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-03: e…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:39
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-03: e…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:39
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-03: e…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:39
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > HU-17 c2…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:47
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-40: d…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:65
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-40: c…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:74
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-40: c…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:74
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-40: c…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:74
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-40: c…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+      7▕ use Src\Compartido\Dominio\NumeroDecimal;
+      8▕ 
+      9▕ function medicionDePrueba(string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     10▕ {
+  ➜  11▕     return MedicionCorporal::registrar(
+     12▕         Identificador::generar(),
+     13▕         Identificador::generar(),
+     14▕         Identificador::generar(),
+     15▕         Identificador::generar(),
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:11
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:74
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-16: e…  Error   
+  Class "Src\CondicionFisica\Dominio\RangoDeMedida" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+     21▕ }
+     22▕ 
+     23▕ function rangoDePrueba(): RangoDeMedida
+     24▕ {
+  ➜  25▕     return new RangoDeMedida(NumeroDecimal::desdeTexto('20.00'), NumeroDecimal::desdeTexto('200.00'));
+     26▕ }
+     27▕ 
+     28▕ test('DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales', function (string $peso, string $estatura, string $imc) {
+     29▕     expect(medicionDePrueba($peso, $estatura)->imc()->comoCadena(2))->toBe($imc);
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:89
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-16: e…  Error   
+  Class "Src\CondicionFisica\Dominio\RangoDeMedida" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+     21▕ }
+     22▕ 
+     23▕ function rangoDePrueba(): RangoDeMedida
+     24▕ {
+  ➜  25▕     return new RangoDeMedida(NumeroDecimal::desdeTexto('20.00'), NumeroDecimal::desdeTexto('200.00'));
+     26▕ }
+     27▕ 
+     28▕ test('DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales', function (string $peso, string $estatura, string $imc) {
+     29▕     expect(medicionDePrueba($peso, $estatura)->imc()->comoCadena(2))->toBe($imc);
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:89
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-16: e…  Error   
+  Class "Src\CondicionFisica\Dominio\RangoDeMedida" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+     21▕ }
+     22▕ 
+     23▕ function rangoDePrueba(): RangoDeMedida
+     24▕ {
+  ➜  25▕     return new RangoDeMedida(NumeroDecimal::desdeTexto('20.00'), NumeroDecimal::desdeTexto('200.00'));
+     26▕ }
+     27▕ 
+     28▕ test('DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales', function (string $peso, string $estatura, string $imc) {
+     29▕     expect(medicionDePrueba($peso, $estatura)->imc()->comoCadena(2))->toBe($imc);
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:89
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-16: f…  Error   
+  Class "Src\CondicionFisica\Dominio\RangoDeMedida" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+     21▕ }
+     22▕ 
+     23▕ function rangoDePrueba(): RangoDeMedida
+     24▕ {
+  ➜  25▕     return new RangoDeMedida(NumeroDecimal::desdeTexto('20.00'), NumeroDecimal::desdeTexto('200.00'));
+     26▕ }
+     27▕ 
+     28▕ test('DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales', function (string $peso, string $estatura, string $imc) {
+     29▕     expect(medicionDePrueba($peso, $estatura)->imc()->comoCadena(2))->toBe($imc);
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:96
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-16: f…  Error   
+  Class "Src\CondicionFisica\Dominio\RangoDeMedida" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+     21▕ }
+     22▕ 
+     23▕ function rangoDePrueba(): RangoDeMedida
+     24▕ {
+  ➜  25▕     return new RangoDeMedida(NumeroDecimal::desdeTexto('20.00'), NumeroDecimal::desdeTexto('200.00'));
+     26▕ }
+     27▕ 
+     28▕ test('DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales', function (string $peso, string $estatura, string $imc) {
+     29▕     expect(medicionDePrueba($peso, $estatura)->imc()->comoCadena(2))->toBe($imc);
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:96
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-16: f…  Error   
+  Class "Src\CondicionFisica\Dominio\RangoDeMedida" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+     21▕ }
+     22▕ 
+     23▕ function rangoDePrueba(): RangoDeMedida
+     24▕ {
+  ➜  25▕     return new RangoDeMedida(NumeroDecimal::desdeTexto('20.00'), NumeroDecimal::desdeTexto('200.00'));
+     26▕ }
+     27▕ 
+     28▕ test('DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales', function (string $peso, string $estatura, string $imc) {
+     29▕     expect(medicionDePrueba($peso, $estatura)->imc()->comoCadena(2))->toBe($imc);
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:96
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-16: f…  Error   
+  Class "Src\CondicionFisica\Dominio\RangoDeMedida" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+     21▕ }
+     22▕ 
+     23▕ function rangoDePrueba(): RangoDeMedida
+     24▕ {
+  ➜  25▕     return new RangoDeMedida(NumeroDecimal::desdeTexto('20.00'), NumeroDecimal::desdeTexto('200.00'));
+     26▕ }
+     27▕ 
+     28▕ test('DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales', function (string $peso, string $estatura, string $imc) {
+     29▕     expect(medicionDePrueba($peso, $estatura)->imc()->comoCadena(2))->toBe($imc);
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:96
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > DA-16: f…  Error   
+  Class "Src\CondicionFisica\Dominio\RangoDeMedida" not found
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+     21▕ }
+     22▕ 
+     23▕ function rangoDePrueba(): RangoDeMedida
+     24▕ {
+  ➜  25▕     return new RangoDeMedida(NumeroDecimal::desdeTexto('20.00'), NumeroDecimal::desdeTexto('200.00'));
+     26▕ }
+     27▕ 
+     28▕ test('DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales', function (string $peso, string $estatura, string $imc) {
+     29▕     expect(medicionDePrueba($peso, $estatura)->imc()->comoCadena(2))->toBe($imc);
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:25
+  2   tests/Unit/CondicionFisica/MedicionCorporalTest.php:96
+
+
+  Tests:    22 failed (0 assertions)
+  Duration: 0.57s
+

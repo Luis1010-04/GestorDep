@@ -317,6 +317,30 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** reordenar las comprobaciones del caso de uso de T06.
 
+## DA-59. Mensaje de baja en pruebas físicas (T06)
+
+- **Qué faltaba:** el texto de DA-41 habla de mediciones.
+- **Qué se eligió:** clave propia: «El jugador está en baja: no se pueden registrar ni corregir pruebas físicas.»
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la clave y usar una existente.
+
+## DA-60. Textos nuevos de T06 (T06)
+
+- **Qué faltaba:** §6.3 no da mensajes.
+- **Qué se eligió:** `prueba_ya_registrada`: «Ya hay una prueba de ese tipo registrada en ese periodo. Si quieres reemplazarla, confírmalo como corrección.»; `tipo_prueba_inexistente`: «El tipo de prueba indicado no existe.»
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cambiar el texto en `lang/es/errores.php`.
+
+## DA-61. Forma de `tipo_prueba_id` en el cuerpo (T06)
+
+- **Qué faltaba:** §6.3 solo dice «inexistente».
+- **Qué se eligió:** como DA-55: un texto que no es UUID da 422 `validacion_fallida`; un UUID no v7 o un tipo eliminado da 422 `tipo_prueba_inexistente`.
+- **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** usar la regla `uuid:7` en la solicitud de T06.
+
 ## DA-62. Los dos filtros juntos en pruebas físicas (T06)
 
 - **Qué faltaba:** §6.1 no dice qué pasa con `filtro[periodo]` y `filtro[tipo_prueba_id]` a la vez.
@@ -324,3 +348,11 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** rechazar la combinación con 422.
+
+## DA-63. Formato y orden de la vista de un periodo (T06)
+
+- **Qué faltaba:** §6.1 la excluye de la paginación, pero no fija el orden.
+- **Qué se propone:** se mantiene §6.1. Mismo formato que los listados sin paginar, como `GET /metricas`: `{"datos": [...]}`, sin `meta`, sin leer `pagina` ni `por_pagina`. Por `codigo` ascendente, también en `GET /tipos-prueba`.
+- **Estado:** **propuesta, pendiente de aprobación de Luis.**
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cambiar el orden o el formato en T06, antes de implementarla.

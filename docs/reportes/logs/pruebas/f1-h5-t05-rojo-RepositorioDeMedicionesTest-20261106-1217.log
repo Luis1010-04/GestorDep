@@ -1,0 +1,197 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Integration\CondicionFisica\RepositorioDeMedicionesTest
+  ⨯ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 7.65s  
+  ⨯ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.29s  
+  ⨯ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.44s  
+  ⨯ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.29s  
+  ⨯ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.35s  
+  ⨯ RNF-02: registrar escribe la fila y su historial crear en la misma…  0.31s  
+  ⨯ RNF-02: corregir escribe los valores anteriores y nuevos con el mot… 0.29s  
+  ⨯ §6.3: dos mediciones simultáneas del mismo periodo chocan con el ín… 0.30s  
+  ⨯ DD-59: buscar del periodo distingue jugador, registrante y periodo,… 0.28s  
+  ⨯ DA-16: los rangos salen de la tabla, también tras cambiarlos en la…  0.31s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\RepositorioDeMedicionesT…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+     11▕ use Tests\Ayudantes\NoNulo;
+     12▕ 
+     13▕ function repositorioMedicion(array $m, string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     14▕ {
+  ➜  15▕     return MedicionCorporal::registrar(
+     16▕         Identificador::generar(),
+     17▕         Identificador::desdeTexto($m['f1']),
+     18▕         Identificador::desdeTexto($m['a']),
+     19▕         Identificador::desdeTexto($m['e1']),
+
+  1   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+  2   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\RepositorioDeMedicionesT…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+     11▕ use Tests\Ayudantes\NoNulo;
+     12▕ 
+     13▕ function repositorioMedicion(array $m, string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     14▕ {
+  ➜  15▕     return MedicionCorporal::registrar(
+     16▕         Identificador::generar(),
+     17▕         Identificador::desdeTexto($m['f1']),
+     18▕         Identificador::desdeTexto($m['a']),
+     19▕         Identificador::desdeTexto($m['e1']),
+
+  1   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+  2   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\RepositorioDeMedicionesT…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+     11▕ use Tests\Ayudantes\NoNulo;
+     12▕ 
+     13▕ function repositorioMedicion(array $m, string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     14▕ {
+  ➜  15▕     return MedicionCorporal::registrar(
+     16▕         Identificador::generar(),
+     17▕         Identificador::desdeTexto($m['f1']),
+     18▕         Identificador::desdeTexto($m['a']),
+     19▕         Identificador::desdeTexto($m['e1']),
+
+  1   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+  2   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\RepositorioDeMedicionesT…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+     11▕ use Tests\Ayudantes\NoNulo;
+     12▕ 
+     13▕ function repositorioMedicion(array $m, string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     14▕ {
+  ➜  15▕     return MedicionCorporal::registrar(
+     16▕         Identificador::generar(),
+     17▕         Identificador::desdeTexto($m['f1']),
+     18▕         Identificador::desdeTexto($m['a']),
+     19▕         Identificador::desdeTexto($m['e1']),
+
+  1   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+  2   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\RepositorioDeMedicionesT…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+     11▕ use Tests\Ayudantes\NoNulo;
+     12▕ 
+     13▕ function repositorioMedicion(array $m, string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     14▕ {
+  ➜  15▕     return MedicionCorporal::registrar(
+     16▕         Identificador::generar(),
+     17▕         Identificador::desdeTexto($m['f1']),
+     18▕         Identificador::desdeTexto($m['a']),
+     19▕         Identificador::desdeTexto($m['e1']),
+
+  1   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+  2   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:29
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\RepositorioDeMedicionesT…  Error   
+  Class "Src\CondicionFisica\Dominio\MedicionCorporal" not found
+
+  at tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+     11▕ use Tests\Ayudantes\NoNulo;
+     12▕ 
+     13▕ function repositorioMedicion(array $m, string $peso = '70.00', string $estatura = '175.0', string $fecha = '2026-11-15'): MedicionCorporal
+     14▕ {
+  ➜  15▕     return MedicionCorporal::registrar(
+     16▕         Identificador::generar(),
+     17▕         Identificador::desdeTexto($m['f1']),
+     18▕         Identificador::desdeTexto($m['a']),
+     19▕         Identificador::desdeTexto($m['e1']),
+
+  1   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:15
+  2   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:44
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\Rep…  BindingResolutionException   
+  Target class [Src\CondicionFisica\Dominio\RepositorioDeMediciones] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1151
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  7   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:59
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\Rep…  BindingResolutionException   
+  Target class [Src\CondicionFisica\Dominio\RepositorioDeMediciones] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1151
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  7   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:81
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\Rep…  BindingResolutionException   
+  Target class [Src\CondicionFisica\Dominio\RepositorioDeMediciones] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1151
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  7   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:89
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\Rep…  BindingResolutionException   
+  Target class [Src\CondicionFisica\Dominio\CatalogoDeRangos] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1151
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  7   tests/Integration/CondicionFisica/RepositorioDeMedicionesTest.php:107
+
+
+  Tests:    10 failed (1 assertions)
+  Duration: 10.92s
+
