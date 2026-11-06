@@ -737,6 +737,25 @@ test('§6.2: confirmar guarda la nota opcional de la lesión', function () {
     expect(DB::table('lesiones')->where('jugador_id', $m['f1'])->value('nota'))->toBe('Con hielo');
 });
 
+test('DA-32: confirmar con la nota nula o vacía responde 422 y no registra nada', function (?string $nota) {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['f1'], $m['e1']);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), confirmacionCuerpo(['nota' => $nota]), sesionesIniciar($this, 'e1@x.com'))
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'validacion_fallida')
+        ->assertJsonPath('errores.0.campo', 'nota');
+
+    expect(DB::table('avisos_lesion')->where('id', $aviso)->value('estado'))->toBe('pendiente')
+        ->and(DB::table('lesiones')->where('jugador_id', $m['f1'])->count())->toBe(0)
+        ->and(DB::table('estados_disponibilidad')->where('jugador_id', $m['f1'])->count())->toBe(0);
+})->with([
+    'nula' => [null],
+    'vacía' => [''],
+    'solo espacios' => ['   '],
+]);
+
 test('§6.2: PATCH del estado rechaza campos desconocidos, apto y fechas mal formadas', function (array $cuerpo, string $campo) {
     /** @var TestCase $this */
     $m = avisosMundo();
@@ -777,6 +796,29 @@ test('§6.2: PATCH de la lesión rechaza la fecha estimada, campos desconocidos 
     'causa inválida' => [['causa' => 'desconocida'], 'causa'],
     'tipo largo' => [['tipo' => str_repeat('a', 101)], 'tipo'],
     'nota larga' => [['nota' => str_repeat('a', 501)], 'nota'],
+]);
+
+test('DA-32: PATCH de la lesión con la nota nula o vacía responde 422; la nota guardada no se borra, solo se reemplaza', function (?string $nota) {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $lesion = lesionInsertar($m['f1'], $m['e2'], ['nota' => 'Con hielo']);
+    $sesion = sesionesIniciar($this, 'e2@x.com');
+
+    sesionesPeticion($this, 'PATCH', lesionRuta($lesion), ['nota' => $nota], $sesion)
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'validacion_fallida')
+        ->assertJsonPath('errores.0.campo', 'nota');
+
+    expect(DB::table('lesiones')->where('id', $lesion)->value('nota'))->toBe('Con hielo')
+        ->and(DB::table('lesiones_historial')->where('lesion_id', $lesion)->count())->toBe(0);
+
+    sesionesPeticion($this, 'PATCH', lesionRuta($lesion), ['nota' => 'Sin hielo'], $sesion)
+        ->assertOk()
+        ->assertJsonPath('datos.nota', 'Sin hielo');
+})->with([
+    'nula' => [null],
+    'vacía' => [''],
+    'solo espacios' => ['   '],
 ]);
 
 test('RN-15: GET de la lesión devuelve solo sus campos a quien la registró', function () {
