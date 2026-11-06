@@ -165,3 +165,76 @@ DA-38 a DA-41 quedan reservadas para las propuestas del plan de T05, que aún no
 - **Estado:** aprobada por el responsable (punto 1 del plan de T03, 5/11/2026). Implementada en T03 (`455720e`), en `BuscarLesionDelRegistrante`. La fija la prueba `Punto 1 del plan`.
 - **Privacidad o permisos:** **sí** (lectura y escritura).
 - **Cómo se revierte:** quitar la comprobación de `esVisibleComoEntrenador` en `BuscarLesionDelRegistrante` y permitir el listado sin alcance de entrenador.
+
+## DA-44. Límite de `motivo` en mediciones y pruebas físicas (T05 y T06)
+
+- **Qué faltaba:** §6.2 decía «hasta 500», pero la macro `historial()` guarda `motivo` en un `varchar(255)` compartido por todos los historiales. Un motivo de 256 a 500 caracteres pasaría la validación y fallaría en la base.
+- **Qué se eligió:** opción A, límite de 255. §6.2 se corrigió en la v1.0.5 y el esquema no cambia. T05 y T06 prueban que 255 se acepta y que 256 responde 422 `validacion_fallida`, sin llegar a la base y nunca con un 500. `docs/api/openapi.yaml` lleva el límite cuando T05 y T06 documenten sus rutas, que aún no existen.
+- **Nota de la auditoría:** esta decisión cambia un contrato aprobado. La auditoría de los Lotes A y B (hallazgo A-1) detectó la diferencia; T01 había declarado «ninguna desviación» y el conflicto solo apareció en el plan de T05, sin registro en el repositorio.
+- **Estado:** decidida por el responsable (opción A, 6/11/2026). Especificación corregida; la validación y sus pruebas llegan con T05 y T06.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** una migración nueva que amplíe `motivo` en los historiales de Condición física, y volver §6.2 a 500.
+
+## DA-45. Lesión propia abierta al confirmar otro aviso (T03)
+
+- **Qué faltaba:** DD-63 dice que la lesión de otro registrante sigue sin alta cuando un estado nuevo sustituye al suyo, pero nada dice qué pasa con la lesión de quien confirma.
+- **Qué se eligió:** se deja sin alta, con el mismo criterio que DD-63. Confirmar no toca la lesión anterior y el alta solo cierra la lesión del estado vigente. Si el estado nuevo es `apto`, el alta responde 409 `sin_lesion_vigente`, así que ninguna ruta cierra esa lesión anterior.
+- **Estado:** decidida por el responsable (6/11/2026). Es el comportamiento de `ConfirmarAviso` desde T03 (`455720e`); lo fijan las dos pruebas `DA-45`. **Pendiente para la revisión de T08.**
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cerrar la lesión propia en `ConfirmarAviso`, con su historial, y cambiar las pruebas `DA-45`.
+
+## DA-46. Orden de los errores en `PATCH` del estado y en el alta (T03, punto 2 del plan)
+
+- **Qué faltaba:** §6.1 no fija el orden entre estos errores.
+- **Qué se eligió:** 403 por rol, 404 por alcance, 422 por cuerpo, 409 `sin_lesion_vigente`, 403 `no_es_registrante`, 409 `jugador_en_baja`. Fuera del alcance nunca se revela `no_es_registrante`.
+- **Estado:** aprobada por el responsable con el plan de T03 (5/11/2026). Implementada en T03 (`455720e`). La fijan las pruebas `Punto 2 del plan`.
+- **Privacidad o permisos:** **sí** (el orden decide qué sabe quien no tiene permiso).
+- **Cómo se revierte:** reordenar las comprobaciones en `CambiarEstado` y `DarDeAlta`.
+
+## DA-47. `PATCH` con el mismo estado (T03, punto 3 del plan)
+
+- **Qué faltaba:** DA-14 define el cambio de estado y el de fecha, pero no un `PATCH` que repite el estado vigente.
+- **Qué se eligió:** no abre fila nueva y solo aplica la fecha, si viene.
+- **Estado:** aprobada por el responsable con el plan de T03 (5/11/2026). Implementada en T03 (`455720e`).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** tratarlo como un cambio de estado en `CambiarEstado`.
+
+## DA-48. `PATCH` idéntico o sin campos (T03, punto 4 del plan)
+
+- **Qué faltaba:** §6.2 pide al menos un campo, pero no qué responder si los valores no cambian.
+- **Qué se eligió:** valores idénticos responden 200 sin historial; sin campos responde 422.
+- **Estado:** aprobada por el responsable (5/11/2026). Implementada en T03 (`455720e`).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** escribir historial también sin cambios reales.
+
+## DA-49. Fechas futuras en el alta y en el regreso estimado (T03, punto 5 del plan)
+
+- **Qué faltaba:** §6.2 no dice si `fecha_alta` y `fecha_estimada_regreso` pueden ser futuras.
+- **Qué se eligió:** pueden serlo.
+- **Estado:** aprobada por el responsable con el plan de T03 (5/11/2026). Implementada en T03 (`455720e`). La fija la prueba `Punto 5 del plan`.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** agregar la regla a las solicitudes.
+
+## DA-50. Alta sin fecha con un aviso de fecha futura (T03, punto 6 del plan)
+
+- **Qué faltaba:** el alta sin fecha usa el hoy de negocio, que puede ser anterior al inicio de una lesión creada con un aviso de fecha futura.
+- **Qué se eligió:** responde 422 `rango_de_fechas_invalido`.
+- **Estado:** aprobada por el responsable con el plan de T03 (5/11/2026). Implementada en T03 (`455720e`). La fija la prueba `Punto 6 del plan`.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cambiar la fecha por defecto en `DarDeAlta`.
+
+## DA-51. Mensaje de `rango_de_fechas_invalido` en la lesión (T03, punto 7 del plan)
+
+- **Qué faltaba:** el mensaje existente no describe la fecha de una lesión.
+- **Qué se eligió:** clave propia, con «La fecha no puede ser anterior al inicio de la lesión.». El mensaje existente no cambia.
+- **Estado:** aprobada por el responsable (5/11/2026). Implementada en T03 (`455720e`). La fija la prueba `Punto 7 del plan`.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la clave y usar la existente.
+
+## DA-52. Mensaje de `jugador_en_baja` al confirmar o cambiar el estado (T03, punto 8 del plan)
+
+- **Qué faltaba:** el mensaje de DA-27 solo describe la creación de avisos.
+- **Qué se eligió:** clave propia, con «El jugador está en baja: no se puede confirmar el aviso ni cambiar su estado.». El código sigue siendo `jugador_en_baja`.
+- **Estado:** aprobada por el responsable (5/11/2026). Implementada en T03 (`455720e`).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la clave y usar la existente.
