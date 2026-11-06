@@ -278,6 +278,7 @@ Además de `backend/CLAUDE.md`:
 - **Commits:** `F1-H5-TNN: descripción` para las tareas y `F1-DOC: descripción` para la documentación.
 - **Documentos de cada tarea:** reporte `docs/reportes/f1-h5-tNN.md`, decisiones nuevas en `f1-h5-decisiones-del-agente.md` y tiempos de Pest en este archivo.
 - **Tiempo:** si `make verificar` pasa de 13 minutos, avisar; si pasa de 15, detenerse.
+- **Logs:** cada `make verificar` se guarda en `docs/reportes/logs/verificar/` y el reporte cita la ruta (§8.2).
 - **PHPStan:** nunca línea base, `ignoreErrors` ni `@phpstan-ignore`. Tras editar una prueba, correr PHPStan antes de `make verificar`.
 - **Nulos en pruebas:** los valores que la prueba ya da por existentes se envuelven con `Tests\Ayudantes\NoNulo::exigir`. Si alguna prueba espera nulo, no se envuelve: se tipa `?T` y se prueba el nulo.
 - **Corridas en serie:** nada en paralelo, y ningún comando mientras corre `make verificar`. Antes de cada corrida, bajar los contenedores que hayan quedado levantados o confirmar que su estado es el esperado.
@@ -575,3 +576,27 @@ Detalle en `docs/reportes/f1-h5-t04.md`.
 | T04 | Puerto hacia Competencia | Este commit |
 
 **Pendientes para el cierre de H5:** concurrencia real con dos peticiones simultáneas; lesión anterior tras DD-63 sin alta; revisión de DA-30 en T08 o H7; el par fechas y `conflicto` de DA-33 sin prueba combinada.
+
+## 8. Correcciones tras la auditoría de los Lotes A y B (6/11/2026)
+
+Pedidas por el responsable antes de continuar T05. T05 sigue detenida hasta que decida el límite de `motivo` y el caso de la lesión propia.
+
+### 8.1 Pruebas de DA-28 y DA-32
+
+Son 12 casos nuevos: 6 de DA-28 en `AvisosTest.php`, y 3 al confirmar y 3 en `PATCH` de lesión de DA-32 en `ConfirmacionYEstadoTest.php`.
+
+**Pruebas primero: lo que se pudo y lo que no.** Pasaron en su primera corrida, porque fijan un comportamiento que el código ya tenía: `Tests: 12 passed`. No hubo una falla previa que pegar. Para demostrar que pueden fallar, se invirtió cada regla en una copia temporal dentro del contenedor (`/tmp/mut`), borrada al terminar. El repositorio no cambió y el control sin mutar pasó antes y después (12 pasadas, 76 aserciones).
+
+| Mutación | Cambio | Resultado |
+|---|---|---|
+| Y1 (DA-28) | El estado del aviso se comprueba en `authorize()` | 6 fallan: `Expected response status code [422] but received 409` |
+| Y2 (DA-32) | `nota` con `nullable` al confirmar | 3 fallan: `[422] but received 200` |
+| Y3 (DA-32) | `nota` con `nullable` en `PATCH` de lesión | 3 fallan: `[422] but received 200` |
+
+El primer intento de Y1 dio 500 por un error de escape en la mutación, no en las pruebas. Se descartó y se repitió.
+
+### 8.2 Logs de `make verificar`
+
+Desde el 6/11/2026, cada corrida se guarda completa en `docs/reportes/logs/verificar/f1-hN-{tarea}-{AAAAMMDD-HHMM}.log`, y el reporte de la tarea cita esa ruta. El log abre con el commit base y cierra con el código y los segundos.
+
+Primera corrida: `docs/reportes/logs/verificar/f1-h5-postauditoria-20261106-1044.log`, código 0 en 588 s: 1 729 pruebas (11 146 aserciones), Pest 507 s, PHPStan «No errors», cobertura de 100 %, 100 % y 99,5 %, sin avisos de seguridad.
