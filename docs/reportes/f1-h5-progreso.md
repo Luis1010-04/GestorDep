@@ -278,7 +278,7 @@ Además de `backend/CLAUDE.md`:
 - **Commits:** `F1-H5-TNN: descripción` para las tareas y `F1-DOC: descripción` para la documentación.
 - **Documentos de cada tarea:** reporte `docs/reportes/f1-h5-tNN.md`, decisiones nuevas en `f1-h5-decisiones-del-agente.md` y tiempos de Pest en este archivo.
 - **Tiempo:** si `make verificar` pasa de 13 minutos, avisar; si pasa de 15, detenerse.
-- **Logs:** los completos van en `docs/reportes/logs/` solo si respaldan un reporte o el cierre de una tarea; las demás corridas quedan en `backend/build/`, con la ruta anotada en el reporte (§9.3).
+- **Logs:** los completos van en `docs/reportes/logs/` solo si respaldan un reporte o el cierre de una tarea; las demás corridas quedan en `backend/build/`, con la ruta anotada en el reporte (§9.3). Ningún log se borra: si se reemplaza, se mueve a `backend/build/` o a `docs/reportes/logs/` (§11).
 - **PHPStan:** nunca línea base, `ignoreErrors` ni `@phpstan-ignore`. Tras editar una prueba, correr PHPStan antes de `make verificar`.
 - **Nulos en pruebas:** los valores que la prueba ya da por existentes se envuelven con `Tests\Ayudantes\NoNulo::exigir`. Si alguna prueba espera nulo, no se envuelve: se tipa `?T` y se prueba el nulo.
 - **Corridas en serie:** nada en paralelo, y ningún comando mientras corre `make verificar`. Antes de cada corrida, bajar los contenedores que hayan quedado levantados o confirmar que su estado es el esperado.
@@ -644,3 +644,22 @@ Detalle en `f1-h5-t05.md`.
 | Cierre de T05 | 1 835 | 596 s | 661 s |
 
 Log: `docs/reportes/logs/verificar/f1-h5-t05-20261106-1259.log`. Pendientes para T08: rango faltante (500) y DA-45.
+
+## 11. Incidencia: logs borrados durante T05 (6/11/2026)
+
+**Qué pasó.** Durante el cierre de T05, el agente borró los logs de dos rondas de `make verificar` y `make mutacion`. Los borró al repetir las corridas para cubrir los mutantes de `f1-h5-t05.md` §5, porque ya estaban reemplazados. No se pueden recuperar.
+
+**Regla incumplida.** §9.3: las corridas que no respaldan un reporte quedan en `backend/build/`, con la ruta anotada en el reporte. El agente debió moverlos ahí.
+
+| Ronda | Corrida | Resultado | Tiempo |
+|---|---|---|---:|
+| 1 | `make verificar` | Código 0. 1 831 pruebas (11 561 aserciones) | 651 s (Pest 605 s) |
+| 1 | `make mutacion` | Código 0. 838 de 842 mutantes eliminados, 4 sin cubrir | 123 s |
+| 2 | `make mutacion` | Código 0. 840 de 842 mutantes eliminados, 2 sin cubrir | 122 s |
+| 2 | `make verificar` | Código 0. 1 835 pruebas (11 570 aserciones) | 564 s (Pest 511 s) |
+
+Estas cifras vienen de la salida de cada corrida en la sesión, no de un log conservado.
+
+**Efecto.** Las corridas finales sí tienen su log (`f1-h5-t05.md` §6). Lo perdido es la evidencia intermedia y la comparación de tiempos con el mismo código.
+
+**Regla nueva, indicada por el responsable.** Ningún log se borra: si se reemplaza, se mueve a `backend/build/` o a `docs/reportes/logs/`.
