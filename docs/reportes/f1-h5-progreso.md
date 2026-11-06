@@ -278,7 +278,7 @@ Además de `backend/CLAUDE.md`:
 - **Commits:** `F1-H5-TNN: descripción` para las tareas y `F1-DOC: descripción` para la documentación.
 - **Documentos de cada tarea:** reporte `docs/reportes/f1-h5-tNN.md`, decisiones nuevas en `f1-h5-decisiones-del-agente.md` y tiempos de Pest en este archivo.
 - **Tiempo:** si `make verificar` pasa de 13 minutos, avisar; si pasa de 15, detenerse.
-- **Logs:** cada `make verificar` se guarda en `docs/reportes/logs/verificar/` y el reporte cita la ruta (§8.2).
+- **Logs:** los completos van en `docs/reportes/logs/` solo si respaldan un reporte o el cierre de una tarea; las demás corridas quedan en `backend/build/`, con la ruta anotada en el reporte (§9.3).
 - **PHPStan:** nunca línea base, `ignoreErrors` ni `@phpstan-ignore`. Tras editar una prueba, correr PHPStan antes de `make verificar`.
 - **Nulos en pruebas:** los valores que la prueba ya da por existentes se envuelven con `Tests\Ayudantes\NoNulo::exigir`. Si alguna prueba espera nulo, no se envuelve: se tipa `?T` y se prueba el nulo.
 - **Corridas en serie:** nada en paralelo, y ningún comando mientras corre `make verificar`. Antes de cada corrida, bajar los contenedores que hayan quedado levantados o confirmar que su estado es el esperado.
@@ -600,3 +600,37 @@ El primer intento de Y1 dio 500 por un error de escape en la mutación, no en la
 Desde el 6/11/2026, cada corrida se guarda completa en `docs/reportes/logs/verificar/f1-hN-{tarea}-{AAAAMMDD-HHMM}.log`, y el reporte de la tarea cita esa ruta. El log abre con el commit base y cierra con el código y los segundos.
 
 Primera corrida: `docs/reportes/logs/verificar/f1-h5-postauditoria-20261106-1044.log`, código 0 en 588 s: 1 729 pruebas (11 146 aserciones), Pest 507 s, PHPStan «No errors», cobertura de 100 %, 100 % y 99,5 %, sin avisos de seguridad.
+
+## 9. Órdenes del responsable antes de T05 (6/11/2026)
+
+### 9.1 Decisiones
+
+- **`motivo`:** opción A, hasta 255 (DA-44). La especificación pasó a la v1.0.5. `docs/api/openapi.yaml` no cambió porque las rutas de mediciones y pruebas físicas aún no existen: T05 y T06 documentan el límite con ellas y prueban 255 y 256.
+- **Lesión propia:** queda sin alta, con el criterio de DD-63 (DA-45). Lo fijan dos pruebas en `ConfirmacionYEstadoTest.php`. **Pendiente para la revisión de T08.**
+- **Condiciones de T04:** aceptadas por el responsable. Están en `f1-h5-t04.md` §5 desde `ed445cd`.
+- **Puntos 2 a 8 del plan de T03:** registrados como DA-46 a DA-52. Solo DA-46 lleva «Privacidad o permisos: sí».
+
+### 9.2 Mutaciones
+
+En una copia temporal dentro del contenedor (`/tmp/mut`), borrada al terminar, con control antes y después de cada una. Las pruebas `DA-45` pasaron en su primera corrida, porque fijan un comportamiento que el código ya tenía.
+
+| Mutación | Cambio | Control antes y después | Con la mutación |
+|---|---|---|---|
+| Y1 (DA-28) | El estado del aviso se comprueba en `authorize()` | 6 pasadas (31 aserciones) | 6 fallan: `Expected response status code [422] but received 409` |
+| Y4 (DA-45) | Confirmar cierra la lesión propia anterior | 2 pasadas (14 aserciones) | 2 fallan: `Failed asserting that '2026-11-15' is null` |
+
+Log completo: `docs/reportes/logs/mutaciones/f1-h5-y1-y4-20261106-1135.log`.
+
+### 9.3 Regla de logs
+
+Sustituye a §8.2. Los logs completos van en `docs/reportes/logs/` solo si respaldan un reporte o el cierre de una tarea. Las demás corridas quedan en `backend/build/`, con la ruta anotada en el reporte.
+
+### 9.4 Corridas
+
+| Corrida | Resultado | Tiempo |
+|---|---|---:|
+| `make verificar` | Código 0. **1 731 pruebas (11 159 aserciones)**, PHPStan «No errors», cobertura Dominio 100 %, Aplicación 100 %, Infraestructura y HTTP 99,5 %, sin avisos de seguridad | **561 s** (Pest 519 s) |
+
+Log completo: `docs/reportes/logs/verificar/f1-h5-preT05-20261106-1138.log`.
+
+CI: el push de `126a567` disparó el run #67, que terminó en `success`.
