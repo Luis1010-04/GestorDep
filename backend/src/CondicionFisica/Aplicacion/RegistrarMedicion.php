@@ -55,8 +55,9 @@ final class RegistrarMedicion
             $equipoId = $this->equipoDe($datos['equipo_id'], $jugadorId, $autor);
             $peso = NumeroDecimal::desdeTexto($datos['peso_kg']);
             $estatura = NumeroDecimal::desdeTexto($datos['estatura_cm']);
-            $this->rangos->de('peso_kg')->exigir($peso, 'peso_kg');
-            $this->rangos->de('estatura_cm')->exigir($estatura, 'estatura_cm');
+            // El límite efectivo es el menor entre el máximo del rango y lo que cabe en la columna (AU-09).
+            $this->rangos->de('peso_kg')->acotadoA($this->rangos->maximoDeColumna('peso_kg'))->exigir($peso, 'peso_kg');
+            $this->rangos->de('estatura_cm')->acotadoA($this->rangos->maximoDeColumna('estatura_cm'))->exigir($estatura, 'estatura_cm');
 
             $instante = Instante::truncadoASegundos($this->reloj->ahora());
             $fecha = $datos['fecha'] ?? $this->hoyDeNegocio->hoy()->format('Y-m-d');

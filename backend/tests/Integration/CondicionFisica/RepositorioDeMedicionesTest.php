@@ -115,3 +115,12 @@ test('DA-16: los rangos salen de la tabla, también tras cambiarlos en la base',
     $catalogo->de('peso_kg')->exigir(NumeroDecimal::desdeTexto('150.00'), 'peso_kg');
     $catalogo->de('estatura_cm')->exigir(NumeroDecimal::desdeTexto('230.0'), 'estatura_cm');
 });
+
+test('AU-09: el máximo de cada columna sale de su tipo en la base', function () {
+    medicionesMundo();
+    $catalogo = app(CatalogoDeRangos::class);
+
+    expect($catalogo->maximoDeColumna('peso_kg')->comoCadena(2))->toBe('999.99')
+        ->and($catalogo->maximoDeColumna('estatura_cm')->comoCadena(1))->toBe('9999.9')
+        ->and(fn () => $catalogo->maximoDeColumna('imc_inexistente'))->toThrow(RuntimeException::class);
+});

@@ -550,3 +550,32 @@ test('RNF-02: una medición borrada lógicamente no se lista ni cuenta para el p
 
     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), $sesion)->assertCreated();
 });
+
+test('AU-09: con el máximo de peso en 1500.00, 1200.00 responde 422 valor_fuera_de_rango, no 500; 999.99 cabe en la columna', function () {
+    /** @var TestCase $this */
+    $m = medicionesMundo();
+    DB::connection('propietario')->table('rangos_mediciones_corporales')->where('codigo', 'peso_kg')->update(['maximo' => '1500.00']);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '1200.00']), $sesion)
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'valor_fuera_de_rango')
+        ->assertJsonPath('errores.0.campo', 'peso_kg');
+
+    expect(medicionesCuenta($m['f1']))->toBe(0);
+
+    sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '999.99']), $sesion)->assertCreated();
+});
+
+test('AU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999.9 se guarda y 10000.0 responde 422, nunca 500', function () {
+    /** @var TestCase $this */
+    $m = medicionesMundo();
+    DB::connection('propietario')->table('rangos_mediciones_corporales')->where('codigo', 'estatura_cm')->update(['maximo' => '9999.99']);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['estatura_cm' => '10000.0']), $sesion)
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'valor_fuera_de_rango')
+        ->assertJsonPath('errores.0.campo', 'estatura_cm');
+    sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['estatura_cm' => '9999.9']), $sesion)->assertCreated();
+});

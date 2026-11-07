@@ -12,6 +12,15 @@ final class RangoDeMedida
         private readonly NumeroDecimal $maximo,
     ) {}
 
+    /**
+     * El rango que de verdad se puede guardar: el máximo efectivo es el menor entre el del rango y el de la columna (AU-09).
+     * Si el rango ya cabe, devuelve el mismo.
+     */
+    public function acotadoA(NumeroDecimal $maximoDeColumna): self
+    {
+        return $this->maximo->mayorQue($maximoDeColumna) ? new self($this->minimo, $maximoDeColumna) : $this;
+    }
+
     /** @throws ValorFueraDeRango */
     public function exigir(NumeroDecimal $valor, string $campo): void
     {

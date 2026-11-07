@@ -136,3 +136,20 @@ test('Reconstruir devuelve la medición con sus valores guardados', function () 
         ->and($medicion->creadoEn())->toEqual($original->creadoEn())
         ->and($medicion->actualizadoEn())->toEqual($actualizada);
 });
+
+test('AU-09: el rango acotado a la columna toma el menor de los dos máximos', function () {
+    $rango = rangoDePrueba();
+    $acotado = $rango->acotadoA(NumeroDecimal::desdeTexto('150.00'));
+
+    $acotado->exigir(NumeroDecimal::desdeTexto('150.00'), 'peso_kg');
+    $error = null;
+    try {
+        $acotado->exigir(NumeroDecimal::desdeTexto('150.01'), 'peso_kg');
+    } catch (ValorFueraDeRango $e) {
+        $error = $e;
+    }
+
+    expect($error?->campo())->toBe('peso_kg')
+        ->and($rango->acotadoA(NumeroDecimal::desdeTexto('999.99')))->toBe($rango)
+        ->and($rango->acotadoA(NumeroDecimal::desdeTexto('200.00')))->toBe($rango);
+});
