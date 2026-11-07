@@ -52,12 +52,20 @@ function avisosMundo(): array
  *
  * @param  array<string, mixed>  $atributos
  */
-function avisoInsertar(string $jugador, string $creadoPor, array $atributos = []): string
+function avisoInsertar(string $jugador, string $creadoPor, array $atributos = [], ?string $id = null): string
 {
-    return mundoInsertar('avisos_lesion', [
+    $fila = [
         'jugador_id' => $jugador, 'creado_por' => $creadoPor, 'nota' => 'Molestia en el tobillo', 'estado' => 'pendiente',
         'fecha_aviso' => '2026-11-14', ...$atributos,
-    ]);
+    ];
+    if ($id === null) {
+        return mundoInsertar('avisos_lesion', $fila);
+    }
+
+    // Un id explícito fija el desempate por id cuando dos filas comparten la fecha del aviso.
+    DB::connection('propietario')->table('avisos_lesion')->insert(['id' => $id, ...$fila]);
+
+    return $id;
 }
 
 function avisosRuta(string $jugador): string

@@ -135,8 +135,9 @@ test('§6.1: un aviso inexistente o eliminado no se encuentra', function () {
 test('DD-56: delJugador ordena por fecha y por id descendentes, y solo trae avisos no eliminados de ese jugador', function () {
     ['m' => $m, 'repositorio' => $repositorio] = repositorioDeAvisosConSesionDe();
     $viejo = avisoInsertar($m['f1'], $m['e1'], ['fecha_aviso' => '2026-11-10']);
-    $primero = avisoInsertar($m['f1'], $m['e1'], ['fecha_aviso' => '2026-11-14']);
-    $segundo = avisoInsertar($m['f1'], $m['e1'], ['fecha_aviso' => '2026-11-14']);
+    // UUID v7 con milisegundos distintos y crecientes: con la misma fecha del aviso, el orden por id es determinista.
+    $primero = avisoInsertar($m['f1'], $m['e1'], ['fecha_aviso' => '2026-11-14'], '019a5c00-0000-7000-8000-000000000001');
+    $segundo = avisoInsertar($m['f1'], $m['e1'], ['fecha_aviso' => '2026-11-14'], '019a5c00-0001-7000-8000-000000000002');
     avisoInsertar($m['f1'], $m['e1'], ['eliminado_en' => '2026-11-15 10:00:00+00']);
     avisoInsertar($m['j1'], $m['e1']);
 
