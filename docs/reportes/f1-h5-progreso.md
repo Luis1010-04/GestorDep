@@ -187,6 +187,32 @@ El encabezado del log dice commit base fea05b1. Ese hash ya no existe en la rama
 
 **Comparación, sin conclusiones todavía:** los cierres de T05 dieron 651, 564 y 661 s con 1 831 a 1 835 pruebas (§11 y `f1-h5-t05.md` §6). Esta corrida tiene 4 pruebas más y tardó entre 92 y 189 s más, casi todo en Pest. Una sola corrida no separa la carga de la laptop del código, y la parte de las cachés que pide DA-57 sigue sin hacerse.
 
+#### 1.8.7 Medición de DA-57 con la caché persistente (7/11/2026)
+
+Opción (i) de DA-57: volúmenes nombrados para `/tmp/phpstan` y `/tmp/pint`, y `backend/pint.json` solo con `cache-file`. Sobre el commit «F1-H5: caché de PHPStan y de Pint en volumen (DA-57, opción i)», con la laptop en carga normal y sin auditor activo. Secuencia: `make bajar`, `make levantar` (volúmenes nuevos y vacíos), corrida fría, corrida caliente y, al final, otro `make bajar` y `make levantar` sin correr nada.
+
+| Corrida | Estado de las cachés | Código | Total | Pest | Total menos Pest | Pruebas |
+|---|---|---|---:|---:|---:|---|
+| Fría | No existían antes de empezar | **2** | **836 s** | 678,65 s | 157 s | 1 840 pasadas y **1 fallida** (11 594 aserciones) |
+| Caliente | Las creó la fría | 0 | **788 s** | 735,55 s | 52 s | 1 841 (11 594 aserciones) |
+| Referencia de §1.8.6 | No estaban frías | 0 | 753 s | 684,54 s | 68 s | 1 839 (11 587 aserciones) |
+
+La caliente dio PHPStan «No errors», cobertura Dominio 100 %, Aplicación 100 %, Infraestructura y HTTP 99,5 % (total 99,6 %) y sin avisos de seguridad.
+
+**Las dos corridas pasaron el aviso de 13 minutos** (780 s), sin llegar al tope de 15.
+
+**La caché se usa y persiste.** `resultCache.php` de PHPStan y `pint.cache` de Pint se crearon en la fría y no cambiaron en la caliente: mismo tamaño, misma hora y misma sha1 (`1caa1ad7d99b` y `4d356477d7e5`). Después de otro `make bajar` y `make levantar` seguían iguales. Lo que no es Pest bajó de 157 s en frío a 52 s en caliente.
+
+**El total no bajó.** Pest varió entre 678 y 735 s con casi el mismo código, y esa variación pesa más que lo que ahorran las cachés. Frente a los 753 s de §1.8.6, la caliente tardó 35 s más, y su parte fuera de Pest, 16 s menos.
+
+**Fallo en la corrida fría:** `RepositorioDeAvisosTest > DD-56: delJugador ordena por fecha y por id descendentes…` (línea 146). Es el mismo defecto que se corrigió en la prueba de RN-15: los dos avisos tienen la misma `fecha_aviso` y sus ids comparten el milisegundo (`01a1b721-843b-…`), así que su orden por id es aleatorio. En la caliente pasó. No se corrigió en esta tarea.
+
+**Logs:**
+
+- `docs/reportes/logs/verificar/f1-h5-da57-fria-20261107-1143.log`
+- `docs/reportes/logs/verificar/f1-h5-da57-caliente-20261107-1157.log`
+- `docs/reportes/logs/verificar/f1-h5-da57-caches-20261107-1143.log`: secuencia completa, con el estado de las cachés antes y después de cada paso
+
 ### 1.9 Por qué Pest subió de 512 s a 647 s
 
 **Corridas de hoy**, todas con 1 430 o 1 432 pruebas y cobertura:
