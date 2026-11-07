@@ -1,0 +1,21 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+=== control antes
+      1   Tests:    13 passed (46 assertions)
+reemplazos: 1
+=== M1 conFecha sin el instante
+      1   ⨯ DA-56: cambiar la fecha fija actualizadoEn en el instante del cambi… 0.01s  
+      1   ⨯ DA-56: cambiar la fecha estimada actualiza actualizado_en, no vigen… 0.26s  
+      1   Tests:    2 failed, 11 passed (43 assertions)
+      1   Failed asserting that two variables reference the same object.
+      1   Failed asserting that two strings are identical.
+      1    FAILED  Tests\Unit\Salud\EstadoOficialTest > DA-56: cambiar la fecha fija…   
+      1    FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > DA-56: cambiar la f…   
+reemplazos: 1
+=== M2 guardarCambio con el instante del estado anterior
+      1   ⨯ DA-56: cambiar la fecha estimada actualiza actualizado_en, no vigen… 0.24s  
+      1   Tests:    1 failed, 12 passed (46 assertions)
+      1   Failed asserting that two strings are identical.
+      1    FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > DA-56: cambiar la f…   
+=== control despues
+      1   Tests:    13 passed (46 assertions)
+copia temporal borrada

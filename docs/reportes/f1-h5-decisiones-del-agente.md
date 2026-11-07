@@ -297,7 +297,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** RNF-04 pide que todo dato muestre su fecha de última actualización, pero §6.2 no da ese campo al estado oficial. `vigente_desde` no cambia cuando solo cambia la fecha estimada, así que ese cambio no deja nada visible.
 - **Qué se eligió:** el estado oficial muestra la fecha y hora de su última actualización. Solo el momento, nunca el contenido del cambio.
-- **Estado:** aprobada por Luis (6/11/2026). **Sin implementar.** Asignada por Luis a T03b, antes de T06, con §6.2 y `docs/api/openapi.yaml` actualizados. Falta fijar el nombre del campo.
+- **Estado:** aprobada por Luis (6/11/2026). Implementada en T03b (7/11/2026), con el campo `actualizado_en`, nulo en el apto implícito y sin cambios al corregir la lesión, como decidió Luis. §6.2 y `docs/api/openapi.yaml` actualizados.
 - **Privacidad o permisos:** **sí** (lectura: quien ve el estado oficial ve el momento, nunca qué cambió).
 - **Cómo se revierte:** quitar el campo del recurso y del contrato.
 

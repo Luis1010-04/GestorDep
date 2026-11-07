@@ -774,3 +774,13 @@ El máximo efectivo de peso y estatura es el menor entre el del rango y lo que c
 - Pruebas en rojo antes de la corrección: `docs/reportes/logs/pruebas/f1-h5-au09-rojo-*-20261107-1016.log`
 - Pruebas en verde después de la corrección: `docs/reportes/logs/pruebas/f1-h5-au09-verde-*-20261107-101{7,8}.log`
 - Estatura sin y con el límite de columna: `docs/reportes/logs/pruebas/f1-h5-au09-estatura-sin-y-con-limite-20261107-1112.log`
+
+## 16. F1-H5-T03b: fecha de última actualización del estado oficial (7/11/2026)
+
+Detalle en `f1-h5-t03b.md`. `make verificar` corrió una vez, sobre el commit «F1-H5-T03: actualizado_en en el estado oficial (DA-56)», con la laptop en carga normal, sin auditor activo y con la caché persistente de DA-57 en caliente.
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Cierre de T03b | 1 854 (11 639 aserciones) | 701 s | 752 s, código 0 |
+
+Log: `docs/reportes/logs/verificar/f1-h5-t03b-20261107-1423.log`. Por debajo del aviso de 13 minutos.

@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Salud\ContratoDeEstadoYLesionTest
+  ✓ HU-20, HU-21 y HU-30: las respuestas de confirmación, estado y lesi… 6.21s  
+
+  Tests:    1 passed (86 assertions)
+  Duration: 6.73s
+
