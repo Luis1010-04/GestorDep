@@ -17,12 +17,13 @@ final class EstadoVisible
         public readonly bool $esImplicito,
         public readonly bool $requiereActualizacion,
         public readonly ?string $lesionId,
+        public readonly ?DateTimeImmutable $actualizadoEn,
     ) {}
 
     /** Sin ningún registro, el jugador está apto (DA-01). */
     public static function aptoImplicito(): self
     {
-        return new self(TipoDeEstado::Apto->value, null, null, true, false, null);
+        return new self(TipoDeEstado::Apto->value, null, null, true, false, null, null);
     }
 
     public static function para(EstadoOficial $estado, Identificador $lector, string $hoy): self
@@ -34,6 +35,7 @@ final class EstadoVisible
             false,
             $estado->requiereActualizacion($hoy),
             $estado->esSostenidoPor($lector) ? $estado->lesionId()?->valor() : null,
+            $estado->actualizadoEn(),
         );
     }
 }

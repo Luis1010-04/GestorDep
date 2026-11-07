@@ -10,8 +10,6 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
-use Src\Compartido\Dominio\Instante;
-use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Salud\Aplicacion\EstadoConcurrente;
 use Src\Salud\Dominio\EstadoOficial;
@@ -22,13 +20,12 @@ use stdClass;
 /** Lee y escribe `estados_disponibilidad`; cada cambio lleva su historial en la misma transacción (RNF-02). */
 final class RepositorioDeEstadosSql implements RepositorioDeEstados
 {
-    private const COLUMNAS = ['id', 'jugador_id', 'estado', 'lesion_id', 'fecha_estimada_regreso', 'confirmado_por', 'vigente_desde', 'vigente_hasta'];
+    private const COLUMNAS = ['id', 'jugador_id', 'estado', 'lesion_id', 'fecha_estimada_regreso', 'confirmado_por', 'vigente_desde', 'vigente_hasta', 'actualizado_en'];
 
     public function __construct(
         private readonly ConnectionInterface $conexion,
         private readonly EscritorDeHistorial $historial,
         private readonly UsuarioActual $usuarioActual,
-        private readonly Reloj $reloj,
     ) {}
 
     public function vigente(Identificador $jugadorId): ?EstadoOficial
@@ -47,7 +44,7 @@ final class RepositorioDeEstadosSql implements RepositorioDeEstados
 
     public function guardarNuevo(EstadoOficial $estado): void
     {
-        $momento = $estado->vigenteDesde()->format('Y-m-d H:i:sP');
+        $momento = $estado->actualizadoEn()->format('Y-m-d H:i:sP');
         $autor = $this->usuarioActual->identificador()?->valor();
         $instantanea = self::instantanea($estado);
 
@@ -67,7 +64,7 @@ final class RepositorioDeEstadosSql implements RepositorioDeEstados
 
     public function guardarCambio(EstadoOficial $anterior, EstadoOficial $nuevo): void
     {
-        $instante = Instante::truncadoASegundos($this->reloj->ahora());
+        $instante = $nuevo->actualizadoEn();
 
         $this->historial->registrar(
             'estados_disponibilidad', 'estado_id', $nuevo->id(), 'actualizar', self::instantanea($anterior), self::instantanea($nuevo),
@@ -113,6 +110,7 @@ final class RepositorioDeEstadosSql implements RepositorioDeEstados
             Identificador::desdeTexto($fila->confirmado_por),
             (new DateTimeImmutable($fila->vigente_desde))->setTimezone($utc),
             $fila->vigente_hasta === null ? null : (new DateTimeImmutable($fila->vigente_hasta))->setTimezone($utc),
+            (new DateTimeImmutable($fila->actualizado_en))->setTimezone($utc),
         );
     }
 }

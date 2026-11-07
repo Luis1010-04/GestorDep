@@ -78,7 +78,7 @@ final class CambiarEstado
             return $vigente;
         }
 
-        $cambiado = $vigente->conFecha($fecha);
+        $cambiado = $vigente->conFecha($fecha, Instante::truncadoASegundos($this->reloj->ahora()));
         $this->estados->guardarCambio($vigente, $cambiado);
 
         return $cambiado;

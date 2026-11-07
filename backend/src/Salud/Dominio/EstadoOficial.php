@@ -9,6 +9,7 @@ use Src\Compartido\Dominio\Identificador;
  * Estado oficial de disponibilidad de un jugador (HU-20, HU-21). `confirmadoPor` es quien lo sostiene, el único que
  * puede modificarlo (RN-16, DA-19). La fecha estimada de regreso vigente vive aquí y decide si requiere actualización
  * (DA-02, DA-09). Un cambio de estado cierra esta fila y abre su sucesora; un cambio de fecha actualiza esta (DA-14).
+ * `actualizadoEn` es el momento de su último cambio, sin decir cuál fue (RNF-04, DA-56).
  */
 final class EstadoOficial
 {
@@ -21,11 +22,12 @@ final class EstadoOficial
         private readonly Identificador $confirmadoPor,
         private readonly DateTimeImmutable $vigenteDesde,
         private readonly ?DateTimeImmutable $vigenteHasta,
+        private readonly DateTimeImmutable $actualizadoEn,
     ) {}
 
     public static function apto(Identificador $id, Identificador $jugadorId, Identificador $confirmadoPor, DateTimeImmutable $instante): self
     {
-        return new self($id, $jugadorId, TipoDeEstado::Apto, null, null, $confirmadoPor, $instante, null);
+        return new self($id, $jugadorId, TipoDeEstado::Apto, null, null, $confirmadoPor, $instante, null, $instante);
     }
 
     public static function conLesion(
@@ -37,7 +39,7 @@ final class EstadoOficial
         Identificador $confirmadoPor,
         DateTimeImmutable $instante,
     ): self {
-        return new self($id, $jugadorId, $tipo, $lesionId, $fechaEstimadaRegreso, $confirmadoPor, $instante, null);
+        return new self($id, $jugadorId, $tipo, $lesionId, $fechaEstimadaRegreso, $confirmadoPor, $instante, null, $instante);
     }
 
     /** @throws EstadoEnElMismoInstante */
@@ -47,18 +49,18 @@ final class EstadoOficial
             throw new EstadoEnElMismoInstante;
         }
 
-        return new self($this->id, $this->jugadorId, $this->tipo, $this->lesionId, $this->fechaEstimadaRegreso, $this->confirmadoPor, $this->vigenteDesde, $instante);
+        return new self($this->id, $this->jugadorId, $this->tipo, $this->lesionId, $this->fechaEstimadaRegreso, $this->confirmadoPor, $this->vigenteDesde, $instante, $instante);
     }
 
-    public function conFecha(string $fechaEstimadaRegreso): self
+    public function conFecha(string $fechaEstimadaRegreso, DateTimeImmutable $instante): self
     {
-        return new self($this->id, $this->jugadorId, $this->tipo, $this->lesionId, $fechaEstimadaRegreso, $this->confirmadoPor, $this->vigenteDesde, $this->vigenteHasta);
+        return new self($this->id, $this->jugadorId, $this->tipo, $this->lesionId, $fechaEstimadaRegreso, $this->confirmadoPor, $this->vigenteDesde, $this->vigenteHasta, $instante);
     }
 
     /** El estado que abre un cambio de tipo: misma lesión y mismo registrante (DA-14). */
     public function sucesor(Identificador $id, TipoDeEstado $tipo, ?string $fechaEstimadaRegreso, DateTimeImmutable $instante): self
     {
-        return new self($id, $this->jugadorId, $tipo, $this->lesionId, $fechaEstimadaRegreso, $this->confirmadoPor, $instante, null);
+        return new self($id, $this->jugadorId, $tipo, $this->lesionId, $fechaEstimadaRegreso, $this->confirmadoPor, $instante, null, $instante);
     }
 
     /** @throws SinLesionVigente|NoEsRegistrante */
@@ -121,5 +123,10 @@ final class EstadoOficial
     public function vigenteHasta(): ?DateTimeImmutable
     {
         return $this->vigenteHasta;
+    }
+
+    public function actualizadoEn(): DateTimeImmutable
+    {
+        return $this->actualizadoEn;
     }
 }

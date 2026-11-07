@@ -5,7 +5,11 @@ use Src\Compartido\Dominio\Identificador;
 use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
-const CAMPOS_DEL_ESTADO = ['estado', 'fecha_estimada_regreso', 'vigente_desde', 'es_implicito', 'requiere_actualizacion', 'lesion_id'];
+const CAMPOS_DEL_ESTADO = ['estado', 'fecha_estimada_regreso', 'vigente_desde', 'es_implicito', 'requiere_actualizacion', 'lesion_id', 'actualizado_en'];
+
+const INSTANTE_DEL_MUNDO = '2026-11-15T18:00:00+00:00';
+
+const INSTANTE_DEL_ESTADO_INSERTADO = '2026-11-10T10:00:00+00:00';
 
 const CAMPOS_DE_LA_LESION = ['id', 'tipo', 'zona', 'causa', 'fecha_inicio', 'fecha_estimada_regreso', 'fecha_alta', 'nota', 'actualizado_en'];
 
@@ -420,7 +424,7 @@ test('DA-01: sin registro, el jugador está apto implícito', function () {
     $respuesta = sesionesPeticion($this, 'GET', estadoRuta($m['f1']), idDeSesion: sesionesIniciar($this, 'e1@x.com'))->assertOk();
 
     expect($respuesta->json('datos'))->toBe([
-        'estado' => 'apto', 'fecha_estimada_regreso' => null, 'vigente_desde' => null, 'es_implicito' => true, 'requiere_actualizacion' => false, 'lesion_id' => null,
+        'estado' => 'apto', 'fecha_estimada_regreso' => null, 'vigente_desde' => null, 'es_implicito' => true, 'requiere_actualizacion' => false, 'lesion_id' => null, 'actualizado_en' => null,
     ]);
 });
 
@@ -964,3 +968,97 @@ test('DA-33: con el jugador en baja y el regreso anterior al aviso, responde 409
         ->assertConflict()
         ->assertJsonPath('codigo', 'jugador_en_baja');
 });
+
+test('DA-56: el estado recién confirmado tiene actualizado_en igual a vigente_desde', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['f1'], $m['d1']);
+    $sesion = sesionesIniciar($this, 'e2@x.com');
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), confirmacionCuerpo(), $sesion)->assertOk();
+
+    sesionesPeticion($this, 'GET', estadoRuta($m['f1']), idDeSesion: $sesion)
+        ->assertOk()
+        ->assertJsonPath('datos.vigente_desde', INSTANTE_DEL_MUNDO)
+        ->assertJsonPath('datos.actualizado_en', INSTANTE_DEL_MUNDO);
+});
+
+test('DA-56: cambiar la fecha estimada actualiza actualizado_en, no vigente_desde, y la respuesta coincide con la base', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $estado = estadoInsertar($m['f1'], $m['e2'])['estado'];
+
+    sesionesPeticion($this, 'PATCH', estadoRuta($m['f1']), ['fecha_estimada_regreso' => '2026-12-05'], sesionesIniciar($this, 'e2@x.com'))
+        ->assertOk()
+        ->assertJsonPath('datos.vigente_desde', INSTANTE_DEL_ESTADO_INSERTADO)
+        ->assertJsonPath('datos.actualizado_en', INSTANTE_DEL_MUNDO);
+
+    expect((new DateTimeImmutable((string) DB::table('estados_disponibilidad')->where('id', $estado)->value('actualizado_en')))->format(DATE_ATOM))
+        ->toBe(INSTANTE_DEL_MUNDO);
+});
+
+test('DA-56: cambiar el estado abre una fila con actualizado_en igual al instante del cambio', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    estadoInsertar($m['f1'], $m['e2']);
+
+    sesionesPeticion($this, 'PATCH', estadoRuta($m['f1']), ['estado' => 'con_molestia'], sesionesIniciar($this, 'e2@x.com'))
+        ->assertOk()
+        ->assertJsonPath('datos.vigente_desde', INSTANTE_DEL_MUNDO)
+        ->assertJsonPath('datos.actualizado_en', INSTANTE_DEL_MUNDO);
+});
+
+test('DA-56: un PATCH con valores idénticos no cambia actualizado_en (DA-48)', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    estadoInsertar($m['f1'], $m['e2']);
+
+    sesionesPeticion($this, 'PATCH', estadoRuta($m['f1']), ['estado' => 'lesionado', 'fecha_estimada_regreso' => '2026-11-30'], sesionesIniciar($this, 'e2@x.com'))
+        ->assertOk()
+        ->assertJsonPath('datos.actualizado_en', INSTANTE_DEL_ESTADO_INSERTADO);
+});
+
+test('DA-56: el alta deja un apto con actualizado_en igual al instante del alta', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    estadoInsertar($m['f1'], $m['e2']);
+
+    sesionesPeticion($this, 'POST', altaRuta($m['f1']), [], sesionesIniciar($this, 'e2@x.com'))
+        ->assertOk()
+        ->assertJsonPath('datos.estado', 'apto')
+        ->assertJsonPath('datos.actualizado_en', INSTANTE_DEL_MUNDO);
+});
+
+test('DA-56: corregir el detalle de la lesión no cambia actualizado_en del estado', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $lesion = NoNulo::exigir(estadoInsertar($m['f1'], $m['e2'])['lesion'], 'la lesión');
+    $sesion = sesionesIniciar($this, 'e2@x.com');
+
+    sesionesPeticion($this, 'PATCH', lesionRuta($lesion), ['zona' => 'Rodilla'], $sesion)->assertOk();
+
+    sesionesPeticion($this, 'GET', estadoRuta($m['f1']), idDeSesion: $sesion)
+        ->assertOk()
+        ->assertJsonPath('datos.actualizado_en', INSTANTE_DEL_ESTADO_INSERTADO);
+});
+
+test('DA-56: sin estado registrado, actualizado_en es nulo como vigente_desde (DA-01)', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+
+    sesionesPeticion($this, 'GET', estadoRuta($m['f1']), idDeSesion: sesionesIniciar($this, 'e1@x.com'))
+        ->assertOk()
+        ->assertJsonPath('datos.es_implicito', true)
+        ->assertJsonPath('datos.vigente_desde', null)
+        ->assertJsonPath('datos.actualizado_en', null);
+});
+
+test('DA-56: D1 y E1 ven el momento de la última actualización, sin lesion_id', function (string $correo) {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    estadoInsertar($m['f1'], $m['e2']);
+
+    sesionesPeticion($this, 'GET', estadoRuta($m['f1']), idDeSesion: sesionesIniciar($this, $correo))
+        ->assertOk()
+        ->assertJsonPath('datos.actualizado_en', INSTANTE_DEL_ESTADO_INSERTADO)
+        ->assertJsonPath('datos.lesion_id', null);
+})->with(['d1@x.com', 'e1@x.com']);

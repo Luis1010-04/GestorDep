@@ -5433,7 +5433,7 @@ components:
     EstadoDeDisponibilidad:
       type: object
       additionalProperties: false
-      required: [estado, fecha_estimada_regreso, vigente_desde, es_implicito, requiere_actualizacion, lesion_id]
+      required: [estado, fecha_estimada_regreso, vigente_desde, es_implicito, requiere_actualizacion, lesion_id, actualizado_en]
       properties:
         estado:
           type: string
@@ -5457,6 +5457,13 @@ components:
           format: uuid
           nullable: true
           description: Solo para el registrante; a los demas se les devuelve nulo (DA-18).
+        actualizado_en:
+          type: string
+          format: date-time
+          nullable: true
+          description: >-
+            Momento de la ultima actualizacion del estado, sin decir que cambio (RNF-04, DA-56). Nulo si es_implicito es
+            verdadero (DA-01). Corregir el detalle de la lesion no lo cambia.
     Medicion:
       type: object
       additionalProperties: false

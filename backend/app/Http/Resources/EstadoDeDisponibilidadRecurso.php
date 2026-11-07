@@ -26,6 +26,7 @@ class EstadoDeDisponibilidadRecurso extends JsonResource
             'es_implicito' => $this->resource->esImplicito,
             'requiere_actualizacion' => $this->resource->requiereActualizacion,
             'lesion_id' => $this->resource->lesionId,
+            'actualizado_en' => $this->resource->actualizadoEn?->format(DateTimeInterface::ATOM),
         ];
     }
 }

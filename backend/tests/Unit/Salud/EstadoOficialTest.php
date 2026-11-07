@@ -87,7 +87,7 @@ test('DA-30: un estado se cierra un segundo después de abrirse', function () {
 test('DA-14: cambiar la fecha conserva la misma fila, sin tocar el original', function () {
     $estado = estadoLesionadoDePrueba();
 
-    $cambiado = $estado->conFecha('2026-12-10');
+    $cambiado = $estado->conFecha('2026-12-10', new DateTimeImmutable('2026-11-16 09:00:00+00:00'));
 
     expect($cambiado->fechaEstimadaRegreso())->toBe('2026-12-10')
         ->and($cambiado->id())->toBe($estado->id())
@@ -155,4 +155,33 @@ test('§6.3: los códigos de las reglas del estado', function () {
 
 test('§5.1: los valores de TipoDeEstado son los de la tabla', function () {
     expect(array_map(fn (TipoDeEstado $tipo) => $tipo->value, TipoDeEstado::cases()))->toBe(['apto', 'con_molestia', 'lesionado']);
+});
+
+test('DA-56: al crearse, el estado tiene actualizadoEn igual al instante', function (Closure $crear) {
+    /** @var EstadoOficial $estado */
+    $estado = $crear();
+
+    expect($estado->actualizadoEn())->toEqual(new DateTimeImmutable('2026-11-15 18:00:00+00:00'));
+})->with([
+    'con lesión' => [fn () => estadoLesionadoDePrueba()],
+    'apto' => [fn () => estadoAptoDePrueba()],
+]);
+
+test('DA-56: cambiar la fecha fija actualizadoEn en el instante del cambio y conserva vigenteDesde', function () {
+    $estado = estadoLesionadoDePrueba();
+    $instante = new DateTimeImmutable('2026-11-16 09:00:00+00:00');
+
+    $cambiado = $estado->conFecha('2026-12-05', $instante);
+
+    expect($cambiado->actualizadoEn())->toBe($instante)
+        ->and($cambiado->vigenteDesde())->toEqual($estado->vigenteDesde())
+        ->and($cambiado->fechaEstimadaRegreso())->toBe('2026-12-05');
+});
+
+test('DA-56: cerrar y abrir el sucesor fijan actualizadoEn en el instante del cambio', function () {
+    $estado = estadoLesionadoDePrueba();
+    $instante = new DateTimeImmutable('2026-11-16 09:00:00+00:00');
+
+    expect($estado->cerrar($instante)->actualizadoEn())->toBe($instante)
+        ->and($estado->sucesor(Identificador::generar(), TipoDeEstado::ConMolestia, '2026-12-01', $instante)->actualizadoEn())->toBe($instante);
 });

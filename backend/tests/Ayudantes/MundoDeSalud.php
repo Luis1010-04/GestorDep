@@ -153,6 +153,6 @@ function estadoInsertar(string $jugador, string $confirmadoPor, ?string $tipo = 
 
     return ['lesion' => $lesion, 'estado' => mundoInsertar('estados_disponibilidad', [
         'jugador_id' => $jugador, 'estado' => $tipo ?? 'apto', 'lesion_id' => $lesion, 'fecha_estimada_regreso' => $tipo === null ? null : $regreso,
-        'confirmado_por' => $confirmadoPor, 'vigente_desde' => '2026-11-10 10:00:00+00',
+        'confirmado_por' => $confirmadoPor, 'vigente_desde' => '2026-11-10 10:00:00+00', 'actualizado_en' => '2026-11-10 10:00:00+00',
     ])];
 }
