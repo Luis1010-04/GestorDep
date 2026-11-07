@@ -1,0 +1,25 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Unit\CondicionFisica\MedicionCorporalTest
+  ⨯ AU-09: el rango acotado a la columna toma el menor de los dos máxim… 0.04s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\MedicionCorporalTest > AU-09: e…  Error   
+  Call to undefined method Src\CondicionFisica\Dominio\RangoDeMedida::acotadoA()
+
+  at tests/Unit/CondicionFisica/MedicionCorporalTest.php:142
+    138▕ });
+    139▕ 
+    140▕ test('AU-09: el rango acotado a la columna toma el menor de los dos máximos', function () {
+    141▕     $rango = rangoDePrueba();
+  ➜ 142▕     $acotado = $rango->acotadoA(NumeroDecimal::desdeTexto('150.00'));
+    143▕ 
+    144▕     $acotado->exigir(NumeroDecimal::desdeTexto('150.00'), 'peso_kg');
+    145▕     $error = null;
+    146▕     try {
+
+  1   tests/Unit/CondicionFisica/MedicionCorporalTest.php:142
+
+
+  Tests:    1 failed (0 assertions)
+  Duration: 0.55s
+

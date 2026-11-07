@@ -1,0 +1,65 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+=== control antes, con la correccion
+
+   PASS  Tests\Integration\CondicionFisica\RegistrarMedicionTest
+  ✓ AU-09: con el máximo de estatura en 9999.99, el caso de uso rechaza… 2.30s  
+
+   PASS  Tests\Feature\CondicionFisica\MedicionesTest
+  ✓ AU-09: con el máximo de peso en 1500.00, 1200.00 responde 422 valor… 0.28s  
+  ✓ AU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999… 0.27s  
+  ✓ AU-09: por HTTP, 9999.95 cm responde 422 validacion_fallida por sus… 0.21s  
+
+  Tests:    4 passed (19 assertions)
+  Duration: 3.18s
+
+--- codigo pest: 0
+reemplazos: 1
+=== sin el limite de columna en estatura
+
+   FAIL  Tests\Integration\CondicionFisica\RegistrarMedicionTest
+  ⨯ AU-09: con el máximo de estatura en 9999.99, el caso de uso rechaza… 2.21s  
+
+   PASS  Tests\Feature\CondicionFisica\MedicionesTest
+  ✓ AU-09: con el máximo de peso en 1500.00, 1200.00 responde 422 valor… 0.28s  
+  ✓ AU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999… 0.25s  
+  ✓ AU-09: por HTTP, 9999.95 cm responde 422 validacion_fallida por sus… 0.21s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\RegistrarMedici…  QueryException   
+  SQLSTATE[22003]: Numeric value out of range: 7 ERROR:  numeric field overflow
+DETAIL:  A field with precision 5, scale 1 must round to an absolute value less than 10^4. (Connection: pgsql, Host: db, Port: 5432, Database: gestordep_pruebas, SQL: insert into "mediciones_corporales" ("id", "jugador_id", "equipo_id", "registrado_por", "fecha", "periodo", "peso_kg", "estatura_cm", "creado_en", "actualizado_en", "creado_por", "actualizado_por") values (01a1b700-9c06-746d-bb2a-9ae36c7287a7, 01a1b700-9be3-7a71-9374-d304203482ae, 01a1b700-9bd9-70fa-ae29-7d82c28c364d, 01a1b700-9bc1-7756-82e5-8bcea7f11c9a, 2026-11-15, 2026-11, 70.00, 10000.0, 2026-11-15 18:00:00+00:00, 2026-11-15 18:00:00+00:00, 01a1b700-9bc1-7756-82e5-8bcea7f11c9a, 01a1b700-9bc1-7756-82e5-8bcea7f11c9a))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:608
+    604▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    605▕ 
+    606▕             $this->recordsHaveBeenModified();
+    607▕ 
+  ➜ 608▕             return $statement->execute();
+    609▕         });
+    610▕     }
+    611▕ 
+    612▕     /**
+
+      [2m+6 vendor frames [22m
+  7   src/CondicionFisica/Infraestructura/RepositorioDeMedicionesSql.php:39
+  8   src/Compartido/Infraestructura/Historial/EscritorDeHistorial.php:44
+
+
+  Tests:    1 failed, 3 passed (17 assertions)
+  Duration: 3.06s
+
+--- codigo pest: 2
+=== control despues, codigo repuesto
+
+   PASS  Tests\Integration\CondicionFisica\RegistrarMedicionTest
+  ✓ AU-09: con el máximo de estatura en 9999.99, el caso de uso rechaza… 2.26s  
+
+   PASS  Tests\Feature\CondicionFisica\MedicionesTest
+  ✓ AU-09: con el máximo de peso en 1500.00, 1200.00 responde 422 valor… 0.28s  
+  ✓ AU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999… 0.25s  
+  ✓ AU-09: por HTTP, 9999.95 cm responde 422 validacion_fallida por sus… 0.20s  
+
+  Tests:    4 passed (19 assertions)
+  Duration: 3.11s
+
+--- codigo pest: 0
+copia temporal borrada

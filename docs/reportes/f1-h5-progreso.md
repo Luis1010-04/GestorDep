@@ -169,7 +169,7 @@ Después de `make bajar`, la primera `make verificar` puede cortarse sin que fal
 
 #### 1.8.6 Medición de DA-57 (7/11/2026)
 
-Una corrida de `make verificar` completa, con la laptop en carga normal y sin auditor activo, sobre `fea05b1` (AU-09 incluido). Los contenedores llevaban unos 45 minutos arriba y ya habían corrido Pint, PHPStan, `make mutacion` y pruebas sueltas, así que las cachés no estaban frías. La salida no lleva marcas de tiempo por línea, así que no hay tiempos por etapa.
+Una corrida de `make verificar` completa, con la laptop en carga normal y sin auditor activo, sobre el commit «F1-H5-T05: límite efectivo del rango frente a la columna (AU-09)». Los contenedores llevaban unos 45 minutos arriba y ya habían corrido Pint, PHPStan, `make mutacion` y pruebas sueltas, así que las cachés no estaban frías. La salida no lleva marcas de tiempo por línea, así que no hay tiempos por etapa.
 
 | Dato | Valor |
 |---|---|
@@ -597,6 +597,8 @@ Detalle en `docs/reportes/f1-h5-t04.md`.
 
 - Observación para T08: Identificador::generar() usa milisegundos y bytes aleatorios, sin contador monotónico. Dos registros creados en el mismo milisegundo con la misma fecha_inicio se listan en orden aleatorio por id (RN-15). Impacto: solo el orden, no la unicidad. Decidir en T08 si el desempate debe usar creado_en con microsegundos en lugar del id. No se corrige en H5.
 
+- Observación para T08: el IMC se guarda en numeric(5,2), así que no puede pasar de 999.99. Con 200 kg, una estatura menor de 44.7 cm lo desborda y responde 500. Hoy el mínimo sembrado es 100 cm, así que no ocurre con los rangos actuales. Decidir en T08 si la validación debe comprobar el IMC antes de guardar.
+
 ## 8. Correcciones tras la auditoría de los Lotes A y B (6/11/2026)
 
 Pedidas por el responsable antes de continuar T05. T05 sigue detenida hasta que decida el límite de `motivo` y el caso de la lesión propia.
@@ -702,3 +704,16 @@ Mientras trabaje la sesión auditora no se ejecuta `make verificar`. No se publi
 ## 14. Committer de los commits publicados el 6/11/2026
 
 Por orden del responsable, `3b578f3`, `7be89b0`, `8a0dedf`, `9899254`, `87a66d5` y el commit "F1-DOC: correcciones de la auditoría de T05" tienen `noreply@anthropic.com` como correo del committer. El autor sigue siendo el de `.git/config`, que no cambió. Se reescribieron antes de publicarlos, sin cambiar su contenido, y el push fue sin `--force`. Es una excepción a §2.2 solo para esos seis commits.
+
+## 15. AU-09: límite efectivo del rango frente a la columna (7/11/2026)
+
+El máximo efectivo de peso y estatura es el menor entre el del rango y lo que cabe en la columna, leído de `information_schema`. Columnas: `peso_kg` es `numeric(5,2)` (999.99), `estatura_cm` es `numeric(5,1)` (9999.9) y `rangos_mediciones_corporales.maximo` es `numeric(6,2)`.
+
+- **Peso:** con el máximo del rango en 1500.00, 1200.00 daba 500 (`numeric field overflow`); ahora responde 422 `valor_fuera_de_rango`.
+- **Estatura:** por HTTP admite un decimal, así que ningún valor llega a desbordar la columna sin superar el rango, y 9999.95 responde 422 `validacion_fallida`. La prueba que demuestra el límite va sobre el caso de uso `RegistrarMedicion`: sin el límite de columna, 9999.95 desborda la columna; con él, responde `valor_fuera_de_rango`. Se demostró en una copia temporal dentro del contenedor, con control antes y después.
+
+**Logs:**
+
+- Pruebas en rojo antes de la corrección: `docs/reportes/logs/pruebas/f1-h5-au09-rojo-*-20261107-1016.log`
+- Pruebas en verde después de la corrección: `docs/reportes/logs/pruebas/f1-h5-au09-verde-*-20261107-101{7,8}.log`
+- Estatura sin y con el límite de columna: `docs/reportes/logs/pruebas/f1-h5-au09-estatura-sin-y-con-limite-20261107-1112.log`

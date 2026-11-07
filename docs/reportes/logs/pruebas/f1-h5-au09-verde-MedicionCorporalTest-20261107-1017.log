@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Unit\CondicionFisica\MedicionCorporalTest
+  ✓ AU-09: el rango acotado a la columna toma el menor de los dos máxim… 0.06s  
+
+  Tests:    1 passed (3 assertions)
+  Duration: 0.58s
+
