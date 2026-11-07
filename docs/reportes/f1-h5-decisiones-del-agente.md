@@ -306,6 +306,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** `make verificar` varió entre 487 y 871 s en H5, en la laptop actual, y T06 agrega más pruebas.
 - **Qué se eligió:** primero medir y resolver las cachés. Pest en paralelo queda fuera de H5 y requiere un plan aparte.
 - **Estado:** aprobada por Luis (6/11/2026). La medición se hace después de la auditoría de T05.
+- Aprobada por Luis el 7/11/2026: opción (i), persistir la caché de PHPStan y de Pint en un volumen.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** no aplica: fija un orden de trabajo.
 

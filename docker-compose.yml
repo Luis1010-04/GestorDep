@@ -16,6 +16,10 @@ x-aplicacion: &aplicacion
     - vendor_app:/var/www/html/vendor
     - cache_bootstrap:/var/www/html/bootstrap/cache
     - vistas_compiladas:/var/www/html/storage/framework/views
+    # Caches de PHPStan (tmpDir por omision) y de Pint (cache-file de backend/pint.json): sobreviven a `make bajar`,
+    # que no borra volumenes (DA-57, opcion i). Las herramientas y sus reglas no cambian.
+    - cache_phpstan:/tmp/phpstan
+    - cache_pint:/tmp/pint
   environment:
     DB_HOST: db
     DB_PORT: 5432
@@ -78,3 +82,5 @@ volumes:
   vendor_app:
   cache_bootstrap:
   vistas_compiladas:
+  cache_phpstan:
+  cache_pint:
