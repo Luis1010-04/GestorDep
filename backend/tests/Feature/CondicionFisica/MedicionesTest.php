@@ -579,3 +579,16 @@ test('AU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999.9 se 
         ->assertJsonPath('errores.0.campo', 'estatura_cm');
     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['estatura_cm' => '9999.9']), $sesion)->assertCreated();
 });
+
+test('AU-09: por HTTP, 9999.95 cm responde 422 validacion_fallida por sus dos decimales, nunca 500', function () {
+    /** @var TestCase $this */
+    $m = medicionesMundo();
+    DB::connection('propietario')->table('rangos_mediciones_corporales')->where('codigo', 'estatura_cm')->update(['maximo' => '9999.99']);
+
+    sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['estatura_cm' => '9999.95']), sesionesIniciar($this, 'e1@x.com'))
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'validacion_fallida')
+        ->assertJsonPath('errores.0.campo', 'estatura_cm');
+
+    expect(medicionesCuenta($m['f1']))->toBe(0);
+});
