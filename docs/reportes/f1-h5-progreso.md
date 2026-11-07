@@ -648,6 +648,8 @@ Detalle en `docs/reportes/f1-h5-t04.md`.
 
 - Observación para T08: Identificador::generar() usa milisegundos y bytes aleatorios, sin contador monotónico. Dos registros creados en el mismo milisegundo con la misma fecha_inicio se listan en orden aleatorio por id (RN-15). Impacto: solo el orden, no la unicidad. Decidir en T08 si el desempate debe usar creado_en con microsegundos en lugar del id. No se corrige en H5.
 
+- Observación para T08: ConvocatoriaTest, líneas 169 a 170, ordena por creado_en y luego por id, con ids generados por el código en dos peticiones. No falla en la práctica porque cada petición dura más de 1 ms, pero la prueba no fija esos ids. Revisar en T08 junto con la observación de RN-15.
+
 - Observación para T08: el IMC se guarda en numeric(5,2), así que no puede pasar de 999.99. Con 200 kg, una estatura menor de 44.7 cm lo desborda y responde 500. Hoy el mínimo sembrado es 100 cm, así que no ocurre con los rangos actuales. Decidir en T08 si la validación debe comprobar el IMC antes de guardar.
 
 - Pendiente: la ejecución en paralelo de Pest (DA-57), como decisión aparte. No se implementa sin esa decisión.
