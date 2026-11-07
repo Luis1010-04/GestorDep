@@ -183,6 +183,8 @@ Una corrida de `make verificar` completa, con la laptop en carga normal y sin au
 
 Log: `docs/reportes/logs/verificar/f1-h5-da57-20261107-1022.log`.
 
+El encabezado del log dice commit base fea05b1. Ese hash ya no existe en la rama porque se reescribió el committer. El contenido del log no cambió. La medición corresponde al árbol de 371bf36 y no incluye la prueba de estatura de 0deda12; la CI del tip valida el estado final.
+
 **Comparación, sin conclusiones todavía:** los cierres de T05 dieron 651, 564 y 661 s con 1 831 a 1 835 pruebas (§11 y `f1-h5-t05.md` §6). Esta corrida tiene 4 pruebas más y tardó entre 92 y 189 s más, casi todo en Pest. Una sola corrida no separa la carga de la laptop del código, y la parte de las cachés que pide DA-57 sigue sin hacerse.
 
 ### 1.9 Por qué Pest subió de 512 s a 647 s
@@ -701,9 +703,11 @@ Orden del responsable:
 
 Mientras trabaje la sesión auditora no se ejecuta `make verificar`. No se publica, ni se abre PR, ni se etiqueta sin su orden expresa.
 
-## 14. Committer de los commits publicados el 6/11/2026
+## 14. Committer de los commits de H5
 
-Por orden del responsable, `3b578f3`, `7be89b0`, `8a0dedf`, `9899254`, `87a66d5` y el commit "F1-DOC: correcciones de la auditoría de T05" tienen `noreply@anthropic.com` como correo del committer. El autor sigue siendo el de `.git/config`, que no cambió. Se reescribieron antes de publicarlos, sin cambiar su contenido, y el push fue sin `--force`. Es una excepción a §2.2 solo para esos seis commits.
+Desde el commit de AU-09 (F1-H5-T05: límite efectivo del rango frente a la columna), el committer de los commits de H5 es noreply@anthropic.com. Esta regla se verifica con git log, no con una lista de hashes.
+
+**Referencia histórica.** Antes de esa regla, por orden del responsable, estos commits ya publicados recibieron `noreply@anthropic.com` como correo del committer: `3b578f3`, `7be89b0`, `8a0dedf`, `9899254`, `87a66d5`, el commit "F1-DOC: correcciones de la auditoría de T05" y `2f468f2`. El autor sigue siendo el de `.git/config`, que no cambió. Se reescribieron antes de publicarlos, sin cambiar su contenido, y el push fue sin `--force`.
 
 ## 15. AU-09: límite efectivo del rango frente a la columna (7/11/2026)
 
