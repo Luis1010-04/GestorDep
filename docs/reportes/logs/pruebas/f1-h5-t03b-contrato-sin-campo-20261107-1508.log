@@ -1,0 +1,30 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+=== control antes, con el campo
+  Tests:    1 passed (86 assertions)
+lineas quitadas: 1
+0
+=== sin actualizado_en en la respuesta
+  ⨯ HU-20, HU-21 y HU-30: las respuestas de confirmación, estado y lesi… 3.90s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Salud\ContratoDeEstadoYLesionT…  ValidationException   
+  Body does not match schema for content-type "application/json" for Response [get /jugadores/{jugador}/estado-disponibilidad 200]: Keyword validation failed: Required property 'actualizado_en' must be present in the object Field: datos.actualizado_en
+
+  at vendor/league/openapi-psr7-validator/src/PSR7/Exception/Validation/AddressValidationFailed.php:31
+     27▕      * @return static
+     28▕      */
+     29▕     public static function fromAddrAndPrev(OperationAddress $address, Throwable $prev): self
+     30▕     {
+  ➜  31▕         $ex          = new static(sprintf('Validation failed for %s', $address), $prev->getCode(), $prev);
+     32▕         $ex->address = $address;
+     33▕ 
+     34▕         return $ex;
+     35▕     }
+
+      [2m+14 vendor frames [22m
+  15  tests/Feature/Salud/ContratoDeEstadoYLesionTest.php:80
+
+
+  Tests:    1 failed (45 assertions)
+=== control despues, codigo repuesto
+  Tests:    1 passed (86 assertions)
+copia temporal borrada

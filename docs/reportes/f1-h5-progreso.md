@@ -784,3 +784,13 @@ Detalle en `f1-h5-t03b.md`. `make verificar` corrió una vez, sobre el commit «
 | Cierre de T03b | 1 854 (11 639 aserciones) | 701 s | 752 s, código 0 |
 
 Log: `docs/reportes/logs/verificar/f1-h5-t03b-20261107-1423.log`. Por debajo del aviso de 13 minutos.
+
+**Prueba de contrato en rojo.** Sin `actualizado_en` en la respuesta, `ContratoDeEstadoYLesionTest` falló con «Required property 'actualizado_en' must be present in the object Field: datos.actualizado_en», y pasó al reponer el código. La demostración se hizo en una copia temporal del contenedor, con control antes y después, y el repositorio no cambió. El primer intento se repitió por un fallo del propio control: en la copia, la prueba no encontraba `docs/api/openapi.yaml`.
+
+**Pruebas por carpeta,** después de la demostración: Salud, 272 pasadas (1 245 aserciones); Condición física, 148 pasadas (560 aserciones).
+
+**Logs:**
+
+- `docs/reportes/logs/pruebas/f1-h5-t03b-contrato-sin-campo-20261107-1508.log`
+- `docs/reportes/logs/pruebas/f1-h5-t03b-carpetas-Salud-20261107-1510.log`
+- `docs/reportes/logs/pruebas/f1-h5-t03b-carpetas-CondicionFisica-20261107-1511.log`
