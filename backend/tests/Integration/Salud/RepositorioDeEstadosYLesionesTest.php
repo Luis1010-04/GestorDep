@@ -107,8 +107,9 @@ test('§6.1: una lesión inexistente o eliminada no se encuentra', function () {
 test('RN-15: delRegistrante solo trae las de ese usuario y ese jugador, sin eliminadas, por inicio e id descendentes', function () {
     $m = saludConSesionDeE2();
     $vieja = lesionInsertar($m['f1'], $m['e2'], ['fecha_inicio' => '2026-10-01']);
-    $primera = lesionInsertar($m['f1'], $m['e2']);
-    $segunda = lesionInsertar($m['f1'], $m['e2']);
+    // UUID v7 con milisegundos distintos y crecientes: con la misma fecha de inicio, el orden por id es determinista.
+    $primera = lesionInsertar($m['f1'], $m['e2'], id: '019a5c00-0000-7000-8000-000000000001');
+    $segunda = lesionInsertar($m['f1'], $m['e2'], id: '019a5c00-0001-7000-8000-000000000002');
     lesionInsertar($m['f1'], $m['e1']);
     lesionInsertar($m['j1'], $m['e2']);
     lesionInsertar($m['f1'], $m['e2'], ['eliminado_en' => '2026-11-15 10:00:00+00']);

@@ -577,6 +577,8 @@ Detalle en `docs/reportes/f1-h5-t04.md`.
 
 **Pendientes para el cierre de H5:** concurrencia real con dos peticiones simultáneas; lesión anterior tras DD-63 sin alta; revisión de DA-30 en T08 o H7; el par fechas y `conflicto` de DA-33 sin prueba combinada.
 
+- Observación para T08: Identificador::generar() usa milisegundos y bytes aleatorios, sin contador monotónico. Dos registros creados en el mismo milisegundo con la misma fecha_inicio se listan en orden aleatorio por id (RN-15). Impacto: solo el orden, no la unicidad. Decidir en T08 si el desempate debe usar creado_en con microsegundos en lugar del id. No se corrige en H5.
+
 ## 8. Correcciones tras la auditoría de los Lotes A y B (6/11/2026)
 
 Pedidas por el responsable antes de continuar T05. T05 sigue detenida hasta que decida el límite de `motivo` y el caso de la lesión propia.

@@ -7,6 +7,7 @@
  */
 
 use Database\Seeders\PosicionesSeeder;
+use Illuminate\Support\Facades\DB;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 
@@ -117,12 +118,20 @@ function relojAdelantar(string $instante): void
  *
  * @param  array<string, mixed>  $atributos
  */
-function lesionInsertar(string $jugador, string $registradaPor, array $atributos = []): string
+function lesionInsertar(string $jugador, string $registradaPor, array $atributos = [], ?string $id = null): string
 {
-    return mundoInsertar('lesiones', [
+    $fila = [
         'jugador_id' => $jugador, 'registrada_por' => $registradaPor, 'tipo' => 'Esguince', 'zona' => 'Tobillo', 'causa' => 'partido',
         'fecha_inicio' => '2026-11-10', 'fecha_estimada_regreso' => '2026-11-30', ...$atributos,
-    ]);
+    ];
+    if ($id === null) {
+        return mundoInsertar('lesiones', $fila);
+    }
+
+    // Un id explícito fija el desempate por id cuando dos filas comparten la fecha de inicio.
+    DB::connection('propietario')->table('lesiones')->insert(['id' => $id, ...$fila]);
+
+    return $id;
 }
 
 /**
