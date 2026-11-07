@@ -167,6 +167,24 @@ No se midió fuera de las corridas, y dos casos no bastan para demostrarlo.
 
 Después de `make bajar`, la primera `make verificar` puede cortarse sin que falle ninguna prueba. Un corte así (Error 124) no dice nada del código: hay que volver a correrla sin bajar los contenedores.
 
+#### 1.8.6 Medición de DA-57 (7/11/2026)
+
+Una corrida de `make verificar` completa, con la laptop en carga normal y sin auditor activo, sobre `fea05b1` (AU-09 incluido). Los contenedores llevaban unos 45 minutos arriba y ya habían corrido Pint, PHPStan, `make mutacion` y pruebas sueltas, así que las cachés no estaban frías. La salida no lleva marcas de tiempo por línea, así que no hay tiempos por etapa.
+
+| Dato | Valor |
+|---|---|
+| Código | 0 |
+| Tiempo total | **753 s** (12 min 33 s), 27 s por debajo del aviso de 13 minutos |
+| Pest | 684,54 s |
+| Pruebas | 1 839 (11 587 aserciones) |
+| Cobertura | Dominio 100 %, Aplicación 100 %, Infraestructura y HTTP 99,5 % (total 99,6 %) |
+| PHPStan | «No errors» |
+| Auditoría de dependencias | Sin avisos de seguridad |
+
+Log: `docs/reportes/logs/verificar/f1-h5-da57-20261107-1022.log`.
+
+**Comparación, sin conclusiones todavía:** los cierres de T05 dieron 651, 564 y 661 s con 1 831 a 1 835 pruebas (§11 y `f1-h5-t05.md` §6). Esta corrida tiene 4 pruebas más y tardó entre 92 y 189 s más, casi todo en Pest. Una sola corrida no separa la carga de la laptop del código, y la parte de las cachés que pide DA-57 sigue sin hacerse.
+
 ### 1.9 Por qué Pest subió de 512 s a 647 s
 
 **Corridas de hoy**, todas con 1 430 o 1 432 pruebas y cobertura:
