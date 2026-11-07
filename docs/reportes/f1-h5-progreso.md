@@ -213,6 +213,29 @@ La caliente dio PHPStan «No errors», cobertura Dominio 100 %, Aplicación 100 
 - `docs/reportes/logs/verificar/f1-h5-da57-caliente-20261107-1157.log`
 - `docs/reportes/logs/verificar/f1-h5-da57-caches-20261107-1143.log`: secuencia completa, con el estado de las cachés antes y después de cada paso
 
+#### 1.8.8 Corrida tras la corrección de DD-56 y resultado de DA-57 (7/11/2026)
+
+Una corrida de `make verificar`, sobre el commit «F1-H5: pruebas de orden por id con ids explícitos (DD-56 y barrido)», con la laptop en carga normal y sin auditor activo. Los contenedores llevaban 20 minutos arriba y las dos cachés ya estaban en sus volúmenes, así que la corrida fue **en caliente**. PHPStan reescribió `resultCache.php`, porque cambiaron dos archivos de pruebas; Pint no cambió su caché.
+
+| Dato | Valor |
+|---|---|
+| Código | 0 |
+| Tiempo total | **721 s**, por debajo del aviso de 13 minutos |
+| Pest | 662,80 s |
+| Total menos Pest | 58 s |
+| Pruebas | 1 841 (11 594 aserciones), sin fallos |
+| Cobertura | Dominio 100 %, Aplicación 100 %, Infraestructura y HTTP 99,5 % (total 99,6 %) |
+| PHPStan y auditoría | «No errors»; sin avisos de seguridad |
+
+Log: `docs/reportes/logs/verificar/f1-h5-dd56-20261107-1231.log`.
+
+**Resultado de DA-57:**
+
+- La caché redujo de 157 a 52 s el tiempo sin Pest (§1.8.7).
+- El tiempo total no bajó de forma fiable.
+- Pest tardó entre 679 y 736 s en las corridas de §1.8.7; esa variación pesa más que lo que ahorra la caché.
+- La ejecución en paralelo de Pest queda como pendiente, para decidirla aparte. No se implementa.
+
 ### 1.9 Por qué Pest subió de 512 s a 647 s
 
 **Corridas de hoy**, todas con 1 430 o 1 432 pruebas y cobertura:
@@ -626,6 +649,8 @@ Detalle en `docs/reportes/f1-h5-t04.md`.
 - Observación para T08: Identificador::generar() usa milisegundos y bytes aleatorios, sin contador monotónico. Dos registros creados en el mismo milisegundo con la misma fecha_inicio se listan en orden aleatorio por id (RN-15). Impacto: solo el orden, no la unicidad. Decidir en T08 si el desempate debe usar creado_en con microsegundos en lugar del id. No se corrige en H5.
 
 - Observación para T08: el IMC se guarda en numeric(5,2), así que no puede pasar de 999.99. Con 200 kg, una estatura menor de 44.7 cm lo desborda y responde 500. Hoy el mínimo sembrado es 100 cm, así que no ocurre con los rangos actuales. Decidir en T08 si la validación debe comprobar el IMC antes de guardar.
+
+- Pendiente: la ejecución en paralelo de Pest (DA-57), como decisión aparte. No se implementa sin esa decisión.
 
 ## 8. Correcciones tras la auditoría de los Lotes A y B (6/11/2026)
 
