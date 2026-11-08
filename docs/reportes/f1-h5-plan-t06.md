@@ -2,7 +2,7 @@
 
 **Fecha:** 6 de noviembre de 2026
 **Rama:** `hito/f1-h5` · **Especificación:** `docs/hitos/f1-h5.md` v1.0.8, §5.1, §6, §7.6 y §8 (T06)
-**Estado:** corregido el 6/11/2026 tras la revisión de Luis, **a la espera de su aprobación**. T06 no empieza hasta que apruebe este plan, termine la auditoría de T05 y se haga T03b (DA-56). DA-58 y DA-62 están aprobadas; DA-59, DA-60 y DA-61, aprobadas por Luis el 6/11/2026; DA-63, aprobada por Luis en el chat (opción A).
+**Estado:** **aprobado por Luis el 7/11/2026.** Corregido el 6/11/2026 tras su revisión; T06 empieza con este plan aprobado. DA-58 y DA-62 están aprobadas; DA-59, DA-60 y DA-61, aprobadas por Luis el 6/11/2026; DA-63 (opción A) y DA-64, aprobadas en el chat el 7/11/2026.
 
 ## 1. Rutas
 
