@@ -353,7 +353,15 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 ## DA-63. Formato y orden de la vista de un periodo (T06)
 
 - **Qué faltaba:** §6.1 la excluye de la paginación, pero no fija el orden.
-- **Qué se propone:** se mantiene §6.1. Mismo formato que los listados sin paginar, como `GET /metricas`: `{"datos": [...]}`, sin `meta`, sin leer `pagina` ni `por_pagina`. Por `codigo` ascendente, también en `GET /tipos-prueba`.
-- **Estado:** **propuesta, pendiente de aprobación de Luis.**
+- **Qué se eligió:** se mantiene §6.1. Mismo formato que los listados sin paginar, como `GET /metricas`: `{"datos": [...]}`, sin `meta`, sin leer `pagina` ni `por_pagina`. Por `codigo` ascendente, también en `GET /tipos-prueba`.
+- **Estado:** **aprobada por Luis en el chat (opción A).** Se implementa en T06.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cambiar el orden o el formato en T06, antes de implementarla.
+
+## DA-64. Doble envío del mismo entrenador en pruebas físicas (T06)
+
+- **Qué faltaba:** el plan no decía qué pasa si el mismo entrenador envía dos veces la misma prueba (doble clic, dos pestañas o un reintento tras un fallo de red).
+- **Qué se eligió:** la unicidad de la base (DA-04) y el 409 `prueba_ya_registrada` (DA-60), con una prueba del doble envío. Sin bloqueo de concurrencia en T06. Dos entrenadores distintos no chocan: cada uno tiene su fila (DA-04, DD-59). La idempotencia (clave por petición, que devolvería el mismo 201) queda para la siguiente fase.
+- **Estado:** **aprobada por Luis en el chat.** Se implementa en T06.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** agregar un bloqueo o una clave de idempotencia en una tarea posterior, con su propia decisión.
