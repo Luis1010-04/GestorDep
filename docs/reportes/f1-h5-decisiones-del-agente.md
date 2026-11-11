@@ -410,7 +410,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** si falta la fila de peso o de estatura, registrar una medición respondía 500. T05 lo dejó así y lo anotó para T08.
 - **Qué se eligió:** responder 422 con el código `rango_no_configurado` y un mensaje claro en `lang/es/errores.php`. Un fallo de datos de fábrica no aparece como error del servidor.
-- **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08.
+- **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08. Texto aprobado por Luis el 11/11/2026: «No está configurado el rango permitido de esta medida, así que no se puede validar el valor.»
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** volver a lanzar la excepción genérica en `CatalogoDeRangosSql::de` y quitar la clave.
 
@@ -418,7 +418,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** con 200 kg y una estatura menor de 44.7 cm, el IMC pasa de 999.99 y la columna generada responde 500. Con el mínimo sembrado de 100 cm no ocurre, pero sí si alguien cambia los rangos.
 - **Qué se eligió:** validar el IMC en el caso de uso, antes de guardar. Si no cabe en la columna, responde 422 `valor_fuera_de_rango`. El límite sale del tipo de la columna, como en AU-09.
-- **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08.
+- **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08. Campo del error: `estatura_cm`, aprobado por Luis el 11/11/2026.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar la comprobación del caso de uso.
 
@@ -445,3 +445,11 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar la prueba; el comportamiento no cambia.
+
+## DA-75. Desviaciones de T08 (T08)
+
+- **Qué faltaba:** §8 T08 solo permite pruebas de Seguridad, Salud y Condición física, y reportes. DA-70, DA-71 y DA-73 exigían tocar producción de Condición física, `lang/es`, OpenAPI, `tests/Unit`, `tests/Integration` y `ConvocatoriaTest`.
+- **Qué se eligió:** aceptar esas rutas como desviación documentada, porque las exigen las decisiones aprobadas. No cambia el contrato de ninguna ruta salvo la descripción del 422 de `POST /jugadores/{jugador}/mediciones`.
+- **Estado:** aprobada por Luis el 11/11/2026.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** no aplica; es un registro de lo ocurrido.

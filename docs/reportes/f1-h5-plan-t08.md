@@ -2,7 +2,7 @@
 
 **Fecha:** 11 de noviembre de 2026
 **Rama:** `hito/f1-h5` · **Especificación:** `docs/hitos/f1-h5.md` v1.0.8, §7.3, §7.4, §7.8 y §8 (T08) · **Pendientes:** `docs/reportes/f1-h5-progreso.md` §7 y §10, y los reportes de T02, T03, T05 y T06
-**Estado:** **a la espera de la aprobación de Luis.** T08 no empieza hasta que la apruebe. Las decisiones de la sección 3 están abiertas.
+**Estado:** **aprobado por Luis el 11/11/2026**, con DA-70 a DA-74. Ejecutado en `91deb25`. Desviaciones aceptadas en DA-75.
 
 ## 1. Qué prueba T08
 
