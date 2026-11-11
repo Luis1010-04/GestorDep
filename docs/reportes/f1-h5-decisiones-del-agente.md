@@ -389,3 +389,19 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T07.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** agregar la advertencia a la corrección con una decisión nueva, que cambia el contrato de la ruta de corrección.
+
+## DA-68. Mutación de `AdvertenciasDeLesion` (T07)
+
+- **Qué faltaba:** el plan de T07 suponía que Infection mutaría la clase nueva, pero `infection.json5` solo muta el dominio y excluye `Aplicacion` (DD-53).
+- **Qué se eligió:** se mantiene DD-53 tal cual: Infection muta solo el dominio. La clase tiene pruebas unitarias y la cobertura de Aplicación está al 100 %. Las mutaciones K1 a K6 se hicieron a mano (`f1-h5-t07.md` §3).
+- **Estado:** aprobada por Luis en el chat (11/11/2026).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cambiar `infection.json5` con una decisión propia.
+
+## DA-69. Séptima prueba de T07 sin mutación (T07)
+
+- **Qué faltaba:** la prueba «T07: una petición rechazada no genera advertencias» pasó sin código, y ninguna mutación la hace fallar.
+- **Qué se eligió:** se acepta. Una respuesta de error nunca lleva `advertencias`, así que no hay mutación posible; la prueba documenta la regla del plan.
+- **Estado:** aprobada por Luis en el chat (11/11/2026).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la prueba con una decisión propia, o reemplazarla si el formato de error llega a admitir advertencias.
