@@ -373,3 +373,19 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T06; la fijan la prueba «Orden del listado» y la mutación G3.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** con una decisión nueva que cambie el criterio, con su prueba.
+
+## DA-66. Texto de la advertencia `jugador_lesionado` (T07)
+
+- **Qué faltaba:** ni la especificación ni el plan fijaban el texto de la advertencia.
+- **Qué se eligió:** «El jugador no está disponible por una lesión.», texto fijo de `lang/es/advertencias.php`, sin nombre, matrícula ni detalles de la lesión.
+- **Estado:** aprobada por Luis en el chat (11/11/2026). Se implementa en T07.
+- **Privacidad o permisos:** sí, en lo mínimo: el mensaje no revela datos del jugador ni de la lesión (RN-15). El estado de disponibilidad ya es visible para sus entrenadores (RN-14).
+- **Cómo se revierte:** cambiar el texto en `lang/es/advertencias.php`, con su prueba.
+
+## DA-67. Corrección de una asistencia de entrenamiento y advertencia (T07)
+
+- **Qué faltaba:** HU-11 c2 habla de registrar la asistencia y no dice qué pasa al corregirla.
+- **Qué se eligió:** la corrección de una asistencia no devuelve la advertencia `jugador_lesionado`. La advertencia es para la captura.
+- **Estado:** aprobada por Luis en el chat (11/11/2026). Se implementa en T07.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** agregar la advertencia a la corrección con una decisión nueva, que cambia el contrato de la ruta de corrección.

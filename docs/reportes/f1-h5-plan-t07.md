@@ -2,7 +2,7 @@
 
 **Fecha:** 11 de noviembre de 2026
 **Rama:** `hito/f1-h5` · **Especificación:** `docs/hitos/f1-h5.md` v1.0.8, §3.3 (DA-15), §7.7 y §8 (T07) · **Convención:** `docs/convenciones-api.md` §4 v1.3
-**Estado:** **a la espera de la aprobación de Luis.** No empieza hasta que la apruebe. DA-15 ya está aprobada por el responsable (v1.0.2); las decisiones de este plan que aún no lo están se listan en la sección 3.
+**Estado:** **aprobado por Luis el 11/11/2026**, con DA-66 y DA-67 aprobadas. DA-15 ya estaba aprobada por el responsable (v1.0.2). T07 empieza con este plan.
 
 ## 1. Contrato
 
@@ -15,7 +15,7 @@ Dos rutas existentes cambian. Sus respuestas exitosas no cambian; solo agregan `
 
 Sin advertencia: `apto`, `con_molestia`, jugador sin registro de estado y jugador dado de alta. Sin `advertencias` en la respuesta cuando no hay ninguna, como hoy.
 
-Mensaje: texto fijo de `lang/es/advertencias.php`, sin datos del jugador (`docs/convenciones-api.md` §4). Propuesto en DA-66.
+Mensaje: texto fijo de `lang/es/advertencias.php`, sin datos del jugador (`docs/convenciones-api.md` §4). Texto aprobado en DA-66.
 
 ## 2. Reglas que se reutilizan
 
@@ -30,8 +30,8 @@ Mensaje: texto fijo de `lang/es/advertencias.php`, sin datos del jugador (`docs/
 
 | Propuesta | Vacío | Recomendación |
 |---|---|---|
-| **DA-66.** Texto del mensaje | El plan y la especificación no fijan el texto de `jugador_lesionado` | «El jugador tiene un estado oficial de lesionado.», el mismo ejemplo de `docs/convenciones-api.md` §4. Sin nombre ni matrícula |
-| **DA-67.** Corregir una asistencia | HU-11 c2 habla de «registrar» la asistencia y no dice nada de corregirla | La corrección (`PATCH` de asistencia) no advierte en H5. La advertencia es para la captura. Si quieres que también advierta, es un cambio de contrato de `PATCH` y lo tratamos aparte |
+| **DA-66.** Texto del mensaje (**aprobada**) | El plan y la especificación no fijan el texto de `jugador_lesionado` | «El jugador no está disponible por una lesión.» Sin nombre ni matrícula, y sin detalles de la lesión. **Aprobada** |
+| **DA-67.** Corregir una asistencia (**aprobada**) | HU-11 c2 habla de «registrar» la asistencia y no dice nada de corregirla | La corrección no advierte en H5. La advertencia es para la captura. **Aprobada** |
 
 ## 4. Pruebas primero
 
@@ -67,4 +67,4 @@ Sin migraciones, sin cambios en Salud ni en el puerto.
 - **Romper H2 o H3:** mitigado con las pruebas de contrato existentes, que no se tocan, y con la prueba de respuesta idéntica sin lesionados.
 - **Consulta extra por petición:** una sola consulta al puerto por petición. Sin consultas por cada jugador.
 - **Estado cambiado entre la captura y la lectura:** el estado que cuenta es el de la petición. Si cambia después, la advertencia ya no se repite; es lo que dice DA-15.
-- **Corrección de asistencia sin advertencia:** es lo que decide DA-67. Si Luis quiere otra cosa, se cambia antes de implementar.
+- **Corrección de asistencia sin advertencia:** decidida en DA-67.
