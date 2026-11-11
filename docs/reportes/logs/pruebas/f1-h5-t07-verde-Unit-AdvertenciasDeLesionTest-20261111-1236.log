@@ -1,0 +1,14 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Unit\Competencia\AdvertenciasDeLesionTest
+  ✓ DA-15: en la asistencia, una advertencia por cada lesionado, con su… 0.05s  
+  ✓ DA-15: solo lesionado advierte; con_molestia y apto no
+  ✓ Una sola consulta al puerto por petición, con la lista completa en orden
+  ✓ Sin jugadores no hay advertencias ni consulta al puerto
+  ✓ DA-15: en la convocatoria, la advertencia del lesionado señala jugador_id
+  ✓ DA-15: en la convocatoria, un jugador que no está lesionado no advierte with ('apto')
+  ✓ DA-15: en la convocatoria, un jugador que no está lesionado no advierte with ('con_molestia')
+
+  Tests:    7 passed (9 assertions)
+  Duration: 0.63s
+

@@ -8,7 +8,8 @@ use Illuminate\Http\JsonResponse;
 final class Respuesta
 {
     /**
-     * @param  list<array{codigo: string, mensaje: string}>  $advertencias  el mensaje sale de lang/es
+     * @param  list<array{codigo: string, mensaje: string, campo?: string}>  $advertencias  el mensaje sale de lang/es; `campo` es
+     *                                                                                      opcional (convenciones §4 v1.3, DA-15)
      */
     public static function conDatos(mixed $datos, array $advertencias = [], int $estado = 200): JsonResponse
     {

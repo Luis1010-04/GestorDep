@@ -1,0 +1,129 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Unit\Competencia\AdvertenciasDeLesionTest
+  ⨯ DA-15: en la asistencia, una advertencia por cada lesionado, con su… 0.04s  
+  ⨯ DA-15: solo lesionado advierte; con_molestia y apto no
+  ⨯ Una sola consulta al puerto por petición, con la lista completa en orden
+  ⨯ Sin jugadores no hay advertencias ni consulta al puerto
+  ⨯ DA-15: en la convocatoria, la advertencia del lesionado señala jugador_id
+  ⨯ DA-15: en la convocatoria, un jugador que no está lesionado no advierte with ('apto')
+  ⨯ DA-15: en la convocatoria, un jugador que no está lesionado no advierte with ('con_molestia')
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Competencia\AdvertenciasDeLesionTest > DA-15: e…  Error   
+  Class "Src\Competencia\Aplicacion\AdvertenciasDeLesion" not found
+
+  at tests/Unit/Competencia/AdvertenciasDeLesionTest.php:36
+     32▕ test('DA-15: en la asistencia, una advertencia por cada lesionado, con su posición en la petición desde 0', function () {
+     33▕     [$j1, $f1, $j2] = [Identificador::generar(), Identificador::generar(), Identificador::generar()];
+     34▕     $puerto = advertenciasPuerto([$j1->valor() => 'lesionado', $j2->valor() => 'lesionado']);
+     35▕ 
+  ➜  36▕     $advertencias = (new AdvertenciasDeLesion($puerto))->deAsistencia([$j1, $f1, $j2]);
+     37▕ 
+     38▕     expect($advertencias)->toBe([
+     39▕         ['codigo' => 'jugador_lesionado', 'campo' => 'registros.0.jugador_id'],
+     40▕         ['codigo' => 'jugador_lesionado', 'campo' => 'registros.2.jugador_id'],
+
+  1   tests/Unit/Competencia/AdvertenciasDeLesionTest.php:36
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Competencia\AdvertenciasDeLesionTest > DA-15: s…  Error   
+  Class "Src\Competencia\Aplicacion\AdvertenciasDeLesion" not found
+
+  at tests/Unit/Competencia/AdvertenciasDeLesionTest.php:48
+     44▕ test('DA-15: solo lesionado advierte; con_molestia y apto no', function () {
+     45▕     [$molestia, $apto] = [Identificador::generar(), Identificador::generar()];
+     46▕     $puerto = advertenciasPuerto([$molestia->valor() => 'con_molestia', $apto->valor() => 'apto']);
+     47▕ 
+  ➜  48▕     expect((new AdvertenciasDeLesion($puerto))->deAsistencia([$molestia, $apto]))->toBe([]);
+     49▕ });
+     50▕ 
+     51▕ test('Una sola consulta al puerto por petición, con la lista completa en orden', function () {
+     52▕     $jugadores = [Identificador::generar(), Identificador::generar(), Identificador::generar()];
+
+  1   tests/Unit/Competencia/AdvertenciasDeLesionTest.php:48
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Competencia\AdvertenciasDeLesionTest > Una sola…  Error   
+  Class "Src\Competencia\Aplicacion\AdvertenciasDeLesion" not found
+
+  at tests/Unit/Competencia/AdvertenciasDeLesionTest.php:55
+     51▕ test('Una sola consulta al puerto por petición, con la lista completa en orden', function () {
+     52▕     $jugadores = [Identificador::generar(), Identificador::generar(), Identificador::generar()];
+     53▕     $puerto = advertenciasPuerto([]);
+     54▕ 
+  ➜  55▕     (new AdvertenciasDeLesion($puerto))->deAsistencia($jugadores);
+     56▕ 
+     57▕     expect($puerto->consultas)->toBe([array_map(fn (Identificador $jugador) => $jugador->valor(), $jugadores)]);
+     58▕ });
+     59▕
+
+  1   tests/Unit/Competencia/AdvertenciasDeLesionTest.php:55
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Competencia\AdvertenciasDeLesionTest > Sin juga…  Error   
+  Class "Src\Competencia\Aplicacion\AdvertenciasDeLesion" not found
+
+  at tests/Unit/Competencia/AdvertenciasDeLesionTest.php:63
+     59▕ 
+     60▕ test('Sin jugadores no hay advertencias ni consulta al puerto', function () {
+     61▕     $puerto = advertenciasPuerto([]);
+     62▕ 
+  ➜  63▕     expect((new AdvertenciasDeLesion($puerto))->deAsistencia([]))->toBe([])
+     64▕         ->and($puerto->consultas)->toBe([]);
+     65▕ });
+     66▕ 
+     67▕ test('DA-15: en la convocatoria, la advertencia del lesionado señala jugador_id', function () {
+
+  1   tests/Unit/Competencia/AdvertenciasDeLesionTest.php:63
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Competencia\AdvertenciasDeLesionTest > DA-15: e…  Error   
+  Class "Src\Competencia\Aplicacion\AdvertenciasDeLesion" not found
+
+  at tests/Unit/Competencia/AdvertenciasDeLesionTest.php:71
+     67▕ test('DA-15: en la convocatoria, la advertencia del lesionado señala jugador_id', function () {
+     68▕     $f1 = Identificador::generar();
+     69▕     $puerto = advertenciasPuerto([$f1->valor() => 'lesionado']);
+     70▕ 
+  ➜  71▕     expect((new AdvertenciasDeLesion($puerto))->deConvocatoria($f1))->toBe([['codigo' => 'jugador_lesionado', 'campo' => 'jugador_id']])
+     72▕         ->and($puerto->consultas)->toBe([[$f1->valor()]]);
+     73▕ });
+     74▕ 
+     75▕ test('DA-15: en la convocatoria, un jugador que no está lesionado no advierte', function (string $estado) {
+
+  1   tests/Unit/Competencia/AdvertenciasDeLesionTest.php:71
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Competencia\AdvertenciasDeLesionTest > DA-15: e…  Error   
+  Class "Src\Competencia\Aplicacion\AdvertenciasDeLesion" not found
+
+  at tests/Unit/Competencia/AdvertenciasDeLesionTest.php:78
+     74▕ 
+     75▕ test('DA-15: en la convocatoria, un jugador que no está lesionado no advierte', function (string $estado) {
+     76▕     $f1 = Identificador::generar();
+     77▕ 
+  ➜  78▕     expect((new AdvertenciasDeLesion(advertenciasPuerto([$f1->valor() => $estado])))->deConvocatoria($f1))->toBe([]);
+     79▕ })->with(['apto', 'con_molestia']);
+     80▕
+
+  1   tests/Unit/Competencia/AdvertenciasDeLesionTest.php:78
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Competencia\AdvertenciasDeLesionTest > DA-15: e…  Error   
+  Class "Src\Competencia\Aplicacion\AdvertenciasDeLesion" not found
+
+  at tests/Unit/Competencia/AdvertenciasDeLesionTest.php:78
+     74▕ 
+     75▕ test('DA-15: en la convocatoria, un jugador que no está lesionado no advierte', function (string $estado) {
+     76▕     $f1 = Identificador::generar();
+     77▕ 
+  ➜  78▕     expect((new AdvertenciasDeLesion(advertenciasPuerto([$f1->valor() => $estado])))->deConvocatoria($f1))->toBe([]);
+     79▕ })->with(['apto', 'con_molestia']);
+     80▕
+
+  1   tests/Unit/Competencia/AdvertenciasDeLesionTest.php:78
+
+
+  Tests:    7 failed (0 assertions)
+  Duration: 0.71s
+

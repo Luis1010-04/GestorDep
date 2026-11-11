@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Competencia\ContratoDeAdvertenciasTest
+  ✓ DA-15: la advertencia con campo de la asistencia y de la convocator… 5.23s  
+
+  Tests:    1 passed (8 assertions)
+  Duration: 5.77s
+

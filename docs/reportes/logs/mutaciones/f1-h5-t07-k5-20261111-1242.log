@@ -1,0 +1,11 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+=== control antes
+Tests:    11 passed (47 assertions)
+0
+=== K5 el adaptador lee estados cerrados
+⨯ §7.7 fila 5: con F1 dado de alta tras estar lesionado, la convocato… 0.21s  
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 5:…   
+Tests:    1 failed, 10 passed (47 assertions)
+=== control despues
+Tests:    11 passed (47 assertions)
+copia temporal borrada

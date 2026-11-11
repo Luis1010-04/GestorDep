@@ -1,0 +1,44 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+=== control antes
+Tests:    11 passed (47 assertions)
+reemplazos: 2
+=== K1 con_molestia tambien advierte
+⨯ §7.7 fila 2 (DA-15): con F1 con_molestia, la asistencia no advierte  0.22s  
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 2…    
+Tests:    1 failed, 10 passed (47 assertions)
+reemplazos: 1
+=== K2 la convocatoria advierte siempre
+⨯ §7.7 fila 4 (DA-01): con F1 apto implícito, la convocatoria no advi… 0.22s  
+⨯ §7.7 fila 5: con F1 dado de alta tras estar lesionado, la convocato… 0.21s  
+⨯ T07: sin jugadores lesionados, la asistencia y la convocatoria resp… 0.26s  
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 4…    
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 5:…   
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > T07: sin jug…   
+Tests:    3 failed, 8 passed (47 assertions)
+reemplazos: 1
+=== K3 la correccion advierte
+⨯ DA-67: corregir la asistencia de un jugador lesionado no devuelve l… 0.22s  
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > DA-67: corre…   
+Tests:    1 failed, 10 passed (46 assertions)
+reemplazos: 1
+=== K4 el empalme lleva campo
+⨯ §7.7 fila 7 (DA-15): un entrenamiento que se empalma responde empal… 0.24s  
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 7…    
+Tests:    1 failed, 10 passed (47 assertions)
+reemplazos: 1
+=== K5 el adaptador lee estados cerrados
+Tests:    11 passed (47 assertions)
+reemplazos: 1
+=== K6 la asistencia advierte siempre
+⨯ §7.7 fila 1 (HU-11 c2, DA-15, DA-66): con F1 lesionado y J1 apto, u… 1.96s  
+⨯ §7.7 fila 2 (DA-15): con F1 con_molestia, la asistencia no advierte  0.21s  
+⨯ §7.7 fila 6 (DA-15): con F1 y J1 lesionados, dos advertencias, en r… 0.28s  
+⨯ T07: sin jugadores lesionados, la asistencia y la convocatoria resp… 0.26s  
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 1…    
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 2…    
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 6…    
+FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > T07: sin jug…   
+Tests:    4 failed, 7 passed (44 assertions)
+=== control despues
+Tests:    11 passed (47 assertions)
+copia temporal borrada

@@ -804,3 +804,13 @@ Detalle en `f1-h5-t06.md`. La tarea se pausó el 7/11/2026 a pedido de Luis, dur
 | Cierre de T06 | 1 927 (12 006 aserciones) | 681 s | 733 s, código 0 |
 
 En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t06-20261111-1139.log`. Pendiente de aprobación: DA-65, el orden del listado dentro de un periodo.
+
+## 18. F1-H5-T07: advertencias de jugador lesionado (11/11/2026)
+
+Detalle en `f1-h5-t07.md`.
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Cierre de T07 | 1 946 (12 068 aserciones) | 691 s | 745 s, código 0 |
+
+En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t07-20261111-1243.log`. Pendiente de decisión: Infection no muta `Aplicacion` (`infection.json5`), así que `AdvertenciasDeLesion` solo tiene pruebas `Unit` y mutaciones manuales.

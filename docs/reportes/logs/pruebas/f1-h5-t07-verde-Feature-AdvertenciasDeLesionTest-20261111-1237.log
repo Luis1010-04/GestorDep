@@ -1,0 +1,18 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Competencia\AdvertenciasDeLesionTest
+  ✓ §7.7 fila 1 (HU-11 c2, DA-15, DA-66): con F1 lesionado y J1 apto, u… 4.49s  
+  ✓ DA-66: el mensaje no lleva nombre, apellidos ni matrícula del jugad… 0.34s  
+  ✓ §7.7 fila 2 (DA-15): con F1 con_molestia, la asistencia no advierte  0.38s  
+  ✓ §7.7 fila 3 (HU-12 c3, DA-15): convocar a F1 lesionado guarda la co… 0.45s  
+  ✓ §7.7 fila 4 (DA-01): con F1 apto implícito, la convocatoria no advi… 0.33s  
+  ✓ §7.7 fila 5: con F1 dado de alta tras estar lesionado, la convocato… 0.34s  
+  ✓ §7.7 fila 6 (DA-15): con F1 y J1 lesionados, dos advertencias, en r… 0.36s  
+  ✓ §7.7 fila 7 (DA-15): un entrenamiento que se empalma responde empal… 0.39s  
+  ✓ DA-67: corregir la asistencia de un jugador lesionado no devuelve l… 0.34s  
+  ✓ T07: sin jugadores lesionados, la asistencia y la convocatoria resp… 0.38s  
+  ✓ T07: una petición rechazada no genera advertencias                   0.40s  
+
+  Tests:    11 passed (47 assertions)
+  Duration: 8.82s
+
