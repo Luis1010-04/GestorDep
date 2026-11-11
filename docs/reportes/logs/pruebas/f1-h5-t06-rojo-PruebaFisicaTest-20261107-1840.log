@@ -1,0 +1,213 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Unit\CondicionFisica\PruebaFisicaTest
+  ⨯ DA-03: el periodo de la prueba se deriva de la fecha with dataset "… 0.05s  
+  ⨯ DA-03: el periodo de la prueba se deriva de la fecha with dataset "… 0.01s  
+  ⨯ HU-18: corregir reemplaza equipo, fecha y resultado, y conserva el…  0.02s  
+  ⨯ DA-40: dos pruebas con los mismos valores son iguales, aunque el re… 0.01s  
+  ⨯ DA-40: cualquier valor distinto hace que la prueba cambie with ('eq… 0.02s  
+  ⨯ DA-40: cualquier valor distinto hace que la prueba cambie with ('fe… 0.01s  
+  ⨯ DA-40: cualquier valor distinto hace que la prueba cambie with ('re… 0.01s  
+  ⨯ Reconstruir devuelve la prueba con sus valores guardados             0.01s  
+  ⨯ DA-16: el tipo de prueba guarda su catálogo y valida el resultado c… 0.01s  
+  ⨯ §6.3: el tipo inexistente lleva su código y su campo with dataset "… 0.01s  
+  ⨯ §6.3: una prueba ya registrada lleva su código                       0.02s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > DA-03: el pe…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+     11▕ use Src\CondicionFisica\Dominio\ValorFueraDeRango;
+     12▕ 
+     13▕ function pruebaDePrueba(string $resultado = '4.35', string $fecha = '2026-11-03'): PruebaFisica
+     14▕ {
+  ➜  15▕     return PruebaFisica::registrar(
+     16▕         Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(),
+     17▕         $fecha, NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     18▕     );
+     19▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:30
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > DA-03: el pe…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+     11▕ use Src\CondicionFisica\Dominio\ValorFueraDeRango;
+     12▕ 
+     13▕ function pruebaDePrueba(string $resultado = '4.35', string $fecha = '2026-11-03'): PruebaFisica
+     14▕ {
+  ➜  15▕     return PruebaFisica::registrar(
+     16▕         Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(),
+     17▕         $fecha, NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     18▕     );
+     19▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:30
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > HU-18: corre…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+     11▕ use Src\CondicionFisica\Dominio\ValorFueraDeRango;
+     12▕ 
+     13▕ function pruebaDePrueba(string $resultado = '4.35', string $fecha = '2026-11-03'): PruebaFisica
+     14▕ {
+  ➜  15▕     return PruebaFisica::registrar(
+     16▕         Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(),
+     17▕         $fecha, NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     18▕     );
+     19▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:37
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > DA-40: dos p…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+     11▕ use Src\CondicionFisica\Dominio\ValorFueraDeRango;
+     12▕ 
+     13▕ function pruebaDePrueba(string $resultado = '4.35', string $fecha = '2026-11-03'): PruebaFisica
+     14▕ {
+  ➜  15▕     return PruebaFisica::registrar(
+     16▕         Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(),
+     17▕         $fecha, NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     18▕     );
+     19▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:55
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > DA-40: cualq…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+     11▕ use Src\CondicionFisica\Dominio\ValorFueraDeRango;
+     12▕ 
+     13▕ function pruebaDePrueba(string $resultado = '4.35', string $fecha = '2026-11-03'): PruebaFisica
+     14▕ {
+  ➜  15▕     return PruebaFisica::registrar(
+     16▕         Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(),
+     17▕         $fecha, NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     18▕     );
+     19▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:62
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > DA-40: cualq…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+     11▕ use Src\CondicionFisica\Dominio\ValorFueraDeRango;
+     12▕ 
+     13▕ function pruebaDePrueba(string $resultado = '4.35', string $fecha = '2026-11-03'): PruebaFisica
+     14▕ {
+  ➜  15▕     return PruebaFisica::registrar(
+     16▕         Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(),
+     17▕         $fecha, NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     18▕     );
+     19▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:62
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > DA-40: cualq…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+     11▕ use Src\CondicionFisica\Dominio\ValorFueraDeRango;
+     12▕ 
+     13▕ function pruebaDePrueba(string $resultado = '4.35', string $fecha = '2026-11-03'): PruebaFisica
+     14▕ {
+  ➜  15▕     return PruebaFisica::registrar(
+     16▕         Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(),
+     17▕         $fecha, NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     18▕     );
+     19▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:62
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > Reconstruir…   Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+     11▕ use Src\CondicionFisica\Dominio\ValorFueraDeRango;
+     12▕ 
+     13▕ function pruebaDePrueba(string $resultado = '4.35', string $fecha = '2026-11-03'): PruebaFisica
+     14▕ {
+  ➜  15▕     return PruebaFisica::registrar(
+     16▕         Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(), Identificador::generar(),
+     17▕         $fecha, NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     18▕     );
+     19▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:15
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:74
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > DA-16: el ti…  Error   
+  Class "Src\CondicionFisica\Dominio\TipoDePrueba" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:23
+     19▕ }
+     20▕ 
+     21▕ function tipoDePruebaDePrueba(): TipoDePrueba
+     22▕ {
+  ➜  23▕     return new TipoDePrueba(
+     24▕         Identificador::generar(), 'resistencia', 'Resistencia', 'm', 'mayor',
+     25▕         new RangoDeMedida(NumeroDecimal::desdeTexto('100.00'), NumeroDecimal::desdeTexto('6000.00')),
+     26▕     );
+     27▕ }
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:23
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:90
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > §6.3: el tip…  Error   
+  Class "Src\CondicionFisica\Dominio\TipoPruebaInexistente" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:115
+    111▕ 
+    112▕     expect($regla->codigo())->toBe($codigo)
+    113▕         ->and($regla->campo())->toBe($campo);
+    114▕ })->with([
+  ➜ 115▕     'tipo de prueba inexistente' => [fn () => new TipoPruebaInexistente, 'tipo_prueba_inexistente', 'tipo_prueba_id'],
+    116▕ ]);
+    117▕ 
+    118▕ test('§6.3: una prueba ya registrada lleva su código', function () {
+    119▕     expect((new PruebaYaRegistrada)->codigo())->toBe('prueba_ya_registrada');
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:115
+  2   tests/Unit/CondicionFisica/PruebaFisicaTest.php:110
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\CondicionFisica\PruebaFisicaTest > §6.3: una pr…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaYaRegistrada" not found
+
+  at tests/Unit/CondicionFisica/PruebaFisicaTest.php:119
+    115▕     'tipo de prueba inexistente' => [fn () => new TipoPruebaInexistente, 'tipo_prueba_inexistente', 'tipo_prueba_id'],
+    116▕ ]);
+    117▕ 
+    118▕ test('§6.3: una prueba ya registrada lleva su código', function () {
+  ➜ 119▕     expect((new PruebaYaRegistrada)->codigo())->toBe('prueba_ya_registrada');
+    120▕ });
+    121▕
+
+  1   tests/Unit/CondicionFisica/PruebaFisicaTest.php:119
+
+
+  Tests:    11 failed (0 assertions)
+  Duration: 1.31s
+

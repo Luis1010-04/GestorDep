@@ -1,0 +1,69 @@
+docker compose exec -T app bash bin/con-candado.sh composer mutacion
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+    ____      ____          __  _
+   /  _/___  / __/__  _____/ /_(_)___  ____
+   / // __ \/ /_/ _ \/ ___/ __/ / __ \/ __ \
+ _/ // / / / __/  __/ /__/ /_/ / /_/ / / / /
+/___/_/ /_/_/  \___/\___/\__/_/\____/_/ /_/
+
+#StandWithUkraine
+
+Infection - PHP Mutation Testing Framework version 0.35.8
+
+[notice] You are running Infection with PCOV enabled.
+[notice] Running Infection with 4 threads.
+
+Running initial tests with PHPUnit version 12.5.33
+
+.: killed by tests, A: killed by SA, M: escaped, U: uncovered
+E: fatal error, X: syntax error, T: timed out, S: skipped, I: ignored
+
+
+Generate mutants...
+
+Processing source code files...
+..................................................   (   50)
+..................................................   (  100)
+..................................................   (  150)
+..................................................   (  200)
+..................................................   (  250)
+..................................................   (  300)
+..................................................   (  350)
+..................................................   (  400)
+..................................................   (  450)
+..................................................   (  500)
+..................................................   (  550)
+..................................................   (  600)
+..................................................   (  650)
+..................................................   (  700)
+..................................................   (  750)
+..................................................   (  800)
+..................................................   (  850)
+..............................
+
+880 mutations were generated:
+     880 mutants were killed by Test Framework
+
+Metrics:
+         Mutation Score Indicator (MSI): 100%
+         Mutation Code Coverage: 100%
+         Covered Code MSI: 100%
+
+Please note that some mutants will inevitably be harmless (i.e. false positives).
+
+Generated Reports:
+         - /var/www/html/build/infection/infection.log
+         - /var/www/html/build/infection/resumen.log
+ ! [NOTE] The MSI is 20% percentage points over the required MSI. Consider      
+ !        increasing the required MSI percentage the next time you run          
+ !        Infection.                                                            
+
+ ! [NOTE] The Covered Code MSI is 15% percentage points over the required       
+ !        Covered Code MSI. Consider increasing the required Covered Code MSI   
+ !        percentage the next time you run Infection.                           
+
+
+Time: 2m 57s. Memory: 0.06GB. Threads: 4
+Mutación completa: 880 mutantes evaluados, ninguno omitido ni con tiempo agotado.
+# make mutacion codigo: 0 en 179 s

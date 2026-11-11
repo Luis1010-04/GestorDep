@@ -38,6 +38,7 @@ return [
     'condicion_fisica' => [
         'valor_fuera_de_rango' => 'El valor está fuera del rango permitido.',
         'jugador_en_baja' => 'El jugador está en baja: no se pueden registrar ni corregir mediciones.',
+        'jugador_en_baja_prueba' => 'El jugador está en baja: no se pueden registrar ni corregir pruebas físicas.',
     ],
 
     // Mensaje propio de cada ReglaDeNegocioViolada, por su codigo; sin entrada se usa regla_de_negocio_violada.
@@ -47,6 +48,8 @@ return [
         'medicion_ya_registrada' => 'Ya hay una medición registrada en ese periodo. Si quieres reemplazarla, confírmalo como corrección.',
         'nada_que_corregir' => 'No hay nada que corregir en ese periodo.',
         'equipo_inexistente' => 'El equipo indicado no existe.',
+        'prueba_ya_registrada' => 'Ya hay una prueba de ese tipo registrada en ese periodo. Si quieres reemplazarla, confírmalo como corrección.',
+        'tipo_prueba_inexistente' => 'El tipo de prueba indicado no existe.',
         'no_es_registrante' => 'Solo quien registró el estado oficial puede modificarlo.',
         'credenciales_invalidas' => 'Las credenciales no son válidas.',
         'cuenta_bloqueada' => 'La cuenta está bloqueada temporalmente por intentos fallidos.',

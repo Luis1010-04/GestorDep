@@ -1,0 +1,65 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+=== control antes
+Tests:    59 passed (291 assertions)
+reemplazos: 1
+=== G0 sin comprobar el alcance
+⨯ §6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de…  0.33s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > §6.1: fuera de…   
+Tests:    1 failed, 58 passed (285 assertions)
+reemplazos: 1
+=== G1 sin filtrar por registrante
+⨯ §7.6 fila 9 (DD-59): E2 lista las de F1 sin las de E1                0.40s  
+⨯ DA-64: dos entrenadores distintos no chocan: cada uno tiene su fila  0.42s  
+⨯ DA-04, DD-59: buscar del periodo distingue jugador, tipo, registran… 0.49s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > §7.6 fila 9 (D…   
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > DA-64: dos ent…   
+FAILED  Tests\Integration\CondicionFisica\RepositorioDePruebasFisicasTest…   
+Tests:    3 failed, 56 passed (286 assertions)
+reemplazos: 1
+=== G2 periodo sin filtrar por tipo
+⨯ §7.6 fila 4 (DA-04): con velocidad de E1 en 2026-11, resistencia en… 0.36s  
+⨯ §7.6 fila 13 (DD-62): velocidad 1.00 y tiempo de prueba 3600.00 son… 0.48s  
+⨯ DA-04, DD-59: buscar del periodo distingue jugador, tipo, registran… 0.42s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > §7.6 fila 4 (D…   
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > §7.6 fila 13 (…   
+FAILED  Tests\Integration\CondicionFisica\RepositorioDePruebasFisicasTest…   
+Tests:    3 failed, 56 passed (286 assertions)
+reemplazos: 1
+=== G3 orden sin el codigo del tipo
+⨯ Orden del listado: por periodo ascendente y, dentro del periodo, po… 0.57s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > Orden del list…   
+Tests:    1 failed, 58 passed (291 assertions)
+reemplazos: 1
+=== G4 catalogo con tipos eliminados
+⨯ DA-61: un UUID no v7, un tipo eliminado y uno inexistente responden… 0.65s  
+⨯ DA-16: el catálogo lee el rango del tipo de la tabla, también tras…  0.27s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > DA-61: un UUID…   
+FAILED  Tests\Integration\CondicionFisica\RepositorioDePruebasFisicasTest…   
+Tests:    2 failed, 57 passed (286 assertions)
+reemplazos: 1
+=== G5 vista sin filtrar por tipo
+⨯ DA-62: con los dos filtros, la vista del periodo trae solo ese tipo… 0.36s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > DA-62: con los…   
+Tests:    1 failed, 58 passed (287 assertions)
+reemplazos: 1
+=== G6 sin comprobar la baja
+⨯ §7.6 fila 10 (DD-60, DA-59): registrar una prueba de JB responde 40… 0.33s  
+⨯ DA-12, DA-59: corregir una prueba de un jugador en baja responde 40… 0.30s  
+⨯ DA-58: jugador_en_baja va antes que equipo_inexistente, tipo_prueba… 0.29s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > §7.6 fila 10 (…   
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > DA-12, DA-59:…    
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > DA-58: jugador…   
+Tests:    3 failed, 56 passed (286 assertions)
+reemplazos: 1
+=== G7 UUID no v7 en el filtro como si no hubiera filtro
+⨯ DA-62: con los dos filtros, la vista del periodo trae solo ese tipo… 0.41s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > DA-62: con los…   
+Tests:    1 failed, 58 passed (285 assertions)
+reemplazos: 1
+=== G8 motivo hasta 256
+⨯ DA-44: el motivo admite 255 caracteres; 256 responden 422 validacio… 0.55s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > DA-44: el moti…   
+Tests:    1 failed, 58 passed (286 assertions)
+=== control despues
+Tests:    59 passed (291 assertions)
+copia temporal borrada

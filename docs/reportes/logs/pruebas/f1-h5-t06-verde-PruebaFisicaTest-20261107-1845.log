@@ -1,0 +1,18 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Unit\CondicionFisica\PruebaFisicaTest
+  ✓ DA-03: el periodo de la prueba se deriva de la fecha with dataset "… 0.06s  
+  ✓ DA-03: el periodo de la prueba se deriva de la fecha with dataset "enero"
+  ✓ HU-18: corregir reemplaza equipo, fecha y resultado, y conserva el tipo y lo demás
+  ✓ DA-40: dos pruebas con los mismos valores son iguales, aunque el resultado se escriba distinto
+  ✓ DA-40: cualquier valor distinto hace que la prueba cambie with ('equipo')
+  ✓ DA-40: cualquier valor distinto hace que la prueba cambie with ('fecha')
+  ✓ DA-40: cualquier valor distinto hace que la prueba cambie with ('resultado')
+  ✓ Reconstruir devuelve la prueba con sus valores guardados
+  ✓ DA-16: el tipo de prueba guarda su catálogo y valida el resultado c… 0.06s  
+  ✓ §6.3: el tipo inexistente lleva su código y su campo with dataset "… 0.01s  
+  ✓ §6.3: una prueba ya registrada lleva su código                       0.01s  
+
+  Tests:    11 passed (28 assertions)
+  Duration: 0.86s
+

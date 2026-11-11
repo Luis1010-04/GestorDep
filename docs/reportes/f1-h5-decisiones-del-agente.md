@@ -365,3 +365,11 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** **aprobada por Luis en el chat.** Se implementa en T06.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** agregar un bloqueo o una clave de idempotencia en una tarea posterior, con su propia decisión.
+
+## DA-65. Orden del listado de pruebas físicas dentro de un periodo (T06)
+
+- **Qué faltaba:** el plan dice que el listado va «por periodo ascendente», pero no cómo ordenar dos tipos del mismo periodo.
+- **Qué se eligió:** por periodo ascendente, luego por `codigo` del tipo, como la vista del periodo (DA-63), y luego por `id`. Desempatar solo por `id` reproduciría el orden aleatorio de RN-15 y DD-56.
+- **Estado:** propuesta del agente, **pendiente de aprobación de Luis.** Implementada en T06; la fijan la prueba «Orden del listado» y la mutación G3.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cambiar el orden en `RepositorioDePruebasFisicasSql::delRegistrante`.

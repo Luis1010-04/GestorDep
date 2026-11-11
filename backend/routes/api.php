@@ -23,12 +23,14 @@ use App\Http\Controllers\MedicionController;
 use App\Http\Controllers\PartidoController;
 use App\Http\Controllers\PeriodoEscolarController;
 use App\Http\Controllers\PlantillaEvaluacionController;
+use App\Http\Controllers\PruebaFisicaController;
 use App\Http\Controllers\RendimientoController;
 use App\Http\Controllers\RivalController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\SituacionAcademicaController;
 use App\Http\Controllers\TemporadaController;
+use App\Http\Controllers\TipoDePruebaController;
 use App\Http\Controllers\TorneoController;
 use App\Http\Controllers\UmbralController;
 use Illuminate\Support\Facades\Route;
@@ -152,5 +154,9 @@ Route::middleware('auth:web')->group(function () {
 
         Route::get('/jugadores/{jugador}/mediciones', [MedicionController::class, 'listar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/mediciones', [MedicionController::class, 'registrar'])->whereUuid('jugador');
+
+        Route::get('/tipos-prueba', [TipoDePruebaController::class, 'listar']);
+        Route::get('/jugadores/{jugador}/pruebas-fisicas', [PruebaFisicaController::class, 'listar'])->whereUuid('jugador');
+        Route::post('/jugadores/{jugador}/pruebas-fisicas', [PruebaFisicaController::class, 'registrar'])->whereUuid('jugador');
     });
 });

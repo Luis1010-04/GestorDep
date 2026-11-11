@@ -1,0 +1,24 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Feature\CondicionFisica\ContratoDePruebasFisicasTest
+  ⨯ HU-18: las respuestas de tipos de prueba y pruebas físicas cumplen…  8.38s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\ContratoDePruebasFisicasTest > HU-1…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/CondicionFisica/ContratoDePruebasFisicasTest.php:18
+     14▕     $pruebas = '/jugadores/{jugador}/pruebas-fisicas';
+     15▕     $tipos = '/tipos-prueba';
+     16▕ 
+     17▕     $respuestas = [
+  ➜  18▕         [$tipos, 'get', sesionesPeticion($this, 'GET', '/api/v1/tipos-prueba', idDeSesion: $e1)->assertOk()],
+     19▕         [$tipos, 'get', sesionesPeticion($this, 'GET', '/api/v1/tipos-prueba')->assertUnauthorized()],
+     20▕         [$tipos, 'get', sesionesPeticion($this, 'GET', '/api/v1/tipos-prueba', idDeSesion: $d1)->assertForbidden()],
+     21▕         [$pruebas, 'post', sesionesPeticion($this, 'POST', pruebasRuta($m['f1']), pruebaCuerpo($m['a'], $m['velocidad']), $e1)->assertCreated()],
+     22▕         [$pruebas, 'post', sesionesPeticion($this, 'POST', pruebasRuta($m['f1']), pruebaCuerpo($m['a'], $m['velocidad']), $e1)->assertConflict()],
+
+
+  Tests:    1 failed (5 assertions)
+  Duration: 9.45s
+

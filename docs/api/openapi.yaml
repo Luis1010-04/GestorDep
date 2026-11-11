@@ -5258,6 +5258,230 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /tipos-prueba:
+    get:
+      operationId: listarTiposDePrueba
+      summary: Lista el catalogo de tipos de prueba
+      description: >-
+        Rol entrenador (HU-18). Los tipos vigentes por codigo ascendente, sin paginar: no lee pagina ni por_pagina (DA-63).
+      tags: [Condicion fisica]
+      responses:
+        '200':
+          description: Catalogo de tipos de prueba.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TipoDePrueba'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/pruebas-fisicas:
+    get:
+      operationId: listarPruebasFisicas
+      summary: Lista las pruebas fisicas del jugador que registro el usuario, o la vista de un periodo
+      description: >-
+        Entrenador del jugador (HU-18, DD-59). Sin filtro[periodo], el listado paginado de las pruebas del usuario, por
+        periodo ascendente y, dentro del periodo, por codigo del tipo. Con filtro[periodo], la vista del periodo: un
+        elemento por tipo, por codigo ascendente, con prueba nula si no hay, sin paginar y sin leer pagina ni por_pagina
+        (HU-18 c3, DA-63). Con los dos filtros, la vista solo trae ese tipo (DA-62). Un filtro[tipo_prueba_id] que es UUID
+        pero no v7 da una lista vacia (DA-26 de H3). Sigue disponible con el jugador en baja.
+      tags: [Condicion fisica]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: filtro[periodo]
+          in: query
+          description: AAAA-MM; otro formato responde 422 validacion_fallida.
+          schema: {type: string}
+        - name: filtro[tipo_prueba_id]
+          in: query
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de pruebas, o la vista de un periodo con filtro[periodo].
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: false
+                    required: [datos, meta]
+                    properties:
+                      datos:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PruebaFisica'
+                      meta:
+                        type: object
+                        additionalProperties: false
+                        required: [pagina, por_pagina, total, total_paginas]
+                        properties:
+                          pagina: {type: integer}
+                          por_pagina: {type: integer}
+                          total: {type: integer}
+                          total_paginas: {type: integer}
+                  - type: object
+                    additionalProperties: false
+                    required: [datos]
+                    properties:
+                      datos:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ElementoDePeriodoDePruebas'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Filtro o parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarPruebaFisica
+      summary: Registra una prueba fisica o la corrige con confirmacion
+      description: >-
+        Entrenador del jugador (HU-18, docs/convenciones-api.md 4.1). El periodo se deriva de fecha (DA-03); una prueba
+        por tipo, periodo y registrante (DA-04). Orden de errores (DA-58): 403 rol, 404 alcance, 422 cuerpo, 409
+        jugador_en_baja, 422 equipo_inexistente, 422 tipo_prueba_inexistente, 422 valor_fuera_de_rango, 422
+        nada_que_corregir, 409 prueba_ya_registrada, 409 conflicto. Un doble envio del mismo entrenador responde 409
+        prueba_ya_registrada (DA-64).
+      tags: [Condicion fisica]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [equipo_id, tipo_prueba_id, resultado]
+              properties:
+                equipo_id:
+                  type: string
+                  format: uuid
+                  description: Equipo que el usuario entrena y donde el jugador tiene membresia vigente (DA-13).
+                tipo_prueba_id:
+                  type: string
+                  format: uuid
+                  description: Un UUID no v7, un tipo eliminado y uno inexistente responden 422 tipo_prueba_inexistente (DA-61).
+                resultado:
+                  type: string
+                  description: Hasta dos decimales. El rango sale de tipos_prueba.minimo y maximo (DA-16).
+                  example: '4.35'
+                fecha:
+                  type: string
+                  format: date
+                  description: Opcional; por defecto, el hoy de negocio. Puede ser futura (DA-03).
+                es_correccion:
+                  type: boolean
+                  default: false
+                motivo:
+                  type: string
+                  maxLength: 255
+                  description: >-
+                    Obligatorio con es_correccion; hasta 255 caracteres (DA-44). Sin es_correccion responde 422 prohibited
+                    (DA-39).
+      responses:
+        '200':
+          description: Correccion confirmada. Con valores identicos no escribe historial (DA-40).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/PruebaFisica'
+        '201':
+          description: Prueba registrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/PruebaFisica'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            jugador_en_baja (DD-60, DA-12), prueba_ya_registrada (ya hay una del usuario de ese tipo en el periodo, sin
+            es_correccion; DA-04, DA-64) o conflicto (dos registros simultaneos).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            validacion_fallida, equipo_inexistente (DA-13), tipo_prueba_inexistente (DA-61), valor_fuera_de_rango en
+            resultado, o nada_que_corregir en es_correccion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /jugadores/{jugador}/lesiones:
     get:
       operationId: listarLesiones
@@ -5497,6 +5721,68 @@ components:
         actualizado_en:
           type: string
           format: date-time
+    PruebaFisica:
+      type: object
+      additionalProperties: false
+      required: [id, equipo_id, tipo_prueba_id, fecha, periodo, resultado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+        tipo_prueba_id:
+          type: string
+          format: uuid
+        fecha:
+          type: string
+          format: date
+        periodo:
+          type: string
+          description: AAAA-MM, derivado de fecha (DA-03).
+          example: 2026-11
+        resultado:
+          type: string
+          description: Dos decimales.
+          example: '4.35'
+        actualizado_en:
+          type: string
+          format: date-time
+    ElementoDePeriodoDePruebas:
+      type: object
+      additionalProperties: false
+      required: [tipo_prueba_id, periodo, prueba]
+      properties:
+        tipo_prueba_id:
+          type: string
+          format: uuid
+        periodo:
+          type: string
+          example: 2026-11
+        prueba:
+          description: La prueba que registro el usuario en el periodo, o nula (HU-18 c3).
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/PruebaFisica'
+    TipoDePrueba:
+      type: object
+      additionalProperties: false
+      required: [id, codigo, nombre, unidad, mejor_resultado]
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+          enum: [velocidad, resistencia, tiempo_prueba]
+        nombre:
+          type: string
+        unidad:
+          type: string
+        mejor_resultado:
+          type: string
+          enum: [mayor, menor]
     Lesion:
       type: object
       additionalProperties: false

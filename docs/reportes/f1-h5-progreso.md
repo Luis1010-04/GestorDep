@@ -794,3 +794,13 @@ Log: `docs/reportes/logs/verificar/f1-h5-t03b-20261107-1423.log`. Por debajo del
 - `docs/reportes/logs/pruebas/f1-h5-t03b-contrato-sin-campo-20261107-1508.log`
 - `docs/reportes/logs/pruebas/f1-h5-t03b-carpetas-Salud-20261107-1510.log`
 - `docs/reportes/logs/pruebas/f1-h5-t03b-carpetas-CondicionFisica-20261107-1511.log`
+
+## 17. F1-H5-T06: pruebas físicas (7 y 11/11/2026)
+
+Detalle en `f1-h5-t06.md`. La tarea se pausó el 7/11/2026 a pedido de Luis, durante `make verificar`, y siguió el 11/11/2026.
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Cierre de T06 | 1 927 (12 006 aserciones) | 681 s | 733 s, código 0 |
+
+En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t06-20261111-1139.log`. Pendiente de aprobación: DA-65, el orden del listado dentro de un periodo.
