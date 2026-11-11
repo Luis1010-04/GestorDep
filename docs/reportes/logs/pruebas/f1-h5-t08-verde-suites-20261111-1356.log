@@ -1,0 +1,932 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Unit\CondicionFisica\ImcTest
+  ✓ DA-71: un IMC igual al máximo de la columna se admite                0.03s  
+  ✓ DA-71: un IMC por encima del máximo de la columna responde valor_fu… 0.03s  
+  ✓ DA-71: el IMC que se valida es el mismo que se guarda
+  ✓ DA-70: un rango no configurado lleva su código                       0.01s  
+
+   PASS  Tests\Unit\CondicionFisica\MedicionCorporalTest
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a… 0.02s  
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "§7.5 fila 2"
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "§7.5 fila 3, HALF_UP sobre 12.505"
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "justo debajo del medio"
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "límites del rango"
+  ✓ DA-03: el periodo se deriva de la fecha with dataset "noviembre"
+  ✓ DA-03: el periodo se deriva de la fecha with dataset "enero"
+  ✓ DA-03: el periodo se deriva de la fecha with dataset "fin de mes"
+  ✓ HU-17 c2: corregir reemplaza equipo, fecha y valores, y conserva lo demás
+  ✓ DA-40: dos mediciones con los mismos valores son iguales, aunque se escriban distinto
+  ✓ DA-40: cualquier valor distinto hace que la medición cambie with ('equipo')
+  ✓ DA-40: cualquier valor distinto hace que la medición cambie with ('fecha')
+  ✓ DA-40: cualquier valor distinto hace que la medición cambie with ('peso')
+  ✓ DA-40: cualquier valor distinto hace que la medición cambie with ('estatura')
+  ✓ DA-16: el rango admite sus dos límites with ('20.00')                0.01s  
+  ✓ DA-16: el rango admite sus dos límites with ('200.00')
+  ✓ DA-16: el rango admite sus dos límites with ('100.50')
+  ✓ DA-16: fuera del rango se señala el campo with ('19.99')
+  ✓ DA-16: fuera del rango se señala el campo with ('200.01')
+  ✓ DA-16: fuera del rango se señala el campo with ('0')
+  ✓ DA-16: fuera del rango se señala el campo with ('-1')
+  ✓ DA-16: fuera del rango se señala el campo with ('99999.99')
+  ✓ §6.3: las reglas de la medición llevan su código y su campo with da… 0.01s  
+  ✓ §6.3: las reglas de la medición llevan su código y su campo with da… 0.01s  
+  ✓ §6.3: una medición ya registrada lleva su código                     0.01s  
+  ✓ Reconstruir devuelve la medición con sus valores guardados
+  ✓ AU-09: el rango acotado a la columna toma el menor de los dos máximos
+
+   PASS  Tests\Unit\CondicionFisica\PruebaFisicaTest
+  ✓ DA-03: el periodo de la prueba se deriva de la fecha with dataset "… 0.05s  
+  ✓ DA-03: el periodo de la prueba se deriva de la fecha with dataset "enero"
+  ✓ HU-18: corregir reemplaza equipo, fecha y resultado, y conserva el tipo y lo demás
+  ✓ DA-40: dos pruebas con los mismos valores son iguales, aunque el resultado se escriba distinto
+  ✓ DA-40: cualquier valor distinto hace que la prueba cambie with ('equipo')
+  ✓ DA-40: cualquier valor distinto hace que la prueba cambie with ('fecha')
+  ✓ DA-40: cualquier valor distinto hace que la prueba cambie with ('resultado')
+  ✓ Reconstruir devuelve la prueba con sus valores guardados
+  ✓ DA-16: el tipo de prueba guarda su catálogo y valida el resultado c… 0.01s  
+  ✓ §6.3: el tipo inexistente lleva su código y su campo with dataset "… 0.01s  
+  ✓ §6.3: una prueba ya registrada lleva su código                       0.01s  
+  ✓ DA-16: el tipo de prueba conserva su identificador
+
+   PASS  Tests\Integration\CondicionFisica\ConcurrenciaTest
+  ✓ DA-74: dos pruebas físicas simultáneas del mismo tipo y periodo: la… 4.35s  
+  ✓ DA-74: dos mediciones simultáneas del mismo periodo: la segunda rec… 0.41s  
+
+   PASS  Tests\Integration\CondicionFisica\MigracionesDeCondicionFisicaTest
+  ✓ RNF-03 (DA-05, §7.5 filas 1 a 3): la base calcula el IMC redondeado… 0.26s  
+  ✓ RNF-03 (DA-05, §7.5 filas 1 a 3): la base calcula el IMC redondeado… 0.22s  
+  ✓ RNF-03 (DA-05, §7.5 filas 1 a 3): la base calcula el IMC redondeado… 0.24s  
+  ✓ RNF-03 (DA-05): el IMC es una columna generada: no se captura y cam… 0.23s  
+  ✓ RNF-03: los tipos de las columnas de mediciones_corporales son los…  0.22s  
+  ✓ RNF-03: el peso debe ser positivo with dataset "cero"                0.20s  
+  ✓ RNF-03: el peso debe ser positivo with dataset "negativo"            0.22s  
+  ✓ RNF-03: una estatura negativa la rechaza el CHECK                    0.23s  
+  ✓ RNF-03: una estatura de cero no entra: la columna generada falla po… 0.22s  
+  ✓ RNF-03 (DA-03): el periodo de una medición debe coincidir con su fe… 0.23s  
+  ✓ RNF-03 (DD-59, DA-13): una medición por jugador, registrante y peri… 0.24s  
+  ✓ RNF-03: el borrado lógico libera la unicidad de la medición          0.24s  
+  ✓ RNF-03: el código del tipo de prueba es único y mejor_resultado sol… 0.22s  
+  ✓ RNF-03 (DA-16): el rango de un tipo de prueba es obligatorio, con m… 0.22s  
+  ✓ RNF-03 (DA-16): rangos_mediciones_corporales solo admite peso y est… 0.18s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.21s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.20s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.20s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.19s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.20s  
+  ✓ RNF-03: el resultado de una prueba debe ser positivo with dataset "… 0.20s  
+  ✓ RNF-03: el resultado de una prueba debe ser positivo with dataset "… 0.22s  
+  ✓ RNF-03 (DA-03): el periodo de una prueba debe coincidir con su fech… 0.23s  
+  ✓ RNF-03 (DA-04): una prueba por jugador, tipo, registrante y periodo… 0.26s  
+  ✓ RNF-03: el borrado lógico libera la unicidad de la prueba            0.23s  
+  ✓ RNF-03: los índices de §5.1 existen con sus columnas                 0.22s  
+  ✓ RNF-03: las claves foráneas de Condición física no borran en cascad… 0.24s  
+  ✓ RNF-02: cada tabla de historial de Condición física es de solo inse… 0.26s  
+  ✓ RNF-02: el historial guarda el motivo de una corrección, y la aplic… 0.27s  
+  ✓ RNF-02 (DA-16): las tablas de Condición física llevan auditoría bás… 0.23s  
+  ✓ RNF-03: migrate:rollback de Condición física no falla y se vuelve a… 3.05s  
+
+   PASS  Tests\Integration\CondicionFisica\RegistrarMedicionTest
+  ✓ AU-09: con el máximo de estatura en 9999.99, el caso de uso rechaza… 2.44s  
+
+   PASS  Tests\Integration\CondicionFisica\RepositorioDeMedicionesTest
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.29s  
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.31s  
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.33s  
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.32s  
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.30s  
+  ✓ RNF-02: registrar escribe la fila y su historial crear en la misma…  0.30s  
+  ✓ RNF-02: corregir escribe los valores anteriores y nuevos con el mot… 0.30s  
+  ✓ §6.3: dos mediciones simultáneas del mismo periodo chocan con el ín… 0.29s  
+  ✓ DD-59: buscar del periodo distingue jugador, registrante y periodo,… 0.30s  
+  ✓ DA-16: los rangos salen de la tabla, también tras cambiarlos en la…  0.31s  
+  ✓ AU-09: el máximo de cada columna sale de su tipo en la base          0.31s  
+
+   PASS  Tests\Integration\CondicionFisica\RepositorioDePruebasFisicasTest
+  ✓ RNF-02: registrar escribe la fila y su historial crear               0.32s  
+  ✓ RNF-02: corregir escribe los valores anteriores y nuevos con el mot… 0.31s  
+  ✓ §6.3, DA-64: dos pruebas del mismo tipo, registrante y periodo choc… 0.32s  
+  ✓ DA-04, DD-59: buscar del periodo distingue jugador, tipo, registran… 0.32s  
+  ✓ DA-16: el catálogo lee el rango del tipo de la tabla, también tras…  0.37s  
+
+   PASS  Tests\Integration\CondicionFisica\SeedersDeCondicionFisicaTest
+  ✓ RNF-09 (DD-62, DA-16): TiposPruebaSeeder siembra los tres tipos de…  0.25s  
+  ✓ RNF-09 (DD-62, DA-16): RangosMedicionesCorporalesSeeder siembra pes… 0.22s  
+  ✓ RNF-09: cada tipo y cada medida sembrados tienen un nombre           0.20s  
+  ✓ RNF-09: TiposPruebaSeeder es idempotente, no deshace un ajuste en l… 0.20s  
+  ✓ RNF-09: RangosMedicionesCorporalesSeeder es idempotente, no deshace… 0.22s  
+  ✓ DA-16: tras db:seed existen los rangos de cada medida y de cada tip… 0.55s  
+  ✓ DA-16: DatabaseSeeder siembra los rangos también en producción       0.29s  
+
+   PASS  Tests\Feature\CondicionFisica\ContratoDeMedicionesTest
+  ✓ HU-17: las respuestas de mediciones cumplen el contrato              1.41s  
+
+   PASS  Tests\Feature\CondicionFisica\ContratoDePruebasFisicasTest
+  ✓ HU-18: las respuestas de tipos de prueba y pruebas físicas cumplen…  1.36s  
+
+   PASS  Tests\Feature\CondicionFisica\MedicionesTest
+  ✓ §7.5 fila 1 (HU-17 c1, DA-05): E1 registra; 201 con el periodo y el… 0.36s  
+  ✓ §7.5 fila 2 (DA-05): 72.50 kg y 180.0 cm dan un IMC de 22.38         0.36s  
+  ✓ §7.5 fila 3 (DA-05): 12.505 se redondea HALF_UP a 12.51 y la base d… 0.38s  
+  ✓ §7.5 fila 4 (HU-17 c2): otra medición en el periodo sin es_correcci… 0.39s  
+  ✓ §7.5 fila 5 (HU-17 c2): la corrección con motivo responde 200, reem… 0.40s  
+  ✓ §7.5 fila 6 (convenciones §4.1): es_correccion sin motivo responde…  0.36s  
+  ✓ §7.5 fila 6 (convenciones §4.1): es_correccion sin motivo responde…  0.38s  
+  ✓ §7.5 fila 7 (convenciones §4.1): es_correccion sin nada en el perio… 0.39s  
+  ✓ §7.5 fila 8 (DD-59): E2 registra la suya en el mismo periodo y no c… 0.36s  
+  ✓ §7.5 fila 9 (DD-59): E2 lista solo la suya                           0.35s  
+  ✓ §7.5 fila 10 (HU-17 c3, DA-06): E1 lista tres periodos en orden asc… 0.34s  
+  ✓ §7.5 fila 11 (DD-62): 19.99 kg responde 422 valor_fuera_de_rango en… 0.35s  
+  ✓ §7.5 fila 12 (DD-62): 230.1 cm responde 422 valor_fuera_de_rango en… 0.35s  
+  ✓ §7.5 fila 13 (DD-62): 200.00 kg y 100.0 cm son válidos, y también l… 0.33s  
+  ✓ §7.5 fila 13 (DD-62): 200.00 kg y 100.0 cm son válidos, y también l… 0.35s  
+  ✓ §7.5 fila 14 (DA-13): E1 con el equipo B responde 422 equipo_inexis… 0.34s  
+  ✓ §7.5 fila 15 (DD-60, DA-41): registrar una medición de JB responde…  0.35s  
+  ✓ §7.5 fila 16 (§5.3): D1 no lista las mediciones: 403 sin_permiso     0.34s  
+  ✓ §7.5 fila 17 (RNF-09, DA-16): el máximo cambiado en la base se apli… 0.44s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.35s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.36s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.35s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.37s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.39s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.37s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.37s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.37s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.38s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.36s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.34s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.36s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.37s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.35s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.35s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.34s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.35s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.35s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.35s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.36s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.36s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.33s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.35s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.34s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.33s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.34s  
+  ✓ DA-03: la fecha es opcional, puede ser futura y decide el periodo    0.39s  
+  ✓ DA-44: el motivo admite 255 caracteres; 256 responden 422 validacio… 0.50s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.35s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.35s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.36s  
+  ✓ DA-39: es_correccion falso sin motivo registra como una medición no… 0.35s  
+  ✓ DA-40: una corrección con valores idénticos responde 200 sin histor… 0.39s  
+  ✓ DA-12: corregir una medición de un jugador en baja responde 409 jug… 0.35s  
+  ✓ DA-12, DD-30: las mediciones de un jugador en baja se siguen listan… 0.33s  
+  ✓ DA-13: inexistente, eliminado, ajeno, sin el jugador o UUID no v7 r… 0.43s  
+  ✓ DA-13: con el jugador en dos equipos suyos hay una sola medición po… 0.45s  
+  ✓ DA-38: el 422 del cuerpo va antes que el 409 jugador_en_baja         0.37s  
+  ✓ DA-38: jugador_en_baja va antes que equipo_inexistente y que valor_… 0.34s  
+  ✓ DA-38: equipo_inexistente va antes que valor_fuera_de_rango          0.34s  
+  ✓ DA-38: valor_fuera_de_rango va antes que nada_que_corregir y que me… 0.42s  
+  ✓ DA-38: valor_fuera_de_rango va antes que nada_que_corregir y que me… 0.35s  
+  ✓ §6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de…  0.38s  
+  ✓ §6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca…  0.33s  
+  ✓ §6.1: sin sesión responde 401 y el docente no registra               0.35s  
+  ✓ DD-61: un usuario con los dos roles solo registra con el alcance de… 0.36s  
+  ✓ §6.1: el listado pagina y valida sus parámetros                      0.37s  
+  ✓ RNF-02: una medición borrada lógicamente no se lista ni cuenta para… 0.38s  
+  ✓ AU-09: con el máximo de peso en 1500.00, 1200.00 responde 422 valor… 0.39s  
+  ✓ AU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999… 0.41s  
+  ✓ AU-09: por HTTP, 9999.95 cm responde 422 validacion_fallida por sus… 0.35s  
+  ✓ DA-71: un IMC que no cabe en la columna responde 422 valor_fuera_de… 0.40s  
+
+   PASS  Tests\Feature\CondicionFisica\PruebasFisicasTest
+  ✓ §7.6 fila 1 (HU-18 c1): E1 registra velocidad 4.35 con fecha 2026-1… 0.40s  
+  ✓ §7.6 fila 2 (DA-04, DA-60): otra velocidad de E1 en 2026-11 respond… 0.42s  
+  ✓ §7.6 fila 3 (convenciones §4.1): con es_correccion y motivo respond… 0.36s  
+  ✓ §7.6 fila 4 (DA-04): con velocidad de E1 en 2026-11, resistencia en… 0.36s  
+  ✓ §7.6 fila 5 (HU-18 c3, DA-63): la vista de 2026-11 trae los tres ti… 0.34s  
+  ✓ §7.6 fila 6 (HU-18 c2): con filtro[tipo_prueba_id] de velocidad, la… 0.34s  
+  ✓ §7.6 fila 7 (DD-62): resistencia 6000.01 responde 422 valor_fuera_d… 0.35s  
+  ✓ §7.6 fila 8 (DA-60): un tipo_prueba_id inexistente responde 422 tip… 0.38s  
+  ✓ §7.6 fila 9 (DD-59): E2 lista las de F1 sin las de E1                0.37s  
+  ✓ §7.6 fila 10 (DD-60, DA-59): registrar una prueba de JB responde 40… 0.35s  
+  ✓ §7.6 fila 11 (DA-63): GET /tipos-prueba trae los tres tipos por cód… 0.32s  
+  ✓ §7.6 fila 12 (RNF-09, DA-16): el máximo de resistencia cambiado en…  0.36s  
+  ✓ §7.6 fila 13 (DD-62): velocidad 1.00 y tiempo de prueba 3600.00 son… 0.36s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.36s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.36s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.36s  
+  ✓ Convenciones §4.1: es_correccion sin motivo responde 422 en motivo,… 0.40s  
+  ✓ DA-44: el motivo admite 255 caracteres; 256 responden 422 validacio… 0.38s  
+  ✓ DA-40: una corrección con valores idénticos responde 200 sin histor… 0.34s  
+  ✓ DA-12, DA-59: corregir una prueba de un jugador en baja responde 40… 0.34s  
+  ✓ DA-12, DD-30: las pruebas de un jugador en baja se siguen listando   0.37s  
+  ✓ DA-58: el 422 del cuerpo va antes que el 409 jugador_en_baja         0.35s  
+  ✓ DA-58: jugador_en_baja va antes que equipo_inexistente, tipo_prueba… 0.34s  
+  ✓ DA-58: equipo_inexistente va antes que tipo_prueba_inexistente       0.36s  
+  ✓ DA-58: tipo_prueba_inexistente va antes que valor_fuera_de_rango     0.37s  
+  ✓ DA-58: valor_fuera_de_rango va antes que nada_que_corregir y que pr… 0.35s  
+  ✓ DA-58: valor_fuera_de_rango va antes que nada_que_corregir y que pr… 0.38s  
+  ✓ DA-61: un tipo_prueba_id que no es UUID responde 422 validacion_fal… 0.35s  
+  ✓ DA-61: un UUID no v7, un tipo eliminado y uno inexistente responden… 0.40s  
+  ✓ DA-62: con los dos filtros, la vista del periodo trae solo ese tipo… 0.43s  
+  ✓ DA-63: la vista del periodo no lee pagina ni por_pagina              0.35s  
+  ✓ DA-64: el doble envío del mismo entrenador deja una sola fila; el s… 0.38s  
+  ✓ DA-64: dos entrenadores distintos no chocan: cada uno tiene su fila  0.39s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.37s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.43s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.39s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.35s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.36s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.36s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.36s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.35s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.34s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.34s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.35s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.37s  
+  ✓ T06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500… 0.35s  
+  ✓ T06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500… 0.35s  
+  ✓ T06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500… 0.37s  
+  ✓ DA-13: un equipo ajeno responde 422 equipo_inexistente; la correcci… 0.41s  
+  ✓ §6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de…  0.40s  
+  ✓ §6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca…  0.35s  
+  ✓ §6.1: sin sesión responde 401 y el docente recibe 403 en las tres r… 0.38s  
+  ✓ Orden del listado: por periodo ascendente y, dentro del periodo, po… 0.34s  
+  ✓ §6.1: el listado pagina y no muestra pruebas borradas lógicamente    0.37s  
+  ✓ DA-13: un UUID no v7, un equipo inexistente y uno ajeno responden e… 0.41s  
+
+   PASS  Tests\Feature\CondicionFisica\RangoFaltanteTest
+  ✓ DA-70: sin la fila de peso, registrar una medición responde 422 ran… 0.42s  
+  ✓ DA-70: con la fila de estatura borrada lógicamente, responde lo mis… 0.40s  
+
+   PASS  Tests\Unit\Salud\AvisoDeLesionTest
+  ✓ HU-19 c1: un aviso nuevo queda pendiente, sin confirmación ni desca… 0.02s  
+  ✓ HU-19 c2: el aviso conserva que lo reportó el jugador
+  ✓ HU-30 c3: descartar deja el aviso descartado con su autor, su nota y el instante, sin tocar el original
+  ✓ HU-30 c3: descartar conserva que lo reportó el jugador
+  ✓ §6.3: un aviso que ya no está pendiente no se descarta with dataset… 0.01s  
+  ✓ §6.3: un aviso que ya no está pendiente no se descarta with dataset "confirmado"
+  ✓ §6.3: el código de AvisoNoPendiente es aviso_no_pendiente
+  ✓ DD-58: la nota la ve quien la escribió, no otro usuario
+  ✓ DD-58: la nota de un aviso confirmado la ven quien la escribió y quien lo confirmó
+  ✓ DA-11: en un aviso descartado, quien descartó no ve la nota si no la escribió
+  ✓ DA-11: la nota del descarte la ven quien descartó y quien creó el aviso
+  ✓ DA-11: un aviso sin descarte no tiene nota del descarte para nadie
+  ✓ §6.2: es_propio solo para quien creó el aviso
+  ✓ §5.1: los valores de EstadoDeAviso son los de la tabla
+  ✓ HU-20 c1: confirmar deja el aviso confirmado con su autor y el instante, sin tocar el original
+  ✓ §6.3: un aviso que ya no está pendiente no se confirma with dataset "descartado"
+  ✓ §6.3: un aviso que ya no está pendiente no se confirma with dataset "confirmado"
+
+   PASS  Tests\Unit\Salud\EstadoOficialTest
+  ✓ HU-20 c1: un estado con lesión guarda su tipo, lesión, fecha y regi… 0.03s  
+  ✓ DD-57: un estado apto no tiene lesión ni fecha estimada
+  ✓ DA-14: cerrar pone vigente_hasta y conserva lo demás, sin tocar el original
+  ✓ DA-30: un estado no se cierra en el mismo instante en que se abrió,… 0.01s  
+  ✓ DA-30: un estado no se cierra en el mismo instante en que se abrió, ni antes with dataset "antes"
+  ✓ DA-30: un estado se cierra un segundo después de abrirse
+  ✓ DA-14: cambiar la fecha conserva la misma fila, sin tocar el original
+  ✓ DA-14: cambiar el estado abre otro con la misma lesión y el mismo registrante
+  ✓ RN-16: solo el registrante modifica un estado con lesión             0.01s  
+  ✓ §3.4: un estado apto no se modifica, tampoco por quien lo sostiene…  0.03s  
+  ✓ DA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "ayer"
+  ✓ DA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "hoy"
+  ✓ DA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "mañana"
+  ✓ DA-09: un estado apto no requiere actualización
+  ✓ §6.3: los códigos de las reglas del estado
+  ✓ §5.1: los valores de TipoDeEstado son los de la tabla
+  ✓ DA-56: al crearse, el estado tiene actualizadoEn igual al instante with dataset "con lesión"
+  ✓ DA-56: al crearse, el estado tiene actualizadoEn igual al instante with dataset "apto"
+  ✓ DA-56: cambiar la fecha fija actualizadoEn en el instante del cambio y conserva vigenteDesde
+  ✓ DA-56: cerrar y abrir el sucesor fijan actualizadoEn en el instante del cambio
+
+   PASS  Tests\Unit\Salud\LesionTest
+  ✓ HU-20 c1: registrar una lesión guarda su detalle, sin fecha de alta  0.04s  
+  ✓ DA-17: la fecha estimada no puede ser anterior al inicio; la misma…  0.01s  
+  ✓ DA-17: comprobar una fecha nueva de regreso sigue la misma regla
+  ✓ HU-30 c1: dar de alta pone la fecha y el instante y conserva el detalle, sin tocar la original
+  ✓ DA-17: la fecha de alta no puede ser anterior al inicio; la misma fecha sí
+  ✓ §6.2: corregir cambia solo lo enviado y conserva lo demás, sin tocar la original
+  ✓ §6.2: corregir admite tipo, causa y nota
+  ✓ §6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "sin cambios"
+  ✓ §6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "tipo"
+  ✓ §6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "zona"
+  ✓ §6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "causa"
+  ✓ §6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "nota"
+  ✓ RN-15: esDe solo para quien la registró
+  ✓ DA-17: el código de la regla es rango_de_fechas_invalido
+  ✓ §5.1: los valores de CausaDeLesion son los de la tabla
+
+   PASS  Tests\Integration\Salud\EstadoDeDisponibilidadOficialTest
+  ✓ DA-01 (DA-36): sin ningún registro, el jugador está apto             0.38s  
+  ✓ HU-11 c2 (DA-08): el puerto devuelve el estado vigente, sea cual se… 0.29s  
+  ✓ HU-11 c2 (DA-08): el puerto devuelve el estado vigente, sea cual se… 0.30s  
+  ✓ HU-11 c2 (DA-08): el puerto devuelve el estado vigente, sea cual se… 0.29s  
+  ✓ DA-08: un estado cerrado no cuenta: sin otro vigente, el jugador es… 0.31s  
+  ✓ DA-08: con un estado cerrado y otro vigente, cuenta el vigente       0.32s  
+  ✓ DA-08: varios jugadores se resuelven en una sola consulta, cada uno… 0.31s  
+  ✓ DA-08: la consulta se limita a los jugadores pedidos                 0.30s  
+  ✓ DA-36: un identificador sin registro responde apto, también si el j… 0.29s  
+  ✓ DA-37: el puerto no filtra por eliminado_en, igual que RepositorioD… 0.29s  
+  ✓ DA-08: una lista vacía no consulta la base                           0.30s  
+  ✓ DA-08: el adaptador es de solo lectura                               0.30s  
+
+   PASS  Tests\Integration\Salud\MigracionesDeSaludTest
+  ✓ RNF-03: la causa de una lesión solo admite entrenamiento, partido u… 0.24s  
+  ✓ RNF-03 (DA-17): la fecha estimada de regreso de la lesión no puede…  0.21s  
+  ✓ RNF-03 (DA-17): la fecha de alta es opcional y no puede ser anterio… 0.21s  
+  ✓ RNF-03: tipo y zona admiten hasta 100 caracteres y la nota de la le… 0.21s  
+  ✓ RNF-03: el estado de un aviso solo admite pendiente, confirmado o d… 0.21s  
+  ✓ RNF-03 (DD-58): creado_por es obligatorio en avisos_lesion y las de… 0.22s  
+  ✓ RNF-03: la nota del aviso es obligatoria y admite hasta 500 caracte… 0.28s  
+  ✓ RNF-03 (DA-19): confirmado_por no es nulo si y solo si el aviso est… 0.23s  
+  ✓ RNF-03 (DA-11): descartado_por y nota_descarte no son nulos si y so… 0.22s  
+  ✓ RNF-03 (DA-11): descartado_por y nota_descarte no son nulos si y so… 0.20s  
+  ✓ RNF-03 (DA-11): descartado_por y nota_descarte no son nulos si y so… 0.21s  
+  ✓ RNF-03 (DA-11): descartado_por y nota_descarte no son nulos si y so… 0.20s  
+  ✓ RNF-03 (DA-11): descartado_por y nota_descarte no son nulos si y so… 0.21s  
+  ✓ RNF-03 (DA-11): descartado_por y nota_descarte no son nulos si y so… 0.20s  
+  ✓ RNF-03 (DA-11): descartado_por y nota_descarte no son nulos si y so… 0.21s  
+  ✓ RNF-03: lesion_id es nulo salvo en un aviso confirmado, que también… 0.23s  
+  ✓ RNF-03: el estado oficial solo admite apto, con_molestia o lesionad… 0.22s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.19s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.20s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.20s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.19s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.20s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.19s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.20s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.20s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.21s  
+  ✓ RNF-03 (DD-57): lesion_id y fecha_estimada_regreso son nulos si y s… 0.20s  
+  ✓ RNF-03: vigente_hasta debe ser posterior a vigente_desde, y confirm… 0.25s  
+  ✓ RNF-03: un jugador tiene un solo estado vigente; cerrarlo permite a… 0.21s  
+  ✓ RNF-03: los índices de §5.1 existen con sus columnas                 0.21s  
+  ✓ RNF-03: las claves foráneas de Salud no borran en cascada            0.24s  
+  ✓ RNF-02: cada tabla de historial de Salud es de solo inserción, para… 0.26s  
+  ✓ RNF-02: cada tabla de Salud tiene su historial con la columna de en… 0.22s  
+  ✓ RNF-03: migrate:rollback de Salud no falla y se vuelve a aplicar     2.63s  
+
+   PASS  Tests\Integration\Salud\RepositorioDeAvisosTest
+  ✓ RNF-02: guardar un aviso escribe la fila, su auditoría y su histori… 2.18s  
+  ✓ RNF-04: un aviso guardado se lee igual, con sus instantes            0.29s  
+  ✓ RNF-02: guardar un descarte actualiza la fila y escribe la versión…  0.30s  
+  ✓ §6.3: buscarParaActualizar bloquea la fila, para que dos descartes…  0.30s  
+  ✓ §6.1: un aviso inexistente o eliminado no se encuentra               0.30s  
+  ✓ DD-56: delJugador ordena por fecha y por id descendentes, y solo tr… 0.30s  
+  ✓ DA-25: delJugador filtra por autor y pagina                          0.30s  
+  ✓ DD-58: la lectura conserva quién confirmó y quién descartó un aviso  0.29s  
+
+   PASS  Tests\Integration\Salud\RepositorioDeEstadosYLesionesTest
+  ✓ RNF-02: guardar una lesión escribe la fila, su auditoría y su histo… 0.32s  
+  ✓ RNF-02: guardar un cambio de la lesión escribe la instantánea anter… 0.30s  
+  ✓ §6.1: una lesión inexistente o eliminada no se encuentra             0.31s  
+  ✓ RN-15: delRegistrante solo trae las de ese usuario y ese jugador, s… 0.29s  
+  ✓ RNF-02: guardar un estado escribe la fila, su auditoría y su histor… 0.32s  
+  ✓ RNF-02: cerrar un estado escribe vigente_hasta y el historial, y de… 0.33s  
+  ✓ §6.3: dos estados vigentes del mismo jugador responden EstadoConcur… 0.34s  
+  ✓ §6.3: las lecturas para actualizar bloquean la fila                  0.31s  
+
+   PASS  Tests\Feature\Salud\AvisosTest
+  ✓ §7.1 fila 1 (HU-19 c1, c3): E1 crea un aviso, queda pendiente y el…  0.45s  
+  ✓ §7.1 fila 2 (HU-19 c2): D1 crea un aviso reportado por el jugador    0.33s  
+  ✓ §7.1 fila 3 (RNF-01): D2, sin relación con F1, recibe el mismo 404…  0.36s  
+  ✓ §7.1 fila 4 (DD-58): E2 ve el aviso pendiente de D1 con la nota nul… 0.37s  
+  ✓ §7.1 fila 5 (§5.3): D1 no ve el aviso pendiente de E1                0.34s  
+  ✓ §7.1 fila 6 (DD-56): E1 lista los tres avisos, del más reciente al…  0.34s  
+  ✓ §7.1 fila 7 (HU-30 c3): E2 descarta con nota; el estado oficial no…  0.45s  
+  ✓ §7.1 fila 8 (§6.3): descartar un aviso ya descartado responde 409 a… 0.35s  
+  ✓ §6.3: descartar un aviso confirmado responde 409 aviso_no_pendiente  0.34s  
+  ✓ DA-28: descartar un aviso no pendiente con el cuerpo inválido respo… 0.34s  
+  ✓ DA-28: descartar un aviso no pendiente con el cuerpo inválido respo… 0.34s  
+  ✓ DA-28: descartar un aviso no pendiente con el cuerpo inválido respo… 0.35s  
+  ✓ DA-28: descartar un aviso no pendiente con el cuerpo inválido respo… 0.34s  
+  ✓ DA-28: descartar un aviso no pendiente con el cuerpo inválido respo… 0.34s  
+  ✓ DA-28: descartar un aviso no pendiente con el cuerpo inválido respo… 0.35s  
+  ✓ §7.1 fila 9 (DD-61): D1 no descarta: 403 sin_permiso, también con u… 0.36s  
+  ✓ §7.1 fila 10 (DA-11): la nota y la nota del descarte según quién li… 0.39s  
+  ✓ §7.1 fila 11 (DD-60, DA-27): crear un aviso de JB en baja responde…  0.35s  
+  ✓ §7.1 fila 11 (DD-60, DA-27): crear un aviso de JB en baja responde…  0.35s  
+  ✓ DA-27: el mensaje existente de jugador_en_baja no cambia             0.14s  
+  ✓ §7.1 fila 12 (HU-19): un aviso sin nota responde 422 validacion_fal… 0.34s  
+  ✓ §6.2: la nota se recorta y admite hasta 500 caracteres               0.39s  
+  ✓ §6.2: la fecha es obligatoria y con formato AAAA-MM-DD with dataset… 0.34s  
+  ✓ §6.2: la fecha es obligatoria y con formato AAAA-MM-DD with dataset… 0.34s  
+  ✓ §6.2: la fecha es obligatoria y con formato AAAA-MM-DD with dataset… 0.35s  
+  ✓ DA-23: la fecha de un aviso puede ser futura                         0.34s  
+  ✓ DA-24: con el jugador en baja, un cuerpo inválido responde 422 ante… 0.39s  
+  ✓ §6.2: los campos desconocidos y los booleanos no estrictos responde… 0.34s  
+  ✓ §6.2: los campos desconocidos y los booleanos no estrictos responde… 0.33s  
+  ✓ §6.2: los campos desconocidos y los booleanos no estrictos responde… 0.33s  
+  ✓ §6.2: los campos desconocidos y los booleanos no estrictos responde… 0.36s  
+  ✓ §6.1: fuera del alcance, el 404 gana sobre el 422 al crear y al des… 0.37s  
+  ✓ §6.1: un aviso ajeno responde igual que uno inexistente              0.37s  
+  ✓ §6.1: un UUID válido que no es v7 responde 404, nunca 500            0.35s  
+  ✓ RNF-01: listar a un jugador fuera del alcance responde el mismo 404… 0.35s  
+  ✓ DA-12: con el jugador en baja, E1 lista los avisos y descarta uno p… 0.39s  
+  ✓ DA-12: el docente lista sus avisos de un jugador en baja             0.33s  
+  ✓ DD-61: DE descarta como entrenador del jugador                       0.35s  
+  ✓ DD-61: un usuario con los dos roles que solo le da clase al jugador… 0.37s  
+  ✓ DA-25: un usuario con los dos roles ve todos los avisos si entrena…  0.34s  
+  ✓ DA-25: un usuario con los dos roles ve solo los suyos si únicamente… 0.34s  
+  ✓ RN-16 frente a §6.1 (opción A): un docente sin alcance recibe 404 a… 0.35s  
+  ✓ DD-58: la nota de un aviso confirmado la ve quien lo confirmó, no o… 0.36s  
+  ✓ DA-18: la respuesta trae solo los campos del recurso, al crear, lis… 0.38s  
+  ✓ RNF-04: el aviso devuelve sus instantes y el descarte actualiza act… 0.38s  
+  ✓ §6.1: el listado pagina con pagina y por_pagina                      0.39s  
+  ✓ §6.2: nota_descarte es obligatoria, se recorta, admite hasta 500 ca… 0.42s  
+  ✓ RNF-02: crear escribe la auditoría y el historial con su autor       0.34s  
+  ✓ DA-26 (§7.1 fila 1): tras crear un aviso, la API sigue dando a F1 a… 0.40s  
+  ✓ DA-26 (§7.1 fila 7): tras descartar un aviso, la API da el mismo es… 0.36s  
+
+   PASS  Tests\Feature\Salud\ConfirmacionYEstadoTest
+  ✓ §7.2 fila 1 (HU-20 c1, RN-16): E2 confirma lesionado y queda como r… 0.42s  
+  ✓ §7.2 fila 2 (HU-04 c3, HU-21 c1): E1 y E2 ven el mismo estado y la…  0.36s  
+  ✓ §7.2 fila 3 (RN-13, DA-10): D1 ve el estado y la fecha, sin lesion_… 0.32s  
+  ✓ §7.2 fila 4 (DD-57): confirmar con_molestia sin zona responde 422 e… 0.34s  
+  ✓ §7.2 fila 5 (DD-57): confirmar apto con tipo responde 422 en tipo    0.40s  
+  ✓ §7.2 fila 6: confirmar apto deja un estado apto explícito, sin lesi… 0.35s  
+  ✓ §7.2 fila 7 (HU-20 c2): D1 no confirma: 403 sin_permiso              0.32s  
+  ✓ §7.2 fila 8 (DD-61): DE confirma como entrenador                     0.34s  
+  ✓ §7.2 fila 9 (HU-30 c2, DA-14): E2 cambia la fecha; la fila vigente…  0.40s  
+  ✓ §7.2 fila 10 (HU-20 c3): E1 cambia la fecha de un estado de E2: 403… 0.37s  
+  ✓ §7.2 fila 11 (DA-14): E2 cambia a con_molestia; la fila anterior se… 0.37s  
+  ✓ §7.2 fila 12 (HU-30 c1): E2 da de alta; estado apto, fecha de alta…  0.40s  
+  ✓ §7.2 fila 13 (§3.4): dar de alta sin estado responde 409 sin_lesion… 0.34s  
+  ✓ §7.2 fila 14 (HU-21 c3, DA-09): con el regreso vencido, requiere ac… 0.32s  
+  ✓ §7.2 fila 15 (DA-09): con el regreso hoy, no requiere actualización  0.31s  
+  ✓ §7.2 fila 16 (DA-17): confirmar con el regreso anterior a la fecha…  0.34s  
+  ✓ §7.2 fila 17 (§6.3): confirmar otra vez responde 409 aviso_no_pendi… 0.37s  
+  ✓ §7.2 fila 18 (DA-12): confirmar un aviso de JB en baja responde 409… 0.37s  
+  ✓ §7.2 fila 19 (RN-16): E2 corrige la zona y queda la anterior en el…  0.39s  
+  ✓ §7.2 fila 20 (DD-63): E2 confirma con un estado vigente de E1; el d… 0.40s  
+  ✓ §7.2 fila 21 (DD-63): tras la sustitución, E1 recibe 403 y E2 cambi… 0.44s  
+  ✓ §7.2 fila 22 (DA-19): al confirmar, las tres columnas son el mismo…  0.40s  
+  ✓ §7.2 fila 23 (DA-19): tras la sustitución por E1 y su alta, el avis… 0.45s  
+  ✓ DD-63: confirmar sustituye también un estado propio o un apto explí… 0.37s  
+  ✓ DD-63: confirmar sustituye también un estado propio o un apto explí… 0.36s  
+  ✓ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 0.39s  
+  ✓ DA-45: confirmar apto deja sin alta la lesión propia anterior, y el… 0.38s  
+  ✓ RNF-02: confirmar escribe el historial del aviso, de la lesión y de… 0.37s  
+  ✓ DA-01: sin registro, el jugador está apto implícito                  0.32s  
+  ✓ DA-18: el estado devuelve solo sus campos                            0.32s  
+  ✓ RN-15: el estado oficial sigue visible para quien lo consulta sin s… 0.32s  
+  ✓ RNF-01: consultar el estado de un jugador fuera del alcance respond… 0.41s  
+  ✓ DD-30: el estado de un jugador en baja sigue disponible para quien…  0.31s  
+  ✓ §6.1: el docente recibe 403 en cambio de estado, alta y lesiones     0.39s  
+  ✓ §6.1: fuera del alcance de entrenador, 404 antes que 422, y nunca n… 0.40s  
+  ✓ DD-61: un usuario con los dos roles que solo le da clase al jugador… 0.40s  
+  ✓ §6.1: un UUID válido que no es v7 responde 404, nunca 500            0.38s  
+  ✓ Plan de T03: PATCH sin campos responde 422 en el estado y en la les… 0.38s  
+  ✓ Plan de T03: PATCH del estado con valores idénticos responde 200 si… 0.33s  
+  ✓ Plan de T03: PATCH del estado con valores idénticos responde 200 si… 0.35s  
+  ✓ Plan de T03: PATCH del estado con valores idénticos responde 200 si… 0.33s  
+  ✓ Plan de T03: el mismo estado con otra fecha no abre fila nueva, sol… 0.34s  
+  ✓ DA-14: cambiar estado y fecha a la vez abre otra fila con la fecha…  0.35s  
+  ✓ Plan de T03: PATCH de la lesión con valores idénticos responde 200…  0.36s  
+  ✓ Punto 2 del plan: con estado apto explícito, cualquier entrenador r… 0.35s  
+  ✓ Punto 2 del plan: el 422 va antes que el 409 sin_lesion_vigente      0.40s  
+  ✓ Punto 2 del plan: con el jugador en baja, el 403 no_es_registrante…  0.34s  
+  ✓ DA-12: cambiar el estado o la fecha de un jugador en baja responde…  0.34s  
+  ✓ DA-12: cambiar el estado o la fecha de un jugador en baja responde…  0.34s  
+  ✓ DA-12: con el jugador en baja, el alta y la corrección de la lesión… 0.35s  
+  ✓ DA-17: cambiar la fecha a una anterior al inicio de la lesión respo… 0.36s  
+  ✓ DA-17: dar de alta con una fecha anterior al inicio responde 422 y…  0.36s  
+  ✓ Punto 7 del plan: el mensaje existente de rango_de_fechas_invalido…  0.14s  
+  ✓ §3.4: el alta sin fecha usa el hoy de negocio                        0.34s  
+  ✓ Punto 5 del plan: la fecha de alta y la estimada pueden ser futuras  0.36s  
+  ✓ Punto 6 del plan: con un aviso de fecha futura, el alta sin fecha r… 0.37s  
+  ✓ DA-30: cambiar el estado en el mismo segundo en que se abrió respon… 0.39s  
+  ✓ DA-30: dar de alta en el mismo segundo responde 409 conflicto y no…  0.39s  
+  ✓ DA-30: confirmar en el mismo segundo que otra confirmación responde… 0.39s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.39s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.34s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.34s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.33s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.36s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.37s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.38s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.36s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.37s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.34s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.35s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.36s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.37s  
+  ✓ §6.2: confirmar guarda la nota opcional de la lesión                 0.34s  
+  ✓ DA-32: confirmar con la nota nula o vacía responde 422 y no registr… 0.35s  
+  ✓ DA-32: confirmar con la nota nula o vacía responde 422 y no registr… 0.35s  
+  ✓ DA-32: confirmar con la nota nula o vacía responde 422 y no registr… 0.35s  
+  ✓ §6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m… 0.34s  
+  ✓ §6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m… 0.34s  
+  ✓ §6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m… 0.35s  
+  ✓ §6.2: el alta rechaza campos desconocidos y fechas mal formadas wit… 0.37s  
+  ✓ §6.2: el alta rechaza campos desconocidos y fechas mal formadas wit… 0.36s  
+  ✓ §6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc… 0.35s  
+  ✓ §6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc… 0.35s  
+  ✓ §6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc… 0.34s  
+  ✓ §6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc… 0.35s  
+  ✓ DA-32: PATCH de la lesión con la nota nula o vacía responde 422; la… 0.36s  
+  ✓ DA-32: PATCH de la lesión con la nota nula o vacía responde 422; la… 0.37s  
+  ✓ DA-32: PATCH de la lesión con la nota nula o vacía responde 422; la… 0.38s  
+  ✓ RN-15: GET de la lesión devuelve solo sus campos a quien la registr… 0.35s  
+  ✓ RN-15: una lesión ajena responde igual que una inexistente, en GET…  0.36s  
+  ✓ Punto 1 del plan: quien registró la lesión y perdió el alcance sobr… 0.36s  
+  ✓ RN-15: GET de las lesiones del jugador trae solo las propias, por i… 0.37s  
+  ✓ RN-15: las lesiones del jugador siguen disponibles con el jugador e… 0.33s  
+  ✓ DA-33: un aviso ya confirmado de un jugador en baja responde 409 av… 0.40s  
+  ✓ DA-33: con el jugador en baja, un cuerpo inválido responde 422 vali… 0.36s  
+  ✓ DA-33: con el aviso ya confirmado, un cuerpo inválido responde 422…  0.38s  
+  ✓ DA-33: con el jugador en baja y el regreso anterior al aviso, respo… 0.34s  
+  ✓ DA-56: el estado recién confirmado tiene actualizado_en igual a vig… 0.36s  
+  ✓ DA-56: cambiar la fecha estimada actualiza actualizado_en, no vigen… 0.34s  
+  ✓ DA-56: cambiar el estado abre una fila con actualizado_en igual al…  0.34s  
+  ✓ DA-56: un PATCH con valores idénticos no cambia actualizado_en (DA-… 0.33s  
+  ✓ DA-56: el alta deja un apto con actualizado_en igual al instante de… 0.35s  
+  ✓ DA-56: corregir el detalle de la lesión no cambia actualizado_en de… 0.38s  
+  ✓ DA-56: sin estado registrado, actualizado_en es nulo como vigente_d… 0.33s  
+  ✓ DA-56: D1 y E1 ven el momento de la última actualización, sin lesio… 0.32s  
+  ✓ DA-56: D1 y E1 ven el momento de la última actualización, sin lesio… 0.34s  
+
+   PASS  Tests\Feature\Salud\ContratoDeAvisosTest
+  ✓ HU-19 y HU-30: las respuestas de avisos cumplen el contrato          1.31s  
+
+   PASS  Tests\Feature\Salud\ContratoDeEstadoYLesionTest
+  ✓ HU-20, HU-21 y HU-30: las respuestas de confirmación, estado y lesi… 1.45s  
+
+   PASS  Tests\Feature\Salud\RegistroRN15Test
+  ✓ §7.4 fila 3 (RN-15): E3, co-entrenador de A y B, recibe 404 al corr… 0.36s  
+
+   PASS  Tests\Feature\Salud\RegistroRN16Test
+  ✓ §7.3 filas 3 a 5 (RN-16): tras la confirmación de E2, E1 no modific… 0.42s  
+
+   PASS  Tests\Feature\Seguridad\AcademicoSeguridadTest
+  ✓ RNF-01: D2 sobre cada recurso de D1, con cualquier cuerpo, recibe u… 2.14s  
+  ✓ RNF-01 (§0.5.4): D2, docente de J3 en M2, recibe un 404 byte a byte… 0.53s  
+  ✓ RNF-01 (§0.5.4): D2, docente de J3 en M2, recibe un 404 byte a byte… 0.39s  
+  ✓ RNF-01 (§0.5.4): D2, docente de J3 en M2, recibe un 404 byte a byte… 0.37s  
+  ✓ RNF-01 (§0.5.4): D2, docente de J3 en M2, recibe un 404 byte a byte… 0.34s  
+  ✓ RNF-01 (§0.5.4): D2, docente de J3 en M2, recibe un 404 byte a byte… 0.37s  
+  ✓ RNF-01 (§0.5.4): D2, docente de J3 en M2, recibe un 404 byte a byte… 0.40s  
+  ✓ RNF-01 (§0.5.4): DE, docente de J1 en M3, recibe un 404 byte a byte… 0.41s  
+  ✓ RNF-01 (§0.5.4): DE, docente de J1 en M3, recibe un 404 byte a byte… 0.41s  
+  ✓ RNF-01 (§0.5.4): DE, docente de J1 en M3, recibe un 404 byte a byte… 0.39s  
+  ✓ RNF-01 (§0.5.4): DE, docente de J1 en M3, recibe un 404 byte a byte… 0.37s  
+  ✓ RNF-01 (§0.5.4): DE, docente de J1 en M3, recibe un 404 byte a byte… 0.39s  
+  ✓ RNF-01 (§0.5.4): DE, docente de J1 en M3, recibe un 404 byte a byte… 0.41s  
+  ✓ RNF-01 (§0.5.4): DELETE de un catálogo con un id inexistente o que…  0.39s  
+  ✓ RNF-01 (§0.5.4): DELETE de un catálogo con un id inexistente o que…  0.48s  
+  ✓ RNF-01: la situación académica de un jugador ajeno es un 404 byte a… 0.63s  
+  ✓ HU-01: un entrenador recibe 403 sin_permiso en cada ruta docente de… 0.68s  
+  ✓ HU-01: sin sesión, cada ruta nueva de H2 responde 401                0.41s  
+  ✓ RNF-01: un docente no ve en la situación académica nada de otro doc… 0.80s  
+
+   PASS  Tests\Feature\Seguridad\CompetenciaSeguridadTest
+  ✓ RNF-01 (§7.6 filas 1, 2, 3, 6 y 8): E2 sobre cada recurso de A, con… 3.16s  
+  ✓ RNF-01: los catálogos responden el mismo 404 a un id inexistente y…  0.43s  
+  ✓ RNF-01: los catálogos responden el mismo 404 a un id inexistente y…  0.38s  
+  ✓ RNF-01: los catálogos responden el mismo 404 a un id inexistente y…  0.43s  
+  ✓ RNF-01: los catálogos responden el mismo 404 a un id inexistente y…  0.43s  
+  ✓ RNF-01 (§7.6 fila 4): un docente con sesión recibe 403 sin_permiso…  0.79s  
+  ✓ RNF-01 (DA-20): el docente recibe en el porcentaje de asistencia de… 0.35s  
+  ✓ RNF-01 (§7.6 fila 5): sin sesión, las 30 rutas de H3 responden 401…  0.50s  
+  ✓ RNF-01 (§7.6 fila 6): un entrenamiento de A consultado por E1 con u… 0.38s  
+  ✓ RN-22 (§7.6 fila 7): E3, que entrena A y B, consulta un partido de…  0.35s  
+  ✓ RNF-01 (§7.6 fila 1): E2 consulta un entrenamiento de A y recibe el… 0.39s  
+  ✓ RNF-01 (§7.6 fila 2): E2 intenta registrar asistencia en un entrena… 0.36s  
+  ✓ RNF-01 (§7.6 fila 3): E2 intenta convocar a J1 a un partido de A y…  0.37s  
+  ✓ RNF-01 (§7.6 fila 8): la asistencia de un equipo ajeno da 404 byte…  0.51s  
+
+   PASS  Tests\Feature\Seguridad\JugadoresSeguridadTest
+  ✓ RNF-01: con un usuario ajeno, ninguna ruta de jugadores revela a J2… 0.68s  
+  ✓ RNF-01: con un docente, las rutas de jugadores no revelan ningún ex… 0.39s  
+  ✓ RNF-01: sin sesión, todas las rutas de jugadores responden 401       0.33s  
+  ✓ RNF-01: el 404 por un jugador ajeno es idéntico al 404 por un id in… 0.37s  
+  ✓ RNF-01: el 404 de un docente por un jugador ajeno es idéntico al de… 0.34s  
+  ✓ RN-14: filtrar por el equipo de otro no cambia la respuesta frente…  0.34s  
+  ✓ RN-20: la búsqueda nunca expone el id ni otros campos del expedient… 0.47s  
+  ✓ RNF-01: las rutas de equipos/jugadores con un usuario ajeno respond… 0.55s  
+  ✓ RNF-01: con un docente, las rutas de equipos/jugadores responden 40… 0.34s  
+  ✓ RNF-01: sin sesión, las rutas de equipos/jugadores responden 401     0.29s  
+  ✓ RNF-01: el PATCH de un jugador ajeno es un 404 byte a byte idéntico… 0.59s  
+  ✓ RNF-01: un docente recibe 403 sin_permiso al actualizar un expedien… 0.32s  
+  ✓ RNF-01: la baja de un jugador ajeno es un 404 byte a byte idéntico…  0.47s  
+  ✓ RNF-01: un docente recibe 403 sin_permiso al dar de baja y sin sesi… 0.31s  
+  ✓ RN-20: asignar por matrícula no entrega el id ni datos del jugador…  0.44s  
+
+   PASS  Tests\Feature\Seguridad\RecorridoDeAlcanceH5Test
+  ✓ §7.8 fila 1 (RNF-01): sin sesión, todas las rutas de H5 responden 4… 0.34s  
+
+   PASS  Tests\Feature\Seguridad\RendimientoSeguridadTest
+  ✓ RNF-01 (§7.4 filas 4 y 5): E2 sobre cada recurso de A, con cualquie… 2.86s  
+  ✓ RN-14 (§7.1 fila 13): E3, que entrena A, intenta corregir el rendim… 0.62s  
+  ✓ RN-14 (§7.4 fila 3): E3 no ve el rendimiento, el umbral, la plantil… 0.61s  
+  ✓ RNF-01 (§7.4 fila 4): E1 con un UUID válido que no es v7 en cada pa… 0.72s  
+  ✓ RNF-01 (§7.4 fila 1): un docente con sesión recibe 403 sin_permiso…  0.58s  
+  ✓ RNF-01 (§7.4 fila 2): sin sesión, las 10 rutas de H4 responden 401…  0.54s  
+  ✓ RN-14 (T05, mutación M02): quien registró un rendimiento y deja de…  0.61s  
+  ✓ RNF-01 (T05, mutaciones M03 y M06): si el jugador deja el equipo, q… 0.69s  
+  ✓ RNF-01 (T05, mutación M09): un convocado que ya no está en el alcan… 0.72s  
+  ✓ RNF-01 (T05, mutación M12): E3 ve a un jugador de B, pero su umbral… 0.61s  
+  ✓ RNF-01 (DA-26 de H3): un filtro de posición con UUID v4 o v1 da una… 0.53s  
+
+   PASS  Tests\Feature\Competencia\AdvertenciasDeLesionTest
+  ✓ §7.7 fila 1 (HU-11 c2, DA-15, DA-66): con F1 lesionado y J1 apto, u… 0.38s  
+  ✓ DA-66: el mensaje no lleva nombre, apellidos ni matrícula del jugad… 0.34s  
+  ✓ §7.7 fila 2 (DA-15): con F1 con_molestia, la asistencia no advierte  0.33s  
+  ✓ §7.7 fila 3 (HU-12 c3, DA-15): convocar a F1 lesionado guarda la co… 0.35s  
+  ✓ §7.7 fila 4 (DA-01): con F1 apto implícito, la convocatoria no advi… 0.33s  
+  ✓ §7.7 fila 5: con F1 dado de alta tras estar lesionado, la convocato… 0.33s  
+  ✓ §7.7 fila 6 (DA-15): con F1 y J1 lesionados, dos advertencias, en r… 0.36s  
+  ✓ §7.7 fila 7 (DA-15): un entrenamiento que se empalma responde empal… 0.37s  
+  ✓ DA-67: corregir la asistencia de un jugador lesionado no devuelve l… 0.33s  
+  ✓ T07: sin jugadores lesionados, la asistencia y la convocatoria resp… 0.38s  
+  ✓ T07: una petición rechazada no genera advertencias                   0.37s  
+
+   PASS  Tests\Feature\Competencia\AlineacionYResultadoTest
+  ✓ HU-13 (§7.5 fila 4): con J1 convocado, E1 lo define titular en la p… 0.39s  
+  ✓ HU-13 (§7.5 fila 5): incluir a J2, que no está convocado, da 422 ju… 0.36s  
+  ✓ HU-13 (§7.5 fila 6): cambiar la alineación de un partido jugado da…  0.34s  
+  ✓ HU-13 (§7.5 fila 7): E1 captura el resultado 3-1 de un partido prog… 0.32s  
+  ✓ HU-13 (§7.5 fila 8): goles de 100 dan 422 valor_fuera_de_rango en g… 0.38s  
+  ✓ HU-12 (§7.4 fila 6): un partido cancelado no admite resultado: PUT…  0.39s  
+  ✓ HU-13 (§2.3): el resultado de un partido jugado no se corrige        0.37s  
+  ✓ HU-13 (DA-33): goles fuera de rango, negativos o con forma inválida… 0.33s  
+  ✓ HU-13 (DA-33): goles fuera de rango, negativos o con forma inválida… 0.32s  
+  ✓ HU-13 (DA-33): goles fuera de rango, negativos o con forma inválida… 0.35s  
+  ✓ HU-13 (DA-33): goles fuera de rango, negativos o con forma inválida… 0.35s  
+  ✓ HU-13 (DA-33): goles fuera de rango, negativos o con forma inválida… 0.33s  
+  ✓ HU-13 (DA-33): goles fuera de rango, negativos o con forma inválida… 0.38s  
+  ✓ HU-13 (DA-33): goles fuera de rango, negativos o con forma inválida… 0.31s  
+  ✓ HU-13: los límites 0 y 99 se aceptan                                 0.31s  
+  ✓ HU-13 (§3.4): la alineación reemplaza la anterior: quien sale queda… 0.39s  
+  ✓ HU-13 (DA-34): un jugador visible cuya convocatoria se quitó da 422… 0.34s  
+  ✓ RNF-01 (DA-34): un jugador fuera del alcance en la alineación, tamb… 0.46s  
+  ✓ HU-13 (DA-34): para E3, que entrena A y B, J4 es visible y no está…  0.37s  
+  ✓ HU-13 (DA-31): una posición inexistente o con UUID que no es v7 da…  0.40s  
+  ✓ HU-13 (DA-31): una posición inexistente o con UUID que no es v7 da…  0.35s  
+  ✓ HU-13: la alineación con forma inválida da 422 with dataset "sin al… 0.33s  
+  ✓ HU-13: la alineación con forma inválida da 422 with dataset "rol in… 0.34s  
+  ✓ HU-13: la alineación con forma inválida da 422 with dataset "sin po… 0.35s  
+  ✓ HU-13: la alineación con forma inválida da 422 with dataset "campo…  0.36s  
+  ✓ HU-13: la alineación con forma inválida da 422 with dataset "repeti… 0.33s  
+  ✓ RNF-01: la alineación y el resultado de un partido ajeno dan 404 by… 0.64s  
+  ✓ RN-22: E3, que entrena A y B, define la alineación y captura el res… 0.36s  
+  ✓ HU-13: un docente recibe 403 y sin sesión 401 en la alineación y el… 0.36s  
+
+   PASS  Tests\Feature\Competencia\AsistenciaDeEntrenamientosTest
+  ✓ HU-11 (§7.3 fila 1): capturar asistencia en un entrenamiento progra… 0.39s  
+  ✓ HU-11 (§7.3 fila 1): un entrenamiento cancelado tampoco admite asis… 0.33s  
+  ✓ HU-11 (§7.3 fila 2): E1 captura J1 presente, J2 falta y J3 falta ju… 0.42s  
+  ✓ HU-11 (§7.3 fila 3): capturar de nuevo da 409 asistencia_ya_registr… 0.34s  
+  ✓ HU-11 (§7.3 fila 4): E1 corrige J2 a presente y el historial guarda… 0.30s  
+  ✓ HU-11 (§7.3 fila 5): una lista con J5 (baja) da 422 jugador_no_pert… 0.34s  
+  ✓ HU-11: un jugador de otro equipo, con la membresía cerrada o inexis… 0.46s  
+  ✓ HU-11 (§7.3 fila 6): con 3 presentes, 1 falta y 1 justificada en en… 0.32s  
+  ✓ HU-11 (§7.3 fila 7): sin entrenamientos realizados el porcentaje de… 0.33s  
+  ✓ HU-11 (§7.3 filas 8 y 9): el porcentaje de J3 solo cuenta los entre… 0.37s  
+  ✓ HU-11 (§7.3 fila 10): con 2 presentes de 4 registros, el porcentaje… 0.34s  
+  ✓ HU-11: un equipo sin registros tiene porcentaje null y sus jugadore… 0.33s  
+  ✓ HU-11 (§7.3 fila 11): E1 consulta el porcentaje de J4 (equipo B) y…  0.40s  
+  ✓ HU-11 (DA-20): un jugador en baja sigue visible para su entrenador;… 0.35s  
+  ✓ HU-11 (DA-17): un jugador repetido, una lista vacía o un estado inv… 0.33s  
+  ✓ HU-11 (DA-17): un jugador repetido, una lista vacía o un estado inv… 0.33s  
+  ✓ HU-11 (DA-17): un jugador repetido, una lista vacía o un estado inv… 0.34s  
+  ✓ HU-11 (DA-17): un jugador repetido, una lista vacía o un estado inv… 0.33s  
+  ✓ HU-11 (DA-18): E3 corrige la asistencia de un jugador que ya está e… 0.33s  
+  ✓ HU-11: una corrección vacía, con un estado inválido o con un campo…  0.39s  
+  ✓ HU-11: el listado de asistencias de un entrenamiento trae sus regis… 0.36s  
+  ✓ RNF-01 (§7.6 fila 1): E2, sin relación con A, consulta un entrenami… 0.35s  
+  ✓ RNF-01 (§7.6 fila 2): E2 intenta registrar asistencia en un entrena… 0.36s  
+  ✓ RNF-01 (§7.6 fila 8): la asistencia de un equipo ajeno responde 404… 0.80s  
+  ✓ HU-11: un docente recibe 403 en las rutas de entrenador de asistenc… 0.43s  
+
+   PASS  Tests\Feature\Competencia\CatalogosTest
+  ✓ HU-28 (§7.1 fila 1): E1 crea el lugar L2 y E2 lo ve en el listado    0.35s  
+  ✓ HU-28 (§7.1 fila 2): E1 crea un lugar con el nombre de L1 y recibe…  0.29s  
+  ✓ HU-28 (§7.1 fila 3): E1 crea la temporada T2 que se cruza con T1 y…  0.29s  
+  ✓ DD-07: una temporada que empieza el día en que termina otra se cruz… 0.46s  
+  ✓ DD-07: una temporada eliminada no cuenta para el cruce               0.37s  
+  ✓ HU-28 (§7.1 fila 4): una temporada con fecha_fin anterior a fecha_i… 0.31s  
+  ✓ HU-28 (§7.1 fila 5): E1 crea un torneo en T1                         0.33s  
+  ✓ HU-28 (§7.1 fila 6): un docente que crea un lugar recibe 403 sin_pe… 0.27s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.27s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.28s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.27s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.31s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.26s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.27s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.27s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.29s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.27s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.28s  
+  ✓ HU-28: un docente recibe 403 en todas las rutas de catálogos de Com… 0.28s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('GET',… 0.26s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('POST'… 0.25s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('DELET… 0.25s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('GET',… 0.24s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('POST'… 0.24s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('DELET… 0.25s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('GET',… 0.25s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('POST'… 0.28s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('DELET… 0.25s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('GET',… 0.24s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('POST'… 0.25s  
+  ✓ HU-28: sin sesión las rutas de catálogos responden 401 with ('DELET… 0.25s  
+  ✓ HU-28 (§7.1 fila 7): E1 borra L1, que tiene un partido; el partido…  0.30s  
+  ✓ HU-28: tras el borrado lógico el nombre puede darse de alta de nuev… 0.36s  
+  ✓ HU-28: tras el borrado lógico el nombre puede darse de alta de nuev… 0.36s  
+  ✓ HU-28: tras el borrado lógico el nombre puede darse de alta de nuev… 0.39s  
+  ✓ HU-28: un rival, una temporada o un torneo repetidos con otras mayú… 0.39s  
+  ✓ HU-28: el mismo nombre de torneo se permite en otra temporada        0.27s  
+  ✓ HU-28: un torneo en una temporada inexistente, eliminada o con UUID… 0.34s  
+  ✓ HU-28: un campo faltante, demasiado largo o con formato inválido da… 0.28s  
+  ✓ HU-28: un campo faltante, demasiado largo o con formato inválido da… 0.32s  
+  ✓ HU-28: un campo faltante, demasiado largo o con formato inválido da… 0.27s  
+  ✓ HU-28: un campo faltante, demasiado largo o con formato inválido da… 0.28s  
+  ✓ HU-28: un campo faltante, demasiado largo o con formato inválido da… 0.27s  
+  ✓ HU-28: un campo faltante, demasiado largo o con formato inválido da… 0.28s  
+  ✓ HU-28: un campo faltante, demasiado largo o con formato inválido da… 0.27s  
+  ✓ HU-28: los listados excluyen los eliminados y ordenan por nombre, o… 0.49s  
+  ✓ HU-28: el listado pagina con pagina y por_pagina                     0.29s  
+  ✓ RNF-02: cada alta y cada borrado de catálogo escriben su historial…  0.29s  
+  ✓ RNF-02: cada alta y cada borrado de catálogo escriben su historial…  0.31s  
+  ✓ RNF-02: cada alta y cada borrado de catálogo escriben su historial…  0.30s  
+  ✓ RNF-02: cada alta y cada borrado de catálogo escriben su historial…  0.31s  
+  ✓ HU-28: borrar un id inexistente o un UUID que no es v7 da el mismo…  0.34s  
+  ✓ HU-28: borrar un id inexistente o un UUID que no es v7 da el mismo…  0.31s  
+  ✓ HU-28: borrar un id inexistente o un UUID que no es v7 da el mismo…  0.30s  
+  ✓ HU-28: borrar un id inexistente o un UUID que no es v7 da el mismo…  0.32s  
+
+   PASS  Tests\Feature\Competencia\ContratoDeAdvertenciasTest
+  ✓ DA-15: la advertencia con campo de la asistencia y de la convocator… 0.97s  
+
+   PASS  Tests\Feature\Competencia\ContratoDeAlineacionYResultadoTest
+  ✓ HU-13: las respuestas de alineación y resultado cumplen el contrato  1.11s  
+
+   PASS  Tests\Feature\Competencia\ContratoDeAsistenciaTest
+  ✓ HU-11: las respuestas de asistencia a entrenamientos cumplen el con… 1.30s  
+
+   PASS  Tests\Feature\Competencia\ContratoDeCompetenciaTest
+  ✓ HU-28: las respuestas de los catálogos de Competencia cumplen el co… 1.03s  
+  ✓ HU-28: las respuestas de los catálogos de Competencia cumplen el co… 1.04s  
+  ✓ HU-28: las respuestas de los catálogos de Competencia cumplen el co… 1.02s  
+  ✓ HU-28: las respuestas de los catálogos de Competencia cumplen el co… 1.02s  
+  ✓ DD-07: el 409 temporada_solapada cumple el contrato                  0.84s  
+
+   PASS  Tests\Feature\Competencia\ContratoDeConvocatoriaTest
+  ✓ HU-12: las respuestas de convocatoria cumplen el contrato            1.20s  
+
+   PASS  Tests\Feature\Competencia\ContratoDeEntrenamientosTest
+  ✓ HU-10: las respuestas de entrenamientos cumplen el contrato          1.31s  
+
+   PASS  Tests\Feature\Competencia\ContratoDePartidosTest
+  ✓ HU-12: las respuestas de partidos cumplen el contrato                1.31s  
+
+   PASS  Tests\Feature\Competencia\ConvocatoriaTest
+  ✓ HU-12 (§7.5 fila 1): E1 convoca a J1 a un partido programado de A    0.32s  
+  ✓ HU-12 (§7.5 fila 2): convocar de nuevo a J1 da 409 jugador_ya_convo… 0.35s  
+  ✓ HU-12 (§7.5 fila 3): convocar a J5 (baja) da el mismo 404 que un ju… 0.38s  
+  ✓ HU-12 (DA-28): un jugador de otro equipo, con la membresía cerrada…  0.51s  
+  ✓ HU-29 (§7.5 fila 9): J5, dado de baja después de convocarlo, no apa… 0.34s  
+  ✓ HU-12 (§7.5 fila 10): E1 quita a J1 de la convocatoria; el historia… 0.44s  
+  ✓ HU-12: la convocatoria lista en orden de convocatoria, excluye las…  0.41s  
+  ✓ HU-12 (§3.4): en un partido cancelado o jugado no se convoca ni se…  0.41s  
+  ✓ HU-12 (§3.4): en un partido cancelado o jugado no se convoca ni se…  0.37s  
+  ✓ HU-12: un jugador_id faltante, que no es UUID o un campo no admitid… 0.33s  
+  ✓ HU-12: un jugador_id faltante, que no es UUID o un campo no admitid… 0.33s  
+  ✓ HU-12: un jugador_id faltante, que no es UUID o un campo no admitid… 0.33s  
+  ✓ RNF-01 (§7.6 fila 3): E2 intenta convocar a J1 a un partido de A y…  0.37s  
+  ✓ RNF-01: la convocatoria de un equipo ajeno da 404 byte a byte por c… 0.73s  
+  ✓ HU-12: un docente recibe 403 y sin sesión 401 en las rutas de convo… 0.38s  
+
+   PASS  Tests\Feature\Competencia\EntrenamientosTest
+  ✓ HU-10 (§7.2 fila 1): E1 crea un entrenamiento de A con L1 y respons… 0.36s  
+  ✓ HU-10 (§7.2 fila 2): otro entrenamiento en L1 de 17:30 a 18:30 se g… 0.35s  
+  ✓ HU-10 (§7.2 fila 3): E1 cambia la hora y entrenamientos_historial r… 0.36s  
+  ✓ HU-10 (§7.2 fila 4): E1 cancela un entrenamiento programado y ya no… 0.37s  
+  ✓ HU-10 (§7.2 fila 5): poner realizado un entrenamiento cancelado da…  0.34s  
+  ✓ HU-10 (§7.2 fila 6): E1 crea un entrenamiento de B y recibe 404      0.35s  
+  ✓ HU-10 (§7.2 fila 7): un responsable que no entrena A da 422 en resp… 0.32s  
+  ✓ HU-10: el responsable puede ser otro entrenador del equipo, pero no… 0.49s  
+  ✓ HU-10: cambiar el responsable a quien no entrena el equipo da 422;…  0.38s  
+  ✓ HU-10: el empalme cuenta entrenamientos de otro equipo en el mismo…  0.49s  
+  ✓ HU-10: modificar un entrenamiento hacia un horario ocupado advierte… 0.38s  
+  ✓ HU-10: de programado se pasa a realizado; de realizado no se pasa a… 0.44s  
+  ✓ HU-10 (DA-08): un entrenamiento cancelado o realizado no admite cam… 0.32s  
+  ✓ HU-10 (DA-08): un entrenamiento cancelado o realizado no admite cam… 0.36s  
+  ✓ HU-10: cambiar datos y cancelar en la misma petición aplica los dos… 0.32s  
+  ✓ HU-10: un horario invertido da 422 en termina_en al crear y rango_d… 0.46s  
+  ✓ HU-10: un lugar inexistente o eliminado da 422 lugar_inexistente     0.45s  
+  ✓ HU-10: los campos faltantes o mal formados dan 422 con el campo señ… 0.33s  
+  ✓ HU-10: los campos faltantes o mal formados dan 422 con el campo señ… 0.37s  
+  ✓ HU-10: los campos faltantes o mal formados dan 422 con el campo señ… 0.33s  
+  ✓ HU-10: un PATCH vacío, con un campo no admitido o con un estado inv… 0.38s  
+  ✓ HU-10: el detalle lista los jugadores del equipo; E2 recibe 404 y E… 0.43s  
+  ✓ HU-10: el 404 de un entrenamiento ajeno gana al 422 y no cambia nad… 0.38s  
+  ✓ HU-10: el listado de un equipo filtra por días locales y ordena por… 0.49s  
+  ✓ HU-10: un docente recibe 403 y sin sesión 401 en las rutas de entre… 0.41s  
+
+   PASS  Tests\Feature\Competencia\PartidosTest
+  ✓ HU-12 (§7.4 fila 1): E1 crea un partido oficial en T1 con TO1; temp… 0.36s  
+  ✓ HU-12 (§7.4 fila 2): sin temporada que contenga la fecha, crear un…  0.35s  
+  ✓ HU-12 (§7.4 fila 3): un partido oficial sin torneo da 422 torneo_ob… 0.32s  
+  ✓ HU-12 (§7.4 fila 3): un partido oficial sin torneo da 422 torneo_ob… 0.35s  
+  ✓ HU-12 (§7.4 fila 4): un partido amistoso sin torneo se crea; uno in… 0.32s  
+  ✓ HU-12 (§7.4 fila 4): un partido amistoso sin torneo se crea; uno in… 0.34s  
+  ✓ HU-12 (§7.4 fila 5): un partido en fecha de otra temporada con TO1…  0.38s  
+  ✓ HU-12 (§7.4 fila 6, parcial hasta T07): E1 cancela un partido de A;… 0.37s  
+  ✓ HU-12 (§7.4 fila 7): E1 consulta un partido de B y recibe el mismo…  0.36s  
+  ✓ HU-12 (§7.4 fila 8): a las 00:30 UTC del 16 de diciembre (el 15 en…  0.31s  
+  ✓ HU-12 (DD-07): la frontera del día local decide la temporada en los… 0.32s  
+  ✓ HU-12 (DD-07): la frontera del día local decide la temporada en los… 0.34s  
+  ✓ HU-12 (DD-07): la frontera del día local decide la temporada en los… 0.35s  
+  ✓ HU-12 (DD-07): la frontera del día local decide la temporada en los… 0.31s  
+  ✓ HU-12 (DD-07): la frontera del día local decide la temporada en los… 0.33s  
+  ✓ HU-12 (DA-25): mover la fecha a otra temporada vuelve a derivarla y… 0.42s  
+  ✓ HU-12 (DA-25): cambiar el tipo o quitar el torneo reevalúa torneo_o… 0.43s  
+  ✓ HU-12: un partido conserva su temporada eliminada mientras no cambi… 0.44s  
+  ✓ HU-12 (DA-24): un lugar, un rival o un torneo inexistente o elimina… 0.47s  
+  ✓ HU-12 (DA-24): un lugar, un rival o un torneo inexistente o elimina… 0.45s  
+  ✓ HU-12 (DA-24): un lugar, un rival o un torneo inexistente o elimina… 0.49s  
+  ✓ HU-12: cancelar un partido jugado o ya cancelado da 409 transicion_… 0.32s  
+  ✓ HU-12: cancelar un partido jugado o ya cancelado da 409 transicion_… 0.35s  
+  ✓ HU-12: datos y cancelación en la misma petición quedan en una sola…  0.31s  
+  ✓ HU-12: un PATCH vacío, con campos no admitidos o con un estado dist… 0.34s  
+  ✓ HU-12: un PATCH vacío, con campos no admitidos o con un estado dist… 0.35s  
+  ✓ HU-12: un PATCH vacío, con campos no admitidos o con un estado dist… 0.37s  
+  ✓ HU-12: un PATCH vacío, con campos no admitidos o con un estado dist… 0.33s  
+  ✓ HU-12: un PATCH vacío, con campos no admitidos o con un estado dist… 0.34s  
+  ✓ HU-12: los campos faltantes o mal formados del alta dan 422 con el…  0.33s  
+  ✓ HU-12: los campos faltantes o mal formados del alta dan 422 con el…  0.33s  
+  ✓ HU-12: los campos faltantes o mal formados del alta dan 422 con el…  0.38s  
+  ✓ HU-12 (DA-26): el listado de un equipo filtra por temporada y estad… 0.57s  
+  ✓ RNF-01: un partido o el listado de un equipo ajeno dan 404 byte a b… 0.70s  
+  ✓ RN-22: E3, que entrena A y B, consulta y modifica un partido de A    0.34s  
+  ✓ HU-12: un docente recibe 403 y sin sesión 401 en las rutas de parti… 0.40s  
+
+   PASS  Tests\Arch\AlcanceDeJugadoresTest
+  ✓ RNF-01: la lista de usos autorizados sin alcance es exactamente la…  0.17s  
+  ✓ RNF-01: el detector marca consultas de jugadores sin alcance y deja… 0.13s  
+  ✓ RNF-01: un archivo exento no se revisa                               0.13s  
+  ✓ RNF-01: ninguna consulta de jugadores en src ni app evita AlcanceDe… 4.05s  
+  ✓ RNF-01: la implementación del alcance existe donde la lista la espe… 0.14s  
+
+   PASS  Tests\Arch\ArquitecturaTest
+  ✓ F1-H0-T05: existen los contextos con sus capas                       0.21s  
+  ✓ F1-H0-T05: cada contexto tiene su proveedor de servicios registrado  0.14s  
+  ✓ F1-H0-T05: el dominio no depende del framework                      12.36s  
+  ✓ F1-H0-T05: la aplicacion de Compartido no depende de su infraestruc… 0.51s  
+  ✓ F1-H0-T05: Compartido no importa el dominio de otro contexto         2.03s  
+  ✓ F1-H0-T05: la aplicacion de Identidad no depende de su infraestruct… 0.38s  
+  ✓ F1-H0-T05: Identidad no importa el dominio de otro contexto          0.45s  
+  ✓ F1-H0-T05: la aplicacion de Plantel no depende de su infraestructur… 0.81s  
+  ✓ F1-H0-T05: Plantel no importa el dominio de otro contexto            0.86s  
+  ✓ F1-H0-T05: la aplicacion de Academico no depende de su infraestruct… 1.32s  
+  ✓ F1-H0-T05: Academico no importa el dominio de otro contexto          1.52s  
+  ✓ F1-H0-T05: la aplicacion de Competencia no depende de su infraestru… 1.34s  
+  ✓ F1-H0-T05: Competencia no importa el dominio de otro contexto        1.55s  
+  ✓ F1-H0-T05: la aplicacion de Rendimiento no depende de su infraestru… 0.77s  
+  ✓ F1-H0-T05: Rendimiento no importa el dominio de otro contexto        1.06s  
+  ✓ F1-H0-T05: la aplicacion de CondicionFisica no depende de su infrae… 0.49s  
+  ✓ F1-H0-T05: CondicionFisica no importa el dominio de otro contexto    0.78s  
+  ✓ F1-H0-T05: la aplicacion de Salud no depende de su infraestructura   0.60s  
+  ✓ F1-H0-T05: Salud no importa el dominio de otro contexto              0.80s  
+  ✓ F1-H0-T05: la aplicacion de Alertas no depende de su infraestructur… 0.21s  
+  ✓ F1-H0-T05: Alertas no importa el dominio de otro contexto            0.25s  
+  ✓ F1-H0-T05: la aplicacion de Consultas no depende de su infraestruct… 0.23s  
+  ✓ F1-H0-T05: Consultas no importa el dominio de otro contexto          0.34s  
+
+   PASS  Tests\Arch\BorradoLogicoTest
+  ✓ F1-H1-T08: la lista de tablas del framework permitidas es exactamen… 0.17s  
+  ✓ F1-H1-T08: el detector marca borrados de negocio y deja pasar las t… 0.16s  
+  ✓ F1-H1-T08: ningun codigo de src ni app borra fisicamente tablas de…  2.36s  
+
+   PASS  Tests\Arch\CompetenciaSinPlantelTest
+  ✓ F1-H3-T03: el detector encuentra importaciones de Plantel y tablas…  0.14s  
+  ✓ F1-H3-T03: Competencia no importa Plantel ni lee sus tablas          2.25s  
+
+   PASS  Tests\Arch\CompetenciaSinSaludTest
+  ✓ F1-H5-T04: el detector encuentra importaciones de Salud y tablas de… 0.13s  
+  ✓ F1-H5-T04: Competencia no importa Salud ni lee sus tablas            2.14s  
+
+   PASS  Tests\Arch\DecimalesEnDominioTest
+  ✓ RNF-04: el detector reconoce float y las funciones de redondeo, y d… 0.13s  
+  ✓ RNF-04: el dominio no usa float ni round, floor, ceil ni number_for… 1.05s  
+  ✓ RNF-04: el dominio no usa round, floor, ceil ni number_format (arch… 0.16s  
+
+   PASS  Tests\Arch\LocalizadorDeJugadoresTest
+  ✓ RN-20: el detector encuentra los archivos que nombran el localizado… 0.14s  
+  ✓ RN-20: solo la declaración, el adaptador, su enlace y el caso de us… 2.25s  
+  ✓ RN-20: el puerto devuelve solo el identificador y si el jugador est… 0.14s  
+  ✓ RN-20: el adaptador del localizador no consulta la tabla de jugador… 0.14s  
+
+   PASS  Tests\Arch\RendimientoSinPlantelTest
+  ✓ F1-H4-T02: el detector encuentra importaciones de Plantel y tablas…  0.13s  
+  ✓ F1-H4-T02: Rendimiento no importa Plantel ni lee sus tablas          2.19s  
+
+   PASS  Tests\Arch\TextosEnLangTest
+  ✓ F1-H0-T09: el detector reconoce texto visible y deja pasar codigos…  0.13s  
+  ✓ F1-H0-T09: ningun texto visible esta escrito fuera de lang/es        2.24s  
+
+  Tests:    817 passed (5808 assertions)
+  Duration: 321.68s
+

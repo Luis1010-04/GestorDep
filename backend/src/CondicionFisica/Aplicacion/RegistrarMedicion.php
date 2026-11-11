@@ -16,6 +16,7 @@ use Src\CondicionFisica\Dominio\EquipoInexistente;
 use Src\CondicionFisica\Dominio\MedicionCorporal;
 use Src\CondicionFisica\Dominio\MedicionYaRegistrada;
 use Src\CondicionFisica\Dominio\NadaQueCorregir;
+use Src\CondicionFisica\Dominio\RangoNoConfigurado;
 use Src\CondicionFisica\Dominio\RepositorioDeMediciones;
 use Src\CondicionFisica\Dominio\ValorFueraDeRango;
 
@@ -41,7 +42,7 @@ final class RegistrarMedicion
      * @param  array{equipo_id: string, peso_kg: string, estatura_cm: string, fecha?: string, es_correccion?: bool, motivo?: string}  $datos
      * @return array{medicion: MedicionCorporal, es_nueva: bool}
      *
-     * @throws RecursoNoEncontrado|JugadorEnBajaSinMedicion|EquipoInexistente|ValorFueraDeRango|NadaQueCorregir|MedicionYaRegistrada|MedicionConcurrente
+     * @throws RecursoNoEncontrado|JugadorEnBajaSinMedicion|EquipoInexistente|RangoNoConfigurado|ValorFueraDeRango|NadaQueCorregir|MedicionYaRegistrada|MedicionConcurrente
      */
     public function ejecutar(Identificador $jugadorId, array $datos): array
     {
@@ -58,6 +59,7 @@ final class RegistrarMedicion
             // El límite efectivo es el menor entre el máximo del rango y lo que cabe en la columna (AU-09).
             $this->rangos->de('peso_kg')->acotadoA($this->rangos->maximoDeColumna('peso_kg'))->exigir($peso, 'peso_kg');
             $this->rangos->de('estatura_cm')->acotadoA($this->rangos->maximoDeColumna('estatura_cm'))->exigir($estatura, 'estatura_cm');
+            MedicionCorporal::exigirImcGuardable($peso, $estatura, $this->rangos->maximoDeColumna('imc'));
 
             $instante = Instante::truncadoASegundos($this->reloj->ahora());
             $fecha = $datos['fecha'] ?? $this->hoyDeNegocio->hoy()->format('Y-m-d');

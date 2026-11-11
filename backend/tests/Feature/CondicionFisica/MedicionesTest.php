@@ -592,3 +592,21 @@ test('AU-09: por HTTP, 9999.95 cm responde 422 validacion_fallida por sus dos de
 
     expect(medicionesCuenta($m['f1']))->toBe(0);
 });
+
+test('DA-71: un IMC que no cabe en la columna responde 422 valor_fuera_de_rango en estatura_cm, nunca 500', function () {
+    /** @var TestCase $this */
+    $m = medicionesMundo();
+    DB::connection('propietario')->table('rangos_mediciones_corporales')->where('codigo', 'estatura_cm')->update(['minimo' => '40.00']);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '200.00', 'estatura_cm' => '44.7']), $sesion)
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'valor_fuera_de_rango')
+        ->assertJsonPath('errores.0.campo', 'estatura_cm');
+
+    expect(medicionesCuenta($m['f1']))->toBe(0);
+
+    sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '200.00', 'estatura_cm' => '44.8']), $sesion)
+        ->assertCreated()
+        ->assertJsonPath('datos.imc', '996.49');
+});

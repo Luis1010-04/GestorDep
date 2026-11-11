@@ -7,8 +7,12 @@ use RuntimeException;
 use Src\Compartido\Dominio\NumeroDecimal;
 use Src\CondicionFisica\Dominio\CatalogoDeRangos;
 use Src\CondicionFisica\Dominio\RangoDeMedida;
+use Src\CondicionFisica\Dominio\RangoNoConfigurado;
 
-/** Lee `rangos_mediciones_corporales` en cada operación. Un rango faltante no se resuelve con un valor del código (DA-16). */
+/**
+ * Lee `rangos_mediciones_corporales` en cada operación. Un rango faltante no se resuelve con un valor del código (DA-16):
+ * responde `rango_no_configurado` (DA-70).
+ */
 final class CatalogoDeRangosSql implements CatalogoDeRangos
 {
     public function __construct(private readonly ConnectionInterface $conexion) {}
@@ -17,7 +21,7 @@ final class CatalogoDeRangosSql implements CatalogoDeRangos
     {
         $fila = $this->conexion->table('rangos_mediciones_corporales')->where('codigo', $codigo)->whereNull('eliminado_en')->first(['minimo', 'maximo']);
         if ($fila === null) {
-            throw new RuntimeException('rango_de_medida_faltante');
+            throw new RangoNoConfigurado;
         }
 
         return new RangoDeMedida(NumeroDecimal::desdeTexto($fila->minimo), NumeroDecimal::desdeTexto($fila->maximo));

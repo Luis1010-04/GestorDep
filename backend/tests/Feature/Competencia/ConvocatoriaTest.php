@@ -161,8 +161,12 @@ test('HU-12: la convocatoria lista en orden de convocatoria, excluye las elimina
     /** @var TestCase $this */
     $m = mundoDeCompetencia();
     $partido = convocatoriaPartido($m);
-    $primera = convocatoriaPeticion($this, 'POST', "/partidos/$partido/convocatoria", ['jugador_id' => $m['j2']])->json('datos.id');
-    $segunda = convocatoriaPeticion($this, 'POST', "/partidos/$partido/convocatoria", ['jugador_id' => $m['j1']])->json('datos.id');
+    // DA-73: ids fijos y crecientes, con el mismo creado_en, para que el desempate por id sea determinista (DA-72).
+    $primera = '019a5c00-0000-7000-8000-000000000001';
+    $segunda = '019a5c00-0001-7000-8000-000000000002';
+    foreach ([$primera => $m['j2'], $segunda => $m['j1']] as $id => $jugador) {
+        DB::connection('propietario')->table('convocatorias')->insert(['id' => $id, 'partido_id' => $partido, 'jugador_id' => $jugador, 'creado_en' => '2026-09-05 15:00:00+00']);
+    }
     convocatoriaDe($partido, $m['j3'], ['eliminado_en' => '2026-09-04 10:00:00+00']);
     convocatoriaDe(convocatoriaPartido($m, atributos: ['inicia_en' => '2026-09-19 23:00:00+00']), $m['j3']);
 

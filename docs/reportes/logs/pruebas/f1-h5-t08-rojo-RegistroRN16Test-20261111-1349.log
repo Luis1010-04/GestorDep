@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Salud\RegistroRN16Test
+  ✓ §7.3 filas 3 a 5 (RN-16): tras la confirmación de E2, E1 no modific… 5.67s  
+
+  Tests:    1 passed (14 assertions)
+  Duration: 6.27s
+

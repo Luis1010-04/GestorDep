@@ -70,12 +70,29 @@ final class MedicionCorporal
         return substr($this->fecha, 0, 7);
     }
 
-    /** `peso_kg ÷ (estatura_cm ÷ 100)²`, a dos decimales HALF_UP (DA-05). La estatura en metros es exacta con tres decimales. */
     public function imc(): NumeroDecimal
     {
-        $metros = $this->estaturaCm->dividir(NumeroDecimal::desdeTexto('100'), 3);
+        return self::calcularImc($this->pesoKg, $this->estaturaCm);
+    }
 
-        return $this->pesoKg->dividir($metros->multiplicar($metros), 2);
+    /** `peso_kg ÷ (estatura_cm ÷ 100)²`, a dos decimales HALF_UP (DA-05). La estatura en metros es exacta con tres decimales. */
+    public static function calcularImc(NumeroDecimal $pesoKg, NumeroDecimal $estaturaCm): NumeroDecimal
+    {
+        $metros = $estaturaCm->dividir(NumeroDecimal::desdeTexto('100'), 3);
+
+        return $pesoKg->dividir($metros->multiplicar($metros), 2);
+    }
+
+    /**
+     * El IMC debe caber en su columna antes de guardar; si no, se señala la estatura, que es lo que lo desborda (DA-71).
+     *
+     * @throws ValorFueraDeRango
+     */
+    public static function exigirImcGuardable(NumeroDecimal $pesoKg, NumeroDecimal $estaturaCm, NumeroDecimal $maximo): void
+    {
+        if (self::calcularImc($pesoKg, $estaturaCm)->mayorQue($maximo)) {
+            throw new ValorFueraDeRango('estatura_cm');
+        }
     }
 
     public function id(): Identificador

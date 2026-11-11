@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Seguridad\RecorridoDeAlcanceH5Test
+  ✓ §7.8 fila 1 (RNF-01): sin sesión, todas las rutas de H5 responden 4… 5.21s  
+
+  Tests:    1 passed (32 assertions)
+  Duration: 6.12s
+

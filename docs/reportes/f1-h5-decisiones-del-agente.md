@@ -405,3 +405,43 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por Luis en el chat (11/11/2026).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar la prueba con una decisión propia, o reemplazarla si el formato de error llega a admitir advertencias.
+
+## DA-70. Rango faltante en `rangos_mediciones_corporales` (T08)
+
+- **Qué faltaba:** si falta la fila de peso o de estatura, registrar una medición respondía 500. T05 lo dejó así y lo anotó para T08.
+- **Qué se eligió:** responder 422 con el código `rango_no_configurado` y un mensaje claro en `lang/es/errores.php`. Un fallo de datos de fábrica no aparece como error del servidor.
+- **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** volver a lanzar la excepción genérica en `CatalogoDeRangosSql::de` y quitar la clave.
+
+## DA-71. IMC que no cabe en `numeric(5,2)` (T08)
+
+- **Qué faltaba:** con 200 kg y una estatura menor de 44.7 cm, el IMC pasa de 999.99 y la columna generada responde 500. Con el mínimo sembrado de 100 cm no ocurre, pero sí si alguien cambia los rangos.
+- **Qué se eligió:** validar el IMC en el caso de uso, antes de guardar. Si no cabe en la columna, responde 422 `valor_fuera_de_rango`. El límite sale del tipo de la columna, como en AU-09.
+- **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la comprobación del caso de uso.
+
+## DA-72. Desempate por `id` en el mismo milisegundo (T08)
+
+- **Qué faltaba:** `Identificador::generar()` no tiene contador monotónico, así que dos registros del mismo milisegundo se ordenan al azar por `id` (observaciones de RN-15 y DD-56).
+- **Qué se eligió:** no se cambia el generador en H5. Las pruebas fijan los ids, como RN-15, DD-56 y DA-73. Se anota para H7, por si el orden en producción importa.
+- **Estado:** aprobada por Luis en el chat (11/11/2026).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** no aplica: deja el generador como está. Cambiarlo es una decisión de H7.
+
+## DA-73. Orden de `ConvocatoriaTest`, líneas 169 a 170 (T08)
+
+- **Qué faltaba:** la prueba ordena por `creado_en` y luego por `id`, con ids que genera el código en dos peticiones.
+- **Qué se eligió:** fijar los ids en la prueba, igual que RN-15 y DD-56. Solo cambia la prueba, no el código.
+- **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** volver a crear las convocatorias por la API en la prueba.
+
+## DA-74. Concurrencia real (T08)
+
+- **Qué faltaba:** Pest no paraleliza peticiones HTTP, así que la concurrencia solo se había probado con dos escrituras seguidas.
+- **Qué se eligió:** una prueba de integración con dos transacciones en conexiones distintas a PostgreSQL. Las dos leen que no hay registro, una confirma primero y la segunda choca con el índice único. Recibe el error que se responde como 409, nunca un 500. No es una prueba HTTP.
+- **Estado:** aprobada por Luis en el chat (11/11/2026). Implementada en T08.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar la prueba; el comportamiento no cambia.

@@ -48,6 +48,7 @@ return [
         'medicion_ya_registrada' => 'Ya hay una medición registrada en ese periodo. Si quieres reemplazarla, confírmalo como corrección.',
         'nada_que_corregir' => 'No hay nada que corregir en ese periodo.',
         'equipo_inexistente' => 'El equipo indicado no existe.',
+        'rango_no_configurado' => 'No está configurado el rango permitido de esta medida, así que no se puede validar el valor.',
         'prueba_ya_registrada' => 'Ya hay una prueba de ese tipo registrada en ese periodo. Si quieres reemplazarla, confírmalo como corrección.',
         'tipo_prueba_inexistente' => 'El tipo de prueba indicado no existe.',
         'no_es_registrante' => 'Solo quien registró el estado oficial puede modificarlo.',

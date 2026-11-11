@@ -814,3 +814,13 @@ Detalle en `f1-h5-t07.md`.
 | Cierre de T07 | 1 946 (12 068 aserciones) | 691 s | 745 s, código 0 |
 
 En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t07-20261111-1243.log`. Pendiente de decisión: Infection no muta `Aplicacion` (`infection.json5`), así que `AdvertenciasDeLesion` solo tiene pruebas `Unit` y mutaciones manuales.
+
+## 19. F1-H5-T08: seguridad, RN-15 y RN-16 (11/11/2026)
+
+Detalle en `f1-h5-t08.md`: cada fila de §7.3, §7.4 y §7.8 con su prueba, la mutación de 21 filtros y los pendientes de H5 cerrados o anotados para H7 (DA-70 a DA-74).
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| Cierre de T08 | 1 958 (12 146 aserciones) | 661 s | 713 s, código 0 |
+
+En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t08-20261111-1407.log`.

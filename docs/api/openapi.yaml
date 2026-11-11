@@ -5253,7 +5253,9 @@ paths:
         '422':
           description: >-
             validacion_fallida, equipo_inexistente (mismo cuerpo si no existe, esta eliminado, es ajeno o no tiene al
-            jugador; DA-13), valor_fuera_de_rango en peso_kg o estatura_cm, o nada_que_corregir en es_correccion.
+            jugador; DA-13), valor_fuera_de_rango en peso_kg o estatura_cm (tambien si el IMC no cabe en su columna, en
+            estatura_cm; DA-71), rango_no_configurado si falta el rango de la medida (DA-70), o nada_que_corregir en
+            es_correccion.
           content:
             application/json:
               schema:

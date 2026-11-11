@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Competencia\ConvocatoriaTest
+  ✓ HU-12: la convocatoria lista en orden de convocatoria, excluye las…  4.94s  
+
+  Tests:    1 passed (8 assertions)
+  Duration: 5.52s
+
