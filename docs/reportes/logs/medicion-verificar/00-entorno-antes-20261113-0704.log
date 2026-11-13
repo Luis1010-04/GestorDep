@@ -1,0 +1,43 @@
+# entorno antes | 2026-11-13T13:04:34Z | commit df068a2
+## anfitrion (Windows)
+NUMBER_OF_PROCESSORS=8
+CPU: AMD Ryzen 5 7235HS                             
+nucleos fisicos: 4, logicos: 8
+carga CPU %: 47
+memoria total MB: 32453
+memoria libre MB: 18672
+encendido desde: 11/11/2026 20:34:08
+## VM de Docker (docker info)
+CPUs=8 Memoria=16609075200 Version=29.9.2
+## contenedores: limites (NanoCpus 0 = sin limite; Memory 0 = sin limite)
+/gestordep-app-1 NanoCpus=0 CpuQuota=0 Memory=0
+/gestordep-db-1 NanoCpus=0 CpuQuota=0 Memory=0
+/gestordep-scheduler-1 NanoCpus=0 CpuQuota=0 Memory=0
+/gestordep-worker-1 NanoCpus=0 CpuQuota=0 Memory=0
+## dentro del contenedor app
+nproc=8
+sh: 1: free: not found
+sh: 1: uptime: not found
+0.02 0.08 0.20 1/353 24947
+## uso de los contenedores
+gestordep-app-1 CPU=0.01% MEM=205.1MiB / 15.47GiB
+gestordep-worker-1 CPU=0.00% MEM=43.96MiB / 15.47GiB
+gestordep-scheduler-1 CPU=0.14% MEM=62.48MiB / 15.47GiB
+gestordep-db-1 CPU=0.72% MEM=224.7MiB / 15.47GiB
+## memoria del contenedor app (/proc/meminfo; free y uptime no estan instalados)
+MemTotal:       16219800 kB
+MemAvailable:   15155800 kB
+loadavg: 0.09 0.09 0.20 6/353 24967
+## procesos del anfitrion con mas CPU acumulada en los ultimos 2 s
+
+Name                 Seg
+----                 ---
+Code                0.72
+Code                0.66
+PhoneExperienceHost 0.52
+Code                0.33
+powershell          0.06
+Code                0.06
+
+
+

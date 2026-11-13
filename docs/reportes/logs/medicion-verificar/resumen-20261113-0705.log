@@ -1,0 +1,7 @@
+# medicion de make verificar por etapas | commit df068a2 | inicio 1794575107
+01 pint codigo=0 duracion=13s inicio=1794575107 fin=1794575120 carga_antes=[0.15 0.10 0.21 3/352 24997] carga_despues=[0.34 0.15 0.22 5/353 25032]
+02 phpstan codigo=0 duracion=5s inicio=1794575121 fin=1794575126 carga_antes=[0.34 0.15 0.22 3/353 25038] carga_despues=[0.39 0.16 0.22 2/354 25066]
+03 pest codigo=0 duracion=718s inicio=1794575126 fin=1794575844 carga_antes=[0.39 0.16 0.22 3/354 25072] carga_despues=[1.27 1.16 0.80 4/358 26481]
+04 cobertura codigo=0 duracion=0s inicio=1794575845 fin=1794575845 carga_antes=[1.27 1.16 0.80 4/358 26487] carga_despues=[1.27 1.16 0.80 3/358 26503]
+05 audit codigo=0 duracion=3s inicio=1794575846 fin=1794575849 carga_antes=[1.27 1.16 0.80 4/358 26509] carga_despues=[1.17 1.14 0.80 3/358 26547]
+# total: 742 s | codigo final: 0

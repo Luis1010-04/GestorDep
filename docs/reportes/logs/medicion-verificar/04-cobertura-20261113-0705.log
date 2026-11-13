@@ -1,0 +1,10 @@
+# etapa 04 cobertura | commit df068a2
+# inicio 1794575845 (13:17:25Z) | loadavg VM: 1.27 1.16 0.80 4/358 26487
+# comando: php bin/verificar-cobertura.php build/coverage/clover.xml
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Capa                      Cobertura   Umbral  Estado
+Dominio                      100.0%      95%  ok
+Aplicación                  100.0%      85%  ok
+Infraestructura y HTTP        99.6%      70%  ok
+# fin 1794575845 (13:17:26Z) | loadavg VM: 1.27 1.16 0.80 3/358 26503
+# codigo: 0 | duracion: 0 s

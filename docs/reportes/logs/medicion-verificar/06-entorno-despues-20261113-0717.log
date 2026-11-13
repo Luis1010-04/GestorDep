@@ -1,0 +1,23 @@
+# entorno despues | 2026-11-13T13:17:44Z
+carga CPU anfitrion %: 31
+memoria libre MB: 18387
+MemTotal:       16219800 kB
+MemAvailable:   14779612 kB
+loadavg: 0.91 1.08 0.78 4/359 26573
+gestordep-app-1 CPU=7.32% MEM=206MiB / 15.47GiB
+gestordep-worker-1 CPU=0.00% MEM=43.95MiB / 15.47GiB
+gestordep-scheduler-1 CPU=0.12% MEM=62.23MiB / 15.47GiB
+gestordep-db-1 CPU=0.22% MEM=248.4MiB / 15.47GiB
+## procesos del anfitrion con mas CPU en 2 s
+
+Name        Seg
+----        ---
+Code       0.55
+Code       0.47
+Code       0.11
+Code       0.09
+powershell 0.08
+claude     0.03
+
+
+
