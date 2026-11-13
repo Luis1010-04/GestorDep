@@ -4837,8 +4837,11 @@ paths:
       description: >-
         Solo un entrenador del jugador (HU-20, DD-61). Con lesionado o con_molestia, tipo, zona, causa y
         fecha_estimada_regreso son obligatorios; con apto, esos campos y la nota estan prohibidos (DD-57). Quien confirma
-        queda como unico registrante y el estado nuevo sustituye al vigente, sea de quien sea (DD-63). Un aviso ajeno,
-        inexistente o con un UUID que no es v7 responde el mismo 404, antes que el 422. Escribe su historial (RNF-02).
+        queda como unico registrante y el estado nuevo sustituye al vigente, sea de quien sea (DD-63). Con apto, si el
+        estado vigente tiene una lesion sin fecha_alta registrada por quien confirma, esa lesion recibe fecha_alta igual al
+        hoy de negocio, salvo si su fecha_inicio es posterior; la lesion de otro registrante no cambia (DA-76). Un aviso
+        ajeno, inexistente o con un UUID que no es v7 responde el mismo 404, antes que el 422. Escribe su historial
+        (RNF-02).
       tags: [Salud]
       parameters:
         - name: aviso
