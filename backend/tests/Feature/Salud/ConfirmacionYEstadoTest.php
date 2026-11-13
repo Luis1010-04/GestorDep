@@ -545,6 +545,31 @@ test('§6.1: en confirmación, descarte y avisos del jugador, un UUID v7 inexist
         ->and(DB::table('lesiones')->count())->toBe(0);
 });
 
+test('§6.1: en estado, alta, lesiones del jugador y lesión, un UUID v7 inexistente responde el mismo 404 que un UUID v4', function () {
+    /** @var TestCase $this */
+    avisosMundo();
+    $v4 = '3f2b8c1e-7a4d-4e9b-8f10-2c5d6e7f8a90';
+    $v7 = Identificador::generar()->valor();
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+    $peticiones = [
+        'GET estado' => fn (string $id) => sesionesPeticion($this, 'GET', estadoRuta($id), idDeSesion: $sesion),
+        'PATCH estado' => fn (string $id) => sesionesPeticion($this, 'PATCH', estadoRuta($id), ['estado' => 'lesionado'], $sesion),
+        'POST alta' => fn (string $id) => sesionesPeticion($this, 'POST', altaRuta($id), [], $sesion),
+        'GET lesiones del jugador' => fn (string $id) => sesionesPeticion($this, 'GET', lesionesRuta($id), idDeSesion: $sesion),
+        'GET lesión' => fn (string $id) => sesionesPeticion($this, 'GET', lesionRuta($id), idDeSesion: $sesion),
+        'PATCH lesión' => fn (string $id) => sesionesPeticion($this, 'PATCH', lesionRuta($id), ['zona' => 'Rodilla'], $sesion),
+    ];
+
+    foreach ($peticiones as $ruta => $peticion) {
+        $conV7 = $peticion($v7)->assertNotFound();
+        $conV4 = $peticion($v4)->assertNotFound();
+        expect($conV7->json('codigo'))->toBe('recurso_no_encontrado', $ruta)
+            ->and($conV7->getContent())->toBe($conV4->getContent(), $ruta);
+    }
+    expect(DB::table('estados_disponibilidad')->count())->toBe(0)
+        ->and(DB::table('lesiones')->count())->toBe(0);
+});
+
 test('Plan de T03: PATCH sin campos responde 422 en el estado y en la lesión', function () {
     /** @var TestCase $this */
     $m = avisosMundo();

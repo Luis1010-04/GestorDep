@@ -4819,7 +4819,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '409':
-          description: El aviso ya no esta pendiente (aviso_no_pendiente).
+          description: El aviso ya no esta pendiente (aviso_no_pendiente), o hubo un choque con otra escritura (conflicto, DA-79).
           content:
             application/json:
               schema:

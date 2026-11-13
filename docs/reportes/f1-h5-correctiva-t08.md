@@ -37,14 +37,23 @@ La orden pide implementar el cierre y tomar la fecha de DD-63 y DA-45, o parar y
 
 - Cerrar una lesión es escribir `fecha_alta`, columna obligatoria del alta (§3.4), que DA-17 exige que no sea anterior a `fecha_inicio`.
 - DD-63 (§3.5) dice que la lesión del otro registrante «se conserva sin fecha de alta». DA-45 deja también sin alta la lesión propia. Ninguna de las dos define una fecha de cierre automático.
-- La única fecha por defecto de la especificación es la del alta manual: el día hábil de la petición (§3.4). No dice que valga para un cierre automático.
+- La única fecha por defecto de la especificación es la del alta manual, y no dice que valga para un cierre automático. Su criterio, citado:
+  - `docs/hitos/f1-h5.md` §3.4, línea 133: «pone `fecha_alta` en la lesión (opcional en el cuerpo; por defecto, el hoy de negocio)». §6.2, línea 310, repite «por defecto, el hoy de negocio».
+  - El «hoy de negocio» es un **día calendario, no hábil**. Lo define DD-36 (`docs/hitos/f1-h1.md`, línea 74): «el día en America/Mexico_City mediante `HoyDeNegocio` (Compartido); la zona sale de `config('app.zona_presentacion')`». La interfaz `backend/src/Compartido/Dominio/HoyDeNegocio.php` lo describe como «el día calendario vigente en su zona horaria, no en UTC (RNF-04)».
+  - En el código, `backend/src/Salud/Aplicacion/DarDeAlta.php`, líneas 46 y 47: `$hoy = $this->hoyDeNegocio->hoy()->format('Y-m-d')` y `darDeAlta($fechaAlta ?? $hoy, $instante)`.
+  - No hay calendario de días inhábiles en el proyecto, y no se inventa uno.
+  - Corrección: la primera versión de este reporte decía «día hábil». Era un error de redacción; el criterio es el día calendario.
 
 No se cambió `ConfirmarAviso`. Siguen las dos pruebas `DA-45` (`ConfirmacionYEstadoTest.php:366` y `:386`), que fallarían en cuanto se implemente el cierre y habrá que reescribir.
 
 Lo que hace falta decidir:
 
 1. **Fecha.** Opciones:
-   - A, recomendada: el día hábil de la confirmación. Es el mismo criterio que el alta manual (§3.4), y la auditoría pidió usar el criterio de campos y de historial del alta.
+   - A, recomendada: el hoy de negocio de la confirmación (día calendario en America/Mexico_City, `HoyDeNegocio`, DD-36). Es el mismo criterio que el alta manual (§3.4), y la auditoría pidió usar el criterio de campos y de historial del alta.
+
+   Luis indicó (13/11/2026) no implementar la fecha hasta confirmarla. `ConfirmarAviso` sigue sin cambios.
+
+   **Decisión registrada (Luis, 13/11/2026):** DA-76 sigue pendiente de confirmación. Si Luis la confirma, la fecha del cierre será el hoy de negocio de `HoyDeNegocio` (DD-36; `docs/hitos/f1-h5.md` §3.4 y §6.2), no un calendario de días hábiles.
    - B: la `fecha_aviso` del aviso confirmado.
    - C: el día anterior al nuevo estado.
 
@@ -83,7 +92,7 @@ Se hicieron en una copia temporal dentro del contenedor, con controles antes y d
   - Leí «409 conflicto» como el estado HTTP. Cambiar el código de §6.3 rompería el contrato, así que no lo hice.
 - **Rutas.** Solo se tocaron archivos citados, más el reporte y los logs. `FormatoDeError.php` no cambió: la captura está en el repositorio. OpenAPI sin cambios.
 - **`make verificar` tardó 794 s**, por encima del aviso de 13 minutos (780 s) y por debajo del alto de 15. Pest tardó 740 s, con 8 pruebas más que en T08 (713 s).
-- **Docker Desktop se apagó** antes del humo; lo más probable es que la computadora se suspendiera. Al volver, `make levantar` no pudo reconstruir la imagen: la versión nueva de compose pide `--allow=fs.read=…Dockerfile`. Se levantaron los contenedores con la imagen existente (`docker compose up -d --no-build --wait`), porque C01 no toca el Dockerfile. El `Makefile` está fuera de las rutas de C01, así que no lo cambié; queda anotado para Luis.
+- **Docker: `make levantar` no reconstruye la imagen.** Docker Desktop se apagó antes del humo; lo más probable es que la computadora se suspendiera. Al volver, `make levantar` falló al construir: la versión nueva de compose pide `--allow=fs.read=…Dockerfile`. **`make humo` corrió con la imagen existente**, levantada con `docker compose up -d --no-build --wait`. C01 no toca el Dockerfile, así que la imagen corresponde al código. Por orden de Luis (13/11/2026), no se cambió ninguna configuración de Docker ni el `Makefile`.
 
 ## 6. Corridas
 
@@ -99,7 +108,39 @@ Corridas que no cuentan, guardadas en `backend/build/`:
 - Un humo sin `make fresh` previo, que falló en H1 paso 3 con 409 `categoria_duplicada` porque `make verificar` deja la base con datos de prueba: `f1-h5-c01-humo-sin-fresh-*`.
 - La repetición que pidió Luis, `fresh` + humo, código 0 y 119 OK: `f1-h5-c01-humo-repeticion-20261113-035702.log`.
 
-## 7. Fuera de alcance
+## 7. Comprobaciones pedidas por Luis (13/11/2026)
 
-- El `Makefile` con la versión nueva de compose (§5).
-- La orden pone `make humo` justo después de `make verificar`, pero el humo de H1 necesita la base recién sembrada. Convendría que el guion o la orden incluyeran `make fresh` antes del humo, como hizo T08.
+1. **Códigos 409 de DA-79 en `docs/api/openapi.yaml`:**
+   - `POST /avisos-lesion/{aviso}/confirmacion` (líneas 4893 a 4896): el 409 nombra `aviso_no_pendiente` y `conflicto`. Correcto.
+   - `POST /avisos-lesion/{aviso}/descarte` (líneas 4821 y 4822): el 409 nombra **solo** `aviso_no_pendiente`. **Falta `conflicto`**, que el descarte puede responder desde C01 en el choque al guardar. El estado 409 y el esquema `Error` ya están documentados, así que las pruebas de contrato pasan. Lo que falta es el código en la descripción.
+   - **Aplicado con la aprobación de Luis (13/11/2026):** a la descripción se le agregó «o hubo un choque con otra escritura (conflicto, DA-79)». Solo cambia la descripción; el estado y el esquema siguen iguales.
+   - `GET /jugadores/{jugador}/avisos-lesion` no escribe, así que no responde 409.
+2. **UUID v7 frente a `ConfirmacionYEstadoTest.php`, líneas 484 a 524.** **No las cubre todas.**
+   - Esas líneas prueban UUID v4 en siete rutas: estado (GET y PATCH), alta, confirmación, lesiones del jugador y lesión (GET y PATCH).
+   - La prueba nueva (línea 526) cubre con UUID v7 solo la **confirmación**.
+   - Las otras dos rutas que cubre, descarte y avisos del jugador, tienen su caso v4 en `AvisosTest.php`, línea 296, no en 484 a 524.
+   - **Agregado con la aprobación de Luis (13/11/2026):** la prueba «§6.1: en estado, alta, lesiones del jugador y lesión, un UUID v7 inexistente responde el mismo 404 que un UUID v4» (`ConfirmacionYEstadoTest.php`, después de la línea 546). Cubre:
+     - estado, GET y PATCH;
+     - alta;
+     - lesiones del jugador;
+     - lesión, GET y PATCH.
+
+     Usa los mismos cuerpos que las líneas 511 a 524, y cada caso responde 404 `recurso_no_encontrado` con un cuerpo idéntico al de UUID v4, sin escribir nada.
+   - **Pasa sin código:** el comportamiento ya existía. Con esto, las siete rutas de las líneas 484 a 524 tienen caso v7.
+3. **Copia temporal sin bloqueo.**
+   - La copia vivió solo dentro del contenedor (`/tmp/mut`, con el enlace `/tmp/docs` y el respaldo `/tmp/orig.php`) y el guion la borra al final. Después de la corrida, `ls` dentro del contenedor confirma que no existe ninguna de las tres rutas.
+   - En el árbol del repositorio no hay ningún directorio `mut`, y `git status` no muestra archivos de la copia.
+   - Lo único que quedó es el guion: `backend/build/mut-c01.sh`, ignorado por `.gitignore` (`/backend/build/`), y una copia versionada como evidencia en `docs/reportes/logs/mutaciones/f1-h5-c01-guion.sh`. Ninguno contiene código mutado.
+
+### Corridas de la segunda entrega (13/11/2026)
+
+| Corrida | Resultado | Log |
+|---|---|---|
+| PHPStan | sin errores | — |
+| `make verificar` | código 0, 1 967 pruebas (12 216 aserciones), Pest 675 s, total 755 s (por debajo de 13 minutos) | `docs/reportes/logs/verificar/f1-h5-c01b-20261113-0502.log` |
+| `make fresh` + `make humo` | código 0, 119 pasos OK, con la imagen existente | `docs/reportes/logs/humo/f1-h5-c01b-20261113-0515.log` |
+
+## 8. Fuera de alcance y observaciones para H7
+
+- **Para H7: `make humo` exige `make fresh` antes.** Después de `make verificar`, la base queda con datos de prueba, y el humo de H1 falla en el paso 3 con 409 `categoria_duplicada` (log en `backend/build/f1-h5-c01-humo-sin-fresh-*`). T08 y C01 corrieron `make fresh` justo antes del humo, en el mismo log.
+- **Para H7: `make levantar` no reconstruye la imagen** con la versión actual de compose (§5). No se tocó la configuración.
