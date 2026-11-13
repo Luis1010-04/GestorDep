@@ -144,6 +144,20 @@ test('§7.5 fila 9 (DD-59): E2 lista solo la suya', function () {
     expect(array_column($respuesta->json('datos'), 'id'))->toBe([$suya]);
 });
 
+test('RN-22 (RN-14, DD-17): E3, del mismo equipo A que E1, no ve la medición de E1 y registra la suya en el mismo periodo sin chocar', function () {
+    /** @var TestCase $this */
+    $m = medicionesMundo();
+    medicionInsertar($m['f1'], $m['a'], $m['e1']);
+    $sesion = sesionesIniciar($this, 'e3@x.com');
+
+    sesionesPeticion($this, 'GET', medicionesRuta($m['f1']), idDeSesion: $sesion)->assertOk()->assertJsonCount(0, 'datos');
+    $suya = sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), $sesion)->assertCreated()->json('datos.id');
+    $respuesta = sesionesPeticion($this, 'GET', medicionesRuta($m['f1']), idDeSesion: $sesion)->assertOk();
+
+    expect(array_column($respuesta->json('datos'), 'id'))->toBe([$suya])
+        ->and(medicionesCuenta($m['f1']))->toBe(2);
+});
+
 test('§7.5 fila 10 (HU-17 c3, DA-06): E1 lista tres periodos en orden ascendente', function () {
     /** @var TestCase $this */
     $m = medicionesMundo();

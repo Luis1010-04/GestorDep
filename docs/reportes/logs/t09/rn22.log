@@ -1,0 +1,11 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\CondicionFisica\MedicionesTest
+  ✓ RN-22 (RN-14, DD-17): E3, del mismo equipo A que E1, no ve la medic… 4.53s  
+
+   PASS  Tests\Feature\CondicionFisica\PruebasFisicasTest
+  ✓ RN-22 (RN-14, DD-17): E3, del mismo equipo A que E1, no ve la prueb… 0.57s  
+
+  Tests:    2 passed (17 assertions)
+  Duration: 5.82s
+

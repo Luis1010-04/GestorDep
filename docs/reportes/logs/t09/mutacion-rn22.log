@@ -1,0 +1,14 @@
+== control antes
+  Tests:    2 passed (17 assertions)
+81:        $consulta = $this->vigentes()->where('jugador_id', $jugadorId->valor())->whereNotNull('registrado_por'); // MUTACION R1
+== R1: el listado de mediciones no filtra por registrante
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > RN-22 (RN-14, DD-1…   
+Failed asserting that actual size 1 matches expected size 0.
+  Tests:    1 failed, 1 passed (13 assertions)
+111:            ->whereNotNull('pruebas_fisicas.registrado_por'); // MUTACION R2
+== R2: las pruebas no filtran por registrante
+   FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > RN-22 (RN-14,…    
+  Failed asserting that two arrays are identical.
+  Tests:    1 failed, 1 passed (12 assertions)
+== control después
+  Tests:    2 passed (17 assertions)

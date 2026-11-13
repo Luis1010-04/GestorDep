@@ -161,6 +161,24 @@ test('§7.6 fila 9 (DD-59): E2 lista las de F1 sin las de E1', function () {
         ->and($vista->json('datos.2.prueba.id'))->toBe($suya);
 });
 
+test('RN-22 (RN-14, DD-17): E3, del mismo equipo A que E1, no ve la prueba de E1 en el listado ni en la vista del periodo, y registra la suya sin chocar', function () {
+    /** @var TestCase $this */
+    $m = pruebasMundo();
+    pruebaInsertar($m['f1'], $m['a'], $m['e1'], $m['velocidad']);
+    $sesion = sesionesIniciar($this, 'e3@x.com');
+
+    $listado = sesionesPeticion($this, 'GET', pruebasRuta($m['f1']), idDeSesion: $sesion)->assertOk();
+    $vista = sesionesPeticion($this, 'GET', pruebasRuta($m['f1']).'?filtro[periodo]=2026-11', idDeSesion: $sesion)->assertOk();
+    expect($listado->json('datos'))->toBe([])
+        ->and($vista->json('datos'))->toHaveCount(3)
+        ->and(array_filter(array_column($vista->json('datos'), 'prueba')))->toBe([]);
+
+    $suya = sesionesPeticion($this, 'POST', pruebasRuta($m['f1']), pruebaCuerpo($m['a'], $m['velocidad']), $sesion)->assertCreated()->json('datos.id');
+    $despues = sesionesPeticion($this, 'GET', pruebasRuta($m['f1']), idDeSesion: $sesion)->assertOk();
+
+    expect(array_column($despues->json('datos'), 'id'))->toBe([$suya]);
+});
+
 test('§7.6 fila 10 (DD-60, DA-59): registrar una prueba de JB responde 409 jugador_en_baja con su mensaje', function () {
     /** @var TestCase $this */
     $m = pruebasMundo();
