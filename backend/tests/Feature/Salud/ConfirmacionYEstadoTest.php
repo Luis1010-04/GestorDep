@@ -1118,6 +1118,32 @@ test('DA-33: con el jugador en baja y el regreso anterior al aviso, responde 409
         ->assertJsonPath('codigo', 'jugador_en_baja');
 });
 
+test('DA-33: con una escritura que chocaría y el regreso anterior al aviso, responde 422 rango_de_fechas_invalido, no 409 conflicto', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['f1'], $m['e1'], ['fecha_aviso' => '2026-11-14']);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+    $propietario = DB::connection('propietario');
+    // Disparador solo de esta prueba: la escritura de la confirmación choca con el índice único del historial del aviso.
+    $propietario->statement("create function public.prueba_t09_da33() returns trigger language plpgsql as \$\$ begin raise exception 'choque simulado' using errcode = 'unique_violation'; end \$\$");
+    $propietario->statement("create trigger prueba_t09_da33 before insert on avisos_lesion_historial for each row when (new.operacion = 'actualizar') execute function public.prueba_t09_da33()");
+    try {
+        $conFechasInvalidas = sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), confirmacionCuerpo(['fecha_estimada_regreso' => '2026-11-13']), $sesion);
+        $conFechasValidas = sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), confirmacionCuerpo(), $sesion);
+    } finally {
+        $propietario->statement('drop trigger prueba_t09_da33 on avisos_lesion_historial');
+        $propietario->statement('drop function public.prueba_t09_da33()');
+    }
+
+    $conFechasInvalidas->assertUnprocessable()
+        ->assertExactJson(['codigo' => 'rango_de_fechas_invalido', 'mensaje' => MENSAJE_DE_RANGO_DE_LESION, 'errores' => []]);
+    // Control: con fechas válidas el mismo choque sí llega, y responde 409 conflicto.
+    $conFechasValidas->assertConflict()->assertJsonPath('codigo', 'conflicto');
+    expect(DB::table('avisos_lesion')->where('id', $aviso)->value('estado'))->toBe('pendiente')
+        ->and(DB::table('lesiones')->where('jugador_id', $m['f1'])->count())->toBe(0)
+        ->and(DB::table('estados_disponibilidad')->where('jugador_id', $m['f1'])->count())->toBe(0);
+});
+
 test('DA-56: el estado recién confirmado tiene actualizado_en igual a vigente_desde', function () {
     /** @var TestCase $this */
     $m = avisosMundo();

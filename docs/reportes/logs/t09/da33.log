@@ -1,0 +1,12 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Salud\ConfirmacionYEstadoTest
+  ✓ DA-33: un aviso ya confirmado de un jugador en baja responde 409 av… 5.52s  
+  ✓ DA-33: con el jugador en baja, un cuerpo inválido responde 422 vali… 0.37s  
+  ✓ DA-33: con el aviso ya confirmado, un cuerpo inválido responde 422…  0.35s  
+  ✓ DA-33: con el jugador en baja y el regreso anterior al aviso, respo… 0.48s  
+  ✓ DA-33: con una escritura que chocaría y el regreso anterior al avis… 0.52s  
+
+  Tests:    5 passed (21 assertions)
+  Duration: 7.90s
+
