@@ -209,9 +209,10 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** DD-63 dice que la lesión de otro registrante sigue sin alta cuando un estado nuevo sustituye al suyo, pero nada dice qué pasa con la lesión de quien confirma.
 - **Qué se eligió:** se deja sin alta, con el mismo criterio que DD-63. Confirmar no toca la lesión anterior y el alta solo cierra la lesión del estado vigente. Si el estado nuevo es `apto`, el alta responde 409 `sin_lesion_vigente`, así que ninguna ruta cierra esa lesión anterior.
-- **Estado:** aprobada por Luis (6/11/2026), con el criterio de DD-63: la lesión propia no admite alta por la ruta del jugador. Es el comportamiento de `ConfirmarAviso` desde T03 (`455720e`); lo fijan las dos pruebas `DA-45`. **Pendiente para la revisión de T08.** **Sustituida por DA-76 en el caso `apto` (13/11/2026)**: la lesión propia se cierra con el hoy de negocio. Con otro estado sigue igual, como fija la primera prueba `DA-45`.
+- **Estado:** aprobada por Luis (6/11/2026), con el criterio de DD-63: la lesión propia no admite alta por la ruta del jugador. Es el comportamiento de `ConfirmarAviso` desde T03 (`455720e`); lo fijan las dos pruebas `DA-45`. **Pendiente para la revisión de T08.**
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cerrar la lesión propia en `ConfirmarAviso`, con su historial, y cambiar las pruebas `DA-45`.
+- **Nota:** Revertida en el caso apto por DA-76 (aprobada 13/11/2026).
 
 ## DA-46. Orden de los errores en `PATCH` del estado y en el alta (T03, punto 2 del plan)
 
@@ -461,14 +462,15 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
   - **Fecha:** `fecha_alta` es el hoy de negocio de `HoyDeNegocio`, un día calendario en America/Mexico_City (DD-36; `docs/hitos/f1-h5.md` §3.4 y §6.2). Es el mismo criterio que el alta manual, sin calendario de días hábiles.
   - **Transacción:** el cierre ocurre en la misma transacción que la confirmación, con su historial en `lesiones_historial`.
   - **Lo que no se toca:** la lesión de otro registrante se conserva sin alta (DD-63, RN-15 y RN-16), y una lesión que ya tenía alta queda igual.
-  - **Relación con DA-45:** sustituye a DA-45 en el caso `apto`; con otro estado, DA-45 sigue igual.
-  - **DA-17:** si el hoy de negocio es anterior a `fecha_inicio` (un aviso con fecha futura), la confirmación responde 422 `rango_de_fechas_invalido`, igual que el alta sin fecha (punto 6 del plan de T03).
+  - **Relación con DA-45:** sustituye a DA-45 en el caso `apto`, como prevé el «Cómo se revierte» de DA-45; con otro estado, DA-45 sigue igual.
+  - **Subdecisión: lesión que empieza después de hoy.** Aprobada por Luis el 13/11/2026. Si la lesión propia tiene `fecha_inicio` posterior al hoy de negocio, confirmar `apto` no la cierra, y la confirmación tiene éxito con su respuesta de siempre (200). No se responde 422 `rango_de_fechas_invalido`. Si la lesión empieza hoy o antes, se cierra. Así, `fecha_alta` nunca queda antes de `fecha_inicio` (DA-17).
 - **Estado:**
   - Aprobada por Luis en el chat: la opción A el 12/11/2026, y la fecha con `HoyDeNegocio` y el alcance (solo la lesión propia) el 13/11/2026.
   - Implementada en C01, en el commit «F1-H5-C01: cierre automático de lesión al confirmar apto (DA-76)».
   - La segunda prueba `DA-45` (`ConfirmacionYEstadoTest.php:386`) se reescribió como prueba `DA-76`, con la aprobación de Luis (13/11/2026).
+  - La subdecisión de las lesiones futuras está implementada en el commit «F1-H5-C01: DA-76 sustituye a DA-45 en apto; lesiones futuras no se cierran».
 - **Privacidad o permisos:** no; el filtro por registrante respeta RN-15 y RN-16.
-- **Cómo se revierte:** quitar `cerrarLesionPropia` de `ConfirmarAviso` y volver a la prueba `DA-45` del caso `apto`.
+- **Cómo se revierte:** quitar `cerrarLesionPropia` de `ConfirmarAviso`, volver a la prueba `DA-45` del caso `apto` y quitar las pruebas `DA-76`.
 
 ## DA-77. Pruebas de tipos borrados en el listado y en la vista del periodo (auditoría de T08)
 

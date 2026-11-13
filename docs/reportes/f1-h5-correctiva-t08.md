@@ -156,7 +156,7 @@ Corridas que no cuentan, guardadas en `backend/build/`:
   - Si la registró quien confirma y no tenía alta, la guarda con `darDeAlta(hoy de negocio)` mediante `guardarCambio`, que escribe el historial.
   - Todo ocurre dentro de la transacción de la confirmación. El dominio no cambió.
 - **Contradicción resuelta con Luis:** la orden pedía mantener en verde las dos pruebas `DA-45`, pero la segunda (`ConfirmacionYEstadoTest.php:386`) exigía que, al confirmar `apto`, la lesión propia quedara **sin** alta. Luis aprobó reescribirla como prueba `DA-76`. La primera prueba `DA-45` (confirmar con un estado que no es `apto`) sigue igual y en verde.
-- **Efecto nuevo a vigilar (DA-17):** si la lesión propia empieza después del hoy de negocio, confirmar `apto` responde 422 `rango_de_fechas_invalido`, igual que el alta sin fecha.
+- **Efecto nuevo a vigilar (DA-17):** si la lesión propia empieza después del hoy de negocio, confirmar `apto` responde 422 `rango_de_fechas_invalido`, igual que el alta sin fecha. **Superado (13/11/2026):** Luis decidió que esa lesión no se cierra y que la confirmación tiene éxito. Ver §11.
 
 | Prueba (`ConfirmacionYEstadoTest.php`) | Sin código | Con código |
 |---|---|---|
@@ -190,3 +190,82 @@ Corridas de DA-76:
 
 - **Para H7: `make humo` exige `make fresh` antes.** Después de `make verificar`, la base queda con datos de prueba, y el humo de H1 falla en el paso 3 con 409 `categoria_duplicada` (log en `backend/build/f1-h5-c01-humo-sin-fresh-*`). T08 y C01 corrieron `make fresh` justo antes del humo, en el mismo log.
 - **Para H7: `make levantar` no reconstruye la imagen** con la versión actual de compose (§5). No se tocó la configuración.
+
+## 11. Ajuste de DA-76 (órdenes del 13/11/2026)
+
+La primera orden se detuvo en el paso 1, y Luis eligió después la opción 1. El resultado está en «Opción 1 aplicada», al final de esta sección.
+
+### Paso 0: alinear la rama
+
+| Comando | Resultado |
+|---|---|
+| Comprobación inicial | rama `auditoria/f1-h5`, HEAD `62822e1`, árbol limpio |
+| `git checkout hito/f1-h5` | correcto; estaba en `9972755`, 2 commits detrás de `origin/hito/f1-h5` |
+| `git merge --ff-only feb4734` | avance rápido; `hito/f1-h5` queda en `feb4734` |
+| `git cherry-pick 62822e1` | sin conflictos; queda como **`4ab4592`** en `hito/f1-h5`, 1 commit por delante de `origin/hito/f1-h5` |
+
+`auditoria/f1-h5` se conserva en `62822e1`. No se usó amend, rebase ni reset.
+
+### Paso 1: texto de DA-45, copiado de `feb4734`, antes del cambio de DA-76
+
+> ## DA-45. Lesión propia abierta al confirmar otro aviso (T03)
+>
+> - **Qué faltaba:** DD-63 dice que la lesión de otro registrante sigue sin alta cuando un estado nuevo sustituye al suyo, pero nada dice qué pasa con la lesión de quien confirma.
+> - **Qué se eligió:** se deja sin alta, con el mismo criterio que DD-63. Confirmar no toca la lesión anterior y el alta solo cierra la lesión del estado vigente. Si el estado nuevo es `apto`, el alta responde 409 `sin_lesion_vigente`, así que ninguna ruta cierra esa lesión anterior.
+> - **Estado:** aprobada por Luis (6/11/2026), con el criterio de DD-63: la lesión propia no admite alta por la ruta del jugador. Es el comportamiento de `ConfirmarAviso` desde T03 (`455720e`); lo fijan las dos pruebas `DA-45`. **Pendiente para la revisión de T08.**
+> - **Privacidad o permisos:** no.
+> - **Cómo se revierte:** cerrar la lesión propia en `ConfirmarAviso`, con su historial, y cambiar las pruebas `DA-45`.
+
+### Por qué se detiene (punto 7 de la orden)
+
+DA-45 dice de forma expresa que confirmar no cierra la lesión propia, también con `apto`:
+
+- **«Qué se eligió»:** «se deja sin alta», «Confirmar no toca la lesión anterior» y, para el caso `apto`, «ninguna ruta cierra esa lesión anterior».
+- **«Estado»:** «la lesión propia no admite alta por la ruta del jugador».
+- **«Cómo se revierte»:** «cerrar la lesión propia en `ConfirmarAviso`», que es exactamente lo que hace DA-76. Según su propio texto, DA-76 revierte a DA-45; no la complementa.
+
+Por eso no se hicieron los pasos 2 a 4: no se revirtió ni se amplió la prueba de la línea 386, no se tocó el texto de DA-45 ni el de DA-76, no se implementó la regla de lesiones con inicio posterior a hoy y no se corrió ninguna suite. `hito/f1-h5` queda en `4ab4592`, con DA-76 como estaba en `62822e1`. Luis decide.
+
+Opciones para Luis:
+
+1. **Recomendada: DA-76 sustituye a DA-45 en el caso `apto`.** Es lo que ya está en `4ab4592`. Luego se aplicaría solo el paso 3 (no cerrar lesiones con inicio posterior a hoy y no responder 422) y el paso 4.
+2. **Modificar DA-45 de forma expresa.** Luis aprueba un texto nuevo de DA-45 que limite su regla a confirmar con un estado que no es `apto`. Entonces se siguen los pasos 2 a 4 tal como están en la orden. El punto 11 pide restaurar el texto original de DA-45, así que esta opción necesita una instrucción explícita sobre ese texto.
+3. **Mantener DA-45 y revertir DA-76** con un commit nuevo, sin reescribir historia.
+
+### Opción 1 aplicada: DA-76 sustituye a DA-45 en `apto`
+
+Luis eligió la opción 1, según la reversión que DA-45 prevé en su propio texto. Se trabajó en `hito/f1-h5` sobre `4ab4592`.
+
+1. **DA-45 en el registro:** el texto original queda intacto (un diff contra `feb4734` muestra solo la línea nueva). Se agregó la nota «Revertida en el caso apto por DA-76 (aprobada 13/11/2026)». Se quitó la frase «Sustituida por DA-76…» que había agregado `4ab4592` dentro de «Estado», porque reescribía ese campo.
+2. **Pruebas de DA-45** (`ConfirmacionYEstadoTest.php`):
+
+   | Prueba | Cambio | Por qué |
+   |---|---|---|
+   | «DA-45: confirmar otro aviso deja sin alta la lesión propia anterior; el alta solo cierra la vigente» (línea 366) | ninguno | Confirma con `con_molestia`, un estado distinto de `apto`: DA-45 sigue rigiendo. |
+   | «DA-45: confirmar apto deja sin alta la lesión propia anterior, y el alta responde 409 sin_lesion_vigente» (antes en la línea 386) | actualizada en `4ab4592` a «DA-76 (sustituye a DA-45 en apto)…» | Describía la regla anterior en el caso `apto`. Ahora exige `fecha_alta` igual al hoy de negocio, con su historial, y conserva la aserción del 409 `sin_lesion_vigente` del alta. |
+
+   En este commit no se toca ninguna de las dos.
+3. **Lesión que empieza después de hoy** (subdecisión de DA-76, aprobada por Luis):
+   - `ConfirmarAviso::cerrarLesionPropia` ya no cierra la lesión propia si su `fecha_inicio` es posterior al hoy de negocio. La confirmación responde 200 como siempre y ya no da 422 `rango_de_fechas_invalido`.
+   - Si la lesión empieza hoy o antes, se cierra igual que antes.
+   - Pruebas nuevas:
+     - «DA-76 (inicio posterior a hoy)…»: **falla sin código**, con 422 en lugar de 200.
+     - «DA-76 (inicio hoy)…»: **pasa sin código**, porque ese caso ya se cerraba.
+   - Las cuatro pruebas DA-45 y DA-76 que ya había siguen en verde.
+4. **OpenAPI sin cambios.** Ninguna respuesta cambia de código ni de forma. El 422 `rango_de_fechas_invalido` documentado en la confirmación se refiere a la fecha estimada con `lesionado` o `con_molestia`, y sigue igual.
+5. **Mutaciones**, en una copia temporal que se borró al terminar (el log lo confirma). Log: `docs/reportes/logs/mutaciones/f1-h5-c01-da76-futuras-20261113-0614.log`; guion: `f1-h5-c01-da76-futuras-guion.sh`.
+
+   | Mutación | La detecta |
+   |---|---|
+   | M6: sin la comprobación de inicio posterior | «DA-76 (inicio posterior a hoy)» |
+   | M7: la comprobación con `>=` en lugar de `>` | «DA-76 (inicio hoy)» |
+
+6. **Tiempo de la suite:** se aceptan los tiempos actuales y no cambia cómo se corre la suite. DA-57 (Pest en paralelo) queda como tarea separada, para después de cerrar H5.
+
+Corridas de la opción 1:
+
+| Corrida | Resultado | Log |
+|---|---|---|
+| PHPStan | sin errores (antes se corrigió una anotación de tipo que faltaba en el ayudante de la prueba) | — |
+| `make verificar` | código 0, 1 971 pruebas (12 240 aserciones), Pest 743 s, **total 799 s**: pasa el aviso de 13 minutos y queda por debajo del alto de 900 s | `docs/reportes/logs/verificar/f1-h5-c01-da76b-20261113-0615.log` |
+| `make fresh` + `make humo` | código 0, 119 pasos OK, con la imagen existente | `docs/reportes/logs/humo/f1-h5-c01-da76b-20261113-0629.log` |

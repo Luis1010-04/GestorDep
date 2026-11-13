@@ -438,6 +438,50 @@ test('DA-76: confirmar apto no toca una lesión propia que ya tenía alta', func
         ->and(DB::table('lesiones_historial')->where('lesion_id', $cerrada)->count())->toBe(0);
 });
 
+/**
+ * Estado `lesionado` vigente de E2 sobre una lesión propia con la fecha de inicio indicada (DA-76, subdecisión del 13/11/2026).
+ *
+ * @param  array<string, string>  $m
+ */
+function estadoConLesionQueEmpieza(array $m, string $inicio): string
+{
+    $lesion = lesionInsertar($m['f1'], $m['e2'], ['fecha_inicio' => $inicio, 'fecha_estimada_regreso' => '2026-11-30']);
+    mundoInsertar('estados_disponibilidad', [
+        'jugador_id' => $m['f1'], 'estado' => 'lesionado', 'lesion_id' => $lesion, 'fecha_estimada_regreso' => '2026-11-30',
+        'confirmado_por' => $m['e2'], 'vigente_desde' => '2026-11-10 10:00:00+00', 'actualizado_en' => '2026-11-10 10:00:00+00',
+    ]);
+
+    return $lesion;
+}
+
+test('DA-76 (inicio posterior a hoy): confirmar apto tiene éxito y no cierra la lesión propia que empieza después del hoy de negocio', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    // Reloj de avisosMundo: 2026-11-15 18:00 UTC; el hoy de negocio (DD-36) es 2026-11-15.
+    $futura = estadoConLesionQueEmpieza($m, '2026-11-16');
+    $aviso = avisoInsertar($m['f1'], $m['d1']);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), ['estado' => 'apto'], sesionesIniciar($this, 'e2@x.com'))
+        ->assertOk()
+        ->assertJsonPath('datos.estado', 'confirmado');
+
+    expect(estadoVigente($m['f1'])->estado)->toBe('apto')
+        ->and(DB::table('lesiones')->where('id', $futura)->value('fecha_alta'))->toBeNull()
+        ->and(DB::table('lesiones_historial')->where('lesion_id', $futura)->count())->toBe(0);
+});
+
+test('DA-76 (inicio hoy): confirmar apto cierra la lesión propia que empieza el hoy de negocio, con esa fecha', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $deHoy = estadoConLesionQueEmpieza($m, '2026-11-15');
+    $aviso = avisoInsertar($m['f1'], $m['d1']);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), ['estado' => 'apto'], sesionesIniciar($this, 'e2@x.com'))->assertOk();
+
+    expect(DB::table('lesiones')->where('id', $deHoy)->value('fecha_alta'))->toBe('2026-11-15')
+        ->and(DB::table('lesiones_historial')->where('lesion_id', $deHoy)->pluck('operacion')->all())->toBe(['actualizar']);
+});
+
 test('RNF-02: confirmar escribe el historial del aviso, de la lesión y del estado', function () {
     /** @var TestCase $this */
     $m = avisosMundo();

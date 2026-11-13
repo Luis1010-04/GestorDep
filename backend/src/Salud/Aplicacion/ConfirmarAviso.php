@@ -82,9 +82,8 @@ final class ConfirmarAviso
 
     /**
      * Al confirmar `apto`, la lesión abierta del estado vigente se cierra con el hoy de negocio si la registró quien confirma
-     * (DA-76, DD-36). La de otro registrante se conserva sin alta (DD-63) y una lesión que ya tenía alta no se toca.
-     *
-     * @throws FechaAnteriorAlInicio
+     * (DA-76, DD-36). La de otro registrante se conserva sin alta (DD-63) y una lesión que ya tenía alta no se toca. Una
+     * lesión que empieza después del hoy de negocio tampoco se cierra, y la confirmación sigue (subdecisión de DA-76).
      */
     private function cerrarLesionPropia(EstadoOficial $vigente, Identificador $autor, DateTimeImmutable $instante): void
     {
@@ -94,7 +93,12 @@ final class ConfirmarAviso
             return;
         }
 
-        $this->lesiones->guardarCambio($lesion, $lesion->darDeAlta($this->hoyDeNegocio->hoy()->format('Y-m-d'), $instante));
+        $hoy = $this->hoyDeNegocio->hoy()->format('Y-m-d');
+        if ($lesion->fechaInicio() > $hoy) {
+            return;
+        }
+
+        $this->lesiones->guardarCambio($lesion, $lesion->darDeAlta($hoy, $instante));
     }
 
     /**
