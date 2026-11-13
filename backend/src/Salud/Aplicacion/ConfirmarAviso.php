@@ -4,6 +4,7 @@ namespace Src\Salud\Aplicacion;
 
 use DateTimeImmutable;
 use Src\Compartido\Aplicacion\UsuarioActual;
+use Src\Compartido\Dominio\HoyDeNegocio;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
@@ -22,7 +23,8 @@ use Src\Salud\Dominio\TipoDeEstado;
 /**
  * Confirma un aviso como estado oficial (HU-20). Todo en una transacción: crea la lesión si no es `apto`, cierra el estado
  * vigente, sea de quien sea, y abre el nuevo con quien confirma como único registrante (DD-63, §3.4). La lesión anterior
- * se conserva sin fecha de alta. La solicitud HTTP ya comprobó que el usuario entrena al jugador.
+ * se conserva sin fecha de alta, salvo al confirmar `apto` sobre la lesión propia (DA-76). La solicitud HTTP ya comprobó
+ * que el usuario entrena al jugador.
  */
 final class ConfirmarAviso
 {
@@ -34,6 +36,7 @@ final class ConfirmarAviso
         private readonly Transaccion $transaccion,
         private readonly UsuarioActual $usuarioActual,
         private readonly Reloj $reloj,
+        private readonly HoyDeNegocio $hoyDeNegocio,
     ) {}
 
     /**
@@ -58,6 +61,9 @@ final class ConfirmarAviso
 
             $vigente = $this->estados->vigenteParaActualizar($aviso->jugadorId());
             if ($vigente !== null) {
+                if ($tipo === TipoDeEstado::Apto) {
+                    $this->cerrarLesionPropia($vigente, $autor, $instante);
+                }
                 $this->estados->guardarCambio($vigente, $vigente->cerrar($instante));
             }
 
@@ -72,6 +78,23 @@ final class ConfirmarAviso
 
             return AvisoVisible::para($confirmado, $autor);
         });
+    }
+
+    /**
+     * Al confirmar `apto`, la lesión abierta del estado vigente se cierra con el hoy de negocio si la registró quien confirma
+     * (DA-76, DD-36). La de otro registrante se conserva sin alta (DD-63) y una lesión que ya tenía alta no se toca.
+     *
+     * @throws FechaAnteriorAlInicio
+     */
+    private function cerrarLesionPropia(EstadoOficial $vigente, Identificador $autor, DateTimeImmutable $instante): void
+    {
+        $lesionId = $vigente->lesionId();
+        $lesion = $lesionId === null ? null : $this->lesiones->buscarParaActualizar($lesionId);
+        if ($lesion === null || ! $lesion->esDe($autor) || $lesion->fechaAlta() !== null) {
+            return;
+        }
+
+        $this->lesiones->guardarCambio($lesion, $lesion->darDeAlta($this->hoyDeNegocio->hoy()->format('Y-m-d'), $instante));
     }
 
     /**

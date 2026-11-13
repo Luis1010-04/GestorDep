@@ -1,0 +1,51 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+== control (sin mutar)
+  ✓ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 2.02s  
+  ✓ DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión…  0.29s  
+  ✓ DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro en… 0.24s  
+  ✓ DA-76: confirmar apto no toca una lesión propia que ya tenía alta    0.24s  
+  Tests:    4 passed (28 assertions)
+== M1 sin el filtro del registrante
+reemplazos: 1
+  ✓ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 2.05s  
+  ✓ DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión…  0.27s  
+  ⨯ DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro en… 0.25s  
+  ✓ DA-76: confirmar apto no toca una lesión propia que ya tenía alta    0.23s  
+  Tests:    1 failed, 3 passed (27 assertions)
+== M2 sin el filtro de lesión ya cerrada
+reemplazos: 1
+  ✓ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 2.01s  
+  ✓ DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión…  0.28s  
+  ✓ DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro en… 0.24s  
+  ⨯ DA-76: confirmar apto no toca una lesión propia que ya tenía alta    0.24s  
+  Tests:    1 failed, 3 passed (27 assertions)
+== M3 día UTC en lugar de HoyDeNegocio
+reemplazos: 1
+  ✓ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 1.97s  
+  ⨯ DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión…  0.25s  
+  ✓ DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro en… 0.24s  
+  ✓ DA-76: confirmar apto no toca una lesión propia que ya tenía alta    0.24s  
+  Tests:    1 failed, 3 passed (22 assertions)
+== M4 cierra también sin apto
+reemplazos: 1
+  ⨯ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 2.06s  
+  ✓ DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión…  0.29s  
+  ✓ DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro en… 0.24s  
+  ✓ DA-76: confirmar apto no toca una lesión propia que ya tenía alta    0.24s  
+  Tests:    1 failed, 3 passed (25 assertions)
+== M5 no cierra nunca
+reemplazos: 1
+  ✓ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 1.94s  
+  ⨯ DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión…  0.25s  
+  ✓ DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro en… 0.23s  
+  ✓ DA-76: confirmar apto no toca una lesión propia que ya tenía alta    0.23s  
+  Tests:    1 failed, 3 passed (22 assertions)
+== control final
+  ✓ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 2.01s  
+  ✓ DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión…  0.27s  
+  ✓ DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro en… 0.25s  
+  ✓ DA-76: confirmar apto no toca una lesión propia que ya tenía alta    0.25s  
+  Tests:    4 passed (28 assertions)
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory
+ls: cannot access '/tmp/orig.php': No such file or directory

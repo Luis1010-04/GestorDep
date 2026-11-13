@@ -383,22 +383,59 @@ test('DA-45: confirmar otro aviso deja sin alta la lesión propia anterior; el a
         ->and(DB::table('lesiones')->where('id', $anterior)->value('fecha_alta'))->toBeNull();
 });
 
-test('DA-45: confirmar apto deja sin alta la lesión propia anterior, y el alta responde 409 sin_lesion_vigente', function () {
+test('DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión propia con el hoy de negocio, con historial, y el alta responde 409 sin_lesion_vigente', function () {
     /** @var TestCase $this */
     $m = avisosMundo();
-    $anterior = estadoInsertar($m['f1'], $m['e2'])['lesion'];
+    $anterior = NoNulo::exigir(estadoInsertar($m['f1'], $m['e2'])['lesion'], 'la lesión');
     $aviso = avisoInsertar($m['f1'], $m['d1']);
     $sesion = sesionesIniciar($this, 'e2@x.com');
+    // 03:00 UTC del 16 es el 15 a las 21:00 en America/Mexico_City: el hoy de negocio (DD-36) es 2026-11-15, no el día UTC.
+    relojAdelantar('2026-11-16 03:00:00');
 
     sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), ['estado' => 'apto'], $sesion)->assertOk();
+    $historial = DB::table('lesiones_historial')->where('lesion_id', $anterior)->orderBy('version')->get();
 
     expect(estadoVigente($m['f1'])->estado)->toBe('apto')
-        ->and(DB::table('lesiones')->where('id', $anterior)->value('fecha_alta'))->toBeNull();
+        ->and(DB::table('lesiones')->where('id', $anterior)->value('fecha_alta'))->toBe('2026-11-15')
+        ->and($historial->pluck('operacion')->all())->toBe(['actualizar'])
+        ->and($historial->first()?->usuario_id)->toBe($m['e2'])
+        ->and(json_decode((string) $historial->first()?->datos_anteriores, true)['fecha_alta'])->toBeNull()
+        ->and(json_decode((string) $historial->first()?->datos_nuevos, true)['fecha_alta'])->toBe('2026-11-15');
 
-    relojAdelantar('2026-11-15 18:00:01');
+    relojAdelantar('2026-11-16 03:00:01');
     sesionesPeticion($this, 'POST', altaRuta($m['f1']), [], $sesion)
         ->assertConflict()
         ->assertJsonPath('codigo', 'sin_lesion_vigente');
+});
+
+test('DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro entrenador (DD-63)', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $deE1 = NoNulo::exigir(estadoInsertar($m['f1'], $m['e1'])['lesion'], 'la lesión de E1');
+    $aviso = avisoInsertar($m['f1'], $m['d1']);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), ['estado' => 'apto'], sesionesIniciar($this, 'e2@x.com'))->assertOk();
+
+    expect(estadoVigente($m['f1'])->estado)->toBe('apto')
+        ->and(DB::table('lesiones')->where('id', $deE1)->value('fecha_alta'))->toBeNull()
+        ->and(DB::table('lesiones_historial')->where('lesion_id', $deE1)->count())->toBe(0);
+});
+
+test('DA-76: confirmar apto no toca una lesión propia que ya tenía alta', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $cerrada = lesionInsertar($m['f1'], $m['e2'], ['fecha_alta' => '2026-11-12']);
+    mundoInsertar('estados_disponibilidad', [
+        'jugador_id' => $m['f1'], 'estado' => 'lesionado', 'lesion_id' => $cerrada, 'fecha_estimada_regreso' => '2026-11-30',
+        'confirmado_por' => $m['e2'], 'vigente_desde' => '2026-11-10 10:00:00+00', 'actualizado_en' => '2026-11-10 10:00:00+00',
+    ]);
+    $aviso = avisoInsertar($m['f1'], $m['d1']);
+
+    sesionesPeticion($this, 'POST', avisoConfirmacionRuta($aviso), ['estado' => 'apto'], sesionesIniciar($this, 'e2@x.com'))->assertOk();
+
+    expect(estadoVigente($m['f1'])->estado)->toBe('apto')
+        ->and(DB::table('lesiones')->where('id', $cerrada)->value('fecha_alta'))->toBe('2026-11-12')
+        ->and(DB::table('lesiones_historial')->where('lesion_id', $cerrada)->count())->toBe(0);
 });
 
 test('RNF-02: confirmar escribe el historial del aviso, de la lesión y del estado', function () {

@@ -209,7 +209,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** DD-63 dice que la lesión de otro registrante sigue sin alta cuando un estado nuevo sustituye al suyo, pero nada dice qué pasa con la lesión de quien confirma.
 - **Qué se eligió:** se deja sin alta, con el mismo criterio que DD-63. Confirmar no toca la lesión anterior y el alta solo cierra la lesión del estado vigente. Si el estado nuevo es `apto`, el alta responde 409 `sin_lesion_vigente`, así que ninguna ruta cierra esa lesión anterior.
-- **Estado:** aprobada por Luis (6/11/2026), con el criterio de DD-63: la lesión propia no admite alta por la ruta del jugador. Es el comportamiento de `ConfirmarAviso` desde T03 (`455720e`); lo fijan las dos pruebas `DA-45`. **Pendiente para la revisión de T08.**
+- **Estado:** aprobada por Luis (6/11/2026), con el criterio de DD-63: la lesión propia no admite alta por la ruta del jugador. Es el comportamiento de `ConfirmarAviso` desde T03 (`455720e`); lo fijan las dos pruebas `DA-45`. **Pendiente para la revisión de T08.** **Sustituida por DA-76 en el caso `apto` (13/11/2026)**: la lesión propia se cierra con el hoy de negocio. Con otro estado sigue igual, como fija la primera prueba `DA-45`.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cerrar la lesión propia en `ConfirmarAviso`, con su historial, y cambiar las pruebas `DA-45`.
 
@@ -457,10 +457,18 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 ## DA-76. Lesión abierta al confirmar `apto` (auditoría de T08)
 
 - **Qué faltaba:** con DA-45, la lesión propia queda abierta cuando el estado nuevo es `apto`, y ninguna ruta la cierra: el alta responde 409 `sin_lesion_vigente`.
-- **Qué se eligió:** opción A: la lesión abierta se cierra automáticamente al confirmar `apto`. Sustituye a DA-45 cuando se implemente.
-- **Estado:** aprobada por Luis en el chat (12/11/2026), opción A. **La regla de la fecha del cierre no está aprobada.** Cerrar la lesión exige escribir `fecha_alta`, y ni DD-63 ni DA-45 definen una: las dos dejan la lesión sin alta. Por la orden de C01, la implementación queda detenida hasta que Luis apruebe la fecha y el alcance (detalle y opciones en `f1-h5-correctiva-t08.md`, §2). El código sigue con DA-45 y sus dos pruebas.
-- **Privacidad o permisos:** no.
-- **Cómo se revierte:** no aplica mientras no se implemente.
+- **Qué se eligió:** opción A: al confirmar `apto`, `ConfirmarAviso` cierra la lesión abierta del estado vigente si la registró quien confirma.
+  - **Fecha:** `fecha_alta` es el hoy de negocio de `HoyDeNegocio`, un día calendario en America/Mexico_City (DD-36; `docs/hitos/f1-h5.md` §3.4 y §6.2). Es el mismo criterio que el alta manual, sin calendario de días hábiles.
+  - **Transacción:** el cierre ocurre en la misma transacción que la confirmación, con su historial en `lesiones_historial`.
+  - **Lo que no se toca:** la lesión de otro registrante se conserva sin alta (DD-63, RN-15 y RN-16), y una lesión que ya tenía alta queda igual.
+  - **Relación con DA-45:** sustituye a DA-45 en el caso `apto`; con otro estado, DA-45 sigue igual.
+  - **DA-17:** si el hoy de negocio es anterior a `fecha_inicio` (un aviso con fecha futura), la confirmación responde 422 `rango_de_fechas_invalido`, igual que el alta sin fecha (punto 6 del plan de T03).
+- **Estado:**
+  - Aprobada por Luis en el chat: la opción A el 12/11/2026, y la fecha con `HoyDeNegocio` y el alcance (solo la lesión propia) el 13/11/2026.
+  - Implementada en C01, en el commit «F1-H5-C01: cierre automático de lesión al confirmar apto (DA-76)».
+  - La segunda prueba `DA-45` (`ConfirmacionYEstadoTest.php:386`) se reescribió como prueba `DA-76`, con la aprobación de Luis (13/11/2026).
+- **Privacidad o permisos:** no; el filtro por registrante respeta RN-15 y RN-16.
+- **Cómo se revierte:** quitar `cerrarLesionPropia` de `ConfirmarAviso` y volver a la prueba `DA-45` del caso `apto`.
 
 ## DA-77. Pruebas de tipos borrados en el listado y en la vista del periodo (auditoría de T08)
 

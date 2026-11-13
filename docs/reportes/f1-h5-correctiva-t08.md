@@ -140,7 +140,53 @@ Corridas que no cuentan, guardadas en `backend/build/`:
 | `make verificar` | código 0, 1 967 pruebas (12 216 aserciones), Pest 675 s, total 755 s (por debajo de 13 minutos) | `docs/reportes/logs/verificar/f1-h5-c01b-20261113-0502.log` |
 | `make fresh` + `make humo` | código 0, 119 pasos OK, con la imagen existente | `docs/reportes/logs/humo/f1-h5-c01b-20261113-0515.log` |
 
-## 8. Fuera de alcance y observaciones para H7
+### Push de 7ba90ac y feb4734 (13/11/2026)
+
+- **Rama de origen:** los dos commits estaban en la rama local `auditoria/f1-h5`, no en `hito/f1-h5`. El reflog muestra un cambio de rama el 12/11/2026 a las 13:24, entre el pull y el inicio de C01. `auditoria/f1-h5` sale de `9972755`, la punta de `origin/hito/f1-h5`.
+- **Cómo se subió:** con la aprobación de Luis, `git push origin feb4734:hito/f1-h5`. Fue un avance rápido (`9972755..feb4734`), sin force ni rebase, y no se tocó ninguna rama local.
+- **Actions:**
+  - La ejecución #87 (id 43417460822, commit `feb4734`, flujo `verificar`) se creó y arrancó a las 11:29:24 UTC, sin espera en cola. Estaba en curso al consultarla.
+  - #85 y #86 siguen en cola desde el 11/11/2026; no se canceló nada.
+
+## 9. DA-76: cierre automático de la lesión al confirmar `apto` (13/11/2026)
+
+- **Decisión de Luis:** el cierre usa `HoyDeNegocio` (DD-36; `f1-h5.md` §3.4 y §6.2) y solo afecta a la lesión propia de quien confirma. Registro completo en `f1-h5-decisiones-del-agente.md`, DA-76.
+- **Código:** `backend/src/Salud/Aplicacion/ConfirmarAviso.php`, método `cerrarLesionPropia`.
+  - Si el estado nuevo es `apto`, bloquea la lesión del estado vigente (`buscarParaActualizar`).
+  - Si la registró quien confirma y no tenía alta, la guarda con `darDeAlta(hoy de negocio)` mediante `guardarCambio`, que escribe el historial.
+  - Todo ocurre dentro de la transacción de la confirmación. El dominio no cambió.
+- **Contradicción resuelta con Luis:** la orden pedía mantener en verde las dos pruebas `DA-45`, pero la segunda (`ConfirmacionYEstadoTest.php:386`) exigía que, al confirmar `apto`, la lesión propia quedara **sin** alta. Luis aprobó reescribirla como prueba `DA-76`. La primera prueba `DA-45` (confirmar con un estado que no es `apto`) sigue igual y en verde.
+- **Efecto nuevo a vigilar (DA-17):** si la lesión propia empieza después del hoy de negocio, confirmar `apto` responde 422 `rango_de_fechas_invalido`, igual que el alta sin fecha.
+
+| Prueba (`ConfirmacionYEstadoTest.php`) | Sin código | Con código |
+|---|---|---|
+| «DA-45: confirmar otro aviso deja sin alta la lesión propia anterior…» | pasa | pasa |
+| «DA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión propia con el hoy de negocio…». Reloj a las 03:00 UTC del 16: el hoy de negocio es 2026-11-15, no el día UTC. Una fila `actualizar` en el historial con `fecha_alta` de nula a 2026-11-15; el alta responde 409 `sin_lesion_vigente` | **falla** (`fecha_alta` nula) | pasa |
+| «DA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro entrenador (DD-63)» | pasa | pasa |
+| «DA-76: confirmar apto no toca una lesión propia que ya tenía alta» | pasa | pasa |
+
+Las dos pruebas negativas pasan sin código porque antes no se cerraba nada. Las mutaciones prueban que detectan una implementación equivocada. Log: `docs/reportes/logs/mutaciones/f1-h5-c01-da76-20261113-0533.log`; guion: `f1-h5-c01-da76-guion.sh`. La copia temporal se borró y el log lo confirma.
+
+| Mutación | La detecta |
+|---|---|
+| M1: sin el filtro del registrante | no cierra la lesión de otro entrenador |
+| M2: sin el filtro de lesión ya cerrada | no toca una lesión que ya tenía alta |
+| M3: día UTC en lugar de `HoyDeNegocio` | cierra con el hoy de negocio |
+| M4: cierra también sin `apto` | la primera `DA-45` |
+| M5: no cierra nunca | cierra con el hoy de negocio |
+
+Corridas de DA-76:
+
+| Corrida | Resultado | Log |
+|---|---|---|
+| PHPStan | sin errores | — |
+| `make verificar` | código 0, 1 969 pruebas (12 230 aserciones), Pest 807 s, **total 868 s** | `docs/reportes/logs/verificar/f1-h5-c01-da76-20261113-0534.log` |
+| `make fresh` + `make humo` | código 0, 119 pasos OK, con la imagen existente | `docs/reportes/logs/humo/f1-h5-c01-da76-20261113-0549.log` |
+
+- **Tiempo de `make verificar`:** 868 s pasa el aviso de 13 minutos (780 s) y queda 32 s por debajo del alto de 15 (900 s). Pest subió de 675 s a 807 s con solo 2 pruebas más que la corrida anterior, así que la diferencia parece de carga de la máquina, no de la suite. Se reporta según la regla.
+- **CI del push anterior:** la ejecución #87 (`feb4734`) terminó con éxito a las 11:36:55 UTC.
+
+## 10. Fuera de alcance y observaciones para H7
 
 - **Para H7: `make humo` exige `make fresh` antes.** Después de `make verificar`, la base queda con datos de prueba, y el humo de H1 falla en el paso 3 con 409 `categoria_duplicada` (log en `backend/build/f1-h5-c01-humo-sin-fresh-*`). T08 y C01 corrieron `make fresh` justo antes del humo, en el mismo log.
 - **Para H7: `make levantar` no reconstruye la imagen** con la versión actual de compose (§5). No se tocó la configuración.
