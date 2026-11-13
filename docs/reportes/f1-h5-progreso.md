@@ -803,7 +803,7 @@ Detalle en `f1-h5-t06.md`. La tarea se pausó el 7/11/2026 a pedido de Luis, dur
 |---|---:|---:|---:|
 | Cierre de T06 | 1 927 (12 006 aserciones) | 681 s | 733 s, código 0 |
 
-En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t06-20261111-1139.log`. Pendiente de aprobación: DA-65, el orden del listado dentro de un periodo.
+En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t06-20261111-1139.log`. DA-65, el orden del listado dentro de un periodo, quedó aprobada por Luis el 11/11/2026 y está registrada en `f1-h5-decisiones-del-agente.md` (corregido en C01, 12/11/2026).
 
 ## 18. F1-H5-T07: advertencias de jugador lesionado (11/11/2026)
 

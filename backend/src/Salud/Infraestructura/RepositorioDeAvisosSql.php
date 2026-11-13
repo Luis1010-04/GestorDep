@@ -3,11 +3,14 @@
 namespace Src\Salud\Infraestructura;
 
 use DateTimeImmutable;
+use DateTimeZone;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
+use Src\Salud\Aplicacion\EstadoConcurrente;
 use Src\Salud\Dominio\AvisoDeLesion;
 use Src\Salud\Dominio\EstadoDeAviso;
 use Src\Salud\Dominio\RepositorioDeAvisos;
@@ -42,34 +45,44 @@ final class RepositorioDeAvisosSql implements RepositorioDeAvisos
         );
     }
 
+    /** Un choque de escritura con otra petición responde 409 conflicto, nunca 500 (DA-79). */
     public function guardarDescarte(AvisoDeLesion $anterior, AvisoDeLesion $descartado): void
     {
-        $this->historial->registrar(
-            'avisos_lesion', 'aviso_id', $descartado->id(), 'actualizar', self::instantanea($anterior), self::instantanea($descartado),
-            fn () => $this->conexion->table('avisos_lesion')->where('id', $descartado->id()->valor())->update([
-                'estado' => $descartado->estado()->value,
-                'descartado_por' => $descartado->descartadoPor()?->valor(),
-                'nota_descarte' => $descartado->notaDescarte(),
-                'actualizado_en' => $descartado->actualizadoEn()->format('Y-m-d H:i:sP'),
-                'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
-            ]),
-            instante: $descartado->actualizadoEn(),
-        );
+        try {
+            $this->historial->registrar(
+                'avisos_lesion', 'aviso_id', $descartado->id(), 'actualizar', self::instantanea($anterior), self::instantanea($descartado),
+                fn () => $this->conexion->table('avisos_lesion')->where('id', $descartado->id()->valor())->update([
+                    'estado' => $descartado->estado()->value,
+                    'descartado_por' => $descartado->descartadoPor()?->valor(),
+                    'nota_descarte' => $descartado->notaDescarte(),
+                    'actualizado_en' => $descartado->actualizadoEn()->format('Y-m-d H:i:sP'),
+                    'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
+                ]),
+                instante: $descartado->actualizadoEn(),
+            );
+        } catch (UniqueConstraintViolationException) {
+            throw new EstadoConcurrente;
+        }
     }
 
+    /** Un choque de escritura con otra petición responde 409 conflicto, nunca 500 (DA-79). */
     public function guardarConfirmacion(AvisoDeLesion $anterior, AvisoDeLesion $confirmado, ?Identificador $lesionId): void
     {
-        $this->historial->registrar(
-            'avisos_lesion', 'aviso_id', $confirmado->id(), 'actualizar', self::instantanea($anterior), [...self::instantanea($confirmado), 'lesion_id' => $lesionId?->valor()],
-            fn () => $this->conexion->table('avisos_lesion')->where('id', $confirmado->id()->valor())->update([
-                'estado' => $confirmado->estado()->value,
-                'lesion_id' => $lesionId?->valor(),
-                'confirmado_por' => $confirmado->confirmadoPor()?->valor(),
-                'actualizado_en' => $confirmado->actualizadoEn()->format('Y-m-d H:i:sP'),
-                'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
-            ]),
-            instante: $confirmado->actualizadoEn(),
-        );
+        try {
+            $this->historial->registrar(
+                'avisos_lesion', 'aviso_id', $confirmado->id(), 'actualizar', self::instantanea($anterior), [...self::instantanea($confirmado), 'lesion_id' => $lesionId?->valor()],
+                fn () => $this->conexion->table('avisos_lesion')->where('id', $confirmado->id()->valor())->update([
+                    'estado' => $confirmado->estado()->value,
+                    'lesion_id' => $lesionId?->valor(),
+                    'confirmado_por' => $confirmado->confirmadoPor()?->valor(),
+                    'actualizado_en' => $confirmado->actualizadoEn()->format('Y-m-d H:i:sP'),
+                    'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
+                ]),
+                instante: $confirmado->actualizadoEn(),
+            );
+        } catch (UniqueConstraintViolationException) {
+            throw new EstadoConcurrente;
+        }
     }
 
     public function buscar(Identificador $id): ?AvisoDeLesion
@@ -124,6 +137,8 @@ final class RepositorioDeAvisosSql implements RepositorioDeAvisos
 
     private static function aAviso(stdClass $fila): AvisoDeLesion
     {
+        $utc = new DateTimeZone('UTC');
+
         return new AvisoDeLesion(
             Identificador::desdeTexto($fila->id),
             Identificador::desdeTexto($fila->jugador_id),
@@ -135,8 +150,8 @@ final class RepositorioDeAvisosSql implements RepositorioDeAvisos
             $fila->confirmado_por === null ? null : Identificador::desdeTexto($fila->confirmado_por),
             $fila->descartado_por === null ? null : Identificador::desdeTexto($fila->descartado_por),
             $fila->nota_descarte,
-            new DateTimeImmutable($fila->creado_en),
-            new DateTimeImmutable($fila->actualizado_en),
+            (new DateTimeImmutable($fila->creado_en))->setTimezone($utc),
+            (new DateTimeImmutable($fila->actualizado_en))->setTimezone($utc),
         );
     }
 }

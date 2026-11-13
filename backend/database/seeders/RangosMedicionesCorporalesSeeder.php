@@ -14,6 +14,9 @@ class RangosMedicionesCorporalesSeeder extends Seeder
      *
      * Idempotente: se identifica cada rango por `codigo`. Lo que ya existe no se toca, para respetar un ajuste posterior
      * en la base (RNF-09). Los seeders no escriben historial.
+     *
+     * No repone filas borradas (DA-78): una fila con `eliminado_en` cuenta como existente y sigue borrada al volver a
+     * correr el seeder. La restauración es manual; el procedimiento está en docs/reportes/f1-h5-correctiva-t08.md.
      */
     public function run(): void
     {

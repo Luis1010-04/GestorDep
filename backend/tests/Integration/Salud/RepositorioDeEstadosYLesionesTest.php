@@ -1,8 +1,12 @@
 <?php
 
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Reloj;
+use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Salud\Aplicacion\EstadoConcurrente;
 use Src\Salud\Dominio\CausaDeLesion;
 use Src\Salud\Dominio\EstadoOficial;
@@ -10,6 +14,8 @@ use Src\Salud\Dominio\Lesion;
 use Src\Salud\Dominio\RepositorioDeEstados;
 use Src\Salud\Dominio\RepositorioDeLesiones;
 use Src\Salud\Dominio\TipoDeEstado;
+use Src\Salud\Infraestructura\RepositorioDeEstadosSql;
+use Src\Salud\Infraestructura\RepositorioDeLesionesSql;
 use Tests\Ayudantes\NoNulo;
 
 /** @return array<string, string> el mundo de `avisosMundo()`, con E2 como usuario de la sesión */
@@ -174,24 +180,37 @@ test('§6.3: dos estados vigentes del mismo jugador responden EstadoConcurrente'
     expect(fn () => $repositorio->guardarNuevo(estadoParaGuardar($m['f1'], $m['e2'])))->toThrow(EstadoConcurrente::class);
 });
 
-test('§6.3: las lecturas para actualizar bloquean la fila', function () {
+test('DA-79: las lecturas para actualizar bloquean la fila: una segunda conexión no la obtiene mientras la primera la tiene', function (string $lectura) {
     $m = saludConSesionDeE2();
-    $estados = app(RepositorioDeEstados::class);
-    $lesiones = app(RepositorioDeLesiones::class);
     $lesion = lesionParaGuardar($m['f1'], $m['e2']);
-    $lesiones->guardarNueva($lesion);
-    $estados->guardarNuevo(estadoParaGuardar($m['f1'], $m['e2']));
-    $consultas = [];
-    DB::listen(function ($consulta) use (&$consultas) {
-        $consultas[] = $consulta->sql;
-    });
+    app(RepositorioDeLesiones::class)->guardarNueva($lesion);
+    app(RepositorioDeEstados::class)->guardarNuevo(estadoParaGuardar($m['f1'], $m['e2']));
+    config(['database.connections.salud_concurrente' => config('database.connections.pgsql')]);
+    $principal = DB::connection();
+    $otra = DB::connection('salud_concurrente');
+    $leer = function (ConnectionInterface $conexion) use ($lectura, $lesion, $m): mixed {
+        $historial = new EscritorDeHistorial($conexion, app(Reloj::class), app(UsuarioActual::class));
 
-    DB::transaction(function () use ($estados, $lesiones, $lesion, $m) {
-        expect($estados->vigenteParaActualizar(Identificador::desdeTexto($m['f1'])))->not->toBeNull()
-            ->and($lesiones->buscarParaActualizar($lesion->id()))->not->toBeNull();
-    });
+        return $lectura === 'estado'
+            ? (new RepositorioDeEstadosSql($conexion, $historial, app(UsuarioActual::class)))->vigenteParaActualizar(Identificador::desdeTexto($m['f1']))
+            : (new RepositorioDeLesionesSql($conexion, $historial, app(UsuarioActual::class)))->buscarParaActualizar($lesion->id());
+    };
 
-    $bloquea = fn (string $tabla) => collect($consultas)->contains(fn (string $sql) => str_contains($sql, $tabla) && str_contains($sql, 'for update'));
-    expect($bloquea('estados_disponibilidad'))->toBeTrue()
-        ->and($bloquea('lesiones'))->toBeTrue();
-});
+    $principal->beginTransaction();
+    $leidoPorA = $leer($principal);
+    $otra->beginTransaction();
+    $otra->statement("set local lock_timeout = '200ms'");
+    $espera = null;
+    try {
+        $leer($otra);
+    } catch (QueryException $e) {
+        $espera = $e;
+    }
+    $otra->rollBack();
+    $principal->rollBack();
+    DB::purge('salud_concurrente');
+
+    // 55P03 (lock_not_available): sin el bloqueo, la segunda conexión leería la fila sin esperar.
+    expect($leidoPorA)->not->toBeNull()
+        ->and($espera?->getCode())->toBe('55P03');
+})->with(['estado', 'lesion']);

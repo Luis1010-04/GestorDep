@@ -453,3 +453,35 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por Luis el 11/11/2026.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** no aplica; es un registro de lo ocurrido.
+
+## DA-76. Lesión abierta al confirmar `apto` (auditoría de T08)
+
+- **Qué faltaba:** con DA-45, la lesión propia queda abierta cuando el estado nuevo es `apto`, y ninguna ruta la cierra: el alta responde 409 `sin_lesion_vigente`.
+- **Qué se eligió:** opción A: la lesión abierta se cierra automáticamente al confirmar `apto`. Sustituye a DA-45 cuando se implemente.
+- **Estado:** aprobada por Luis en el chat (12/11/2026), opción A. **La regla de la fecha del cierre no está aprobada.** Cerrar la lesión exige escribir `fecha_alta`, y ni DD-63 ni DA-45 definen una: las dos dejan la lesión sin alta. Por la orden de C01, la implementación queda detenida hasta que Luis apruebe la fecha y el alcance (detalle y opciones en `f1-h5-correctiva-t08.md`, §2). El código sigue con DA-45 y sus dos pruebas.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** no aplica mientras no se implemente.
+
+## DA-77. Pruebas de tipos borrados en el listado y en la vista del periodo (auditoría de T08)
+
+- **Qué faltaba:** el listado de historial une `tipos_prueba` sin filtrar `eliminado_en` (`RepositorioDePruebasFisicasSql.php`, línea 89) y la vista del periodo recorre solo el catálogo vigente (`ConsultarPeriodoDePruebas.php`, línea 38). Nada decía si era lo buscado.
+- **Qué se eligió:** opción A: el listado de historial incluye las pruebas de tipos borrados y la vista del periodo solo muestra tipos vigentes. Es lo que ya hacía el código, así que no cambia producción. La prueba `DA-77` lo fija.
+- **Estado:** aprobada por Luis en el chat (12/11/2026), opción A. Implementada en C01 (solo la prueba).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** con una decisión nueva y su prueba; filtrar `eliminado_en` en el listado o recorrer también los tipos borrados en la vista.
+
+## DA-78. El seeder de rangos no repone filas borradas (auditoría de T08)
+
+- **Qué faltaba:** `RangosMedicionesCorporalesSeeder.php`, línea 26, comprueba si existe el `codigo` sin mirar `eliminado_en`, así que una fila borrada lógicamente sigue borrada al volver a sembrar y las mediciones responden 422 `rango_no_configurado` (DA-70).
+- **Qué se eligió:** opción A: el seeder no repone. La restauración es manual y está documentada en `f1-h5-correctiva-t08.md`, §4. La lógica no cambia; el seeder lo dice en su comentario y la prueba `DA-78` lo fija.
+- **Estado:** aprobada por Luis en el chat (12/11/2026), opción A. Implementada en C01 (comentario y prueba).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** con una decisión nueva que haga que el seeder reponga filas borradas, con su historial y su prueba.
+
+## DA-79. Descarte y confirmación en paralelo (auditoría de T08)
+
+- **Qué faltaba:** las pruebas de bloqueo solo revisaban que el SQL dijera `for update`, y un choque de escritura en `guardarDescarte` o `guardarConfirmacion` (`RepositorioDeAvisosSql.php`, líneas 45 a 73) llegaba a `FormatoDeError.php`, línea 121, como 500.
+- **Qué se eligió:** opción A en las dos partes. Pruebas con dos conexiones a PostgreSQL, con `ConcurrenciaTest` como modelo: la segunda no obtiene la fila mientras la primera la tiene bloqueada, y la segunda petición encuentra el aviso ya cambiado y responde 409 (`aviso_no_pendiente`, el código de §6.3), con el historial en versiones 1 y 2. Como respaldo, `guardarDescarte` y `guardarConfirmacion` convierten `UniqueConstraintViolationException` en `EstadoConcurrente`, que ya se responde como 409 `conflicto`. Nunca 500. `EscritorDeHistorial` (max + 1) no cambia: con el bloqueo tomado, la versión no se repite, y la prueba lo comprueba.
+- **Estado:** aprobada por Luis en el chat (12/11/2026), opción A en ambas. Implementada en C01.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** quitar las dos capturas de `RepositorioDeAvisosSql`; las pruebas `DA-79` de choque fallarían con 500.

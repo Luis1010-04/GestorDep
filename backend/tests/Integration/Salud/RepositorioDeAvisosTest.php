@@ -1,11 +1,18 @@
 <?php
 
+use App\Exceptions\FormatoDeError;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Reloj;
+use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Salud\Dominio\AvisoDeLesion;
+use Src\Salud\Dominio\AvisoNoPendiente;
 use Src\Salud\Dominio\EstadoDeAviso;
 use Src\Salud\Dominio\RepositorioDeAvisos;
+use Src\Salud\Infraestructura\RepositorioDeAvisosSql;
 use Tests\Ayudantes\NoNulo;
 
 /** @return array{m: array<string, string>, repositorio: RepositorioDeAvisos} */
@@ -107,19 +114,113 @@ test('RNF-02: guardar un descarte actualiza la fila y escribe la versión 2 del 
         ->and($nuevos['nota_descarte'])->toBe('No aplica');
 });
 
-test('§6.3: buscarParaActualizar bloquea la fila, para que dos descartes simultáneos no pasen los dos', function () {
+/** Una segunda conexión a la misma base, para simular dos peticiones (DA-79; modelo: ConcurrenciaTest). */
+function avisosOtraConexion(): ConnectionInterface
+{
+    config(['database.connections.avisos_concurrente' => config('database.connections.pgsql')]);
+
+    return DB::connection('avisos_concurrente');
+}
+
+function avisosRepositorioEn(ConnectionInterface $conexion): RepositorioDeAvisosSql
+{
+    return new RepositorioDeAvisosSql($conexion, new EscritorDeHistorial($conexion, app(Reloj::class), app(UsuarioActual::class)), app(UsuarioActual::class));
+}
+
+test('DA-79: buscarParaActualizar bloquea el aviso: una segunda conexión espera hasta que termina la primera', function () {
     ['m' => $m, 'repositorio' => $repositorio] = repositorioDeAvisosConSesionDe();
     $aviso = avisoParaGuardar($m['f1'], $m['e1']);
     $repositorio->guardarNuevo($aviso);
-    $consultas = [];
-    DB::listen(function ($consulta) use (&$consultas) {
-        $consultas[] = $consulta->sql;
+    $principal = DB::connection();
+    $otra = avisosOtraConexion();
+
+    $principal->beginTransaction();
+    $leidoPorA = avisosRepositorioEn($principal)->buscarParaActualizar($aviso->id());
+    $otra->beginTransaction();
+    $otra->statement("set local lock_timeout = '200ms'");
+    $espera = null;
+    try {
+        avisosRepositorioEn($otra)->buscarParaActualizar($aviso->id());
+    } catch (QueryException $e) {
+        $espera = $e;
+    }
+    $otra->rollBack();
+    $principal->rollBack();
+    DB::purge('avisos_concurrente');
+
+    // 55P03 (lock_not_available): la segunda no pudo leer mientras la primera tenía la fila; sin el bloqueo, la leería.
+    expect($leidoPorA)->not->toBeNull()
+        ->and($espera?->getCode())->toBe('55P03');
+});
+
+test('DA-79: descarte y confirmación en paralelo: la segunda encuentra el aviso ya descartado y responde 409, nunca 500', function () {
+    ['m' => $m, 'repositorio' => $repositorio] = repositorioDeAvisosConSesionDe();
+    $aviso = avisoParaGuardar($m['f1'], $m['e1']);
+    $repositorio->guardarNuevo($aviso);
+    $principal = DB::connection();
+    $otra = avisosOtraConexion();
+    $instante = new DateTimeImmutable('2026-11-15 18:00:05+00:00');
+
+    $otra->beginTransaction();
+    $principal->transaction(function () use ($principal, $aviso, $m, $instante) {
+        $repositorioA = avisosRepositorioEn($principal);
+        $leido = NoNulo::exigir($repositorioA->buscarParaActualizar($aviso->id()), 'el aviso');
+        $repositorioA->guardarDescarte($leido, $leido->descartar(Identificador::desdeTexto($m['e1']), 'No aplica', $instante));
     });
+    $leidoPorB = NoNulo::exigir(avisosRepositorioEn($otra)->buscarParaActualizar($aviso->id()), 'el aviso');
+    $error = null;
+    try {
+        $leidoPorB->confirmar(Identificador::desdeTexto($m['e2']), $instante);
+    } catch (AvisoNoPendiente $e) {
+        $error = $e;
+    }
+    $otra->rollBack();
+    DB::purge('avisos_concurrente');
+    $respuesta = FormatoDeError::responder(NoNulo::exigir($error, 'el rechazo de la segunda'));
 
-    $leido = DB::transaction(fn () => $repositorio->buscarParaActualizar($aviso->id()));
+    expect($leidoPorB->estado())->toBe(EstadoDeAviso::Descartado)
+        ->and($respuesta->getStatusCode())->toBe(409)
+        ->and(json_decode((string) $respuesta->getContent(), true)['codigo'])->toBe('aviso_no_pendiente')
+        ->and(DB::table('avisos_lesion_historial')->where('aviso_id', $aviso->id()->valor())->orderBy('version')->pluck('version')->all())->toBe([1, 2]);
+});
 
-    expect($leido)->not->toBeNull()
-        ->and(collect($consultas)->contains(fn (string $sql) => str_contains($sql, 'avisos_lesion') && str_contains($sql, 'for update')))->toBeTrue();
+test('DA-79: si escribir el descarte o la confirmación choca con un índice único, responde 409 conflicto, nunca 500', function (string $operacion) {
+    ['m' => $m, 'repositorio' => $repositorio] = repositorioDeAvisosConSesionDe();
+    $aviso = avisoParaGuardar($m['f1'], $m['e1']);
+    $repositorio->guardarNuevo($aviso);
+    $instante = new DateTimeImmutable('2026-11-15 18:00:05+00:00');
+    $propietario = DB::connection('propietario');
+    // Disparador solo de esta prueba: simula el choque con el índice único (entidad, versión) de dos escrituras a la vez.
+    $propietario->statement("create function public.prueba_da79_choque() returns trigger language plpgsql as \$\$ begin raise exception 'choque simulado' using errcode = 'unique_violation'; end \$\$");
+    $propietario->statement("create trigger prueba_da79_choque before insert on avisos_lesion_historial for each row when (new.operacion = 'actualizar') execute function public.prueba_da79_choque()");
+    $error = null;
+    try {
+        $operacion === 'descarte'
+            ? $repositorio->guardarDescarte($aviso, $aviso->descartar(Identificador::desdeTexto($m['e1']), 'No aplica', $instante))
+            : $repositorio->guardarConfirmacion($aviso, $aviso->confirmar(Identificador::desdeTexto($m['e1']), $instante), null);
+    } catch (Throwable $e) {
+        $error = $e;
+    } finally {
+        $propietario->statement('drop trigger prueba_da79_choque on avisos_lesion_historial');
+        $propietario->statement('drop function public.prueba_da79_choque()');
+    }
+    $respuesta = FormatoDeError::responder(NoNulo::exigir($error, 'el choque'));
+
+    expect($respuesta->getStatusCode())->toBe(409)
+        ->and(json_decode((string) $respuesta->getContent(), true)['codigo'])->toBe('conflicto')
+        ->and(DB::table('avisos_lesion')->where('id', $aviso->id()->valor())->value('estado'))->toBe('pendiente');
+})->with(['descarte', 'confirmacion']);
+
+test('Normalización UTC: el aviso leído trae creado_en y actualizado_en en UTC, como estados y mediciones', function () {
+    ['m' => $m, 'repositorio' => $repositorio] = repositorioDeAvisosConSesionDe();
+    $aviso = avisoParaGuardar($m['f1'], $m['e1']);
+    $repositorio->guardarNuevo($aviso);
+
+    $leido = NoNulo::exigir($repositorio->buscar($aviso->id()), 'el aviso');
+
+    expect($leido->creadoEn()->getTimezone()->getName())->toBe('UTC')
+        ->and($leido->actualizadoEn()->getTimezone()->getName())->toBe('UTC')
+        ->and($leido->creadoEn()->format(DATE_ATOM))->toBe('2026-11-15T18:00:00+00:00');
 });
 
 test('§6.1: un aviso inexistente o eliminado no se encuentra', function () {

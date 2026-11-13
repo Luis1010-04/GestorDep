@@ -1,0 +1,31 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+== control (sin mutar)
+  ✓ DA-79: buscarParaActualizar bloquea el aviso: una segunda conexión…  2.86s  
+  ✓ DA-79: las lecturas para actualizar bloquean la fila: una segunda c… 0.48s  
+  ✓ DA-79: las lecturas para actualizar bloquean la fila: una segunda c… 0.47s  
+  Tests:    3 passed (7 assertions)
+quitados: 1
+== sin lockForUpdate en RepositorioDeAvisosSql
+  ⨯ DA-79: buscarParaActualizar bloquea el aviso: una segunda conexión…  2.98s  
+  ✓ DA-79: las lecturas para actualizar bloquean la fila: una segunda c… 0.47s  
+  ✓ DA-79: las lecturas para actualizar bloquean la fila: una segunda c… 0.51s  
+  Tests:    1 failed, 2 passed (7 assertions)
+quitados: 1
+== sin lockForUpdate en RepositorioDeEstadosSql
+  ✓ DA-79: buscarParaActualizar bloquea el aviso: una segunda conexión…  2.77s  
+  ⨯ DA-79: las lecturas para actualizar bloquean la fila: una segunda c… 0.22s  
+  ✓ DA-79: las lecturas para actualizar bloquean la fila: una segunda c… 0.40s  
+  Tests:    1 failed, 2 passed (7 assertions)
+quitados: 1
+== sin lockForUpdate en RepositorioDeLesionesSql
+  ✓ DA-79: buscarParaActualizar bloquea el aviso: una segunda conexión…  2.36s  
+  ✓ DA-79: las lecturas para actualizar bloquean la fila: una segunda c… 0.42s  
+  ⨯ DA-79: las lecturas para actualizar bloquean la fila: una segunda c… 0.22s  
+  Tests:    1 failed, 2 passed (7 assertions)
+== sin el catch en RepositorioDeAvisosSql
+cambiados: 2
+  ⨯ DA-79: si escribir el descarte o la confirmación choca con un índic… 2.11s  
+  ⨯ DA-79: si escribir el descarte o la confirmación choca con un índic… 0.34s  
+  Tests:    2 failed (3 assertions)
+== control final
+  Tests:    5 passed (13 assertions)

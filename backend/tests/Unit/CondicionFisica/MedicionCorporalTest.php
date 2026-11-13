@@ -90,10 +90,8 @@ test('DA-40: cualquier valor distinto hace que la medición cambie', function (s
 })->with(['equipo', 'fecha', 'peso', 'estatura']);
 
 test('DA-16: el rango admite sus dos límites', function (string $valor) {
-    rangoDePrueba()->exigir(NumeroDecimal::desdeTexto($valor), 'peso_kg');
-
-    expect(true)->toBeTrue();
-})->with(['20.00', '200.00', '100.50']);
+    expect(fn () => rangoDePrueba()->exigir(NumeroDecimal::desdeTexto($valor), 'peso_kg'))->not->toThrow(ValorFueraDeRango::class);
+})->with(['mínimo de §5.2' => '20.00', 'máximo de §5.2' => '200.00', 'interior' => '100.50']);
 
 test('DA-16: fuera del rango se señala el campo', function (string $valor) {
     $error = null;

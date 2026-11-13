@@ -367,6 +367,24 @@ test('DA-61: un UUID no v7, un tipo eliminado y uno inexistente responden el mis
         ->and(pruebasCuenta($m['f1']))->toBe(0);
 });
 
+test('DA-77: con el tipo borrado, el listado de historial conserva su prueba y la vista del periodo ya no muestra el tipo', function () {
+    /** @var TestCase $this */
+    $m = pruebasMundo();
+    $deTipoBorrado = pruebaInsertar($m['f1'], $m['a'], $m['e1'], $m['tiempo_prueba']);
+    $velocidad = pruebaInsertar($m['f1'], $m['a'], $m['e1'], $m['velocidad']);
+    DB::connection('propietario')->table('tipos_prueba')->where('codigo', 'tiempo_prueba')->update(['eliminado_en' => '2026-11-11 10:00:00+00']);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    $listado = sesionesPeticion($this, 'GET', pruebasRuta($m['f1']), idDeSesion: $sesion)->assertOk();
+    $periodo = sesionesPeticion($this, 'GET', pruebasRuta($m['f1']).'?filtro[periodo]=2026-11', idDeSesion: $sesion)->assertOk();
+    $tiposDelPeriodo = array_column($periodo->json('datos'), 'tipo_prueba_id');
+
+    expect(array_column($listado->json('datos'), 'id'))->toContain($deTipoBorrado, $velocidad)
+        ->and($listado->json('meta.total'))->toBe(2)
+        ->and($tiposDelPeriodo)->toContain($m['velocidad'])
+        ->and($tiposDelPeriodo)->not->toContain($m['tiempo_prueba']);
+});
+
 test('DA-62: con los dos filtros, la vista del periodo trae solo ese tipo; con un UUID no v7, lista vacía', function () {
     /** @var TestCase $this */
     $m = pruebasMundo();
