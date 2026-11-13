@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use Src\Compartido\Dominio\Identificador;
 use Tests\TestCase;
@@ -47,4 +48,25 @@ test('HU-19 y HU-30: las respuestas de avisos cumplen el contrato', function () 
     foreach ($respuestas as [$plantilla, $metodo, $respuesta]) {
         expect($validador->validate($respuesta->baseResponse, $plantilla, $metodo))->toBeTrue("$metodo $plantilla {$respuesta->getStatusCode()}");
     }
+});
+
+test('DA-79: el 409 conflicto del descarte cumple el contrato', function () {
+    /** @var TestCase $this */
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['f1'], $m['e1']);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+    $propietario = DB::connection('propietario');
+    // Disparador solo de esta prueba: simula el choque con el índice único (aviso_id, version) de dos escrituras a la vez.
+    $propietario->statement("create function public.prueba_t09_choque_descarte() returns trigger language plpgsql as \$\$ begin raise exception 'choque simulado' using errcode = 'unique_violation'; end \$\$");
+    $propietario->statement("create trigger prueba_t09_choque_descarte before insert on avisos_lesion_historial for each row when (new.operacion = 'actualizar') execute function public.prueba_t09_choque_descarte()");
+    try {
+        $respuesta = sesionesPeticion($this, 'POST', avisoDescarteRuta($aviso), ['nota_descarte' => 'No aplica'], $sesion);
+    } finally {
+        $propietario->statement('drop trigger prueba_t09_choque_descarte on avisos_lesion_historial');
+        $propietario->statement('drop function public.prueba_t09_choque_descarte()');
+    }
+
+    $respuesta->assertConflict()->assertJsonPath('codigo', 'conflicto');
+    expect($validador->validate($respuesta->baseResponse, '/avisos-lesion/{aviso}/descarte', 'post'))->toBeTrue();
 });

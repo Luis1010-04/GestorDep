@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use Tests\TestCase;
 
@@ -35,4 +36,17 @@ test('HU-17: las respuestas de mediciones cumplen el contrato', function () {
     foreach ($respuestas as [$metodo, $respuesta]) {
         expect($validador->validate($respuesta->baseResponse, $ruta, $metodo))->toBeTrue();
     }
+});
+
+test('DA-70: el 422 rango_no_configurado de mediciones cumple el contrato', function () {
+    /** @var TestCase $this */
+    $validador = ValidatorBuilder::fromYamlFile(base_path('../docs/api/openapi.yaml'))->getValidator();
+    $m = medicionesMundo();
+    DB::connection('propietario')->table('rangos_mediciones_corporales')->where('codigo', 'peso_kg')->delete();
+
+    $respuesta = sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), sesionesIniciar($this, 'e1@x.com'))
+        ->assertUnprocessable()
+        ->assertJsonPath('codigo', 'rango_no_configurado');
+
+    expect($validador->validate($respuesta->baseResponse, '/jugadores/{jugador}/mediciones', 'post'))->toBeTrue();
 });

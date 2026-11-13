@@ -1,0 +1,13 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Salud\ContratoDeAvisosTest
+  ✓ HU-19 y HU-30: las respuestas de avisos cumplen el contrato          5.13s  
+  ✓ DA-79: el 409 conflicto del descarte cumple el contrato              0.92s  
+
+   PASS  Tests\Feature\CondicionFisica\ContratoDeMedicionesTest
+  ✓ HU-17: las respuestas de mediciones cumplen el contrato              1.62s  
+  ✓ DA-70: el 422 rango_no_configurado de mediciones cumple el contrato  0.90s  
+
+  Tests:    4 passed (81 assertions)
+  Duration: 9.22s
+
