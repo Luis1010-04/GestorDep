@@ -201,3 +201,55 @@ test('F1-H3-T09: humo-h3.sh se detiene ante cualquier error y recorre los 16 pas
         ->and($guion)->toContain('humo_igual 12 ')
         ->and(array_values(array_unique(array_map('intval', $pasos[1]))))->toBe(range(1, 16));
 });
+
+/*
+ * F1-H5-T09: humo-h5.sh, con el mismo `curl` falso, se detiene en el primer paso roto; y recorre los 18 pasos de
+ * docs/hitos/f1-h5.md §9 (v1.0.9), con el 404 del paso 9 comparado byte a byte (RN-15).
+ */
+
+test('F1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1 si el inicio de sesión no responde 200', function () {
+    [$codigo, $salida] = ejecutarHumoH3ConCurlFalso(500, '{}', 'humo-h5.sh');
+
+    expect($codigo)->toBe(1)
+        ->and($salida)->toContain('FALLA  paso 1: E1 inicia sesión -> HTTP 500 (se esperaba 200)')
+        ->and($salida)->not->toContain('paso 2')
+        ->and($salida)->not->toContain('HUMO H5 OK');
+});
+
+test('F1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1 si el cuerpo del inicio de sesión no cumple', function () {
+    [$codigo, $salida] = ejecutarHumoH3ConCurlFalso(200, '{"datos":{"roles":["docente"]}}', 'humo-h5.sh');
+
+    expect($codigo)->toBe(1)
+        ->and($salida)->toContain('FALLA  paso 1: E1 inicia sesión -> HTTP 200 (el cuerpo no cumple')
+        ->and($salida)->not->toContain('paso 2')
+        ->and($salida)->not->toContain('HUMO H5 OK');
+});
+
+test('F1-H5-T09: el humo_igual de humo-h5.sh se detiene con FALLA y código 1 si el 404 de la lesión no es igual byte a byte, o si el código no es 404', function () {
+    $funcion = funcionHumoIgual('humo-h5.sh');
+    expect($funcion)->not->toBe('');
+
+    [$codigoCuerpo, $salidaCuerpo] = ejecutarConLibreriaDeHumo($funcion."\n".'HUMO_CODIGO=404; HUMO_CUERPO=\'{"codigo":"recurso_no_encontrado","mensaje":"otro"}\'; humo_igual 9 "lesión ajena" 404 \'{"codigo":"recurso_no_encontrado","mensaje":"uno"}\'; echo SIGUIO');
+    [$codigoEstado, $salidaEstado] = ejecutarConLibreriaDeHumo($funcion."\n".'HUMO_CODIGO=200; HUMO_CUERPO=\'{"datos":{}}\'; humo_igual 9 "lesión ajena" 404 \'{"codigo":"recurso_no_encontrado"}\'; echo SIGUIO');
+    [$codigoBien, $salidaBien] = ejecutarConLibreriaDeHumo($funcion."\n".'HUMO_CODIGO=404; HUMO_CUERPO=\'{"codigo":"recurso_no_encontrado"}\'; humo_igual 9 "lesión ajena" 404 \'{"codigo":"recurso_no_encontrado"}\'; echo SIGUIO');
+
+    expect($codigoCuerpo)->toBe(1)
+        ->and($salidaCuerpo)->toContain('FALLA  paso 9: lesión ajena -> HTTP 404 (el cuerpo no es igual byte a byte al de referencia)')
+        ->and($salidaCuerpo)->not->toContain('SIGUIO')
+        ->and($codigoEstado)->toBe(1)
+        ->and($salidaEstado)->toContain('FALLA  paso 9: lesión ajena -> HTTP 200 (se esperaba 404)')
+        ->and($salidaEstado)->not->toContain('SIGUIO')
+        ->and($codigoBien)->toBe(0)
+        ->and($salidaBien)->toContain('OK     paso 9: lesión ajena -> HTTP 404')
+        ->and($salidaBien)->toContain('SIGUIO');
+});
+
+test('F1-H5-T09: humo-h5.sh se detiene ante cualquier error y recorre los 18 pasos de §9 en orden, con el 404 del paso 9 byte a byte', function () {
+    $guion = (string) file_get_contents(carpetaDeHumo().'/humo-h5.sh');
+    preg_match_all('/^\s*humo_(?:paso|igual) (\d+) /m', $guion, $pasos);
+
+    expect($guion)->toContain('set -euo pipefail')
+        ->and($guion)->toContain('source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"')
+        ->and($guion)->toContain('humo_igual 9 ')
+        ->and(array_values(array_unique(array_map('intval', $pasos[1]))))->toBe(range(1, 18));
+});
