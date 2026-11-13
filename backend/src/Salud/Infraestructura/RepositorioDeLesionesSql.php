@@ -6,9 +6,11 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
+use Src\Salud\Aplicacion\EstadoConcurrente;
 use Src\Salud\Dominio\CausaDeLesion;
 use Src\Salud\Dominio\Lesion;
 use Src\Salud\Dominio\RepositorioDeLesiones;
@@ -44,21 +46,26 @@ final class RepositorioDeLesionesSql implements RepositorioDeLesiones
         );
     }
 
+    /** Un choque de escritura con otra petición responde 409 conflicto, nunca 500 (DA-79). */
     public function guardarCambio(Lesion $anterior, Lesion $nueva): void
     {
-        $this->historial->registrar(
-            'lesiones', 'lesion_id', $nueva->id(), 'actualizar', self::instantanea($anterior), self::instantanea($nueva),
-            fn () => $this->conexion->table('lesiones')->where('id', $nueva->id()->valor())->update([
-                'tipo' => $nueva->tipo(),
-                'zona' => $nueva->zona(),
-                'causa' => $nueva->causa()->value,
-                'fecha_alta' => $nueva->fechaAlta(),
-                'nota' => $nueva->nota(),
-                'actualizado_en' => $nueva->actualizadoEn()->format('Y-m-d H:i:sP'),
-                'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
-            ]),
-            instante: $nueva->actualizadoEn(),
-        );
+        try {
+            $this->historial->registrar(
+                'lesiones', 'lesion_id', $nueva->id(), 'actualizar', self::instantanea($anterior), self::instantanea($nueva),
+                fn () => $this->conexion->table('lesiones')->where('id', $nueva->id()->valor())->update([
+                    'tipo' => $nueva->tipo(),
+                    'zona' => $nueva->zona(),
+                    'causa' => $nueva->causa()->value,
+                    'fecha_alta' => $nueva->fechaAlta(),
+                    'nota' => $nueva->nota(),
+                    'actualizado_en' => $nueva->actualizadoEn()->format('Y-m-d H:i:sP'),
+                    'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
+                ]),
+                instante: $nueva->actualizadoEn(),
+            );
+        } catch (UniqueConstraintViolationException) {
+            throw new EstadoConcurrente;
+        }
     }
 
     public function buscar(Identificador $id): ?Lesion

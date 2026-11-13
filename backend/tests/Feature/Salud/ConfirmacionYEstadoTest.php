@@ -1057,6 +1057,27 @@ test('RN-15: las lesiones del jugador siguen disponibles con el jugador en baja'
         ->assertOk()->assertJsonCount(1, 'datos');
 });
 
+test('DA-79: si corregir la lesión choca con un índice único de su historial, PATCH /lesiones/{lesion} responde 409 conflicto, nunca 500', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $lesion = NoNulo::exigir(estadoInsertar($m['f1'], $m['e2'])['lesion'], 'la lesión');
+    $sesion = sesionesIniciar($this, 'e2@x.com');
+    $propietario = DB::connection('propietario');
+    // Disparador solo de esta prueba: simula el choque con el índice único (lesion_id, version) de dos escrituras a la vez.
+    $propietario->statement("create function public.prueba_t09_choque_lesiones() returns trigger language plpgsql as \$\$ begin raise exception 'choque simulado' using errcode = 'unique_violation'; end \$\$");
+    $propietario->statement("create trigger prueba_t09_choque_lesiones before insert on lesiones_historial for each row when (new.operacion = 'actualizar') execute function public.prueba_t09_choque_lesiones()");
+    try {
+        $respuesta = sesionesPeticion($this, 'PATCH', lesionRuta($lesion), ['zona' => 'Rodilla'], $sesion);
+    } finally {
+        $propietario->statement('drop trigger prueba_t09_choque_lesiones on lesiones_historial');
+        $propietario->statement('drop function public.prueba_t09_choque_lesiones()');
+    }
+
+    $respuesta->assertConflict()->assertJsonPath('codigo', 'conflicto');
+    expect(DB::table('lesiones')->where('id', $lesion)->value('zona'))->toBe('Tobillo')
+        ->and(DB::table('lesiones_historial')->where('lesion_id', $lesion)->where('operacion', 'actualizar')->count())->toBe(0);
+});
+
 test('DA-33: un aviso ya confirmado de un jugador en baja responde 409 aviso_no_pendiente, no jugador_en_baja', function () {
     /** @var TestCase $this */
     $m = avisosMundo();
