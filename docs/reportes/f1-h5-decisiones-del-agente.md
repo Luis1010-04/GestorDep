@@ -154,6 +154,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** §6.1 fija el 404 antes del 422, pero no el orden entre los demás errores de T05.
 - **Qué se eligió:** 403 por rol, 404 por alcance, 422 por cuerpo, 409 `jugador_en_baja`, 422 `equipo_inexistente`, 422 `valor_fuera_de_rango`, 422 `nada_que_corregir`, 409 `medicion_ya_registrada`, 409 `conflicto`.
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T05.
+- **Nota (13/11/2026):** Implementada en T05 (94b0772).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** reordenar las comprobaciones del caso de uso de T05.
 
@@ -162,6 +163,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** §6.2 hace obligatorio `motivo` con `es_correccion`, pero no dice qué pasa si llega sin él.
 - **Qué se eligió:** responde 422 `prohibited`, para no perder un motivo en silencio.
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T05.
+- **Nota (13/11/2026):** Implementada en T05 (94b0772).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar la regla de la solicitud e ignorar el campo.
 
@@ -170,6 +172,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** `docs/convenciones-api.md` define la corrección, pero no qué responder si los valores no cambian.
 - **Qué se eligió:** responde 200 sin historial, como en T03 (DA-48).
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T05.
+- **Nota (13/11/2026):** Implementada en T05 (94b0772).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** escribir historial también sin cambios reales.
 
@@ -178,6 +181,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** los mensajes existentes de `jugador_en_baja` no describen las mediciones.
 - **Qué se eligió:** clave propia, con «El jugador está en baja: no se pueden registrar ni corregir mediciones.». El código sigue siendo `jugador_en_baja`.
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T05.
+- **Nota (13/11/2026):** Implementada en T05 (94b0772).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar la clave y usar una existente.
 
@@ -203,6 +207,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué se eligió:** opción A, límite de 255. §6.2 se corrigió en la v1.0.5 y el esquema no cambia. T05 y T06 prueban que 255 se acepta y que 256 responde 422 `validacion_fallida`, sin llegar a la base y nunca con un 500. `docs/api/openapi.yaml` lleva el límite cuando T05 y T06 documenten sus rutas, que aún no existen.
 - **Nota de la auditoría:** esta decisión cambia un contrato aprobado. La auditoría de los Lotes A y B (hallazgo A-1) detectó la diferencia; T01 había declarado «ninguna desviación» y el conflicto solo apareció en el plan de T05, sin registro en el repositorio.
 - **Estado:** decidida por el responsable (opción A, 6/11/2026). Especificación corregida; la validación y sus pruebas llegan con T05 y T06.
+- **Nota (13/11/2026):** Implementada en 94b0772 y d4a34a1.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** una migración nueva que amplíe `motivo` en los historiales de Condición física, y volver §6.2 a 500.
 
@@ -308,6 +313,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** `make verificar` varió entre 487 y 871 s en H5, en la laptop actual, y T06 agrega más pruebas.
 - **Qué se eligió:** primero medir y resolver las cachés. Pest en paralelo queda fuera de H5 y requiere un plan aparte.
 - **Estado:** aprobada por Luis (6/11/2026). La medición se hace después de la auditoría de T05.
+- **Nota (13/11/2026):** Medición hecha en 75459b6.
 - Aprobada por Luis el 7/11/2026: opción (i), persistir la caché de PHPStan y de Pint en un volumen.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** no aplica: fija un orden de trabajo.
@@ -317,6 +323,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** DA-38 solo cubre las mediciones.
 - **Qué se eligió:** 403 por rol, 404 por alcance, 422 por cuerpo, 409 `jugador_en_baja`, 422 `equipo_inexistente`, 422 `tipo_prueba_inexistente`, 422 `valor_fuera_de_rango`, 422 `nada_que_corregir`, 409 `prueba_ya_registrada`, 409 `conflicto`.
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Nota (13/11/2026):** Implementada en T06 (d4a34a1).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** reordenar las comprobaciones del caso de uso de T06.
 
@@ -325,6 +332,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** el texto de DA-41 habla de mediciones.
 - **Qué se eligió:** clave propia: «El jugador está en baja: no se pueden registrar ni corregir pruebas físicas.»
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Nota (13/11/2026):** Implementada en T06 (d4a34a1).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar la clave y usar una existente.
 
@@ -333,6 +341,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** §6.3 no da mensajes.
 - **Qué se eligió:** `prueba_ya_registrada`: «Ya hay una prueba de ese tipo registrada en ese periodo. Si quieres reemplazarla, confírmalo como corrección.»; `tipo_prueba_inexistente`: «El tipo de prueba indicado no existe.»
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Nota (13/11/2026):** Implementada en T06 (d4a34a1).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cambiar el texto en `lang/es/errores.php`.
 
@@ -341,6 +350,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** §6.3 solo dice «inexistente».
 - **Qué se eligió:** como DA-55: un texto que no es UUID da 422 `validacion_fallida`; un UUID no v7 o un tipo eliminado da 422 `tipo_prueba_inexistente`.
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Nota (13/11/2026):** Implementada en T06 (d4a34a1).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** usar la regla `uuid:7` en la solicitud de T06.
 
@@ -349,6 +359,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** §6.1 no dice qué pasa con `filtro[periodo]` y `filtro[tipo_prueba_id]` a la vez.
 - **Qué se eligió:** la vista del periodo, solo con ese tipo. Con un UUID no v7, lista vacía, como DA-26 de H3.
 - **Estado:** aprobada por Luis (6/11/2026). Se implementa en T06.
+- **Nota (13/11/2026):** Implementada en T06 (d4a34a1).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** rechazar la combinación con 422.
 
@@ -357,6 +368,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** §6.1 la excluye de la paginación, pero no fija el orden.
 - **Qué se eligió:** se mantiene §6.1. Mismo formato que los listados sin paginar, como `GET /metricas`: `{"datos": [...]}`, sin `meta`, sin leer `pagina` ni `por_pagina`. Por `codigo` ascendente, también en `GET /tipos-prueba`.
 - **Estado:** **aprobada por Luis en el chat (opción A).** Se implementa en T06.
+- **Nota (13/11/2026):** Implementada en T06 (d4a34a1).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** cambiar el orden o el formato en T06, antes de implementarla.
 
@@ -365,6 +377,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Qué faltaba:** el plan no decía qué pasa si el mismo entrenador envía dos veces la misma prueba (doble clic, dos pestañas o un reintento tras un fallo de red).
 - **Qué se eligió:** la unicidad de la base (DA-04) y el 409 `prueba_ya_registrada` (DA-60), con una prueba del doble envío. Sin bloqueo de concurrencia en T06. Dos entrenadores distintos no chocan: cada uno tiene su fila (DA-04, DD-59). La idempotencia (clave por petición, que devolvería el mismo 201) queda para la siguiente fase.
 - **Estado:** **aprobada por Luis en el chat.** Se implementa en T06.
+- **Nota (13/11/2026):** Implementada en T06 (d4a34a1).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** agregar un bloqueo o una clave de idempotencia en una tarea posterior, con su propia decisión.
 
