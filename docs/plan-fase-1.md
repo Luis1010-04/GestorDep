@@ -1,7 +1,7 @@
 # Plan de la Fase 1 (API del MVP)
 
-**Versión:** 1.2.1
-**Fecha:** 21 de octubre de 2026
+**Versión:** 1.2.2 (§4: `make mutacion` en la compuerta de cierre a partir de H6)
+**Fecha:** 13 de noviembre de 2026
 **Origen:** sección 5 del Documento de Arranque v1.0, con las dependencias corregidas por la auditoría (IC-04, IC-05).
 
 ## 1. Tecnologías y metodología
@@ -96,7 +96,8 @@ Un hito se da por cerrado cuando se cumple todo lo siguiente:
 7. El hito cumple sus criterios de aceptación de `docs/criterios-aceptacion-fase-1.md`.
 8. El agente entregó el reporte de **fuera de alcance** (`backend/.ai/guidelines/proyecto.md` §6) y no hay trabajo no pedido.
 9. El responsable revisa los reportes de las tareas, prueba manualmente los flujos principales y aprueba.
-10. Se crea la etiqueta de git `f1-hN` y se fusiona la rama del hito.
+10. A partir de H6, `make mutacion` pasa al cerrar cada hito (Infection sobre `Dominio/`, umbrales de DD-53), con su log en `docs/reportes/logs/`.
+11. Se crea la etiqueta de git `f1-hN` y se fusiona la rama del hito.
 
 ## 5. Qué se escribe y cuándo
 
