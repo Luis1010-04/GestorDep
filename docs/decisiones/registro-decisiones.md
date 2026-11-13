@@ -1,7 +1,7 @@
 # Registro de decisiones tomadas por defecto tras la auditoría
 
-**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026; DD-42 a DD-55, AB-22 a AB-27 y la sección 4, al cerrar H2, el 28 de octubre de 2026; DA-17 y las confirmaciones de DA-14 y DA-15, el 29 de octubre de 2026; la enmienda a DD-53, PT-08 y la sección 5, al cerrar H3, el 29 de octubre de 2026; DD-09 y DD-10 confirmadas, AB-01 deportivo por validar, PT-08 resuelto y la sección 6, al cerrar H4, el 30 de octubre de 2026; DD-03 confirmada y PT-01 y PT-07 en implementación, el 31 de octubre de 2026; PT-07 y PT-01 resueltos, el 1 de noviembre de 2026; DD-56 a DD-62 y las secciones 7 y 8 (especificación de H5), el 1 de noviembre de 2026; DD-63, DA-19 y AB-28, el 1 de noviembre de 2026; DA-16 corregida y DA-11, DA-14, DA-17, DA-18 y DA-19 aprobadas, el 1 de noviembre de 2026)
-**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04). Cambios del 28 de octubre de 2026 (F1-H2-T15): se registran DD-42 a DD-55 (decisiones de H2), las validaciones pendientes con la institución y las dudas de H2 (AB-22 a AB-27) y las decisiones del agente en H2 (sección 4). Cambios del 28 de octubre de 2026 tras la auditoría del Lote E: DA-16 (sección 4), la referencia de DD-45; los plazos vencidos en H2 de DD-20, AB-01, AB-08, AB-10, AB-14, PT-01 y PT-03; PT-02 resuelto (`b010636`); y PT-07 (lock de `make verificar` y procesos huérfanos), sin implementar. Cambios del 29 de octubre de 2026 (decisiones del responsable sobre la auditoría del Lote E): DA-17 (I-1, sección 4); DA-14 y DA-15 confirmadas (I-2), con lo que se cierra AB-27. Cambios del 29 de octubre de 2026 tras la auditoría corta del rango `1145c77..4fb2fc5`: DA-17 nombra también T10 y anota la frase de `docs/arquitectura.md` §4.3 que la versión 1.4 quitó y la 1.4.1 restituyó. Cambios del 29 de octubre de 2026 (F1-H3-T09): DD-07, DD-17 y DD-18 quedan confirmadas por el responsable (`docs/hitos/f1-h3.md` §3.1); AB-07 y AB-15 siguen por validar; se registra PT-08 (tiempo de `make verificar`), pendiente obligatorio antes de H4, y las decisiones del agente en H3 (sección 5). Cambios del 31 de octubre de 2026 (F1-DOC, tras cerrar H4): DD-03 queda confirmada por el responsable; PT-01 y PT-07 pasan a «En implementación», cada uno en su rama desde `main`. Cambios del 1 de noviembre de 2026 (F1-DOC, especificación de H5 v1.0): se registran DD-56 a DD-62, confirmadas por el responsable (sección 7), y las decisiones de la especificación de H5 (sección 8). Cambios del 1 de noviembre de 2026 (F1-DOC, especificación de H5 v1.0.1): DD-63 confirmada (sección 7); DA-12 y DA-13 aprobadas, DA-15 corregida y DA-19 nueva (sección 8); AB-28 (sección 2), sin bloquear H5. Cambios del 1 de noviembre de 2026 (F1-DOC, especificación de H5 v1.0.2): DA-15 decidida por el responsable, con el campo opcional `campo` en las advertencias (`docs/convenciones-api.md` 1.3). Cambios del 1 de noviembre de 2026 (F1-DOC, especificación de H5 v1.0.3): DA-16 decidida por el responsable (rangos en tablas de Condición física, sin `parametros_institucionales`); DA-11, DA-14, DA-17, DA-18 y DA-19 aprobadas tal como están (sección 8)
+**Fecha:** 19 de octubre de 2026 (DD-19 a DD-23 agregadas el 21 de octubre de 2026, versión 1.2 de la documentación; DD-24 a DD-27, decisiones técnicas de H0, el 21 de octubre de 2026; DD-28 a DD-41, AB-10 a AB-21 y PT-01 a PT-04, al cerrar H1, el 26 de octubre de 2026; DD-42 a DD-55, AB-22 a AB-27 y la sección 4, al cerrar H2, el 28 de octubre de 2026; DA-17 y las confirmaciones de DA-14 y DA-15, el 29 de octubre de 2026; la enmienda a DD-53, PT-08 y la sección 5, al cerrar H3, el 29 de octubre de 2026; DD-09 y DD-10 confirmadas, AB-01 deportivo por validar, PT-08 resuelto y la sección 6, al cerrar H4, el 30 de octubre de 2026; DD-03 confirmada y PT-01 y PT-07 en implementación, el 31 de octubre de 2026; PT-07 y PT-01 resueltos, el 1 de noviembre de 2026; DD-56 a DD-62 y las secciones 7 y 8 (especificación de H5), el 1 de noviembre de 2026; DD-63, DA-19 y AB-28, el 1 de noviembre de 2026; DA-16 corregida y DA-11, DA-14, DA-17, DA-18 y DA-19 aprobadas, el 1 de noviembre de 2026; AB-29, AB-30, la sección 9 y sus notas, el 13 de noviembre de 2026)
+**Estado:** Pendiente de validación. Cambios del 26 de octubre de 2026 (F1-H1-T17): se registran DD-28 a DD-41 (decisiones de H1), las dudas abiertas de H1 (AB-10 a AB-21) y los pendientes técnicos posteriores a H1 (sección 3, PT-01 a PT-04). Cambios del 28 de octubre de 2026 (F1-H2-T15): se registran DD-42 a DD-55 (decisiones de H2), las validaciones pendientes con la institución y las dudas de H2 (AB-22 a AB-27) y las decisiones del agente en H2 (sección 4). Cambios del 28 de octubre de 2026 tras la auditoría del Lote E: DA-16 (sección 4), la referencia de DD-45; los plazos vencidos en H2 de DD-20, AB-01, AB-08, AB-10, AB-14, PT-01 y PT-03; PT-02 resuelto (`b010636`); y PT-07 (lock de `make verificar` y procesos huérfanos), sin implementar. Cambios del 29 de octubre de 2026 (decisiones del responsable sobre la auditoría del Lote E): DA-17 (I-1, sección 4); DA-14 y DA-15 confirmadas (I-2), con lo que se cierra AB-27. Cambios del 29 de octubre de 2026 tras la auditoría corta del rango `1145c77..4fb2fc5`: DA-17 nombra también T10 y anota la frase de `docs/arquitectura.md` §4.3 que la versión 1.4 quitó y la 1.4.1 restituyó. Cambios del 29 de octubre de 2026 (F1-H3-T09): DD-07, DD-17 y DD-18 quedan confirmadas por el responsable (`docs/hitos/f1-h3.md` §3.1); AB-07 y AB-15 siguen por validar; se registra PT-08 (tiempo de `make verificar`), pendiente obligatorio antes de H4, y las decisiones del agente en H3 (sección 5). Cambios del 31 de octubre de 2026 (F1-DOC, tras cerrar H4): DD-03 queda confirmada por el responsable; PT-01 y PT-07 pasan a «En implementación», cada uno en su rama desde `main`. Cambios del 1 de noviembre de 2026 (F1-DOC, especificación de H5 v1.0): se registran DD-56 a DD-62, confirmadas por el responsable (sección 7), y las decisiones de la especificación de H5 (sección 8). Cambios del 1 de noviembre de 2026 (F1-DOC, especificación de H5 v1.0.1): DD-63 confirmada (sección 7); DA-12 y DA-13 aprobadas, DA-15 corregida y DA-19 nueva (sección 8); AB-28 (sección 2), sin bloquear H5. Cambios del 1 de noviembre de 2026 (F1-DOC, especificación de H5 v1.0.2): DA-15 decidida por el responsable, con el campo opcional `campo` en las advertencias (`docs/convenciones-api.md` 1.3). Cambios del 1 de noviembre de 2026 (F1-DOC, especificación de H5 v1.0.3): DA-16 decidida por el responsable (rangos en tablas de Condición física, sin `parametros_institucionales`); DA-11, DA-14, DA-17, DA-18 y DA-19 aprobadas tal como están (sección 8). Cambios del 13 de noviembre de 2026 (F1-H5, auditoría de estado de H5): AB-29 (baja simultánea en H5) y AB-30 (lesiones que ninguna ruta cierra), sección 9 (resumen de DA-20 a DA-79 de H5, nota a DA-30, observación sobre `TipoDePrueba.codigo` para H7 y nota sobre la auditoría de T08, que no está versionada)
 
 La auditoría cruzada dejó seis decisiones que bloqueaban la corrección de los documentos. Para trabajar con lo que se tiene, el equipo de análisis aplicó la **recomendación de la auditoría** en cada una y las registró aquí. Ninguna cuenta como validada por la institución. Cada una indica antes de qué hito debe confirmarse; si se cambia, se corrige el documento afectado y se anota en este registro.
 
@@ -107,6 +107,8 @@ Las debe tomar el responsable del proyecto o la institución. Ninguna se ha asum
 | AB-26 | Revisión de seguridad: el 409 `jugador_en_baja` al inscribir revela a un docente que una matrícula ajena está en baja (DD-52, auditoría de C2 M-8); y la captura académica no bloquea la fila del jugador ante una baja simultánea (`docs/hitos/f1-h2.md` §11) | Responsable (revisión de seguridad) | H7 |
 | AB-27 | Confirmar DA-15 (la situación académica lista solo las materias del docente del periodo vigente) | Responsable | **Cerrada:** DA-15 confirmada por el responsable el 29/10/2026 (auditoría del Lote E, I-2) |
 | AB-28 | `docs/requisitos.md` §10.2 punto 4 y §2.3: si el aviso que el jugador reporta a través de un docente o entrenador (HU-19, `avisos_lesion.reportado_por_jugador`) cubre la necesidad planteada mientras el futbolista no sea usuario | Institución | **Por validar**; sin hito fijado. No bloquea H5: el aviso con `reportado_por_jugador` se construye según HU-19 c2 (`docs/hitos/f1-h5.md` §11) |
+| AB-29 | Revisión de seguridad: baja simultánea en H5. Crear un aviso, confirmarlo, registrar una medición o una prueba física comprueban que el jugador no está en baja, pero no bloquean la fila del jugador. Una baja que se confirma entre la comprobación y la escritura deja un registro nuevo de un jugador ya en baja. Es el mismo caso que AB-26 para la captura académica, pero en Salud y Condición física. AB-26 no cambia: su alcance sigue siendo la inscripción y la captura académica | Responsable (revisión de seguridad) | **Abierta**; destino H7 (`f1-h5-t08.md` §5, «Baja simultánea») |
+| AB-30 | Lesiones que ninguna ruta puede cerrar: (a) la lesión de otro registrante cuando un estado nuevo sustituye al suyo (DD-63); (b) la lesión propia al confirmar un estado distinto de `apto` (DA-45); (c) la lesión propia con fecha de inicio posterior al hoy de negocio al confirmar `apto` (DA-76, subdecisión aprobada el 13/11/2026). El alta solo cierra la lesión del estado vigente, así que estas quedan sin `fecha_alta`. Decidir si hace falta una ruta o una regla para cerrarlas, o si basta con consultarlas en el historial | Responsable | **Abierta**; destino H7, con HU-26 (consulta del historial) |
 
 ## 3. Pendientes técnicos tras H1
 
@@ -261,3 +263,74 @@ Decisiones `[Decisión por defecto]` de `docs/hitos/f1-h5.md` (§3.3; v1.0 a v1.
 | DA-17 | `lesiones.fecha_inicio` es la `fecha_aviso`; la fecha estimada y la de alta no pueden ser anteriores (422 `rango_de_fechas_invalido`) | No | **Aprobada** por el responsable (01/11/2026), tal como está |
 | DA-18 | Las respuestas no revelan autores (`creado_por`, `confirmado_por`, `registrado_por`, `registrada_por`); el estado oficial da `lesion_id` solo al registrante | **Sí** (revela lo mínimo) | **Aprobada** por el responsable (01/11/2026), tal como está |
 | DA-19 | `avisos_lesion.confirmado_por` (quién confirmó ese aviso; no cambia) es distinto de `estados_disponibilidad.confirmado_por` (quién sostiene el estado vigente; cambia con cada fila nueva, por DD-63 o por un alta). Coinciden al confirmar, junto con `lesiones.registrada_por`; la nota del aviso (DD-58) sigue a la primera y los permisos sobre el estado (RN-16), a la segunda. Prueba de coherencia en H5 §7.2 filas 22 y 23 | **Sí** (quién ve la nota y quién modifica el estado) | Pedida por el responsable en v1.0.1; **aprobada** por el responsable (01/11/2026), tal como está |
+
+## 9. Decisiones del agente en H5 (DA-20 a DA-79)
+
+Resumen de las decisiones que tomó el agente durante H5, continuando la numeración de la sección 8. El texto completo de cada una (qué faltaba, qué se eligió, estado, privacidad y cómo se revierte) está en [`docs/reportes/f1-h5-decisiones-del-agente.md`](../reportes/f1-h5-decisiones-del-agente.md); aquí no se duplica. Al 13 de noviembre de 2026, las 60 están aprobadas, confirmadas o decididas por el responsable. DA-45 quedó sustituida en el caso `apto` por DA-76.
+
+| ID | Tema | Tarea | Nota |
+|---|---|---|---|
+| DA-20 | Columnas de entidad de los historiales | T01 | |
+| DA-21 | Nombres de los catálogos | T01 | |
+| DA-22 | Longitud de las columnas de texto sin tamaño en §5.1 | T01 | |
+| DA-23 | Fecha futura en un aviso | T02 | |
+| DA-24 | Orden entre 422 y 409 `jugador_en_baja` en un aviso | T02 | |
+| DA-25 | Listado de avisos para un usuario con los dos roles | T02 | |
+| DA-26 | Comprobar el estado oficial en §7.1 filas 1 y 7 | T02 | |
+| DA-27 | Mensaje de `jugador_en_baja` al crear un aviso | T02 | |
+| DA-28 | Orden entre 422 y 409 `aviso_no_pendiente` | T02 | |
+| DA-29 | Texto del mensaje de `aviso_no_pendiente` | T02 | |
+| DA-30 | Estado abierto y cerrado en el mismo segundo | T03 | **Nota (13/11/2026):** se deja como está para H5 (409 `conflicto` en el mismo segundo); se reabre en H7 solo si aparece un problema real |
+| DA-31 | Orden del listado de lesiones | T03 | |
+| DA-32 | `nota` nula o vacía en la lesión | T03 | |
+| DA-33 | Orden de los 409 al confirmar | T03 | |
+| DA-34 | Textos nuevos de T03 | T03 | |
+| DA-35 | Tipo que devuelve `EstadoDeDisponibilidadOficial` | T04 | |
+| DA-36 | Identificador sin registro en el puerto | T04 | |
+| DA-37 | `eliminado_en` en el puerto | T04 | |
+| DA-38 | Orden de los errores en mediciones | T05 | |
+| DA-39 | `motivo` sin `es_correccion` | T05 | |
+| DA-40 | Corrección con valores idénticos | T05 | |
+| DA-41 | Mensaje de `jugador_en_baja` en mediciones | T05 | |
+| DA-42 | Docente que creó un aviso y perdió el alcance | T02 | |
+| DA-43 | Registrante que perdió el alcance sobre el jugador | T03 | |
+| DA-44 | Límite de `motivo` en mediciones y pruebas físicas | T05 y T06 | |
+| DA-45 | Lesión propia abierta al confirmar otro aviso | T03 | |
+| DA-46 | Orden de los errores en `PATCH` del estado y en el alta | T03, punto 2 del plan | |
+| DA-47 | `PATCH` con el mismo estado | T03, punto 3 del plan | |
+| DA-48 | `PATCH` idéntico o sin campos | T03, punto 4 del plan | |
+| DA-49 | Fechas futuras en el alta y en el regreso estimado | T03, punto 5 del plan | |
+| DA-50 | Alta sin fecha con un aviso de fecha futura | T03, punto 6 del plan | |
+| DA-51 | Mensaje de `rango_de_fechas_invalido` en la lesión | T03, punto 7 del plan | |
+| DA-52 | Mensaje de `jugador_en_baja` al confirmar o cambiar el estado | T03, punto 8 del plan | |
+| DA-53 | Mensaje de `valor_fuera_de_rango` en mediciones | T05 | |
+| DA-54 | Textos nuevos de T05 | T05 | |
+| DA-55 | Forma de `equipo_id` en mediciones | T05 | |
+| DA-56 | Fecha de última actualización del estado oficial | RNF-04, hallazgo B-5 de la auditoría | |
+| DA-57 | Tiempo de `make verificar` en H5 |  | |
+| DA-58 | Orden de los errores en pruebas físicas | T06 | |
+| DA-59 | Mensaje de baja en pruebas físicas | T06 | |
+| DA-60 | Textos nuevos de T06 | T06 | |
+| DA-61 | Forma de `tipo_prueba_id` en el cuerpo | T06 | |
+| DA-62 | Los dos filtros juntos en pruebas físicas | T06 | |
+| DA-63 | Formato y orden de la vista de un periodo | T06 | |
+| DA-64 | Doble envío del mismo entrenador en pruebas físicas | T06 | |
+| DA-65 | Orden del listado de pruebas físicas dentro de un periodo | T06 | |
+| DA-66 | Texto de la advertencia `jugador_lesionado` | T07 | |
+| DA-67 | Corrección de una asistencia de entrenamiento y advertencia | T07 | |
+| DA-68 | Mutación de `AdvertenciasDeLesion` | T07 | |
+| DA-69 | Séptima prueba de T07 sin mutación | T07 | |
+| DA-70 | Rango faltante en `rangos_mediciones_corporales` | T08 | |
+| DA-71 | IMC que no cabe en `numeric(5,2)` | T08 | |
+| DA-72 | Desempate por `id` en el mismo milisegundo | T08 | |
+| DA-73 | Orden de `ConvocatoriaTest`, líneas 169 a 170 | T08 | |
+| DA-74 | Concurrencia real | T08 | |
+| DA-75 | Desviaciones de T08 | T08 | |
+| DA-76 | Lesión abierta al confirmar `apto` | auditoría de T08 | |
+| DA-77 | Pruebas de tipos borrados en el listado y en la vista del periodo | auditoría de T08 | |
+| DA-78 | El seeder de rangos no repone filas borradas | auditoría de T08 | |
+| DA-79 | Descarte y confirmación en paralelo | auditoría de T08 | |
+
+**Observación para H7 (13/11/2026):** en `docs/api/openapi.yaml`, `TipoDePrueba.codigo` es una lista cerrada (`enum: [velocidad, resistencia, tiempo_prueba]`). Si se siembra un tipo de prueba nuevo, las respuestas que lo incluyan dejan de validar contra el contrato. No se cambia el contrato en H5.
+
+**Auditoría de T08 (13/11/2026):** su texto no está versionado. Se hizo fuera del repositorio, y del chat solo llegaron sus referencias (archivos y líneas) y la regla de reproducir cada hallazgo antes de corregirlo; no hay un texto completo que guardar. Los hallazgos, su decisión, su prueba y su resultado están en `docs/reportes/f1-h5-correctiva-t08.md`. El texto de la auditoría de estado de H5 del 13/11/2026 se guardará en `docs/reportes/auditorias/auditoria-estado-h5-20261113.md` cuando Luis lo entregue.

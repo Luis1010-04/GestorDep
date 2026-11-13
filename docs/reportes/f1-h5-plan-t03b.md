@@ -4,6 +4,8 @@
 **Rama:** `hito/f1-h5` · **Especificación:** `docs/hitos/f1-h5.md` v1.0.7, §6.2 y §8 (T03b)
 **Estado:** propuesto, **a la espera de aprobación del responsable**. No se escribe código hasta su aprobación. Va antes de T06, y después de la auditoría de T05 y de la medición de DA-57, porque exige `make verificar`.
 
+> **Superado** (nota del 13/11/2026, auditoría de estado de H5): el plan se aprobó y T03b se ejecutó el 7/11/2026 (`f1-h5-t03b.md` y `f1-h5-progreso.md` §16).
+
 ## 1. Qué cambia
 
 El recurso del estado oficial agrega un campo con el momento de su última actualización. Solo el momento, nunca el contenido del cambio.

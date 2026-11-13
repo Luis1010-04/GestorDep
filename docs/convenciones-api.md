@@ -67,7 +67,7 @@ Las acciones que el sistema permite pero quiere señalar (HU-10 empalme, HU-12 j
 {
   "datos": { "...": "..." },
   "advertencias": [
-    { "codigo": "jugador_lesionado", "mensaje": "El jugador tiene un estado oficial de lesionado.", "campo": "registros.1.jugador_id" }
+    { "codigo": "jugador_lesionado", "mensaje": "El jugador no está disponible por una lesión.", "campo": "registros.1.jugador_id" }
   ]
 }
 ```

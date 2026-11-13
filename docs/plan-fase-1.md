@@ -46,7 +46,7 @@ Cada hito es un corte vertical: entrega algo que se puede ejecutar y probar a tr
 | H2 | Académico | Periodos y asignaturas, materias, inscripciones, calificaciones, criterios y riesgo académico calculado | HU-06 a HU-09, HU-28 (periodos y asignaturas) | H1 |
 | H3 | Competencia | Lugares, temporadas, torneos y rivales, entrenamientos, asistencia, partidos, convocatorias y alineación | HU-10 a HU-13, HU-28 (lugares, temporadas, torneos y rivales) | H1 |
 | H4 | Rendimiento | Captura por posición, plantillas, umbrales y resultado pasa, no pasa o datos insuficientes | HU-14 a HU-16 | H3 |
-| H5 | Condición física y Salud | Mediciones, pruebas, avisos, lesiones y disponibilidad | HU-17 a HU-21, HU-30 | H1, H2 |
+| H5 | Condición física y Salud | Mediciones, pruebas, avisos, lesiones y disponibilidad | HU-17 a HU-21, HU-30 | H3, H4 (usa además H1 y H2; `docs/hitos/f1-h5.md`, línea 7) |
 | H6 | Alertas y consultas | Alertas, listado de estatus, vista para convocar y datos para gráficos | HU-22 a HU-25 | H2, H3, H4, H5 |
 | H7 | Cierre | Historial consultable, revisión de seguridad y rendimiento, y validación final de los valores de fábrica | HU-26 y transversal | H6 |
 
@@ -100,7 +100,7 @@ Un hito se da por cerrado cuando se cumple todo lo siguiente:
 
 ## 5. Qué se escribe y cuándo
 
-- La especificación de cada hito (`docs/hitos/f1-hN.md`) se redacta **justo antes** de empezarlo, con lo aprendido en el anterior. H0 y H1 están escritas.
+- La especificación de cada hito (`docs/hitos/f1-hN.md`) se redacta **justo antes** de empezarlo, con lo aprendido en el anterior.
 - Cada especificación de hito incluye: tareas con las rutas que se pueden tocar, criterios de aceptación por tarea, tablas de casos de ejemplo de las reglas del hito, criterios diferidos y el guion de humo.
 - **Cada especificación de hito es autocontenida.** Copia el texto de las HU y RN del hito, sus tablas de casos y las tablas de datos de `docs/arquitectura.md` que usa. Así el agente trabaja con la especificación y consulta los documentos completos solo ante una duda, lo que ahorra contexto en cada tarea.
 - **Cada tarea se trabaja en una sesión nueva del agente**, que termina con el reporte y espera aprobación.

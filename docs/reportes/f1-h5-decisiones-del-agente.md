@@ -91,6 +91,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Privacidad o permisos:** no.
 - **Límite para revisión posterior (T08 o H7):** quien confirma un aviso y cambia el estado o da de alta en el mismo segundo recibe 409 y debe repetir la operación. Falta comprobar que esto no llegue al usuario como 500 y decidir si el caso merece otra solución.
 - **Cómo se revierte:** una migración nueva que cambie el `CHECK` a `>=` o la precisión de las columnas.
+- **Nota (13/11/2026, auditoría de estado de H5):** se deja como está para H5; se reabre en H7 solo si aparece un problema real. T08 comprobó que responde 409 `conflicto`, nunca 500.
 
 ## DA-31. Orden del listado de lesiones (T03)
 

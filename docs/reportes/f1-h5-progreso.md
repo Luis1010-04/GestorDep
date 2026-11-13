@@ -1,7 +1,9 @@
 # Progreso de H5
 
-**Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.4
-**Estado:** Lote A terminado, a la espera de revisión del responsable. T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó en la laptop anterior (§1.8) y el responsable la cerró el 3/11/2026 sin cambios de configuración, con las corridas de la laptop nueva (§1.13). T01 terminada (§2). La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); los commits hasta `18db0da` se publicaron después, también por orden suya (el último push es del 5/11/2026); lo posterior es local. Sin PR ni etiquetas.
+**Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.8
+**Estado (13/11/2026):** Lotes A y B terminados y revisados. Lote C: T05 a T08 terminadas, y C01 (correcciones de la auditoría de T08, con DA-76 a DA-79) terminada. Faltan T09 (humo y cierre documental) y la auditoría independiente del lote. Todo está publicado en `origin/hito/f1-h5` hasta `75459b6` (§20), sin PR ni etiquetas.
+
+*Estado anterior, conservado como registro:* Lote A terminado, a la espera de revisión del responsable. T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó en la laptop anterior (§1.8) y el responsable la cerró el 3/11/2026 sin cambios de configuración, con las corridas de la laptop nueva (§1.13). T01 terminada (§2). La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); los commits hasta `18db0da` se publicaron después, también por orden suya (el último push es del 5/11/2026); lo posterior es local. Sin PR ni etiquetas.
 
 ## 1. F1-H5-T00: PHPStan nivel 8
 
@@ -646,11 +648,11 @@ Detalle en `docs/reportes/f1-h5-t04.md`.
 
 **Pendientes para el cierre de H5:** concurrencia real con dos peticiones simultáneas; lesión anterior tras DD-63 sin alta; revisión de DA-30 en T08 o H7; el par fechas y `conflicto` de DA-33 sin prueba combinada.
 
-- Observación para T08: Identificador::generar() usa milisegundos y bytes aleatorios, sin contador monotónico. Dos registros creados en el mismo milisegundo con la misma fecha_inicio se listan en orden aleatorio por id (RN-15). Impacto: solo el orden, no la unicidad. Decidir en T08 si el desempate debe usar creado_en con microsegundos en lugar del id. No se corrige en H5.
+- **Cerrada en T08 con DA-72** (el generador no cambia en H5, las pruebas fijan los ids y queda anotado para H7). Observación para T08: Identificador::generar() usa milisegundos y bytes aleatorios, sin contador monotónico. Dos registros creados en el mismo milisegundo con la misma fecha_inicio se listan en orden aleatorio por id (RN-15). Impacto: solo el orden, no la unicidad. Decidir en T08 si el desempate debe usar creado_en con microsegundos en lugar del id. No se corrige en H5.
 
-- Observación para T08: ConvocatoriaTest, líneas 169 a 170, ordena por creado_en y luego por id, con ids generados por el código en dos peticiones. No falla en la práctica porque cada petición dura más de 1 ms, pero la prueba no fija esos ids. Revisar en T08 junto con la observación de RN-15.
+- **Cerrada en T08 con DA-73** (las convocatorias de la prueba se insertan con ids fijos). Observación para T08: ConvocatoriaTest, líneas 169 a 170, ordena por creado_en y luego por id, con ids generados por el código en dos peticiones. No falla en la práctica porque cada petición dura más de 1 ms, pero la prueba no fija esos ids. Revisar en T08 junto con la observación de RN-15.
 
-- Observación para T08: el IMC se guarda en numeric(5,2), así que no puede pasar de 999.99. Con 200 kg, una estatura menor de 44.7 cm lo desborda y responde 500. Hoy el mínimo sembrado es 100 cm, así que no ocurre con los rangos actuales. Decidir en T08 si la validación debe comprobar el IMC antes de guardar.
+- **Cerrada en T08 con DA-71** (el IMC que no cabe responde 422 `valor_fuera_de_rango` en `estatura_cm`). Observación para T08: el IMC se guarda en numeric(5,2), así que no puede pasar de 999.99. Con 200 kg, una estatura menor de 44.7 cm lo desborda y responde 500. Hoy el mínimo sembrado es 100 cm, así que no ocurre con los rangos actuales. Decidir en T08 si la validación debe comprobar el IMC antes de guardar.
 
 - Pendiente: la ejecución en paralelo de Pest (DA-57), como decisión aparte. No se implementa sin esa decisión.
 
@@ -720,7 +722,7 @@ Detalle en `f1-h5-t05.md`.
 |---|---:|---:|---:|
 | Cierre de T05 | 1 835 | 596 s | 661 s |
 
-Log: `docs/reportes/logs/verificar/f1-h5-t05-20261106-1259.log`. Pendientes para T08: rango faltante (500) y DA-45.
+Log: `docs/reportes/logs/verificar/f1-h5-t05-20261106-1259.log`. Pendientes para T08: rango faltante y DA-45. El rango faltante respondía 500; hoy responde 422 `rango_no_configurado` (DA-70, T08). DA-45 quedó sustituida en el caso `apto` por DA-76 (C01).
 
 ## 11. Incidencia: logs borrados durante T05 (6/11/2026)
 
@@ -813,7 +815,7 @@ Detalle en `f1-h5-t07.md`.
 |---|---:|---:|---:|
 | Cierre de T07 | 1 946 (12 068 aserciones) | 691 s | 745 s, código 0 |
 
-En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t07-20261111-1243.log`. Pendiente de decisión: Infection no muta `Aplicacion` (`infection.json5`), así que `AdvertenciasDeLesion` solo tiene pruebas `Unit` y mutaciones manuales.
+En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t07-20261111-1243.log`. Aprobada, DA-68: Infection no muta `Aplicacion` (`infection.json5`), así que `AdvertenciasDeLesion` solo tiene pruebas `Unit` y mutaciones manuales.
 
 ## 19. F1-H5-T08: seguridad, RN-15 y RN-16 (11/11/2026)
 
@@ -824,3 +826,64 @@ Detalle en `f1-h5-t08.md`: cada fila de §7.3, §7.4 y §7.8 con su prueba, la m
 | Cierre de T08 | 1 958 (12 146 aserciones) | 661 s | 713 s, código 0 |
 
 En serie, sin auditor activo y con la caché persistente. Por debajo del aviso de 13 minutos. Log: `docs/reportes/logs/verificar/f1-h5-t08-20261111-1407.log`.
+
+## 20. F1-H5-C01, medición de DA-57 y CI (12 y 13/11/2026)
+
+### C01: correcciones de la auditoría de T08
+
+Detalle en `f1-h5-correctiva-t08.md`; decisiones en `f1-h5-decisiones-del-agente.md`.
+
+| Commit | Contenido |
+|---|---|
+| `7ba90ac` | DA-77 a DA-79 y correcciones: bloqueos probados con dos conexiones, choque al guardar como 409 `conflicto`, UTC en avisos, la aserción vacía de DA-16, UUID v7 en las rutas de avisos |
+| `feb4734` | Contrato del descarte (`conflicto` en la descripción del 409) y UUID v7 en estado, alta, lesiones y lesión |
+| `4ab4592` | DA-76: cierre automático de la lesión propia al confirmar `apto`, con `HoyDeNegocio` (DD-36). Es el cherry-pick de `62822e1`, hecho en `auditoria/f1-h5` |
+| `df068a2` | DA-76 sustituye a DA-45 en `apto`; una lesión con inicio posterior a hoy no se cierra |
+
+### Decisiones DA-75 a DA-79
+
+| ID | Decisión | Estado |
+|---|---|---|
+| DA-75 | Desviaciones de rutas de T08 | Aprobada, 11/11/2026 |
+| DA-76 | Lesión propia cerrada al confirmar `apto`, con `HoyDeNegocio`; subdecisión: no se cierra si empieza después de hoy | Aprobada, 12 y 13/11/2026; sustituye a DA-45 en `apto` |
+| DA-77 | El listado incluye pruebas de tipos borrados; la vista del periodo, solo tipos vigentes | Aprobada, 12/11/2026 |
+| DA-78 | El seeder de rangos no repone filas borradas; restauración manual documentada | Aprobada, 12/11/2026 |
+| DA-79 | Descarte y confirmación en paralelo: dos conexiones y 409, nunca 500 | Aprobada, 12/11/2026 |
+
+### Corridas
+
+| Corrida | Pruebas | Pest | `make verificar` |
+|---|---:|---:|---:|
+| C01, primera entrega (`7ba90ac`) | 1 966 | 740 s | 794 s, código 0 |
+| C01, contrato y UUID v7 (`feb4734`) | 1 967 | 675 s | 755 s, código 0 |
+| DA-76 (`62822e1`, luego `4ab4592`) | 1 969 | 807 s | 868 s, código 0 |
+| DA-76 sustituye a DA-45 (`df068a2`) | 1 971 | 743 s | 799 s, código 0 |
+
+`make humo`, con `make fresh` antes, pasó en cada entrega: código 0 y 119 pasos OK.
+
+### Medición de DA-57 (`75459b6`)
+
+Detalle en `f1-h5-medicion-verificar.md`. Las etapas se corrieron por separado:
+
+| Etapa | Tiempo |
+|---|---:|
+| Pint | 13 s |
+| PHPStan | 5 s |
+| Pest con cobertura | 718 s (Pest informa 681 s) |
+| Umbrales de cobertura | 0 s |
+| `composer audit` | 3 s |
+| **Total** | **742 s** |
+
+- Pest corre en un solo hilo y es el 97 % del total.
+- La variación entre corridas (661 a 807 s de Pest) es compatible con la carga del anfitrión.
+- El paralelo de Pest sigue como tarea separada, para después de cerrar H5.
+
+### CI (`verificar` en GitHub Actions)
+
+| Corrida | Commit | Estado |
+|---|---|---|
+| #85 | `91deb25` | En cola desde el 11/11/2026 (no se canceló) |
+| #86 | `9972755` | En cola desde el 11/11/2026 (no se canceló) |
+| #87 | `feb4734` | En verde |
+| #88 | `df068a2` | En verde |
+| #89 | `75459b6` | En verde |

@@ -20,6 +20,10 @@ Regla de la orden: los hallazgos del auditor son sospechas hasta reproducirlos, 
 | 10 | `f1-h5-progreso.md`, §17, decía que DA-65 estaba pendiente | — | No aplica | No aplica | Corregido: aprobada el 11/11/2026 y registrada |
 | 11 | La lesión abierta al confirmar `apto` | DA-76 | Ninguna nueva | — | **Detenido**: ver §2 |
 
+> **Superado** (nota del 13/11/2026, auditoría de estado de H5):
+> - **Fila 11:** DA-76 ya no está detenido; se implementó en `4ab4592` y `df068a2` (§9 y §11).
+> - **Fila 8:** la prueba de `ConfirmacionYEstadoTest.php:526` está hoy en `:607`.
+
 Pruebas que pasan sin código, por nombre:
 - «DA-79: buscarParaActualizar bloquea el aviso…»
 - «DA-79: las lecturas para actualizar bloquean la fila…» (estado y lesión)
@@ -32,6 +36,8 @@ Pruebas que pasan sin código, por nombre:
 En todas, el código ya hacía lo que la prueba fija; ninguna se ajustó para pasar.
 
 ## 2. DA-76: detenido en la fecha del cierre
+
+> **Superado** (nota del 13/11/2026, auditoría de estado de H5): la fecha la confirmó Luis el 13/11/2026 (`HoyDeNegocio`, DD-36), y DA-76 se implementó en `4ab4592` y `df068a2`. Ver §9 y §11.
 
 La orden pide implementar el cierre y tomar la fecha de DD-63 y DA-45, o parar y reportar si el código necesita una fecha que no está en la especificación. El código la necesita y no está:
 
@@ -54,6 +60,8 @@ Lo que hace falta decidir:
    Luis indicó (13/11/2026) no implementar la fecha hasta confirmarla. `ConfirmarAviso` sigue sin cambios.
 
    **Decisión registrada (Luis, 13/11/2026):** DA-76 sigue pendiente de confirmación. Si Luis la confirma, la fecha del cierre será el hoy de negocio de `HoyDeNegocio` (DD-36; `docs/hitos/f1-h5.md` §3.4 y §6.2), no un calendario de días hábiles.
+
+   > **Superado** (nota del 13/11/2026, auditoría de estado de H5): Luis confirmó DA-76 ese mismo día; ver §9 y §11.
    - B: la `fecha_aviso` del aviso confirmado.
    - C: el día anterior al nuevo estado.
 
@@ -127,6 +135,8 @@ Corridas que no cuentan, guardadas en `backend/build/`:
 
      Usa los mismos cuerpos que las líneas 511 a 524, y cada caso responde 404 `recurso_no_encontrado` con un cuerpo idéntico al de UUID v4, sin escribir nada.
    - **Pasa sin código:** el comportamiento ya existía. Con esto, las siete rutas de las líneas 484 a 524 tienen caso v7.
+
+   > **Líneas actuales** (nota del 13/11/2026, auditoría de estado de H5): las líneas 484 a 524 de `ConfirmacionYEstadoTest.php` están hoy en 565 a 605. La prueba de la línea 526 está en 607 y la segunda prueba de UUID v7, en 629.
 3. **Copia temporal sin bloqueo.**
    - La copia vivió solo dentro del contenedor (`/tmp/mut`, con el enlace `/tmp/docs` y el respaldo `/tmp/orig.php`) y el guion la borra al final. Después de la corrida, `ls` dentro del contenedor confirma que no existe ninguna de las tres rutas.
    - En el árbol del repositorio no hay ningún directorio `mut`, y `git status` no muestra archivos de la copia.
