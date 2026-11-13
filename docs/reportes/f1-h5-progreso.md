@@ -1,7 +1,9 @@
 # Progreso de H5
 
-**Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.8
-**Estado (13/11/2026):** Lotes A y B terminados y revisados. Lote C: T05 a T08 terminadas, y C01 (correcciones de la auditoría de T08, con DA-76 a DA-79) terminada. Faltan T09 (humo y cierre documental) y la auditoría independiente del lote. Todo está publicado en `origin/hito/f1-h5` hasta `75459b6` (§20), sin PR ni etiquetas.
+**Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.9
+**Estado (13/11/2026, cierre de T09):** Lotes A, B y C terminados. T09 cerrada (§21): humo de H5, respaldo 409 en lesiones, pruebas de DA-33, RN-22 y de contrato, especificación v1.0.9 y `laravel/framework` 13.42.0. `make verificar`, `make mutacion` y `make humo` (H0 a H5) pasan. Falta la auditoría independiente del Lote C; PR, etiqueta `f1-h5` y fusión esperan la orden del responsable. Los commits de T09 son locales; `origin/hito/f1-h5` llega a `e51cb46`.
+
+*Estado anterior (13/11/2026, antes de T09), conservado como registro:* Lotes A y B terminados y revisados. Lote C: T05 a T08 terminadas, y C01 (correcciones de la auditoría de T08, con DA-76 a DA-79) terminada. Faltan T09 (humo y cierre documental) y la auditoría independiente del lote. Todo está publicado en `origin/hito/f1-h5` hasta `75459b6` (§20), sin PR ni etiquetas.
 
 *Estado anterior, conservado como registro:* Lote A terminado, a la espera de revisión del responsable. T00 aceptada con dos correcciones. La primera, el mínimo de nivel 8 en la prueba de configuración, está hecha. La segunda, la condición de parada, se activó en la laptop anterior (§1.8) y el responsable la cerró el 3/11/2026 sin cambios de configuración, con las corridas de la laptop nueva (§1.13). T01 terminada (§2). La rama se publicó por orden del responsable para seguir en otra computadora (§1.12); los commits hasta `18db0da` se publicaron después, también por orden suya (el último push es del 5/11/2026); lo posterior es local. Sin PR ni etiquetas.
 
@@ -887,3 +889,37 @@ Detalle en `f1-h5-medicion-verificar.md`. Las etapas se corrieron por separado:
 | #87 | `feb4734` | En verde |
 | #88 | `df068a2` | En verde |
 | #89 | `75459b6` | En verde |
+
+## 21. F1-H5-T09: humo de H5 y cierre (13/11/2026)
+
+Plan en `f1-h5-plan-t09.md`, aprobado por Luis el 13/11/2026 (alcance completo). Reporte de cierre en `f1-h5-reporte.md`.
+
+| Commit | Contenido |
+|---|---|
+| `a868503` | Plan de cierre |
+| `5ccf340` | Especificación v1.0.9: `rango_no_configurado` en §6.3 (DA-70); DA-76 en §3.4 y §3.5 |
+| `649eb87` | OpenAPI: descripción de la confirmación para DA-76, sin cambiar códigos ni esquemas |
+| `43ce232` | `RepositorioDeLesionesSql::guardarCambio` responde 409 `conflicto` ante un choque de índice único (DA-79); antes, 500 |
+| `fc0178d` | Contrato del 409 `conflicto` del descarte y del 422 `rango_no_configurado` |
+| `e660649` | Prueba combinada de DA-33: fechas inválidas frente a `conflicto` |
+| `07682c7` | RN-22: E3, del mismo equipo que E1, no ve sus mediciones ni sus pruebas |
+| `f60698e` | `scripts/humo/humo-h5.sh` (18 pasos), línea en `make humo`, `GuionDeHumoTest` |
+| `73b7bd0` | `laravel/framework` v13.38.0 → v13.42.0 por CVE-2026-128083 (orden de Luis) |
+
+### Corridas
+
+| Corrida | Resultado | Tiempo |
+|---|---|---:|
+| `make verificar` en `f60698e` | 1 981 pruebas pasan; falla solo `composer audit` (CVE-2026-128083, publicado el 13/11/2026 a las 18:54 UTC) | 781 s |
+| `make verificar` en `73b7bd0` | Código 0: 1 981 pruebas (12 299 aserciones), Pest 729 s, cobertura 100 / 100 / 99.6 %, sin avisos | 783 s |
+| `make mutacion` en `73b7bd0` | Código 0: 885 de 885 mutantes eliminados, MSI 100 %, igual que en T08 | 184 s |
+| `make fresh` y `make humo` en `73b7bd0` | Código 0: H0 a H5, 156 pasos OK; H5, 18 pasos | — |
+
+Logs: `docs/reportes/logs/verificar/f1-h5-t09-20261113-1434.log` y `-1525.log`, `docs/reportes/logs/mutaciones/f1-h5-t09-infection-20261113-1539.log`, `docs/reportes/logs/humo/f1-h5-t09-20261113-1542.log` y `docs/reportes/logs/t09/`.
+
+### CI
+
+| Corrida | Commit | Estado |
+|---|---|---|
+| #90 | `9cb63b3` | En verde |
+| #91 (id 43500058870) | `e51cb46` | Falla en el paso «Verificar». El log no se pudo leer sin autenticación; la causa probable es el aviso de `composer audit`, que falló en local con el mismo commit de dependencias |
