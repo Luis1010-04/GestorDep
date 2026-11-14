@@ -1,9 +1,9 @@
-# F1-H6: plan de DA-81, Pest en paralelo
+# F1-H6: plan de DA-101, Pest en paralelo
 
 **Fecha:** 14 de noviembre de 2026
 **Rama y commit de partida:** `hito/f1-h6-especificacion`, `6a10ce0`
 **Estado:** plan para aprobación. No se ha tocado código ni configuración.
-**Origen:** DA-81 y DA-82 (`docs/reportes/f1-h5-decisiones-del-agente.md`); medición de H5 en `docs/reportes/f1-h5-medicion-verificar.md`.
+**Origen:** DA-81 y DA-82 de H5 (`docs/reportes/f1-h5-decisiones-del-agente.md`), cuya tarea se registra en H6 como DA-101 (`docs/hitos/f1-h6.md` §3.1); medición de H5 en `docs/reportes/f1-h5-medicion-verificar.md`.
 
 ## 1. Qué se busca
 
@@ -121,8 +121,8 @@ Esta tarea no está en `docs/hitos/f1-h6.md`, así que estas rutas necesitan tu 
 | `.github/workflows/verificar.yml` | El paso «Roles y base de pruebas» crea también las bases por proceso |
 | `backend/bin/con-candado.sh` | Solo el comentario |
 | `docs/estrategia-pruebas.md` §2 | Una línea: Pest corre en paralelo, una base por proceso |
-| `docs/reportes/f1-h5-decisiones-del-agente.md` y `docs/decisiones/registro-decisiones.md` | Estado de DA-81 |
-| `docs/reportes/f1-h6-da81.md` y logs | Reporte y medición |
+| `docs/reportes/f1-h5-decisiones-del-agente.md` y `docs/decisiones/registro-decisiones.md` | Estado de DA-81 (H5) y de DA-101 |
+| `docs/reportes/f1-h6-da101.md` y logs | Reporte y medición |
 
 No se tocan `phpunit.xml`, `infection.json5`, `bin/verificar-cobertura.php`, `EsquemaDePrueba.php` ni ningún archivo de `src/` o `app/`.
 
@@ -152,5 +152,5 @@ Con un `git revert` del commit: `verificar` vuelve a correr en serie sobre `gest
 1. **Aprobación del plan** y de las rutas de §7, incluido el cambio a `EntornoDePruebasTest`.
 2. **Cómo se crean las bases en un entorno que ya existe.** El guion de inicio de PostgreSQL solo corre al crear el volumen. Opciones: (a) un guion idempotente que `make levantar` ejecuta siempre, y que crea solo las bases que falten; (b) borrar el volumen de la base y volver a levantar, lo que elimina los datos locales de desarrollo. Recomiendo (a).
 3. **Criterio de éxito** de §5, en particular los 450 s.
-4. **Formato del commit.** La tarea no tiene número en la especificación. Propongo `F1-H6-T00: Pest en paralelo (DA-81)`, como las T00 de H4 y H5.
-5. **Rama.** Propongo trabajar en `hito/f1-h6-especificacion`, donde ya está la especificación. Si prefieres una rama aparte para DA-81, dime el nombre.
+4. **Formato del commit.** La tarea no tiene número en la especificación. Propongo `F1-H6-T00: Pest en paralelo (DA-101)`, como las T00 de H4 y H5.
+5. **Rama.** Propongo trabajar en `hito/f1-h6-especificacion`, donde ya está la especificación. Si prefieres una rama aparte para DA-101, dime el nombre.
