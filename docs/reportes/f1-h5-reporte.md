@@ -1,7 +1,7 @@
 # Reporte de cierre del hito F1-H5: Condición física y Salud
 
 **Fecha:** 13 de noviembre de 2026 · **Rama:** `hito/f1-h5` (desde `main`, `a34283e`) · **Especificación:** `docs/hitos/f1-h5.md` v1.0.9
-**Estado:** construcción terminada (T00 a T09, T03b y C01). Falta la **auditoría independiente del Lote C** (§10 punto 10) y la revisión del responsable (punto 11). Los commits de T09 son locales: `origin/hito/f1-h5` llega a `e51cb46`. Sin PR ni etiqueta.
+**Estado:** construcción terminada (T00 a T09, T03b y C01). La auditoría independiente de cierre, de solo lectura sobre `39cc400`, está hecha (sección 10). Falta la revisión del responsable (punto 11). Los commits de T09 están en `origin/hito/f1-h5` hasta `39cc400`; las correcciones de la auditoría de cierre (sección 10) son locales. Sin PR ni etiqueta.
 
 ## 1. Resumen
 
@@ -25,8 +25,8 @@ Plan: `f1-h5-plan-t09.md`, aprobado por Luis el 13/11/2026 (alcance completo).
 | Paso 0: push de los documentos | — | `e51cb46` subido con avance rápido. Actions #91 (id 43500058870): **falla** en «Verificar»; causa probable, el aviso de `composer audit` (sección 4) |
 | Plan | `a868503` | Hecho |
 | Especificación v1.0.9 | `5ccf340` | `rango_no_configurado` en §6.3 (DA-70); DA-76 en §3.4 y §3.5; control de cambios |
-| OpenAPI para DA-76 | `649eb87` | Solo la descripción de la confirmación. Las pruebas de contrato siguen en verde (134 pruebas de contrato y de Condición física) |
-| Respaldo 409 en lesiones (DA-79) | `43ce232` | `guardarCambio` convierte el choque de índice único en `EstadoConcurrente`. La prueba (disparador en `lesiones_historial` durante `PATCH /lesiones/{lesion}`) falló primero con «Expected response status code [409] but received 500.» y ahora pasa |
+| OpenAPI para DA-76 | `649eb87` | Solo la descripción de la confirmación. Las cuatro pruebas de contrato de H5 que había entonces (una por archivo: `ContratoDeAvisosTest`, `ContratoDeEstadoYLesionTest`, `ContratoDeMedicionesTest` y `ContratoDePruebasFisicasTest`) siguen en verde |
+| Respaldo 409 en lesiones (DA-79) | `43ce232` | DA-79 cubría el descarte y la confirmación de avisos; T09 extiende su respaldo a lesiones: `RepositorioDeLesionesSql::guardarCambio` convierte el choque de índice único en `EstadoConcurrente` (409 `conflicto`). Lo usan la corrección (`PATCH /lesiones/{lesion}`), el alta y el cierre de DA-76. La prueba (disparador en `lesiones_historial` durante `PATCH /lesiones/{lesion}`) falló primero con «Expected response status code [409] but received 500.» y ahora pasa |
 | Contrato de `conflicto` y `rango_no_configurado` | `fc0178d` | Dos pruebas nuevas validan las respuestas contra OpenAPI. Pasaron a la primera: el comportamiento y el contrato ya existían, y lo que faltaba era validarlos juntos |
 | DA-33 | `e660649` | Con el choque activo, fechas inválidas dan 422 `rango_de_fechas_invalido`; con fechas válidas, 409 `conflicto`. Pasa a la primera porque fija un orden existente; la mutación Z1 (escribir antes de validar las fechas) la rompe con 409 en lugar de 422 |
 | RN-22 | `07682c7` | E3, del mismo equipo A que E1, no ve sus mediciones ni sus pruebas y registra las suyas sin chocar. Pasan a la primera; las mutaciones R1 y R2 (sin el filtro por registrante) las rompen |
@@ -51,7 +51,18 @@ En serie, sin nada más corriendo. Log: `docs/reportes/logs/verificar/f1-h5-t09-
 | `composer audit` | Sin avisos | Sin medir por separado |
 | **Total** | **Código 0** | **783 s** |
 
-Las etapas que no son Pest suman unos 54 s en esta corrida. La medición por etapas de DA-57 (`f1-h5-medicion-verificar.md`, sobre `75459b6`) dio Pint 13 s, PHPStan 5 s, umbrales 0 s y auditoría 3 s. El total queda por debajo del límite de 900 s de la orden.
+Las etapas que no son Pest suman unos 54 s en esta corrida. La medición por etapas de referencia es la de DA-57 sobre `75459b6` (`f1-h5-medicion-verificar.md`), con cada etapa corrida por separado:
+
+| Etapa | Tiempo en `75459b6` |
+|---|---:|
+| Pint | 13 s |
+| PHPStan | 5 s |
+| Pest con cobertura | 718 s (Pest informa 681 s) |
+| Umbrales de cobertura | 0 s |
+| `composer audit` | 3 s |
+| **Total** | **742 s** |
+
+El total de la corrida de cierre queda por debajo del límite de 900 s de la orden.
 
 La corrida anterior, sobre `f60698e` y antes de la actualización, tardó 781 s. Pasaron todas las etapas salvo `composer audit` (log `f1-h5-t09-20261113-1434.log`).
 
@@ -61,7 +72,7 @@ Código 0. 885 de 885 mutantes eliminados; MSI 100 %, MSI cubierto 100 %, igual 
 
 ### 3.3 `make fresh` y `make humo`
 
-Código 0 en las dos. Humo de H0 a H5: 156 pasos OK; el de H5, sus 18 pasos (`HUMO H5 OK: 18 pasos`). Log: `docs/reportes/logs/humo/f1-h5-t09-20261113-1542.log`. Antes hubo una corrida de prueba del guion, también en verde, con su log en `backend/build/t09/`.
+Código 0 en las dos. Humo de H0 a H5: 156 comprobaciones OK, que recorren H0 y los 78 pasos numerados de H1 a H5 (14, 16, 16, 14 y 18); un paso puede tener varias comprobaciones. El de H5, sus 18 pasos (`HUMO H5 OK: 18 pasos`). Log: `docs/reportes/logs/humo/f1-h5-t09-20261113-1542.log`. Antes hubo una corrida de prueba del guion, también en verde, con su log en `backend/build/t09/`.
 
 ### 3.4 Migración (§10 punto 4)
 
@@ -79,16 +90,16 @@ No se corrió `migrate:rollback` en local en T09. En CI, el paso «Migraciones (
 
 | Punto | Estado |
 |---|---|
-| 1. `make verificar` en local y CI, `make mutacion` | En local, pasa (sección 3). En CI, #91 falló antes de la actualización; los commits de T09 no están subidos |
+| 1. `make verificar` en local y CI, `make mutacion` | En local, pasa (sección 3). En CI, #91 falló antes de la actualización; con los commits de T09 subidos, #92 (`23e2b1d`) y #93 (`39cc400`) pasaron en verde |
 | 2. Historias con pruebas; HU-04 c3, HU-11 c2 y HU-12 c3 cerrados | Cumplido (`docs/trazabilidad.md`) |
-| 3. OpenAPI con las rutas de §6.1 | Cumplido; contrato de DA-70, DA-79 y DA-76 completado en T09 |
+| 3. OpenAPI con las rutas de §6.1 | Cumplido; contrato de DA-70, DA-79 y DA-76 completado en T09. El 409 `conflicto` de `PATCH /lesiones/{lesion}` quedó documentado y validado contra OpenAPI tras la auditoría de cierre (M1, sección 10) |
 | 4. `make fresh` y `migrate:rollback` | `make fresh` en local; rollback en CI (sección 3.4) |
 | 5. Tablas de §7, una prueba por fila | Cumplido por prueba propia o por equivalencia (tablas en `docs/trazabilidad.md`) |
 | 6. `make humo` de H0 a H5 | Cumplido |
 | 7. Criterios propios de H5 | Cumplidos; los recorre el humo de H5 |
 | 8. Reporte con los tiempos por etapa | Este documento; solo Pest y el total se midieron en la corrida de cierre |
 | 9. DD-56 a DD-63, rangos por validar, AB-28 | Sin cambios en T09 |
-| 10. Auditoría independiente del Lote C | **Pendiente** |
+| 10. Auditoría independiente del Lote C | Hecha: auditoría de solo lectura de `39cc400` (sección 10) |
 | 11. Revisión, etiqueta y fusión | Esperan la orden del responsable |
 
 ## 6. Disposición de los 27 pendientes de la auditoría de estado
@@ -98,7 +109,7 @@ No se corrió `migrate:rollback` en local en T09. En CI, el paso «Migraciones (
 | 1 | DA-20 a DA-79 en el registro | Cerrado | `9cb63b3`, registro §9 |
 | 2 | Trazabilidad de H5 | Cerrado | `9cb63b3` y este commit |
 | 3 | Guion de humo de H5 | Cerrado | `f60698e` |
-| 4 | Reporte de cierre y auditoría del Lote C | Reporte cerrado; auditoría **pendiente de decisión** (orden de Luis) | Este documento |
+| 4 | Reporte de cierre y auditoría del Lote C | Cerrado: reporte y auditoría de solo lectura de `39cc400` | Este documento, sección 10 |
 | 5 | DA-65 en el progreso | Cerrado | Ya estaba correcto |
 | 6 | DA-45 y DA-76 | Cerrado | `df068a2` |
 | 7 | Lesiones que ninguna ruta cierra | Anotado para H7 | AB-30, con HU-26 |
@@ -133,8 +144,7 @@ Hallazgos de la sección 3 de la auditoría que T09 cerró: M1 (`5ccf340`), M2 (
 
 ## 8. Lo que no se cerró
 
-- La auditoría independiente del Lote C.
-- CI con los commits de T09: no están subidos. #91, sobre `e51cb46`, sigue en rojo hasta que se suba `73b7bd0`.
+- *Superado:* la auditoría independiente del Lote C ya está hecha (sección 10), y los commits de T09 ya están en `origin/hito/f1-h5` hasta `39cc400`, con #92 y #93 en verde.
 - Los pendientes marcados «pendiente de decisión» en la sección 6.
 
 ## 9. Revisión de la compuerta de cierre (`docs/plan-fase-1.md` §4, v1.2.2; 13/11/2026)
@@ -200,6 +210,21 @@ Se cumple, con la misma salvedad de 9.2 para la tabla de RN-16.
 
 1. Resuelto: la fila de HU-02 en `docs/trazabilidad.md` cita la prueba de H5 (punto 2).
 2. Resuelto con DA-80: basta la equivalencia en H5 (puntos 5 y 7).
-3. La revisión del responsable, la auditoría independiente del Lote C, la etiqueta y la fusión (puntos 9 y 11).
+3. La revisión del responsable, la etiqueta y la fusión (puntos 9 y 11). La auditoría independiente del Lote C ya está hecha (sección 10).
 
 **Para la especificación de H6 (DA-80):** una prueba por fila de cada tabla de casos, con el identificador de la fila en el nombre, desde el primer commit del hito. Es un cambio de proceso: queda en DA-80 y todavía no se agrega a `docs/plan-fase-1.md`.
+
+## 10. Auditoría independiente de cierre (`39cc400`, 13/11/2026)
+
+Auditoría de solo lectura sobre `39cc400`. Cuenta como la auditoría independiente del Lote C (§10 punto 10 de la especificación) y cierra el pendiente 4 de la sección 6. Su texto se versionará en `docs/reportes/auditorias/` cuando Luis lo entregue: **pendiente el texto**.
+
+| Hallazgo | Disposición |
+|---|---|
+| M1. `PATCH /lesiones/{lesion}` respondía 409 `conflicto` sin documentarlo en OpenAPI | Cerrado en `e3f8c2d`: 409 documentado y validado contra OpenAPI en `ContratoDeEstadoYLesionTest`. Antes de documentarlo, la prueba falló con «OpenAPI spec contains no such operation [/lesiones/{lesion},patch,409]» |
+| B3. `CorregirLesion` no nombraba `EstadoConcurrente` en `@throws`, y el comentario de `EstadoConcurrente` solo hablaba del estado vigente | Cerrado en `76c7373`. Solo comentarios |
+| B1. `RepositorioDeLesionesSql` solo captura el choque en `guardarCambio` | **Anotado para H7:** captura de cualquier índice único en lesiones, también en `guardarNueva`. No se cambia en H5 |
+| Registro: el título de la sección 9 decía «DA-20 a DA-79» y «las 60» | Cerrado: «DA-20 a DA-80», «las 61» y la fila de DA-80, con referencia a `f1-h5-decisiones-del-agente.md` |
+| Trazabilidad: la nota de HU-02 seguía diciendo «Diferido a H5»; DA-33 sin hito | Cerrado: nota corregida, y las cinco menciones de DA-33 dicen «de H4» o «de H5», sin renombrar decisiones |
+| Este reporte: estado de los commits, DA-79 en lesiones, tiempos por etapa, «156 pasos», «134 pruebas de contrato» y el contrato de lesiones | Cerrado en esta corrección (encabezado y secciones 2, 3, 5, 6 y 8) |
+
+Corridas de la corrección: PHPStan sin errores tras cada cambio de pruebas; `make verificar` completo (resultado en el reporte de la orden). No se corrió `make mutacion`: no cambió código de producción, solo comentarios, y el cambio de OpenAPI no afecta a las mutaciones.

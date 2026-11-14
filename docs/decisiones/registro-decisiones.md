@@ -264,9 +264,9 @@ Decisiones `[Decisión por defecto]` de `docs/hitos/f1-h5.md` (§3.3; v1.0 a v1.
 | DA-18 | Las respuestas no revelan autores (`creado_por`, `confirmado_por`, `registrado_por`, `registrada_por`); el estado oficial da `lesion_id` solo al registrante | **Sí** (revela lo mínimo) | **Aprobada** por el responsable (01/11/2026), tal como está |
 | DA-19 | `avisos_lesion.confirmado_por` (quién confirmó ese aviso; no cambia) es distinto de `estados_disponibilidad.confirmado_por` (quién sostiene el estado vigente; cambia con cada fila nueva, por DD-63 o por un alta). Coinciden al confirmar, junto con `lesiones.registrada_por`; la nota del aviso (DD-58) sigue a la primera y los permisos sobre el estado (RN-16), a la segunda. Prueba de coherencia en H5 §7.2 filas 22 y 23 | **Sí** (quién ve la nota y quién modifica el estado) | Pedida por el responsable en v1.0.1; **aprobada** por el responsable (01/11/2026), tal como está |
 
-## 9. Decisiones del agente en H5 (DA-20 a DA-79)
+## 9. Decisiones del agente en H5 (DA-20 a DA-80)
 
-Resumen de las decisiones que tomó el agente durante H5, continuando la numeración de la sección 8. El texto completo de cada una (qué faltaba, qué se eligió, estado, privacidad y cómo se revierte) está en [`docs/reportes/f1-h5-decisiones-del-agente.md`](../reportes/f1-h5-decisiones-del-agente.md); aquí no se duplica. Al 13 de noviembre de 2026, las 60 están aprobadas, confirmadas o decididas por el responsable. DA-45 quedó sustituida en el caso `apto` por DA-76.
+Resumen de las decisiones que tomó el agente durante H5, continuando la numeración de la sección 8. El texto completo de cada una (qué faltaba, qué se eligió, estado, privacidad y cómo se revierte) está en [`docs/reportes/f1-h5-decisiones-del-agente.md`](../reportes/f1-h5-decisiones-del-agente.md); aquí no se duplica. Al 13 de noviembre de 2026, las 61 están aprobadas, confirmadas o decididas por el responsable. DA-45 quedó sustituida en el caso `apto` por DA-76.
 
 | ID | Tema | Tarea | Nota |
 |---|---|---|---|
@@ -330,6 +330,7 @@ Resumen de las decisiones que tomó el agente durante H5, continuando la numerac
 | DA-77 | Pruebas de tipos borrados en el listado y en la vista del periodo | auditoría de T08 | |
 | DA-78 | El seeder de rangos no repone filas borradas | auditoría de T08 | |
 | DA-79 | Descarte y confirmación en paralelo | auditoría de T08 | |
+| DA-80 | Equivalencia de filas en §7.3, §7.4 y §7.8 para H5; una prueba por fila con su identificador desde H6 | revisión de la compuerta de T09 | Aprobada por Luis el 13/11/2026; texto completo en [`f1-h5-decisiones-del-agente.md`](../reportes/f1-h5-decisiones-del-agente.md), DA-80 |
 
 **Observación para H7 (13/11/2026):** en `docs/api/openapi.yaml`, `TipoDePrueba.codigo` es una lista cerrada (`enum: [velocidad, resistencia, tiempo_prueba]`). Si se siembra un tipo de prueba nuevo, las respuestas que lo incluyan dejan de validar contra el contrato. No se cambia el contrato en H5.
 
