@@ -1,7 +1,7 @@
 # Documento de Requisitos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas, Universidad del Fútbol y Ciencias del Deporte
-**Versión:** 1.2.2 (RN-16: excepción de DA-42; ver `docs/decisiones/registro-decisiones.md`, DA-83)
+**Versión:** 1.2.3 (RN-22: excepción de las alertas entre entrenadores de un mismo equipo; ver `docs/decisiones/registro-decisiones.md`, DA-102)
 **Fecha:** 21 de octubre de 2026
 **Estado:** Pendiente de validación por la institución. Lo marcado **[Propuesta]** o **[Decisión por defecto]** debe validarse antes de construir la parte que lo usa (ver `docs/decisiones/registro-decisiones.md`)
 
@@ -14,6 +14,7 @@
 | 1.2 | 21/10/2026 | RN-04: tipo de redondeo. RN-09: ventana móvil de 30 días y vencimiento por tiempo. HU-17: cómo se confirma una corrección |
 | 1.2.1 | 22/10/2026 | RN-22: la asignación de entrenadores adicionales pasa al backlog (ninguna historia la describe) |
 | 1.2.2 | 14/11/2026 | RN-16: quien creó un aviso deja de verlo si pierde el alcance sobre el jugador (DA-42, DA-83) |
+| 1.2.3 | 14/11/2026 | RN-22: las alertas de riesgo de baja deportiva y de acumulación de sanciones de un equipo se calculan con los datos de todos sus entrenadores y las ven todos ellos (DA-102) |
 
 ## 1. Introducción
 
@@ -110,7 +111,7 @@ Todas son **[Decisión por defecto]** y deben validarse con la institución.
 - **RN-19.** Mientras no exista perfil de administración, los usuarios (docentes y entrenadores) los crea el equipo del proyecto con un comando de consola o un seeder. Un usuario puede tener uno o los dos roles.
 - **RN-20.** Un usuario puede buscar a un jugador por matrícula aunque no esté asignado a él; la búsqueda devuelve solo nombres, apellidos y matrícula. Asignar al jugador a un equipo (HU-04) o inscribirlo en una materia (HU-06) le otorga acceso al usuario que lo hace.
 - **RN-21.** La alerta de riesgo de baja académica se activa cuando el nivel de riesgo es "en riesgo" (RN-04); "en observación" no genera alerta.
-- **RN-22.** Quien crea un equipo queda asignado a él como entrenador. Un equipo puede tener más de un entrenador; entre entrenadores de un mismo equipo se aplica la regla estricta de RN-14 hasta que la institución decida otra cosa. La asignación de entrenadores adicionales a un equipo existente queda en el backlog, porque ninguna historia la describe.
+- **RN-22.** Quien crea un equipo queda asignado a él como entrenador. Un equipo puede tener más de un entrenador; entre entrenadores de un mismo equipo se aplica la regla estricta de RN-14 hasta que la institución decida otra cosa, con una excepción: las alertas de riesgo de baja deportiva y de acumulación de sanciones de un equipo se calculan con los datos de todos los entrenadores de ese equipo y las ven todos ellos (DA-102). La asignación de entrenadores adicionales a un equipo existente queda en el backlog, porque ninguna historia la describe.
 - **RN-23.** Dar de baja a un jugador exige un motivo y una fecha, y queda en el historial. Un jugador dado de baja deja de aparecer en convocatorias, listados y alertas, y su información se conserva (RN-17).
 
 ## 4. Requisitos funcionales
