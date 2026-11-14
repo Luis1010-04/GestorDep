@@ -509,3 +509,14 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por Luis en el chat (12/11/2026), opción A en ambas. Implementada en C01.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** quitar las dos capturas de `RepositorioDeAvisosSql`; las pruebas `DA-79` de choque fallarían con 500.
+
+## DA-80. Equivalencia de filas en §7.3, §7.4 y §7.8 para H5 (revisión de la compuerta de T09)
+
+- **Qué faltaba:** `docs/hitos/f1-h5.md` §10 punto 5 y `backend/.ai/guidelines/proyecto.md` §10 piden una prueba por fila de cada tabla de casos. En §7.3, §7.4 y §7.8 solo las filas 3 a 5 de §7.3, la 3 de §7.4 y la 1 de §7.8 llevan el identificador de fila en el nombre (`f1-h5-reporte.md` §9.2).
+- **Qué se eligió:**
+  - **H5:** las filas de §7.3, §7.4 y §7.8 se cubren por equivalencia, con la tabla de `docs/trazabilidad.md` («Estado al cierre de H5») como evidencia. No se renombran pruebas ni se agregan pruebas con el identificador de fila.
+  - **Regla para H6 en adelante:** una prueba por fila de cada tabla de casos, con el identificador de la fila en el nombre, desde el primer commit del hito. La especificación de H6 debe incluirla. No se agrega todavía a `docs/plan-fase-1.md`.
+  - **Criterios sin número en el nombre:** HU-19 c3 y HU-21 c2 quedan aceptados. Tienen prueba por comportamiento (`Feature/Salud/AvisosTest.php:479`; las pruebas RN-15 de `Feature/Salud/ConfirmacionYEstadoTest.php`, líneas 55, 512 y 1008) y paso de humo (`humo-h5.sh` pasos 5 y 9).
+- **Estado:** aprobada por Luis el 13/11/2026, según la recomendación del reporte de la compuerta (`f1-h5-reporte.md` §9).
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** agregar en H5 una prueba por fila de §7.3, §7.4 y §7.8 con su identificador, y pruebas con «HU-19 c3» y «HU-21 c2» en el nombre.

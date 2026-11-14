@@ -136,3 +136,70 @@ Hallazgos de la sección 3 de la auditoría que T09 cerró: M1 (`5ccf340`), M2 (
 - La auditoría independiente del Lote C.
 - CI con los commits de T09: no están subidos. #91, sobre `e51cb46`, sigue en rojo hasta que se suba `73b7bd0`.
 - Los pendientes marcados «pendiente de decisión» en la sección 6.
+
+## 9. Revisión de la compuerta de cierre (`docs/plan-fase-1.md` §4, v1.2.2; 13/11/2026)
+
+Revisión hecha sobre `23e2b1d`, ya subido. Actions #92 (id 43548615304): **en verde**. Pasaron todos sus pasos, incluidos «Migraciones (fresh y rollback)», «Verificar» y «Mutacion». Esto actualiza lo que dicen las secciones 5 y 8 sobre CI y el rollback.
+
+| Punto | Estado | Evidencia |
+|---|---|---|
+| 1. `make verificar` en local y CI | Cumple | Local: sección 3.1. CI: #92 |
+| 2. Historias con su identificador, criterios diferidos anotados, trazabilidad | Cumple (fila de HU-02 corregida) | Ver 9.1 |
+| 3. OpenAPI | Cumple | Pruebas de contrato de H5 en verde en #92 |
+| 4. `make fresh` y rollback | Cumple | Local: sección 3.3. CI: «Migraciones (fresh y rollback)» en #92 |
+| 5. Tablas de casos | Cumple por equivalencia (DA-80) | Ver 9.2 |
+| 6. `make humo` | Cumple | Sección 3.3 |
+| 7. Criterios de aceptación | Cumple | Ver 9.3 |
+| 8. Reporte de fuera de alcance | Cumple | Reportes de cada tarea y sección 7 |
+| 9. Revisión del responsable | Pendiente | Espera a Luis |
+| 10. `make mutacion` (desde H6) | No aplica a H5; se corrió igual | Sección 3.2 y paso «Mutacion» de #92 |
+| 11. Etiqueta y fusión | Pendiente | Espera la orden de Luis |
+
+### 9.1 Punto 2
+
+- **Historias con su identificador en el nombre.** Las de H5 tienen todas pruebas con su identificador: HU-17 (6), HU-18 (5), HU-19 (6), HU-20 (7), HU-21 (3) y HU-30 (8). Las tres de HU-17, HU-18, HU-20 y HU-30 tienen criterios con su número en el nombre.
+  - **HU-19 c3** («el estado oficial no cambia hasta que un entrenador lo confirme») no tiene prueba con «HU-19 c3» en el nombre. Lo cubre `Feature/Salud/AvisosTest.php:479` («DA-26 (§7.1 fila 1)…») y el paso 5 del humo.
+  - **HU-21 c2** («no ve tipo, zona ni causa») tampoco. Lo cubren las pruebas RN-15 de `Feature/Salud/ConfirmacionYEstadoTest.php` (líneas 55, 512 y 1008) y el paso 9 del humo.
+- **Criterios diferidos.** HU-04 c3 (`ConfirmacionYEstadoTest.php:55`), HU-11 c2 y HU-12 c3 (`Feature/Competencia/AdvertenciasDeLesionTest.php`) tienen prueba con su identificador y figuran así en `docs/trazabilidad.md`. Los que H5 difiere a H6 y H7 (§2.2) están en las filas de la trazabilidad y en §6 de este reporte.
+- **Resuelto (13/11/2026):** la fila de HU-02 en `docs/trazabilidad.md`, línea 16, conservaba «**Diferido a H5:** el lado deportivo del docente (estado de disponibilidad, §2.2)». Ahora cita la prueba de H5 que lo cubre: `ConfirmacionYEstadoTest.php:72`, «§7.2 fila 3 (RN-13, DA-10): D1 ve el estado y la fecha, sin lesion_id».
+
+### 9.2 Punto 5
+
+Las tablas de `docs/hitos/f1-h5.md` §7 que copian a `docs/estrategia-pruebas.md`, y las propias del hito, tienen prueba para cada fila:
+
+| Tabla | Filas | Con «§7.N fila M» en el nombre |
+|---|---:|---|
+| §7.1 Avisos | 12 | Las 12 |
+| §7.2 Confirmación y estado | 23 | Las 23 |
+| §7.3 RN-16 | 5 | Solo las filas 3 a 5, en una sola prueba (`RegistroRN16Test.php:10`) |
+| §7.4 RN-15 | 7 | Solo la fila 3 (`RegistroRN15Test.php:12`) |
+| §7.5 Mediciones | 17 | Las 17 |
+| §7.6 Pruebas físicas | 13 | Las 13 |
+| §7.7 Advertencias | 7 | Las 7 |
+| §7.8 Alcance y privacidad | 6 | Solo la fila 1 (`RecorridoDeAlcanceH5Test.php:14`) |
+
+- **Resuelto con DA-80:** las filas restantes de §7.3, §7.4 y §7.8 se cubren por equivalencia, en las tablas de `docs/trazabilidad.md` («Estado al cierre de H5»).
+- Eso cumple el punto 5 del plan («las reglas… se demuestran con las tablas de casos»), pero no la letra de `docs/hitos/f1-h5.md` §10 punto 5 («una prueba por fila») ni de `backend/.ai/guidelines/proyecto.md` §10 («cada fila de una tabla de casos es una prueba»).
+- Era la pregunta 6 de la auditoría de estado. DA-80 (13/11/2026) acepta la equivalencia para H5, acepta HU-19 c3 y HU-21 c2 sin número en el nombre, y fija la regla para H6.
+
+### 9.3 Punto 7
+
+Criterios de H5 en `docs/criterios-aceptacion-fase-1.md`, línea 32:
+
+| Criterio | Prueba | Humo de H5 |
+|---|---|---|
+| Un aviso de docente o entrenador queda pendiente y no cambia el estado oficial | `AvisosTest.php:479` (§7.1 fila 1) y las filas de §7.1 que crean avisos | Pasos 4 y 5 |
+| Cualquier entrenador del jugador lo confirma y queda como registrante | `ConfirmacionYEstadoTest.php:31` (§7.2 fila 1, HU-20 c1) | Paso 7 |
+| El otro entrenador ve estado y fecha estimada, pero no tipo, zona ni causa | `ConfirmacionYEstadoTest.php:55` (§7.2 fila 2), `:512` (DA-18) y `:1008` (RN-15) | Pasos 8 y 9 |
+| El IMC se calcula sin captura | `MedicionesTest.php:27` (§7.5 fila 1, HU-17 c1) | Paso 12 |
+| La tabla de RN-16 pasa | §7.3, por las pruebas de 9.2 (filas 1 y 2 por equivalencia) | Pasos 7 y 10 |
+
+Se cumple, con la misma salvedad de 9.2 para la tabla de RN-16.
+
+### 9.4 Pendientes que deja esta revisión
+
+1. Resuelto: la fila de HU-02 en `docs/trazabilidad.md` cita la prueba de H5 (punto 2).
+2. Resuelto con DA-80: basta la equivalencia en H5 (puntos 5 y 7).
+3. La revisión del responsable, la auditoría independiente del Lote C, la etiqueta y la fusión (puntos 9 y 11).
+
+**Para la especificación de H6 (DA-80):** una prueba por fila de cada tabla de casos, con el identificador de la fila en el nombre, desde el primer commit del hito. Es un cambio de proceso: queda en DA-80 y todavía no se agrega a `docs/plan-fase-1.md`.
