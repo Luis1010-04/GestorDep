@@ -1,0 +1,12 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Integration\CondicionFisica\RepositorioDePruebasFisicasTest
+  ✓ RNF-02: registrar escribe la fila y su historial crear               6.47s  
+  ✓ RNF-02: corregir escribe los valores anteriores y nuevos con el mot… 0.51s  
+  ✓ §6.3, DA-64: dos pruebas del mismo tipo, registrante y periodo choc… 0.61s  
+  ✓ DA-04, DD-59: buscar del periodo distingue jugador, tipo, registran… 0.49s  
+  ✓ DA-16: el catálogo lee el rango del tipo de la tabla, también tras…  0.58s  
+
+  Tests:    5 passed (36 assertions)
+  Duration: 9.41s
+

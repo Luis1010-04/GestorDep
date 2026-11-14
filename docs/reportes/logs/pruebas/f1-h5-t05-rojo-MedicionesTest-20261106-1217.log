@@ -1,0 +1,1100 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Feature\CondicionFisica\MedicionesTest
+  ⨯ §7.5 fila 1 (HU-17 c1, DA-05): E1 registra; 201 con el periodo y el… 3.29s  
+  ⨯ §7.5 fila 2 (DA-05): 72.50 kg y 180.0 cm dan un IMC de 22.38         0.25s  
+  ⨯ §7.5 fila 3 (DA-05): 12.505 se redondea HALF_UP a 12.51 y la base d… 0.25s  
+  ⨯ §7.5 fila 4 (HU-17 c2): otra medición en el periodo sin es_correcci… 0.25s  
+  ⨯ §7.5 fila 5 (HU-17 c2): la corrección con motivo responde 200, reem… 0.26s  
+  ⨯ §7.5 fila 6 (convenciones §4.1): es_correccion sin motivo responde…  0.25s  
+  ⨯ §7.5 fila 6 (convenciones §4.1): es_correccion sin motivo responde…  0.26s  
+  ⨯ §7.5 fila 7 (convenciones §4.1): es_correccion sin nada en el perio… 0.25s  
+  ⨯ §7.5 fila 8 (DD-59): E2 registra la suya en el mismo periodo y no c… 0.25s  
+  ⨯ §7.5 fila 9 (DD-59): E2 lista solo la suya                           0.25s  
+  ⨯ §7.5 fila 10 (HU-17 c3, DA-06): E1 lista tres periodos en orden asc… 0.25s  
+  ⨯ §7.5 fila 11 (DD-62): 19.99 kg responde 422 valor_fuera_de_rango en… 0.27s  
+  ⨯ §7.5 fila 12 (DD-62): 230.1 cm responde 422 valor_fuera_de_rango en… 0.26s  
+  ⨯ §7.5 fila 13 (DD-62): 200.00 kg y 100.0 cm son válidos, y también l… 0.24s  
+  ⨯ §7.5 fila 13 (DD-62): 200.00 kg y 100.0 cm son válidos, y también l… 0.25s  
+  ⨯ §7.5 fila 14 (DA-13): E1 con el equipo B responde 422 equipo_inexis… 0.25s  
+  ⨯ §7.5 fila 15 (DD-60, DA-41): registrar una medición de JB responde…  0.24s  
+  ⨯ §7.5 fila 16 (§5.3): D1 no lista las mediciones: 403 sin_permiso     0.24s  
+  ⨯ §7.5 fila 17 (RNF-09, DA-16): el máximo cambiado en la base se apli… 0.25s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.25s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.26s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.28s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.33s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.40s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.30s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.28s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.25s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.25s  
+  ⨯ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.25s  
+  ⨯ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.25s  
+  ⨯ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.28s  
+  ⨯ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.29s  
+  ⨯ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.26s  
+  ⨯ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.24s  
+  ⨯ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.28s  
+  ⨯ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.25s  
+  ⨯ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.26s  
+  ⨯ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.30s  
+  ⨯ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.30s  
+  ⨯ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.31s  
+  ⨯ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.31s  
+  ⨯ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.26s  
+  ⨯ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.27s  
+  ⨯ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.27s  
+  ⨯ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.25s  
+  ⨯ DA-03: la fecha es opcional, puede ser futura y decide el periodo    0.25s  
+  ⨯ DA-44: el motivo admite 255 caracteres; 256 responden 422 validacio… 0.27s  
+  ⨯ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.31s  
+  ⨯ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.27s  
+  ⨯ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.34s  
+  ⨯ DA-39: es_correccion falso sin motivo registra como una medición no… 0.31s  
+  ⨯ DA-40: una corrección con valores idénticos responde 200 sin histor… 0.27s  
+  ⨯ DA-12: corregir una medición de un jugador en baja responde 409 jug… 0.26s  
+  ⨯ DA-12, DD-30: las mediciones de un jugador en baja se siguen listan… 0.43s  
+  ⨯ DA-13: inexistente, eliminado, ajeno, sin el jugador o UUID no v7 r… 0.28s  
+  ⨯ DA-13: con el jugador en dos equipos suyos hay una sola medición po… 0.28s  
+  ⨯ DA-38: el 422 del cuerpo va antes que el 409 jugador_en_baja         0.29s  
+  ⨯ DA-38: jugador_en_baja va antes que equipo_inexistente y que valor_… 0.45s  
+  ⨯ DA-38: equipo_inexistente va antes que valor_fuera_de_rango          0.30s  
+  ⨯ DA-38: valor_fuera_de_rango va antes que nada_que_corregir y que me… 0.36s  
+  ⨯ DA-38: valor_fuera_de_rango va antes que nada_que_corregir y que me… 0.31s  
+  ✓ §6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de…  0.33s  
+  ✓ §6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca…  0.27s  
+  ⨯ §6.1: sin sesión responde 401 y el docente no registra               0.24s  
+  ✓ DD-61: un usuario con los dos roles solo registra con el alcance de… 0.30s  
+  ⨯ §6.1: el listado pagina y valida sus parámetros                      0.34s  
+  ⨯ RNF-02: una medición borrada lógicamente no se lista ni cuenta para… 0.30s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 1 (HU-17…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:32
+     28▕     /** @var TestCase $this */
+     29▕     $m = medicionesMundo();
+     30▕ 
+     31▕     $respuesta = sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), sesionesIniciar($this, 'e1@x.com'))
+  ➜  32▕         ->assertCreated()
+     33▕         ->assertJsonPath('datos.equipo_id', $m['a'])
+     34▕         ->assertJsonPath('datos.fecha', '2026-11-15')
+     35▕         ->assertJsonPath('datos.periodo', '2026-11')
+     36▕         ->assertJsonPath('datos.peso_kg', '70.00')
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 2 (DA-05…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:48
+     44▕     /** @var TestCase $this */
+     45▕     $m = medicionesMundo();
+     46▕ 
+     47▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '72.50', 'estatura_cm' => '180.0']), sesionesIniciar($this, 'e1@x.com'))
+  ➜  48▕         ->assertCreated()
+     49▕         ->assertJsonPath('datos.imc', '22.38');
+     50▕ });
+     51▕ 
+     52▕ test('§7.5 fila 3 (DA-05): 12.505 se redondea HALF_UP a 12.51 y la base da el mismo valor', function () {
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 3 (DA-05…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:57
+     53▕     /** @var TestCase $this */
+     54▕     $m = medicionesMundo();
+     55▕ 
+     56▕     $respuesta = sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '50.02', 'estatura_cm' => '200.0']), sesionesIniciar($this, 'e1@x.com'))
+  ➜  57▕         ->assertCreated()
+     58▕         ->assertJsonPath('datos.imc', '12.51');
+     59▕ 
+     60▕     expect(DB::table('mediciones_corporales')->where('id', $respuesta->json('datos.id'))->value('imc'))->toBe('12.51');
+     61▕ });
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 4 (HU-17…   
+  Expected response status code [409] but received 404.
+Failed asserting that 404 is identical to 409.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:69
+     65▕     $m = medicionesMundo();
+     66▕     medicionInsertar($m['f1'], $m['a'], $m['e1']);
+     67▕ 
+     68▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '71.00']), sesionesIniciar($this, 'e1@x.com'))
+  ➜  69▕         ->assertConflict()
+     70▕         ->assertJsonPath('codigo', 'medicion_ya_registrada')
+     71▕         ->assertJsonPath('mensaje', __('errores.reglas.medicion_ya_registrada'))
+     72▕         ->assertJsonPath('errores', []);
+     73▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 5 (HU-17…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:83
+     79▕     $m = medicionesMundo();
+     80▕     $medicion = medicionInsertar($m['f1'], $m['a'], $m['e1']);
+     81▕ 
+     82▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '71.00', 'es_correccion' => true, 'motivo' => 'Báscula mal calibrada']), sesionesIniciar($this, 'e1@x.com'))
+  ➜  83▕         ->assertOk()
+     84▕         ->assertJsonPath('datos.id', $medicion)
+     85▕         ->assertJsonPath('datos.peso_kg', '71.00')
+     86▕         ->assertJsonPath('datos.imc', '23.18');
+     87▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 6 (conve…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:105
+    101▕     $m = medicionesMundo();
+    102▕     medicionInsertar($m['f1'], $m['a'], $m['e1']);
+    103▕ 
+    104▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['es_correccion' => true, ...$cambios]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 105▕         ->assertUnprocessable()
+    106▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    107▕         ->assertJsonPath('errores.0.campo', 'motivo');
+    108▕ })->with([
+    109▕     'ausente' => [[]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 6 (conve…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:105
+    101▕     $m = medicionesMundo();
+    102▕     medicionInsertar($m['f1'], $m['a'], $m['e1']);
+    103▕ 
+    104▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['es_correccion' => true, ...$cambios]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 105▕         ->assertUnprocessable()
+    106▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    107▕         ->assertJsonPath('errores.0.campo', 'motivo');
+    108▕ })->with([
+    109▕     'ausente' => [[]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 7 (conve…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:119
+    115▕     $m = medicionesMundo();
+    116▕     medicionInsertar($m['f1'], $m['a'], $m['e1']);
+    117▕ 
+    118▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['fecha' => '2026-10-05', 'es_correccion' => true, 'motivo' => 'Error']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 119▕         ->assertUnprocessable()
+    120▕         ->assertJsonPath('codigo', 'nada_que_corregir')
+    121▕         ->assertJsonPath('errores.0.campo', 'es_correccion');
+    122▕ 
+    123▕     expect(medicionesCuenta($m['f1']))->toBe(1);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 8 (DD-59…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:131
+    127▕     /** @var TestCase $this */
+    128▕     $m = medicionesMundo();
+    129▕     medicionInsertar($m['f1'], $m['a'], $m['e1']);
+    130▕ 
+  ➜ 131▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['b']), sesionesIniciar($this, 'e2@x.com'))->assertCreated();
+    132▕ 
+    133▕     expect(medicionesCuenta($m['f1']))->toBe(2);
+    134▕ });
+    135▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 9 (DD-59…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:142
+    138▕     $m = medicionesMundo();
+    139▕     medicionInsertar($m['f1'], $m['a'], $m['e1']);
+    140▕     $suya = medicionInsertar($m['f1'], $m['b'], $m['e2']);
+    141▕ 
+  ➜ 142▕     $respuesta = sesionesPeticion($this, 'GET', medicionesRuta($m['f1']), idDeSesion: sesionesIniciar($this, 'e2@x.com'))->assertOk();
+    143▕ 
+    144▕     expect(array_column($respuesta->json('datos'), 'id'))->toBe([$suya]);
+    145▕ });
+    146▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 10 (HU-1…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:155
+    151▕     medicionInsertar($m['f1'], $m['a'], $m['e1'], '2026-09-02');
+    152▕     medicionInsertar($m['f1'], $m['a'], $m['e1'], '2026-10-02');
+    153▕ 
+    154▕     $respuesta = sesionesPeticion($this, 'GET', medicionesRuta($m['f1']), idDeSesion: sesionesIniciar($this, 'e1@x.com'))
+  ➜ 155▕         ->assertOk()
+    156▕         ->assertJsonPath('meta.total', 3);
+    157▕ 
+    158▕     expect(array_column($respuesta->json('datos'), 'periodo'))->toBe(['2026-09', '2026-10', '2026-11'])
+    159▕         ->and(array_keys($respuesta->json('datos.0')))->toEqualCanonicalizing(CAMPOS_DE_LA_MEDICION);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 11 (DD-6…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:167
+    163▕     /** @var TestCase $this */
+    164▕     $m = medicionesMundo();
+    165▕ 
+    166▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '19.99']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 167▕         ->assertUnprocessable()
+    168▕         ->assertJsonPath('codigo', 'valor_fuera_de_rango')
+    169▕         ->assertJsonPath('errores.0.campo', 'peso_kg');
+    170▕ });
+    171▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 12 (DD-6…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:177
+    173▕     /** @var TestCase $this */
+    174▕     $m = medicionesMundo();
+    175▕ 
+    176▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['estatura_cm' => '230.1']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 177▕         ->assertUnprocessable()
+    178▕         ->assertJsonPath('codigo', 'valor_fuera_de_rango')
+    179▕         ->assertJsonPath('errores.0.campo', 'estatura_cm');
+    180▕ });
+    181▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 13 (DD-6…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:187
+    183▕     /** @var TestCase $this */
+    184▕     $m = medicionesMundo();
+    185▕ 
+    186▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => $peso, 'estatura_cm' => $estatura]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 187▕         ->assertCreated();
+    188▕ })->with([
+    189▕     'máximo de peso y mínimo de estatura' => ['200.00', '100.0'],
+    190▕     'mínimo de peso y máximo de estatura' => ['20.00', '230.0'],
+    191▕ ]);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 13 (DD-6…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:187
+    183▕     /** @var TestCase $this */
+    184▕     $m = medicionesMundo();
+    185▕ 
+    186▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => $peso, 'estatura_cm' => $estatura]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 187▕         ->assertCreated();
+    188▕ })->with([
+    189▕     'máximo de peso y mínimo de estatura' => ['200.00', '100.0'],
+    190▕     'mínimo de peso y máximo de estatura' => ['20.00', '230.0'],
+    191▕ ]);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 14 (DA-1…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:198
+    194▕     /** @var TestCase $this */
+    195▕     $m = medicionesMundo();
+    196▕ 
+    197▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['b']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 198▕         ->assertUnprocessable()
+    199▕         ->assertJsonPath('codigo', 'equipo_inexistente')
+    200▕         ->assertJsonPath('errores.0.campo', 'equipo_id');
+    201▕ 
+    202▕     expect(medicionesCuenta($m['f1']))->toBe(0);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 15 (DD-6…   
+  Expected response status code [409] but received 404.
+Failed asserting that 404 is identical to 409.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:210
+    206▕     /** @var TestCase $this */
+    207▕     $m = medicionesMundo();
+    208▕ 
+    209▕     sesionesPeticion($this, 'POST', medicionesRuta($m['jb']), medicionCuerpo($m['a']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 210▕         ->assertConflict()
+    211▕         ->assertExactJson(['codigo' => 'jugador_en_baja', 'mensaje' => MENSAJE_DE_BAJA_EN_MEDICION, 'errores' => []]);
+    212▕ 
+    213▕     expect(medicionesCuenta($m['jb']))->toBe(0);
+    214▕ });
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 16 (§5.3…   
+  Expected response status code [403] but received 404.
+Failed asserting that 404 is identical to 403.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:221
+    217▕     /** @var TestCase $this */
+    218▕     $m = medicionesMundo();
+    219▕ 
+    220▕     sesionesPeticion($this, 'GET', medicionesRuta($m['f1']), idDeSesion: sesionesIniciar($this, 'd1@x.com'))
+  ➜ 221▕         ->assertForbidden()
+    222▕         ->assertJsonPath('codigo', 'sin_permiso');
+    223▕ });
+    224▕ 
+    225▕ test('§7.5 fila 17 (RNF-09, DA-16): el máximo cambiado en la base se aplica sin tocar el código', function () {
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 17 (RNF-…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:231
+    227▕     $m = medicionesMundo();
+    228▕     DB::connection('propietario')->table('rangos_mediciones_corporales')->where('codigo', 'peso_kg')->update(['maximo' => '150.00']);
+    229▕ 
+    230▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '160.00']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 231▕         ->assertUnprocessable()
+    232▕         ->assertJsonPath('codigo', 'valor_fuera_de_rango')
+    233▕         ->assertJsonPath('errores.0.campo', 'peso_kg');
+    234▕ });
+    235▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > T05 (condición del…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:241
+    237▕     /** @var TestCase $this */
+    238▕     $m = medicionesMundo();
+    239▕ 
+    240▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 241▕         ->assertUnprocessable()
+    242▕         ->assertExactJson([
+    243▕             'codigo' => 'valor_fuera_de_rango',
+    244▕             'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION,
+    245▕             'errores' => [['campo' => $campo, 'codigo' => 'valor_fuera_de_rango', 'mensaje' => MENSAJE_DE_RANGO_DE_MEDICION]],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: peso y estat…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:267
+    263▕     /** @var TestCase $this */
+    264▕     $m = medicionesMundo();
+    265▕ 
+    266▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 267▕         ->assertUnprocessable()
+    268▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    269▕         ->assertJsonPath('errores.0.campo', $campo);
+    270▕ })->with([
+    271▕     'peso con tres decimales' => ['peso_kg', '70.123'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: peso y estat…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:267
+    263▕     /** @var TestCase $this */
+    264▕     $m = medicionesMundo();
+    265▕ 
+    266▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 267▕         ->assertUnprocessable()
+    268▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    269▕         ->assertJsonPath('errores.0.campo', $campo);
+    270▕ })->with([
+    271▕     'peso con tres decimales' => ['peso_kg', '70.123'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: peso y estat…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:267
+    263▕     /** @var TestCase $this */
+    264▕     $m = medicionesMundo();
+    265▕ 
+    266▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 267▕         ->assertUnprocessable()
+    268▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    269▕         ->assertJsonPath('errores.0.campo', $campo);
+    270▕ })->with([
+    271▕     'peso con tres decimales' => ['peso_kg', '70.123'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: peso y estat…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:267
+    263▕     /** @var TestCase $this */
+    264▕     $m = medicionesMundo();
+    265▕ 
+    266▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 267▕         ->assertUnprocessable()
+    268▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    269▕         ->assertJsonPath('errores.0.campo', $campo);
+    270▕ })->with([
+    271▕     'peso con tres decimales' => ['peso_kg', '70.123'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: peso y estat…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:267
+    263▕     /** @var TestCase $this */
+    264▕     $m = medicionesMundo();
+    265▕ 
+    266▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 267▕         ->assertUnprocessable()
+    268▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    269▕         ->assertJsonPath('errores.0.campo', $campo);
+    270▕ })->with([
+    271▕     'peso con tres decimales' => ['peso_kg', '70.123'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: peso y estat…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:267
+    263▕     /** @var TestCase $this */
+    264▕     $m = medicionesMundo();
+    265▕ 
+    266▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 267▕         ->assertUnprocessable()
+    268▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    269▕         ->assertJsonPath('errores.0.campo', $campo);
+    270▕ })->with([
+    271▕     'peso con tres decimales' => ['peso_kg', '70.123'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: peso y estat…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:267
+    263▕     /** @var TestCase $this */
+    264▕     $m = medicionesMundo();
+    265▕ 
+    266▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 267▕         ->assertUnprocessable()
+    268▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    269▕         ->assertJsonPath('errores.0.campo', $campo);
+    270▕ })->with([
+    271▕     'peso con tres decimales' => ['peso_kg', '70.123'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: peso y estat…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:267
+    263▕     /** @var TestCase $this */
+    264▕     $m = medicionesMundo();
+    265▕ 
+    266▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], [$campo => $valor]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 267▕         ->assertUnprocessable()
+    268▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    269▕         ->assertJsonPath('errores.0.campo', $campo);
+    270▕ })->with([
+    271▕     'peso con tres decimales' => ['peso_kg', '70.123'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: campos oblig…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:289
+    285▕     unset($base[$cuerpo['quitar'] ?? '']);
+    286▕     unset($cuerpo['quitar']);
+    287▕ 
+    288▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [...$base, ...$cuerpo], sesionesIniciar($this, 'e1@x.com'))
+  ➜ 289▕         ->assertUnprocessable()
+    290▕         ->assertJsonPath('errores.0.campo', $campo)
+    291▕         ->assertJsonPath('errores.0.codigo', $codigo);
+    292▕ })->with([
+    293▕     'sin equipo' => [['quitar' => 'equipo_id'], 'equipo_id', 'required'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: campos oblig…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:289
+    285▕     unset($base[$cuerpo['quitar'] ?? '']);
+    286▕     unset($cuerpo['quitar']);
+    287▕ 
+    288▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [...$base, ...$cuerpo], sesionesIniciar($this, 'e1@x.com'))
+  ➜ 289▕         ->assertUnprocessable()
+    290▕         ->assertJsonPath('errores.0.campo', $campo)
+    291▕         ->assertJsonPath('errores.0.codigo', $codigo);
+    292▕ })->with([
+    293▕     'sin equipo' => [['quitar' => 'equipo_id'], 'equipo_id', 'required'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: campos oblig…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:289
+    285▕     unset($base[$cuerpo['quitar'] ?? '']);
+    286▕     unset($cuerpo['quitar']);
+    287▕ 
+    288▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [...$base, ...$cuerpo], sesionesIniciar($this, 'e1@x.com'))
+  ➜ 289▕         ->assertUnprocessable()
+    290▕         ->assertJsonPath('errores.0.campo', $campo)
+    291▕         ->assertJsonPath('errores.0.codigo', $codigo);
+    292▕ })->with([
+    293▕     'sin equipo' => [['quitar' => 'equipo_id'], 'equipo_id', 'required'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: campos oblig…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:289
+    285▕     unset($base[$cuerpo['quitar'] ?? '']);
+    286▕     unset($cuerpo['quitar']);
+    287▕ 
+    288▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [...$base, ...$cuerpo], sesionesIniciar($this, 'e1@x.com'))
+  ➜ 289▕         ->assertUnprocessable()
+    290▕         ->assertJsonPath('errores.0.campo', $campo)
+    291▕         ->assertJsonPath('errores.0.codigo', $codigo);
+    292▕ })->with([
+    293▕     'sin equipo' => [['quitar' => 'equipo_id'], 'equipo_id', 'required'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: campos oblig…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:289
+    285▕     unset($base[$cuerpo['quitar'] ?? '']);
+    286▕     unset($cuerpo['quitar']);
+    287▕ 
+    288▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [...$base, ...$cuerpo], sesionesIniciar($this, 'e1@x.com'))
+  ➜ 289▕         ->assertUnprocessable()
+    290▕         ->assertJsonPath('errores.0.campo', $campo)
+    291▕         ->assertJsonPath('errores.0.codigo', $codigo);
+    292▕ })->with([
+    293▕     'sin equipo' => [['quitar' => 'equipo_id'], 'equipo_id', 'required'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: campos oblig…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:289
+    285▕     unset($base[$cuerpo['quitar'] ?? '']);
+    286▕     unset($cuerpo['quitar']);
+    287▕ 
+    288▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [...$base, ...$cuerpo], sesionesIniciar($this, 'e1@x.com'))
+  ➜ 289▕         ->assertUnprocessable()
+    290▕         ->assertJsonPath('errores.0.campo', $campo)
+    291▕         ->assertJsonPath('errores.0.codigo', $codigo);
+    292▕ })->with([
+    293▕     'sin equipo' => [['quitar' => 'equipo_id'], 'equipo_id', 'required'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: campos oblig…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:289
+    285▕     unset($base[$cuerpo['quitar'] ?? '']);
+    286▕     unset($cuerpo['quitar']);
+    287▕ 
+    288▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [...$base, ...$cuerpo], sesionesIniciar($this, 'e1@x.com'))
+  ➜ 289▕         ->assertUnprocessable()
+    290▕         ->assertJsonPath('errores.0.campo', $campo)
+    291▕         ->assertJsonPath('errores.0.codigo', $codigo);
+    292▕ })->with([
+    293▕     'sin equipo' => [['quitar' => 'equipo_id'], 'equipo_id', 'required'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.2: campos oblig…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:289
+    285▕     unset($base[$cuerpo['quitar'] ?? '']);
+    286▕     unset($cuerpo['quitar']);
+    287▕ 
+    288▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [...$base, ...$cuerpo], sesionesIniciar($this, 'e1@x.com'))
+  ➜ 289▕         ->assertUnprocessable()
+    290▕         ->assertJsonPath('errores.0.campo', $campo)
+    291▕         ->assertJsonPath('errores.0.codigo', $codigo);
+    292▕ })->with([
+    293▕     'sin equipo' => [['quitar' => 'equipo_id'], 'equipo_id', 'required'],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-03: la fecha es…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:309
+    305▕     $m = medicionesMundo();
+    306▕     $sesion = sesionesIniciar($this, 'e1@x.com');
+    307▕ 
+    308▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['fecha' => '2026-10-05']), $sesion)
+  ➜ 309▕         ->assertCreated()
+    310▕         ->assertJsonPath('datos.fecha', '2026-10-05')
+    311▕         ->assertJsonPath('datos.periodo', '2026-10');
+    312▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['fecha' => '2027-01-20']), $sesion)
+    313▕         ->assertCreated()
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-44: el motivo a…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:324
+    320▕     $medicion = medicionInsertar($m['f1'], $m['a'], $m['e1']);
+    321▕     $sesion = sesionesIniciar($this, 'e1@x.com');
+    322▕ 
+    323▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '71.00', 'es_correccion' => true, 'motivo' => str_repeat('a', 256)]), $sesion)
+  ➜ 324▕         ->assertUnprocessable()
+    325▕         ->assertJsonPath('codigo', 'validacion_fallida')
+    326▕         ->assertJsonPath('errores.0.campo', 'motivo');
+    327▕ 
+    328▕     expect(medicionesHistorial($medicion))->toHaveCount(0)
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-39: motivo sin…    
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:342
+    338▕     /** @var TestCase $this */
+    339▕     $m = medicionesMundo();
+    340▕ 
+    341▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], $cambios), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 342▕         ->assertUnprocessable()
+    343▕         ->assertJsonPath('errores.0.campo', 'motivo')
+    344▕         ->assertJsonPath('errores.0.codigo', 'prohibited');
+    345▕ 
+    346▕     expect(medicionesCuenta($m['f1']))->toBe(0);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-39: motivo sin…    
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:342
+    338▕     /** @var TestCase $this */
+    339▕     $m = medicionesMundo();
+    340▕ 
+    341▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], $cambios), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 342▕         ->assertUnprocessable()
+    343▕         ->assertJsonPath('errores.0.campo', 'motivo')
+    344▕         ->assertJsonPath('errores.0.codigo', 'prohibited');
+    345▕ 
+    346▕     expect(medicionesCuenta($m['f1']))->toBe(0);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-39: motivo sin…    
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:342
+    338▕     /** @var TestCase $this */
+    339▕     $m = medicionesMundo();
+    340▕ 
+    341▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], $cambios), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 342▕         ->assertUnprocessable()
+    343▕         ->assertJsonPath('errores.0.campo', 'motivo')
+    344▕         ->assertJsonPath('errores.0.codigo', 'prohibited');
+    345▕ 
+    346▕     expect(medicionesCuenta($m['f1']))->toBe(0);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-39: es_correcci…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:358
+    354▕     /** @var TestCase $this */
+    355▕     $m = medicionesMundo();
+    356▕ 
+    357▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['es_correccion' => false]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 358▕         ->assertCreated();
+    359▕ });
+    360▕ 
+    361▕ test('DA-40: una corrección con valores idénticos responde 200 sin historial ni cambio de actualizado_en', function () {
+    362▕     /** @var TestCase $this */
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-40: una correcc…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:368
+    364▕     $medicion = medicionInsertar($m['f1'], $m['a'], $m['e1'], '2026-11-15');
+    365▕     $antes = DB::table('mediciones_corporales')->where('id', $medicion)->value('actualizado_en');
+    366▕ 
+    367▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['es_correccion' => true, 'motivo' => 'Sin cambios']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 368▕         ->assertOk()
+    369▕         ->assertJsonPath('datos.id', $medicion);
+    370▕ 
+    371▕     expect(medicionesHistorial($medicion))->toHaveCount(0)
+    372▕         ->and(DB::table('mediciones_corporales')->where('id', $medicion)->value('actualizado_en'))->toBe($antes);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-12: corregir un…   
+  Expected response status code [409] but received 404.
+Failed asserting that 404 is identical to 409.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:381
+    377▕     $m = medicionesMundo();
+    378▕     $medicion = medicionInsertar($m['jb'], $m['a'], $m['e1']);
+    379▕ 
+    380▕     sesionesPeticion($this, 'POST', medicionesRuta($m['jb']), medicionCuerpo($m['a'], ['peso_kg' => '71.00', 'es_correccion' => true, 'motivo' => 'Error']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 381▕         ->assertConflict()
+    382▕         ->assertExactJson(['codigo' => 'jugador_en_baja', 'mensaje' => MENSAJE_DE_BAJA_EN_MEDICION, 'errores' => []]);
+    383▕ 
+    384▕     expect(medicionesHistorial($medicion))->toHaveCount(0);
+    385▕ });
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-12, DD-30: las…    
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:392
+    388▕     /** @var TestCase $this */
+    389▕     $m = medicionesMundo();
+    390▕     $medicion = medicionInsertar($m['jb'], $m['a'], $m['e1']);
+    391▕ 
+  ➜ 392▕     $respuesta = sesionesPeticion($this, 'GET', medicionesRuta($m['jb']), idDeSesion: sesionesIniciar($this, 'e1@x.com'))->assertOk();
+    393▕ 
+    394▕     expect(array_column($respuesta->json('datos'), 'id'))->toBe([$medicion]);
+    395▕ });
+    396▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-13: inexistente…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:407
+    403▕     $ajeno = mundoEquipo('Ajeno', (string) DB::table('equipos')->where('id', $m['a'])->value('categoria_id'), $m['e1']);
+    404▕     $sinElJugador = mundoEquipo('Sin F1', (string) DB::table('equipos')->where('id', $m['a'])->value('categoria_id'), $m['e3']);
+    405▕ 
+    406▕     $cuerpos = array_map(
+  ➜ 407▕         fn (string $equipo) => sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($equipo), $sesion)->assertUnprocessable()->getContent(),
+    408▕         [Identificador::generar()->valor(), $eliminado, $ajeno, $sinElJugador, UUID_V4_EN_MEDICIONES],
+    409▕     );
+    410▕ 
+    411▕     expect(array_unique($cuerpos))->toHaveCount(1)
+
+  1   tests/Feature/CondicionFisica/MedicionesTest.php:406
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-13: con el juga…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:421
+    417▕     /** @var TestCase $this */
+    418▕     $m = medicionesMundo();
+    419▕     $sesion = sesionesIniciar($this, 'e3@x.com');
+    420▕ 
+  ➜ 421▕     $creada = sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), $sesion)->assertCreated();
+    422▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['b']), $sesion)
+    423▕         ->assertConflict()
+    424▕         ->assertJsonPath('codigo', 'medicion_ya_registrada');
+    425▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['b'], ['es_correccion' => true, 'motivo' => 'Era el otro equipo']), $sesion)
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-38: el 422 del…    
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:436
+    432▕     /** @var TestCase $this */
+    433▕     $m = medicionesMundo();
+    434▕ 
+    435▕     sesionesPeticion($this, 'POST', medicionesRuta($m['jb']), medicionCuerpo($m['a'], ['peso_kg' => 'x']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 436▕         ->assertUnprocessable()
+    437▕         ->assertJsonPath('codigo', 'validacion_fallida');
+    438▕ });
+    439▕ 
+    440▕ test('DA-38: jugador_en_baja va antes que equipo_inexistente y que valor_fuera_de_rango', function () {
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-38: jugador_en_…   
+  Expected response status code [409] but received 404.
+Failed asserting that 404 is identical to 409.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:445
+    441▕     /** @var TestCase $this */
+    442▕     $m = medicionesMundo();
+    443▕ 
+    444▕     sesionesPeticion($this, 'POST', medicionesRuta($m['jb']), medicionCuerpo($m['b'], ['peso_kg' => '1.00']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 445▕         ->assertConflict()
+    446▕         ->assertJsonPath('codigo', 'jugador_en_baja');
+    447▕ });
+    448▕ 
+    449▕ test('DA-38: equipo_inexistente va antes que valor_fuera_de_rango', function () {
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-38: equipo_inex…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:454
+    450▕     /** @var TestCase $this */
+    451▕     $m = medicionesMundo();
+    452▕ 
+    453▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['b'], ['peso_kg' => '1.00']), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 454▕         ->assertUnprocessable()
+    455▕         ->assertJsonPath('codigo', 'equipo_inexistente');
+    456▕ });
+    457▕ 
+    458▕ test('DA-38: valor_fuera_de_rango va antes que nada_que_corregir y que medicion_ya_registrada', function (bool $yaRegistrada, array $cambios) {
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-38: valor_fuera…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:466
+    462▕         medicionInsertar($m['f1'], $m['a'], $m['e1'], '2026-11-15');
+    463▕     }
+    464▕ 
+    465▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '1.00', ...$cambios]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 466▕         ->assertUnprocessable()
+    467▕         ->assertJsonPath('codigo', 'valor_fuera_de_rango');
+    468▕ })->with([
+    469▕     'sin nada que corregir' => [false, ['es_correccion' => true, 'motivo' => 'Error']],
+    470▕     'ya registrada' => [true, []],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DA-38: valor_fuera…   
+  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:466
+    462▕         medicionInsertar($m['f1'], $m['a'], $m['e1'], '2026-11-15');
+    463▕     }
+    464▕ 
+    465▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '1.00', ...$cambios]), sesionesIniciar($this, 'e1@x.com'))
+  ➜ 466▕         ->assertUnprocessable()
+    467▕         ->assertJsonPath('codigo', 'valor_fuera_de_rango');
+    468▕ })->with([
+    469▕     'sin nada que corregir' => [false, ['es_correccion' => true, 'motivo' => 'Error']],
+    470▕     'ya registrada' => [true, []],
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.1: sin sesión r…   
+  Expected response status code [401] but received 404.
+Failed asserting that 404 is identical to 401.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:501
+    497▕ test('§6.1: sin sesión responde 401 y el docente no registra', function () {
+    498▕     /** @var TestCase $this */
+    499▕     $m = medicionesMundo();
+    500▕ 
+  ➜ 501▕     sesionesPeticion($this, 'GET', medicionesRuta($m['f1']))->assertUnauthorized();
+    502▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']))->assertUnauthorized();
+    503▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), sesionesIniciar($this, 'd1@x.com'))
+    504▕         ->assertForbidden()
+    505▕         ->assertJsonPath('codigo', 'sin_permiso');
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.1: el listado p…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:527
+    523▕     medicionInsertar($m['f1'], $m['a'], $m['e1'], '2026-10-02');
+    524▕     $sesion = sesionesIniciar($this, 'e1@x.com');
+    525▕ 
+    526▕     $segunda = sesionesPeticion($this, 'GET', medicionesRuta($m['f1']).'?pagina=2&por_pagina=1', idDeSesion: $sesion)
+  ➜ 527▕         ->assertOk()
+    528▕         ->assertJsonPath('meta.total', 2)
+    529▕         ->assertJsonPath('meta.pagina', 2)
+    530▕         ->assertJsonPath('meta.por_pagina', 1)
+    531▕         ->assertJsonPath('meta.total_paginas', 2);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\MedicionesTest > RNF-02: una medici…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/CondicionFisica/MedicionesTest.php:546
+    542▕     $m = medicionesMundo();
+    543▕     medicionInsertar($m['f1'], $m['a'], $m['e1'], '2026-11-02', ['eliminado_en' => '2026-11-03 10:00:00+00']);
+    544▕     $sesion = sesionesIniciar($this, 'e1@x.com');
+    545▕ 
+  ➜ 546▕     $respuesta = sesionesPeticion($this, 'GET', medicionesRuta($m['f1']), idDeSesion: $sesion)->assertOk();
+    547▕ 
+    548▕     expect($respuesta->json('datos'))->toBe([]);
+    549▕ 
+    550▕     sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), $sesion)->assertCreated();
+
+
+  Tests:    64 failed, 3 passed (142 assertions)
+  Duration: 22.33s
+

@@ -10,6 +10,7 @@ use Src\Plantel\Aplicacion\ActualizarExpedienteDeJugador;
 use Src\Plantel\Aplicacion\JugadorNoEncontrado;
 use Src\Plantel\Dominio\RepositorioDeJugadores;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /**
@@ -46,19 +47,19 @@ test('HU-05: A actualiza nombres de J1 y el historial guarda la instantánea com
 
     $historial = DB::table('jugadores_historial')->where('jugador_id', $m['j1'])->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('actualizar')
-        ->and($historial[0]->version)->toBe(1)
-        ->and($historial[0]->usuario_id)->toBe($usuarioId)
-        ->and(json_decode($historial[0]->datos_anteriores, true))->toEqual([
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('actualizar')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->version)->toBe(1)
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($usuarioId)
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_anteriores, true))->toEqual([
             'nombres' => 'Uno', 'apellidos' => 'Alvarez', 'fecha_nacimiento' => '2009-05-10', 'matricula' => 'M-1',
             'estatus_academico' => 'activo', 'estatus_deportivo' => 'activo',
         ])
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqual([
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqual([
             'nombres' => 'Uno Nuevo', 'apellidos' => 'Alvarez', 'fecha_nacimiento' => '2009-05-10', 'matricula' => 'M-1',
             'estatus_academico' => 'activo', 'estatus_deportivo' => 'activo',
         ])
-        ->and((new DateTimeImmutable($historial[0]->ocurrido_en))->getTimestamp())->toBe((new DateTimeImmutable('2026-03-10 15:20:45', new DateTimeZone('UTC')))->getTimestamp())
-        ->and((new DateTimeImmutable($fila['actualizado_en']))->getTimestamp())->toBe((new DateTimeImmutable($historial[0]->ocurrido_en))->getTimestamp());
+        ->and((new DateTimeImmutable(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->ocurrido_en))->getTimestamp())->toBe((new DateTimeImmutable('2026-03-10 15:20:45', new DateTimeZone('UTC')))->getTimestamp())
+        ->and((new DateTimeImmutable($fila['actualizado_en']))->getTimestamp())->toBe((new DateTimeImmutable(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->ocurrido_en))->getTimestamp());
 });
 
 test('HU-05: dos cambios seguidos dejan versiones consecutivas', function () {
@@ -70,8 +71,8 @@ test('HU-05: dos cambios seguidos dejan versiones consecutivas', function () {
 
     $historial = DB::table('jugadores_historial')->where('jugador_id', $m['j1'])->orderBy('version')->get();
     expect($historial->pluck('version')->all())->toBe([1, 2])
-        ->and(json_decode($historial[1]->datos_anteriores, true))->toMatchArray(['nombres' => 'Uno B', 'apellidos' => 'Alvarez'])
-        ->and(json_decode($historial[1]->datos_nuevos, true))->toMatchArray(['nombres' => 'Uno B', 'apellidos' => 'Alvarez B']);
+        ->and(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_anteriores, true))->toMatchArray(['nombres' => 'Uno B', 'apellidos' => 'Alvarez'])
+        ->and(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_nuevos, true))->toMatchArray(['nombres' => 'Uno B', 'apellidos' => 'Alvarez B']);
 });
 
 test('HU-05: una actualización parcial cambia solo el campo enviado', function (string $campo, string $valor) {

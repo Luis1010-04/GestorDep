@@ -1,0 +1,94 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Unit\Salud\EstadoOficialTest
+  ✓ HU-20 c1: un estado con lesión guarda su tipo, lesión, fecha y regi… 0.06s  
+  ✓ DD-57: un estado apto no tiene lesión ni fecha estimada
+  ✓ DA-14: cerrar pone vigente_hasta y conserva lo demás, sin tocar el original
+  ✓ DA-30: un estado no se cierra en el mismo instante en que se abrió,… 0.01s  
+  ✓ DA-30: un estado no se cierra en el mismo instante en que se abrió, ni antes with dataset "antes"
+  ✓ DA-30: un estado se cierra un segundo después de abrirse
+  ✓ DA-14: cambiar la fecha conserva la misma fila, sin tocar el original
+  ✓ DA-14: cambiar el estado abre otro con la misma lesión y el mismo registrante
+  ✓ RN-16: solo el registrante modifica un estado con lesión             0.02s  
+  ✓ §3.4: un estado apto no se modifica, tampoco por quien lo sostiene…  0.01s  
+  ✓ DA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "ayer"
+  ✓ DA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "hoy"
+  ✓ DA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "mañana"
+  ✓ DA-09: un estado apto no requiere actualización
+  ✓ §6.3: los códigos de las reglas del estado
+  ✓ §5.1: los valores de TipoDeEstado son los de la tabla
+  ⨯ DA-56: al crearse, el estado tiene actualizadoEn igual al instante…  0.01s  
+  ⨯ DA-56: al crearse, el estado tiene actualizadoEn igual al instante with dataset "apto"
+  ⨯ DA-56: cambiar la fecha fija actualizadoEn en el instante del cambio y conserva vigenteDesde
+  ⨯ DA-56: cerrar y abrir el sucesor fijan actualizadoEn en el instante del cambio
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Salud\EstadoOficialTest > DA-56: al crearse, el…  Error   
+  Call to undefined method Src\Salud\Dominio\EstadoOficial::actualizadoEn()
+
+  at tests/Unit/Salud/EstadoOficialTest.php:164
+    160▕ test('DA-56: al crearse, el estado tiene actualizadoEn igual al instante', function (Closure $crear) {
+    161▕     /** @var EstadoOficial $estado */
+    162▕     $estado = $crear();
+    163▕ 
+  ➜ 164▕     expect($estado->actualizadoEn())->toEqual(new DateTimeImmutable('2026-11-15 18:00:00+00:00'));
+    165▕ })->with([
+    166▕     'con lesión' => [fn () => estadoLesionadoDePrueba()],
+    167▕     'apto' => [fn () => estadoAptoDePrueba()],
+    168▕ ]);
+
+  1   tests/Unit/Salud/EstadoOficialTest.php:164
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Salud\EstadoOficialTest > DA-56: al crearse, el…  Error   
+  Call to undefined method Src\Salud\Dominio\EstadoOficial::actualizadoEn()
+
+  at tests/Unit/Salud/EstadoOficialTest.php:164
+    160▕ test('DA-56: al crearse, el estado tiene actualizadoEn igual al instante', function (Closure $crear) {
+    161▕     /** @var EstadoOficial $estado */
+    162▕     $estado = $crear();
+    163▕ 
+  ➜ 164▕     expect($estado->actualizadoEn())->toEqual(new DateTimeImmutable('2026-11-15 18:00:00+00:00'));
+    165▕ })->with([
+    166▕     'con lesión' => [fn () => estadoLesionadoDePrueba()],
+    167▕     'apto' => [fn () => estadoAptoDePrueba()],
+    168▕ ]);
+
+  1   tests/Unit/Salud/EstadoOficialTest.php:164
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Salud\EstadoOficialTest > DA-56: cambiar la fec…  Error   
+  Call to undefined method Src\Salud\Dominio\EstadoOficial::actualizadoEn()
+
+  at tests/Unit/Salud/EstadoOficialTest.php:176
+    172▕     $instante = new DateTimeImmutable('2026-11-16 09:00:00+00:00');
+    173▕ 
+    174▕     $cambiado = $estado->conFecha('2026-12-05', $instante);
+    175▕ 
+  ➜ 176▕     expect($cambiado->actualizadoEn())->toBe($instante)
+    177▕         ->and($cambiado->vigenteDesde())->toEqual($estado->vigenteDesde())
+    178▕         ->and($cambiado->fechaEstimadaRegreso())->toBe('2026-12-05');
+    179▕ });
+    180▕
+
+  1   tests/Unit/Salud/EstadoOficialTest.php:176
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Salud\EstadoOficialTest > DA-56: cerrar y abrir…  Error   
+  Call to undefined method Src\Salud\Dominio\EstadoOficial::actualizadoEn()
+
+  at tests/Unit/Salud/EstadoOficialTest.php:185
+    181▕ test('DA-56: cerrar y abrir el sucesor fijan actualizadoEn en el instante del cambio', function () {
+    182▕     $estado = estadoLesionadoDePrueba();
+    183▕     $instante = new DateTimeImmutable('2026-11-16 09:00:00+00:00');
+    184▕ 
+  ➜ 185▕     expect($estado->cerrar($instante)->actualizadoEn())->toBe($instante)
+    186▕         ->and($estado->sucesor(Identificador::generar(), TipoDeEstado::ConMolestia, '2026-12-01', $instante)->actualizadoEn())->toBe($instante);
+    187▕ });
+    188▕
+
+  1   tests/Unit/Salud/EstadoOficialTest.php:185
+
+
+  Tests:    4 failed, 16 passed (57 assertions)
+  Duration: 0.72s
+

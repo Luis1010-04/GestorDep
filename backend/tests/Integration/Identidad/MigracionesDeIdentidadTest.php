@@ -4,6 +4,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Src\Compartido\Dominio\Identificador;
+use Tests\Ayudantes\NoNulo;
 
 beforeEach(function () {
     esquemaReiniciar();
@@ -52,7 +53,7 @@ test('RNF-03: el indice parcial de correo permite reutilizarlo tras el borrado l
 test('RNF-03: usuarios aplica los valores por defecto de activo e intentos fallidos', function () {
     $id = insertarUsuario();
 
-    $fila = DB::connection('propietario')->table('usuarios')->where('id', $id)->first();
+    $fila = NoNulo::exigir(DB::connection('propietario')->table('usuarios')->where('id', $id)->first(), 'el usuario');
 
     expect($fila->activo)->toBeTrue()
         ->and($fila->intentos_fallidos)->toBe(0)

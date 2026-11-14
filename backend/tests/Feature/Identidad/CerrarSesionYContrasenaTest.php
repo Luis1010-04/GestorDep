@@ -9,6 +9,7 @@ use Illuminate\Testing\TestResponse;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use Src\Compartido\Dominio\Identificador;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 const CLAVE_VIGENTE = 'una-clave-larga-1';
@@ -175,7 +176,7 @@ test('HU-27: el cambio correcto conserva la sesión actual, cierra la otra y dej
     $filas = DB::table('usuarios_historial')->where('usuario_afectado_id', $id)->where('operacion', 'actualizar')->get();
     expect($filas)->toHaveCount(1);
 
-    $fila = $filas->first();
+    $fila = NoNulo::exigir($filas->first(), 'el historial del cambio de contraseña');
     expect(json_decode((string) $fila->datos_anteriores, true))->toBeEmpty()
         ->and(json_decode((string) $fila->datos_nuevos, true))->toBe(['contrasena_modificada' => true])
         ->and($fila->usuario_id)->toBe($id)

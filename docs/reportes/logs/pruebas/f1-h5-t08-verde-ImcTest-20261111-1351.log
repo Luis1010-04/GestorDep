@@ -1,0 +1,11 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Unit\CondicionFisica\ImcTest
+  ✓ DA-71: un IMC igual al máximo de la columna se admite                0.04s  
+  ✓ DA-71: un IMC por encima del máximo de la columna responde valor_fu… 0.03s  
+  ✓ DA-71: el IMC que se valida es el mismo que se guarda
+  ✓ DA-70: un rango no configurado lleva su código                       0.01s  
+
+  Tests:    4 passed (7 assertions)
+  Duration: 0.72s
+

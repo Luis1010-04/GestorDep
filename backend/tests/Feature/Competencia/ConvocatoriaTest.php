@@ -6,6 +6,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Convocatoria (HU-12, HU-29 criterio 3; docs/hitos/f1-h3.md §7.5 filas 1, 2, 3, 9 y 10, y §7.6 fila 3). */
@@ -67,9 +68,9 @@ test('HU-12 (§7.5 fila 1): E1 convoca a J1 a un partido programado de A', funct
     ]]);
     $historial = DB::table('convocatorias_historial')->where('convocatoria_id', $id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->usuario_id)->toBe($m['e1'])
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqual(['partido_id' => $partido, 'jugador_id' => $m['j1'], 'posicion_id' => null, 'rol_alineacion' => null]);
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['e1'])
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqual(['partido_id' => $partido, 'jugador_id' => $m['j1'], 'posicion_id' => null, 'rol_alineacion' => null]);
 });
 
 test('HU-12 (§7.5 fila 2): convocar de nuevo a J1 da 409 jugador_ya_convocado en jugador_id', function () {
@@ -140,15 +141,15 @@ test('HU-12 (§7.5 fila 10): E1 quita a J1 de la convocatoria; el historial regi
 
     convocatoriaPeticion($this, 'DELETE', "/convocatorias/$id")->assertNoContent();
 
-    $fila = DB::table('convocatorias')->where('id', $id)->first();
+    $fila = NoNulo::exigir(DB::table('convocatorias')->where('id', $id)->first(), 'la convocatoria borrada');
     $historial = DB::table('convocatorias_historial')->where('convocatoria_id', $id)->get();
     expect($fila->eliminado_en)->toBe('2026-09-05 15:00:00+00')
         ->and($fila->eliminado_por)->toBe($m['e1'])
         ->and($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('eliminar')
-        ->and($historial[0]->usuario_id)->toBe($m['e1'])
-        ->and(json_decode($historial[0]->datos_anteriores, true))->toMatchArray(['jugador_id' => $m['j1'], 'posicion_id' => $posicion, 'rol_alineacion' => 'titular'])
-        ->and($historial[0]->datos_nuevos)->toBeNull()
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('eliminar')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['e1'])
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_anteriores, true))->toMatchArray(['jugador_id' => $m['j1'], 'posicion_id' => $posicion, 'rol_alineacion' => 'titular'])
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos)->toBeNull()
         ->and(convocatoriaPeticion($this, 'GET', "/partidos/$partido/convocatoria")->json('datos'))->toBe([]);
 
     $nueva = convocatoriaPeticion($this, 'POST', "/partidos/$partido/convocatoria", ['jugador_id' => $m['j1']])->assertCreated();
@@ -160,8 +161,12 @@ test('HU-12: la convocatoria lista en orden de convocatoria, excluye las elimina
     /** @var TestCase $this */
     $m = mundoDeCompetencia();
     $partido = convocatoriaPartido($m);
-    $primera = convocatoriaPeticion($this, 'POST', "/partidos/$partido/convocatoria", ['jugador_id' => $m['j2']])->json('datos.id');
-    $segunda = convocatoriaPeticion($this, 'POST', "/partidos/$partido/convocatoria", ['jugador_id' => $m['j1']])->json('datos.id');
+    // DA-73: ids fijos y crecientes, con el mismo creado_en, para que el desempate por id sea determinista (DA-72).
+    $primera = '019a5c00-0000-7000-8000-000000000001';
+    $segunda = '019a5c00-0001-7000-8000-000000000002';
+    foreach ([$primera => $m['j2'], $segunda => $m['j1']] as $id => $jugador) {
+        DB::connection('propietario')->table('convocatorias')->insert(['id' => $id, 'partido_id' => $partido, 'jugador_id' => $jugador, 'creado_en' => '2026-09-05 15:00:00+00']);
+    }
     convocatoriaDe($partido, $m['j3'], ['eliminado_en' => '2026-09-04 10:00:00+00']);
     convocatoriaDe(convocatoriaPartido($m, atributos: ['inicia_en' => '2026-09-19 23:00:00+00']), $m['j3']);
 

@@ -1,0 +1,248 @@
+# make fresh + make humo | commit base: feb4734 + DA-76 sin commit
+docker compose exec -T app php artisan migrate:fresh --database=propietario --seed --force
+
+  Dropping all tables .......................................... 186.83ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table ...................................... 12.23ms DONE
+
+   INFO  Running migrations.  
+
+  2026_10_20_000100_habilitar_extension_citext ................... 2.57ms DONE
+  2026_10_21_000200_crear_tabla_trabajos ........................ 12.72ms DONE
+  2026_10_21_000300_crear_tabla_trabajos_fallidos ............... 16.37ms DONE
+  2026_10_21_000400_crear_tabla_sessions ........................ 14.82ms DONE
+  2026_10_21_010100_crear_tabla_usuarios ........................ 21.31ms DONE
+  2026_10_21_010200_crear_tabla_roles ........................... 16.23ms DONE
+  2026_10_21_010300_crear_tabla_usuario_rol ..................... 11.38ms DONE
+  2026_10_21_020100_crear_tabla_categorias ...................... 17.92ms DONE
+  2026_10_21_020200_crear_tabla_posiciones ...................... 17.60ms DONE
+  2026_10_21_020300_crear_tabla_jugadores ....................... 20.23ms DONE
+  2026_10_21_020400_crear_tabla_equipos ......................... 16.10ms DONE
+  2026_10_21_020500_crear_tabla_jugador_equipo .................. 22.65ms DONE
+  2026_10_21_020600_crear_tabla_entrenador_equipo ............... 23.63ms DONE
+  2026_10_21_020700_crear_tabla_bajas_jugador ................... 22.30ms DONE
+  2026_10_21_020800_indice_de_matricula_sin_mayusculas ........... 7.22ms DONE
+  2026_10_21_090100_crear_tabla_usuarios_historial .............. 26.43ms DONE
+  2026_10_21_090200_crear_tabla_jugadores_historial ............. 23.67ms DONE
+  2026_10_21_090300_crear_tabla_equipos_historial ............... 22.02ms DONE
+  2026_10_21_090400_crear_tabla_jugador_equipo_historial ........ 23.50ms DONE
+  2026_10_21_090500_crear_tabla_entrenador_equipo_historial ..... 21.47ms DONE
+  2026_10_21_090600_crear_tabla_bajas_jugador_historial ......... 21.78ms DONE
+  2026_10_26_030100_crear_tabla_periodos_escolares .............. 17.56ms DONE
+  2026_10_26_030200_crear_tabla_asignaturas ..................... 18.47ms DONE
+  2026_10_26_030300_crear_tabla_materias ........................ 21.43ms DONE
+  2026_10_26_030400_crear_tabla_inscripciones ................... 20.70ms DONE
+  2026_10_26_030500_crear_tabla_criterios_aprobacion ............ 23.26ms DONE
+  2026_10_26_030600_crear_tabla_calificaciones .................. 21.05ms DONE
+  2026_10_26_030700_crear_tabla_asistencias_clase ............... 16.35ms DONE
+  2026_10_26_030800_crear_tabla_resumenes_academicos ............ 18.01ms DONE
+  2026_10_26_035100_crear_tabla_parametros_institucionales ...... 17.65ms DONE
+  2026_10_26_090701_crear_tabla_materias_historial .............. 22.18ms DONE
+  2026_10_26_090702_crear_tabla_inscripciones_historial ......... 22.56ms DONE
+  2026_10_26_090703_crear_tabla_criterios_aprobacion_historial .. 24.77ms DONE
+  2026_10_26_090704_crear_tabla_calificaciones_historial ........ 23.42ms DONE
+  2026_10_26_090705_crear_tabla_asistencias_clase_historial ..... 23.76ms DONE
+  2026_10_26_090800_crear_tabla_parametros_institucionales_historial  25.41ms DONE
+  2026_10_29_040100_crear_tabla_lugares ......................... 19.85ms DONE
+  2026_10_29_040200_crear_tabla_rivales ......................... 21.08ms DONE
+  2026_10_29_040300_crear_tabla_temporadas ...................... 21.37ms DONE
+  2026_10_29_040400_crear_tabla_torneos ......................... 21.81ms DONE
+  2026_10_29_040500_crear_tabla_entrenamientos .................. 27.85ms DONE
+  2026_10_29_040600_crear_tabla_asistencias_entrenamiento ....... 25.02ms DONE
+  2026_10_29_040700_crear_tabla_partidos ........................ 35.06ms DONE
+  2026_10_29_040800_crear_tabla_convocatorias ................... 25.18ms DONE
+  2026_10_29_090901_crear_tabla_lugares_historial ............... 26.70ms DONE
+  2026_10_29_090902_crear_tabla_rivales_historial ............... 23.05ms DONE
+  2026_10_29_090903_crear_tabla_temporadas_historial ............ 24.90ms DONE
+  2026_10_29_090904_crear_tabla_torneos_historial ............... 24.40ms DONE
+  2026_10_29_090905_crear_tabla_entrenamientos_historial ........ 26.82ms DONE
+  2026_10_29_090906_crear_tabla_asistencias_entrenamiento_historial  26.77ms DONE
+  2026_10_29_090907_crear_tabla_partidos_historial .............. 26.67ms DONE
+  2026_10_29_090908_crear_tabla_convocatorias_historial ......... 26.20ms DONE
+  2026_10_30_050100_crear_tabla_metricas ........................ 19.67ms DONE
+  2026_10_30_050200_crear_tabla_metricas_posicion ............... 10.10ms DONE
+  2026_10_30_050300_crear_tabla_rendimientos_partido ............ 37.40ms DONE
+  2026_10_30_050400_crear_tabla_valores_metrica ................. 19.79ms DONE
+  2026_10_30_050500_crear_tabla_plantillas_evaluacion ........... 25.74ms DONE
+  2026_10_30_050600_crear_tabla_umbrales_rendimiento ............ 25.12ms DONE
+  2026_10_30_050700_crear_tabla_evaluaciones_rendimiento ........ 22.00ms DONE
+  2026_10_30_090951_crear_tabla_rendimientos_partido_historial .. 26.65ms DONE
+  2026_10_30_090952_crear_tabla_valores_metrica_historial ....... 31.76ms DONE
+  2026_10_30_090953_crear_tabla_plantillas_evaluacion_historial . 22.28ms DONE
+  2026_10_30_090954_crear_tabla_umbrales_rendimiento_historial .. 25.92ms DONE
+  2026_11_03_060100_crear_tabla_mediciones_corporales ........... 30.38ms DONE
+  2026_11_03_060200_crear_tabla_tipos_prueba .................... 20.47ms DONE
+  2026_11_03_060300_crear_tabla_pruebas_fisicas ................. 30.64ms DONE
+  2026_11_03_060400_crear_tabla_rangos_mediciones_corporales .... 17.54ms DONE
+  2026_11_03_070100_crear_tabla_lesiones ........................ 24.45ms DONE
+  2026_11_03_070200_crear_tabla_avisos_lesion ................... 29.45ms DONE
+  2026_11_03_070300_crear_tabla_estados_disponibilidad .......... 24.93ms DONE
+  2026_11_03_090961_crear_tabla_mediciones_corporales_historial . 23.26ms DONE
+  2026_11_03_090962_crear_tabla_pruebas_fisicas_historial ....... 20.88ms DONE
+  2026_11_03_090971_crear_tabla_lesiones_historial .............. 49.82ms DONE
+  2026_11_03_090972_crear_tabla_avisos_lesion_historial ......... 24.67ms DONE
+  2026_11_03_090973_crear_tabla_estados_disponibilidad_historial  22.18ms DONE
+
+
+   INFO  Seeding database.  
+
+  Database\Seeders\RolesSeeder ....................................... RUNNING  
+  Database\Seeders\RolesSeeder .................................... 20 ms DONE  
+
+  Database\Seeders\PosicionesSeeder .................................. RUNNING  
+  Database\Seeders\PosicionesSeeder ............................... 13 ms DONE  
+
+  Database\Seeders\CriterioGeneralSeeder ............................. RUNNING  
+  Database\Seeders\CriterioGeneralSeeder ........................... 4 ms DONE  
+
+  Database\Seeders\ParametrosInstitucionalesSeeder ................... RUNNING  
+  Database\Seeders\ParametrosInstitucionalesSeeder ................. 3 ms DONE  
+
+  Database\Seeders\MetricasSeeder .................................... RUNNING  
+  Database\Seeders\MetricasSeeder ................................. 75 ms DONE  
+
+  Database\Seeders\PlantillasDeFabricaSeeder ......................... RUNNING  
+  Database\Seeders\PlantillasDeFabricaSeeder ...................... 14 ms DONE  
+
+  Database\Seeders\TiposPruebaSeeder ................................. RUNNING  
+  Database\Seeders\TiposPruebaSeeder ............................... 9 ms DONE  
+
+  Database\Seeders\RangosMedicionesCorporalesSeeder .................. RUNNING  
+  Database\Seeders\RangosMedicionesCorporalesSeeder ................ 7 ms DONE  
+
+  Database\Seeders\UsuariosDemoSeeder ................................ RUNNING  
+  Database\Seeders\UsuariosDemoSeeder .......................... 1,173 ms DONE  
+
+docker compose exec -T app bash -s < scripts/humo/humo-h0.sh
+HUMO H0 OK: GET /api/v1/salud -> 200
+docker compose exec -T app bash /scripts/humo/humo-h1.sh
+OK     paso 1: GET /api/v1/salud -> HTTP 200
+OK     paso 2: el entrenador 1 inicia sesión -> HTTP 200
+OK     paso 3: crea la categoría Sub-17 -> HTTP 201
+OK     paso 4: crea el equipo Tigres Sub-17 -> HTTP 201
+OK     paso 4: el equipo aparece en GET /equipos -> HTTP 200
+OK     paso 5: registra un jugador en ese equipo -> HTTP 201
+OK     paso 6: la misma matrícula responde 409 sin datos del primero -> HTTP 409
+OK     paso 7: el entrenador 2 inicia sesión con otro archivo de cookies -> HTTP 200
+OK     paso 8: el jugador del entrenador 1 responde 404 al entrenador 2 -> HTTP 404
+OK     paso 9: la búsqueda por matrícula devuelve solo nombres, apellidos y matrícula -> HTTP 200
+OK     paso 10: el entrenador 2 crea su equipo -> HTTP 201
+OK     paso 10: asigna al jugador por matrícula -> HTTP 201
+OK     paso 11: GET /jugadores del entrenador 2 devuelve al jugador con solo su equipo -> HTTP 200
+OK     paso 12: el docente inicia sesión -> HTTP 200
+OK     paso 12: el docente recibe 403 al crear un equipo -> HTTP 403
+OK     paso 12: el docente recibe una lista vacía en GET /jugadores -> HTTP 200
+OK     paso 13: el entrenador 1 da de baja al jugador -> HTTP 201
+OK     paso 13: deja de aparecer en GET /jugadores del entrenador 1 -> HTTP 200
+OK     paso 13: deja de aparecer en GET /jugadores del entrenador 2 -> HTTP 200
+OK     paso 14: el entrenador 1 cierra sesión -> HTTP 204
+OK     paso 14: la misma cookie responde 401 -> HTTP 401
+HUMO H1 OK: 14 pasos
+docker compose exec -T app bash /scripts/humo/humo-h2.sh
+Servidor del guion con QUEUE_CONNECTION=sync
+OK     paso 1: GET /api/v1/salud -> HTTP 200
+OK     paso 2: el docente 1 inicia sesión -> HTTP 200
+OK     paso 3: crea un periodo escolar que contiene hoy y sale vigente -> HTTP 201
+OK     paso 4: crea la asignatura MAT-101 -> HTTP 201
+OK     paso 5: crea la materia con esa asignatura y ese periodo -> HTTP 201
+OK     paso 6: el entrenador 1 inicia sesión (otro archivo de cookies) -> HTTP 200
+OK     paso 6: crea su categoría Sub-15 -> HTTP 201
+OK     paso 6: crea su equipo -> HTTP 201
+OK     paso 6: registra un jugador -> HTTP 201
+OK     paso 7: el docente 1 busca la matrícula: solo nombres, apellidos y matrícula -> HTTP 200
+OK     paso 7: lo inscribe por matrícula -> HTTP 201
+OK     paso 8: captura la calificación parcial 8.50 -> HTTP 201
+OK     paso 8: captura la calificación final 8.00 -> HTTP 201
+OK     paso 9: captura la asistencia presente del 2026-11-11 -> HTTP 201
+OK     paso 9: captura la asistencia presente del 2026-11-12 -> HTTP 201
+OK     paso 9: captura la asistencia falta del 2026-11-13 -> HTTP 201
+OK     paso 10: situación como docente: 8.00, sin_riesgo, 66.67 y con materias -> HTTP 200
+OK     paso 11: define el criterio propio 8.50 -> HTTP 200
+OK     paso 11: la situación pasa a 1 reprobada y en_observacion -> HTTP 200
+OK     paso 12: el entrenador 1 ve el mismo nivel, sin materias -> HTTP 200
+OK     paso 13: el docente 2 inicia sesión -> HTTP 200
+OK     paso 13: el docente 2 recibe 404 en la situación -> HTTP 404
+OK     paso 13: el docente 2 recibe una lista vacía en GET /jugadores -> HTTP 200
+OK     paso 14: el entrenador 1 recibe 403 al crear un periodo -> HTTP 403
+OK     paso 14: el docente 1 recibe 403 al crear un equipo -> HTTP 403
+OK     paso 15: un valor fuera de rango responde calificacion_fuera_de_rango -> HTTP 422
+OK     paso 16: el docente 1 cierra sesión -> HTTP 204
+OK     paso 16: la misma cookie responde 401 -> HTTP 401
+HUMO H2 OK: 16 pasos
+docker compose exec -T app bash /scripts/humo/humo-h3.sh
+OK     paso 1: GET /api/v1/salud -> HTTP 200
+OK     paso 2: E1 inicia sesión -> HTTP 200
+OK     paso 2: E1 crea la categoría Sub-13 -> HTTP 201
+OK     paso 2: E1 crea el equipo A -> HTTP 201
+OK     paso 2: registra a Jota Uno (HUMO-H3-001) -> HTTP 201
+OK     paso 2: registra a Jota Dos (HUMO-H3-002) -> HTTP 201
+OK     paso 2: registra a Jota Tres (HUMO-H3-003) -> HTTP 201
+OK     paso 2: E2 inicia sesión (otro archivo de cookies) -> HTTP 200
+OK     paso 2: E2 crea el equipo B -> HTTP 201
+OK     paso 2: registra a Jota Cuatro (HUMO-H3-004) -> HTTP 201
+OK     paso 2: E2 asigna a J3 al equipo B -> HTTP 201
+OK     paso 3: E1 crea el lugar L2 -> HTTP 201
+OK     paso 3: E1 crea la temporada que contiene hoy -> HTTP 201
+OK     paso 4: E1 crea un torneo en esa temporada -> HTTP 201
+OK     paso 5: E1 crea un entrenamiento de A con J1, J2 y J3 listados -> HTTP 201
+OK     paso 6: E1 crea otro entrenamiento en L2 que se cruza: advierte empalme_de_lugar -> HTTP 201
+OK     paso 7: E1 marca el primero realizado -> HTTP 200
+OK     paso 7: E1 captura la asistencia de J1, J2 y J3 -> HTTP 201
+OK     paso 8: E1 consulta el porcentaje de J1: 100.00 -> HTTP 200
+OK     paso 8: el porcentaje del equipo A es 33.33 (la falta justificada cuenta en el denominador) -> HTTP 200
+OK     paso 9: E1 crea el rival R1 -> HTTP 201
+OK     paso 9: E1 crea un partido oficial con el torneo, en la temporada esperada -> HTTP 201
+OK     paso 10: registra a Jota Cinco (HUMO-H3-005) -> HTTP 201
+OK     paso 10: E1 convoca a J1 -> HTTP 201
+OK     paso 10: E1 convoca a J5 -> HTTP 201
+OK     paso 10: E1 define la alineación: J1 titular -> HTTP 200
+OK     paso 11: E1 captura el resultado 2-1 -> HTTP 200
+OK     paso 11: el partido queda jugado -> HTTP 200
+OK     paso 12: E2 consulta un entrenamiento inexistente (referencia) -> HTTP 404
+OK     paso 12: E2 consulta el entrenamiento de A: 404 igual byte a byte -> HTTP 404
+OK     paso 13: el docente inicia sesión -> HTTP 200
+OK     paso 13: el docente recibe 403 al crear un lugar -> HTTP 403
+OK     paso 14: antes de la baja, J5 está en la convocatoria -> HTTP 200
+OK     paso 14: E1 da de baja a J5 -> HTTP 201
+OK     paso 14: J5 desaparece de la convocatoria y J1 sigue -> HTTP 200
+OK     paso 15: E1 crea un amistoso programado -> HTTP 201
+OK     paso 15: 100 goles responde valor_fuera_de_rango -> HTTP 422
+OK     paso 16: E1 cierra sesión -> HTTP 204
+OK     paso 16: la misma cookie responde 401 -> HTTP 401
+HUMO H3 OK: 16 pasos
+docker compose exec -T app bash /scripts/humo/humo-h4.sh
+OK     paso 1: E1 inicia sesión -> HTTP 200
+OK     paso 2: E1 consulta el catálogo: las nueve métricas sembradas -> HTTP 200
+OK     paso 3: E1 crea la categoría Sub-11 -> HTTP 201
+OK     paso 3: E1 crea el equipo A -> HTTP 201
+OK     paso 3: registra a Pe Uno (HUMO-H4-001, portero) -> HTTP 201
+OK     paso 3: registra a De Uno (HUMO-H4-002, defensa) -> HTTP 201
+OK     paso 3: registra a Efe Uno (HUMO-H4-003, delantero) -> HTTP 201
+OK     paso 3: ya hay una temporada que contiene hoy (la del humo de H3) -> HTTP 409
+OK     paso 3: E1 crea un lugar -> HTTP 201
+OK     paso 3: E1 crea un rival -> HTTP 201
+OK     paso 3: E1 crea el amistoso PJ1 -> HTTP 201
+OK     paso 3: E1 convoca a un jugador a PJ1 -> HTTP 201
+OK     paso 3: E1 convoca a un jugador a PJ1 -> HTTP 201
+OK     paso 3: E1 convoca a un jugador a PJ1 -> HTTP 201
+OK     paso 3: E1 captura el resultado: PJ1 queda jugado -> HTTP 200
+OK     paso 3: E1 captura a P1 en PJ1 con sus métricas -> HTTP 201
+OK     paso 4: E1 captura a D1 sin recuperaciones: metrica_obligatoria_faltante -> HTTP 422
+OK     paso 5: E1 consulta pendientes: PJ1 aparece porque le faltan D1 y F1 -> HTTP 200
+OK     paso 6: E1 consulta el umbral de F1: la plantilla «Desarrollo» (6.00, ventana 5) -> HTTP 200
+OK     paso 7: E1 cambia el umbral de F1 a 7.0 con ventana 3 -> HTTP 200
+OK     paso 8: E1 consulta el desempeño de F1: datos_insuficientes con el umbral nuevo -> HTTP 200
+OK     paso 9: E2 inicia sesión (otro archivo de cookies) -> HTTP 200
+OK     paso 9: E2 lista los rendimientos de un partido inexistente (referencia) -> HTTP 404
+OK     paso 9: E2 lista los rendimientos de PJ1: 404 igual byte a byte -> HTTP 404
+OK     paso 10: E2 intenta corregir el rendimiento de E1: 404 igual byte a byte -> HTTP 404
+OK     paso 11: el docente inicia sesión -> HTTP 200
+OK     paso 11: el docente consulta pendientes: 403 -> HTTP 403
+OK     paso 12: sin sesión, el desempeño responde 401 -> HTTP 401
+OK     paso 13: E1 captura a F1 con 151 minutos: valor_fuera_de_rango -> HTTP 422
+OK     paso 14: E1 cierra sesión -> HTTP 204
+OK     paso 14: la misma cookie responde 401 -> HTTP 401
+HUMO H4 OK: 14 pasos
+# make humo codigo: 0

@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Integration\CondicionFisica\RepositorioDeMedicionesTest
+  ✓ AU-09: el máximo de cada columna sale de su tipo en la base          4.13s  
+
+  Tests:    1 passed (4 assertions)
+  Duration: 4.63s
+

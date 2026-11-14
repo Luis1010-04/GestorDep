@@ -1,7 +1,7 @@
 # Convenciones de la API (se aplican desde H0)
 
-**Versión:** 1.2.1
-**Fecha:** 21 de octubre de 2026
+**Versión:** 1.3
+**Fecha:** 1 de noviembre de 2026 (1.3: campo opcional `campo` en las advertencias, §4, por decisión del responsable para H5, DA-15 de `docs/hitos/f1-h5.md`; cambio aditivo)
 **Origen:** sección 7 del Documento de Arranque v1.0, con las correcciones de la auditoría (500 y 503, advertencias, excepción de la búsqueda por matrícula).
 
 Este documento es una fuente de verdad del agente. Ante una contradicción con otro documento se aplica el orden de precedencia de `docs/README.md`, y el agente se detiene y pregunta.
@@ -67,10 +67,14 @@ Las acciones que el sistema permite pero quiere señalar (HU-10 empalme, HU-12 j
 {
   "datos": { "...": "..." },
   "advertencias": [
-    { "codigo": "jugador_lesionado", "mensaje": "El jugador tiene un estado oficial de lesionado." }
+    { "codigo": "jugador_lesionado", "mensaje": "El jugador no está disponible por una lesión.", "campo": "registros.1.jugador_id" }
   ]
 }
 ```
+
+- `codigo`: estable, en `snake_case`. `mensaje`: traducido, sale de `lang/es`.
+- `campo` (opcional, desde la versión 1.3): señala el campo o el elemento de la petición al que se refiere la advertencia, con la misma notación que `errores[].campo` de la sección 3 (por ejemplo, `jugador_id` o `registros.N.jugador_id`). Se omite cuando la advertencia es de toda la acción (por ejemplo, `empalme_de_lugar`). El `mensaje` nunca lleva datos del jugador; el cliente lo identifica con `campo`.
+- El cambio es aditivo: una advertencia que no usa `campo` se responde igual que antes.
 
 Los datos que el sistema "marca" (HU-21 estado que requiere actualización, HU-24 dato posiblemente desactualizado, HU-09 dato incompleto) se devuelven como campos booleanos o de estado dentro del recurso, con nombre en español (`requiere_actualizacion`, `posiblemente_desactualizado`, `incompleto`). Cada nombre se define en el contrato OpenAPI del hito.
 

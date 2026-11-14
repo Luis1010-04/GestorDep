@@ -12,6 +12,7 @@ use Src\Plantel\Aplicacion\JugadorNoEncontrado;
 use Src\Plantel\Aplicacion\JugadorYaEnBaja;
 use Src\Plantel\Dominio\RepositorioDeJugadores;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /**
@@ -50,9 +51,9 @@ test('HU-29: A da de baja a J1 con motivo y fecha; se guardan la baja, los estat
 
     $baja = DB::table('bajas_jugador')->where('jugador_id', $m['j1'])->get();
     expect($baja)->toHaveCount(1)
-        ->and($baja[0]->motivo)->toBe('Cambió de escuela')
-        ->and($baja[0]->fecha)->toBe('2026-03-09')
-        ->and($baja[0]->registrada_por)->toBe($m['a']);
+        ->and(NoNulo::exigir($baja[0], 'la fila 0 de $baja')->motivo)->toBe('Cambió de escuela')
+        ->and(NoNulo::exigir($baja[0], 'la fila 0 de $baja')->fecha)->toBe('2026-03-09')
+        ->and(NoNulo::exigir($baja[0], 'la fila 0 de $baja')->registrada_por)->toBe($m['a']);
 
     $jugador = (array) DB::table('jugadores')->where('id', $m['j1'])->first();
     expect($jugador['estatus_academico'])->toBe('baja')
@@ -60,29 +61,29 @@ test('HU-29: A da de baja a J1 con motivo y fecha; se guardan la baja, los estat
         ->and($jugador['actualizado_por'])->toBe($m['a']);
 
     $historialJugador = DB::table('jugadores_historial')->where('jugador_id', $m['j1'])->get();
-    $historialBaja = DB::table('bajas_jugador_historial')->where('baja_jugador_id', $baja[0]->id)->get();
+    $historialBaja = DB::table('bajas_jugador_historial')->where('baja_jugador_id', NoNulo::exigir($baja[0], 'la fila 0 de $baja')->id)->get();
     expect($historialJugador)->toHaveCount(1)
-        ->and($historialJugador[0]->operacion)->toBe('actualizar')
-        ->and($historialJugador[0]->usuario_id)->toBe($m['a'])
-        ->and(json_decode($historialJugador[0]->datos_anteriores, true))->toEqual([
+        ->and(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->operacion)->toBe('actualizar')
+        ->and(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->usuario_id)->toBe($m['a'])
+        ->and(json_decode(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->datos_anteriores, true))->toEqual([
             'nombres' => 'Uno', 'apellidos' => 'Alvarez', 'fecha_nacimiento' => '2009-05-10', 'matricula' => 'M-1',
             'estatus_academico' => 'activo', 'estatus_deportivo' => 'activo',
         ])
-        ->and(json_decode($historialJugador[0]->datos_nuevos, true))->toEqual([
+        ->and(json_decode(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->datos_nuevos, true))->toEqual([
             'nombres' => 'Uno', 'apellidos' => 'Alvarez', 'fecha_nacimiento' => '2009-05-10', 'matricula' => 'M-1',
             'estatus_academico' => 'baja', 'estatus_deportivo' => 'baja',
         ])
         ->and($historialBaja)->toHaveCount(1)
-        ->and($historialBaja[0]->operacion)->toBe('crear')
-        ->and($historialBaja[0]->datos_anteriores)->toBeNull()
-        ->and($historialBaja[0]->usuario_id)->toBe($m['a'])
-        ->and(json_decode($historialBaja[0]->datos_nuevos, true))->toEqual([
+        ->and(NoNulo::exigir($historialBaja[0], 'la fila 0 de $historialBaja')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historialBaja[0], 'la fila 0 de $historialBaja')->datos_anteriores)->toBeNull()
+        ->and(NoNulo::exigir($historialBaja[0], 'la fila 0 de $historialBaja')->usuario_id)->toBe($m['a'])
+        ->and(json_decode(NoNulo::exigir($historialBaja[0], 'la fila 0 de $historialBaja')->datos_nuevos, true))->toEqual([
             'jugador_id' => $m['j1'], 'motivo' => 'Cambió de escuela', 'fecha' => '2026-03-09', 'registrada_por' => $m['a'],
         ])
-        ->and($historialBaja[0]->ocurrido_en)->toBe($historialJugador[0]->ocurrido_en)
-        ->and((new DateTimeImmutable($historialBaja[0]->ocurrido_en))->getTimestamp())->toBe((new DateTimeImmutable('2026-03-10 15:20:45', new DateTimeZone('UTC')))->getTimestamp())
-        ->and((new DateTimeImmutable($jugador['actualizado_en']))->getTimestamp())->toBe((new DateTimeImmutable($historialJugador[0]->ocurrido_en))->getTimestamp())
-        ->and((new DateTimeImmutable($baja[0]->creado_en))->getTimestamp())->toBe((new DateTimeImmutable($historialJugador[0]->ocurrido_en))->getTimestamp());
+        ->and(NoNulo::exigir($historialBaja[0], 'la fila 0 de $historialBaja')->ocurrido_en)->toBe(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->ocurrido_en)
+        ->and((new DateTimeImmutable(NoNulo::exigir($historialBaja[0], 'la fila 0 de $historialBaja')->ocurrido_en))->getTimestamp())->toBe((new DateTimeImmutable('2026-03-10 15:20:45', new DateTimeZone('UTC')))->getTimestamp())
+        ->and((new DateTimeImmutable($jugador['actualizado_en']))->getTimestamp())->toBe((new DateTimeImmutable(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->ocurrido_en))->getTimestamp())
+        ->and((new DateTimeImmutable(NoNulo::exigir($baja[0], 'la fila 0 de $baja')->creado_en))->getTimestamp())->toBe((new DateTimeImmutable(NoNulo::exigir($historialJugador[0], 'la fila 0 de $historialJugador')->ocurrido_en))->getTimestamp());
 });
 
 test('RN-17: la baja no cierra las membresías del jugador', function () {

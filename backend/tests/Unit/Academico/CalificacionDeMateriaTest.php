@@ -2,6 +2,7 @@
 
 use Src\Academico\Dominio\CalificacionDeMateria;
 use Src\Compartido\Dominio\NumeroDecimal;
+use Tests\Ayudantes\NoNulo;
 
 function dCal(string $texto): NumeroDecimal
 {
@@ -51,7 +52,7 @@ test('RN-02 (§7.9 calificación fila 8): el cero es una calificación, no una a
     $calificacion = CalificacionDeMateria::calcular(dCal('0.00'), []);
 
     expect($calificacion)->not->toBeNull()
-        ->and($calificacion->comoCadena())->toBe('0.00');
+        ->and(NoNulo::exigir($calificacion, 'la calificación cero')->comoCadena())->toBe('0.00');
 });
 
 test('RN-02 (§7.9 calificación fila 9): 10.00 es 10.00', function () {
@@ -60,9 +61,9 @@ test('RN-02 (§7.9 calificación fila 9): 10.00 es 10.00', function () {
 
 test('DD-43: una final con más precisión también se redondea al medio hacia arriba', function () {
     expect(calificacionDeMateria('7.995', []))->toBe('8.00')
-        ->and(CalificacionDeMateria::calcular(dCal('7.995'), [])->decimales())->toBe(2);
+        ->and(NoNulo::exigir(CalificacionDeMateria::calcular(dCal('7.995'), []), 'la calificación')->decimales())->toBe(2);
 });
 
 test('DD-43: la media de parciales queda con dos decimales aunque salga exacta', function () {
-    expect(CalificacionDeMateria::calcular(null, [dCal('8'), dCal('9')])->decimales())->toBe(2);
+    expect(NoNulo::exigir(CalificacionDeMateria::calcular(null, [dCal('8'), dCal('9')]), 'la calificación')->decimales())->toBe(2);
 });

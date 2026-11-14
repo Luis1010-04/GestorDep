@@ -12,6 +12,8 @@ use App\Http\Respuestas\Respuesta;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Src\Compartido\Dominio\Identificador;
+use Src\Competencia\Aplicacion\AdvertenciasDeLesion;
 use Src\Competencia\Aplicacion\BuscarEntrenamientoDelEntrenador;
 use Src\Competencia\Aplicacion\CorregirAsistencia;
 use Src\Competencia\Aplicacion\ListarAsistencias;
@@ -46,8 +48,13 @@ class AsistenciaDeEntrenamientoController extends Controller
         ));
     }
 
-    public function crear(SolicitudDeAsistenciasDeEntrenamiento $solicitud, string $entrenamiento, RegistrarAsistencias $registrarAsistencias): JsonResponse
-    {
+    /** Después de guardar, advierte por cada jugador lesionado de `registros`, con su posición desde 0 (HU-11 c2, DA-15). */
+    public function crear(
+        SolicitudDeAsistenciasDeEntrenamiento $solicitud,
+        string $entrenamiento,
+        RegistrarAsistencias $registrarAsistencias,
+        AdvertenciasDeLesion $advertenciasDeLesion,
+    ): JsonResponse {
         /** @var list<array{jugador_id: string, estado: string}> $registros */
         $registros = $solicitud->validated('registros');
 
@@ -56,8 +63,11 @@ class AsistenciaDeEntrenamientoController extends Controller
             array_map(fn (array $registro) => ['jugador_id' => $registro['jugador_id'], 'estado' => EstadoDeAsistencia::from($registro['estado'])], $registros),
         );
 
+        $advertencias = $advertenciasDeLesion->deAsistencia(array_map(fn (array $registro) => Identificador::desdeTexto($registro['jugador_id']), $registros));
+
         return Respuesta::conDatos(
             array_map(fn ($asistencia) => (new AsistenciaDeEntrenamientoRecurso($asistencia))->resolve($solicitud), $asistencias),
+            self::conMensaje($advertencias),
             estado: 201,
         );
     }
@@ -90,5 +100,18 @@ class AsistenciaDeEntrenamientoController extends Controller
         $jugadorId = IdentificadorDeRuta::desde($jugador);
 
         return Respuesta::conDatos(['jugador_id' => $jugadorId->valor(), ...ConteoDeAsistenciaRecurso::de($verAsistencia->ejecutar($jugadorId))]);
+    }
+
+    /**
+     * @param  list<array{codigo: string, campo: string}>  $advertencias
+     * @return list<array{codigo: string, mensaje: string, campo: string}>
+     */
+    private static function conMensaje(array $advertencias): array
+    {
+        return array_map(fn (array $advertencia) => [
+            'codigo' => $advertencia['codigo'],
+            'mensaje' => (string) __('advertencias.'.$advertencia['codigo']),
+            'campo' => $advertencia['campo'],
+        ], $advertencias);
     }
 }

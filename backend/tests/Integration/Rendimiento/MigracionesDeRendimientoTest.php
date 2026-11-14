@@ -7,6 +7,7 @@ use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Compartido\Infraestructura\RelojFijo;
+use Tests\Ayudantes\NoNulo;
 
 const TABLAS_DE_RENDIMIENTO = [
     'metricas', 'metricas_posicion', 'rendimientos_partido', 'valores_metrica', 'plantillas_evaluacion', 'umbrales_rendimiento', 'evaluaciones_rendimiento',
@@ -458,7 +459,7 @@ test('RNF-02: el cambio en una tabla de Rendimiento y su historial se escriben e
 
     $escritor->registrar('plantillas_evaluacion', 'plantilla_id', $id, 'crear', null, ['nombre' => $datos['nombre']], fn () => DB::table('plantillas_evaluacion')->insert(['id' => $id->valor(), ...$datos]));
 
-    $fila = DB::table('plantillas_evaluacion_historial')->where('plantilla_id', $id->valor())->first();
+    $fila = NoNulo::exigir(DB::table('plantillas_evaluacion_historial')->where('plantilla_id', $id->valor())->first(), 'el historial de la plantilla');
     expect($fila->usuario_id)->toBe($autor)
         ->and($fila->version)->toBe(1)
         ->and(json_decode($fila->datos_nuevos, true))->toBe(['nombre' => $datos['nombre']]);

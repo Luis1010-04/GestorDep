@@ -1,0 +1,26 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Feature\Salud\ContratoDeEstadoYLesionTest
+  ⨯ DA-79 (M1): el 409 conflicto de PATCH /lesiones/{lesion} cumple el…  5.61s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Salud\ContratoDeEstadoYLesionT…  ValidationException   
+  OpenAPI spec contains no such operation [/lesiones/{lesion},patch,409]
+
+  at vendor/league/openapi-psr7-validator/src/PSR7/Exception/NoResponseCode.php:16
+     12▕     protected $responseCode;
+     13▕ 
+     14▕     public static function fromPathAndMethodAndResponseCode(string $path, string $method, int $responseCode): self
+     15▕     {
+  ➜  16▕         $i               = new self(sprintf('OpenAPI spec contains no such operation [%s,%s,%d]', $path, $method, $responseCode));
+     17▕         $i->path         = $path;
+     18▕         $i->method       = $method;
+     19▕         $i->responseCode = $responseCode;
+     20▕
+
+      [2m+7 vendor frames [22m
+  8   tests/Feature/Salud/ContratoDeEstadoYLesionTest.php:103
+
+
+  Tests:    1 failed (4 assertions)
+  Duration: 6.38s
+

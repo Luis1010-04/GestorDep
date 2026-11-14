@@ -1,0 +1,26 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Unit\Herramientas\GuionDeHumoTest
+  ✓ F1-H2-T15: un paso con un código HTTP distinto del esperado detiene… 0.02s  
+  ✓ F1-H2-T15: un paso cuyo cuerpo no cumple la condición detiene el gu… 0.03s  
+  ✓ F1-H2-T15: un paso correcto imprime OK y el guion sigue              0.03s  
+  ✓ F1-H2-T15: humo-h2.sh se detiene ante cualquier error, declara la c… 0.01s  
+  ✓ F1-H3-T09: humo-h3.sh se detiene en el paso 1 con FALLA y código 1…  0.44s  
+  ✓ F1-H3-T09: humo-h3.sh se detiene en el paso 2 con FALLA y código 1…  0.53s  
+  ✓ F1-H3-T09: el paso 12 se detiene con FALLA y código 1 si el 404 no…  0.02s  
+  ✓ F1-H3-T09: el paso 12 se detiene con FALLA y código 1 si el código…  0.02s  
+  ✓ F1-H3-T09: el paso 12 imprime OK y el guion sigue si el 404 es igua… 0.02s  
+  ✓ F1-H4-T06: humo-h4.sh se detiene en el paso 1 con FALLA y código 1…  0.41s  
+  ✓ F1-H4-T06: humo-h4.sh se detiene en el paso 2 con FALLA y código 1…  0.53s  
+  ✓ F1-H4-T06 (m-6): el humo_igual de humo-h4.sh se detiene con FALLA y… 0.03s  
+  ✓ F1-H4-T06 (m-6): el humo_igual de humo-h4.sh imprime OK y el guion…  0.02s  
+  ✓ F1-H4-T06: humo-h4.sh se detiene ante cualquier error y recorre los… 0.01s  
+  ✓ F1-H3-T09: humo-h3.sh se detiene ante cualquier error y recorre los… 0.01s  
+  ✓ F1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1…  0.45s  
+  ✓ F1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1…  0.49s  
+  ✓ F1-H5-T09: el humo_igual de humo-h5.sh se detiene con FALLA y códig… 0.04s  
+  ✓ F1-H5-T09: humo-h5.sh se detiene ante cualquier error y recorre los… 0.01s  
+
+  Tests:    19 passed (81 assertions)
+  Duration: 3.69s
+

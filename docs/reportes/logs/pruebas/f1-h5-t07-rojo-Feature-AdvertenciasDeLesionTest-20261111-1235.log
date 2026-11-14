@@ -1,0 +1,101 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Feature\Competencia\AdvertenciasDeLesionTest
+  ⨯ §7.7 fila 1 (HU-11 c2, DA-15, DA-66): con F1 lesionado y J1 apto, u… 5.37s  
+  ⨯ DA-66: el mensaje no lleva nombre, apellidos ni matrícula del jugad… 0.37s  
+  ✓ §7.7 fila 2 (DA-15): con F1 con_molestia, la asistencia no advierte  0.33s  
+  ⨯ §7.7 fila 3 (HU-12 c3, DA-15): convocar a F1 lesionado guarda la co… 0.60s  
+  ✓ §7.7 fila 4 (DA-01): con F1 apto implícito, la convocatoria no advi… 0.31s  
+  ✓ §7.7 fila 5: con F1 dado de alta tras estar lesionado, la convocato… 0.32s  
+  ⨯ §7.7 fila 6 (DA-15): con F1 y J1 lesionados, dos advertencias, en r… 0.33s  
+  ✓ §7.7 fila 7 (DA-15): un entrenamiento que se empalma responde empal… 0.52s  
+  ✓ DA-67: corregir la asistencia de un jugador lesionado no devuelve l… 0.42s  
+  ✓ T07: sin jugadores lesionados, la asistencia y la convocatoria resp… 0.37s  
+  ✓ T07: una petición rechazada no genera advertencias                   0.55s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 1…    
+  Failed asserting that null is identical to Array &0 [
+    0 => Array &1 [
+        'codigo' => 'jugador_lesionado',
+        'mensaje' => 'El jugador no está disponible por una lesión.',
+        'campo' => 'registros.1.jugador_id',
+    ],
+].
+
+  at tests/Feature/Competencia/AdvertenciasDeLesionTest.php:56
+     52▕ 
+     53▕     $respuesta = advertenciaPeticion($this, 'POST', '/entrenamientos/'.advertenciaEntrenamiento($m).'/asistencias', advertenciaRegistros($m['j1'], $m['j3']))
+     54▕         ->assertCreated();
+     55▕ 
+  ➜  56▕     expect($respuesta->json('advertencias'))->toBe([
+     57▕         ['codigo' => 'jugador_lesionado', 'mensaje' => MENSAJE_DE_JUGADOR_LESIONADO, 'campo' => 'registros.1.jugador_id'],
+     58▕     ])
+     59▕         ->and($respuesta->json('datos'))->toHaveCount(2);
+     60▕ });
+
+  1   tests/Feature/Competencia/AdvertenciasDeLesionTest.php:56
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > DA-66: el me…   
+  Failed asserting that two strings are identical.
+  -'El jugador no está disponible por una lesión.'
+  +''
+  
+
+  at tests/Feature/Competencia/AdvertenciasDeLesionTest.php:71
+     67▕     $mensaje = (string) advertenciaPeticion($this, 'POST', '/entrenamientos/'.advertenciaEntrenamiento($m).'/asistencias', advertenciaRegistros($m['j3']))
+     68▕         ->assertCreated()
+     69▕         ->json('advertencias.0.mensaje');
+     70▕ 
+  ➜  71▕     expect($mensaje)->toBe(MENSAJE_DE_JUGADOR_LESIONADO)
+     72▕         ->and($mensaje)->not->toContain('J3')
+     73▕         ->and($mensaje)->not->toContain('Tres')
+     74▕         ->and($mensaje)->not->toContain('M-3')
+     75▕         ->and($mensaje)->not->toContain('Esguince')
+
+  1   tests/Feature/Competencia/AdvertenciasDeLesionTest.php:71
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §7.7 fila 3…    
+  Failed asserting that null is identical to Array &0 [
+    0 => Array &1 [
+        'codigo' => 'jugador_lesionado',
+        'mensaje' => 'El jugador no está disponible por una lesión.',
+        'campo' => 'jugador_id',
+    ],
+].
+
+  at tests/Feature/Competencia/AdvertenciasDeLesionTest.php:98
+     94▕     $partido = advertenciaPartido($m);
+     95▕ 
+     96▕     $respuesta = advertenciaPeticion($this, 'POST', "/partidos/$partido/convocatoria", ['jugador_id' => $m['j3']])->assertCreated();
+     97▕ 
+  ➜  98▕     expect($respuesta->json('advertencias'))->toBe([['codigo' => 'jugador_lesionado', 'mensaje' => MENSAJE_DE_JUGADOR_LESIONADO, 'campo' => 'jugador_id']])
+     99▕         ->and($respuesta->json('datos.jugador_id'))->toBe($m['j3'])
+    100▕         ->and(DB::table('convocatorias')->where('partido_id', $partido)->where('jugador_id', $m['j3'])->count())->toBe(1);
+    101▕ });
+    102▕
+
+  1   tests/Feature/Competencia/AdvertenciasDeLesionTest.php:98
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Competencia\AdvertenciasDeLesionTest > §…  TypeError   
+  array_column(): Argument #1 ($array) must be of type array, null given
+
+  at tests/Feature/Competencia/AdvertenciasDeLesionTest.php:135
+    131▕ 
+    132▕     $respuesta = advertenciaPeticion($this, 'POST', '/entrenamientos/'.advertenciaEntrenamiento($m).'/asistencias', advertenciaRegistros($m['j1'], $m['j3'], $m['j2']))
+    133▕         ->assertCreated();
+    134▕ 
+  ➜ 135▕     expect(array_column($respuesta->json('advertencias'), 'campo'))->toBe(['registros.0.jugador_id', 'registros.1.jugador_id'])
+    136▕         ->and(array_unique(array_column($respuesta->json('advertencias'), 'codigo')))->toBe(['jugador_lesionado']);
+    137▕ });
+    138▕ 
+    139▕ test('§7.7 fila 7 (DA-15): un entrenamiento que se empalma responde empalme_de_lugar igual que en H3, sin campo', function () {
+
+  1   tests/Feature/Competencia/AdvertenciasDeLesionTest.php:135
+
+
+  Tests:    4 failed, 7 passed (37 assertions)
+  Duration: 10.07s
+

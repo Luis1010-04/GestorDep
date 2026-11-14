@@ -13,6 +13,7 @@ use Src\Compartido\Dominio\NumeroDecimal;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Calificaciones (HU-07, RN-01, RN-02, RN-03, DD-47, DD-50, DD-51, DD-52, DD-55). Datos de partida de docs/hitos/f1-h2.md §7.0. */
@@ -58,15 +59,15 @@ test('HU-07 (§7.7 fila 1): D1 captura el parcial 1 de I1 con 8.50; fecha de hoy
         'fecha' => '2026-03-10',
         'actualizado_en' => '2026-03-10T12:00:00+00:00',
     ]);
-    $fila = DB::table('calificaciones')->where('id', $id)->first();
+    $fila = NoNulo::exigir(DB::table('calificaciones')->where('id', $id)->first(), 'la calificación creada');
     expect($fila->criterio_id)->toBe(DB::table('criterios_aprobacion')->where('ambito', 'general')->value('id'))
         ->and($fila->creado_por)->toBe($m['d1']);
     $historial = DB::table('calificaciones_historial')->where('calificacion_id', $id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->version)->toBe(1)
-        ->and($historial[0]->usuario_id)->toBe($m['d1'])
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqual([
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->version)->toBe(1)
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['d1'])
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqual([
             'inscripcion_id' => $m['i1'], 'tipo' => 'parcial', 'numero_parcial' => 1, 'valor' => '8.50',
             'criterio_id' => $fila->criterio_id, 'fecha' => '2026-03-10',
         ]);
@@ -169,12 +170,12 @@ test('HU-07 (§7.7 fila 7): PATCH con 9.00 responde 200 y escribe actualizar con
 
     $historial = DB::table('calificaciones_historial')->where('calificacion_id', $id)->orderBy('version')->get();
     expect($historial)->toHaveCount(2)
-        ->and($historial[1]->operacion)->toBe('actualizar')
-        ->and($historial[1]->version)->toBe(2)
-        ->and($historial[1]->usuario_id)->toBe($m['d1'])
-        ->and(json_decode($historial[1]->datos_anteriores, true)['valor'])->toBe('8.00')
-        ->and(json_decode($historial[1]->datos_nuevos, true)['valor'])->toBe('9.00')
-        ->and(array_keys(json_decode($historial[1]->datos_nuevos, true)))->toEqualCanonicalizing(['inscripcion_id', 'tipo', 'numero_parcial', 'valor', 'criterio_id', 'fecha'])
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->operacion)->toBe('actualizar')
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->version)->toBe(2)
+        ->and(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->usuario_id)->toBe($m['d1'])
+        ->and(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_anteriores, true)['valor'])->toBe('8.00')
+        ->and(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_nuevos, true)['valor'])->toBe('9.00')
+        ->and(array_keys(json_decode(NoNulo::exigir($historial[1], 'la fila 1 de $historial')->datos_nuevos, true)))->toEqualCanonicalizing(['inscripcion_id', 'tipo', 'numero_parcial', 'valor', 'criterio_id', 'fecha'])
         ->and(DB::table('calificaciones')->where('id', $id)->value('actualizado_por'))->toBe($m['d1']);
     Event::assertDispatchedTimes(CalificacionRegistrada::class, 1);
 });

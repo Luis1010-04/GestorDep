@@ -1,0 +1,9 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\CondicionFisica\RangoFaltanteTest
+  ✓ DA-70: sin la fila de peso, registrar una medición responde 422 ran… 4.78s  
+  ✓ DA-70: con la fila de estatura borrada lógicamente, responde lo mis… 0.43s  
+
+  Tests:    2 passed (8 assertions)
+  Duration: 5.95s
+

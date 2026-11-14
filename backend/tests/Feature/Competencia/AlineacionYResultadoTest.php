@@ -6,6 +6,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Alineación y resultado (HU-13; docs/hitos/f1-h3.md §7.5 filas 4 a 8 y §7.4 fila 6). */
@@ -61,7 +62,7 @@ test('HU-13 (§7.5 fila 4): con J1 convocado, E1 lo define titular en la posici�
         'id' => $convocatoria, 'partido_id' => $partido, 'jugador_id' => $m['j1'], 'posicion_id' => $defensa,
         'rol_alineacion' => 'titular', 'actualizado_en' => '2026-09-13T01:00:00+00:00',
     ]]);
-    $fila = DB::table('convocatorias_historial')->where('convocatoria_id', $convocatoria)->first();
+    $fila = NoNulo::exigir(DB::table('convocatorias_historial')->where('convocatoria_id', $convocatoria)->first(), 'el historial de la convocatoria');
     expect($fila->operacion)->toBe('actualizar')
         ->and($fila->usuario_id)->toBe($m['e1'])
         ->and(json_decode($fila->datos_anteriores, true))->toMatchArray(['posicion_id' => null, 'rol_alineacion' => null])
@@ -111,7 +112,7 @@ test('HU-13 (§7.5 fila 7): E1 captura el resultado 3-1 de un partido programado
     expect($respuesta->json('datos'))->toMatchArray([
         'id' => $partido, 'estado' => 'jugado', 'goles_favor' => 3, 'goles_contra' => 1, 'actualizado_en' => '2026-09-13T01:00:00+00:00',
     ]);
-    $fila = DB::table('partidos_historial')->where('partido_id', $partido)->first();
+    $fila = NoNulo::exigir(DB::table('partidos_historial')->where('partido_id', $partido)->first(), 'el historial del partido');
     expect($fila->operacion)->toBe('actualizar')
         ->and($fila->usuario_id)->toBe($m['e1'])
         ->and(json_decode($fila->datos_anteriores, true))->toMatchArray(['estado' => 'programado', 'goles_favor' => null])

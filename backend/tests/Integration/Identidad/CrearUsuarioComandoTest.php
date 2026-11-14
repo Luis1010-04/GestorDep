@@ -3,6 +3,7 @@
 use Database\Seeders\RolesSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Tests\Ayudantes\NoNulo;
 
 const CONTRASENA_VALIDA = 'una-clave-larga-1';
 
@@ -15,7 +16,7 @@ test('CONSOLA usuarios:crear: un rol y contraseña por opción crea el usuario',
     consolaArtisan('usuarios:crear', ['correo' => 'ana@example.test', 'nombre' => 'Ana Pérez', '--rol' => ['entrenador'], '--contrasena' => CONTRASENA_VALIDA])
         ->assertSuccessful();
 
-    $usuario = DB::table('usuarios')->where('correo', 'ana@example.test')->first();
+    $usuario = NoNulo::exigir(DB::table('usuarios')->where('correo', 'ana@example.test')->first(), 'el usuario creado');
 
     expect($usuario->nombre)->toBe('Ana Pérez')
         ->and($usuario->activo)->toBeTrue()
@@ -96,16 +97,16 @@ test('CONSOLA usuarios:crear: la salida no contiene la contraseña ni queda en c
 test('CONSOLA usuarios:crear: el alta escribe una fila crear en el historial sin autor y sin hash', function () {
     consolaArtisan('usuarios:crear', ['correo' => 'ana@example.test', 'nombre' => 'Ana', '--rol' => ['docente'], '--contrasena' => CONTRASENA_VALIDA])->assertSuccessful();
 
-    $usuario = DB::table('usuarios')->first();
+    $usuario = NoNulo::exigir(DB::table('usuarios')->first(), 'el usuario creado');
     $historial = DB::table('usuarios_historial')->get();
 
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->usuario_afectado_id)->toBe($usuario->id)
-        ->and($historial[0]->usuario_id)->toBeNull()
-        ->and($historial[0]->datos_anteriores)->toBeNull()
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqualCanonicalizing(['nombre' => 'Ana', 'correo' => 'ana@example.test', 'activo' => true, 'roles' => ['docente']])
-        ->and($historial[0]->datos_nuevos)->not->toContain('hash')
-        ->and($historial[0]->datos_nuevos)->not->toContain('intentos')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_afectado_id)->toBe($usuario->id)
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBeNull()
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_anteriores)->toBeNull()
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqualCanonicalizing(['nombre' => 'Ana', 'correo' => 'ana@example.test', 'activo' => true, 'roles' => ['docente']])
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos)->not->toContain('hash')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos)->not->toContain('intentos')
         ->and($usuario->creado_por)->toBeNull();
 });

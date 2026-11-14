@@ -1,0 +1,9 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Integration\CondicionFisica\ConcurrenciaTest
+  ✓ DA-74: dos pruebas físicas simultáneas del mismo tipo y periodo: la… 4.50s  
+  ✓ DA-74: dos mediciones simultáneas del mismo periodo: la segunda rec… 0.40s  
+
+  Tests:    2 passed (10 assertions)
+  Duration: 5.56s
+

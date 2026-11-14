@@ -1,0 +1,159 @@
+# Mutacion de filtros de H5 (T08) | commit base: ea0211b + cambios de T08 sin commit | inicio: 2026-11-11T13:57:57-06:00
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+=== control antes
+Tests:    302 passed (1511 assertions)
+reemplazos: 1
+=== F01 Salud ComprobarJugadorVisible sin alcance
+⨯ §7.1 fila 3 (RNF-01): D2, sin relación con F1, recibe el mismo 404…  0.18s  
+⨯ §6.1: fuera del alcance, el 404 gana sobre el 422 al crear y al des… 0.23s  
+⨯ RNF-01: listar a un jugador fuera del alcance responde el mismo 404… 0.17s  
+⨯ RN-16 frente a §6.1 (opción A): un docente sin alcance recibe 404 a… 0.18s  
+FAILED  Tests\Feature\Salud\AvisosTest > §7.1 fila 3 (RNF-01): D2, sin re…   
+FAILED  Tests\Feature\Salud\AvisosTest > §6.1: fuera del alcance, el 404…    
+FAILED  Tests\Feature\Salud\AvisosTest > RNF-01: listar a un jugador fuer…   
+FAILED  Tests\Feature\Salud\AvisosTest > RN-16 frente a §6.1 (opción A):…    
+reemplazos: 1
+=== F02 Salud ComprobarAvisoDelEntrenador sin alcance
+⨯ §6.1: fuera del alcance, el 404 gana sobre el 422 al crear y al des… 0.19s  
+⨯ §6.1: un aviso ajeno responde igual que uno inexistente              0.18s  
+⨯ DD-61: un usuario con los dos roles que solo le da clase al jugador… 0.19s  
+⨯ §6.1: fuera del alcance de entrenador, 404 antes que 422, y nunca n… 0.22s  
+⨯ DD-61: un usuario con los dos roles que solo le da clase al jugador… 0.22s  
+FAILED  Tests\Feature\Salud\AvisosTest > §6.1: fuera del alcance, el 404…    
+FAILED  Tests\Feature\Salud\AvisosTest > §6.1: un aviso ajeno responde ig…   
+FAILED  Tests\Feature\Salud\AvisosTest > DD-61: un usuario con los dos ro…   
+reemplazos: 1
+=== F03 Salud ComprobarJugadorDelEntrenador sin alcance
+⨯ §6.1: fuera del alcance de entrenador, 404 antes que 422, y nunca n… 0.18s  
+⨯ DD-61: un usuario con los dos roles que solo le da clase al jugador… 0.19s  
+⨯ Punto 1 del plan: quien registró la lesión y perdió el alcance sobr… 0.22s  
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > §6.1: fuera del alc…   
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > DD-61: un usuario c…   
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > Punto 1 del plan: q…   
+Tests:    3 failed, 103 passed (495 assertions)
+reemplazos: 1
+=== F04 ListarAvisos sin filtrar por creador
+⨯ §7.1 fila 5 (§5.3): D1 no ve el aviso pendiente de E1                0.18s  
+⨯ DA-25: un usuario con los dos roles ve solo los suyos si únicamente… 0.19s  
+FAILED  Tests\Feature\Salud\AvisosTest > §7.1 fila 5 (§5.3): D1 no ve el…    
+FAILED  Tests\Feature\Salud\AvisosTest > DA-25: un usuario con los dos ro…   
+Tests:    2 failed, 48 passed (222 assertions)
+reemplazos: 1
+=== F05 RepositorioDeAvisosSql sin filtrar por creador
+⨯ §7.1 fila 5 (§5.3): D1 no ve el aviso pendiente de E1                0.20s  
+⨯ DA-25: un usuario con los dos roles ve solo los suyos si únicamente… 0.19s  
+FAILED  Tests\Feature\Salud\AvisosTest > §7.1 fila 5 (§5.3): D1 no ve el…    
+FAILED  Tests\Feature\Salud\AvisosTest > DA-25: un usuario con los dos ro…   
+Tests:    2 failed, 48 passed (222 assertions)
+reemplazos: 1
+=== F06 BuscarLesionDelRegistrante sin registrante
+⨯ §7.2 fila 20 (DD-63): E2 confirma con un estado vigente de E1; el d… 0.24s  
+⨯ RN-15: una lesión ajena responde igual que una inexistente, en GET…  0.22s  
+⨯ §7.4 fila 3 (RN-15): E3, co-entrenador de A y B, recibe 404 al corr… 0.24s  
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > §7.2 fila 20 (DD-63…   
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > RN-15: una lesión a…   
+FAILED  Tests\Feature\Salud\RegistroRN15Test > §7.4 fila 3 (RN-15): E3, c…   
+Tests:    3 failed, 104 passed (499 assertions)
+reemplazos: 1
+=== F07 BuscarLesionDelRegistrante sin alcance
+⨯ Punto 1 del plan: quien registró la lesión y perdió el alcance sobr… 0.19s  
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > Punto 1 del plan: q…   
+Tests:    1 failed, 105 passed (498 assertions)
+reemplazos: 1
+=== F08 EstadoVisible da lesion_id a todos
+⨯ §7.2 fila 2 (HU-04 c3, HU-21 c1): E1 y E2 ven el mismo estado y la…  0.19s  
+⨯ §7.2 fila 3 (RN-13, DA-10): D1 ve el estado y la fecha, sin lesion_… 0.18s  
+⨯ DA-56: D1 y E1 ven el momento de la última actualización, sin lesio… 0.18s  
+⨯ DA-56: D1 y E1 ven el momento de la última actualización, sin lesio… 0.18s  
+⨯ §7.3 filas 3 a 5 (RN-16): tras la confirmación de E2, E1 no modific… 0.33s  
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > §7.2 fila 2 (HU-04…    
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > §7.2 fila 3 (RN-13,…   
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > DA-56: D1 y E1 ven…    
+reemplazos: 1
+=== F09 Salud VisibilidadDeJugadorSql sin soloEntrenador
+⨯ DD-61: un usuario con los dos roles que solo le da clase al jugador… 0.20s  
+⨯ §7.1 fila 5 (§5.3): D1 no ve el aviso pendiente de E1                0.19s  
+⨯ DD-61: un usuario con los dos roles que solo le da clase al jugador… 0.20s  
+⨯ DA-25: un usuario con los dos roles ve solo los suyos si únicamente… 0.20s  
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > DD-61: un usuario c…   
+FAILED  Tests\Feature\Salud\AvisosTest > §7.1 fila 5 (§5.3): D1 no ve el…    
+FAILED  Tests\Feature\Salud\AvisosTest > DD-61: un usuario con los dos ro…   
+FAILED  Tests\Feature\Salud\AvisosTest > DA-25: un usuario con los dos ro…   
+reemplazos: 1
+=== F10 EstadoOficial cualquiera lo sostiene
+⨯ §7.2 fila 2 (HU-04 c3, HU-21 c1): E1 y E2 ven el mismo estado y la…  0.22s  
+⨯ §7.2 fila 3 (RN-13, DA-10): D1 ve el estado y la fecha, sin lesion_… 0.21s  
+⨯ §7.2 fila 10 (HU-20 c3): E1 cambia la fecha de un estado de E2: 403… 0.19s  
+⨯ §7.2 fila 21 (DD-63): tras la sustitución, E1 recibe 403 y E2 cambi… 0.23s  
+⨯ Punto 2 del plan: con el jugador en baja, el 403 no_es_registrante…  0.19s  
+⨯ DA-56: D1 y E1 ven el momento de la última actualización, sin lesio… 0.18s  
+⨯ DA-56: D1 y E1 ven el momento de la última actualización, sin lesio… 0.18s  
+⨯ §7.3 filas 3 a 5 (RN-16): tras la confirmación de E2, E1 no modific… 0.29s  
+reemplazos: 1
+=== F11 RepositorioDeLesionesSql sin filtrar por registrante
+⨯ RN-15: GET de las lesiones del jugador trae solo las propias, por i… 0.19s  
+FAILED  Tests\Feature\Salud\ConfirmacionYEstadoTest > RN-15: GET de las l…   
+Tests:    1 failed, 105 passed (497 assertions)
+reemplazos: 1
+=== F12 AvisoDeLesion nota visible para todos
+⨯ §7.1 fila 4 (DD-58): E2 ve el aviso pendiente de D1 con la nota nul… 0.18s  
+⨯ §7.1 fila 10 (DA-11): la nota y la nota del descarte según quién li… 0.18s  
+⨯ DD-58: la nota de un aviso confirmado la ve quien lo confirmó, no o… 0.24s  
+FAILED  Tests\Feature\Salud\AvisosTest > §7.1 fila 4 (DD-58): E2 ve el av…   
+FAILED  Tests\Feature\Salud\AvisosTest > §7.1 fila 10 (DA-11): la nota y…    
+FAILED  Tests\Feature\Salud\AvisosTest > DD-58: la nota de un aviso confi…   
+Tests:    3 failed, 47 passed (216 assertions)
+reemplazos: 1
+=== F13 CondicionFisica ComprobarJugadorDelEntrenador sin alcance
+⨯ §6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de…  0.18s  
+⨯ DD-61: un usuario con los dos roles solo registra con el alcance de… 0.18s  
+⨯ §6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de…  0.18s  
+FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §6.1: fuera del al…   
+FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DD-61: un usuario…    
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > §6.1: fuera de…   
+Tests:    3 failed, 123 passed (568 assertions)
+reemplazos: 1
+=== F14 CondicionFisica VisibilidadDeJugadorSql sin soloEntrenador
+⨯ DD-61: un usuario con los dos roles solo registra con el alcance de… 0.19s  
+FAILED  Tests\Feature\CondicionFisica\MedicionesTest > DD-61: un usuario…    
+Tests:    1 failed, 125 passed (580 assertions)
+reemplazos: 1
+=== F15 Mediciones listado sin registrante
+⨯ §7.5 fila 9 (DD-59): E2 lista solo la suya                           0.19s  
+FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 9 (DD-59…   
+Tests:    1 failed, 70 passed (319 assertions)
+reemplazos: 1
+=== F16 Mediciones periodo sin registrante
+⨯ §7.5 fila 8 (DD-59): E2 registra la suya en el mismo periodo y no c… 0.24s  
+FAILED  Tests\Feature\CondicionFisica\MedicionesTest > §7.5 fila 8 (DD-59…   
+Tests:    1 failed, 70 passed (318 assertions)
+reemplazos: 1
+=== F17 Pruebas sin registrante
+⨯ §7.6 fila 9 (DD-59): E2 lista las de F1 sin las de E1                0.21s  
+⨯ DA-64: dos entrenadores distintos no chocan: cada uno tiene su fila  0.23s  
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > §7.6 fila 9 (D…   
+FAILED  Tests\Feature\CondicionFisica\PruebasFisicasTest > DA-64: dos ent…   
+Tests:    2 failed, 53 passed (261 assertions)
+reemplazos: 1
+=== F18 Sin sesion no responde 401
+⨯ §7.8 fila 1 (RNF-01): sin sesión, todas las rutas de H5 responden 4… 1.64s  
+FAILED  Tests\Feature\Seguridad\RecorridoDeAlcanceH5Test > §7.8 fila 1 (R…   
+Tests:    1 failed (2 assertions)
+reemplazos: 1
+=== F19 Pruebas sin capturar el choque del indice
+⨯ DA-74: dos pruebas físicas simultáneas del mismo tipo y periodo: la… 1.64s  
+FAILED  Tests\Integration\CondicionFi…  UniqueConstraintViolationException   
+Tests:    1 failed, 1 passed (5 assertions)
+reemplazos: 1
+=== F20 Mediciones sin capturar el choque del indice
+⨯ DA-74: dos mediciones simultáneas del mismo periodo: la segunda rec… 0.18s  
+FAILED  Tests\Integration\CondicionFi…  UniqueConstraintViolationException   
+Tests:    1 failed, 1 passed (6 assertions)
+reemplazos: 1
+=== F21 Convocatoria desempata al reves
+⨯ HU-12: la convocatoria lista en orden de convocatoria, excluye las…  0.21s  
+FAILED  Tests\Feature\Competencia\ConvocatoriaTest > HU-12: la convocator…   
+Tests:    1 failed, 14 passed (146 assertions)
+=== control despues
+Tests:    302 passed (1511 assertions)
+copia temporal borrada

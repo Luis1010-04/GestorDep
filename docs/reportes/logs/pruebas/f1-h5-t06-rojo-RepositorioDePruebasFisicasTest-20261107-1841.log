@@ -1,0 +1,102 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Integration\CondicionFisica\RepositorioDePruebasFisicasTest
+  ⨯ RNF-02: registrar escribe la fila y su historial crear               6.33s  
+  ⨯ RNF-02: corregir escribe los valores anteriores y nuevos con el mot… 0.39s  
+  ⨯ §6.3, DA-64: dos pruebas del mismo tipo, registrante y periodo choc… 0.42s  
+  ⨯ DA-04, DD-59: buscar del periodo distingue jugador, tipo, registran… 0.38s  
+  ⨯ DA-16: el catálogo lee el rango del tipo de la tabla, también tras…  0.47s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\RepositorioDePruebasFisi…  Error   
+  Class "Src\CondicionFisica\Dominio\PruebaFisica" not found
+
+  at tests/Integration/CondicionFisica/RepositorioDePruebasFisicasTest.php:16
+     12▕ 
+     13▕ /** @param  array<string, string>  $m */
+     14▕ function repositorioPrueba(array $m, string $resultado = '4.35', string $tipo = 'velocidad'): PruebaFisica
+     15▕ {
+  ➜  16▕     return PruebaFisica::registrar(
+     17▕         Identificador::generar(), Identificador::desdeTexto($m['f1']), Identificador::desdeTexto($m['a']), Identificador::desdeTexto($m['e1']),
+     18▕         Identificador::desdeTexto($m[$tipo]), '2026-11-03', NumeroDecimal::desdeTexto($resultado), new DateTimeImmutable('2026-11-15 18:00:00+00:00'),
+     19▕     );
+     20▕ }
+
+  1   tests/Integration/CondicionFisica/RepositorioDePruebasFisicasTest.php:16
+  2   tests/Integration/CondicionFisica/RepositorioDePruebasFisicasTest.php:24
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\Rep…  BindingResolutionException   
+  Target class [Src\CondicionFisica\Dominio\RepositorioDePruebasFisicas] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1151
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  7   tests/Integration/CondicionFisica/RepositorioDePruebasFisicasTest.php:41
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\Rep…  BindingResolutionException   
+  Target class [Src\CondicionFisica\Dominio\RepositorioDePruebasFisicas] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1151
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  7   tests/Integration/CondicionFisica/RepositorioDePruebasFisicasTest.php:61
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\Rep…  BindingResolutionException   
+  Target class [Src\CondicionFisica\Dominio\RepositorioDePruebasFisicas] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1151
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  7   tests/Integration/CondicionFisica/RepositorioDePruebasFisicasTest.php:70
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Integration\CondicionFisica\Rep…  BindingResolutionException   
+  Target class [Src\CondicionFisica\Dominio\CatalogoDeTiposDePrueba] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1151
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  7   tests/Integration/CondicionFisica/RepositorioDePruebasFisicasTest.php:90
+
+
+  Tests:    5 failed (1 assertions)
+  Duration: 8.81s
+

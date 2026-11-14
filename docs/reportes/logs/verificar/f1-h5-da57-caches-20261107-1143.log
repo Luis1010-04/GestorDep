@@ -1,0 +1,38 @@
+=== make bajar y make levantar
+ Network gestordep_default Removing 
+ Network gestordep_default Removed 
+ Container gestordep-app-1 Healthy 
+ Container gestordep-scheduler-1 Healthy 
+gestordep_cache_phpstan
+gestordep_cache_pint
+--- caches (tras levantar, antes de la fria)
+/tmp/phpstan/resultCache.php no existe
+/tmp/pint/pint.cache no existe
+=== fria: docs/reportes/logs/verificar/f1-h5-da57-fria-20261107-1143.log
+# make verificar codigo: 2 en 836 s
+ [OK] No errors                                                                 
+   FAILED  Tests\Integration\Salud\RepositorioDeAvisosTest > DD-56: delJugad…   
+  Tests:    1 failed, 1840 passed (11594 assertions)
+  Duration: 678.65s
+--- caches (tras la fria)
+/tmp/phpstan/resultCache.php 5489522 bytes 2026-11-07 17:45:59.373560645 +0000 sha1=1caa1ad7d99b
+/tmp/pint/pint.cache 81149 bytes 2026-11-07 17:45:04.532669250 +0000 sha1=4d356477d7e5
+=== caliente: docs/reportes/logs/verificar/f1-h5-da57-caliente-20261107-1157.log
+# make verificar codigo: 0 en 788 s
+ [OK] No errors                                                                 
+  Tests:    1841 passed (11594 assertions)
+  Duration: 735.55s
+                                                                 Total: 99.6 %  
+Dominio                      100.0%      95%  ok
+Aplicación                  100.0%      85%  ok
+Infraestructura y HTTP        99.5%      70%  ok
+No security vulnerability advisories found.
+--- caches (tras la caliente)
+/tmp/phpstan/resultCache.php 5489522 bytes 2026-11-07 17:45:59.373560645 +0000 sha1=1caa1ad7d99b
+/tmp/pint/pint.cache 81149 bytes 2026-11-07 17:45:04.532669250 +0000 sha1=4d356477d7e5
+=== persistencia: make bajar y make levantar otra vez
+ Network gestordep_default Removed 
+ Container gestordep-worker-1 Healthy 
+--- caches (tras bajar y levantar)
+/tmp/phpstan/resultCache.php 5489522 bytes 2026-11-07 17:45:59.373560645 +0000 sha1=1caa1ad7d99b
+/tmp/pint/pint.cache 81149 bytes 2026-11-07 17:45:04.532669250 +0000 sha1=4d356477d7e5

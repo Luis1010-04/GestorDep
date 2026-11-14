@@ -1,9 +1,9 @@
 <?php
 
 /*
- * RNF-11, DD-53 (auditoría del Lote E, M-1): la configuración de PHPStan no se debilita. Nivel 7 o más, sin
- * `ignoreErrors`, sin línea base (ni el archivo ni su inclusión), sin exclusiones de rutas, sin `includes` fuera de
- * `vendor/` y analizando las cinco carpetas de siempre. Se lee `phpstan.neon` como texto: el proyecto no instala un
+ * RNF-11, DD-53 (auditoría del Lote E, M-1): la configuración de PHPStan no se debilita. Nivel 8 o más (desde
+ * F1-H5-T00), sin `ignoreErrors`, sin línea base (ni el archivo ni su inclusión), sin exclusiones de rutas, sin
+ * `includes` fuera de `vendor/` y analizando las cinco carpetas de siempre. Se lee `phpstan.neon` como texto: el proyecto no instala un
  * analizador de NEON y la configuración es corta y plana.
  */
 
@@ -36,11 +36,11 @@ function listaDePhpstan(string $configuracion, string $clave): array
     return $elementos[1];
 }
 
-test('RNF-11 (M-1): PHPStan analiza en nivel 7 o más', function () {
+test('RNF-11 (M-1, F1-H5-T00): PHPStan analiza en nivel 8 o más', function () {
     $encontrado = preg_match('/^\s*level:\s*(\d+)\s*$/m', configuracionDePhpstan(), $nivel);
 
     expect($encontrado)->toBe(1)
-        ->and((int) ($nivel[1] ?? 0))->toBeGreaterThanOrEqual(7);
+        ->and((int) ($nivel[1] ?? 0))->toBeGreaterThanOrEqual(8);
 });
 
 test('RNF-11 (M-1): PHPStan no ignora errores, no excluye rutas ni usa línea base', function () {

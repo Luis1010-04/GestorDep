@@ -10,6 +10,7 @@ use Src\Rendimiento\Dominio\RepositorioDePlantillas;
 use Src\Rendimiento\Dominio\RepositorioDeUmbrales;
 use Src\Rendimiento\Dominio\UmbralDeRendimiento;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /**
@@ -81,7 +82,7 @@ test('HU-15 (§7.2 fila 2): E1 cambia el umbral de F1 a 7.0 con ventana 3; el an
     ])
         ->and(DB::table('umbrales_rendimiento')->where('id', $anterior)->value('vigente_hasta'))->toBe('2026-09-21 10:00:00+00')
         ->and(DB::table('umbrales_rendimiento')->whereNull('vigente_hasta')->count())->toBe(1);
-    $cierre = DB::table('umbrales_rendimiento_historial')->where('umbral_id', $anterior)->where('operacion', 'actualizar')->first();
+    $cierre = NoNulo::exigir(DB::table('umbrales_rendimiento_historial')->where('umbral_id', $anterior)->where('operacion', 'actualizar')->first(), 'el historial del cierre');
     $antes = json_decode((string) $cierre->datos_anteriores, true);
     $despues = json_decode((string) $cierre->datos_nuevos, true);
     expect($antes['calificacion_minima'])->toBe('6.50')

@@ -1,0 +1,9 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\CondicionFisica\MedicionesTest
+  ✓ AU-09: con el máximo de peso en 1500.00, 1200.00 responde 422 valor… 4.54s  
+  ✓ AU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999… 0.48s  
+
+  Tests:    2 passed (12 assertions)
+  Duration: 5.57s
+

@@ -14,6 +14,7 @@ use Src\Compartido\Dominio\Eventos\JugadorInscrito;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Recálculo de `resumenes_academicos` (HU-07, HU-09, RN-04, RN-05, DD-45, DD-46, arquitectura §11) con datos sembrados directo. */
@@ -46,7 +47,7 @@ test('HU-07 (§7.10 fila 1, caso de uso): J1 inscrito sin calificaciones tiene r
 
     expect(recalculoCalcular($m['j1']))->toBeTrue();
 
-    $resumen = recalculoResumen($m['j1']);
+    $resumen = NoNulo::exigir(recalculoResumen($m['j1']), 'el resumen del jugador');
     expect($resumen->periodo_id)->toBe($m['p1'])
         ->and($resumen->promedio)->toBeNull()
         ->and($resumen->materias_reprobadas)->toBe(0)
@@ -71,7 +72,7 @@ test('RN-02: la final prevalece sobre los parciales y sin final se promedian los
     mundoCalificar($m['i1'], 'parcial', '8.00', 1);
     mundoCalificar($m['i1'], 'parcial', '7.00', 2);
     recalculoCalcular($m['j1']);
-    expect(recalculoResumen($m['j1'])->promedio)->toBe('7.50');
+    expect(NoNulo::exigir(recalculoResumen($m['j1']), 'el resumen del jugador')->promedio)->toBe('7.50');
 
     mundoCalificar($m['i1'], 'final', '6.00');
     recalculoCalcular($m['j1']);
@@ -95,20 +96,20 @@ test('RN-03 (§7.10 filas 5 y 6): el criterio propio vigente decide si la materi
     $m = mundoDeDocentes();
     mundoCalificar($m['i1'], 'final', '7.50');
     recalculoCalcular($m['j1']);
-    expect(recalculoResumen($m['j1'])->materias_reprobadas)->toBe(0);
+    expect(NoNulo::exigir(recalculoResumen($m['j1']), 'el resumen del jugador')->materias_reprobadas)->toBe(0);
 
     $propio = mundoCriterioPropio($m['m1'], '8.00');
     recalculoCalcular($m['j1']);
-    expect(recalculoResumen($m['j1'])->materias_reprobadas)->toBe(1);
+    expect(NoNulo::exigir(recalculoResumen($m['j1']), 'el resumen del jugador')->materias_reprobadas)->toBe(1);
 
     DB::connection('propietario')->table('calificaciones')->where('inscripcion_id', $m['i1'])->update(['valor' => '8.00']);
     recalculoCalcular($m['j1']);
-    expect(recalculoResumen($m['j1'])->materias_reprobadas)->toBe(0);
+    expect(NoNulo::exigir(recalculoResumen($m['j1']), 'el resumen del jugador')->materias_reprobadas)->toBe(0);
 
     DB::connection('propietario')->table('criterios_aprobacion')->where('id', $propio)->update(['calificacion_minima' => '6.00']);
     DB::connection('propietario')->table('calificaciones')->where('inscripcion_id', $m['i1'])->update(['valor' => '6.50']);
     recalculoCalcular($m['j1']);
-    expect(recalculoResumen($m['j1'])->materias_reprobadas)->toBe(0);
+    expect(NoNulo::exigir(recalculoResumen($m['j1']), 'el resumen del jugador')->materias_reprobadas)->toBe(0);
 });
 
 test('RN-05 (§7.10 fila 8): 7 presentes, 1 falta justificada y 2 faltas dan 80.00 y la asistencia no entra en el riesgo', function () {
@@ -154,13 +155,13 @@ test('DD-45 (§7.10 fila 16): al cambiar el día vigente, alertas:recalcular cre
     $m = mundoDeDocentes();
     mundoCalificar($m['i1'], 'final', '8.00');
     consolaArtisan('alertas:recalcular')->assertSuccessful();
-    expect(recalculoResumen($m['j1'], $m['p1'])->promedio)->toBe('8.00');
+    expect(NoNulo::exigir(recalculoResumen($m['j1'], $m['p1']), 'el resumen del jugador')->promedio)->toBe('8.00');
 
     recalculoFijarReloj('2026-08-03 12:00:00');
     consolaArtisan('alertas:recalcular')->assertSuccessful();
 
     expect(recalculoResumen($m['j1'], $m['p2']))->toMatchObject(['promedio' => null, 'materias_reprobadas' => 0, 'materias_sin_calificar' => 0, 'nivel_riesgo' => null])
-        ->and(recalculoResumen($m['j1'], $m['p1'])->promedio)->toBe('8.00');
+        ->and(NoNulo::exigir(recalculoResumen($m['j1'], $m['p1']), 'el resumen del jugador')->promedio)->toBe('8.00');
 });
 
 test('HU-09 (§7.10 fila 17): alertas:recalcular dos veces da el mismo resultado, sin filas duplicadas, con código 0', function () {
@@ -216,7 +217,7 @@ test('HU-07 (§7.10 fila 22): calculado_en es el instante del reloj truncado a s
 
     recalculoCalcular($m['j1']);
 
-    expect((new DateTimeImmutable(recalculoResumen($m['j1'])->calculado_en))->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s.u'))->toBe('2026-03-10 12:00:00.000000');
+    expect((new DateTimeImmutable(NoNulo::exigir(recalculoResumen($m['j1']), 'el resumen del jugador')->calculado_en))->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s.u'))->toBe('2026-03-10 12:00:00.000000');
 });
 
 test('HU-09 (§7.10 fila 24): alertas:recalcular está programado a las 02:00 de America/Mexico_City', function () {
@@ -274,7 +275,7 @@ test('arquitectura §11: el escucha va en cola, después del commit, y los event
     foreach ([CalificacionRegistrada::class, AsistenciaDeClaseRegistrada::class, JugadorInscrito::class, CriterioDeMateriaModificado::class] as $clase) {
         $constructor = (new ReflectionClass($clase))->getConstructor();
         expect($constructor)->not->toBeNull();
-        foreach ($constructor->getParameters() as $parametro) {
+        foreach (NoNulo::exigir($constructor, 'el constructor del evento')->getParameters() as $parametro) {
             expect((string) $parametro->getType())->toBe('string');
         }
     }

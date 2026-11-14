@@ -6,6 +6,7 @@ use Illuminate\Testing\TestResponse;
 use Src\Compartido\Dominio\Eventos\JugadorInscrito;
 use Src\Compartido\Dominio\Identificador;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Inscripciones (HU-06 criterios 2 y 3, RN-20, DD-37, DD-52). Datos de partida de docs/hitos/f1-h2.md §7.0. */
@@ -34,9 +35,9 @@ test('HU-06 (§7.5 fila 1): D1 inscribe a J4 por matrícula, queda el historial 
     $id = $respuesta->json('datos.id');
     $historial = DB::table('inscripciones_historial')->where('inscripcion_id', $id)->get();
     expect($historial)->toHaveCount(1)
-        ->and($historial[0]->operacion)->toBe('crear')
-        ->and($historial[0]->usuario_id)->toBe($m['d1'])
-        ->and(json_decode($historial[0]->datos_nuevos, true))->toEqual(['materia_id' => $m['m1'], 'jugador_id' => $m['j4']]);
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->usuario_id)->toBe($m['d1'])
+        ->and(json_decode(NoNulo::exigir($historial[0], 'la fila 0 de $historial')->datos_nuevos, true))->toEqual(['materia_id' => $m['m1'], 'jugador_id' => $m['j4']]);
     $lista = sesionesPeticion($this, 'GET', '/api/v1/jugadores', idDeSesion: $sesion)->assertOk();
     expect(array_column($lista->json('datos'), 'id'))->toBe([$m['j1'], $m['j3'], $m['j4']]);
 });

@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Salud\RegistroRN15Test
+  ✓ §7.4 fila 3 (RN-15): E3, co-entrenador de A y B, recibe 404 al corr… 4.65s  
+
+  Tests:    1 passed (7 assertions)
+  Duration: 5.26s
+

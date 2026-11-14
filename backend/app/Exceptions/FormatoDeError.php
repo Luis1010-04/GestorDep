@@ -31,6 +31,12 @@ use Src\Competencia\Dominio\EntrenamientoNoProgramado;
 use Src\Competencia\Dominio\PartidoNoProgramado;
 use Src\Competencia\Dominio\ReglaDeCampoViolada;
 use Src\Competencia\Dominio\TransicionNoPermitida;
+use Src\CondicionFisica\Aplicacion\MedicionConcurrente;
+use Src\CondicionFisica\Aplicacion\PruebaConcurrente;
+use Src\CondicionFisica\Aplicacion\RecursoNoEncontrado as RecursoDeCondicionFisicaNoEncontrado;
+use Src\CondicionFisica\Dominio\MedicionYaRegistrada;
+use Src\CondicionFisica\Dominio\PruebaYaRegistrada;
+use Src\CondicionFisica\Dominio\ReglaDeCampoViolada as ReglaDeCampoDeCondicionFisica;
 use Src\Identidad\Aplicacion\ContrasenaNuevaMuyCorta;
 use Src\Identidad\Aplicacion\CredencialesInvalidas;
 use Src\Identidad\Aplicacion\CuentaBloqueada;
@@ -49,6 +55,12 @@ use Src\Rendimiento\Aplicacion\RendimientoDuplicado;
 use Src\Rendimiento\Aplicacion\SinUmbralAplicable;
 use Src\Rendimiento\Aplicacion\UmbralConcurrente;
 use Src\Rendimiento\Dominio\ReglaDeCampoViolada as ReglaDeCampoDeRendimiento;
+use Src\Salud\Aplicacion\EstadoConcurrente;
+use Src\Salud\Aplicacion\RecursoNoEncontrado as RecursoDeSaludNoEncontrado;
+use Src\Salud\Dominio\AvisoNoPendiente;
+use Src\Salud\Dominio\EstadoEnElMismoInstante;
+use Src\Salud\Dominio\NoEsRegistrante;
+use Src\Salud\Dominio\SinLesionVigente;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -87,6 +99,14 @@ final class FormatoDeError
             $e instanceof PartidoNoJugado, $e instanceof SinUmbralAplicable => self::reglaDeNegocio($e, 409),
             $e instanceof ReglaDeCampoDeRendimiento => self::reglaDeCampoDeRendimiento($e, $e instanceof RendimientoDuplicado || $e instanceof PlantillaDuplicada ? 409 : 422),
             $e instanceof UmbralConcurrente => self::respuesta(409, 'conflicto'),
+            $e instanceof RecursoDeSaludNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
+            $e instanceof AvisoNoPendiente, $e instanceof SinLesionVigente => self::reglaDeNegocio($e, 409),
+            $e instanceof NoEsRegistrante => self::reglaDeNegocio($e, 403),
+            $e instanceof EstadoConcurrente, $e instanceof EstadoEnElMismoInstante => self::respuesta(409, 'conflicto'),
+            $e instanceof RecursoDeCondicionFisicaNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
+            $e instanceof MedicionYaRegistrada, $e instanceof PruebaYaRegistrada => self::reglaDeNegocio($e, 409),
+            $e instanceof MedicionConcurrente, $e instanceof PruebaConcurrente => self::respuesta(409, 'conflicto'),
+            $e instanceof ReglaDeCampoDeCondicionFisica => self::reglaDeCampoDeCondicionFisica($e),
             $e instanceof MatriculaDuplicada, $e instanceof JugadorYaEnEquipo, $e instanceof JugadorEnBaja, $e instanceof JugadorYaEnBaja => self::reglaDeNegocio($e, 409),
             $e instanceof EquipoNoEncontrado, $e instanceof JugadorNoEncontrado => self::respuesta(404, 'recurso_no_encontrado'),
             $e instanceof JugadorNoRegistrado => self::reglaDeNegocio($e, 404),
@@ -139,6 +159,17 @@ final class FormatoDeError
         $mensaje = Lang::has($clave) ? __($clave) : __('errores.reglas.'.$e->codigo());
 
         return self::json($estado, $e->codigo(), $mensaje, [
+            ['campo' => $e->campo(), 'codigo' => $e->codigo(), 'mensaje' => $mensaje],
+        ]);
+    }
+
+    /** Como `reglaDeCampoDeRendimiento`, con los mensajes propios de `errores.condicion_fisica`. */
+    private static function reglaDeCampoDeCondicionFisica(ReglaDeCampoDeCondicionFisica $e): JsonResponse
+    {
+        $clave = 'errores.condicion_fisica.'.$e->codigo();
+        $mensaje = Lang::has($clave) ? __($clave) : __('errores.reglas.'.$e->codigo());
+
+        return self::json(422, $e->codigo(), $mensaje, [
             ['campo' => $e->campo(), 'codigo' => $e->codigo(), 'mensaje' => $mensaje],
         ]);
     }

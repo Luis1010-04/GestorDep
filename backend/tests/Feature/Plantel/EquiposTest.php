@@ -12,6 +12,7 @@ use Src\Plantel\Aplicacion\ListarEquipos;
 use Src\Plantel\Dominio\Equipo;
 use Src\Plantel\Dominio\RepositorioDeEquipos;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 beforeEach(function () {
@@ -67,20 +68,20 @@ test('RN-22: quien crea un equipo queda asignado con una fila vigente y su histo
     $usuarioId = DB::table('usuarios')->where('correo', 'a@x.com')->value('id');
     $asignacion = DB::table('entrenador_equipo')->where('equipo_id', $equipoId)->get();
     expect($asignacion)->toHaveCount(1)
-        ->and($asignacion[0]->usuario_id)->toBe($usuarioId)
-        ->and($asignacion[0]->hasta)->toBeNull()
-        ->and($asignacion[0]->creado_por)->toBe($usuarioId);
+        ->and(NoNulo::exigir($asignacion[0], 'la fila 0 de $asignacion')->usuario_id)->toBe($usuarioId)
+        ->and(NoNulo::exigir($asignacion[0], 'la fila 0 de $asignacion')->hasta)->toBeNull()
+        ->and(NoNulo::exigir($asignacion[0], 'la fila 0 de $asignacion')->creado_por)->toBe($usuarioId);
 
-    $historialAsignacion = DB::table('entrenador_equipo_historial')->where('entrenador_equipo_id', $asignacion[0]->id)->get();
+    $historialAsignacion = DB::table('entrenador_equipo_historial')->where('entrenador_equipo_id', NoNulo::exigir($asignacion[0], 'la fila 0 de $asignacion')->id)->get();
     expect($historialAsignacion)->toHaveCount(1)
-        ->and($historialAsignacion[0]->operacion)->toBe('crear')
-        ->and($historialAsignacion[0]->usuario_id)->toBe($usuarioId)
-        ->and($historialAsignacion[0]->datos_anteriores)->toBeNull();
+        ->and(NoNulo::exigir($historialAsignacion[0], 'la fila 0 de $historialAsignacion')->operacion)->toBe('crear')
+        ->and(NoNulo::exigir($historialAsignacion[0], 'la fila 0 de $historialAsignacion')->usuario_id)->toBe($usuarioId)
+        ->and(NoNulo::exigir($historialAsignacion[0], 'la fila 0 de $historialAsignacion')->datos_anteriores)->toBeNull();
 
     $historialEquipo = DB::table('equipos_historial')->where('equipo_id', $equipoId)->get();
     expect($historialEquipo)->toHaveCount(1)
-        ->and($historialEquipo[0]->operacion)->toBe('crear')
-        ->and(json_decode($historialEquipo[0]->datos_nuevos, true))->toMatchArray(['nombre' => 'Tigres', 'categoria_id' => $categoriaId]);
+        ->and(NoNulo::exigir($historialEquipo[0], 'la fila 0 de $historialEquipo')->operacion)->toBe('crear')
+        ->and(json_decode(NoNulo::exigir($historialEquipo[0], 'la fila 0 de $historialEquipo')->datos_nuevos, true))->toMatchArray(['nombre' => 'Tigres', 'categoria_id' => $categoriaId]);
 });
 
 test('RN-22: la asignación empieza el día de hoy en America/Mexico_City', function () {

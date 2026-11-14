@@ -1,0 +1,25 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+=== control antes
+✓ DA-61: un tipo_prueba_id que no es UUID responde 422 validacion_fal… 2.70s  
+✓ DA-61: un UUID no v7, un tipo eliminado y uno inexistente responden… 0.35s  
+✓ DA-62: con los dos filtros, la vista del periodo trae solo ese tipo… 0.32s  
+✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.29s  
+✓ §6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca…  0.29s  
+Tests:    5 passed (28 assertions)
+1
+=== G9 un UUID no v7 en la ruta no da 404
+✓ DA-61: un tipo_prueba_id que no es UUID responde 422 validacion_fal… 2.65s  
+✓ DA-61: un UUID no v7, un tipo eliminado y uno inexistente responden… 0.37s  
+✓ DA-62: con los dos filtros, la vista del periodo trae solo ese tipo… 0.34s  
+✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.34s  
+⨯ §6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca…  0.32s  
+Expected response status code [404] but received 500.
+Tests:    1 failed, 4 passed (27 assertions)
+=== control despues
+✓ DA-61: un tipo_prueba_id que no es UUID responde 422 validacion_fal… 2.57s  
+✓ DA-61: un UUID no v7, un tipo eliminado y uno inexistente responden… 0.35s  
+✓ DA-62: con los dos filtros, la vista del periodo trae solo ese tipo… 0.31s  
+✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.29s  
+✓ §6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca…  0.28s  
+Tests:    5 passed (28 assertions)
+copia temporal borrada

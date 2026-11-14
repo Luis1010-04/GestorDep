@@ -1,0 +1,81 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Unit\Herramientas\GuionDeHumoTest
+  ⨯ F1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1…  0.03s  
+  ⨯ F1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1…  0.01s  
+  ⨯ F1-H5-T09: el humo_igual de humo-h5.sh se detiene con FALLA y códig… 0.01s  
+  ⨯ F1-H5-T09: humo-h5.sh se detiene ante cualquier error y recorre los… 0.01s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Herramientas\GuionDeHumoTest > F1-H5-T09: humo-h5.sh s…   
+  Failed asserting that 127 is identical to 1.
+
+  at tests/Unit/Herramientas/GuionDeHumoTest.php:213
+    209▕ 
+    210▕ test('F1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1 si el inicio de sesión no responde 200', function () {
+    211▕     [$codigo, $salida] = ejecutarHumoH3ConCurlFalso(500, '{}', 'humo-h5.sh');
+    212▕ 
+  ➜ 213▕     expect($codigo)->toBe(1)
+    214▕         ->and($salida)->toContain('FALLA  paso 1: E1 inicia sesión -> HTTP 500 (se esperaba 200)')
+    215▕         ->and($salida)->not->toContain('paso 2')
+    216▕         ->and($salida)->not->toContain('HUMO H5 OK');
+    217▕ });
+
+  1   tests/Unit/Herramientas/GuionDeHumoTest.php:213
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Herramientas\GuionDeHumoTest > F1-H5-T09: humo-h5.sh s…   
+  Failed asserting that 127 is identical to 1.
+
+  at tests/Unit/Herramientas/GuionDeHumoTest.php:222
+    218▕ 
+    219▕ test('F1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1 si el cuerpo del inicio de sesión no cumple', function () {
+    220▕     [$codigo, $salida] = ejecutarHumoH3ConCurlFalso(200, '{"datos":{"roles":["docente"]}}', 'humo-h5.sh');
+    221▕ 
+  ➜ 222▕     expect($codigo)->toBe(1)
+    223▕         ->and($salida)->toContain('FALLA  paso 1: E1 inicia sesión -> HTTP 200 (el cuerpo no cumple')
+    224▕         ->and($salida)->not->toContain('paso 2')
+    225▕         ->and($salida)->not->toContain('HUMO H5 OK');
+    226▕ });
+
+  1   tests/Unit/Herramientas/GuionDeHumoTest.php:222
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Herramientas\GuionDeHumoTest > F1-H5-T09: el humo_igua…   
+  Expecting '' not to be ''.
+
+  at tests/Unit/Herramientas/GuionDeHumoTest.php:230
+    226▕ });
+    227▕ 
+    228▕ test('F1-H5-T09: el humo_igual de humo-h5.sh se detiene con FALLA y código 1 si el 404 de la lesión no es igual byte a byte, o si el código no es 404', function () {
+    229▕     $funcion = funcionHumoIgual('humo-h5.sh');
+  ➜ 230▕     expect($funcion)->not->toBe('');
+    231▕ 
+    232▕     [$codigoCuerpo, $salidaCuerpo] = ejecutarConLibreriaDeHumo($funcion."\n".'HUMO_CODIGO=404; HUMO_CUERPO=\'{"codigo":"recurso_no_encontrado","mensaje":"otro"}\'; humo_igual 9 "lesión ajena" 404 \'{"codigo":"recurso_no_encontrado","mensaje":"uno"}\'; echo SIGUIO');
+    233▕     [$codigoEstado, $salidaEstado] = ejecutarConLibreriaDeHumo($funcion."\n".'HUMO_CODIGO=200; HUMO_CUERPO=\'{"datos":{}}\'; humo_igual 9 "lesión ajena" 404 \'{"codigo":"recurso_no_encontrado"}\'; echo SIGUIO');
+    234▕     [$codigoBien, $salidaBien] = ejecutarConLibreriaDeHumo($funcion."\n".'HUMO_CODIGO=404; HUMO_CUERPO=\'{"codigo":"recurso_no_encontrado"}\'; humo_igual 9 "lesión ajena" 404 \'{"codigo":"recurso_no_encontrado"}\'; echo SIGUIO');
+
+  1   tests/Unit/Herramientas/GuionDeHumoTest.php:230
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Herramientas\GuionDeHumoTest > F1-H5-T09: humo-h5.sh s…   
+  Expected: 
+
+  To contain: set -euo pipefail
+
+  at tests/Unit/Herramientas/GuionDeHumoTest.php:251
+    247▕ test('F1-H5-T09: humo-h5.sh se detiene ante cualquier error y recorre los 18 pasos de §9 en orden, con el 404 del paso 9 byte a byte', function () {
+    248▕     $guion = (string) file_get_contents(carpetaDeHumo().'/humo-h5.sh');
+    249▕     preg_match_all('/^\s*humo_(?:paso|igual) (\d+) /m', $guion, $pasos);
+    250▕ 
+  ➜ 251▕     expect($guion)->toContain('set -euo pipefail')
+    252▕         ->and($guion)->toContain('source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"')
+    253▕         ->and($guion)->toContain('humo_igual 9 ')
+    254▕         ->and(array_values(array_unique(array_map('intval', $pasos[1]))))->toBe(range(1, 18));
+    255▕ });
+
+  1   tests/Unit/Herramientas/GuionDeHumoTest.php:251
+
+
+  Tests:    4 failed (4 assertions)
+  Duration: 0.63s
+

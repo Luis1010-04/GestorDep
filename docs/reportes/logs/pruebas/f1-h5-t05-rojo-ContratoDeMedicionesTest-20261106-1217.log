@@ -1,0 +1,24 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   FAIL  Tests\Feature\CondicionFisica\ContratoDeMedicionesTest
+  ⨯ HU-17: las respuestas de mediciones cumplen el contrato              3.55s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\CondicionFisica\ContratoDeMedicionesTest > HU-17: l…   
+  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.
+
+  at tests/Feature/CondicionFisica/ContratoDeMedicionesTest.php:17
+     13▕     $d1 = sesionesIniciar($this, 'd1@x.com');
+     14▕     $ruta = '/jugadores/{jugador}/mediciones';
+     15▕ 
+     16▕     $respuestas = [
+  ➜  17▕         ['post', sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), $e1)->assertCreated()],
+     18▕         ['post', sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a'], ['peso_kg' => '71.00', 'es_correccion' => true, 'motivo' => 'Error']), $e1)->assertOk()],
+     19▕         ['post', sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), medicionCuerpo($m['a']), $e1)->assertConflict()],
+     20▕         ['post', sesionesPeticion($this, 'POST', medicionesRuta($m['jb']), medicionCuerpo($m['a']), $e1)->assertConflict()],
+     21▕         ['post', sesionesPeticion($this, 'POST', medicionesRuta($m['f1']), [], $e1)->assertUnprocessable()],
+
+
+  Tests:    1 failed (5 assertions)
+  Duration: 4.03s
+

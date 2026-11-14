@@ -6,6 +6,7 @@ use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /** Asistencia a entrenamientos y porcentajes (HU-11, docs/hitos/f1-h3.md §7.3 y §7.6 filas 1, 2 y 8). */
@@ -118,7 +119,7 @@ test('HU-11 (§7.3 fila 4): E1 corrige J2 a presente y el historial guarda la fi
     asistenciaPeticion($this, 'PATCH', "/asistencias-entrenamiento/$asistencia", ['estado' => 'presente'])
         ->assertOk()->assertJsonPath('datos.estado', 'presente')->assertJsonPath('datos.actualizado_en', '2026-09-20T15:00:00+00:00');
 
-    $fila = DB::table('asistencias_entrenamiento_historial')->where('asistencia_entrenamiento_id', $asistencia)->first();
+    $fila = NoNulo::exigir(DB::table('asistencias_entrenamiento_historial')->where('asistencia_entrenamiento_id', $asistencia)->first(), 'el historial de la asistencia');
     expect($fila->operacion)->toBe('actualizar')
         ->and($fila->usuario_id)->toBe($m['e1'])
         ->and($fila->ocurrido_en)->toBe('2026-09-20 15:00:00+00')

@@ -1,0 +1,113 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Salud\ConfirmacionYEstadoTest
+  ✓ §7.2 fila 1 (HU-20 c1, RN-16): E2 confirma lesionado y queda como r… 4.24s  
+  ✓ §7.2 fila 2 (HU-04 c3, HU-21 c1): E1 y E2 ven el mismo estado y la…  0.39s  
+  ✓ §7.2 fila 3 (RN-13, DA-10): D1 ve el estado y la fecha, sin lesion_… 0.38s  
+  ✓ §7.2 fila 4 (DD-57): confirmar con_molestia sin zona responde 422 e… 0.35s  
+  ✓ §7.2 fila 5 (DD-57): confirmar apto con tipo responde 422 en tipo    0.39s  
+  ✓ §7.2 fila 6: confirmar apto deja un estado apto explícito, sin lesi… 0.32s  
+  ✓ §7.2 fila 7 (HU-20 c2): D1 no confirma: 403 sin_permiso              0.29s  
+  ✓ §7.2 fila 8 (DD-61): DE confirma como entrenador                     0.31s  
+  ✓ §7.2 fila 9 (HU-30 c2, DA-14): E2 cambia la fecha; la fila vigente…  0.33s  
+  ✓ §7.2 fila 10 (HU-20 c3): E1 cambia la fecha de un estado de E2: 403… 0.39s  
+  ✓ §7.2 fila 11 (DA-14): E2 cambia a con_molestia; la fila anterior se… 0.31s  
+  ✓ §7.2 fila 12 (HU-30 c1): E2 da de alta; estado apto, fecha de alta…  0.38s  
+  ✓ §7.2 fila 13 (§3.4): dar de alta sin estado responde 409 sin_lesion… 0.35s  
+  ✓ §7.2 fila 14 (HU-21 c3, DA-09): con el regreso vencido, requiere ac… 0.43s  
+  ✓ §7.2 fila 15 (DA-09): con el regreso hoy, no requiere actualización  0.48s  
+  ✓ §7.2 fila 16 (DA-17): confirmar con el regreso anterior a la fecha…  0.40s  
+  ✓ §7.2 fila 17 (§6.3): confirmar otra vez responde 409 aviso_no_pendi… 0.38s  
+  ✓ §7.2 fila 18 (DA-12): confirmar un aviso de JB en baja responde 409… 0.34s  
+  ✓ §7.2 fila 19 (RN-16): E2 corrige la zona y queda la anterior en el…  0.36s  
+  ✓ §7.2 fila 20 (DD-63): E2 confirma con un estado vigente de E1; el d… 0.43s  
+  ✓ §7.2 fila 21 (DD-63): tras la sustitución, E1 recibe 403 y E2 cambi… 0.47s  
+  ✓ §7.2 fila 22 (DA-19): al confirmar, las tres columnas son el mismo…  0.36s  
+  ✓ §7.2 fila 23 (DA-19): tras la sustitución por E1 y su alta, el avis… 0.61s  
+  ✓ DD-63: confirmar sustituye también un estado propio o un apto explí… 0.43s  
+  ✓ DD-63: confirmar sustituye también un estado propio o un apto explí… 0.42s  
+  ✓ DA-45: confirmar otro aviso deja sin alta la lesión propia anterior… 0.45s  
+  ✓ DA-45: confirmar apto deja sin alta la lesión propia anterior, y el… 0.38s  
+  ✓ RNF-02: confirmar escribe el historial del aviso, de la lesión y de… 0.35s  
+  ✓ DA-01: sin registro, el jugador está apto implícito                  0.32s  
+  ✓ DA-18: el estado devuelve solo sus campos                            0.33s  
+  ✓ RN-15: el estado oficial sigue visible para quien lo consulta sin s… 0.37s  
+  ✓ RNF-01: consultar el estado de un jugador fuera del alcance respond… 0.37s  
+  ✓ DD-30: el estado de un jugador en baja sigue disponible para quien…  0.31s  
+  ✓ §6.1: el docente recibe 403 en cambio de estado, alta y lesiones     0.37s  
+  ✓ §6.1: fuera del alcance de entrenador, 404 antes que 422, y nunca n… 0.40s  
+  ✓ DD-61: un usuario con los dos roles que solo le da clase al jugador… 0.40s  
+  ✓ §6.1: un UUID válido que no es v7 responde 404, nunca 500            0.41s  
+  ✓ Plan de T03: PATCH sin campos responde 422 en el estado y en la les… 0.39s  
+  ✓ Plan de T03: PATCH del estado con valores idénticos responde 200 si… 0.34s  
+  ✓ Plan de T03: PATCH del estado con valores idénticos responde 200 si… 0.33s  
+  ✓ Plan de T03: PATCH del estado con valores idénticos responde 200 si… 0.32s  
+  ✓ Plan de T03: el mismo estado con otra fecha no abre fila nueva, sol… 0.33s  
+  ✓ DA-14: cambiar estado y fecha a la vez abre otra fila con la fecha…  0.39s  
+  ✓ Plan de T03: PATCH de la lesión con valores idénticos responde 200…  0.34s  
+  ✓ Punto 2 del plan: con estado apto explícito, cualquier entrenador r… 0.37s  
+  ✓ Punto 2 del plan: el 422 va antes que el 409 sin_lesion_vigente      0.34s  
+  ✓ Punto 2 del plan: con el jugador en baja, el 403 no_es_registrante…  0.34s  
+  ✓ DA-12: cambiar el estado o la fecha de un jugador en baja responde…  0.34s  
+  ✓ DA-12: cambiar el estado o la fecha de un jugador en baja responde…  0.36s  
+  ✓ DA-12: con el jugador en baja, el alta y la corrección de la lesión… 0.36s  
+  ✓ DA-17: cambiar la fecha a una anterior al inicio de la lesión respo… 0.34s  
+  ✓ DA-17: dar de alta con una fecha anterior al inicio responde 422 y…  0.38s  
+  ✓ Punto 7 del plan: el mensaje existente de rango_de_fechas_invalido…  0.16s  
+  ✓ §3.4: el alta sin fecha usa el hoy de negocio                        0.44s  
+  ✓ Punto 5 del plan: la fecha de alta y la estimada pueden ser futuras  0.38s  
+  ✓ Punto 6 del plan: con un aviso de fecha futura, el alta sin fecha r… 0.37s  
+  ✓ DA-30: cambiar el estado en el mismo segundo en que se abrió respon… 0.39s  
+  ✓ DA-30: dar de alta en el mismo segundo responde 409 conflicto y no…  0.38s  
+  ✓ DA-30: confirmar en el mismo segundo que otra confirmación responde… 0.42s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.35s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.35s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.34s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.34s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.34s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.34s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.35s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.39s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.39s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.35s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.34s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.38s  
+  ✓ §6.2: confirmar rechaza campos desconocidos, una causa o un estado…  0.35s  
+  ✓ §6.2: confirmar guarda la nota opcional de la lesión                 0.36s  
+  ✓ DA-32: confirmar con la nota nula o vacía responde 422 y no registr… 0.36s  
+  ✓ DA-32: confirmar con la nota nula o vacía responde 422 y no registr… 0.34s  
+  ✓ DA-32: confirmar con la nota nula o vacía responde 422 y no registr… 0.35s  
+  ✓ §6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m… 0.36s  
+  ✓ §6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m… 0.34s  
+  ✓ §6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m… 0.34s  
+  ✓ §6.2: el alta rechaza campos desconocidos y fechas mal formadas wit… 0.36s  
+  ✓ §6.2: el alta rechaza campos desconocidos y fechas mal formadas wit… 0.36s  
+  ✓ §6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc… 0.35s  
+  ✓ §6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc… 0.35s  
+  ✓ §6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc… 0.36s  
+  ✓ §6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc… 0.33s  
+  ✓ DA-32: PATCH de la lesión con la nota nula o vacía responde 422; la… 0.36s  
+  ✓ DA-32: PATCH de la lesión con la nota nula o vacía responde 422; la… 0.36s  
+  ✓ DA-32: PATCH de la lesión con la nota nula o vacía responde 422; la… 0.38s  
+  ✓ RN-15: GET de la lesión devuelve solo sus campos a quien la registr… 0.33s  
+  ✓ RN-15: una lesión ajena responde igual que una inexistente, en GET…  0.36s  
+  ✓ Punto 1 del plan: quien registró la lesión y perdió el alcance sobr… 0.36s  
+  ✓ RN-15: GET de las lesiones del jugador trae solo las propias, por i… 0.39s  
+  ✓ RN-15: las lesiones del jugador siguen disponibles con el jugador e… 0.34s  
+  ✓ DA-33: un aviso ya confirmado de un jugador en baja responde 409 av… 0.35s  
+  ✓ DA-33: con el jugador en baja, un cuerpo inválido responde 422 vali… 0.42s  
+  ✓ DA-33: con el aviso ya confirmado, un cuerpo inválido responde 422…  0.35s  
+  ✓ DA-33: con el jugador en baja y el regreso anterior al aviso, respo… 0.34s  
+  ✓ DA-56: el estado recién confirmado tiene actualizado_en igual a vig… 0.36s  
+  ✓ DA-56: cambiar la fecha estimada actualiza actualizado_en, no vigen… 0.37s  
+  ✓ DA-56: cambiar el estado abre una fila con actualizado_en igual al…  0.34s  
+  ✓ DA-56: un PATCH con valores idénticos no cambia actualizado_en (DA-… 0.33s  
+  ✓ DA-56: el alta deja un apto con actualizado_en igual al instante de… 0.35s  
+  ✓ DA-56: corregir el detalle de la lesión no cambia actualizado_en de… 0.35s  
+  ✓ DA-56: sin estado registrado, actualizado_en es nulo como vigente_d… 0.32s  
+  ✓ DA-56: D1 y E1 ven el momento de la última actualización, sin lesio… 0.34s  
+  ✓ DA-56: D1 y E1 ven el momento de la última actualización, sin lesio… 0.35s  
+
+  Tests:    106 passed (500 assertions)
+  Duration: 42.99s
+

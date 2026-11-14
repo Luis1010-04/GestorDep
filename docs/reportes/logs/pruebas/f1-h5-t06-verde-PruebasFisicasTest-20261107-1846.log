@@ -1,0 +1,61 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\CondicionFisica\PruebasFisicasTest
+  ✓ §7.6 fila 1 (HU-18 c1): E1 registra velocidad 4.35 con fecha 2026-1… 5.78s  
+  ✓ §7.6 fila 2 (DA-04, DA-60): otra velocidad de E1 en 2026-11 respond… 0.57s  
+  ✓ §7.6 fila 3 (convenciones §4.1): con es_correccion y motivo respond… 0.46s  
+  ✓ §7.6 fila 4 (DA-04): con velocidad de E1 en 2026-11, resistencia en… 0.47s  
+  ✓ §7.6 fila 5 (HU-18 c3, DA-63): la vista de 2026-11 trae los tres ti… 0.50s  
+  ✓ §7.6 fila 6 (HU-18 c2): con filtro[tipo_prueba_id] de velocidad, la… 0.49s  
+  ✓ §7.6 fila 7 (DD-62): resistencia 6000.01 responde 422 valor_fuera_d… 0.51s  
+  ✓ §7.6 fila 8 (DA-60): un tipo_prueba_id inexistente responde 422 tip… 0.49s  
+  ✓ §7.6 fila 9 (DD-59): E2 lista las de F1 sin las de E1                0.48s  
+  ✓ §7.6 fila 10 (DD-60, DA-59): registrar una prueba de JB responde 40… 0.48s  
+  ✓ §7.6 fila 11 (DA-63): GET /tipos-prueba trae los tres tipos por cód… 0.57s  
+  ✓ §7.6 fila 12 (RNF-09, DA-16): el máximo de resistencia cambiado en…  0.48s  
+  ✓ §7.6 fila 13 (DD-62): velocidad 1.00 y tiempo de prueba 3600.00 son… 0.60s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.52s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.46s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.47s  
+  ✓ Convenciones §4.1: es_correccion sin motivo responde 422 en motivo,… 0.51s  
+  ✓ DA-44: el motivo admite 255 caracteres; 256 responden 422 validacio… 0.51s  
+  ✓ DA-40: una corrección con valores idénticos responde 200 sin histor… 0.47s  
+  ✓ DA-12, DA-59: corregir una prueba de un jugador en baja responde 40… 0.56s  
+  ✓ DA-12, DD-30: las pruebas de un jugador en baja se siguen listando   0.53s  
+  ✓ DA-58: el 422 del cuerpo va antes que el 409 jugador_en_baja         0.48s  
+  ✓ DA-58: jugador_en_baja va antes que equipo_inexistente, tipo_prueba… 0.60s  
+  ✓ DA-58: equipo_inexistente va antes que tipo_prueba_inexistente       0.56s  
+  ✓ DA-58: tipo_prueba_inexistente va antes que valor_fuera_de_rango     0.59s  
+  ✓ DA-58: valor_fuera_de_rango va antes que nada_que_corregir y que pr… 0.60s  
+  ✓ DA-58: valor_fuera_de_rango va antes que nada_que_corregir y que pr… 0.58s  
+  ✓ DA-61: un tipo_prueba_id que no es UUID responde 422 validacion_fal… 0.50s  
+  ✓ DA-61: un UUID no v7, un tipo eliminado y uno inexistente responden… 0.57s  
+  ✓ DA-62: con los dos filtros, la vista del periodo trae solo ese tipo… 0.58s  
+  ✓ DA-63: la vista del periodo no lee pagina ni por_pagina              0.51s  
+  ✓ DA-64: el doble envío del mismo entrenador deja una sola fila; el s… 0.60s  
+  ✓ DA-64: dos entrenadores distintos no chocan: cada uno tiene su fila  0.51s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.49s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.47s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.49s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.46s  
+  ✓ §6.1: filtros inválidos responden 422 validacion_fallida with datas… 0.48s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.46s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.53s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.80s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.72s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.50s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.54s  
+  ✓ §6.2: resultado exige cadena con hasta dos decimales; campos obliga… 0.83s  
+  ✓ T06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500… 0.61s  
+  ✓ T06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500… 0.62s  
+  ✓ T06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500… 0.53s  
+  ✓ DA-13: un equipo ajeno responde 422 equipo_inexistente; la correcci… 0.67s  
+  ✓ §6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de…  0.54s  
+  ✓ §6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca…  0.48s  
+  ✓ §6.1: sin sesión responde 401 y el docente recibe 403 en las tres r… 0.63s  
+  ✓ Orden del listado: por periodo ascendente y, dentro del periodo, po… 0.63s  
+  ✓ §6.1: el listado pagina y no muestra pruebas borradas lógicamente    0.58s  
+
+  Tests:    54 passed (256 assertions)
+  Duration: 35.33s
+

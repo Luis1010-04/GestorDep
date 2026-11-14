@@ -3044,7 +3044,11 @@ paths:
                         enum: [presente, falta, falta_justificada]
       responses:
         '201':
-          description: Registros creados, en el orden recibido.
+          description: >-
+            Registros creados, en el orden recibido. Desde H5 (HU-11 c2) puede llevar advertencias
+            jugador_lesionado, una por cada jugador de la lista con estado oficial lesionado; su campo senala el
+            elemento de la lista (registros.N.jugador_id) y el mensaje no lleva datos del jugador
+            (docs/convenciones-api.md §4).
           content:
             application/json:
               schema:
@@ -3056,6 +3060,21 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/AsistenciaDeEntrenamiento'
+                  advertencias:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      required: [codigo, mensaje]
+                      properties:
+                        codigo:
+                          type: string
+                          enum: [jugador_lesionado]
+                        mensaje:
+                          type: string
+                        campo:
+                          type: string
+                          description: Elemento de la lista al que se refiere (por ejemplo, registros.0.jugador_id).
         '401':
           description: No hay sesion (codigo no_autenticado).
           content:
@@ -3657,7 +3676,10 @@ paths:
                   format: uuid
       responses:
         '201':
-          description: Jugador convocado.
+          description: >-
+            Jugador convocado. Desde H5 (HU-12 c3) puede llevar la advertencia jugador_lesionado si el jugador tiene
+            estado oficial lesionado, con campo jugador_id; la convocatoria se guarda igual y el mensaje no lleva
+            datos del jugador (docs/convenciones-api.md §4).
           content:
             application/json:
               schema:
@@ -3667,6 +3689,21 @@ paths:
                 properties:
                   datos:
                     $ref: '#/components/schemas/Convocatoria'
+                  advertencias:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      required: [codigo, mensaje]
+                      properties:
+                        codigo:
+                          type: string
+                          enum: [jugador_lesionado]
+                        mensaje:
+                          type: string
+                        campo:
+                          type: string
+                          description: Campo de la peticion al que se refiere (jugador_id).
         '401':
           description: No hay sesion (codigo no_autenticado).
           content:
@@ -4590,8 +4627,1238 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/avisos-lesion:
+    get:
+      operationId: listarAvisosDeLesion
+      summary: Lista los avisos de lesion de un jugador
+      description: >-
+        Entrenador o docente del jugador (HU-19, DD-56). Quien lo entrena ve todos sus avisos; quien solo le da clase,
+        los que el creo, aunque tenga tambien el rol entrenador (§5.3, DA-25). Ordenados por fecha_aviso y por id,
+        descendentes. Sigue disponible con el jugador en baja (DA-12). La nota solo la ven quien la escribio y quien
+        confirmo el aviso (DD-58); la nota del descarte, quien descarto y quien creo el aviso (DA-11); a los demas se
+        les devuelven nulas. Un jugador fuera del alcance, inexistente o con un UUID que no es v7 responde el mismo 404,
+        tambien para un docente que creo un aviso y perdio el alcance.
+      tags: [Salud]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de avisos.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AvisoDeLesion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: crearAvisoDeLesion
+      summary: Crea un aviso de molestia o lesion
+      description: >-
+        Entrenador o docente del jugador (HU-19). El aviso queda pendiente y el estado oficial no cambia. La fecha puede
+        ser futura (DA-23). El 404 gana sobre el 422, y el 422 sobre el 409 jugador_en_baja (DA-24). Escribe su historial
+        (RNF-02).
+      tags: [Salud]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nota, fecha]
+              properties:
+                nota: {type: string, maxLength: 500}
+                fecha: {type: string, format: date}
+                reportado_por_jugador: {type: boolean, default: false}
+      responses:
+        '201':
+          description: El aviso creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/AvisoDeLesion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El jugador esta en baja (jugador_en_baja, DD-60).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Cuerpo invalido o con campos desconocidos (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /avisos-lesion/{aviso}/descarte:
+    post:
+      operationId: descartarAvisoDeLesion
+      summary: Descarta un aviso pendiente
+      description: >-
+        Solo un entrenador del jugador (HU-30 c3, DD-61). El estado oficial no cambia. Se permite con el jugador en baja
+        (DA-12). Un aviso ajeno, inexistente o con un UUID que no es v7 responde el mismo 404, antes que el 422. Escribe
+        su historial (RNF-02).
+      tags: [Salud]
+      parameters:
+        - name: aviso
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [nota_descarte]
+              properties:
+                nota_descarte: {type: string, maxLength: 500}
+      responses:
+        '200':
+          description: El aviso descartado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/AvisoDeLesion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Aviso no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: El aviso ya no esta pendiente (aviso_no_pendiente), o hubo un choque con otra escritura (conflicto, DA-79).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Cuerpo invalido o con campos desconocidos (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /avisos-lesion/{aviso}/confirmacion:
+    post:
+      operationId: confirmarAvisoDeLesion
+      summary: Confirma un aviso como estado oficial
+      description: >-
+        Solo un entrenador del jugador (HU-20, DD-61). Con lesionado o con_molestia, tipo, zona, causa y
+        fecha_estimada_regreso son obligatorios; con apto, esos campos y la nota estan prohibidos (DD-57). Quien confirma
+        queda como unico registrante y el estado nuevo sustituye al vigente, sea de quien sea (DD-63). Con apto, si el
+        estado vigente tiene una lesion sin fecha_alta registrada por quien confirma, esa lesion recibe fecha_alta igual al
+        hoy de negocio, salvo si su fecha_inicio es posterior; la lesion de otro registrante no cambia (DA-76). Un aviso
+        ajeno, inexistente o con un UUID que no es v7 responde el mismo 404, antes que el 422. Escribe su historial
+        (RNF-02).
+      tags: [Salud]
+      parameters:
+        - name: aviso
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [estado]
+              properties:
+                estado: {type: string, enum: [apto, con_molestia, lesionado]}
+                tipo: {type: string, maxLength: 100}
+                zona: {type: string, maxLength: 100}
+                causa: {type: string, enum: [entrenamiento, partido, otra]}
+                fecha_estimada_regreso: {type: string, format: date}
+                nota: {type: string, maxLength: 500}
+      responses:
+        '200':
+          description: El aviso confirmado.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/AvisoDeLesion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Aviso no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El aviso ya no esta pendiente (aviso_no_pendiente), el jugador esta en baja (jugador_en_baja, DA-12), o hubo un
+            choque con otra escritura o con un estado abierto en el mismo segundo (conflicto, DA-30).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Cuerpo invalido o con campos desconocidos (validacion_fallida), o fecha estimada anterior a la fecha del aviso
+            (rango_de_fechas_invalido, DA-17).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/estado-disponibilidad:
+    get:
+      operationId: consultarEstadoDeDisponibilidad
+      summary: Consulta el estado oficial vigente de un jugador
+      description: >-
+        Entrenador o docente del jugador (HU-21, HU-04 c3). Sin ningun registro, el jugador esta apto con es_implicito
+        verdadero (DA-01). Todos ven el mismo estado y la misma fecha; lesion_id solo lo recibe el registrante (DA-18).
+        requiere_actualizacion se calcula al leer (DA-09). Sigue disponible con el jugador en baja.
+      tags: [Salud]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: El estado oficial.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/EstadoDeDisponibilidad'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      operationId: cambiarEstadoDeDisponibilidad
+      summary: Cambia el estado o la fecha estimada de regreso
+      description: >-
+        Solo el registrante del estado (HU-30 c2, HU-20 c3). Un cambio de estado cierra la fila vigente y abre otra; solo
+        la fecha actualiza la vigente (DA-14). Con valores identicos responde 200 sin escribir historial. Orden de los
+        errores: 403 por rol, 404 por alcance, 422 por cuerpo, 409 sin_lesion_vigente, 403 no_es_registrante, 409
+        jugador_en_baja.
+      tags: [Salud]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                estado: {type: string, enum: [con_molestia, lesionado]}
+                fecha_estimada_regreso: {type: string, format: date}
+      responses:
+        '200':
+          description: El estado oficial resultante.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/EstadoDeDisponibilidad'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Sin el rol entrenador (sin_permiso) o sin ser el registrante del estado (no_es_registrante).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El estado vigente es apto (sin_lesion_vigente), el jugador esta en baja (jugador_en_baja, DA-12), o hubo un
+            choque con otra escritura o con un estado abierto en el mismo segundo (conflicto, DA-30).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Cuerpo vacio, invalido o con campos desconocidos (validacion_fallida), o fecha anterior al inicio de la lesion
+            (rango_de_fechas_invalido, DA-17).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/estado-disponibilidad/alta:
+    post:
+      operationId: darDeAltaAlJugador
+      summary: Da de alta al jugador
+      description: >-
+        Solo el registrante del estado (HU-30 c1). Pone fecha_alta en la lesion (por defecto, el hoy de negocio), cierra el
+        estado vigente y abre uno apto. Se permite con el jugador en baja (DA-12).
+      tags: [Salud]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                fecha_alta: {type: string, format: date}
+      responses:
+        '200':
+          description: El estado oficial apto.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/EstadoDeDisponibilidad'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Sin el rol entrenador (sin_permiso) o sin ser el registrante del estado (no_es_registrante).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            El estado vigente es apto (sin_lesion_vigente), o hubo un choque con otra escritura o con un estado abierto en
+            el mismo segundo (conflicto, DA-30).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Cuerpo invalido o con campos desconocidos (validacion_fallida), o fecha anterior al inicio de la lesion
+            (rango_de_fechas_invalido, DA-17).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/mediciones:
+    get:
+      operationId: listarMediciones
+      summary: Lista las mediciones del jugador que registro el usuario
+      description: >-
+        Entrenador del jugador (HU-17 c3, DD-59). Solo las que el usuario registro, por periodo ascendente (DA-06). Sigue
+        disponible con el jugador en baja.
+      tags: [Condicion fisica]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de mediciones.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Medicion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarMedicion
+      summary: Registra una medicion o la corrige con confirmacion
+      description: >-
+        Entrenador del jugador (HU-17, docs/convenciones-api.md 4.1). El periodo se deriva de fecha (DA-03) y el IMC se
+        calcula (DA-05). Orden de errores (DA-38): 403 rol, 404 alcance, 422 cuerpo, 409 jugador_en_baja, 422
+        equipo_inexistente, 422 valor_fuera_de_rango, 422 nada_que_corregir, 409 medicion_ya_registrada, 409 conflicto.
+      tags: [Condicion fisica]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [equipo_id, peso_kg, estatura_cm]
+              properties:
+                equipo_id:
+                  type: string
+                  format: uuid
+                  description: Equipo que el usuario entrena y donde el jugador tiene membresia vigente (DA-13).
+                peso_kg:
+                  type: string
+                  description: Hasta dos decimales. El rango sale de rangos_mediciones_corporales (DA-16).
+                  example: '70.00'
+                estatura_cm:
+                  type: string
+                  description: Hasta un decimal. El rango sale de rangos_mediciones_corporales (DA-16).
+                  example: '175.0'
+                fecha:
+                  type: string
+                  format: date
+                  description: Opcional; por defecto, el hoy de negocio. Puede ser futura (DA-03).
+                es_correccion:
+                  type: boolean
+                  default: false
+                motivo:
+                  type: string
+                  maxLength: 255
+                  description: >-
+                    Obligatorio con es_correccion; hasta 255 caracteres (DA-44). Sin es_correccion responde 422 prohibited
+                    (DA-39).
+      responses:
+        '200':
+          description: Correccion confirmada. Con valores identicos no escribe historial (DA-40).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Medicion'
+        '201':
+          description: Medicion registrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Medicion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            jugador_en_baja (DD-60, DA-12), medicion_ya_registrada (ya hay una del usuario en el periodo, sin es_correccion)
+            o conflicto (dos registros simultaneos).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            validacion_fallida, equipo_inexistente (mismo cuerpo si no existe, esta eliminado, es ajeno o no tiene al
+            jugador; DA-13), valor_fuera_de_rango en peso_kg o estatura_cm (tambien si el IMC no cabe en su columna, en
+            estatura_cm; DA-71), rango_no_configurado si falta el rango de la medida (DA-70), o nada_que_corregir en
+            es_correccion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /tipos-prueba:
+    get:
+      operationId: listarTiposDePrueba
+      summary: Lista el catalogo de tipos de prueba
+      description: >-
+        Rol entrenador (HU-18). Los tipos vigentes por codigo ascendente, sin paginar: no lee pagina ni por_pagina (DA-63).
+      tags: [Condicion fisica]
+      responses:
+        '200':
+          description: Catalogo de tipos de prueba.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TipoDePrueba'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/pruebas-fisicas:
+    get:
+      operationId: listarPruebasFisicas
+      summary: Lista las pruebas fisicas del jugador que registro el usuario, o la vista de un periodo
+      description: >-
+        Entrenador del jugador (HU-18, DD-59). Sin filtro[periodo], el listado paginado de las pruebas del usuario, por
+        periodo ascendente y, dentro del periodo, por codigo del tipo. Con filtro[periodo], la vista del periodo: un
+        elemento por tipo, por codigo ascendente, con prueba nula si no hay, sin paginar y sin leer pagina ni por_pagina
+        (HU-18 c3, DA-63). Con los dos filtros, la vista solo trae ese tipo (DA-62). Un filtro[tipo_prueba_id] que es UUID
+        pero no v7 da una lista vacia (DA-26 de H3). Sigue disponible con el jugador en baja.
+      tags: [Condicion fisica]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: filtro[periodo]
+          in: query
+          description: AAAA-MM; otro formato responde 422 validacion_fallida.
+          schema: {type: string}
+        - name: filtro[tipo_prueba_id]
+          in: query
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de pruebas, o la vista de un periodo con filtro[periodo].
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: false
+                    required: [datos, meta]
+                    properties:
+                      datos:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PruebaFisica'
+                      meta:
+                        type: object
+                        additionalProperties: false
+                        required: [pagina, por_pagina, total, total_paginas]
+                        properties:
+                          pagina: {type: integer}
+                          por_pagina: {type: integer}
+                          total: {type: integer}
+                          total_paginas: {type: integer}
+                  - type: object
+                    additionalProperties: false
+                    required: [datos]
+                    properties:
+                      datos:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ElementoDePeriodoDePruebas'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Filtro o parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: registrarPruebaFisica
+      summary: Registra una prueba fisica o la corrige con confirmacion
+      description: >-
+        Entrenador del jugador (HU-18, docs/convenciones-api.md 4.1). El periodo se deriva de fecha (DA-03); una prueba
+        por tipo, periodo y registrante (DA-04). Orden de errores (DA-58): 403 rol, 404 alcance, 422 cuerpo, 409
+        jugador_en_baja, 422 equipo_inexistente, 422 tipo_prueba_inexistente, 422 valor_fuera_de_rango, 422
+        nada_que_corregir, 409 prueba_ya_registrada, 409 conflicto. Un doble envio del mismo entrenador responde 409
+        prueba_ya_registrada (DA-64).
+      tags: [Condicion fisica]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [equipo_id, tipo_prueba_id, resultado]
+              properties:
+                equipo_id:
+                  type: string
+                  format: uuid
+                  description: Equipo que el usuario entrena y donde el jugador tiene membresia vigente (DA-13).
+                tipo_prueba_id:
+                  type: string
+                  format: uuid
+                  description: Un UUID no v7, un tipo eliminado y uno inexistente responden 422 tipo_prueba_inexistente (DA-61).
+                resultado:
+                  type: string
+                  description: Hasta dos decimales. El rango sale de tipos_prueba.minimo y maximo (DA-16).
+                  example: '4.35'
+                fecha:
+                  type: string
+                  format: date
+                  description: Opcional; por defecto, el hoy de negocio. Puede ser futura (DA-03).
+                es_correccion:
+                  type: boolean
+                  default: false
+                motivo:
+                  type: string
+                  maxLength: 255
+                  description: >-
+                    Obligatorio con es_correccion; hasta 255 caracteres (DA-44). Sin es_correccion responde 422 prohibited
+                    (DA-39).
+      responses:
+        '200':
+          description: Correccion confirmada. Con valores identicos no escribe historial (DA-40).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/PruebaFisica'
+        '201':
+          description: Prueba registrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/PruebaFisica'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: >-
+            jugador_en_baja (DD-60, DA-12), prueba_ya_registrada (ya hay una del usuario de ese tipo en el periodo, sin
+            es_correccion; DA-04, DA-64) o conflicto (dos registros simultaneos).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            validacion_fallida, equipo_inexistente (DA-13), tipo_prueba_inexistente (DA-61), valor_fuera_de_rango en
+            resultado, o nada_que_corregir en es_correccion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/lesiones:
+    get:
+      operationId: listarLesiones
+      summary: Lista las lesiones del jugador que registro el usuario
+      description: >-
+        Entrenador del jugador (RN-15). Solo las que el usuario registro, por fecha_inicio y id descendentes (DA-31). Sigue
+        disponible con el jugador en baja.
+      tags: [Salud]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de lesiones.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Lesion'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /lesiones/{lesion}:
+    get:
+      operationId: consultarLesion
+      summary: Consulta el detalle de una lesion
+      description: >-
+        Solo quien la registro, mientras entrene al jugador (RN-15). Para cualquier otro entrenador responde el mismo 404
+        que una lesion inexistente.
+      tags: [Salud]
+      parameters:
+        - name: lesion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: La lesion.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Lesion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Lesion no encontrada para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      operationId: corregirLesion
+      summary: Corrige el detalle de una lesion
+      description: >-
+        Solo quien la registro, mientras entrene al jugador (RN-16). La fecha estimada no se cambia aqui (DA-02). Con
+        valores identicos responde 200 sin escribir historial. Se permite con el jugador en baja (DA-12).
+      tags: [Salud]
+      parameters:
+        - name: lesion
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                tipo: {type: string, maxLength: 100}
+                zona: {type: string, maxLength: 100}
+                causa: {type: string, enum: [entrenamiento, partido, otra]}
+                nota: {type: string, maxLength: 500}
+      responses:
+        '200':
+          description: La lesion corregida.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Lesion'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Lesion no encontrada para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Hubo un choque con otra escritura (conflicto, DA-79).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Cuerpo vacio, invalido o con campos desconocidos (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    EstadoDeDisponibilidad:
+      type: object
+      additionalProperties: false
+      required: [estado, fecha_estimada_regreso, vigente_desde, es_implicito, requiere_actualizacion, lesion_id, actualizado_en]
+      properties:
+        estado:
+          type: string
+          enum: [apto, con_molestia, lesionado]
+        fecha_estimada_regreso:
+          type: string
+          format: date
+          nullable: true
+        vigente_desde:
+          type: string
+          format: date-time
+          nullable: true
+          description: Nula si es_implicito es verdadero (DA-01).
+        es_implicito:
+          type: boolean
+        requiere_actualizacion:
+          type: boolean
+          description: Verdadero si el estado no es apto y su fecha estimada es anterior al hoy de negocio (DA-09).
+        lesion_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Solo para el registrante; a los demas se les devuelve nulo (DA-18).
+        actualizado_en:
+          type: string
+          format: date-time
+          nullable: true
+          description: >-
+            Momento de la ultima actualizacion del estado, sin decir que cambio (RNF-04, DA-56). Nulo si es_implicito es
+            verdadero (DA-01). Corregir el detalle de la lesion no lo cambia.
+    Medicion:
+      type: object
+      additionalProperties: false
+      required: [id, equipo_id, fecha, periodo, peso_kg, estatura_cm, imc, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+        fecha:
+          type: string
+          format: date
+        periodo:
+          type: string
+          description: AAAA-MM, derivado de fecha (DA-03).
+          example: 2026-11
+        peso_kg:
+          type: string
+          description: Dos decimales.
+          example: '70.00'
+        estatura_cm:
+          type: string
+          description: Un decimal.
+          example: '175.0'
+        imc:
+          type: string
+          description: Calculado, a dos decimales HALF_UP (DA-05).
+          example: '22.86'
+        actualizado_en:
+          type: string
+          format: date-time
+    PruebaFisica:
+      type: object
+      additionalProperties: false
+      required: [id, equipo_id, tipo_prueba_id, fecha, periodo, resultado, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+        tipo_prueba_id:
+          type: string
+          format: uuid
+        fecha:
+          type: string
+          format: date
+        periodo:
+          type: string
+          description: AAAA-MM, derivado de fecha (DA-03).
+          example: 2026-11
+        resultado:
+          type: string
+          description: Dos decimales.
+          example: '4.35'
+        actualizado_en:
+          type: string
+          format: date-time
+    ElementoDePeriodoDePruebas:
+      type: object
+      additionalProperties: false
+      required: [tipo_prueba_id, periodo, prueba]
+      properties:
+        tipo_prueba_id:
+          type: string
+          format: uuid
+        periodo:
+          type: string
+          example: 2026-11
+        prueba:
+          description: La prueba que registro el usuario en el periodo, o nula (HU-18 c3).
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/PruebaFisica'
+    TipoDePrueba:
+      type: object
+      additionalProperties: false
+      required: [id, codigo, nombre, unidad, mejor_resultado]
+      properties:
+        id:
+          type: string
+          format: uuid
+        codigo:
+          type: string
+          enum: [velocidad, resistencia, tiempo_prueba]
+        nombre:
+          type: string
+        unidad:
+          type: string
+        mejor_resultado:
+          type: string
+          enum: [mayor, menor]
+    Lesion:
+      type: object
+      additionalProperties: false
+      required: [id, tipo, zona, causa, fecha_inicio, fecha_estimada_regreso, fecha_alta, nota, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        tipo:
+          type: string
+        zona:
+          type: string
+        causa:
+          type: string
+          enum: [entrenamiento, partido, otra]
+        fecha_inicio:
+          type: string
+          format: date
+        fecha_estimada_regreso:
+          type: string
+          format: date
+          description: La que se registro al confirmar; no cambia despues (DA-02).
+        fecha_alta:
+          type: string
+          format: date
+          nullable: true
+        nota:
+          type: string
+          nullable: true
+        actualizado_en:
+          type: string
+          format: date-time
+    AvisoDeLesion:
+      type: object
+      additionalProperties: false
+      required: [id, estado, fecha_aviso, reportado_por_jugador, nota, nota_descarte, es_propio, creado_en, actualizado_en]
+      properties:
+        id:
+          type: string
+          format: uuid
+        estado:
+          type: string
+          enum: [pendiente, confirmado, descartado]
+        fecha_aviso:
+          type: string
+          format: date
+        reportado_por_jugador:
+          type: boolean
+        nota:
+          type: string
+          nullable: true
+          description: Nula para quien no la escribio ni confirmo el aviso (DD-58).
+        nota_descarte:
+          type: string
+          nullable: true
+          description: Nula para quien no descarto ni creo el aviso (DA-11).
+        es_propio:
+          type: boolean
+          description: Si el usuario creo el aviso.
+        creado_en:
+          type: string
+          format: date-time
+        actualizado_en:
+          type: string
+          format: date-time
     Baja:
       type: object
       additionalProperties: false
@@ -5107,6 +6374,11 @@ components:
                 enum: [empalme_de_lugar]
               mensaje:
                 type: string
+              campo:
+                type: string
+                description: >-
+                  Opcional (docs/convenciones-api.md §4, desde H5). empalme_de_lugar no lo usa: la advertencia es de
+                  todo el entrenamiento.
     AsistenciaDeEntrenamiento:
       type: object
       additionalProperties: false

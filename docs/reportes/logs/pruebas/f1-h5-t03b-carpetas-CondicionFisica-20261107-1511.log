@@ -1,0 +1,167 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Unit\CondicionFisica\MedicionCorporalTest
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a… 0.06s  
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "§7.5 fila 2"
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "§7.5 fila 3, HALF_UP sobre 12.505"
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "justo debajo del medio"
+  ✓ DA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "límites del rango"
+  ✓ DA-03: el periodo se deriva de la fecha with dataset "noviembre"
+  ✓ DA-03: el periodo se deriva de la fecha with dataset "enero"
+  ✓ DA-03: el periodo se deriva de la fecha with dataset "fin de mes"
+  ✓ HU-17 c2: corregir reemplaza equipo, fecha y valores, y conserva lo demás
+  ✓ DA-40: dos mediciones con los mismos valores son iguales, aunque se escriban distinto
+  ✓ DA-40: cualquier valor distinto hace que la medición cambie with ('equipo')
+  ✓ DA-40: cualquier valor distinto hace que la medición cambie with ('fecha')
+  ✓ DA-40: cualquier valor distinto hace que la medición cambie with ('peso')
+  ✓ DA-40: cualquier valor distinto hace que la medición cambie with ('estatura')
+  ✓ DA-16: el rango admite sus dos límites with ('20.00')                0.02s  
+  ✓ DA-16: el rango admite sus dos límites with ('200.00')
+  ✓ DA-16: el rango admite sus dos límites with ('100.50')
+  ✓ DA-16: fuera del rango se señala el campo with ('19.99')             0.04s  
+  ✓ DA-16: fuera del rango se señala el campo with ('200.01')
+  ✓ DA-16: fuera del rango se señala el campo with ('0')
+  ✓ DA-16: fuera del rango se señala el campo with ('-1')
+  ✓ DA-16: fuera del rango se señala el campo with ('99999.99')
+  ✓ §6.3: las reglas de la medición llevan su código y su campo with da… 0.01s  
+  ✓ §6.3: las reglas de la medición llevan su código y su campo with da… 0.01s  
+  ✓ §6.3: una medición ya registrada lleva su código                     0.01s  
+  ✓ Reconstruir devuelve la medición con sus valores guardados
+  ✓ AU-09: el rango acotado a la columna toma el menor de los dos máximos
+
+   PASS  Tests\Integration\CondicionFisica\MigracionesDeCondicionFisicaTest
+  ✓ RNF-03 (DA-05, §7.5 filas 1 a 3): la base calcula el IMC redondeado… 5.19s  
+  ✓ RNF-03 (DA-05, §7.5 filas 1 a 3): la base calcula el IMC redondeado… 0.27s  
+  ✓ RNF-03 (DA-05, §7.5 filas 1 a 3): la base calcula el IMC redondeado… 0.28s  
+  ✓ RNF-03 (DA-05): el IMC es una columna generada: no se captura y cam… 0.25s  
+  ✓ RNF-03: los tipos de las columnas de mediciones_corporales son los…  0.25s  
+  ✓ RNF-03: el peso debe ser positivo with dataset "cero"                0.24s  
+  ✓ RNF-03: el peso debe ser positivo with dataset "negativo"            0.24s  
+  ✓ RNF-03: una estatura negativa la rechaza el CHECK                    0.24s  
+  ✓ RNF-03: una estatura de cero no entra: la columna generada falla po… 0.25s  
+  ✓ RNF-03 (DA-03): el periodo de una medición debe coincidir con su fe… 0.26s  
+  ✓ RNF-03 (DD-59, DA-13): una medición por jugador, registrante y peri… 0.29s  
+  ✓ RNF-03: el borrado lógico libera la unicidad de la medición          0.30s  
+  ✓ RNF-03: el código del tipo de prueba es único y mejor_resultado sol… 0.26s  
+  ✓ RNF-03 (DA-16): el rango de un tipo de prueba es obligatorio, con m… 0.24s  
+  ✓ RNF-03 (DA-16): rangos_mediciones_corporales solo admite peso y est… 0.26s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.24s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.27s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.25s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.22s  
+  ✓ RNF-03 (DA-16): el rango de una medida es obligatorio, con mínimo p… 0.22s  
+  ✓ RNF-03: el resultado de una prueba debe ser positivo with dataset "… 0.22s  
+  ✓ RNF-03: el resultado de una prueba debe ser positivo with dataset "… 0.27s  
+  ✓ RNF-03 (DA-03): el periodo de una prueba debe coincidir con su fech… 0.25s  
+  ✓ RNF-03 (DA-04): una prueba por jugador, tipo, registrante y periodo… 0.26s  
+  ✓ RNF-03: el borrado lógico libera la unicidad de la prueba            0.25s  
+  ✓ RNF-03: los índices de §5.1 existen con sus columnas                 0.23s  
+  ✓ RNF-03: las claves foráneas de Condición física no borran en cascad… 0.28s  
+  ✓ RNF-02: cada tabla de historial de Condición física es de solo inse… 0.32s  
+  ✓ RNF-02: el historial guarda el motivo de una corrección, y la aplic… 0.29s  
+  ✓ RNF-02 (DA-16): las tablas de Condición física llevan auditoría bás… 0.26s  
+  ✓ RNF-03: migrate:rollback de Condición física no falla y se vuelve a… 4.02s  
+
+   PASS  Tests\Integration\CondicionFisica\RegistrarMedicionTest
+  ✓ AU-09: con el máximo de estatura en 9999.99, el caso de uso rechaza… 3.61s  
+
+   PASS  Tests\Integration\CondicionFisica\RepositorioDeMedicionesTest
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.41s  
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.39s  
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.36s  
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.37s  
+  ✓ DA-05: el dominio y la columna generada dan el mismo IMC with datas… 0.36s  
+  ✓ RNF-02: registrar escribe la fila y su historial crear en la misma…  0.38s  
+  ✓ RNF-02: corregir escribe los valores anteriores y nuevos con el mot… 0.40s  
+  ✓ §6.3: dos mediciones simultáneas del mismo periodo chocan con el ín… 0.39s  
+  ✓ DD-59: buscar del periodo distingue jugador, registrante y periodo,… 0.38s  
+  ✓ DA-16: los rangos salen de la tabla, también tras cambiarlos en la…  0.38s  
+  ✓ AU-09: el máximo de cada columna sale de su tipo en la base          0.53s  
+
+   PASS  Tests\Integration\CondicionFisica\SeedersDeCondicionFisicaTest
+  ✓ RNF-09 (DD-62, DA-16): TiposPruebaSeeder siembra los tres tipos de…  0.34s  
+  ✓ RNF-09 (DD-62, DA-16): RangosMedicionesCorporalesSeeder siembra pes… 0.23s  
+  ✓ RNF-09: cada tipo y cada medida sembrados tienen un nombre           0.25s  
+  ✓ RNF-09: TiposPruebaSeeder es idempotente, no deshace un ajuste en l… 0.27s  
+  ✓ RNF-09: RangosMedicionesCorporalesSeeder es idempotente, no deshace… 0.27s  
+  ✓ DA-16: tras db:seed existen los rangos de cada medida y de cada tip… 0.62s  
+  ✓ DA-16: DatabaseSeeder siembra los rangos también en producción       0.39s  
+
+   PASS  Tests\Feature\CondicionFisica\ContratoDeMedicionesTest
+  ✓ HU-17: las respuestas de mediciones cumplen el contrato              1.74s  
+
+   PASS  Tests\Feature\CondicionFisica\MedicionesTest
+  ✓ §7.5 fila 1 (HU-17 c1, DA-05): E1 registra; 201 con el periodo y el… 0.59s  
+  ✓ §7.5 fila 2 (DA-05): 72.50 kg y 180.0 cm dan un IMC de 22.38         0.55s  
+  ✓ §7.5 fila 3 (DA-05): 12.505 se redondea HALF_UP a 12.51 y la base d… 0.47s  
+  ✓ §7.5 fila 4 (HU-17 c2): otra medición en el periodo sin es_correcci… 0.48s  
+  ✓ §7.5 fila 5 (HU-17 c2): la corrección con motivo responde 200, reem… 0.44s  
+  ✓ §7.5 fila 6 (convenciones §4.1): es_correccion sin motivo responde…  0.41s  
+  ✓ §7.5 fila 6 (convenciones §4.1): es_correccion sin motivo responde…  0.42s  
+  ✓ §7.5 fila 7 (convenciones §4.1): es_correccion sin nada en el perio… 0.44s  
+  ✓ §7.5 fila 8 (DD-59): E2 registra la suya en el mismo periodo y no c… 0.43s  
+  ✓ §7.5 fila 9 (DD-59): E2 lista solo la suya                           0.41s  
+  ✓ §7.5 fila 10 (HU-17 c3, DA-06): E1 lista tres periodos en orden asc… 0.46s  
+  ✓ §7.5 fila 11 (DD-62): 19.99 kg responde 422 valor_fuera_de_rango en… 0.52s  
+  ✓ §7.5 fila 12 (DD-62): 230.1 cm responde 422 valor_fuera_de_rango en… 0.48s  
+  ✓ §7.5 fila 13 (DD-62): 200.00 kg y 100.0 cm son válidos, y también l… 0.51s  
+  ✓ §7.5 fila 13 (DD-62): 200.00 kg y 100.0 cm son válidos, y también l… 0.46s  
+  ✓ §7.5 fila 14 (DA-13): E1 con el equipo B responde 422 equipo_inexis… 0.48s  
+  ✓ §7.5 fila 15 (DD-60, DA-41): registrar una medición de JB responde…  0.45s  
+  ✓ §7.5 fila 16 (§5.3): D1 no lista las mediciones: 403 sin_permiso     0.44s  
+  ✓ §7.5 fila 17 (RNF-09, DA-16): el máximo cambiado en la base se apli… 0.46s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.48s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.51s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.52s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.47s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.46s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.48s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.45s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.52s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.55s  
+  ✓ T05 (condición del 03/11/2026): un valor fuera de rango responde 42… 0.47s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.41s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.43s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.46s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.51s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.44s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.44s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.43s  
+  ✓ §6.2: peso y estatura exigen cadena con sus decimales; lo demás res… 0.39s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.43s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.41s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.55s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.52s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.55s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.54s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.55s  
+  ✓ §6.2: campos obligatorios, fecha, booleano estricto y campos descon… 0.54s  
+  ✓ DA-03: la fecha es opcional, puede ser futura y decide el periodo    0.57s  
+  ✓ DA-44: el motivo admite 255 caracteres; 256 responden 422 validacio… 0.57s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.46s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.45s  
+  ✓ DA-39: motivo sin es_correccion responde 422 prohibited, aunque est… 0.48s  
+  ✓ DA-39: es_correccion falso sin motivo registra como una medición no… 0.48s  
+  ✓ DA-40: una corrección con valores idénticos responde 200 sin histor… 0.47s  
+  ✓ DA-12: corregir una medición de un jugador en baja responde 409 jug… 0.47s  
+  ✓ DA-12, DD-30: las mediciones de un jugador en baja se siguen listan… 0.49s  
+  ✓ DA-13: inexistente, eliminado, ajeno, sin el jugador o UUID no v7 r… 0.55s  
+  ✓ DA-13: con el jugador en dos equipos suyos hay una sola medición po… 0.55s  
+  ✓ DA-38: el 422 del cuerpo va antes que el 409 jugador_en_baja         0.41s  
+  ✓ DA-38: jugador_en_baja va antes que equipo_inexistente y que valor_… 0.42s  
+  ✓ DA-38: equipo_inexistente va antes que valor_fuera_de_rango          0.42s  
+  ✓ DA-38: valor_fuera_de_rango va antes que nada_que_corregir y que me… 0.42s  
+  ✓ DA-38: valor_fuera_de_rango va antes que nada_que_corregir y que me… 0.45s  
+  ✓ §6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de…  0.52s  
+  ✓ §6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca…  0.45s  
+  ✓ §6.1: sin sesión responde 401 y el docente no registra               0.53s  
+  ✓ DD-61: un usuario con los dos roles solo registra con el alcance de… 0.45s  
+  ✓ §6.1: el listado pagina y valida sus parámetros                      0.45s  
+  ✓ RNF-02: una medición borrada lógicamente no se lista ni cuenta para… 0.49s  
+  ✓ AU-09: con el máximo de peso en 1500.00, 1200.00 responde 422 valor… 0.49s  
+  ✓ AU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999… 0.48s  
+  ✓ AU-09: por HTTP, 9999.95 cm responde 422 validacion_fallida por sus… 0.42s  
+
+  Tests:    148 passed (560 assertions)
+  Duration: 63.20s
+

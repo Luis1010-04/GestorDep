@@ -4,6 +4,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Src\Compartido\Dominio\Identificador;
+use Tests\Ayudantes\NoNulo;
 
 const TABLAS_DE_PLANTEL = ['categorias', 'posiciones', 'jugadores', 'equipos', 'jugador_equipo', 'entrenador_equipo', 'bajas_jugador'];
 
@@ -132,7 +133,7 @@ test('RNF-03: revertir la migracion del indice restaura el indice anterior', fun
 
 test('RNF-03: jugadores.estatus solo admite activo o baja y por defecto es activo', function () {
     $id = plantelJugador();
-    $fila = DB::connection('propietario')->table('jugadores')->where('id', $id)->first();
+    $fila = NoNulo::exigir(DB::connection('propietario')->table('jugadores')->where('id', $id)->first(), 'el jugador');
 
     expect($fila->estatus_academico)->toBe('activo')
         ->and($fila->estatus_deportivo)->toBe('activo')

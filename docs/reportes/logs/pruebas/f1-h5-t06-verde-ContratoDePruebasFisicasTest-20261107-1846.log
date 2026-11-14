@@ -1,0 +1,8 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\CondicionFisica\ContratoDePruebasFisicasTest
+  ✓ HU-18: las respuestas de tipos de prueba y pruebas físicas cumplen…  8.58s  
+
+  Tests:    1 passed (42 assertions)
+  Duration: 9.40s
+
