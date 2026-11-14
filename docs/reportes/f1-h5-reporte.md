@@ -118,7 +118,7 @@ No se corrió `migrate:rollback` en local en T09. En CI, el paso «Migraciones (
 | 8 | DA-72, desempate por id | Anotado para H7 | DA-72 |
 | 9 | Baja simultánea en H5 | Anotado para H7 | AB-29 (`9cb63b3`) |
 | 10 | AB-02 y AB-03 | Anotado para H7 | `docs/plan-fase-1.md` §3 |
-| 11 | DA-57, Pest en paralelo | Pendiente de decisión | Después de H5; medición en `75459b6` |
+| 11 | DA-57, Pest en paralelo | Decidido (DA-81) | Tarea antes de H6; sección 6.1 |
 | 12 | DA-30, mismo segundo | Anotado para H7 | Nota de DA-30 en el registro: se reabre en H7 solo si aparece un problema real |
 | 13 | DA-33, par fechas y `conflicto` | Cerrado | `e660649` |
 | 14 | El historial guarda la nota del aviso | Anotado para H7 | HU-26 debe respetar DD-58 |
@@ -127,16 +127,29 @@ No se corrió `migrate:rollback` en local en T09. En CI, el paso «Migraciones (
 | 17 | `make levantar` no reconstruye; `make humo` exige `make fresh` | Anotado para H7 | En T09 se levantó con `--no-build` y se corrió `make fresh` antes del humo |
 | 18 | Desviación de `Respuesta.php` | Cerrado | `f1-h5-t07.md` |
 | 19 | Infection no muta `Aplicacion` | Cerrado | Progreso corregido en `9cb63b3` (DA-68) |
-| 20 | DA-42 frente a `requisitos.md` | Pendiente de decisión | F1-DOC posterior |
-| 21 | DA-64, idempotencia | Pendiente de decisión | Aplazada a Fase 2; sin dueño en Fase 1 |
-| 22 | F1-DOC de arquitectura, rangos [Propuesta], AB-28 | Pendiente de decisión | Después de H5; institución |
+| 20 | DA-42 frente a `requisitos.md` | Decidido (DA-83) | `docs/requisitos.md` 1.2.2, RN-16; sección 6.1 |
+| 21 | DA-64, idempotencia | Decidido (DA-84) | Fase 2, en `docs/alcance-fases.md` §5; sección 6.1 |
+| 22 | F1-DOC de arquitectura, rangos [Propuesta], AB-28 | Decidido (DA-85), salvo AB-28 | Arquitectura antes de H6; rangos hasta H7; AB-28 por validar con la institución; sección 6.1 |
 | 23 | HU-23 c4, HU-24, HU-25, DD-08, HU-12 c2, `posiblemente_desactualizado` | Anotado para H6 | `docs/hitos/f1-h5.md` §11 |
 | 24 | HU-26 | Anotado para H7 | `docs/hitos/f1-h5.md` §11 |
 | 25 | Rama local `auditoria/f1-h5` | Cerrado | Borrada con `-D` el 13/11/2026, con el diff vacío |
-| 26 | Corridas #85 y #86 en cola | Pendiente de decisión | Siguen `queued` el 13/11/2026; no se cancelaron |
-| 27 | Lentitud variable del entorno | Pendiente de decisión | Ligada a DA-57 |
+| 26 | Corridas #85 y #86 en cola | Decidido (DA-86) | Quedan en cola; no cuentan para la compuerta; sección 6.1 |
+| 27 | Lentitud variable del entorno | Decidido (DA-82) | Se atiende con DA-57; sección 6.1 |
 
 Hallazgos de la sección 3 de la auditoría que T09 cerró: M1 (`5ccf340`), M2 (`649eb87`), B6 (`43ce232`) y B7 (`fc0178d`). M3 a M6 y B2 se cerraron en `9cb63b3`. B3 se cerró en parte en `9cb63b3`: las líneas 49 y 103 de `docs/plan-fase-1.md`. La compuerta del plan (§4) sigue sin pedir `make mutacion`, el reporte ni la auditoría; no se cambió porque `docs/plan-fase-1.md` no está en las rutas de T09. B4 se cerró con notas en `e51cb46`. M7 también quedó en parte: `5c8a115` versionó la auditoría de estado, pero las anteriores (AU-09, A-1, B-5 y la de T08) siguen sin documento, con una nota en el registro. B1, la nota de la migración `2026_11_03_060100`, no se toca, por orden. B5, el `enum` de `TipoDePrueba.codigo`, queda como observación para H7 en el registro.
+
+### 6.1 Las 6 decisiones de Luis (decididas el 14/11/2026)
+
+Ninguna bloqueaba el cierre de H5. **Decididas por Luis el 14/11/2026 (DA-81 a DA-86)**, registradas en `f1-h5-decisiones-del-agente.md` y en `docs/decisiones/registro-decisiones.md` §9. La tabla conserva lo que estaba en juego y las opciones; la columna «Decisión» dice cuál se eligió.
+
+| # | Pendiente | Qué está en juego | Opciones | Decisión |
+|---|---|---|---|---|
+| 11 | DA-57, Pest en paralelo | El tiempo de `make verificar`. En H5 seis corridas pasaron el aviso de 13 min (780 s), la más alta de 868 s, cerca del alto de 900 s (sección 3.1). Pest se lleva casi todo el tiempo. La opción (i) de DA-57 (cachés de PHPStan y Pint en un volumen) ya está implementada; el paralelo no tiene plan | (a) Abrir una tarea con su plan para Pest en paralelo (`--parallel`), con su efecto en la cobertura y en el candado de la base. (b) Subir los umbrales de 13 y 15 min. (c) Reducir el costo por prueba sin paralelo, con una medición aparte. (d) Dejarlo como está y volver a medir al cierre de H6 | **DA-81:** (a), tarea con su plan para Pest en paralelo, antes de H6 y fuera de H5 |
+| 20 | DA-42 frente a `docs/requisitos.md` | RN-16 dice que quien creó un aviso lo ve; DA-42 (opción A) da 404 al docente que perdió el alcance. El código cumple §6.1 y RN-16 queda sin cumplirse en ese caso, sin que `requisitos.md` lo diga | (a) F1-DOC que agregue a RN-16 la excepción de DA-42. (b) Revertir DA-42: el creador conserva el acceso a sus avisos, con su cambio de código y la resolución del choque con §6.1. (c) Dejarlo registrado solo en DA-42 | **DA-83:** (a), RN-16 recoge la excepción de DA-42 en `docs/requisitos.md` 1.2.2 |
+| 21 | DA-64, idempotencia | Un doble envío del mismo entrenador responde 409 `prueba_ya_registrada` en vez del mismo 201. No hay pérdida de datos; la experiencia del cliente sí cambia. Está aplazada a Fase 2 y no tiene dueño en Fase 1 | (a) Confirmar el aplazamiento a Fase 2 y anotarlo en `docs/alcance-fases.md`. (b) Traerla a Fase 1 con una clave por petición, en una tarea con su plan. (c) Cerrarla sin idempotencia: el 409 es el comportamiento definitivo | **DA-84:** (a), aplazada a Fase 2 en `docs/alcance-fases.md` §5; nota para el frontend: deshabilitar el botón de envío tras el primer clic |
+| 22 | F1-DOC de arquitectura, rangos [Propuesta] y AB-28 | Tres temas de `docs/hitos/f1-h5.md` §11. `docs/arquitectura.md` no refleja lo que H5 construyó (§7.7, §7.8, §8.4, §4.2, §4.3, §11.5 y la marca de RN-16). Los rangos y unidades de §3.2 son valores de fábrica sin validar. AB-28 (si el aviso por medio de un docente o entrenador cubre al jugador) sigue por validar con la institución | Arquitectura: (a) F1-DOC antes de H6, o (b) al cierre de Fase 1. Rangos y unidades: (a) validarlos con la institución y cambiarlos en la base, o (b) mantenerlos como [Propuesta] y llevarlos a H6 o H7. AB-28: (a) consultarla con la institución y fijar un hito, o (b) dejarla abierta sin hito | **DA-85:** F1-DOC de arquitectura antes de H6; rangos [Propuesta] hasta H7; AB-28 **sigue pendiente** de consulta con la institución |
+| 26 | Corridas de CI #85 y #86 en cola | #85 (id 43095880903, `91deb25`) y #86 (id 43098353538, `9972755`) siguen `queued` desde el 11/11/2026 (consultado el 14/11/2026). No afectan a #92 a #95, que terminaron | (a) Cancelarlas desde GitHub. (b) Dejarlas y anotar que no cuentan para la compuerta | **DA-86:** (b), quedan en cola y no cuentan para la compuerta |
+| 27 | Lentitud variable del entorno | Con casi las mismas pruebas, `make verificar` tardó 871 s en T03 y 571 s en la medición posterior: 300 s de diferencia que no vienen del código (`f1-h5-progreso.md`). La causa no está demostrada: OneDrive quedó descartado por ubicación, pero no hay prueba de otra causa. Está ligado a DA-57 | (a) Medirla en una tarea aparte (otra máquina o CI como referencia, carga del host, Docker Desktop). (b) Aceptarla como límite conocido y repetir la corrida si pasa de 900 s. (c) Resolverla junto con DA-57 | **DA-82:** (c), se atiende con DA-57 (tarea de DA-81) |
 
 ## 7. Desviaciones de T09
 

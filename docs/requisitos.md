@@ -1,7 +1,7 @@
 # Documento de Requisitos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas, Universidad del Fútbol y Ciencias del Deporte
-**Versión:** 1.2.1 (RN-22 recortada; ver `docs/CAMBIOS-v1.2.1.md`)
+**Versión:** 1.2.2 (RN-16: excepción de DA-42; ver `docs/decisiones/registro-decisiones.md`, DA-83)
 **Fecha:** 21 de octubre de 2026
 **Estado:** Pendiente de validación por la institución. Lo marcado **[Propuesta]** o **[Decisión por defecto]** debe validarse antes de construir la parte que lo usa (ver `docs/decisiones/registro-decisiones.md`)
 
@@ -13,6 +13,7 @@
 | 1.1 | 19/10/2026 | Correcciones de la auditoría cruzada: RN-19 a RN-23, HU-27 a HU-30, referencias cruzadas, matriz de visibilidad, RNF-10 y RNF-11, y backlog completo según el PDF |
 | 1.2 | 21/10/2026 | RN-04: tipo de redondeo. RN-09: ventana móvil de 30 días y vencimiento por tiempo. HU-17: cómo se confirma una corrección |
 | 1.2.1 | 22/10/2026 | RN-22: la asignación de entrenadores adicionales pasa al backlog (ninguna historia la describe) |
+| 1.2.2 | 14/11/2026 | RN-16: quien creó un aviso deja de verlo si pierde el alcance sobre el jugador (DA-42, DA-83) |
 
 ## 1. Introducción
 
@@ -100,7 +101,7 @@ Los valores marcados como **[Propuesta]** son valores de fábrica sugeridos por 
 - **RN-13.** Cada perfil ve el detalle de su propia área y solo un resumen esencial del resto. El entrenador ve el resumen académico simplificado; el docente ve del lado deportivo únicamente el estado oficial de disponibilidad, no el riesgo deportivo, porque este se calcula por equipo (RN-14). **[Decisión por defecto]**
 - **RN-14.** Cuando un jugador pertenece a dos equipos, cada entrenador ve únicamente los datos que él registró, por protección de datos. Excepciones: el estado oficial de disponibilidad con su fecha estimada de regreso, y el resumen académico simplificado, visibles para todos sus entrenadores.
 - **RN-15.** El detalle de una lesión (tipo, zona, causa) lo ve solo quien la registró.
-- **RN-16.** Un aviso permanece "pendiente de confirmación" hasta que un entrenador del jugador lo confirme. Quien lo confirma queda como registrante de la lesión y es el único que después puede modificar ese estado y su detalle. Los avisos pendientes los ven los entrenadores del jugador y quien los creó. **[Decisión por defecto]**
+- **RN-16.** Un aviso permanece "pendiente de confirmación" hasta que un entrenador del jugador lo confirme. Quien lo confirma queda como registrante de la lesión y es el único que después puede modificar ese estado y su detalle. Los avisos pendientes los ven los entrenadores del jugador y quien los creó. Excepción (DA-42, DA-83): si quien creó el aviso pierde después el alcance sobre el jugador (`docs/hitos/f1-h5.md` §6.1), deja de verlo y recibe la misma respuesta que con un jugador inexistente. **[Decisión por defecto]**
 - **RN-17.** El historial de cambios se conserva mientras el jugador permanezca en la institución, y solo existe borrado lógico. Al darse de baja un jugador el historial no se elimina; el plazo posterior se define con la institución.
 - **RN-18.** Los criterios de convocatoria son del entrenador; el sistema muestra información y no bloquea ni valida convocatorias. Se prioriza visualmente a quienes tienen mejor desempeño (ver definición en 1.5); los jugadores con datos insuficientes se muestran al final. **[Propuesta]**
 
