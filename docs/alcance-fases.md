@@ -71,6 +71,7 @@ Está prohibido construirlo en la Fase 1, aunque parezca fácil o útil:
 - Alertas distintas de las tres de la sección 4.
 - Carga o subida de archivos (fotografía, documentación).
 - Servicios externos de cualquier tipo.
+- Idempotencia de los envíos de pruebas físicas (una clave por petición que devuelva el mismo 201): queda para la Fase 2 (DA-64, DA-84). En la Fase 1, el doble envío responde 409 `prueba_ya_registrada`. Nota para el frontend: deshabilitar el botón de envío tras el primer clic.
 - Una aplicación móvil o el modo de tokens de Sanctum.
 - Optimizaciones no pedidas (particiones, cachés, colas externas), salvo que una prueba de rendimiento del hito H7 las exija y se apruebe. La cola con driver `database` y el planificador de Laravel **sí** están permitidos: no son servicios externos y la arquitectura los exige (`docs/arquitectura.md` §11).
 

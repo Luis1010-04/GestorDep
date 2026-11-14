@@ -520,3 +520,54 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 - **Estado:** aprobada por Luis el 13/11/2026, según la recomendación del reporte de la compuerta (`f1-h5-reporte.md` §9).
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** agregar en H5 una prueba por fila de §7.3, §7.4 y §7.8 con su identificador, y pruebas con «HU-19 c3» y «HU-21 c2» en el nombre.
+
+## DA-81. Tarea de Pest en paralelo (sección 6.1 del reporte de cierre, pendiente 11)
+
+- **Qué faltaba:** DA-57 dejó Pest en paralelo fuera de H5 y sin plan. En H5 seis corridas de `make verificar` pasaron el aviso de 13 min (780 s), la más alta de 868 s (`f1-h5-reporte.md` §3.1).
+- **Qué se eligió:** una tarea con su plan para Pest en paralelo, antes de H6 y fuera de H5. El plan debe cubrir su efecto en la cobertura y en el candado de la base. DA-57 no cambia.
+- **Estado:** decidida por Luis (14/11/2026), opción (a) del pendiente 11. La tarea aún no existe.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** con una decisión nueva que elija otra opción del pendiente 11.
+
+## DA-82. Lentitud variable de `make verificar` (sección 6.1 del reporte de cierre, pendiente 27)
+
+- **Qué faltaba:** con casi las mismas pruebas, `make verificar` tardó 871 s en T03 y 571 s en la medición posterior, sin causa demostrada (`f1-h5-progreso.md`).
+- **Qué se eligió:** se atiende junto con DA-57, en la tarea de DA-81. No tiene tarea propia.
+- **Estado:** decidida por Luis (14/11/2026), opción (c) del pendiente 27.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** abrir una tarea aparte de medición, con su propia decisión.
+
+## DA-83. RN-16 recoge la excepción de DA-42 (sección 6.1 del reporte de cierre, pendiente 20)
+
+- **Qué faltaba:** RN-16 dice que los avisos pendientes los ve quien los creó; DA-42 (opción A) responde 404 al docente que creó un aviso y perdió el alcance sobre el jugador. `docs/requisitos.md` no lo decía.
+- **Qué se eligió:** F1-DOC que agrega a RN-16 la excepción de DA-42 en `docs/requisitos.md` (versión 1.2.2). DA-42 y el código no cambian.
+- **Estado:** decidida por Luis (14/11/2026), opción (a) del pendiente 20. Aplicada en este commit.
+- **Privacidad o permisos:** **sí** (lectura): documenta quién deja de ver sus avisos.
+- **Cómo se revierte:** quitar la excepción de RN-16 y revertir DA-42, con su cambio de código.
+
+## DA-84. Idempotencia de pruebas físicas aplazada a Fase 2 (sección 6.1 del reporte de cierre, pendiente 21)
+
+- **Qué faltaba:** DA-64 aplazó la idempotencia (clave por petición, que devolvería el mismo 201) a la siguiente fase, sin dueño en Fase 1 y sin constar en `docs/alcance-fases.md`.
+- **Qué se eligió:** queda aplazada a Fase 2 y se anota en `docs/alcance-fases.md` §5. En Fase 1, el doble envío sigue respondiendo 409 `prueba_ya_registrada` (DA-60, DA-64). Nota para el frontend: deshabilitar el botón de envío tras el primer clic.
+- **Estado:** decidida por Luis (14/11/2026), opción (a) del pendiente 21. Aplicada en este commit.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** traer la idempotencia a Fase 1 con una tarea y su plan.
+
+## DA-85. F1-DOC de arquitectura, rangos y AB-28 (sección 6.1 del reporte de cierre, pendiente 22)
+
+- **Qué faltaba:** `docs/hitos/f1-h5.md` §11 deja tres temas: `docs/arquitectura.md` no refleja lo que construyó H5, los rangos y unidades de §3.2 son valores de fábrica sin validar, y AB-28 sigue por validar con la institución.
+- **Qué se eligió:**
+  - **Arquitectura:** F1-DOC de `docs/arquitectura.md` antes de H6, con lo que lista `docs/hitos/f1-h5.md` §11. No se hace en este commit.
+  - **Rangos y unidades:** siguen como [Propuesta] hasta H7.
+  - **AB-28:** queda pendiente de consulta con la institución. Esta decisión no la resuelve ni le fija hito.
+- **Estado:** decidida por Luis (14/11/2026) en arquitectura y rangos. AB-28 sigue **por validar**.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** con una decisión nueva que cambie el momento del F1-DOC o de la validación de rangos.
+
+## DA-86. Corridas de CI #85 y #86 en cola (sección 6.1 del reporte de cierre, pendiente 26)
+
+- **Qué faltaba:** #85 (id 43095880903, `91deb25`) y #86 (id 43098353538, `9972755`) siguen `queued` desde el 11/11/2026.
+- **Qué se eligió:** quedan en cola, sin cancelarlas, y no cuentan para la compuerta.
+- **Estado:** decidida por Luis (14/11/2026), opción (b) del pendiente 26.
+- **Privacidad o permisos:** no.
+- **Cómo se revierte:** cancelarlas desde GitHub.
