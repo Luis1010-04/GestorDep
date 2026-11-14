@@ -1,0 +1,20 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+   PASS  Tests\Feature\Salud\ContratoDeEstadoYLesionTest
+  ✓ HU-20, HU-21 y HU-30: las respuestas de confirmación, estado y lesi… 6.17s  
+  ✓ DA-79 (M1): el 409 conflicto de PATCH /lesiones/{lesion} cumple el…  1.00s  
+
+   PASS  Tests\Feature\Salud\ContratoDeAvisosTest
+  ✓ HU-19 y HU-30: las respuestas de avisos cumplen el contrato          1.33s  
+  ✓ DA-79: el 409 conflicto del descarte cumple el contrato              1.04s  
+
+   PASS  Tests\Feature\CondicionFisica\ContratoDeMedicionesTest
+  ✓ HU-17: las respuestas de mediciones cumplen el contrato              1.61s  
+  ✓ DA-70: el 422 rango_no_configurado de mediciones cumple el contrato  1.00s  
+
+   PASS  Tests\Feature\CondicionFisica\ContratoDePruebasFisicasTest
+  ✓ HU-18: las respuestas de tipos de prueba y pruebas físicas cumplen…  1.51s  
+
+  Tests:    7 passed (211 assertions)
+  Duration: 14.27s
+

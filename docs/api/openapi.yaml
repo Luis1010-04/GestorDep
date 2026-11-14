@@ -5651,6 +5651,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '409':
+          description: Hubo un choque con otra escritura (conflicto, DA-79).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '422':
           description: Cuerpo vacio, invalido o con campos desconocidos (validacion_fallida).
           content:
