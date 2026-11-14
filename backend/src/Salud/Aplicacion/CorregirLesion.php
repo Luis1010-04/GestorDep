@@ -23,7 +23,7 @@ final class CorregirLesion
     /**
      * @param  array{tipo?: string, zona?: string, causa?: string, nota?: string}  $cambios
      *
-     * @throws RecursoNoEncontrado
+     * @throws RecursoNoEncontrado|EstadoConcurrente
      */
     public function ejecutar(Identificador $lesionId, array $cambios): Lesion
     {
