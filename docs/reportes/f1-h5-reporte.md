@@ -218,7 +218,7 @@ Se cumple, con la misma salvedad de 9.2 para la tabla de RN-16.
 
 ## 10. Auditoría independiente de cierre (`39cc400`, 13/11/2026)
 
-Auditoría de solo lectura sobre `39cc400`. Cuenta como la auditoría independiente del Lote C (§10 punto 10 de la especificación) y cierra el pendiente 4 de la sección 6. Su texto se versionará en `docs/reportes/auditorias/` cuando Luis lo entregue: **pendiente el texto**.
+Auditoría de solo lectura sobre `39cc400`. Cuenta como la auditoría independiente del Lote C (§10 punto 10 de la especificación) y cierra el pendiente 4 de la sección 6. Su texto está en `docs/reportes/auditorias/auditoria-cierre-h5-20261113.md` (commit `1339146`).
 
 | Hallazgo | Disposición |
 |---|---|
