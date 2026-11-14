@@ -66,6 +66,8 @@ El total de la corrida de cierre queda por debajo del límite de 900 s de la ord
 
 La corrida anterior, sobre `f60698e` y antes de la actualización, tardó 781 s. Pasaron todas las etapas salvo `composer audit` (log `f1-h5-t09-20261113-1434.log`).
 
+**Límite conocido: tiempo de `make verificar`.** La corrida tras las correcciones de la auditoría (`632ffbd`, sección 10) tardó 830 s y pasó el aviso de 13 min (780 s) de `docs/hitos/f1-h5.md`. En H5 lo pasaron seis corridas: 794 s (`7ba90ac`), 868 s (`4ab4592`), 799 s (`df068a2`), 781 s (`f60698e`, falló en `composer audit`), 783 s (`73b7bd0`) y 830 s (`632ffbd`). Todas quedaron por debajo del alto de 900 s. Las tres primeras están en `f1-h5-progreso.md`, «Corridas»; las otras tres, en los logs `f1-h5-t09-20261113-1434.log`, `f1-h5-t09-20261113-1525.log` y `f1-h5-t09-auditoria-20261113-2149.log`.
+
 ### 3.2 `make mutacion`
 
 Código 0. 885 de 885 mutantes eliminados; MSI 100 %, MSI cubierto 100 %, igual que en T08. Infection muta solo `src/*/Dominio` (DD-53; DA-68), y T09 no tocó el dominio, así que no hay regresiones. 184 s. Log: `docs/reportes/logs/mutaciones/f1-h5-t09-infection-20261113-1539.log`.
@@ -220,11 +222,11 @@ Auditoría de solo lectura sobre `39cc400`. Cuenta como la auditoría independie
 
 | Hallazgo | Disposición |
 |---|---|
-| M1. `PATCH /lesiones/{lesion}` respondía 409 `conflicto` sin documentarlo en OpenAPI | Cerrado en `e3f8c2d`: 409 documentado y validado contra OpenAPI en `ContratoDeEstadoYLesionTest`. Antes de documentarlo, la prueba falló con «OpenAPI spec contains no such operation [/lesiones/{lesion},patch,409]» |
+| M1. `PATCH /lesiones/{lesion}` respondía 409 `conflicto` sin documentarlo en OpenAPI | Cerrado en `e3f8c2d`: 409 documentado y validado contra OpenAPI en `ContratoDeEstadoYLesionTest`. Antes de documentarlo, la prueba falló con «OpenAPI spec contains no such operation [/lesiones/{lesion},patch,409]»; evidencia del antes: `docs/reportes/logs/t09/contrato-lesion-409-antes.log`, y del después: `contrato-lesion-409-despues.log`, ambos en `e3f8c2d` |
 | B3. `CorregirLesion` no nombraba `EstadoConcurrente` en `@throws`, y el comentario de `EstadoConcurrente` solo hablaba del estado vigente | Cerrado en `76c7373`. Solo comentarios |
 | B1. `RepositorioDeLesionesSql` solo captura el choque en `guardarCambio` | **Anotado para H7:** captura de cualquier índice único en lesiones, también en `guardarNueva`. No se cambia en H5 |
 | Registro: el título de la sección 9 decía «DA-20 a DA-79» y «las 60» | Cerrado: «DA-20 a DA-80», «las 61» y la fila de DA-80, con referencia a `f1-h5-decisiones-del-agente.md` |
 | Trazabilidad: la nota de HU-02 seguía diciendo «Diferido a H5»; DA-33 sin hito | Cerrado: nota corregida, y las cinco menciones de DA-33 dicen «de H4» o «de H5», sin renombrar decisiones |
 | Este reporte: estado de los commits, DA-79 en lesiones, tiempos por etapa, «156 pasos», «134 pruebas de contrato» y el contrato de lesiones | Cerrado en esta corrección (encabezado y secciones 2, 3, 5, 6 y 8) |
 
-Corridas de la corrección: PHPStan sin errores tras cada cambio de pruebas; `make verificar` completo (resultado en el reporte de la orden). No se corrió `make mutacion`: no cambió código de producción, solo comentarios, y el cambio de OpenAPI no afecta a las mutaciones.
+Corridas de la corrección: PHPStan sin errores tras cada cambio de pruebas; `make verificar` completo sobre `632ffbd`: código 0 en 830 s, 1 982 pruebas (log `f1-h5-t09-auditoria-20261113-2149.log`, en `fbd4308`; tiempos en la sección 3.1). No se corrió `make mutacion`: no cambió código de producción, solo comentarios, y el cambio de OpenAPI no afecta a las mutaciones.
