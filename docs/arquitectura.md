@@ -1,7 +1,7 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.5.2 (ver sección 14)
+**Versión:** 1.5.3 (ver sección 14)
 **Fecha:** 31 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
@@ -227,7 +227,7 @@ El mínimo de calificaciones para evaluar es `ventana_partidos` (RN-08): con men
 
 Notas de H4:
 
-- **Unicidad de `rendimientos_partido`:** es por registrante. Dos entrenadores del mismo equipo pueden registrar, cada uno, su propia calificación de un mismo jugador en un mismo partido, y cada uno ve y promedia solo la suya. La UQ por (`partido_id`, `jugador_id`, `registrado_por`) sustituye a la anterior por (`partido_id`, `jugador_id`) por DD-17 y DA-36 (`docs/hitos/f1-h4.md` v1.0.8).
+- **Unicidad de `rendimientos_partido`:** es por registrante. Dos entrenadores del mismo equipo pueden registrar, cada uno, su propia calificación de un mismo jugador en un mismo partido, y cada uno ve y promedia solo la suya. Las alertas son la excepción: se calculan con los registros de todos los entrenadores del equipo (DA-102), y las tarjetas cuentan, por partido, jugador y tipo, el mayor número registrado por un solo entrenador (DA-103). La UQ por (`partido_id`, `jugador_id`, `registrado_por`) sustituye a la anterior por (`partido_id`, `jugador_id`) por DD-17 y DA-36 (`docs/hitos/f1-h4.md` v1.0.8).
 - **`entrenador_id`:** está en `umbrales_rendimiento` y en `evaluaciones_rendimiento` porque RN-08 y HU-16 son por entrenador (DA-04 de H4).
 - **Las dos UQ de `plantillas_evaluacion`:** con ellas, un nombre repetido no revela las plantillas de otro entrenador (`docs/hitos/f1-h4.md` v1.0.4). La aplicación rechaza además una plantilla propia con el nombre de una de fábrica de la misma posición.
 - **Lo que guarda cada evaluación:** copia la calificación mínima y la ventana con que se calculó, para que lo que vio el entrenador se conserve aunque cambien el umbral o la plantilla (`docs/hitos/f1-h4.md` v1.0.2).
@@ -366,11 +366,11 @@ Un jugador con baja registrada (RN-23) queda fuera de listados, convocatorias y 
 - Las pruebas de arquitectura verifican que las consultas de lectura lo usen.
 - **Única excepción:** la búsqueda por matrícula (RN-20) devuelve solo nombres, apellidos y matrícula de un jugador no asignado; asignarlo o inscribirlo (HU-04, HU-06) otorga el alcance.
 - Reglas por dato:
-  - Rendimiento, estado físico y evaluaciones: filtro por `registrado_por` igual al usuario (RN-14).
+  - Rendimiento, estado físico y evaluaciones: filtro por `registrado_por` igual al usuario (RN-14). Excepción: el cálculo de las alertas deportivas y de sanciones de un equipo lee los registros de todos sus entrenadores (RN-22, DA-102).
   - Estado de disponibilidad: visible para todos los entrenadores con acceso al jugador.
   - Detalle de lesión: solo si `registrada_por` es el usuario.
   - Resumen académico: igual para todo entrenador asignado, sin calificaciones individuales.
-  - Alertas académicas: docentes y entrenadores del jugador. Alertas deportivas: solo el entrenador del equipo en `equipo_id`; el docente no las ve.
+  - Alertas académicas: docentes y entrenadores del jugador. Alertas deportivas y de sanciones: los entrenadores del equipo en `equipo_id`, sin importar cuál de ellos registró los datos con que se calcularon (RN-22, DA-102); el entrenador de otro equipo del jugador y el docente no las ven.
   - Docente, del lado deportivo: solo el estado oficial de disponibilidad (RN-13).
   - Avisos pendientes: entrenadores del jugador y quien los creó.
   - Asistencia a entrenamientos y convocatorias: entrenadores de los equipos del entrenamiento o del partido.
@@ -402,7 +402,7 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 
 | Tema | Riesgo o duda | Propuesta |
 |---|---|---|
-| Co-entrenadores | Si un equipo tiene dos entrenadores, RN-14 ("solo lo que él registró") impide que se vean entre sí | **Resuelto:** DD-17 está confirmada y se aplica la regla estricta. Cada entrenador registra su propia calificación de un jugador en un partido, y ve y promedia solo lo que él registró; la unicidad de `rendimientos_partido` es por registrante (sección 7.6; DA-36 de H4) |
+| Co-entrenadores | Si un equipo tiene dos entrenadores, RN-14 ("solo lo que él registró") impide que se vean entre sí | **Resuelto:** DD-17 está confirmada y se aplica la regla estricta, salvo en las alertas deportivas y de sanciones (DA-102). Cada entrenador registra su propia calificación de un jugador en un partido, y ve y promedia solo lo que él registró; la unicidad de `rendimientos_partido` es por registrante (sección 7.6; DA-36 de H4) |
 | Reglas de sanción | RN-09 y RN-10 son propuestas, no valores institucionales | Validar antes de sembrar |
 | Retención | El historial se conserva mientras el jugador esté en la institución; falta definir qué ocurre al darse de baja | Mantenerlo sin borrar y definir con la institución un plazo posterior |
 | Aviso del jugador | `reportado_por_jugador` asume que otro usuario lo registra | Se reemplaza por un perfil de futbolista en la fase siguiente |
@@ -425,3 +425,4 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | 1.5 | 31/10/2026 | Se alinea con lo construido en H4 (`docs/hitos/f1-h4.md` v1.0.8, §5.1), por decisión del responsable. Sección 4.3: puertos `PosicionEnEquipo` (adaptador en Plantel) e `InicioDePartidos` (adaptador en Competencia), en Compartido. Sección 7.6: unicidad de `rendimientos_partido` por (`partido_id`, `jugador_id`, `registrado_por`), que sustituye a la de (`partido_id`, `jugador_id`) (DD-17, DA-36); dos UQ parciales y el `CHECK` de origen en `plantillas_evaluacion`; `entrenador_id` en umbrales y evaluaciones, con la UQ del umbral vigente y el índice de evaluaciones que lo incluyen (DA-04); `evaluaciones_rendimiento` con `calificacion_minima` y `ventana_partidos` copiadas y obligatorias, `plantilla_id` anulable junto a `umbral_id` y el `CHECK` de promedio nulo. Sección 8.4: el seeder de plantillas se llama `PlantillasDeFabricaSeeder`. Sin cambios de código |
 | 1.5.1 | 31/10/2026 | Sección 13: la fila «Co-entrenadores» queda resuelta, porque DD-17 está confirmada (DA-36 de H4). Decisión del responsable |
 | 1.5.2 | 31/10/2026 | Sección 4.1: el servicio de RN-08 se llama `CalculoDeDesempeno` (`src/Rendimiento/Dominio/`), como en el código. `EvaluadorDeRendimiento` no existe y se quita. Decisión del responsable |
+| 1.5.3 | 15/11/2026 | Excepción de las alertas entre entrenadores de un mismo equipo (RN-22 de `docs/requisitos.md` v1.2.3, DA-102) y conteo de tarjetas (DA-103), por decisión del responsable. Sección 7.6: nota de unicidad de `rendimientos_partido`. Sección 10: reglas por dato de rendimiento y de alertas deportivas y de sanciones. Sección 13: fila «Co-entrenadores» |
