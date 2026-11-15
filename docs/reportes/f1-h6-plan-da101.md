@@ -60,7 +60,9 @@ Los umbrales por capa (95, 85 y 70 %) y `bin/verificar-cobertura.php` **no se to
 
 Riesgo concreto que hay que comprobar: hoy pcov recibe `-d pcov.directory=.` en la línea de comandos. Si los procesos hijos no heredan esa opción, pcov usaría su directorio por defecto y podría dejar `app/` fuera del reporte. No sé todavía si paratest la propaga; se comprueba en la primera corrida. Si no lo hace, la opción se fija en la configuración de PHP del contenedor y de CI en lugar de la línea de comandos.
 
-**Criterio de aceptación de la cobertura:** en el mismo commit, la corrida en serie y la corrida en paralelo deben dar, por capa, **las mismas líneas ejecutables y las mismas líneas cubiertas**, y el mismo número de pruebas y de aserciones. Cualquier diferencia se investiga hasta explicarla; no se acepta «casi igual» ni se ajusta un umbral.
+**Criterio de aceptación de la cobertura** (enmendado el 15/11/2026 por decisión del responsable): en el mismo commit, la corrida en serie y la corrida en paralelo deben dar **las mismas pruebas y las mismas líneas de cobertura** (ejecutables y cubiertas, por capa), **con una aserción adicional por proceso por la reconstrucción del esquema**. Cualquier otra diferencia se investiga hasta explicarla; no se acepta «casi igual» ni se ajusta un umbral.
+
+Por qué cambia el número de aserciones: `esquemaReconstruir()` (`tests/Ayudantes/EsquemaDePrueba.php`) ejecuta `migrate:fresh` y comprueba que termina bien, y esa comprobación cuenta como una aserción. En serie ocurre una vez al empezar; en paralelo, una vez en cada proceso. Medido sobre las mismas 33 pruebas de `tests/Feature/Identidad`: 138 aserciones en serie, 139 con 2 procesos y 140 con 3. El total puede variar además en una o dos según cómo se repartan los archivos que hacen DDL, porque una reconstrucción pendiente al final de un proceso no llega a ejecutarse. No se cambió código de prueba para igualar el número.
 
 ## 4. Candado de la base
 
@@ -93,7 +95,7 @@ Son unas 12 corridas; con las de serie a unos 13 minutos, la medición ocupa cer
 **Propuesta de criterio de éxito, para que la confirmes o la cambies:**
 
 1. Las 3 corridas del valor elegido pasan con código 0.
-2. Mismas pruebas, aserciones y cobertura por capa que en serie (§3).
+2. Mismas pruebas y líneas de cobertura que en serie, con una aserción adicional por proceso por la reconstrucción del esquema (§3, enmendado el 15/11/2026).
 3. La mediana del total queda por debajo de 450 s. El número es mío: deja margen bajo el aviso de 780 s para lo que agregue H6. Si no se alcanza, se informa el número real y decides.
 
 ## 6. Pruebas que pueden fallar solo en paralelo
@@ -103,6 +105,8 @@ Se revisan antes de medir y se corrigen de raíz si fallan:
 - `tests/Feature/EntornoDePruebasTest.php` afirma que la base se llama exactamente `gestordep_pruebas`. Hay que cambiarla para que acepte `gestordep_pruebas` o `gestordep_pruebas_N` y siga rechazando la base de desarrollo. **Es un cambio a una prueba existente y necesita tu aprobación explícita**; no la debilita: sigue comprobando que nunca se usa otra base.
 - Pruebas de `tests/Unit/Herramientas/` que escriben archivos: usan `tempnam`, con nombre único; no deberían chocar.
 - Pruebas que hacen DDL o `migrate:fresh` (24 archivos): cada proceso tiene su base, así que no se afectan entre sí.
+
+Encontrado al ejecutar (15/11/2026, aprobado por el responsable como DA-104): dos funciones de ayuda estaban definidas dentro de un archivo de prueba y otros archivos las usaban, `parametrosDePrueba()` y `decimal()`. En paralelo fallaban 27 pruebas con «Call to undefined function». Se trasladaron, sin cambiar su lógica, a `tests/Ayudantes/DominioDePrueba.php`, que `tests/Pest.php` carga siempre.
 
 Una prueba que falle solo en paralelo **no se omite, no se reintenta y no se marca como en serie sin avisarte**: se reporta con su causa.
 
@@ -116,6 +120,10 @@ Esta tarea no está en `docs/hitos/f1-h6.md`, así que estas rutas necesitan tu 
 | `backend/tests/TestCase.php` | Elegir la base según `TEST_TOKEN` |
 | `backend/tests/Feature/EntornoDePruebasTest.php` | Aceptar la base del proceso (§6) |
 | `backend/tests/Unit/Herramientas/**` | Prueba que fija la forma del paso de Pest (paralelo, cobertura y Clover), como ya se hace con `mutacion` |
+| `backend/tests/Ayudantes/DominioDePrueba.php` (nuevo) | Las funciones de ayuda `parametrosDePrueba()` y `decimal()`, trasladadas sin cambiar su lógica (DA-104) |
+| `backend/tests/Pest.php` | Una línea que carga ese archivo (DA-104) |
+| `backend/tests/Unit/Academico/ParametrosDeRiesgoTest.php` | Pierde la definición de `parametrosDePrueba()` y los dos `use` que solo ella usaba (DA-104) |
+| `backend/tests/Unit/Compartido/NumeroDecimalTest.php` | Pierde la definición de `decimal()` (DA-104) |
 | `backend/docker/db/init/01-roles-y-bases.sh` y un guion idempotente junto a él | Crear las bases por proceso |
 | `Makefile` | Una línea en `levantar` que ejecuta ese guion (ver decisión 2) |
 | `.github/workflows/verificar.yml` | El paso «Roles y base de pruebas» crea también las bases por proceso |

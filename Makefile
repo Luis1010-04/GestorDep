@@ -2,8 +2,11 @@
 
 # `vendor` vive en un volumen nombrado: si esta vacio (primer arranque o tras `docker compose down -v`) se instala solo.
 # El worker y el scheduler arrancan despues, cuando ya hay dependencias.
+# Las bases de pruebas por proceso (DA-101) se crean aqui si faltan: el guion es idempotente y un volumen de datos que
+# ya existe no vuelve a correr los guiones de inicio de PostgreSQL.
 levantar:
 	docker compose up -d --build --wait db app
+	docker compose exec -T db bash /docker-entrypoint-initdb.d/02-bases-por-proceso.sh
 	docker compose exec -T app sh -c 'test -f vendor/autoload.php || composer install --no-interaction --no-progress'
 	docker compose up -d --wait
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Candado y vigilante de las corridas que usan la base de pruebas `gestordep_pruebas` (PT-07).
+# Candado y vigilante de las corridas que usan la base de pruebas `gestordep_pruebas` (PT-07) y las bases por proceso
+# de Pest en paralelo, `gestordep_pruebas_1` a `gestordep_pruebas_8` (DA-101): un solo candado las cubre todas.
 #
 # Uso, desde el Makefile: docker compose exec -T app bash bin/con-candado.sh <comando>
 # La receta es un solo comando, sin sintaxis de shell, para que funcione en cmd.exe, PowerShell y Git Bash.

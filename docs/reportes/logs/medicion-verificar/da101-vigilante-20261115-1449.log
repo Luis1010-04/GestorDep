@@ -1,0 +1,30 @@
+commit base: 33a9910 + cambios de T00 sin commit | prueba del vigilante (PT-07) con Pest en paralelo | 2026-11-15T14:49:47-06:00
+# antes de empezar
+  procesos de la corrida: 0
+  candado: libre
+# a los 40 s, con la corrida en marcha
+  10079 bash bin/con-candado.sh php vendor/bin/pest --parallel --processes=4 
+  10086 timeout --kill-after=10s 20m php vendor/bin/pest --parallel --processes=4 
+  10087 bash bin/con-candado.sh php vendor/bin/pest --parallel --processes=4 
+  10088 php vendor/bin/pest --parallel --processes=4 
+  10097 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-
+  10098 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-
+  10099 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-
+  10100 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-
+  procesos de la corrida: 8
+  candado: tomado
+# se termina el cliente (docker.exe y docker-compose.exe) a la fuerza: 2026-11-15T14:50:30-06:00
+Correcto: se termin¢ el proceso "docker-compose.exe" con PID 15636.
+ERROR: no se encontr¢ el proceso "docker.exe".
+# 5 s despues
+  procesos de la corrida: 0
+  candado: libre
+# 20 s despues
+  procesos de la corrida: 0
+  candado: libre
+# salida de la corrida cortada (ultimas lineas):
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ...................................................
+codigo: 0 | segundos: 66

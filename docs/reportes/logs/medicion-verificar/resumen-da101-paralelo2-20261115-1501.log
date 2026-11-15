@@ -1,0 +1,5 @@
+# DA-101 serie paralelo2 | commit 33a9910 | 2026-11-15T15:01:52-06:00
+# paso de Pest: vendor/bin/pest --parallel --processes=2 --passthru-php=\
+corrida=1 codigo=0 total=544s pest= pruebas=[1985 passed (12325 assertions)] capas=[Dominio 100.0% 95% ok Aplicación 100.0% 85% ok Infraestructura y HTTP 99.6% 70% ok ] carga=[0.10 0.41 1.20 2/332 11651 -> 1.49 1.75 1.61 3/339 12661] cpu=[40 -> 12]
+corrida=2 codigo=0 total=459s pest= pruebas=[1985 passed (12325 assertions)] capas=[Dominio 100.0% 95% ok Aplicación 100.0% 85% ok Infraestructura y HTTP 99.6% 70% ok ] carga=[1.45 1.74 1.60 4/337 12673 -> 1.91 2.17 1.90 3/334 13580] cpu=[26 -> 17]
+corrida=3 codigo=0 total=456s pest= pruebas=[1985 passed (12325 assertions)] capas=[Dominio 100.0% 95% ok Aplicación 100.0% 85% ok Infraestructura y HTTP 99.6% 70% ok ] carga=[1.75 2.13 1.89 3/334 13586 -> 1.55 2.00 1.96 3/354 14492] cpu=[26 -> 34]

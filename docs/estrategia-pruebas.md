@@ -18,7 +18,7 @@ Este documento es una fuente de verdad del agente. Define cómo se demuestra que
 
 | Qué se verifica | Herramienta | Notas |
 |---|---|---|
-| Pruebas unitarias, de integración y de API | Pest sobre PHPUnit | PostgreSQL real en contenedor |
+| Pruebas unitarias, de integración y de API | Pest sobre PHPUnit | PostgreSQL real en contenedor. En `make verificar`, Pest corre en paralelo con una base por proceso (DA-101) |
 | Reglas de arquitectura | Pest Arch | Dominio sin framework, dirección de dependencias, aislamiento entre contextos |
 | Análisis estático | Larastan (PHPStan) | Nivel 6 en H0 y H1; nivel 7 de H2 a H4; nivel 8 desde H5. Se sube al abrir el hito y nunca se baja |
 | Estilo | Laravel Pint | En modo de comprobación |

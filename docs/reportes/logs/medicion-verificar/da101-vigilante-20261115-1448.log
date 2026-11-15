@@ -1,0 +1,39 @@
+commit base: 33a9910 + cambios de T00 sin commit | prueba del vigilante (PT-07) con Pest en paralelo | 2026-11-15T14:48:23-06:00
+# antes de empezar
+  9584 bash -c n=0; for d in /proc/[0-9]*; do c=$(tr "\0" " " < $d/cmdline 2>/dev/null); case "$c" in *pest*|*parates
+  procesos de la corrida: 1
+  candado: libre
+# a los 40 s, con la corrida en marcha
+  9596 bash bin/con-candado.sh php vendor/bin/pest --parallel --processes=4 
+  9603 timeout --kill-after=10s 20m php vendor/bin/pest --parallel --processes=4 
+  9604 bash bin/con-candado.sh php vendor/bin/pest --parallel --processes=4 
+  9605 php vendor/bin/pest --parallel --processes=4 
+  9614 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-file /tmp/
+  9615 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-file /tmp/
+  9616 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-file /tmp/
+  9617 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-file /tmp/
+  9944 bash -c n=0; for d in /proc/[0-9]*; do c=$(tr "\0" " " < $d/cmdline 2>/dev/null); case "$c" in *pest*|*parates
+  procesos de la corrida: 9
+  candado: tomado
+# se termina el cliente (docker.exe y docker-compose.exe) a la fuerza: 2026-11-15T14:49:05-06:00
+Error: Argumento u opci¢n no v lido - "//F".
+Escriba "TASKKILL /?" para su uso.
+Error: Argumento u opci¢n no v lido - "//F".
+Escriba "TASKKILL /?" para su uso.
+# 5 s despues
+  9596 bash bin/con-candado.sh php vendor/bin/pest --parallel --processes=4 
+  9603 timeout --kill-after=10s 20m php vendor/bin/pest --parallel --processes=4 
+  9604 bash bin/con-candado.sh php vendor/bin/pest --parallel --processes=4 
+  9605 php vendor/bin/pest --parallel --processes=4 
+  9614 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-file /tmp/
+  9615 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-file /tmp/
+  9616 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-file /tmp/
+  9617 /usr/local/bin/php /var/www/html/vendor/pestphp/pest/bin/worker.php --test-directory=tests --status-file /tmp/
+  9983 bash -c n=0; for d in /proc/[0-9]*; do c=$(tr "\0" " " < $d/cmdline 2>/dev/null); case "$c" in *pest*|*parates
+  procesos de la corrida: 9
+  candado: tomado
+# 20 s despues
+  10027 bash -c n=0; for d in /proc/[0-9]*; do c=$(tr "\0" " " < $d/cmdline 2>/dev/null); case "$c" in *pest*|*parates
+  procesos de la corrida: 1
+  candado: libre
+codigo: 0 | segundos: 66

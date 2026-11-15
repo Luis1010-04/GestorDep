@@ -17,6 +17,10 @@ abstract class TestCase extends BaseTestCase
      * sesiones, los candados, los permisos y las reversiones no cambian; solo la durabilidad ante una caída del
      * servidor, que a una base de pruebas no le importa. Se purgan para que ninguna conexión abierta durante el
      * arranque conserve el valor anterior.
+     *
+     * DA-101: `make verificar` corre Pest en paralelo. Paratest numera cada proceso desde 1 en `TEST_TOKEN`, y cada
+     * proceso usa su propia base, `<base de pruebas>_N`, para que no se borren los datos entre sí. Las bases las crea
+     * `docker/db/init/02-bases-por-proceso.sh`. Sin `TEST_TOKEN` (corrida en serie) la base es la de siempre.
      */
     protected function setUp(): void
     {
@@ -24,7 +28,13 @@ abstract class TestCase extends BaseTestCase
 
         config(['session.lottery' => [0, 100]]);
 
+        $proceso = getenv('TEST_TOKEN');
+
         foreach (['pgsql', 'propietario'] as $conexion) {
+            if ($proceso !== false && $proceso !== '') {
+                config(["database.connections.{$conexion}.database" => config("database.connections.{$conexion}.database").'_'.$proceso]);
+            }
+
             config(["database.connections.{$conexion}.synchronous_commit" => 'off']);
             DB::purge($conexion);
         }

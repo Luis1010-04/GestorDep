@@ -11,5 +11,6 @@ require_once __DIR__.'/Ayudantes/MundoDeRendimiento.php';
 require_once __DIR__.'/Ayudantes/MundoDeSalud.php';
 require_once __DIR__.'/Ayudantes/MundoDeCondicionFisica.php';
 require_once __DIR__.'/Ayudantes/DeteccionDeConsultasDeJugadores.php';
+require_once __DIR__.'/Ayudantes/DominioDePrueba.php';
 
 pest()->extend(TestCase::class)->in('Feature', 'Arch', 'Integration');
