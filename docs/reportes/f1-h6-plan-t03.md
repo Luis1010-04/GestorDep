@@ -25,7 +25,28 @@ Fuera de T03: las rutas y consultas de alertas y del listado (T04), la vista par
 
 ## 2. Estado de partida
 
-[pendiente]
+Solo lectura, con grep y lectura corta (rutas bajo `backend/`).
+
+| Qué | Hallazgo |
+|---|---|
+| Comando actual | `src/Academico/Infraestructura/Consola/ConciliarResumenesComando.php`, firma `alertas:recalcular`. Su `handle` solo llama a `ConciliarResumenes::ejecutar()` (`src/Academico/Aplicacion/`), que recalcula el resumen de cada jugador con inscripciones, y devuelve `SUCCESS` sin escribir texto. Lo registra `AcademicoServiceProvider::boot()` (si corre en consola). `routes/console.php:6` lo programa con `dailyAt('02:00')` y zona America/Mexico_City |
+| Dominio de Alertas (T02) | `src/Alertas/Dominio/`: `AccionSobreAlerta`, `AcumulacionDeSanciones`, `AlertaAcademica`, `DecisionDeAlerta`, `InasistenciaAEntrenamiento`, `ParametrosDeSanciones`, `ResultadoDeEvaluacion` (con `delEquipo()`), `RiesgoDeBajaDeportiva`, `TarjetasDePartido` (con `elMayorPorPartido()`), `TarjetasRegistradas`, `VentanaDeFaltas`. Sus únicos `use` son `DateTimeImmutable` y `Src\Compartido\Dominio\ReglaDeNegocioViolada`: no importan otros contextos |
+| Aplicación e Infraestructura de Alertas | `src/Alertas/Aplicacion/` solo tiene `.gitkeep`. `src/Alertas/Infraestructura/AlertasServiceProvider.php` está vacío, aunque ya figura en `bootstrap/providers.php` |
+| Escuchas de Académico | Uno: `src/Academico/Infraestructura/Escuchas/RecalcularResumenAcademico.php`, `ShouldQueue`, `afterCommit = true`, 3 intentos. `AcademicoServiceProvider::boot()` lo registra con `Event::listen` para los cuatro eventos |
+| Publicación de eventos | Los casos de uso de `src/Academico/Aplicacion/` (`RegistrarCalificacion`, `CorregirCalificacion`, `RegistrarAsistencia`, `CorregirAsistencia`, `DefinirCriterioDeMateria`, `InscribirJugador`) llaman a `PublicadorDeEventos`; `PublicadorDeEventosLaravel` despacha con `DB::afterCommit`. Los eventos viven en `src/Compartido/Dominio/Eventos/`. Tres traen `jugadorId` (`CalificacionRegistrada`, `AsistenciaDeClaseRegistrada`, `JugadorInscrito`); `CriterioDeMateriaModificado` trae solo `materiaId` |
+| Cola | `config/queue.php`: por defecto `database`. `phpunit.xml`: `sync` |
+| Tabla `alertas` (T01) | Existe: `database/migrations/alertas/2026_11_15_080100_crear_tabla_alertas.php`, con el disparador `rechazar_modificacion_alerta` (solo permite `cerrada_en` de nulo a fecha), el índice único parcial `uq_alertas_abierta` por (tipo, jugador, equipo o uuid nulo) y el `CHECK` del tipo. El seeder `ParametrosInstitucionalesSeeder` ya siembra las cuatro claves de DA-100 |
+| Puertos de Compartido | `src/Compartido/Aplicacion/` no tiene ninguno de los cuatro de DA-112 ni el del nivel de riesgo académico. Sí tiene `InicioDePartidos` (adaptador en Competencia), `JugadoresDelEquipo`, `EquiposDelEntrenador` y `AlcanceDeJugadores` |
+| Reloj | `Src\Compartido\Dominio\Reloj` (`ahora()`, `hoy()`) y `HoyDeNegocio`, con `HoyDeNegocioSegunReloj` en Infraestructura. Las pruebas usan `RelojFijo` |
+
+**Lo que difiere de la especificación**
+
+1. **El comando no reconcilia alertas.** T03 dice «quitar la reconciliación de alertas» de `ConciliarResumenesComando`, y `docs/estrategia-pruebas.md` línea 68 dice «Concilia resúmenes y alertas abiertas». El código solo concilia resúmenes; nunca tocó alertas. El cambio en ese archivo es solo la firma y el comentario.
+2. **No son 23 llamadas, son 17.** La cifra «23 llamadas en 5 archivos» cuenta líneas con la cadena `alertas:recalcular`: 17 llamadas a `consolaArtisan(...)`, 5 títulos de prueba y 1 comprobación del horario. Detalle en §9.
+3. **Faltan datos para el comando que ningún puerto de DA-112 cubre.** El comando corre sin usuario de sesión y necesita las parejas (jugador, equipo) con membresía vigente y sin baja; `JugadoresDelEquipo` pasa por `AlcanceDeJugadores` con el usuario de la sesión, así que no sirve. Tampoco lo cubre la lista de jugadores con inscripciones para el escucha de `CriterioDeMateriaModificado`, que solo trae `materiaId`. Ver §3 y la pregunta 1 de §10.
+4. **El puerto P-09 no devuelve solo el nivel.** La `causa` de la alerta académica lleva `nivel_riesgo`, `promedio` y `materias_reprobadas` (DA-105, DA-110), así que el puerto debe devolver los tres. Ver §3.
+5. **La temporada de cada partido no es dato de Rendimiento.** `TarjetasRegistradas` (T02) lleva `temporadaId` por partido, pero `partidos.temporada_id` es de Competencia. Ver §3.
+6. **Rutas permitidas.** T03 permite adaptadores solo en Rendimiento y Competencia, y en Académico solo el archivo del comando. El adaptador del puerto P-09 (Académico) y el de la lista de membresías (Plantel) quedan fuera. Ver §8 y la pregunta 2 de §10.
 
 ## 3. Puertos
 
