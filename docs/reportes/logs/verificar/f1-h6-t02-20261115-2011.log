@@ -1,0 +1,42 @@
+commit base: 8fbd178 + cambios de T02 sin commit | make verificar | 2026-11-15T20:11:45-06:00
+docker compose exec -T app bash bin/con-candado.sh composer verificar
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ...............................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 867 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Unit/Alertas/ReglasDeAlertaTest.php                              
+ ------ ----------------------------------------------------------------------- 
+  148    Parameter #1 $tarjetas of static method                                
+         Src\Alertas\Dominio\AcumulacionDeSanciones::seCumple() expects list<S  
+         rc\Alertas\Dominio\TarjetasDePartido>, array given.                    
+         🪪  argument.type                                                      
+         💡  array might not be a list.                                         
+  148    Parameter #3 $inasistencias of static method                           
+         Src\Alertas\Dominio\AcumulacionDeSanciones::seCumple() expects list<S  
+         rc\Alertas\Dominio\InasistenciaAEntrenamiento>, array given.           
+         🪪  argument.type                                                      
+         💡  array might not be a list.                                         
+ ------ ----------------------------------------------------------------------- 
+
+
+ [ERROR] Found 2 errors                                                         
+
+Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with error code 1
+make: *** [Makefile:32: verificar] Error 1
+codigo: 2 | segundos: 24
