@@ -1,0 +1,636 @@
+﻿docker compose exec -T app bash bin/con-candado.sh php vendor/bin/pest
+make : Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+En línea: 1 Carácter: 514
++ ... dantes routes 2>&1 | Select-Object -Last 5; make pruebas 2>&1 | Out-F ...
++                                                 ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Entrada estanda...tope de 20 min.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\AsistenciaDeClaseTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-07: una asistencia a clase expone lo que se le dio[39m[90m               [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-05: los estados de asistencia son presente, falta y falta justificada[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\CalificacionDeMateriaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 calificación fila 1): solo final 8.00 da 8.00[39m[90m           [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 calificación fila 2): la final prevalece sobre los parciales[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 calificación fila 3): parciales 8.00 y 7.00 dan 7.50[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 calificación fila 4): 22 entre 3 da 7.33[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-43 (§7.9 calificación fila 5): 7.005 se redondea al medio hacia arriba a 7.01[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 calificación fila 6): un solo parcial es la calificación[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 calificación fila 7): sin final ni parciales no hay calificación[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 calificación fila 8): el cero es una calificación, no u[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 calificación fila 9): 10.00 es 10.00[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-43: una final con más precisión también se redondea al medio hacia arriba[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-43: la media de parciales queda con dos decimales aunque salga exacta[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\CalificacionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-07: una calificación expone lo que se le dio[39m[90m                     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-02: los tipos de calificación son parcial y final[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-51: un parcial lleva número de 1 a 10 y la final ninguno with dataset "parcial 1"[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-51: un parcial lleva número de 1 a 10 y la final ninguno with dataset "parcial 10"[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-51: un parcial lleva número de 1 a 10 y la final ninguno with dataset "parcial 0"[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-51: un parcial lleva número de 1 a 10 y la final ninguno with dataset "parcial 11"[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-51: un parcial lleva número de 1 a 10 y la final ninguno with dataset "parcial sin número"[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-51: un parcial lleva número de 1 a 10 y la final ninguno with dataset "final sin número"[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-51: un parcial lleva número de 1 a 10 y la final ninguno with dataset "final con número"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: el valor de una calificación está en la escala de 0 a 10 with dataset "cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: el valor de una calificación está en la escala de 0 a 10 with dataset "diez"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: el valor de una calificación está en la escala de 0 a 10 with dataset "sobre diez"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: el valor de una calificación está en la escala de 0 a 10 with dataset "bajo cero"[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\ConteoDeAsistenciaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05 (§7.9 asistencia fila 1): 10 presentes dan 100.00[39m[90m             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-05 (§7.9 asistencia fila 2): 8 presentes y 2 faltas dan 80.00[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-44 (§7.9 asistencia fila 3): la falta justificada cuenta como asistencia[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05 (§7.9 asistencia fila 4): 1 presente y 2 faltas dan 33.33[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05 (§7.9 asistencia fila 5): 2 presentes y 1 falta dan 66.67[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05 (§7.9 asistencia fila 6): sin registros el porcentaje es nulo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05: solo faltas dan 0.00 y el total de registros suma los tres conteos[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05: un conteo negativo no es válido with dataset "presentes"[39m[90m     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-05: un conteo negativo no es válido with dataset "justificadas"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05: un conteo negativo no es válido with dataset "faltas"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05: el cero es un conteo válido[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\CriterioDeAprobacionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: una calificación igual al mínimo aprueba y una menor reprueb[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-03: el criterio propio prevalece y el resultado indica que es de la materia[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-03: sin criterio propio se aplica el general y así lo indica[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-03: el criterio propio debe ser de ámbito materia y el general de ámbito general[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\EscalaDeCalificacionesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: la escala de calificaciones va de 0 a 10, ambos extremos inc[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-01: la escala de calificaciones va de 0 a 10, ambos extremos incluidos with dataset "cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: la escala de calificaciones va de 0 a 10, ambos extremos incluidos with dataset "cero sin decimales"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: la escala de calificaciones va de 0 a 10, ambos extremos incluidos with dataset "dentro"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: la escala de calificaciones va de 0 a 10, ambos extremos incluidos with dataset "diez"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: la escala de calificaciones va de 0 a 10, ambos extremos incluidos with dataset "justo sobre diez"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: la escala de calificaciones va de 0 a 10, ambos extremos incluidos with dataset "muy sobre diez"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-01: la escala de calificaciones va de 0 a 10, ambos extremos incluidos with dataset "muy bajo cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-03: un criterio vigente expone el criterio y la fecha desde la q[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\InscripcionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-06: una inscripción expone la materia, el jugador y el instante[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\MateriaEvaluadaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.9 aprobada fila 1): 6.99 con criterio general 7.00 reprue[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-01 (§7.9 aprobada fila 2): 7.00 con criterio general 7.00 aprueba[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.9 aprobada fila 3): 6.50 con criterio propio 6.00 aprueba[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.9 aprobada fila 4): 7.50 con criterio propio 8.00 reprueba aunque pase el general[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.9 aprobada fila 5): sin calificación no está aprobada ni reprobada[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-43 (§7.9 aprobada fila 6): parciales 6.99 y 7.00 dan 6.995, que se redondea a 7.00 y aprueba[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\MateriaYAsignaturaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-06: una materia expone la asignatura, el periodo y el docente qu[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una asignatura expone su clave, nombre y grado[39m[90m               [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\ParametrosDeRiesgoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: los parámetros válidos exponen sus cuatro valores[39m[90m            [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-04: los umbrales iguales, el cero, el diez y reprobadas iguales son válidos[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: parámetros incoherentes se rechazan with dataset "observación mayor que sin riesgo"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: parámetros incoherentes se rechazan with dataset "sin riesgo sobre diez"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: parámetros incoherentes se rechazan with dataset "observación bajo cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: parámetros incoherentes se rechazan with dataset "reprobadas de observación en cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: parámetros incoherentes se rechazan with dataset "reprobadas de riesgo menor que las de observación"[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\PeriodoEscolarTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un periodo con fecha_fin posterior a fecha_inicio expone sus[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una fecha_fin igual o anterior a fecha_inicio viola rango_de_fechas_invalido with dataset "mismo día"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una fecha_fin igual o anterior a fecha_inicio viola rango_de_fechas_invalido with dataset "un día antes"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: las fechas se comparan por día aunque traigan hora[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\ResumenAcademicoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 promedio fila 1): 8.00 y 9.00 dan 8.50 y el dato está c[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 promedio fila 2): una materia sin calificar deja el dato incompleto[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 promedio fila 3): sin calificaciones el promedio y el nivel son nulos[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 promedio fila 4): 7.49 y 7.50 dan 7.50 y ninguna reprobada[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 promedio fila 5): 7.00, 7.00 y 8.00 dan 7.33[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.9 promedio fila 6): una sola materia con 6.00 da 6.00, una reprobada y en_riesgo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 promedio fila 7): sin materias el promedio y el nivel son nulos y el dato está incompleto[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: las materias sin calificar no cuentan como reprobadas[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: dos reprobadas con buen promedio dan en_riesgo y una da en_observacion[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05: la asistencia no entra en el nivel de riesgo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-05: el resumen copia el porcentaje de asistencia y es nulo sin registros[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Academico\RiesgoAcademicoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 1): 8.00 sin reprobadas es sin_riesgo[39m[90m       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 2): 7.50 sin reprobadas es sin_riesgo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 3): 7.495 se redondea a 7.50 y es sin_riesgo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 4): 7.49 sin reprobadas es en_observacion[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 5): 7.00 sin reprobadas es en_observacion[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 6): 8.50 con 1 reprobada es en_observacion[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 7): 6.99 sin reprobadas es en_riesgo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 8): 8.50 con 2 reprobadas es en_riesgo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 9): 7.20 con 2 reprobadas es en_riesgo, prevalece el más grave[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 10): 6.50 con 1 reprobada es en_riesgo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.9 riesgo fila 11): sin promedio el nivel es nulo[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 / RNF-09 (§7.9 riesgo fila 12): los umbrales de promedio vienen de los parámetros[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 / RNF-09 (§7.9 riesgo fila 13): el umbral de reprobadas viene del parámetro[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el umbral de reprobadas de observación viene del parámetro[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: las fronteras de 1 y 2 reprobadas con promedio sano[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el promedio se redondea a dos decimales antes de comparar[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Alertas\ConteosDeSancionesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-117: los conteos suman las tarjetas de la temporada y cuentan la[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-117 (P-08b): sin temporada los conteos no incluyen tarjetas, pero sí las faltas[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-117: la ventana de faltas sale del parámetro de días, no del código (RNF-09)[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Alertas\ReglasDeAlertaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-21 (§7.1 fila 1): en_riesgo sin alerta abierta crea la alerta[39m[90m    [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-21 (§7.1 fila 2): en_riesgo con alerta abierta no la duplica[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-21 (§7.1 fila 3): en_observacion sin alerta abierta no crea ninguna[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-21 (§7.1 fila 4): en_observacion con alerta abierta la cierra[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-21 (§7.1 fila 5): sin_riesgo con alerta abierta la cierra[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-21: sin nivel de riesgo (sin datos) no se cumple, y el nivel que activa viene del parámetro, no del código[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 1): 1 tarjeta roja en la temporada activa la acumulación[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 2): 2 tarjetas amarillas en la temporada no la activan[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 3): 3 tarjetas amarillas en la temporada la activan[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 4): 3 faltas en 30 días la activan, con la más antigua en el primer día de la ventana[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 5): 2 faltas y 1 falta justificada en 30 días no la activan[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 6): 3 faltas repartidas en 31 días no la activan[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 7): 1 tarjeta roja de la temporada anterior no la activa[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 8): alerta abierta por 3 faltas; cuando la más antigua sale de la ventana, se cierra[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 9): alerta abierta por 1 tarjeta roja; tras el fin de la temporada, se cierra[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: las tarjetas amarillas y las faltas no se suman entre sí, y las de otra temporada no cuentan[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: la ventana de faltas son los días naturales que terminan en la fecha de cálculo, inclusive, sin importar la hora[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: los umbrales vienen de los parámetros, no del código (RNF-09)[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: unos parámetros de sanciones sin sentido se rechazan with dataset "amarillas en cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: unos parámetros de sanciones sin sentido se rechazan with dataset "rojas en cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: unos parámetros de sanciones sin sentido se rechazan with dataset "faltas en cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: unos parámetros de sanciones sin sentido se rechazan with dataset "ventana en cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: los parámetros mínimos válidos se aceptan y exponen sus valores[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: un registro de tarjetas no admite cantidades negativas with (-1, 0)[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09: un registro de tarjetas no admite cantidades negativas with (0, -1)[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-10 (§7.4 fila 1): no_pasa sin sanciones acumuladas activa el rie[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-10 (§7.4 fila 2): pasa con sanciones acumuladas lo activa[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-10 (§7.4 fila 3): pasa sin sanciones acumuladas no lo activa[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-10 (§7.4 fila 4): datos_insuficientes sin sanciones acumuladas no lo activa[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-10 (§7.4 fila 5): datos_insuficientes con sanciones acumuladas lo activa[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-10: no_pasa con sanciones acumuladas también lo activa, y los resultados son los tres de RN-08[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-22: una alerta se abre si la condición se cumple y no hay abierta, y se cierra si deja de cumplirse with dataset "se cumple, sin abierta"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-22: una alerta se abre si la condición se cumple y no hay abierta, y se cierra si deja de cumplirse with dataset "se cumple, con abierta"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-22: una alerta se abre si la condición se cumple y no hay abierta, y se cierra si deja de cumplirse with dataset "no se cumple, sin abierta"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-22: una alerta se abre si la condición se cumple y no hay abierta, y se cierra si deja de cumplirse with dataset "no se cumple, con abierta"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa with dataset "pasa y no_pasa"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa with dataset "no_pasa y datos_insuficientes"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa with dataset "datos_insuficientes, pasa y no_pasa"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa with dataset "pasa y pasa"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa with dataset "datos_insuficientes y pasa"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa with dataset "solo datos_insuficientes"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa with dataset "un solo entrenador que no pasa"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa with dataset "un solo entrenador que pasa"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-107 (RN-08, RN-10): sin ninguna evaluación guardada el resultado es datos_insuficientes y solo las sanciones activan el riesgo[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-103 (§7.6): la misma tarjeta amarilla registrada por dos entrena[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-103: por partido y tipo de tarjeta cuenta el mayor número registrado por un solo entrenador[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-103: los partidos distintos no se mezclan y cada uno conserva su temporada[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-103 con RN-09: dos partidos con la misma amarilla registrada por dos entrenadores suman 2 y no activan; un tercero sí[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-103: un registro de tarjetas de un entrenador no admite cantidades negativas with (-1, 0)[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-103: un registro de tarjetas de un entrenador no admite cantidades negativas with (0, -1)[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (P-08b): sin temporada que contenga la fecha de cálculo no se cuentan tarjetas, y las faltas sí[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Compartido\HoyDeNegocioTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: 03:30 UTC sigue siendo el día anterior en America/Mexico_Ci[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: un segundo antes de la medianoche local sigue siendo el día anterior, y a la medianoche cambia[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: en una zona adelantada a UTC el día de negocio es el siguiente[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: hoy es la medianoche en la zona de la institución[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Compartido\IdentificadorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: un identificador generado es un UUID v7 valido[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: el identificador generado lleva la marca de tiempo actual en milisegundos[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: dos identificadores generados son distintos[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: identificadores generados en milisegundos distintos se ordenan por tiempo[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: acepta un UUID v7 valido desde texto y lo normaliza a minusculas[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un identificador invalido with dataset "texto cualquiera"[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un identificador invalido with dataset "vacio"[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un identificador invalido with dataset "uuid v4"[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un identificador invalido with dataset "variante incorrecta"[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un identificador invalido with dataset "sin guiones"[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: dos identificadores con el mismo valor son iguales[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Compartido\InstanteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-FIX: el instante se trunca a segundos[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-FIX: el instante en otra zona horaria queda en UTC y truncado[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Compartido\NumeroDecimalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.12 fila 3): 7.495 redondeado a dos decimales es 7.50[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "justo debajo del medio"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "el medio exacto sube"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "justo encima del medio"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "cinco milésimas"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "cuatro milésimas"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "negativo en el medio se aleja del cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "negativo bajo el medio"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "ya con dos decimales"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "sin decimales"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "un decimal"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-04: el redondeo es al medio hacia arriba, también con negativos with dataset "acarreo al redondear"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02 (§7.12 fila 4): 1 entre 3 es 0.33 y 2 entre 3 es 0.67[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02: la división redondea al medio hacia arriba con el dígito siguiente with dataset "termina exactamente en el medio"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02: la división redondea al medio hacia arriba con el dígito siguiente with dataset "cociente exacto"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02: la división redondea al medio hacia arriba con el dígito siguiente with dataset "negativo"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02: la división redondea al medio hacia arriba con el dígito siguiente with dataset "divisor negativo"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02: la división redondea al medio hacia arriba con el dígito siguiente with dataset "escala cero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02: la división redondea al medio hacia arriba con el dígito siguiente with dataset "escala tres"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-02: dividir entre cero lanza una regla de negocio violada[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: una escala negativa es inválida al dividir, al redondear y al escribir[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 5): la suma, la resta y la multiplicación son exactas[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 5): la media es exacta y se redondea al medio hacia arriba[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: la media de una lista vacía lanza una regla de negocio violada[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 5): la comparación es exacta y no depende de los decimales escritos[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: una diferencia más pequeña que dos decimales se distingue al comparar[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepció[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('1,5')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with (' ')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with (' 1')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('1 ')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('1.')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('.5')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('+1')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('1e3')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('--1')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('1.2.3')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('1')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 6): un texto que no es decimal lanza la excepción de dominio with ('8.5.0')[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: la excepción de texto inválido es una regla de negocio con código estable[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el texto válido se normaliza sin perder decimales with dataset "ceros a la izquierda"[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el texto válido se normaliza sin perder decimales with dataset "cero con signo"[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el texto válido se normaliza sin perder decimales with dataset "cero entero"[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el texto válido se normaliza sin perder decimales with dataset "negativo"[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el texto válido se normaliza sin perder decimales with dataset "muchos decimales"[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.12 fila 7): el dominio acepta más de dos decimales y los informa para que la API los rechace[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: la cadena lleva exactamente los decimales pedidos[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el ayudante de la API serializa el decimal como cadena con[39m[90m… [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Compartido\ReglaDeNegocioVioladaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: la excepcion de regla de negocio expone su codigo[39m[90m        [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: la excepcion de regla de negocio se puede lanzar y capturar con su codigo[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un codigo que no esta en snake_case with dataset "vacio"[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un codigo que no esta en snake_case with dataset "con espacios"[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un codigo que no esta en snake_case with dataset "con mayusculas"[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: rechaza un codigo que no esta en snake_case with dataset "con tilde"[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Compartido\RelojTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: el reloj se puede fijar[39m[90m                                  [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: el reloj fijo devuelve la fecha en UTC aunque se fije en otra zona[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T06: el reloj del sistema devuelve la hora actual en UTC[39m[90m      [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Competencia\AdvertenciasDeLesionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-15: en la asistencia, una advertencia por cada lesionado, con su[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-15: solo lesionado advierte; con_molestia y apto no[39m
+  [32;1m✓[39;22m[90m [39m[90mUna sola consulta al puerto por petición, con la lista completa en orden[39m
+  [32;1m✓[39;22m[90m [39m[90mSin jugadores no hay advertencias ni consulta al puerto[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-15: en la convocatoria, la advertencia del lesionado señala jugador_id[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-15: en la convocatoria, un jugador que no está lesionado no advierte with ('apto')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-15: en la convocatoria, un jugador que no está lesionado no advierte with ('con_molestia')[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Competencia\AsistenciaDeEntrenamientoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros por 100, con la falta justificada solo en el denominador with dataset "fila 10 de §7.3"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros por 100, con la falta justificada solo en el denominador with dataset "solo justificada"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros por 100, con la falta justificada solo en el denominador with dataset "todo presente"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros por 100, con la falta justificada solo en el denominador with dataset "redondeo hacia arriba (2 de 3)"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros por 100, con la falta justificada solo en el denominador with dataset "redondeo hacia abajo (1 de 3)"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros por 100, con la falta justificada solo en el denominador with dataset "medio hacia arriba (1 de 8)"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros por 100, con la falta justificada solo en el denominador with dataset "HALF_UP en el tercer decimal (1 de 6)"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§3.4): el porcentaje es presentes entre todos los registros por 100, con la falta justificada solo en el denominador with dataset "sin registros"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11: los conteos se exponen tal cual[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11: un conteo negativo viola conteo_de_asistencia_invalido with (-1, 0, 0)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11: un conteo negativo viola conteo_de_asistencia_invalido with (0, -1, 0)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11: un conteo negativo viola conteo_de_asistencia_invalido with (0, 0, -1)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11: corregir el estado conserva el registro y fija el instante[39m[90m   [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Competencia\CatalogosDeCompetenciaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una temporada con fecha_fin posterior a fecha_inicio expone[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una temporada con fecha_fin igual o anterior a fecha_inicio viola rango_de_fechas_invalido with dataset "mismo día"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una temporada con fecha_fin igual o anterior a fecha_inicio viola rango_de_fechas_invalido with dataset "un día antes"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una temporada con fecha_fin igual o anterior a fecha_inicio viola rango_de_fechas_invalido with dataset "mismo día con horas distintas"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: lugar, rival y torneo exponen sus datos[39m[90m                      [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Competencia\ConvocatoriaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DA-03): una convocatoria nueva no tiene posición ni rol hast[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: el rol de alineación solo es titular o suplente[39m[90m              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: conAlineacion fija o quita la posición y el rol, y tieneAlineacion compara los dos[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Competencia\EntrenamientoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: un entrenamiento que termina igual o antes de empezar viola[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: un entrenamiento que termina igual o antes de empezar viola rango_de_fechas_invalido with ('2026-09-10 22:59:59')[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: un segundo después del inicio ya es un horario válido[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: conDatos cambia solo lo indicado, conserva lo demás y fija el instante[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: conDatos revalida el horario resultante[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (DA-08): conDatos en un entrenamiento realizado o cancelado l[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (DA-08): conDatos en un entrenamiento realizado o cancelado lanza EntrenamientoNoProgramado with (Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Cancelado, 'cancelado'))[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: de programado se pasa a realizado o a cancelado y se fija el instante with (Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Realizado, 'realizado'))[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: de programado se pasa a realizado o a cancelado y se fija el instante with (Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Cancelado, 'cancelado'))[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: cualquier otra transición lanza TransicionNoPermitida en el[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: cualquier otra transición lanza TransicionNoPermitida en el campo estado with (Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Realizado, 'realizado'), Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Cancelado, 'cancelado'))[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: cualquier otra transición lanza TransicionNoPermitida en el campo estado with (Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Realizado, 'realizado'), Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Realizado, 'realizado'))[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: cualquier otra transición lanza TransicionNoPermitida en el campo estado with (Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Cancelado, 'cancelado'), Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Realizado, 'realizado'))[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: cualquier otra transición lanza TransicionNoPermitida en el campo estado with (Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Cancelado, 'cancelado'), Src\Competencia\Dominio\EstadoDeEntrenamiento Enum (Programado, 'programado'))[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: solo un entrenamiento cancelado deja de contar para empalmes[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Competencia\PartidoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 8): el día local de inicia_en se toma en la zona i[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 8): el día local de inicia_en se toma en la zona indicada with dataset "05:59:59 UTC del 16 es el 15 local"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 8): el día local de inicia_en se toma en la zona indicada with dataset "06:00 UTC del 16 ya es el 16 local"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§3.4): el torneo es obligatorio en oficial y torneo, y opcional en amistoso e interno with (Src\Competencia\Dominio\TipoDePartido Enum (Oficial, 'oficial'), true)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§3.4): el torneo es obligatorio en oficial y torneo, y opcional en amistoso e interno with (Src\Competencia\Dominio\TipoDePartido Enum (Torneo, 'torneo'), true)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§3.4): el torneo es obligatorio en oficial y torneo, y opcional en amistoso e interno with (Src\Competencia\Dominio\TipoDePartido Enum (Amistoso, 'amistoso'), false)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§3.4): el torneo es obligatorio en oficial y torneo, y opcional en amistoso e interno with (Src\Competencia\Dominio\TipoDePartido Enum (Interno, 'interno'), false)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12: conDatos reemplaza lo indicado, conserva lo demás y fija el instante[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12: conDatos en un partido jugado o cancelado lanza PartidoNoPro[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: conDatos en un partido jugado o cancelado lanza PartidoNoProgramado with (Src\Competencia\Dominio\EstadoDePartido Enum (Cancelado, 'cancelado'))[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 6): de programado se cancela; un partido jugado o cancelado no se cancela[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 6, parcial hasta T07): un partido cancelado no admite resultado; uno programado sí y pasa a jugado[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 8, DA-33): el resultado acepta 0 y 99 y rechaza lo que sale de ese rango, primero en goles_favor with dataset "límites"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 8, DA-33): el resultado acepta 0 y 99 y rechaza lo que sale de ese rango, primero en goles_favor with dataset "otros límites"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 8, DA-33): el resultado acepta 0 y 99 y rechaza lo[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 8, DA-33): el resultado acepta 0 y 99 y rechaza lo que sale de ese rango, primero en goles_favor with dataset "favor -1"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 8, DA-33): el resultado acepta 0 y 99 y rechaza lo que sale de ese rango, primero en goles_favor with dataset "contra 100"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 8, DA-33): el resultado acepta 0 y 99 y rechaza lo que sale de ese rango, primero en goles_favor with dataset "contra -1"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 8, DA-33): el resultado acepta 0 y 99 y rechaza lo que sale de ese rango, primero en goles_favor with dataset "los dos fuera"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-33): un partido cancelado rechaza el resultado por su estado antes que por el rango[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\CondicionFisica\ImcTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-71: un IMC igual al máximo de la columna se admite[39m[90m               [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-71: un IMC por encima del máximo de la columna responde valor_fu[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-71: el IMC que se valida es el mismo que se guarda[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-70: un rango no configurado lleva su código[39m[90m                      [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\CondicionFisica\MedicionCorporalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-05: el IMC es el peso entre la estatura en metros al cuadrado, a[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "§7.5 fila 2"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "§7.5 fila 3, HALF_UP sobre 12.505"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "justo debajo del medio"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-05: el IMC es el peso entre la estatura en metros al cuadrado, a dos decimales with dataset "límites del rango"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-03: el periodo se deriva de la fecha with dataset "noviembre"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-03: el periodo se deriva de la fecha with dataset "enero"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-03: el periodo se deriva de la fecha with dataset "fin de mes"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-17 c2: corregir reemplaza equipo, fecha y valores, y conserva lo demás[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: dos mediciones con los mismos valores son iguales, aunque se escriban distinto[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: cualquier valor distinto hace que la medición cambie with ('equipo')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: cualquier valor distinto hace que la medición cambie with ('fecha')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: cualquier valor distinto hace que la medición cambie with ('peso')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: cualquier valor distinto hace que la medición cambie with ('estatura')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-16: el rango admite sus dos límites with dataset "mínimo de §5.2[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-16: el rango admite sus dos límites with dataset "máximo de §5.2"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-16: el rango admite sus dos límites with dataset "interior"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-16: fuera del rango se señala el campo with ('19.99')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-16: fuera del rango se señala el campo with ('200.01')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-16: fuera del rango se señala el campo with ('0')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-16: fuera del rango se señala el campo with ('-1')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-16: fuera del rango se señala el campo with ('99999.99')[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.3: las reglas de la medición llevan su código y su campo with da[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.3: las reglas de la medición llevan su código y su campo with da[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.3: una medición ya registrada lleva su código[39m[90m                    [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mReconstruir devuelve la medición con sus valores guardados[39m
+  [32;1m✓[39;22m[90m [39m[90mAU-09: el rango acotado a la columna toma el menor de los dos máximos[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\CondicionFisica\PruebaFisicaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-03: el periodo de la prueba se deriva de la fecha with dataset "[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-03: el periodo de la prueba se deriva de la fecha with dataset "enero"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-18: corregir reemplaza equipo, fecha y resultado, y conserva el tipo y lo demás[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: dos pruebas con los mismos valores son iguales, aunque el resultado se escriba distinto[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: cualquier valor distinto hace que la prueba cambie with ('equipo')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: cualquier valor distinto hace que la prueba cambie with ('fecha')[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-40: cualquier valor distinto hace que la prueba cambie with ('resultado')[39m
+  [32;1m✓[39;22m[90m [39m[90mReconstruir devuelve la prueba con sus valores guardados[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-16: el tipo de prueba guarda su catálogo y valida el resultado c[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.3: el tipo inexistente lleva su código y su campo with dataset "[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.3: una prueba ya registrada lleva su código[39m[90m                      [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-16: el tipo de prueba conserva su identificador[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Consultas\CalculadorDeDesempenoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-18 (§7.5 fila 1): A 8.0, B 6.5, C 7.2 se ordenan A, C, B[39m[90m         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-18 (§7.5 fila 2): A 7.0, B datos insuficientes, C 5.0 se ordenan A, C, B[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-18 (§7.5 fila 3): A 7.0 y B 7.0 conservan el orden de entrada[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-18 (DA-118): los jugadores sin promedio van al final y conservan entre sí el orden de entrada[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-18: el promedio se compara como decimal, no como texto[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-18: una lista vacía queda vacía[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Consultas\MarcaDeDesactualizacionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.7 fila 1, DD-15): una captura de hace 31 días está posib[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.7 fila 2, DD-15): una captura de hace 30 días no lo está[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: una captura de hoy o de ayer no está desactualizada with dataset "hoy"[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: una captura de hoy o de ayer no está desactualizada with dataset "ayer"[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: sin ninguna captura no hay nada que marcar como desactualizado[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (m5): el día de la captura se cuenta en la zona de hoy de negocio, no en UTC[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-09: el número de días viene por parámetro, no es una constante[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-09: un parámetro de días menor que 1 se rechaza with (0)[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-09: un parámetro de días menor que 1 se rechaza with (-5)[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Herramientas\ConfiguracionDePhpstanTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-11 (M-1, F1-H5-T00): PHPStan analiza en nivel 8 o más[39m[90m           [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-11 (M-1): PHPStan no ignora errores, no excluye rutas ni usa lí[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-11 (M-1): PHPStan solo incluye configuración de vendor/ y analiza app, bootstrap, routes, src y tests[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Herramientas\GuionDeHumoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-T15: un paso con un código HTTP distinto del esperado detiene[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-T15: un paso cuyo cuerpo no cumple la condición detiene el gu[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-T15: un paso correcto imprime OK y el guion sigue[39m[90m             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-T15: humo-h2.sh se detiene ante cualquier error, declara la c[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T09: humo-h3.sh se detiene en el paso 1 con FALLA y código 1[39m[90m… [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T09: humo-h3.sh se detiene en el paso 2 con FALLA y código 1[39m[90m… [39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T09: el paso 12 se detiene con FALLA y código 1 si el 404 no[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T09: el paso 12 se detiene con FALLA y código 1 si el código[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T09: el paso 12 imprime OK y el guion sigue si el 404 es igua[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T06: humo-h4.sh se detiene en el paso 1 con FALLA y código 1[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T06: humo-h4.sh se detiene en el paso 2 con FALLA y código 1[39m[90m… [39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T06 (m-6): el humo_igual de humo-h4.sh se detiene con FALLA y[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T06 (m-6): el humo_igual de humo-h4.sh imprime OK y el guion[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T06: humo-h4.sh se detiene ante cualquier error y recorre los[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T09: humo-h3.sh se detiene ante cualquier error y recorre los[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1[39m[90m… [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T09: humo-h5.sh se detiene en el paso 1 con FALLA y código 1[39m[90m… [39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T09: el humo_igual de humo-h5.sh se detiene con FALLA y códig[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T09: humo-h5.sh se detiene ante cualquier error y recorre los[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Herramientas\NoNuloTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T00: NoNulo devuelve el valor cuando no es nulo[39m[90m               [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T00: NoNulo hace fallar la prueba con un mensaje que dice qué faltaba[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Herramientas\PestEnParaleloTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS DA-101: make verificar corre Pest en paralelo con un n[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS DA-101: el paso de Pest conserva la cobertura y escrib[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS DA-101: pcov mide todo el proyecto en el proceso principal y en los procesos hijos[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Herramientas\VerificarCoberturaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS cobertura: falla si Dominio queda en 94.9 %[39m[90m            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS cobertura: pasa en 95.0 %[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS cobertura: falla si Aplicación queda bajo 85 %[39m[90m         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS cobertura: falla si Infraestructura y HTTP queda bajo[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS cobertura: una capa sin archivos no falla[39m[90m              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS cobertura: falla si el reporte no existe[39m[90m               [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-02: si el clover no existe, falla con «El reporte Clover no exis[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-02: el guion borra el clover tras leerlo, apruebe o no los umbra[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-02: el guion borra el clover tras leerlo, apruebe o no los umbra[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-02: un clover que no se puede leer también se borra[39m[90m              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-02: una segunda verificación sin regenerar el clover falla, aunq[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-02 (M-g): si el clover no se puede borrar, falla con «El reporte[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Herramientas\VerificarMutacionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación: pasa si Infection no omitió ni descartó ning[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación: falla si un solo mutante agotó el tiempo[39m[90m     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación: falla si Infection omitió mutantes (Skipped)[39m[90m [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación: informa los dos problemas cuando hay mutante[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación: falla si el resumen no existe[39m[90m                [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación: falla si el resumen no trae los contadores[39m[90m   [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación: falla si Infection no generó ningún mutante[39m[90m  [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación (M-10 a): Infection escribe el resumen en la[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación (F1-H3-FIX, enmienda a DD-53): make verificar ya no corre Infection; make mutacion sí[39m
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación (M-10 b): los mutantes con error se cuentan c[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHERRAMIENTAS mutación (M-10 b): los ignorados no hacen fallar, y la[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Identidad\PoliticaDeContrasenaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: contraseña de 9 caracteres no cumple[39m[90m                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: contraseña de 10 caracteres cumple[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: la longitud se cuenta en caracteres y no en bytes[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: una longitud mínima menor que 1 es inválida[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Identidad\UsuarioTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10 (HU-01 fila 6): la quinta contraseña incorrecta bloquea 15 m[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10 (HU-01 fila 8): a los 14 min 59 s del bloqueo sigue bloqueado[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10 (HU-01 fila 9): a los 15 min 00 s el bloqueo vence y el acceso reinicia el contador[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10 (HU-01 fila 10): cuatro fallos y un acierto reinician el contador[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10 (HU-01 fila 11): un fallo con el bloqueo vencido reinicia el contador en 1[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: los parámetros del bloqueo salen de los argumentos y no del código[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-19: un usuario nuevo nace activo, sin intentos y con sus roles[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-19: un usuario reconstituido conserva todos sus datos[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: cambiar la contraseña reemplaza el hash[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: un acceso correcto reinicia el contador y levanta el bloqueo[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Plantel\EntidadesDePlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una categoría expone su identificador, nombre e instante de[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: un equipo expone su identificador, nombre, categoría e insta[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: un jugador registrado expone sus datos y nace activo en lo a[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Rendimiento\CalculoDeDesempenoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 1): con cuatro de cinco calificaciones el resultad[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 2): con cinco calificaciones (7, 7, 8, 6, 5) el promedio es 6.60 y pasa[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 3): con (5, 5, 6, 6, 5) el promedio es 5.40 y no pasa[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 4): un promedio exactamente igual al umbral pasa[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-08: con más de N calificaciones solo cuentan las N más recientes[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-08 (v1.0.5): se compara el promedio ya redondeado: 5.875 se redondea a 5.88 y con umbral 5.88 pasa[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-08: un umbral con decimales compara en el borde[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-08: con ventana 1 cuenta solo la última; sin calificaciones son datos insuficientes con cero partidos[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-08: los códigos de resultado son los del CHECK de evaluaciones_rendimiento[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-16: una evaluación guarda el criterio aplicado, su procedencia,[39m[90m… [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Rendimiento\CategoriaDeCalificacionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (DD-09): cada calificación general de 1 a 10 cae en su catego[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (DD-09): cada calificación general de 1 a 10 cae en su categoría de texto with (4, Src\Rendimiento\Dominio\CategoriaDeCalificacion Enum (Deficiente, 'deficiente'))[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (DD-09): cada calificación general de 1 a 10 cae en su categoría de texto with (5, Src\Rendimiento\Dominio\CategoriaDeCalificacion Enum (Regular, 'regular'))[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (DD-09): cada calificación general de 1 a 10 cae en su categoría de texto with (6, Src\Rendimiento\Dominio\CategoriaDeCalificacion Enum (Regular, 'regular'))[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (DD-09): cada calificación general de 1 a 10 cae en su categoría de texto with (7, Src\Rendimiento\Dominio\CategoriaDeCalificacion Enum (Bueno, 'bueno'))[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (DD-09): cada calificación general de 1 a 10 cae en su categoría de texto with (8, Src\Rendimiento\Dominio\CategoriaDeCalificacion Enum (Bueno, 'bueno'))[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (DD-09): cada calificación general de 1 a 10 cae en su categoría de texto with (9, Src\Rendimiento\Dominio\CategoriaDeCalificacion Enum (Sobresaliente, 'sobresaliente'))[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (DD-09): cada calificación general de 1 a 10 cae en su categoría de texto with (10, Src\Rendimiento\Dominio\CategoriaDeCalificacion Enum (Sobresaliente, 'sobresaliente'))[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06: los códigos de las categorías son los que viajan en categoria_calificacion[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06: una calificación fuera de 1 a 10 no tiene categoría with (0)[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-06: una calificación fuera de 1 a 10 no tiene categoría with (11)[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Rendimiento\CriterioDeEvaluacionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (RNF-09): el criterio acepta los extremos de la calificación[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (RNF-09): el criterio acepta los extremos de la calificación mínima y de la ventana with ('10.00', 32767)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (RNF-09): el criterio acepta los extremos de la calificación mínima y de la ventana with ('6.5', 5)[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): una calificación mínima o una ventana fuera de[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): una calificación mínima o una ventana fuera de rango da valor_fuera_de_rango en su campo with dataset "calificación 0.99"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): una calificación mínima o una ventana fuera de rango da valor_fuera_de_rango en su campo with dataset "calificación 10.01"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): una calificación mínima o una ventana fuera de rango da valor_fuera_de_rango en su campo with dataset "ventana 0"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): una calificación mínima o una ventana fuera de rango da valor_fuera_de_rango en su campo with dataset "ventana negativa"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): una calificación mínima o una ventana fuera de rango da valor_fuera_de_rango en su campo with dataset "ventana sobre el límite técnico"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): una calificación mínima o una ventana fuera de rango da valor_fuera_de_rango en su campo with dataset "la calificación se valida antes que la ventana"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla propia guarda a su autor y no es de fábrica[39m[90m    [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla sin autor es de fábrica[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15: un umbral conserva el criterio, la plantilla de procedencia[39m[90m… [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Rendimiento\RendimientoDePartidoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3): los datos de juego aceptan los extremos de cada rango[39m[90m [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "minutos -1"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "minutos 151"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "amarillas -1"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "amarillas 3"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "rojas -1"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "rojas 2"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "calificación 0"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "calificación 11"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "observación de 501"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3, RNF-03): un dato de juego fuera de rango lanza valor_fuera_de_rango en su campo with dataset "varios: se señala el primero"[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14: corregir los datos de juego cambia solo lo indicado y vuelve a validar[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-07): una métrica admite valores dentro de su mínimo y máx[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: con las obligatorias dentro de rango, devuelve un valor por[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3): una métrica que no es de la posición lanza metrica_no[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3): si falta una obligatoria lanza metrica_obligatoria_fa[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§3.3): un valor fuera del rango de su métrica lanza valor_fuera_de_rango en metricas.N.valor[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14: primero se señala la métrica que no aplica, luego la obligatoria que falta y después el rango[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14: corregir un rendimiento conserva su identidad y reemplaza lo[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: las excepciones de campo llevan su código estable[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Salud\AvisoDeLesionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-19 c1: un aviso nuevo queda pendiente, sin confirmación ni desca[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-19 c2: el aviso conserva que lo reportó el jugador[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-30 c3: descartar deja el aviso descartado con su autor, su nota y el instante, sin tocar el original[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-30 c3: descartar conserva que lo reportó el jugador[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.3: un aviso que ya no está pendiente no se descarta with dataset[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.3: un aviso que ya no está pendiente no se descarta with dataset "confirmado"[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.3: el código de AvisoNoPendiente es aviso_no_pendiente[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-58: la nota la ve quien la escribió, no otro usuario[39m
+  [32;1m✓[39;22m[90m [39m[90mDD-58: la nota de un aviso confirmado la ven quien la escribió y quien lo confirmó[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-11: en un aviso descartado, quien descartó no ve la nota si no la escribió[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-11: la nota del descarte la ven quien descartó y quien creó el aviso[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-11: un aviso sin descarte no tiene nota del descarte para nadie[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.2: es_propio solo para quien creó el aviso[39m
+  [32;1m✓[39;22m[90m [39m[90m§5.1: los valores de EstadoDeAviso son los de la tabla[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-20 c1: confirmar deja el aviso confirmado con su autor y el instante, sin tocar el original[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.3: un aviso que ya no está pendiente no se confirma with dataset "descartado"[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.3: un aviso que ya no está pendiente no se confirma with dataset "confirmado"[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Salud\EstadoOficialTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-20 c1: un estado con lesión guarda su tipo, lesión, fecha y regi[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-57: un estado apto no tiene lesión ni fecha estimada[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-14: cerrar pone vigente_hasta y conserva lo demás, sin tocar el original[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-30: un estado no se cierra en el mismo instante en que se abrió,[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-30: un estado no se cierra en el mismo instante en que se abrió, ni antes with dataset "antes"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-30: un estado se cierra un segundo después de abrirse[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-14: cambiar la fecha conserva la misma fila, sin tocar el original[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-14: cambiar el estado abre otro con la misma lesión y el mismo registrante[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-16: solo el registrante modifica un estado con lesión[39m[90m            [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§3.4: un estado apto no se modifica, tampoco por quien lo sostiene[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "ayer"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "hoy"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-09: requiere actualización si la fecha estimada es anterior a hoy with dataset "mañana"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-09: un estado apto no requiere actualización[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.3: los códigos de las reglas del estado[39m
+  [32;1m✓[39;22m[90m [39m[90m§5.1: los valores de TipoDeEstado son los de la tabla[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-56: al crearse, el estado tiene actualizadoEn igual al instante with dataset "con lesión"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-56: al crearse, el estado tiene actualizadoEn igual al instante with dataset "apto"[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-56: cambiar la fecha fija actualizadoEn en el instante del cambio y conserva vigenteDesde[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-56: cerrar y abrir el sucesor fijan actualizadoEn en el instante del cambio[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Salud\LesionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-20 c1: registrar una lesión guarda su detalle, sin fecha de alta[39m[90m [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-17: la fecha estimada no puede ser anterior al inicio; la misma[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-17: comprobar una fecha nueva de regreso sigue la misma regla[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-30 c1: dar de alta pone la fecha y el instante y conserva el detalle, sin tocar la original[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-17: la fecha de alta no puede ser anterior al inicio; la misma fecha sí[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.2: corregir cambia solo lo enviado y conserva lo demás, sin tocar la original[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.2: corregir admite tipo, causa y nota[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "sin cambios"[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "tipo"[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "zona"[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "causa"[39m
+  [32;1m✓[39;22m[90m [39m[90m§6.2: tieneElMismoDetalleQue compara tipo, zona, causa y nota with dataset "nota"[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-15: esDe solo para quien la registró[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-17: el código de la regla es rango_de_fechas_invalido[39m
+  [32;1m✓[39;22m[90m [39m[90m§5.1: los valores de CausaDeLesion son los de la tabla[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\AlcanceDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la lista de usos autorizados sin alcance es exactamente la[39m[90m… [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: el detector marca consultas de jugadores sin alcance y deja[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un archivo exento no se revisa[39m[90m                              [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: ninguna consulta de jugadores en src ni app evita AlcanceDe[39m[90m…[39m [90m6.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la implementación del alcance existe donde la lista la espe[39m[90m…[39m [90m0.11s[39m  
+
+Fatal error: Allowed memory size of 134217728 bytes exhausted (tried to allocate 2097152 bytes) in /var/www/html/vendor/nikic/php-parser/lib/PhpParser/Lexer.php on line 31
+Fatal error: Premature end of PHP process when running P\Tests\Arch\ArquitecturaTest::__pest_evaluable_F1_H0_T05__el_dominio_no_depende_del_framework.
+make: *** [Makefile:40: pruebas] Error 2

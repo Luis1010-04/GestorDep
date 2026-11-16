@@ -1,0 +1,52 @@
+﻿docker compose exec -T app bash bin/con-candado.sh composer verificar
+make : Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+En línea: 1 Carácter: 619
++ ... ruebas.txt; "pruebas exit=$LASTEXITCODE"; make verificar 2>&1 | Out-F ...
++                                               ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Entrada estanda...tope de 20 min.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ...................................................................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 979 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php       
+ ------ ----------------------------------------------------------------------- 
+  52     Parameter #1 $callback of method                                       
+         Illuminate\Database\Query\Builder::whereExists() expects               
+         Closure|Illuminate\Database\Eloquent\Builder<*>|Illuminate\Database\Q  
+         uery\Builder, callable(): mixed given.                                 
+         🪪  argument.type                                                      
+  62     Parameter #1 $callback of method                                       
+         Illuminate\Database\Query\Builder::whereExists() expects               
+         Closure|Illuminate\Database\Eloquent\Builder<*>|Illuminate\Database\Q  
+         uery\Builder, callable(): mixed given.                                 
+         🪪  argument.type                                                      
+  269    Cannot access property $presentes on stdClass|null.                    
+         🪪  property.nonObject                                                 
+  270    Cannot access property $actualizado_en on stdClass|null.               
+         🪪  property.nonObject                                                 
+ ------ ----------------------------------------------------------------------- 
+
+
+ [ERROR] Found 4 errors                                                         
+
+Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with 
+error code 1
+make: *** [Makefile:32: verificar] Error 1

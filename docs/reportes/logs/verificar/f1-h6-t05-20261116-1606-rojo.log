@@ -1,0 +1,653 @@
+﻿docker : Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+En línea: 1 Carácter: 355
++ ... \GestorDep; docker compose exec -T app bash bin/con-candado.sh php ve ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Entrada estanda...tope de 20 min.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Consultas\CalculadorDeDesempenoTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mRN-18 (§7.5 fila 1): A 8.0, B 6.5, C 7.2 se ordenan A, C, B[39m[90m         [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-18 (§7.5 fila 2): A 7.0, B datos insuficientes, C 5.0 se ordenan[39m[90m…[39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-18 (§7.5 fila 3): A 7.0 y B 7.0 conservan el orden de entrada[39m
+  [31;1m⨯[39;22m[90m [39m[90mRN-18 (DA-118): los jugadores sin promedio van al final y conservan[39m[90m…[39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-18: el promedio se compara como decimal, no como texto[39m
+  [31;1m⨯[39;22m[90m [39m[90mRN-18: una lista vacía queda vacía[39m[90m                                  [39m [90m0.01s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Consultas\OrdenPorDesempenoTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mRN-18 (§7.5 fila 1, por la ruta): P1 8.0, D1 6.5 y M1 7.2 se ordena[39m[90m…[39m [90m6.54s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-18 (§7.5 fila 2, por la ruta): P1 7.0, D1 datos insuficientes y[39m[90m… [39m [90m0.48s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-18 (§7.5 fila 3, por la ruta): P1 7.0 y D1 7.0 conservan el orde[39m[90m…[39m [90m0.41s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-18 (DA-106): el orden usa la última evaluación de cada jugador,[39m[90m… [39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-14 (DA-95): el orden usa solo las evaluaciones del entrenador qu[39m[90m…[39m [90m0.40s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-95: el orden se calcula sobre todos los jugadores y después se p[39m[90m…[39m [90m0.41s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRNF-01 (RN-23): la lista del equipo no incluye jugadores en baja[39m[90m    [39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un entrenador que no entrena el equipo, un equipo inexisten[39m[90m…[39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24: el docente recibe 403 y sin sesión 401 en la lista del equip[39m[90m…[39m [90m0.41s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRNF-01 (DA-119): un parámetro de paginación inválido responde 422[39m[90m   [39m [90m0.46s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Consultas\VistaParaConvocarTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (§7.7): una última medición de hace 31 días marca estado_fisi[39m[90m…[39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (§7.7): una última medición de hace 30 días no la marca[39m[90m       [39m [90m0.43s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRNF-09 (DA-98): los días de desactualización salen de la tabla de p[39m[90m…[39m [90m0.39s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (§7.7): sin evaluación de rendimiento, rendimiento_reciente t[39m[90m…[39m [90m0.39s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-106 (plan §4): el promedio de rendimiento_reciente es el de las[39m[90m… [39m [90m1.81s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-14 (§7.7, DD-17): con dos entrenadores en dos equipos, cada uno[39m[90m… [39m [90m0.43s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-119: filtro[equipo_id] fija el equipo de rendimiento_reciente; s[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-119 (RNF-01): un equipo que el consultante no entrena, o donde e[39m[90m…[39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-119: un filtro[equipo_id] que no es UUID responde 422 con filtro[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (RN-23): un jugador sin alcance, en baja o inexistente respo[39m[90m…[39m [90m0.50s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24: el docente recibe 403 y sin sesión 401[39m[90m                       [39m [90m0.43s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (DA-94): disponibilidad trae el estado oficial, la fecha de r[39m[90m…[39m [90m0.41s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (DA-94): sin estado guardado, disponibilidad es apto, sin fec[39m[90m…[39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (DA-94, RN-13): situacion_academica trae el resumen simplific[39m[90m…[39m [90m0.44s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (DA-94): sin periodo vigente, situacion_academica trae period[39m[90m…[39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (DA-94): con periodo vigente pero sin resumen calculado, el d[39m[90m…[39m [90m0.41s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (DA-94): estado_fisico trae la última medición y la última pr[39m[90m…[39m [90m0.45s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-111: asistencia.equipo cuenta la asistencia de los equipos del c[39m[90m…[39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (DA-94): el jugador de la vista lleva id, nombres, apellidos[39m[90m… [39m [90m0.38s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRNF-01: la vista no escribe nada en la base[39m[90m                         [39m [90m0.38s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Consultas\ContratoDeVistaParaConvocarTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mHU-24 (DA-94, DA-119): las respuestas de la vista para convocar y d[39m[90m…[39m [90m1.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Consultas\CalculadorDeDesempenoTest[22m [90m>[39m RN-18 (§7… [41;1m Error [49;22m  
+[39;1m  Class "Src\Consultas\Aplicacion\CalculadorDeDesempeno" not found[39;22m
+
+  at [32mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39m:[32m15[39m
+     11▕  * @return list<string> los nombres, en orden
+     12▕  */
+     13▕ function desempenoOrdenar(array $jugadores): array
+     14▕ {
+  ➜  15▕     $orden = (new CalculadorDeDesempeno)->ordenar(
+     16▕         $jugadores,
+     17▕         fn (array $jugador): ?NumeroDecimal => $jugador[1] === null ? null : NumeroDecimal::desdeTexto($jugador[1]),
+     18▕     );
+     19▕
+
+  [33m1   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m15[39;22m
+  [33m2   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m24[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Consultas\CalculadorDeDesempenoTest[22m [90m>[39m RN-18 (§7… [41;1m Error [49;22m  
+[39;1m  Class "Src\Consultas\Aplicacion\CalculadorDeDesempeno" not found[39;22m
+
+  at [32mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39m:[32m15[39m
+     11▕  * @return list<string> los nombres, en orden
+     12▕  */
+     13▕ function desempenoOrdenar(array $jugadores): array
+     14▕ {
+  ➜  15▕     $orden = (new CalculadorDeDesempeno)->ordenar(
+     16▕         $jugadores,
+     17▕         fn (array $jugador): ?NumeroDecimal => $jugador[1] === null ? null : NumeroDecimal::desdeTexto($jugador[1]),
+     18▕     );
+     19▕
+
+  [33m1   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m15[39;22m
+  [33m2   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m28[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Consultas\CalculadorDeDesempenoTest[22m [90m>[39m RN-18 (§7… [41;1m Error [49;22m  
+[39;1m  Class "Src\Consultas\Aplicacion\CalculadorDeDesempeno" not found[39;22m
+
+  at [32mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39m:[32m15[39m
+     11▕  * @return list<string> los nombres, en orden
+     12▕  */
+     13▕ function desempenoOrdenar(array $jugadores): array
+     14▕ {
+  ➜  15▕     $orden = (new CalculadorDeDesempeno)->ordenar(
+     16▕         $jugadores,
+     17▕         fn (array $jugador): ?NumeroDecimal => $jugador[1] === null ? null : NumeroDecimal::desdeTexto($jugador[1]),
+     18▕     );
+     19▕
+
+  [33m1   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m15[39;22m
+  [33m2   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m32[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Consultas\CalculadorDeDesempenoTest[22m [90m>[39m RN-18 (DA… [41;1m Error [49;22m  
+[39;1m  Class "Src\Consultas\Aplicacion\CalculadorDeDesempeno" not found[39;22m
+
+  at [32mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39m:[32m15[39m
+     11▕  * @return list<string> los nombres, en orden
+     12▕  */
+     13▕ function desempenoOrdenar(array $jugadores): array
+     14▕ {
+  ➜  15▕     $orden = (new CalculadorDeDesempeno)->ordenar(
+     16▕         $jugadores,
+     17▕         fn (array $jugador): ?NumeroDecimal => $jugador[1] === null ? null : NumeroDecimal::desdeTexto($jugador[1]),
+     18▕     );
+     19▕
+
+  [33m1   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m15[39;22m
+  [33m2   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Consultas\CalculadorDeDesempenoTest[22m [90m>[39m RN-18: el… [41;1m Error [49;22m  
+[39;1m  Class "Src\Consultas\Aplicacion\CalculadorDeDesempeno" not found[39;22m
+
+  at [32mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39m:[32m15[39m
+     11▕  * @return list<string> los nombres, en orden
+     12▕  */
+     13▕ function desempenoOrdenar(array $jugadores): array
+     14▕ {
+  ➜  15▕     $orden = (new CalculadorDeDesempeno)->ordenar(
+     16▕         $jugadores,
+     17▕         fn (array $jugador): ?NumeroDecimal => $jugador[1] === null ? null : NumeroDecimal::desdeTexto($jugador[1]),
+     18▕     );
+     19▕
+
+  [33m1   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m15[39;22m
+  [33m2   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m41[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Consultas\CalculadorDeDesempenoTest[22m [90m>[39m RN-18: un… [41;1m Error [49;22m  
+[39;1m  Class "Src\Consultas\Aplicacion\CalculadorDeDesempeno" not found[39;22m
+
+  at [32mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39m:[32m15[39m
+     11▕  * @return list<string> los nombres, en orden
+     12▕  */
+     13▕ function desempenoOrdenar(array $jugadores): array
+     14▕ {
+  ➜  15▕     $orden = (new CalculadorDeDesempeno)->ordenar(
+     16▕         $jugadores,
+     17▕         fn (array $jugador): ?NumeroDecimal => $jugador[1] === null ? null : NumeroDecimal::desdeTexto($jugador[1]),
+     18▕     );
+     19▕
+
+  [33m1   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m15[39;22m
+  [33m2   [39m[39;1mtests/Unit/Consultas/CalculadorDeDesempenoTest.php[39;22m:[39;1m45[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m RN-18 (§7.5 fila…    
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m18[39m
+     14▕  */
+     15▕ function ordenIds(TestCase $prueba, array $m, string $consulta = '', string $correo = 'e1@x.com'): array
+     16▕ {
+     17▕     /** @var list<array{jugador: array{id: string}}> $filas */
+  ➜  18▕     $filas = convocarPedir($prueba, convocarRutaDelEquipo($m['a'], $consulta), $correo)->assertOk()->json('datos');
+     19▕ 
+     20▕     return array_map(fn (array $fila): string => $fila['jugador']['id'], $filas);
+     21▕ }
+     22▕
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39;22m:[39;1m30[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m RN-18 (§7.5 fila…    
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m18[39m
+     14▕  */
+     15▕ function ordenIds(TestCase $prueba, array $m, string $consulta = '', string $correo = 'e1@x.com'): array
+     16▕ {
+     17▕     /** @var list<array{jugador: array{id: string}}> $filas */
+  ➜  18▕     $filas = convocarPedir($prueba, convocarRutaDelEquipo($m['a'], $consulta), $correo)->assertOk()->json('datos');
+     19▕ 
+     20▕     return array_map(fn (array $fila): string => $fila['jugador']['id'], $filas);
+     21▕ }
+     22▕
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39;22m:[39;1m40[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m RN-18 (§7.5 fila…    
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m18[39m
+     14▕  */
+     15▕ function ordenIds(TestCase $prueba, array $m, string $consulta = '', string $correo = 'e1@x.com'): array
+     16▕ {
+     17▕     /** @var list<array{jugador: array{id: string}}> $filas */
+  ➜  18▕     $filas = convocarPedir($prueba, convocarRutaDelEquipo($m['a'], $consulta), $correo)->assertOk()->json('datos');
+     19▕ 
+     20▕     return array_map(fn (array $fila): string => $fila['jugador']['id'], $filas);
+     21▕ }
+     22▕
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39;22m:[39;1m49[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m RN-18 (DA-106): e…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m18[39m
+     14▕  */
+     15▕ function ordenIds(TestCase $prueba, array $m, string $consulta = '', string $correo = 'e1@x.com'): array
+     16▕ {
+     17▕     /** @var list<array{jugador: array{id: string}}> $filas */
+  ➜  18▕     $filas = convocarPedir($prueba, convocarRutaDelEquipo($m['a'], $consulta), $correo)->assertOk()->json('datos');
+     19▕ 
+     20▕     return array_map(fn (array $fila): string => $fila['jugador']['id'], $filas);
+     21▕ }
+     22▕
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39;22m:[39;1m59[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m RN-14 (DA-95): el…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m18[39m
+     14▕  */
+     15▕ function ordenIds(TestCase $prueba, array $m, string $consulta = '', string $correo = 'e1@x.com'): array
+     16▕ {
+     17▕     /** @var list<array{jugador: array{id: string}}> $filas */
+  ➜  18▕     $filas = convocarPedir($prueba, convocarRutaDelEquipo($m['a'], $consulta), $correo)->assertOk()->json('datos');
+     19▕ 
+     20▕     return array_map(fn (array $fila): string => $fila['jugador']['id'], $filas);
+     21▕ }
+     22▕
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39;22m:[39;1m68[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m DA-95: el orden s…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m78[39m
+     74▕     convocarEvaluar($m['p1'], $m['a'], $m['e1'], 'pasa', '8.00');
+     75▕     convocarEvaluar($m['m1'], $m['a'], $m['e1'], 'pasa', '7.20');
+     76▕     convocarEvaluar($m['d1'], $m['a'], $m['e1'], 'pasa', '6.50');
+     77▕ 
+  ➜  78▕     $segunda = convocarPedir($this, convocarRutaDelEquipo($m['a'], 'por_pagina=2&pagina=2'))->assertOk();
+     79▕ 
+     80▕     /** @var list<array{jugador: array{id: string}}> $filas */
+     81▕     $filas = $segunda->json('datos');
+     82▕     expect(array_map(fn (array $fila): string => $fila['jugador']['id'], $filas))->toBe([$m['d1'], $m['f1']])
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m RNF-01 (RN-23): l…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m18[39m
+     14▕  */
+     15▕ function ordenIds(TestCase $prueba, array $m, string $consulta = '', string $correo = 'e1@x.com'): array
+     16▕ {
+     17▕     /** @var list<array{jugador: array{id: string}}> $filas */
+  ➜  18▕     $filas = convocarPedir($prueba, convocarRutaDelEquipo($m['a'], $consulta), $correo)->assertOk()->json('datos');
+     19▕ 
+     20▕     return array_map(fn (array $fila): string => $fila['jugador']['id'], $filas);
+     21▕ }
+     22▕
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39;22m:[39;1m92[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m HU-24: el docente…   
+[39;1m  Expected response status code [403] but received 404.
+Failed asserting that 404 is identical to 403.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m112[39m
+    108▕ test('HU-24: el docente recibe 403 y sin sesión 401 en la lista del equipo', function () {
+    109▕     /** @var TestCase $this */
+    110▕     $m = convocarMundo();
+    111▕ 
+  ➜ 112▕     convocarPedir($this, convocarRutaDelEquipo($m['a']), 'd@x.com')->assertForbidden();
+    113▕     sesionesPeticion($this, 'GET', convocarRutaDelEquipo($m['a']))->assertUnauthorized();
+    114▕ });
+    115▕ 
+    116▕ test('RNF-01 (DA-119): un parámetro de paginación inválido responde 422', function () {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\OrdenPorDesempenoTest[22m [90m>[39m RNF-01 (DA-119):…    
+[39;1m  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.[39;22m
+
+  at [32mtests/Feature/Consultas/OrdenPorDesempenoTest.php[39m:[32m120[39m
+    116▕ test('RNF-01 (DA-119): un parámetro de paginación inválido responde 422', function () {
+    117▕     /** @var TestCase $this */
+    118▕     $m = convocarMundo();
+    119▕ 
+  ➜ 120▕     convocarPedir($this, convocarRutaDelEquipo($m['a'], 'por_pagina=500'))->assertUnprocessable();
+    121▕ });
+    122▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m HU-24 (§7.7): una…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m17[39m
+     13▕     /** @var TestCase $this */
+     14▕     $m = convocarMundo();
+     15▕     convocarMedir($m['f1'], $m['a'], $m['e1'], '2026-08-31');
+     16▕ 
+  ➜  17▕     $estado = convocarPedir($this, convocarRuta($m['f1']))->assertOk()->json('datos.estado_fisico');
+     18▕ 
+     19▕     expect($estado['posiblemente_desactualizado'])->toBeTrue()
+     20▕         ->and($estado['actualizado_en'])->toBe('2026-08-31T18:00:00+00:00');
+     21▕ });
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m HU-24 (§7.7): una…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m28[39m
+     24▕     /** @var TestCase $this */
+     25▕     $m = convocarMundo();
+     26▕     convocarMedir($m['f1'], $m['a'], $m['e1'], '2026-09-01');
+     27▕ 
+  ➜  28▕     expect(convocarPedir($this, convocarRuta($m['f1']))->assertOk()->json('datos.estado_fisico.posiblemente_desactualizado'))->toBeFalse();
+     29▕ });
+     30▕ 
+     31▕ test('RNF-09 (DA-98): los días de desactualización salen de la tabla de parámetros; cambiarlos cambia la marca', function () {
+     32▕     /** @var TestCase $this */
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m RNF-09 (DA-98): l…   
+[39;1m  Failed asserting that null is false.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m35[39m
+     31▕ test('RNF-09 (DA-98): los días de desactualización salen de la tabla de parámetros; cambiarlos cambia la marca', function () {
+     32▕     /** @var TestCase $this */
+     33▕     $m = convocarMundo();
+     34▕     convocarMedir($m['f1'], $m['a'], $m['e1'], '2026-09-20');
+  ➜  35▕     expect(convocarPedir($this, convocarRuta($m['f1']))->json('datos.estado_fisico.posiblemente_desactualizado'))->toBeFalse();
+     36▕ 
+     37▕     DB::connection('propietario')->table('parametros_institucionales')->where('clave', 'desactualizacion')->update(['valor' => json_encode(['dias' => 10])]);
+     38▕ 
+     39▕     expect(convocarPedir($this, convocarRuta($m['f1']))->json('datos.estado_fisico.posiblemente_desactualizado'))->toBeTrue();
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/VistaParaConvocarTest.php[39;22m:[39;1m35[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m HU-24 (§7.7): sin…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m46[39m
+     42▕ test('HU-24 (§7.7): sin evaluación de rendimiento, rendimiento_reciente trae promedio nulo y resultado datos_insuficientes', function () {
+     43▕     /** @var TestCase $this */
+     44▕     $m = convocarMundo();
+     45▕ 
+  ➜  46▕     $respuesta = convocarPedir($this, convocarRuta($m['j2']))->assertOk();
+     47▕ 
+     48▕     expect($respuesta->json('datos.rendimiento_reciente'))->toBe(['promedio' => null, 'resultado' => 'datos_insuficientes', 'actualizado_en' => null, 'posiblemente_desactualizado' => false])
+     49▕         ->and($respuesta->json('datos.progreso'))->toBe(['primero' => null, 'ultimo' => null, 'actualizado_en' => null, 'posiblemente_desactualizado' => false])
+     50▕         ->and($respuesta->json('datos.estado_fisico'))->toBe(['ultima_medicion' => null, 'pruebas' => [], 'actualizado_en' => null, 'posiblemente_desactualizado' => false]);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m DA-106 (plan §4):…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m62[39m
+     58▕         ->where('rendimiento.jugador_id', $m['f1'])->where('rendimiento.registrado_por', $m['e1'])
+     59▕         ->orderByDesc('partido.inicia_en')->limit(5)->pluck('rendimiento.calificacion_general')->all();
+     60▕     $esperado = number_format(array_sum($ultimas) / count($ultimas), 2, '.', '');
+     61▕ 
+  ➜  62▕     $vista = convocarPedir($this, convocarRuta($m['f1']))->assertOk()->json('datos');
+     63▕ 
+     64▕     expect($ultimas)->toHaveCount(5)
+     65▕         ->and($esperado)->toBe('7.40')
+     66▕         ->and($vista['rendimiento_reciente']['promedio'])->toBe($esperado)
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m RN-14 (§7.7, DD-1…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m83[39m
+     79▕     convocarMedir($m['f1'], $m['a'], $m['e3'], '2026-09-21', '80.00');
+     80▕     convocarAsistir($m, $m['a'], $m['f1'], 'presente', $m['e1']);
+     81▕     convocarAsistir($m, $m['b'], $m['f1'], 'falta', $m['e2'], '2026-09-11 18:00:00+00');
+     82▕ 
+  ➜  83▕     $deE1 = convocarPedir($this, convocarRuta($m['f1']), 'e1@x.com')->assertOk()->json('datos');
+     84▕     $deE3 = convocarPedir($this, convocarRuta($m['f1']), 'e3@x.com')->assertOk()->json('datos');
+     85▕ 
+     86▕     expect($deE1['rendimiento_reciente']['promedio'])->toBe('5.00')
+     87▕         ->and($deE1['rendimiento_reciente']['resultado'])->toBe('no_pasa')
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m DA-119: filtro[eq…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m103[39m
+     99▕     $m = convocarMundo();
+    100▕     convocarEvaluar($m['f1'], $m['a'], $m['e3'], 'pasa', '8.00', '2026-09-10 12:00:00+00');
+    101▕     convocarEvaluar($m['f1'], $m['b'], $m['e3'], 'pasa', '9.00', '2026-09-25 12:00:00+00');
+    102▕ 
+  ➜ 103▕     $porOmision = convocarPedir($this, convocarRuta($m['f1']), 'e3@x.com')->assertOk()->json('datos.rendimiento_reciente.promedio');
+    104▕     $enA = convocarPedir($this, convocarRuta($m['f1'], "filtro[equipo_id]={$m['a']}"), 'e3@x.com')->assertOk()->json('datos.rendimiento_reciente.promedio');
+    105▕     $enB = convocarPedir($this, convocarRuta($m['f1'], "filtro[equipo_id]={$m['b']}"), 'e3@x.com')->assertOk()->json('datos.rendimiento_reciente.promedio');
+    106▕ 
+    107▕     expect($porOmision)->toBe('9.00')->and($enA)->toBe('8.00')->and($enB)->toBe('9.00');
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m DA-119: un filtro…   
+[39;1m  Expected response status code [422] but received 404.
+Failed asserting that 404 is identical to 422.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m125[39m
+    121▕ test('DA-119: un filtro[equipo_id] que no es UUID responde 422 con filtro_invalido', function () {
+    122▕     /** @var TestCase $this */
+    123▕     $m = convocarMundo();
+    124▕ 
+  ➜ 125▕     $respuesta = convocarPedir($this, convocarRuta($m['f1'], 'filtro[equipo_id]=abc'))->assertUnprocessable();
+    126▕ 
+    127▕     expect($respuesta->json('codigo'))->toBe('validacion_fallida')
+    128▕         ->and($respuesta->json('errores.0.codigo'))->toBe('filtro_invalido');
+    129▕ });
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m HU-24: el docente…   
+[39;1m  Expected response status code [403] but received 404.
+Failed asserting that 404 is identical to 403.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m150[39m
+    146▕ test('HU-24: el docente recibe 403 y sin sesión 401', function () {
+    147▕     /** @var TestCase $this */
+    148▕     $m = convocarMundo();
+    149▕ 
+  ➜ 150▕     convocarPedir($this, convocarRuta($m['f1']), 'd@x.com')->assertForbidden();
+    151▕     sesionesPeticion($this, 'GET', convocarRuta($m['f1']))->assertUnauthorized();
+    152▕ });
+    153▕ 
+    154▕ test('HU-24 (DA-94): disponibilidad trae el estado oficial, la fecha de regreso y el aviso pendiente, sin el detalle de la lesión', function () {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m H… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "lesiones" violates check constraint "ck_lesiones_fecha_estimada_regreso"
+DETAIL:  Failing row contains (01a1e665-29db-74e1-9d69-679c09c6d96e, 01a1e665-29bd-7acb-a818-cba4213f813a, 01a1e665-299b-7794-98f6-d867483b350b, Esguince, Tobillo, partido, 2026-11-10, 2026-10-10, null, null, 2026-11-16 22:05:52+00, 2026-11-16 22:05:52+00, null, null, null, null). (Connection: propietario, Host: db, Port: 5432, Database: gestordep_pruebas, SQL: insert into "lesiones" ("id", "jugador_id", "registrada_por", "tipo", "zona", "causa", "fecha_inicio", "fecha_estimada_regreso") values (01a1e665-29db-74e1-9d69-679c09c6d96e, 01a1e665-29bd-7acb-a818-cba4213f813a, 01a1e665-299b-7794-98f6-d867483b350b, Esguince, Tobillo, partido, 2026-11-10, 2026-10-10))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m608[39m
+    604▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    605▕ 
+    606▕             $this->recordsHaveBeenModified();
+    607▕ 
+  ➜ 608▕             return $statement->execute();
+    609▕         });
+    610▕     }
+    611▕ 
+    612▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Ayudantes/MundoDeJugadores.php[39;22m:[39;1m17[39;22m
+  [33m8   [39m[39;1mtests/Ayudantes/MundoDeSalud.php[39;22m:[39;1m136[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m HU-24 (DA-94): si…   
+[39;1m  Failed asserting that null is identical to Array &0 [
+    'estado' => 'apto',
+    'fecha_estimada_regreso' => null,
+    'aviso_pendiente' => false,
+    'actualizado_en' => null,
+    'posiblemente_desactualizado' => false,
+].[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m172[39m
+    168▕ test('HU-24 (DA-94): sin estado guardado, disponibilidad es apto, sin fecha ni aviso y sin marca', function () {
+    169▕     /** @var TestCase $this */
+    170▕     $m = convocarMundo();
+    171▕ 
+  ➜ 172▕     expect(convocarPedir($this, convocarRuta($m['p1']))->json('datos.disponibilidad'))->toBe([
+    173▕         'estado' => 'apto', 'fecha_estimada_regreso' => null, 'aviso_pendiente' => false, 'actualizado_en' => null, 'posiblemente_desactualizado' => false,
+    174▕     ]);
+    175▕ });
+    176▕
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/VistaParaConvocarTest.php[39;22m:[39;1m172[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m HU-24 (DA-94, RN-…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m186[39m
+    182▕         'jugador_id' => $m['f1'], 'periodo_id' => $periodo, 'promedio' => '6.50', 'materias_reprobadas' => 1, 'materias_sin_calificar' => 0,
+    183▕         'porcentaje_asistencia' => '90.00', 'nivel_riesgo' => 'en_riesgo', 'calculado_en' => '2026-09-30 12:00:00+00',
+    184▕     ]);
+    185▕ 
+  ➜ 186▕     $situacion = convocarPedir($this, convocarRuta($m['f1']))->assertOk()->json('datos.situacion_academica');
+    187▕ 
+    188▕     expect($situacion)->toBe([
+    189▕         'periodo' => ['id' => $periodo, 'nombre' => '2026-2'], 'promedio' => '6.50', 'materias_reprobadas' => 1, 'materias_sin_calificar' => 0,
+    190▕         'dato_incompleto' => false, 'porcentaje_asistencia' => '90.00', 'nivel_riesgo' => 'en_riesgo', 'calculado_en' => '2026-09-30T12:00:00+00:00',
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m HU-24 (DA-94): si…   
+[39;1m  Failed asserting that null is identical to Array &0 [
+    'periodo' => null,
+    'promedio' => null,
+    'materias_reprobadas' => 0,
+    'materias_sin_calificar' => 0,
+    'dato_incompleto' => true,
+    'porcentaje_asistencia' => null,
+    'nivel_riesgo' => null,
+    'calculado_en' => null,
+    'actualizado_en' => null,
+    'posiblemente_desactualizado' => false,
+].[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m199[39m
+    195▕ test('HU-24 (DA-94): sin periodo vigente, situacion_academica trae periodo nulo y el dato incompleto', function () {
+    196▕     /** @var TestCase $this */
+    197▕     $m = convocarMundo();
+    198▕ 
+  ➜ 199▕     expect(convocarPedir($this, convocarRuta($m['p1']))->json('datos.situacion_academica'))->toBe([
+    200▕         'periodo' => null, 'promedio' => null, 'materias_reprobadas' => 0, 'materias_sin_calificar' => 0, 'dato_incompleto' => true,
+    201▕         'porcentaje_asistencia' => null, 'nivel_riesgo' => null, 'calculado_en' => null, 'actualizado_en' => null, 'posiblemente_desactualizado' => false,
+    202▕     ]);
+    203▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Consultas/VistaParaConvocarTest.php[39;22m:[39;1m199[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m H… [41;1m ErrorException [49;22m  
+[39;1m  Trying to access array offset on null[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m212[39m
+    208▕     $periodo = mundoInsertar('periodos_escolares', ['nombre' => '2026-2', 'fecha_inicio' => '2026-08-03', 'fecha_fin' => '2026-12-18']);
+    209▕ 
+    210▕     $situacion = convocarPedir($this, convocarRuta($m['p1']))->json('datos.situacion_academica');
+    211▕ 
+  ➜ 212▕     expect($situacion['periodo'])->toBe(['id' => $periodo, 'nombre' => '2026-2'])
+    213▕         ->and($situacion['dato_incompleto'])->toBeTrue()
+    214▕         ->and($situacion['calculado_en'])->toBeNull();
+    215▕ });
+    216▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\Vista[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "uq_pruebas_fisicas_jugador_tipo_registrado_periodo"
+DETAIL:  Key (jugador_id, tipo_prueba_id, registrado_por, periodo)=(01a1e665-31e6-77de-89c8-65efddbc9a4a, 01a1e665-3226-7267-912e-ff267c29e485, 01a1e665-31c4-7e0e-b8a9-bb1adbc02bad, 2026-09) already exists. (Connection: propietario, Host: db, Port: 5432, Database: gestordep_pruebas, SQL: insert into "pruebas_fisicas" ("id", "jugador_id", "equipo_id", "registrado_por", "tipo_prueba_id", "fecha", "periodo", "resultado", "creado_en", "actualizado_en") values (01a1e665-3230-7c0d-8d56-01eaadaef5e3, 01a1e665-31e6-77de-89c8-65efddbc9a4a, 01a1e665-31d5-7bbb-bcb2-dc4057954510, 01a1e665-31c4-7e0e-b8a9-bb1adbc02bad, 01a1e665-3226-7267-912e-ff267c29e485, 2026-09-25, 2026-09, 4.90, 2026-09-25 18:00:00+00, 2026-09-25 18:00:00+00))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m608[39m
+    604▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    605▕ 
+    606▕             $this->recordsHaveBeenModified();
+    607▕ 
+  ➜ 608▕             return $statement->execute();
+    609▕         });
+    610▕     }
+    611▕ 
+    612▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Ayudantes/MundoDeJugadores.php[39;22m:[39;1m17[39;22m
+  [33m8   [39m[39;1mtests/Ayudantes/MundoDeCondicionFisica.php[39;22m:[39;1m90[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m DA-111: asistenci…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m244[39m
+    240▕     convocarAsistir($m, $m['a'], $m['f1'], 'falta', $m['e3'], '2026-09-11 18:00:00+00');
+    241▕     convocarAsistir($m, $m['a'], $m['f1'], 'falta_justificada', $m['e3'], '2026-09-12 18:00:00+00');
+    242▕     convocarAsistir($m, $m['a'], $m['f1'], 'presente', $m['e3'], '2026-09-13 18:00:00+00');
+    243▕ 
+  ➜ 244▕     $asistencia = convocarPedir($this, convocarRuta($m['f1']), 'e1@x.com')->assertOk()->json('datos.asistencia');
+    245▕ 
+    246▕     expect($asistencia['equipo']['porcentaje'])->toBe('50.00')
+    247▕         ->and($asistencia['equipo']['actualizado_en'])->toBe('2026-09-13T18:00:00+00:00')
+    248▕         ->and($asistencia['de_mis_capturas']['porcentaje'])->toBe('100.00')
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m HU-24 (DA-94): el…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m256[39m
+    252▕ test('HU-24 (DA-94): el jugador de la vista lleva id, nombres, apellidos y matrícula', function () {
+    253▕     /** @var TestCase $this */
+    254▕     $m = convocarMundo();
+    255▕ 
+  ➜ 256▕     expect(convocarPedir($this, convocarRuta($m['f1']))->assertOk()->json('datos.jugador'))->toBe([
+    257▕         'id' => $m['f1'], 'nombres' => 'F1', 'apellidos' => 'Delantero', 'matricula' => 'M-F1',
+    258▕     ]);
+    259▕ });
+    260▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\VistaParaConvocarTest[22m [90m>[39m RNF-01: la vista…    
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Consultas/VistaParaConvocarTest.php[39m:[32m267[39m
+    263▕     $m = convocarMundo();
+    264▕     convocarEvaluar($m['f1'], $m['a'], $m['e1'], 'pasa', '8.00');
+    265▕     $antes = [DB::table('evaluaciones_rendimiento')->count(), DB::table('alertas')->count(), DB::table('resumenes_academicos')->count()];
+    266▕ 
+  ➜ 267▕     convocarPedir($this, convocarRuta($m['f1']))->assertOk();
+    268▕     convocarPedir($this, convocarRutaDelEquipo($m['a']))->assertOk();
+    269▕ 
+    270▕     expect([DB::table('evaluaciones_rendimiento')->count(), DB::table('alertas')->count(), DB::table('resumenes_academicos')->count()])->toBe($antes);
+    271▕ });
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Consultas\ContratoDeVistaParaConvoc[22m… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "lesiones" violates check constraint "ck_lesiones_fecha_estimada_regreso"
+DETAIL:  Failing row contains (01a1e665-3ad5-7f73-83f6-ec45fe66cf9e, 01a1e665-3aa7-7219-9ede-c90eea2428f8, 01a1e665-3a8a-74ce-a9ac-555f497d3f4c, Esguince, Tobillo, partido, 2026-11-10, 2026-10-10, null, null, 2026-11-16 22:05:56+00, 2026-11-16 22:05:56+00, null, null, null, null). (Connection: propietario, Host: db, Port: 5432, Database: gestordep_pruebas, SQL: insert into "lesiones" ("id", "jugador_id", "registrada_por", "tipo", "zona", "causa", "fecha_inicio", "fecha_estimada_regreso") values (01a1e665-3ad5-7f73-83f6-ec45fe66cf9e, 01a1e665-3aa7-7219-9ede-c90eea2428f8, 01a1e665-3a8a-74ce-a9ac-555f497d3f4c, Esguince, Tobillo, partido, 2026-11-10, 2026-10-10))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m608[39m
+    604▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    605▕ 
+    606▕             $this->recordsHaveBeenModified();
+    607▕ 
+  ➜ 608▕             return $statement->execute();
+    609▕         });
+    610▕     }
+    611▕ 
+    612▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Ayudantes/MundoDeJugadores.php[39;22m:[39;1m17[39;22m
+  [33m8   [39m[39;1mtests/Ayudantes/MundoDeSalud.php[39;22m:[39;1m136[39;22m
+
+
+  [90mTests:[39m    [31;1m34 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (84 assertions)[39m
+  [90mDuration:[39m [39m22.12s[39m
+
