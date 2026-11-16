@@ -1,6 +1,6 @@
 # F1-H6-T03: plan del recálculo de alertas
 
-**Fecha:** 15 de noviembre de 2026 · **Especificación:** `docs/hitos/f1-h6.md` v1.9 · **Estado:** plan para aprobación. No se escribió código de T03.
+**Fecha:** 15 de noviembre de 2026; actualizado el 16 de noviembre con las decisiones del responsable · **Especificación:** `docs/hitos/f1-h6.md` v1.10 · **Estado:** plan para aprobación. No se escribió código de T03.
 **Base:** DA-88, aprobada el 15/11/2026 (recálculo mixto, con el apartamiento de ADR-07 por escrito). T02 ya dejó las reglas en `src/Alertas/Dominio/`.
 
 ## 1. Qué construye
@@ -45,7 +45,19 @@ Cada alerta se decide con `DecisionDeAlerta::decidir(seCumple, hayAbierta)`.
 
 ## 6. Lo que este plan no puede resolver solo
 
-Cada punto necesita tu decisión antes de ejecutar T03.
+**Actualización del 16/11/2026.** El responsable decidió los puntos 3 a 7; quedan abiertos el 1 y el 2.
+
+| # | Decisión |
+|---|---|
+| 3 | P-09, opción A: el escucha de Alertas calcula el nivel de riesgo por un puerto, sin leer el resumen guardado |
+| 4 | P-10, opción A: ya está en el Dominio (`ResultadoDeEvaluacion::delEquipo()` y `TarjetasDePartido::elMayorPorPartido()`), con T02 |
+| 5 | P-08b, opción A: sin temporada no se cuentan tarjetas; las faltas sí. `AcumulacionDeSanciones` acepta una temporada nula |
+| 6 | DA-107, decisión por defecto: sin evaluación, `datos_insuficientes` (`delEquipo([])`) |
+| 7 | P-08c, opción A: las alertas abiertas de un jugador en baja se conservan y no se muestran |
+
+El punto 3 necesita un puerto nuevo, «nivel de riesgo académico de un jugador», con su adaptador en Académico: es el mismo patrón que DA-109 aprobó para T07 y cae dentro del punto 1.
+
+Tabla original, con los puntos 1 y 2 todavía por decidir:
 
 | # | Asunto | Opciones | Recomendación |
 |---|---|---|---|

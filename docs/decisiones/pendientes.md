@@ -301,3 +301,32 @@ P-04 (aviso pendiente del docente) y P-08a (sin evaluación) los responden `docs
 | T07 | Bloqueada | P-14 |
 | T08 | No ejecutada | Recorre las rutas de T04 a T07, que no existen todavía |
 | T09 | No ejecutada | El humo depende de T03 y T05 y de P-07; la trazabilidad y el registro de DA-87 a DA-100 son del cierre |
+
+---
+
+## Actualización del 16 de noviembre de 2026: decisiones del responsable
+
+Fuente citada: [`docs/fuentes/proceso-general-sistema-web.md`](../fuentes/proceso-general-sistema-web.md). §7 dice que el sistema genera alertas automáticas y que las consultan docentes y entrenadores; §8 lista los análisis, entre ellos «Participación en entrenamientos», «Evolución de calificaciones» y «Futbolistas con bajo rendimiento».
+
+| Id | Decisión | Dónde quedó |
+|---|---|---|
+| P-05 | Opción A: 422 `validacion_fallida` arriba y `filtro_invalido` en `errores[].codigo`; un id válido pero ajeno devuelve lista vacía | Especificación v1.10, §6.3 |
+| P-07 | Opción A: guion de humo reescrito con cinco partidos, un aviso, un filtro y el caso académico activo y cerrado | Especificación v1.10, §9 |
+| P-08b | Opción A: sin temporada que contenga la fecha, no se cuentan tarjetas; las faltas sí | DA-91; `AcumulacionDeSanciones` (T02) |
+| P-08c | Opción A: las alertas abiertas de un jugador en baja se conservan y no se muestran | DA-99, sin cambio |
+| P-09 | Opción A: el escucha de Alertas calcula el nivel de riesgo por un puerto | T03 y su plan |
+| P-10 | Opción A: el Dominio aplica «basta un `no_pasa`» y «el mayor por partido» | T02 |
+| P-14 | Opción A: dos puertos en Compartido con adaptadores en Académico y Competencia | DA-109; `docs/arquitectura.md` v1.5.4, pendiente de revisión de Luis |
+| T05 | Opción A: el orden usa el promedio de las últimas N calificaciones de partido, con N igual a la ventana del umbral | DA-106; especificación v1.10 |
+
+Decisiones por defecto del agente, porque responden los requisitos: **DA-107** (P-08a, sin evaluación es `datos_insuficientes`) y **DA-108** (P-04, el docente ve el indicador solo de los avisos que él creó). Pendientes de validación.
+
+### Lo que sigue pendiente o bloqueado
+
+| Tarea | Estado | Qué falta |
+|---|---|---|
+| T03 | Plan actualizado, sin ejecutar | Aprobar el plan y decidir sus puntos 1 (cómo lee Alertas los datos de otros contextos) y 2 (dueño del comando) |
+| T05 | Plan actualizado con DA-106, sin ejecutar | Aprobar el plan y sus puntos 1 a 6 |
+| T06 | Bloqueada | Devuelve la vista de T05 (DA-96) |
+| T08 | Bloqueada | Recorre las rutas de T04 a T07; faltan las de T05 y T06 |
+| T09 | Bloqueada | El humo de §9 usa `alertas:recalcular` (T03) y la vista para convocar (T05) |

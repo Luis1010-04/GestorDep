@@ -1,6 +1,6 @@
 # F1-H6-T05: plan de la vista para convocar y el orden por desempeño
 
-**Fecha:** 15 de noviembre de 2026 · **Especificación:** `docs/hitos/f1-h6.md` v1.9 · **Estado:** plan para aprobación. No se escribió código de T05.
+**Fecha:** 15 de noviembre de 2026; actualizado el 16 de noviembre con DA-106 · **Especificación:** `docs/hitos/f1-h6.md` v1.10 · **Estado:** plan para aprobación. No se escribió código de T05.
 **Base:** DA-94, DA-95 y DA-98; formas de respuesta de DA-105 (§6.2).
 
 ## 1. Qué construye
@@ -11,7 +11,8 @@
 | `GET /equipos/{equipo}/jugadores/para-convocar` | Entrenador del equipo | Lista paginada de esa misma vista, ordenada por desempeño (DA-95) |
 
 - **`ConsultaDeVistaParaConvocar`** (`src/Consultas/Aplicacion/`, SQL en `Infraestructura/`): arma las cinco dimensiones de uno o varios jugadores, siempre a través de `AlcanceDeJugadores`.
-- **`CalculadorDeDesempeno`** (`src/Consultas/Aplicacion/`, `docs/arquitectura.md` §4.1): ordena por el promedio de la última evaluación; sin evaluación o con `datos_insuficientes`, al final; los empates conservan el orden de entrada (RN-18).
+- **`CalculadorDeDesempeno`** (`src/Consultas/Aplicacion/`, `docs/arquitectura.md` §4.1): ordena por el promedio de las últimas N calificaciones generales de partido, con N igual a la ventana del umbral del entrenador (**DA-106, opción A, aprobada el 16/11/2026**; glosario de `docs/requisitos.md` §1.5, RN-08 y RN-18). Con menos de N calificaciones (`datos_insuficientes`), al final; los empates conservan el orden de entrada (RN-18).
+  - Ese promedio es el que RN-08 ya calcula en H4 con `CalculoDeDesempeno` y guarda en `evaluaciones_rendimiento.promedio`, con la ventana copiada del umbral o de la plantilla. H4 recalcula la evaluación al capturar, al corregir y al fijar el umbral, así que la última fila guardada del entrenador consultante trae el promedio de la ventana vigente. El plan lee esa fila y **no** recalcula el promedio en Consultas, para no duplicar RN-08. Una prueba comprobará que el promedio leído coincide con el de las últimas N calificaciones capturadas.
 - **`MarcaDeDesactualizacion`** (`src/Consultas/Aplicacion/`): `posiblemente_desactualizado` es verdadero si la última captura es anterior a hoy de negocio menos `desactualizacion.dias`. Se calcula al leer; no se guarda.
 
 ## 2. De dónde sale cada dimensión
