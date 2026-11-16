@@ -261,9 +261,9 @@ Sin aprobación, T03 no las toca. Las razones están en §2 (puntos 3, 4 y 6), �
 | `src/Compartido/Aplicacion/RiesgoAcademicoDelJugador.php`, `RiesgoAcademico.php`, `JugadoresDeLaMateria.php`, `MembresiasVigentes.php`, `MembresiaVigente.php` | El puerto P-09 con su forma, y los dos puertos que el comando y el escucha necesitan (DA-112 solo nombra cuatro) | Preguntas 1 y 2 |
 | `src/Academico/Infraestructura/` (adaptadores de P-09 y de `JugadoresDeLaMateria`) y su `bind` en `AcademicoServiceProvider` | Adaptador en el contexto dueño del dato | Pregunta 2 |
 | `src/Plantel/Infraestructura/` (adaptador de `MembresiasVigentes`) y su `bind` en `PlantelServiceProvider` | Idem | Pregunta 1 |
-| `src/Alertas/Dominio/AcumulacionDeSanciones.php` | Un método que dé los conteos de tarjetas (§6), para la causa de sanciones | Pregunta 1 |
-| `tests/Ayudantes/MundoDeAlertas.php` | Agregar los datos de tarjetas, faltas y evaluaciones que usan las pruebas de §7 | Pregunta 1 |
-| `tests/Unit/Alertas/` | Pruebas del método nuevo de Dominio | Pregunta 1 |
+| `src/Alertas/Dominio/AcumulacionDeSanciones.php` | Un método que dé los conteos de tarjetas (§6), para la causa de sanciones | Pregunta 3 |
+| `tests/Ayudantes/MundoDeAlertas.php` | Agregar los datos de tarjetas, faltas y evaluaciones que usan las pruebas de §7 | Preguntas 1 a 3 |
+| `tests/Unit/Alertas/` | Pruebas del método nuevo de Dominio | Pregunta 3 |
 | Las de §9 | Renombrado | Con el plan |
 
 ### 8.4 Rutas que T03 no toca
@@ -317,4 +317,21 @@ Orden de 1 y 2: el renombrado va primero porque libera el nombre `alertas:recalc
 
 ## 10. Preguntas abiertas para Luis
 
-[pendiente]
+Tres. En cada una, la opción recomendada va primera. Ninguna cambia un requisito; las tres tocan la lista de puertos o de rutas de DA-112 y de T03, que fijó el responsable.
+
+**Pregunta 1. ¿Cómo obtiene el comando las parejas (jugador, equipo) sin usuario de sesión?** (§2 punto 3, §3.4)
+Hace falta la lista de membresías vigentes de jugadores sin baja. Ningún puerto de DA-112 la da, y `JugadoresDelEquipo` exige usuario.
+- **(a) Recomendada:** un puerto nuevo `MembresiasVigentes` en `src/Compartido/Aplicacion/`, con adaptador en la Infraestructura de Plantel. Es el mismo patrón de DA-112; amplía a cinco puertos más el de P-09. Exige agregar a T03 la ruta `src/Plantel/Infraestructura/` (solo el adaptador y su `bind`).
+- (b) Que Alertas lea `jugador_equipo` y `bajas_jugador` con SQL de solo lectura. Es más barato, pero contradice DA-112 («Alertas no lee tablas de otros contextos») y la regla de §4.3.
+
+**Pregunta 2. ¿Qué devuelve el puerto de riesgo académico (P-09), y quién da los jugadores de una materia?** (§3.2, §5)
+La `causa` lleva `nivel_riesgo`, `promedio` y `materias_reprobadas` (DA-105, DA-110), y `CriterioDeMateriaModificado` solo trae `materiaId`.
+- **(a) Recomendada:** un puerto `RiesgoAcademicoDelJugador` que devuelve `{nivel, promedio, materiasReprobadas}` o `null`, calculado sin leer `resumenes_academicos`, y un segundo, `JugadoresDeLaMateria`, ambos con adaptador en Académico. Exige agregar a T03 las rutas `src/Compartido/Aplicacion/` (esos puertos) y `src/Academico/Infraestructura/` (adaptadores y `bind`).
+- (b) Que el puerto devuelva solo el nivel y la `causa` académica lleve los otros dos datos leídos de otro lado. No hay otro lado sin leer tablas de Académico: no recomendada.
+
+**Pregunta 3. Tres detalles de reglas que T03 necesita y la spec no fija.** (§3.1, §3.3, §6)
+- **3a. Temporada de cada partido.** (a, recomendada) Se obtiene con el puerto que ya existe `InicioDePartidos` más `TemporadaDeFecha` aplicado a esa fecha, sin puerto nuevo; (b) un puerto `TemporadaDelPartido` en Competencia.
+- **3b. Conteos de la causa de sanciones.** (a, recomendada) Un método nuevo en `AcumulacionDeSanciones` que devuelve los conteos de tarjetas, para no calcular dos veces; exige agregar a T03 la ruta `src/Alertas/Dominio/AcumulacionDeSanciones.php` y su prueba unitaria; (b) calcularlos en Aplicación, duplicando la regla.
+- **3c. `promedio` de la causa de riesgo deportivo con varios entrenadores.** Es la duda que el reporte `docs/reportes/f1-doc-16-11.md` §6 ya lista como pendiente (DA-105 solo fija `null` con `datos_insuficientes`). (a, recomendada) El promedio de la evaluación que decide: el menor entre las `no_pasa`; si no hay ninguna, el mayor entre las demás; (b) el promedio de los promedios de los entrenadores. Marcar el valor como [Decisión por defecto] hasta que se valide.
+
+Si respondes «lo recomendado» a las tres, el plan queda aprobado tal cual está y T03 empieza por el renombrado de §9.4.
