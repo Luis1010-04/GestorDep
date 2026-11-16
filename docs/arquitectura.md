@@ -1,7 +1,7 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.5.3 (ver sección 14)
+**Versión:** 1.5.4 (ver sección 14)
 **Fecha:** 31 de octubre de 2026
 **Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
@@ -83,6 +83,7 @@ Cada evento dispara el recalculo de riesgos y alertas del jugador afectado. Los 
 - Una consulta que cruza contextos vive en el contexto que la consume, nunca dentro de un agregado. El listado, la vista consolidada, los gráficos, los pendientes de captura y el historial viven en **Consultas**; la situación académica, en **Académico** (DA-17 de H2). La consulta lee el dato de otro contexto a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando clases de dominio de otro contexto. Consultas puede leer las tablas de otros contextos con SQL de solo lectura.
 - `AlcanceDeJugadores` es una interfaz de Compartido; su implementación SQL vive en la Infraestructura de Consultas y lee `jugador_equipo`, `entrenador_equipo` e `inscripciones`.
 - Rendimiento no lee las tablas de Plantel ni de Competencia: usa dos puertos de `src/Compartido/Aplicacion/`. `PosicionEnEquipo` da la posición de un jugador en un equipo según su membresía vigente, y su adaptador vive en la Infraestructura de Plantel. `InicioDePartidos` da la fecha de inicio de los partidos para ordenar las últimas N calificaciones (RN-08), y su adaptador vive en la Infraestructura de Competencia.
+- Consultas calcula los gráficos de H6 con dos puertos de `src/Compartido/Aplicacion/` y no repite las fórmulas de asistencia (DA-109): uno da el porcentaje de asistencia a clases por mes de un jugador y de una materia, con su adaptador en la Infraestructura de Académico, y otro da el porcentaje de asistencia a entrenamientos por mes de un jugador y de un equipo, con su adaptador en la Infraestructura de Competencia. Cada adaptador usa la regla de su propio Dominio (`ConteoDeAsistencia` y `ConteoDeAsistenciaAEntrenamientos`). Alertas lee el nivel de riesgo académico de un jugador con un puerto de la misma forma, con su adaptador en Académico (P-09).
 
 ## 5. Estructura de carpetas
 
@@ -425,4 +426,5 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | 1.5 | 31/10/2026 | Se alinea con lo construido en H4 (`docs/hitos/f1-h4.md` v1.0.8, §5.1), por decisión del responsable. Sección 4.3: puertos `PosicionEnEquipo` (adaptador en Plantel) e `InicioDePartidos` (adaptador en Competencia), en Compartido. Sección 7.6: unicidad de `rendimientos_partido` por (`partido_id`, `jugador_id`, `registrado_por`), que sustituye a la de (`partido_id`, `jugador_id`) (DD-17, DA-36); dos UQ parciales y el `CHECK` de origen en `plantillas_evaluacion`; `entrenador_id` en umbrales y evaluaciones, con la UQ del umbral vigente y el índice de evaluaciones que lo incluyen (DA-04); `evaluaciones_rendimiento` con `calificacion_minima` y `ventana_partidos` copiadas y obligatorias, `plantilla_id` anulable junto a `umbral_id` y el `CHECK` de promedio nulo. Sección 8.4: el seeder de plantillas se llama `PlantillasDeFabricaSeeder`. Sin cambios de código |
 | 1.5.1 | 31/10/2026 | Sección 13: la fila «Co-entrenadores» queda resuelta, porque DD-17 está confirmada (DA-36 de H4). Decisión del responsable |
 | 1.5.2 | 31/10/2026 | Sección 4.1: el servicio de RN-08 se llama `CalculoDeDesempeno` (`src/Rendimiento/Dominio/`), como en el código. `EvaluadorDeRendimiento` no existe y se quita. Decisión del responsable |
+| 1.5.4 | 16/11/2026 | Sección 4.3: puertos de Compartido para el porcentaje de asistencia por mes (gráficos de H6, DA-109, P-14) y para el nivel de riesgo académico que lee Alertas (P-09), con su adaptador en Académico y Competencia. **Pendiente de revisión del responsable** (cambio aplicado por decisión por defecto de la orden del 16/11/2026) |
 | 1.5.3 | 15/11/2026 | Excepción de las alertas entre entrenadores de un mismo equipo (RN-22 de `docs/requisitos.md` v1.2.3, DA-102) y conteo de tarjetas (DA-103), por decisión del responsable. Sección 7.6: nota de unicidad de `rendimientos_partido`. Sección 10: reglas por dato de rendimiento y de alertas deportivas y de sanciones. Sección 13: fila «Co-entrenadores» |
