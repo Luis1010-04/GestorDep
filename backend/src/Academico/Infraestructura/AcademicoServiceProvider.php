@@ -21,6 +21,7 @@ use Src\Academico\Dominio\RepositorioDePeriodos;
 use Src\Academico\Dominio\RepositorioDeResumenes;
 use Src\Academico\Infraestructura\Consola\ConciliarResumenesComando;
 use Src\Academico\Infraestructura\Escuchas\RecalcularResumenAcademico;
+use Src\Compartido\Aplicacion\PorcentajeDeAsistenciaAClases;
 use Src\Compartido\Dominio\Eventos\AsistenciaDeClaseRegistrada;
 use Src\Compartido\Dominio\Eventos\CalificacionRegistrada;
 use Src\Compartido\Dominio\Eventos\CriterioDeMateriaModificado;
@@ -30,6 +31,7 @@ class AcademicoServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(PorcentajeDeAsistenciaAClases::class, PorcentajeDeAsistenciaAClasesSql::class);
         $this->app->bind(ConsultaDeAsistencias::class, ConsultaDeAsistenciasSql::class);
         $this->app->bind(ConsultaDeCalificaciones::class, ConsultaDeCalificacionesSql::class);
         $this->app->bind(ConsultaDeInscripciones::class, ConsultaDeInscripcionesSql::class);

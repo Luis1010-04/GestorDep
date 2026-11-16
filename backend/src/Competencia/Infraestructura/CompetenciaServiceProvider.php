@@ -5,6 +5,7 @@ namespace Src\Competencia\Infraestructura;
 use Illuminate\Support\ServiceProvider;
 use Src\Compartido\Aplicacion\ConvocatoriaDePartido;
 use Src\Compartido\Aplicacion\InicioDePartidos;
+use Src\Compartido\Aplicacion\PorcentajeDeAsistenciaAEntrenamientos;
 use Src\Competencia\Aplicacion\ConsultaDeAsistencia;
 use Src\Competencia\Aplicacion\ConsultaDeConvocatoria;
 use Src\Competencia\Aplicacion\VisibilidadDeJugador;
@@ -21,6 +22,7 @@ class CompetenciaServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(PorcentajeDeAsistenciaAEntrenamientos::class, PorcentajeDeAsistenciaAEntrenamientosSql::class);
         $this->app->bind(ConsultaDeAsistencia::class, ConsultaDeAsistenciaSql::class);
         $this->app->bind(ConsultaDeConvocatoria::class, ConsultaDeConvocatoriaSql::class);
         $this->app->bind(ConvocatoriaDePartido::class, ConvocatoriaDePartidoCompetencia::class);

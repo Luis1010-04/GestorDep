@@ -5786,8 +5786,236 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/graficos:
+    get:
+      operationId: verGraficosDelJugador
+      summary: Series de historial de un jugador para graficar
+      description: >-
+        Docente o entrenador con el jugador en su alcance (HU-25, DA-97, DA-105). Devuelve series ya calculadas; el dibujo es
+        del frontend. El entrenador que entrena al jugador recibe rendimiento_partidos, asistencia_entrenamientos, mediciones
+        y resumen_academico, solo con lo que el registro (RN-14). El docente recibe calificaciones y asistencia_clases de sus
+        materias, sin mediciones (RN-13). Un usuario con los dos roles recibe lo de cada uno; un campo que no puede ver se
+        omite. Cada serie lleva actualizado_en y posiblemente_desactualizado (RNF-04), que se calcula al leer con el
+        parametro desactualizacion. Un jugador fuera del alcance, dado de baja (RN-23), inexistente o con un id que no es un
+        UUID v7 responde el mismo 404.
+      tags: [Consultas]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Las series que el usuario puede ver.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/GraficosDelJugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/graficos:
+    get:
+      operationId: verGraficosDelEquipo
+      summary: Series de historial de un equipo, y de un jugador contra el promedio del equipo
+      description: >-
+        Solo entrenadores del equipo (HU-25 c2, DA-97). equipo trae el promedio por partido de lo que registro el usuario
+        (RN-14) y el porcentaje de asistencia del equipo por mes. Con filtro[jugador_id] llega tambien jugador, con las mismas
+        dos series para ese jugador en ese equipo. Un equipo que el usuario no entrena, o un jugador que no es del equipo, no
+        esta en su alcance, esta en baja o no existe, responde el mismo 404.
+      tags: [Consultas]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: filtro[jugador_id]
+          in: query
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Las series del equipo y, si se pidio, las del jugador.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/GraficosDelEquipo'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no lo entrena, o el jugador pedido no es del equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: filtro[jugador_id] no es un UUID (codigo validacion_fallida, con filtro_invalido en errores[].codigo).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    PuntoDeSerie:
+      type: object
+      additionalProperties: false
+      required: [valor]
+      description: >-
+        Un punto de una serie. Las series por fecha traen fecha; las series por periodo traen periodo, que es un mes AAAA-MM o,
+        en el resumen academico, el periodo escolar con su id y su nombre. El valor es una cadena con los decimales del dato
+        (docs/convenciones-api.md seccion 1) o un entero donde el dato lo es.
+      properties:
+        fecha:
+          type: string
+          format: date
+        periodo:
+          oneOf:
+            - type: string
+              pattern: '^\d{4}-\d{2}$'
+            - type: object
+              additionalProperties: false
+              required: [id, nombre]
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                nombre:
+                  type: string
+        valor:
+          oneOf:
+            - type: string
+            - type: integer
+    SerieDeGrafico:
+      type: object
+      additionalProperties: false
+      required: [serie, actualizado_en, posiblemente_desactualizado]
+      description: >-
+        Los puntos de una serie, del mas antiguo al mas reciente. Sin datos, serie va vacia y actualizado_en es nulo.
+        posiblemente_desactualizado es verdadero si la ultima captura es anterior a hoy menos los dias del parametro
+        desactualizacion (RNF-04, DD-15); sin captura es falso.
+      properties:
+        serie:
+          type: array
+          items:
+            $ref: '#/components/schemas/PuntoDeSerie'
+        actualizado_en:
+          type: string
+          format: date-time
+          nullable: true
+        posiblemente_desactualizado:
+          type: boolean
+    SerieDeMateria:
+      type: object
+      additionalProperties: false
+      required: [materia_id, asignatura, serie]
+      properties:
+        materia_id:
+          type: string
+          format: uuid
+        asignatura:
+          type: object
+          additionalProperties: false
+          required: [clave, nombre]
+          properties:
+            clave:
+              type: string
+            nombre:
+              type: string
+        serie:
+          $ref: '#/components/schemas/SerieDeGrafico'
+    GraficosDelJugador:
+      type: object
+      additionalProperties: false
+      description: >-
+        Las series que el usuario puede ver (DA-105). rendimiento_partidos, asistencia_entrenamientos, mediciones y
+        resumen_academico solo para el entrenador del jugador; calificaciones y asistencia_clases solo para el docente.
+      properties:
+        rendimiento_partidos:
+          $ref: '#/components/schemas/SerieDeGrafico'
+        asistencia_entrenamientos:
+          $ref: '#/components/schemas/SerieDeGrafico'
+        mediciones:
+          type: object
+          additionalProperties: false
+          required: [peso_kg, estatura_cm, imc]
+          properties:
+            peso_kg:
+              $ref: '#/components/schemas/SerieDeGrafico'
+            estatura_cm:
+              $ref: '#/components/schemas/SerieDeGrafico'
+            imc:
+              $ref: '#/components/schemas/SerieDeGrafico'
+        resumen_academico:
+          $ref: '#/components/schemas/SerieDeGrafico'
+        calificaciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/SerieDeMateria'
+        asistencia_clases:
+          type: array
+          items:
+            $ref: '#/components/schemas/SerieDeMateria'
+    GraficosDelEquipo:
+      type: object
+      additionalProperties: false
+      required: [equipo]
+      properties:
+        equipo:
+          type: object
+          additionalProperties: false
+          required: [rendimiento_partidos, asistencia_entrenamientos]
+          properties:
+            rendimiento_partidos:
+              $ref: '#/components/schemas/SerieDeGrafico'
+            asistencia_entrenamientos:
+              $ref: '#/components/schemas/SerieDeGrafico'
+        jugador:
+          type: object
+          additionalProperties: false
+          required: [jugador_id, rendimiento_partidos, asistencia_entrenamientos]
+          description: Solo con filtro[jugador_id].
+          properties:
+            jugador_id:
+              type: string
+              format: uuid
+            rendimiento_partidos:
+              $ref: '#/components/schemas/SerieDeGrafico'
+            asistencia_entrenamientos:
+              $ref: '#/components/schemas/SerieDeGrafico'
     Alerta:
       type: object
       additionalProperties: false
