@@ -1,13 +1,13 @@
 # F1-H6-T05: plan de la vista para convocar y el orden por desempeño
 
-**Fecha:** 15 de noviembre de 2026; actualizado el 16 de noviembre con DA-106 · **Especificación:** `docs/hitos/f1-h6.md` v1.10 · **Estado:** plan para aprobación. No se escribió código de T05.
+**Fecha:** 15 de noviembre de 2026; actualizado el 16 de noviembre con DA-106 · **Especificación:** `docs/hitos/f1-h6.md` v1.10 · **Estado:** plan aprobado el 16/11/2026 (recomendaciones de §5, puntos 1 a 6; DA-118 a DA-120). No se escribió código de T05: la implementación espera la orden del responsable.
 **Base:** DA-94, DA-95 y DA-98; formas de respuesta de DA-105 (§6.2).
 
 ## 1. Qué construye
 
 | Ruta | Quién | Respuesta |
 |---|---|---|
-| `GET /jugadores/{jugador}/vista-para-convocar` | Entrenador con alcance | La vista de §6.2 |
+| `GET /jugadores/{jugador}/vista-para-convocar`, con `filtro[equipo_id]` opcional (DA-119) | Entrenador con alcance | La vista de §6.2 |
 | `GET /equipos/{equipo}/jugadores/para-convocar` | Entrenador del equipo | Lista paginada de esa misma vista, ordenada por desempeño (DA-95) |
 
 - **`ConsultaDeVistaParaConvocar`** (`src/Consultas/Aplicacion/`, SQL en `Infraestructura/`): arma las cinco dimensiones de uno o varios jugadores, siempre a través de `AlcanceDeJugadores`.
@@ -31,7 +31,7 @@ Todas con los datos del entrenador consultante (RN-14), salvo la disponibilidad 
 ## 3. Orden y paginación
 
 - El orden se calcula sobre **todos** los jugadores del equipo y después se pagina; si se paginara antes, cada página quedaría ordenada por separado.
-- «Orden de entrada» (m6 de la auditoría): propongo apellidos, nombres e `id`, que es estable entre páginas. **Necesita tu confirmación**: DA-95 no lo define.
+- «Orden de entrada» (m6 de la auditoría): propongo apellidos, nombres e `id`, que es estable entre páginas. **Confirmado el 16/11/2026 (DA-118).** DA-95 no lo define.
 - El promedio se compara con el decimal de Compartido, nunca con `float`.
 
 ## 4. Pruebas previstas
@@ -58,7 +58,20 @@ Todas con los datos del entrenador consultante (RN-14), salvo la disponibilidad 
 
 Dentro de las rutas de T05: `src/Consultas/**`, `app/Http/**` (un controlador y dos recursos), `routes/api.php` (las dos rutas), `docs/api/openapi.yaml` y `tests/**`.
 
+Las evaluaciones de rendimiento se leen desde `src/Consultas/Infraestructura/` (DA-120); no se toca `src/Rendimiento/`.
+
 ## 7. Dependencias
 
 - T06 (vista consolidada de la convocatoria) devuelve esta misma vista por cada convocado: no puede empezar antes de T05.
 - No depende de T03: la vista no muestra alertas.
+
+## 8. Decisiones del 16/11/2026
+
+| # | Punto | Decisión |
+|---|---|---|
+| 1 | Orden de entrada | Apellidos, nombres e `id` (DA-118) |
+| 2 | Equipo en vista-para-convocar | `filtro[equipo_id]` opcional; sin él, el equipo de la evaluación más reciente del consultante (DA-119) |
+| 3 | Lectura de evaluaciones | Desde `src/Consultas/Infraestructura/`; no se toca Rendimiento (DA-120) |
+| 4 | lang/es | Sin cambio; si aparece un mensaje nuevo, se detiene |
+| 5 | Aviso pendiente | Sin cambio (RN-16) |
+| 6 | Zona de «hoy de negocio» | America/Mexico_City |

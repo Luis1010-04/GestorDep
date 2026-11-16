@@ -1,6 +1,6 @@
 # F1-H6-T03: plan de recálculo de alertas
 
-**Fecha:** 16 de noviembre de 2026 · **Especificación:** `docs/hitos/f1-h6.md` v1.11 · **Estado:** plan completo (diez secciones), para aprobación; el agente se detiene hasta que lo apruebes. No se escribió código, pruebas ni migraciones, y no se ejecutó `make`.
+**Fecha:** 16 de noviembre de 2026 · **Especificación:** `docs/hitos/f1-h6.md` v1.13 · **Estado:** plan aprobado el 16/11/2026 (DA-112, DA-113, DA-115 a DA-117; renombrado y rutas, §9). No se escribió código de T03: la implementación espera la orden del responsable.
 **Nota:** este archivo sustituye al plan de T03 del 15 y 16 de noviembre; esa versión sigue en el historial de git.
 
 ## 1. Alcance y reglas aplicadas
@@ -252,9 +252,9 @@ Rutas bajo `backend/`. Los nombres de clase son una propuesta de este plan; los 
 | `src/Academico/Infraestructura/Consola/ConciliarResumenesComando.php` | Solo la firma (`resumenes:conciliar`) y el comentario. No hay reconciliación de alertas que quitar (§2, punto 1) |
 | `routes/console.php` | Al final, `alertas:recalcular` y `resumenes:conciliar` a las 02:00, ambos en America/Mexico_City. La línea 6 actual se convierte primero en la de `resumenes:conciliar` (renombrado, §9.4) y la de `alertas:recalcular` se agrega con el comando nuevo |
 
-### 8.3 Rutas que hay que pedir, porque no están en las permitidas de T03
+### 8.3 Rutas fuera de las permitidas originales de T03, aprobadas el 16/11/2026
 
-Sin aprobación, T03 no las toca. Las razones están en §2 (puntos 3, 4 y 6), §3 y §6.
+Aprobadas por el responsable el 16/11/2026 (DA-115, DA-117, y `tests/Ayudantes/MundoDeAlertas.php` y `tests/Unit/Alertas/**`). Las razones están en §2 (puntos 3, 4 y 6), §3 y §6.
 
 | Ruta | Para qué | Se aprueba con |
 |---|---|---|
@@ -270,9 +270,9 @@ Sin aprobación, T03 no las toca. Las razones están en §2 (puntos 3, 4 y 6), �
 
 `frontend/`; `database/migrations/**` (no hay tablas ni columnas nuevas; la migración de `alertas` es de T01 y no se edita); `docker-compose*`, `Dockerfile` y `.github/**` (solo T00); `routes/api.php` y `app/Http/**` (no hay rutas, T04); `docs/api/openapi.yaml` (sin rutas nuevas); `lang/es/**` (el comando no escribe texto); `src/Consultas/**`; `docs/arquitectura.md` y `docs/requisitos.md`. Si se aprueban los puertos de §8.3, `docs/arquitectura.md` §4.3 los tendría que nombrar: eso es un F1-DOC aparte, con aprobación, no parte de T03.
 
-## 9. Cambios de renombrado fuera de rutas permitidas
+## 9. Renombrado aprobado (16/11/2026)
 
-**Esto se propone; no se toca hasta que el responsable apruebe el plan.** Los números de línea se verificaron con `grep -n "alertas:recalcular"` el 16/11/2026, en la rama `hito/f1-h6-especificacion`.
+**Aprobado por el responsable el 16/11/2026: 23 líneas en 5 archivos de H2 (17 llamadas, 5 títulos y 1 comprobación del horario), 3 líneas de código (firma y comentario de `ConciliarResumenesComando.php`, comentario de `ConciliarResumenes.php`) y la programación en `routes/console.php`, donde la de `resumenes:conciliar` se agrega junto a la de `alertas:recalcular`. Los documentos de §9.2 se revisan con esta aprobación.** Los números de línea se verificaron con `grep -n "alertas:recalcular"` el 16/11/2026, en la rama `hito/f1-h6-especificacion`.
 
 ### 9.1 Pruebas de H2 (`backend/tests/Feature/`)
 
@@ -315,23 +315,24 @@ Todas pasan a `resumenes:conciliar`. La prueba del horario (línea 223 a 233) si
 
 Orden de 1 y 2: el renombrado va primero porque libera el nombre `alertas:recalcular`; mientras Académico lo use, el comando de Alertas no se puede registrar sin chocar.
 
-## 10. Preguntas abiertas para Luis
+## 10. Precisiones resueltas (16/11/2026)
 
-Tres. En cada una, la opción recomendada va primera. Ninguna cambia un requisito; las tres tocan la lista de puertos o de rutas de DA-112 y de T03, que fijó el responsable.
+### 10.1 Los dos comandos a las 02:00 son independientes
 
-**Pregunta 1. ¿Cómo obtiene el comando las parejas (jugador, equipo) sin usuario de sesión?** (§2 punto 3, §3.4)
-Hace falta la lista de membresías vigentes de jugadores sin baja. Ningún puerto de DA-112 la da, y `JugadoresDelEquipo` exige usuario.
-- **(a) Recomendada:** un puerto nuevo `MembresiasVigentes` en `src/Compartido/Aplicacion/`, con adaptador en la Infraestructura de Plantel. Es el mismo patrón de DA-112; amplía a cinco puertos más el de P-09. Exige agregar a T03 la ruta `src/Plantel/Infraestructura/` (solo el adaptador y su `bind`).
-- (b) Que Alertas lea `jugador_equipo` y `bajas_jugador` con SQL de solo lectura. Es más barato, pero contradice DA-112 («Alertas no lee tablas de otros contextos») y la regla de §4.3.
+`alertas:recalcular` y `resumenes:conciliar` se programan los dos a las 02:00 (America/Mexico_City) y ninguno llama al otro. `alertas:recalcular` no llama a `ConciliarResumenes` de Académico, y la alerta académica calcula el nivel por el puerto de P-09, sin leer el resumen guardado. Confirmado el 16/11/2026 (DA-113).
 
-**Pregunta 2. ¿Qué devuelve el puerto de riesgo académico (P-09), y quién da los jugadores de una materia?** (§3.2, §5)
-La `causa` lleva `nivel_riesgo`, `promedio` y `materias_reprobadas` (DA-105, DA-110), y `CriterioDeMateriaModificado` solo trae `materiaId`.
-- **(a) Recomendada:** un puerto `RiesgoAcademicoDelJugador` que devuelve `{nivel, promedio, materiasReprobadas}` o `null`, calculado sin leer `resumenes_academicos`, y un segundo, `JugadoresDeLaMateria`, ambos con adaptador en Académico. Exige agregar a T03 las rutas `src/Compartido/Aplicacion/` (esos puertos) y `src/Academico/Infraestructura/` (adaptadores y `bind`).
-- (b) Que el puerto devuelva solo el nivel y la `causa` académica lleve los otros dos datos leídos de otro lado. No hay otro lado sin leer tablas de Académico: no recomendada.
+### 10.2 La especificación de T03 cita §7.1, §7.3 y §7.4
 
-**Pregunta 3. Tres detalles de reglas que T03 necesita y la spec no fija.** (§3.1, §3.3, §6)
-- **3a. Temporada de cada partido.** (a, recomendada) Se obtiene con el puerto que ya existe `InicioDePartidos` más `TemporadaDeFecha` aplicado a esa fecha, sin puerto nuevo; (b) un puerto `TemporadaDelPartido` en Competencia.
-- **3b. Conteos de la causa de sanciones.** (a, recomendada) Un método nuevo en `AcumulacionDeSanciones` que devuelve los conteos de tarjetas, para no calcular dos veces; exige agregar a T03 la ruta `src/Alertas/Dominio/AcumulacionDeSanciones.php` y su prueba unitaria; (b) calcularlos en Aplicación, duplicando la regla.
-- **3c. `promedio` de la causa de riesgo deportivo con varios entrenadores.** Es la duda que el reporte `docs/reportes/f1-doc-16-11.md` §6 ya lista como pendiente (DA-105 solo fija `null` con `datos_insuficientes`). (a, recomendada) El promedio de la evaluación que decide: el menor entre las `no_pasa`; si no hay ninguna, el mayor entre las demás; (b) el promedio de los promedios de los entrenadores. Marcar el valor como [Decisión por defecto] hasta que se valide.
+Las pruebas de T03 cubren las filas de §7.1 (RN-21), §7.3 (RN-09) y §7.4 (RN-10); la especificación lo dice así desde la v1.13. Confirmado el 16/11/2026.
 
-Si respondes «lo recomendado» a las tres, el plan queda aprobado tal cual está y T03 empieza por el renombrado de §9.4.
+### 10.3 Respuestas a las tres preguntas de la revisión de plan
+
+Las tres se resolvieron con la opción recomendada, el 16/11/2026 (`docs/decisiones/registro-decisiones.md` §10):
+
+| Pregunta | Decisión | Registro |
+|---|---|---|
+| 1. Parejas (jugador, equipo) sin usuario de sesión | Puerto `MembresiasVigentes`, adaptador en Plantel | DA-115 |
+| 2. Forma del puerto de P-09 y jugadores de una materia | `RiesgoAcademicoDelJugador` con nivel, promedio y materias reprobadas; `JugadoresDeLaMateria`; ambos con adaptador en Académico | DA-115 |
+| 3a. Temporada de cada partido | `InicioDePartidos` más `TemporadaDeFecha`, sin puerto nuevo | DA-117 |
+| 3b. Conteos de sanciones | Método nuevo en `AcumulacionDeSanciones` (Dominio de Alertas) | DA-117 |
+| 3c. `promedio` de la causa deportiva | El de la evaluación que decide; decisión por defecto, privacidad Sí | DA-116 |
