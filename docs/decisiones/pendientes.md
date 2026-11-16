@@ -349,3 +349,10 @@ Decisiones por defecto del agente, porque responden los requisitos: **DA-107** (
 | T09 | Bloqueada | — | El humo de §9 ejecuta `alertas:recalcular` (T03) y consulta la vista para convocar (T05); la trazabilidad y el registro de DA-87 a DA-100 son del cierre |
 
 Para desbloquear: aprobar el plan de T05 (y decidir sus puntos 1 a 6) y el de T03 (y decidir sus puntos 1 y 2). T06 sigue a T05; T08 y T09 siguen a todas.
+
+---
+
+## Deudas registradas tras T05 (16 de noviembre de 2026)
+
+- **DA-98 y DD-51:** la vista para convocar repite en SQL (`ConsultaDeVistaParaConvocarSql`) la fórmula de asistencia de DD-51 y la lectura del estado oficial; la paridad con T04 y T07 está probada (`ParidadDeVistaParaConvocarTest`), pero si cambia alguna de las dos reglas hay que cambiarla en los dos lugares.
+- **Nombres casi iguales:** `CalculoDeDesempeno` (Rendimiento, RN-08) y `CalculadorDeDesempeno` (Consultas, RN-18) tienen responsabilidades distintas y nombres casi idénticos; resolver en H7.
