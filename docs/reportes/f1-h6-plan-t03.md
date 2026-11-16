@@ -86,7 +86,25 @@ Un jugador en baja no entra en esta lista: no se le abren alertas, y las abierta
 
 ## 4. Comando y programación
 
-[pendiente]
+**Clase nueva.** `Src\Alertas\Infraestructura\Consola\RecalcularAlertasComando`, firma `alertas:recalcular`, sin argumentos ni opciones. No escribe texto en consola (los mensajes irían en `lang/es`, y no hay ninguno que dar). Devuelve `SUCCESS`. Lo registra `AlertasServiceProvider::boot()` con `$this->commands([...])` cuando corre en consola, igual que Académico y Identidad. El comando solo llama al caso de uso `RecalcularTodasLasAlertas` (`src/Alertas/Aplicacion/`); no contiene reglas.
+
+**Fecha de cálculo.** Se lee una sola vez al empezar, del reloj inyectable de Compartido (`Reloj`/`HoyDeNegocio`, vía `HoyDeNegocioSegunReloj`), y se pasa a todas las reglas; así una corrida que cruza la medianoche no mezcla dos días. `activada_en` y `cerrada_en` llevan el instante del reloj, no `now()` de la base. Las pruebas fijan el día con `RelojFijo`.
+
+**Parámetros.** Se leen una vez por corrida: `sanciones_deportivas` (tarjetas amarillas y rojas, umbral y ventana de faltas) y `alerta_academica_nivel`, de `parametros_institucionales` (DA-100), nunca de constantes (RNF-09). Se asume que Alertas puede leer esa tabla con su propio repositorio en `Infraestructura/`, porque arquitectura §7.9 la lista junto a `alertas` y T02 ya describe estos parámetros como suyos; si el responsable lo ve distinto, es un puerto más.
+
+**Orden dentro de una corrida.**
+
+1. Se pide la lista de membresías vigentes sin baja (§3.4): parejas (jugador, equipo).
+2. Por cada pareja, en este orden, porque RN-10 usa el resultado de RN-09:
+   1. **Acumulación de sanciones** (RN-09): tarjetas, temporada de la fecha de cálculo y faltas de la ventana → `AcumulacionDeSanciones::seCumple()` → `DecisionDeAlerta::decidir()`.
+   2. **Riesgo de baja deportiva** (RN-10): evaluaciones del equipo → `ResultadoDeEvaluacion::delEquipo()` y el resultado de (1) → `RiesgoDeBajaDeportiva::seCumple()`.
+3. Una vez por jugador, **alerta académica** (RN-21), con el puerto de §3.2.
+
+Cada decisión da `Abrir`, `Cerrar` o `Ninguna`, y el repositorio la aplica (§6). La unidad de trabajo es el jugador: una transacción por jugador con las tres alertas, para que un fallo no deje a un jugador a medias. Si el recálculo de un jugador lanza una excepción, se informa con `report()` y la corrida sigue con el siguiente; al terminar, el comando devuelve `FAILURE` si hubo alguna. Es una decisión de diseño de T03 dentro del plan, no un cambio de contrato; la prueba del comando con base sin datos sigue saliendo con 0.
+
+**Programación.** `routes/console.php` ya trae `Schedule::command('alertas:recalcular')->dailyAt('02:00')->timezone('America/Mexico_City')` (línea 6, de H2). T03 conserva esa línea, que ahora corresponde al comando nuevo, y agrega `Schedule::command('resumenes:conciliar')->dailyAt('02:00')->timezone('America/Mexico_City')` (DA-113). Sin `withoutOverlapping` ni otras opciones: no están en la spec. Los dos eventos de las 02:00 corren uno tras otro en la misma pasada del planificador; el orden entre ellos no importa, porque la alerta académica calcula el nivel por el puerto y no lee el resumen guardado (P-09).
+
+**Renombrado de `resumenes:conciliar`.** `ConciliarResumenesComando` conserva el nombre de la clase y su caso de uso `ConciliarResumenes`; cambian la firma (`resumenes:conciliar`) y su comentario. No hay nada que quitar de «reconciliación de alertas»: el comando nunca la tuvo (§2, punto 1). Las pruebas y documentos que lo llaman por su firma vieja están en §9.
 
 ## 5. Escuchas de la alerta académica
 
