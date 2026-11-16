@@ -23,6 +23,7 @@
 | P-11 | El PDF del cliente no está en el repositorio | Todo el lote | Cerrado: transcripción versionada |
 | P-12 | Valores que dependen de la institución | T01, T03 | Pendiente de institución |
 | P-13 | T00 tocó cuatro archivos de pruebas fuera de §7 de su plan | T00 | Cerrado: aprobado por el responsable (DA-104) |
+| P-14 | Los porcentajes de asistencia de los gráficos | T07 | Bloqueo: reglas de otros contextos o rutas no permitidas |
 
 ---
 
@@ -268,3 +269,35 @@ El responsable pidió no decidirlos. PDF §7 dice que el sistema genera alertas 
 | P-10 | El Dominio recibe los datos por entrenador y aplica «basta un `no_pasa`» y «el mayor por partido»; §7.3 y §7.4 ganan una fila cada una | A |
 
 P-04 (aviso pendiente del docente) y P-08a (sin evaluación) los responden `docs/requisitos.md` §7, RN-16, RN-08 y RN-10; se aplican como decisión por defecto al ejecutar T04 y T02. Las lesiones no están en el PDF.
+
+---
+
+## P-14. Los porcentajes de asistencia de los gráficos (T07)
+
+- **Pregunta:** DA-105 define en los gráficos dos series de porcentaje de asistencia por mes: a entrenamientos (entrenador) y a clases (docente). Cada porcentaje tiene su regla en el Dominio de otro contexto: `Src\Academico\Dominio\ConteoDeAsistencia` cuenta presentes y justificadas sobre los registros, y `Src\Competencia\Dominio\ConteoDeAsistenciaAEntrenamientos` tiene la suya. Consultas no tiene `Dominio/` y la prueba de arquitectura prohíbe importar el Dominio de otro contexto. ¿Cómo calcula T07 esos porcentajes?
+- **Tarea afectada:** T07. Las rutas permitidas de T07 son `src/Consultas/**`, `app/Http/**`, `routes/api.php`, `docs/api/openapi.yaml` y `tests/**`.
+- **Fuente:** PDF §8 pide «Participación en entrenamientos» y la evolución académica entre los análisis; HU-25 c1 pide la asistencia a entrenamientos para el entrenador y la asistencia a clases para el docente. Ninguno dice cómo se calcula por mes.
+
+| Opción | Qué hace | A favor | En contra |
+|---|---|---|---|
+| A | Dos puertos en `src/Compartido/Aplicacion/` («porcentaje de asistencia por mes»), con su adaptador en Académico y en Competencia, que usan la regla de su propio Dominio | Una sola regla por porcentaje; es el patrón de `docs/arquitectura.md` §4.3 | Toca `src/Compartido/**`, `src/Academico/**` y `src/Competencia/**`, fuera de las rutas de T07 |
+| B | Consultas repite las dos fórmulas con SQL | No sale de las rutas de T07 | Duplica dos reglas de negocio fuera del Dominio; si una cambia, los gráficos y las pantallas de H2 y H3 darían números distintos |
+| C | Las series de asistencia devuelven conteos por mes (presentes, faltas, justificadas) y no un porcentaje | No duplica reglas ni toca otros contextos | Cambia DA-105; el frontend tendría que conocer la regla |
+
+- **Recomendación:** A.
+- **Estado:** bloqueo. T07 no se ejecutó: construirla sin las dos series de asistencia la dejaría a medias frente a HU-25 c1, y las opciones A y B exceden lo permitido (rutas, o duplicar reglas). Las demás series (rendimiento por partido, mediciones, resumen por periodo y calificaciones) no tienen este problema.
+
+## Estado de las tareas al cierre del lote (15/11/2026)
+
+| Tarea | Estado | Por qué |
+|---|---|---|
+| T00 | Completada | — |
+| T01 | Completada | — |
+| T02 | Completada | — |
+| T03 | Plan entregado, sin ejecutar | La especificación manda detenerse en el plan (`docs/reportes/f1-h6-plan-t03.md`) |
+| T04 | No ejecutada | Depende de P-05 (forma del error de filtro), que el responsable pidió no decidir |
+| T05 | Plan entregado, sin ejecutar | La especificación manda detenerse en el plan (`docs/reportes/f1-h6-plan-t05.md`) |
+| T06 | No ejecutada | Devuelve la vista de T05 (DA-96) |
+| T07 | Bloqueada | P-14 |
+| T08 | No ejecutada | Recorre las rutas de T04 a T07, que no existen todavía |
+| T09 | No ejecutada | El humo depende de T03 y T05 y de P-07; la trazabilidad y el registro de DA-87 a DA-100 son del cierre |
