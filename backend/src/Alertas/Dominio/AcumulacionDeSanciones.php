@@ -13,12 +13,13 @@ final class AcumulacionDeSanciones
 {
     /**
      * @param  list<TarjetasDePartido>  $tarjetas
-     * @param  string  $temporadaId  la temporada que contiene la fecha de cálculo
+     * @param  string|null  $temporadaId  la temporada que contiene la fecha de cálculo; nulo si ninguna la contiene: entonces no se
+     *                                    cuentan tarjetas y las faltas sí (P-08b)
      * @param  list<InasistenciaAEntrenamiento>  $inasistencias
      */
     public static function seCumple(
         array $tarjetas,
-        string $temporadaId,
+        ?string $temporadaId,
         array $inasistencias,
         DateTimeImmutable $fechaDeCalculo,
         ParametrosDeSanciones $parametros,

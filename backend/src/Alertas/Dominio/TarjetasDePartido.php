@@ -18,6 +18,35 @@ final class TarjetasDePartido
         }
     }
 
+    /**
+     * DA-103: por partido y tipo de tarjeta cuenta el mayor número registrado por un solo entrenador del equipo. Así,
+     * una tarjeta que dos entrenadores registran en el mismo partido cuenta una vez. Si los registros no coinciden,
+     * se toma el mayor de cada tipo, sin avisar.
+     *
+     * @param  list<TarjetasRegistradas>  $registros  de un jugador en un equipo, de cualquier entrenador del equipo
+     * @return list<self> una entrada por partido, en el orden en que aparece cada partido
+     */
+    public static function elMayorPorPartido(array $registros): array
+    {
+        /** @var array<string, array{temporada: string, amarillas: int, rojas: int}> $porPartido */
+        $porPartido = [];
+
+        foreach ($registros as $registro) {
+            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
+
+            $porPartido[$registro->partidoId()] = [
+                'temporada' => $anterior['temporada'],
+                'amarillas' => max($anterior['amarillas'], $registro->amarillas()),
+                'rojas' => max($anterior['rojas'], $registro->rojas()),
+            ];
+        }
+
+        return array_values(array_map(
+            fn (array $partido): self => new self($partido['temporada'], $partido['amarillas'], $partido['rojas']),
+            $porPartido,
+        ));
+    }
+
     public function temporadaId(): string
     {
         return $this->temporadaId;

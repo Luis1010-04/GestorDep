@@ -9,6 +9,7 @@ use Src\Alertas\Dominio\ParametrosDeSanciones;
 use Src\Alertas\Dominio\ResultadoDeEvaluacion;
 use Src\Alertas\Dominio\RiesgoDeBajaDeportiva;
 use Src\Alertas\Dominio\TarjetasDePartido;
+use Src\Alertas\Dominio\TarjetasRegistradas;
 use Src\Alertas\Dominio\VentanaDeFaltas;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
 
@@ -207,3 +208,93 @@ test('HU-22: una alerta se abre si la condición se cumple y no hay abierta, y s
     'no se cumple, sin abierta' => [false, false, AccionSobreAlerta::Ninguna],
     'no se cumple, con abierta' => [false, true, AccionSobreAlerta::Cerrar],
 ]);
+
+test('DA-102: con varios entrenadores en el equipo basta que la evaluación de uno sea no_pasa', function (array $porEntrenador, ResultadoDeEvaluacion $esperado, bool $activa) {
+    /** @var list<ResultadoDeEvaluacion> $porEntrenador */
+    $resultado = ResultadoDeEvaluacion::delEquipo($porEntrenador);
+
+    expect($resultado)->toBe($esperado)
+        ->and(RiesgoDeBajaDeportiva::seCumple($resultado, hayAcumulacionDeSanciones: false))->toBe($activa);
+})->with([
+    'pasa y no_pasa' => [[ResultadoDeEvaluacion::Pasa, ResultadoDeEvaluacion::NoPasa], ResultadoDeEvaluacion::NoPasa, true],
+    'no_pasa y datos_insuficientes' => [[ResultadoDeEvaluacion::NoPasa, ResultadoDeEvaluacion::DatosInsuficientes], ResultadoDeEvaluacion::NoPasa, true],
+    'datos_insuficientes, pasa y no_pasa' => [[ResultadoDeEvaluacion::DatosInsuficientes, ResultadoDeEvaluacion::Pasa, ResultadoDeEvaluacion::NoPasa], ResultadoDeEvaluacion::NoPasa, true],
+    'pasa y pasa' => [[ResultadoDeEvaluacion::Pasa, ResultadoDeEvaluacion::Pasa], ResultadoDeEvaluacion::Pasa, false],
+    'datos_insuficientes y pasa' => [[ResultadoDeEvaluacion::DatosInsuficientes, ResultadoDeEvaluacion::Pasa], ResultadoDeEvaluacion::Pasa, false],
+    'solo datos_insuficientes' => [[ResultadoDeEvaluacion::DatosInsuficientes, ResultadoDeEvaluacion::DatosInsuficientes], ResultadoDeEvaluacion::DatosInsuficientes, false],
+    'un solo entrenador que no pasa' => [[ResultadoDeEvaluacion::NoPasa], ResultadoDeEvaluacion::NoPasa, true],
+    'un solo entrenador que pasa' => [[ResultadoDeEvaluacion::Pasa], ResultadoDeEvaluacion::Pasa, false],
+]);
+
+test('DA-107 (RN-08, RN-10): sin ninguna evaluación guardada el resultado es datos_insuficientes y solo las sanciones activan el riesgo', function () {
+    $sinEvaluaciones = ResultadoDeEvaluacion::delEquipo([]);
+
+    expect($sinEvaluaciones)->toBe(ResultadoDeEvaluacion::DatosInsuficientes)
+        ->and(RiesgoDeBajaDeportiva::seCumple($sinEvaluaciones, hayAcumulacionDeSanciones: false))->toBeFalse()
+        ->and(RiesgoDeBajaDeportiva::seCumple($sinEvaluaciones, hayAcumulacionDeSanciones: true))->toBeTrue();
+});
+
+/**
+ * @param  list<TarjetasDePartido>  $tarjetas
+ * @return list<array{string, int, int}>
+ */
+function alertasTarjetasComoArreglo(array $tarjetas): array
+{
+    return array_map(fn (TarjetasDePartido $t): array => [$t->temporadaId(), $t->amarillas(), $t->rojas()], $tarjetas);
+}
+
+test('DA-103 (§7.6): la misma tarjeta amarilla registrada por dos entrenadores en un partido cuenta una, no dos', function () {
+    $registros = [
+        new TarjetasRegistradas('partido-1', ALERTAS_TEMPORADA, 1, 0),
+        new TarjetasRegistradas('partido-1', ALERTAS_TEMPORADA, 1, 0),
+    ];
+
+    expect(alertasTarjetasComoArreglo(TarjetasDePartido::elMayorPorPartido($registros)))->toBe([[ALERTAS_TEMPORADA, 1, 0]]);
+});
+
+test('DA-103: por partido y tipo de tarjeta cuenta el mayor número registrado por un solo entrenador', function () {
+    $registros = [
+        new TarjetasRegistradas('partido-1', ALERTAS_TEMPORADA, 2, 0),
+        new TarjetasRegistradas('partido-1', ALERTAS_TEMPORADA, 1, 1),
+        new TarjetasRegistradas('partido-1', ALERTAS_TEMPORADA, 0, 0),
+    ];
+
+    // El mayor de amarillas (2) y el mayor de rojas (1) pueden venir de entrenadores distintos; no se suman entre sí.
+    expect(alertasTarjetasComoArreglo(TarjetasDePartido::elMayorPorPartido($registros)))->toBe([[ALERTAS_TEMPORADA, 2, 1]]);
+});
+
+test('DA-103: los partidos distintos no se mezclan y cada uno conserva su temporada', function () {
+    $registros = [
+        new TarjetasRegistradas('partido-1', ALERTAS_TEMPORADA_ANTERIOR, 0, 1),
+        new TarjetasRegistradas('partido-2', ALERTAS_TEMPORADA, 1, 0),
+        new TarjetasRegistradas('partido-1', ALERTAS_TEMPORADA_ANTERIOR, 0, 1),
+        new TarjetasRegistradas('partido-3', ALERTAS_TEMPORADA, 1, 0),
+        new TarjetasRegistradas('partido-2', ALERTAS_TEMPORADA, 1, 0),
+    ];
+
+    expect(alertasTarjetasComoArreglo(TarjetasDePartido::elMayorPorPartido($registros)))
+        ->toBe([[ALERTAS_TEMPORADA_ANTERIOR, 0, 1], [ALERTAS_TEMPORADA, 1, 0], [ALERTAS_TEMPORADA, 1, 0]])
+        ->and(TarjetasDePartido::elMayorPorPartido([]))->toBe([]);
+});
+
+test('DA-103 con RN-09: dos partidos con la misma amarilla registrada por dos entrenadores suman 2 y no activan; un tercero sí', function () {
+    $dosVeces = fn (string $partido) => [new TarjetasRegistradas($partido, ALERTAS_TEMPORADA, 1, 0), new TarjetasRegistradas($partido, ALERTAS_TEMPORADA, 1, 0)];
+    $dosPartidos = [...$dosVeces('partido-1'), ...$dosVeces('partido-2')];
+
+    expect(alertasAcumulacion(tarjetas: TarjetasDePartido::elMayorPorPartido($dosPartidos)))->toBeFalse()
+        ->and(alertasAcumulacion(tarjetas: TarjetasDePartido::elMayorPorPartido([...$dosPartidos, ...$dosVeces('partido-3')])))->toBeTrue();
+});
+
+test('DA-103: un registro de tarjetas de un entrenador no admite cantidades negativas', function (int $amarillas, int $rojas) {
+    expect(fn () => new TarjetasRegistradas('partido-1', ALERTAS_TEMPORADA, $amarillas, $rojas))
+        ->toThrow(ReglaDeNegocioViolada::class, 'tarjetas_invalidas');
+})->with([[-1, 0], [0, -1]]);
+
+test('RN-09 (P-08b): sin temporada que contenga la fecha de cálculo no se cuentan tarjetas, y las faltas sí', function () {
+    $calculo = new DateTimeImmutable(ALERTAS_FECHA_DE_CALCULO);
+    $roja = [new TarjetasDePartido(ALERTAS_TEMPORADA, 3, 1)];
+    $tresFaltas = [alertasInasistencia(2), alertasInasistencia(1), alertasInasistencia(0)];
+
+    expect(AcumulacionDeSanciones::seCumple($roja, null, [], $calculo, alertasParametrosDeSanciones()))->toBeFalse()
+        ->and(AcumulacionDeSanciones::seCumple($roja, null, $tresFaltas, $calculo, alertasParametrosDeSanciones()))->toBeTrue();
+});
