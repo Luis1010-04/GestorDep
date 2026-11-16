@@ -1,6 +1,6 @@
 # F1-H6-T03: plan de recálculo de alertas
 
-**Fecha:** 16 de noviembre de 2026 · **Especificación:** `docs/hitos/f1-h6.md` v1.11 · **Estado:** plan para aprobación (revisión de plan). No se escribió código, pruebas ni migraciones, y no se ejecutó `make`.
+**Fecha:** 16 de noviembre de 2026 · **Especificación:** `docs/hitos/f1-h6.md` v1.11 · **Estado:** plan completo (diez secciones), para aprobación; el agente se detiene hasta que lo apruebes. No se escribió código, pruebas ni migraciones, y no se ejecutó `make`.
 **Nota:** este archivo sustituye al plan de T03 del 15 y 16 de noviembre; esa versión sigue en el historial de git.
 
 ## 1. Alcance y reglas aplicadas
