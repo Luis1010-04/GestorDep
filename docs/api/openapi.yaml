@@ -5663,8 +5663,195 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/alertas:
+    get:
+      operationId: listarAlertasDelJugador
+      summary: Alertas abiertas de un jugador que el usuario puede ver
+      description: >-
+        Docente o entrenador con el jugador en su alcance (HU-22). Solo las alertas abiertas: una alerta que dejo de
+        cumplirse se cierra, se conserva en la base y ya no aparece. La alerta academica la ven el entrenador de un equipo
+        del jugador y el docente con una materia suya del periodo vigente (DA-89). Las alertas deportivas y de sanciones
+        las ven los entrenadores del equipo de la alerta, sin importar cual de ellos registro los datos con que se
+        calculo (DA-90, DA-102); el entrenador de otro equipo del jugador y el docente no las ven (RN-14, DD-08), y no
+        hay error: la lista simplemente no las incluye. Un jugador fuera del alcance, dado de baja (RN-23), inexistente
+        o con un id que no es un UUID v7 responde el mismo 404.
+      tags: [Alertas]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Las alertas abiertas visibles, de la mas antigua a la mas reciente; vacia si no hay.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Alerta'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /estatus-de-jugadores:
+    get:
+      operationId: listarEstatusDeJugadores
+      summary: Listado de estatus de los jugadores del usuario
+      description: >-
+        Docente o entrenador (HU-23). Solo jugadores en su alcance y nunca uno dado de baja (RN-23), ordenados por
+        apellidos, nombres e identificador. Una forma por rol (DA-105): todos reciben jugador, estado_oficial (el mismo
+        objeto de GET /jugadores/{jugador}/estado-disponibilidad, con lesion_id solo para el registrante), aviso_pendiente y
+        las alertas que pueden ver; el entrenador recibe ademas resumen_academico (RN-13), y el docente, materias con el
+        detalle de las suyas del periodo vigente. Un campo que el usuario no puede ver se omite. aviso_pendiente es
+        verdadero para los entrenadores del jugador y para quien creo el aviso (RN-16, DA-108). Los filtros se combinan con
+        AND; filtro[equipo_id] y filtro[materia_id] solo aciertan con equipos que el usuario entrena y materias que da, y
+        un id valido pero ajeno o inexistente da una lista vacia, no un error (P-05).
+      tags: [Alertas]
+      parameters:
+        - name: filtro[equipo_id]
+          in: query
+          schema: {type: string, format: uuid}
+        - name: filtro[materia_id]
+          in: query
+          schema: {type: string, format: uuid}
+        - name: filtro[tipo_alerta]
+          in: query
+          schema: {type: string, enum: [riesgo_baja_academica, riesgo_baja_deportiva, acumulacion_sanciones_deportivas]}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de filas de estatus.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FilaDeEstatus'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Paginacion o filtro invalidos (codigo validacion_fallida). Un filtro con un valor que no corresponde, como un
+            tipo de alerta desconocido o un id que no es un UUID, trae filtro_invalido en errores[].codigo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Alerta:
+      type: object
+      additionalProperties: false
+      required: [id, tipo, jugador_id, equipo_id, causa, activada_en]
+      description: Una alerta abierta (HU-22). No lleva cerrada_en, porque solo se devuelven las abiertas.
+      properties:
+        id:
+          type: string
+          format: uuid
+        tipo:
+          type: string
+          enum: [riesgo_baja_academica, riesgo_baja_deportiva, acumulacion_sanciones_deportivas]
+        jugador_id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Nulo en la alerta academica.
+        causa:
+          type: object
+          description: >-
+            El dato que activa la alerta, nunca un texto libre (DA-105). riesgo_baja_academica: nivel_riesgo, promedio y
+            materias_reprobadas. riesgo_baja_deportiva: resultado, promedio y acumulacion_sanciones.
+            acumulacion_sanciones_deportivas: tarjetas_amarillas, tarjetas_rojas y faltas_en_ventana.
+        activada_en:
+          type: string
+          format: date-time
+    FilaDeEstatus:
+      type: object
+      additionalProperties: false
+      required: [jugador, estado_oficial, aviso_pendiente, alertas]
+      description: >-
+        Una fila del listado de estatus (HU-23); la forma depende del rol (DA-105). resumen_academico solo lo recibe el
+        entrenador (RN-13): la situacion academica sin el detalle de materias. materias solo la recibe el docente: el
+        detalle de sus materias del periodo vigente (DD-48), vacia sin periodo vigente.
+      properties:
+        jugador:
+          type: object
+          additionalProperties: false
+          required: [id, nombres, apellidos, matricula]
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombres:
+              type: string
+            apellidos:
+              type: string
+            matricula:
+              type: string
+        estado_oficial:
+          $ref: '#/components/schemas/EstadoDeDisponibilidad'
+        aviso_pendiente:
+          type: boolean
+        alertas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alerta'
+        resumen_academico:
+          $ref: '#/components/schemas/SituacionAcademica'
+        materias:
+          $ref: '#/components/schemas/SituacionAcademica/properties/materias'
     EstadoDeDisponibilidad:
       type: object
       additionalProperties: false

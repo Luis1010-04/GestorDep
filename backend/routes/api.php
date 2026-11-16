@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlertaController;
 use App\Http\Controllers\AlineacionYResultadoController;
 use App\Http\Controllers\AsignaturaController;
 use App\Http\Controllers\AsistenciaController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\EntrenamientoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\EstadoDeDisponibilidadController;
+use App\Http\Controllers\EstatusDeJugadoresController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\LesionController;
@@ -53,6 +55,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/jugadores/{jugador}/avisos-lesion', [AvisoDeLesionController::class, 'listar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/avisos-lesion', [AvisoDeLesionController::class, 'crear'])->whereUuid('jugador');
         Route::get('/jugadores/{jugador}/estado-disponibilidad', [EstadoDeDisponibilidadController::class, 'consultar'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/alertas', [AlertaController::class, 'delJugador'])->whereUuid('jugador');
+        Route::get('/estatus-de-jugadores', [EstatusDeJugadoresController::class, 'listar']);
     });
 
     Route::middleware('rol:docente')->group(function () {

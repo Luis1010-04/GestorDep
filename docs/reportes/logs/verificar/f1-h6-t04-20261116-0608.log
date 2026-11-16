@@ -1,0 +1,120 @@
+commit base: cf1e267 + T04 sin commit | make verificar | 2026-11-16T06:08:18-06:00
+docker compose exec -T app bash bin/con-candado.sh composer verificar
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ...................................................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 887 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   src/Consultas/Infraestructura/ConsultaDeEstatusSql.php                 
+ ------ ----------------------------------------------------------------------- 
+  48     Parameter #1 $expression of method                                     
+         Illuminate\Database\Query\Builder::selectRaw() expects                 
+         literal-string, string given.                                          
+         🪪  argument.type                                                      
+  51     Parameter #1 $jugadores of method                                      
+         Src\Consultas\Aplicacion\ConsultaDeAlertas::deLosJugadores() expects   
+         list<string>, array<mixed> given.                                      
+         🪪  argument.type                                                      
+         💡  array<mixed> might not be a list.                                  
+  53     Method Src\Consultas\Infraestructura\ConsultaDeEstatusSql::pagina()    
+         should return array{elementos: list<Src\Consultas\Aplicacion\FilaDeEs  
+         tatus>, total: int} but returns array{elementos: array<int, Src\Consu  
+         ltas\Aplicacion\FilaDeEstatus>, total: int<0, max>}.                   
+         🪪  return.type                                                        
+         💡  Offset 'elementos' (list<Src\Consultas\Aplicacion\FilaDeEstatus>)   
+         does not accept type array<int, Src\Consultas\Aplicacion\FilaDeEstatu  
+         s>: array<int, Src\Consultas\Aplicacion\FilaDeEstatus> might not be a  
+          list.                                                                 
+  82     Call to function assert() with true will always evaluate to true.      
+         🪪  function.alreadyNarrowedType                                       
+         💡  Because the type is coming from a PHPDoc, you can turn off this    
+         check by setting treatPhpDocTypesAsCertain: false in your phpstan.neo  
+         n.                                                                     
+  82     Instanceof between Illuminate\Database\Query\Builder and               
+         Illuminate\Database\Query\Builder will always evaluate to true.        
+         🪪  instanceof.alwaysTrue                                              
+         💡  Because the type is coming from a PHPDoc, you can turn off this    
+         check by setting treatPhpDocTypesAsCertain: false in your phpstan.neo  
+         n.                                                                     
+ ------ ----------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   tests/Feature/Alertas/AlertasDelJugadorTest.php                      
+ ------ --------------------------------------------------------------------- 
+  14     Function alertasTipos() has parameter $respuesta with generic class  
+         Illuminate\Testing\TestResponse but does not specify its types:      
+         TResponse                                                            
+         🪪  missingType.generics                                             
+ ------ --------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Feature/Consultas/EstatusDeJugadoresTest.php                     
+ ------ ----------------------------------------------------------------------- 
+  13     Function estatusJugadores() has parameter $respuesta with generic      
+         class Illuminate\Testing\TestResponse but does not specify its types:  
+         TResponse                                                              
+         🪪  missingType.generics                                               
+  22     Function estatusFila() has parameter $respuesta with generic class     
+         Illuminate\Testing\TestResponse but does not specify its types:        
+         TResponse                                                              
+         🪪  missingType.generics                                               
+  69     No error with identifier argument.type is reported on line 69.         
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  73     No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 73.                                                            
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  132    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 132.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  133    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 133.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  134    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 134.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  135    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 135.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  136    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 136.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  137    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 137.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  146    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 146.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  147    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 147.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  158    No error with identifier offsetAccess.nonOffsetAccessible is reported  
+         on line 158.                                                           
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  159    No error with identifier argument.type is reported on line 159.        
+         🪪  ignore.unmatchedIdentifier (non-ignorable)                         
+  234    Access to an undefined property Pest\Mixins\Expectation<mixed>::$not.  
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ [ERROR] Found 21 errors                                                        
+
+Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with error code 1
+make: *** [Makefile:32: verificar] Error 1
+codigo: 2 | segundos: 26
