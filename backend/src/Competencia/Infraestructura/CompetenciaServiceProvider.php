@@ -4,8 +4,10 @@ namespace Src\Competencia\Infraestructura;
 
 use Illuminate\Support\ServiceProvider;
 use Src\Compartido\Aplicacion\ConvocatoriaDePartido;
+use Src\Compartido\Aplicacion\FaltasDeEntrenamiento;
 use Src\Compartido\Aplicacion\InicioDePartidos;
 use Src\Compartido\Aplicacion\PorcentajeDeAsistenciaAEntrenamientos;
+use Src\Compartido\Aplicacion\TemporadaDeFecha;
 use Src\Competencia\Aplicacion\ConsultaDeAsistencia;
 use Src\Competencia\Aplicacion\ConsultaDeConvocatoria;
 use Src\Competencia\Aplicacion\VisibilidadDeJugador;
@@ -26,6 +28,7 @@ class CompetenciaServiceProvider extends ServiceProvider
         $this->app->bind(ConsultaDeAsistencia::class, ConsultaDeAsistenciaSql::class);
         $this->app->bind(ConsultaDeConvocatoria::class, ConsultaDeConvocatoriaSql::class);
         $this->app->bind(ConvocatoriaDePartido::class, ConvocatoriaDePartidoCompetencia::class);
+        $this->app->bind(FaltasDeEntrenamiento::class, FaltasDeEntrenamientoSql::class);
         $this->app->bind(InicioDePartidos::class, InicioDePartidosCompetencia::class);
         $this->app->bind(RepositorioDeAsistenciasDeEntrenamiento::class, RepositorioDeAsistenciasDeEntrenamientoEloquent::class);
         $this->app->bind(RepositorioDeConvocatorias::class, RepositorioDeConvocatoriasEloquent::class);
@@ -35,6 +38,7 @@ class CompetenciaServiceProvider extends ServiceProvider
         $this->app->bind(RepositorioDeRivales::class, RepositorioDeRivalesEloquent::class);
         $this->app->bind(RepositorioDeTemporadas::class, RepositorioDeTemporadasEloquent::class);
         $this->app->bind(RepositorioDeTorneos::class, RepositorioDeTorneosEloquent::class);
+        $this->app->bind(TemporadaDeFecha::class, TemporadaDeFechaSql::class);
         $this->app->bind(VisibilidadDeJugador::class, VisibilidadDeJugadorSql::class);
     }
 }

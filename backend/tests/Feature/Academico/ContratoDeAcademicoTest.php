@@ -169,7 +169,7 @@ test('HU-09: las respuestas de la situación académica cumplen el contrato', fu
     mundoAsistir($m['i1'], '2026-03-09', 'presente');
     $ruta = "/api/v1/jugadores/{$m['j1']}/situacion-academica";
     $sinResumen = sesionesPeticion($this, 'GET', $ruta, idDeSesion: sesionesIniciar($this, 'a@x.com'))->assertOk();
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     $respuestas = [
         $sinResumen,

@@ -223,7 +223,7 @@ test('RNF-01: un docente no ve en la situación académica nada de otro docente,
     // Dos parciales de D2 cuya media (7.50) es lo único que el resumen común deja ver.
     mundoCalificar($m['i3b'], 'parcial', '5.55', 1);
     mundoCalificar($m['i3b'], 'parcial', '9.45', 2);
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     $respuesta = sesionesPeticion($this, 'GET', "/api/v1/jugadores/{$m['j3']}/situacion-academica", idDeSesion: sesionesIniciar($this, 'd1@x.com'))->assertOk();
     $cuerpo = (string) $respuesta->getContent();

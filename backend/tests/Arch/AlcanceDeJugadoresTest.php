@@ -11,6 +11,7 @@ test('RNF-01: la lista de usos autorizados sin alcance es exactamente la acordad
     expect(array_keys(USOS_AUTORIZADOS_SIN_ALCANCE))->toBe([
         'src/Plantel/Infraestructura/RepositorioDeJugadoresEloquent.php',
         'src/Plantel/Infraestructura/BusquedaDeJugadorPorMatricula.php',
+        'src/Plantel/Infraestructura/MembresiasVigentesPlantel.php',
     ]);
     foreach (USOS_AUTORIZADOS_SIN_ALCANCE as $motivo) {
         expect($motivo)->not->toBeEmpty();

@@ -150,30 +150,30 @@ test('DD-45 (§7.10 fila 15, caso de uso): sin periodo vigente no se calcula ni 
         ->and(DB::table('resumenes_academicos')->count())->toBe(0);
 });
 
-test('DD-45 (§7.10 fila 16): al cambiar el día vigente, alertas:recalcular crea el resumen del periodo P2 con valores nulos', function () {
+test('DD-45 (§7.10 fila 16): al cambiar el día vigente, resumenes:conciliar crea el resumen del periodo P2 con valores nulos', function () {
     /** @var TestCase $this */
     $m = mundoDeDocentes();
     mundoCalificar($m['i1'], 'final', '8.00');
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
     expect(NoNulo::exigir(recalculoResumen($m['j1'], $m['p1']), 'el resumen del jugador')->promedio)->toBe('8.00');
 
     recalculoFijarReloj('2026-08-03 12:00:00');
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     expect(recalculoResumen($m['j1'], $m['p2']))->toMatchObject(['promedio' => null, 'materias_reprobadas' => 0, 'materias_sin_calificar' => 0, 'nivel_riesgo' => null])
         ->and(NoNulo::exigir(recalculoResumen($m['j1'], $m['p1']), 'el resumen del jugador')->promedio)->toBe('8.00');
 });
 
-test('HU-09 (§7.10 fila 17): alertas:recalcular dos veces da el mismo resultado, sin filas duplicadas, con código 0', function () {
+test('HU-09 (§7.10 fila 17): resumenes:conciliar dos veces da el mismo resultado, sin filas duplicadas, con código 0', function () {
     /** @var TestCase $this */
     $m = mundoDeDocentes();
     mundoCalificar($m['i1'], 'final', '8.00');
     mundoCalificar($m['i3a'], 'final', '9.00');
     mundoCalificar($m['i3b'], 'final', '6.00');
 
-    consolaArtisan('alertas:recalcular')->assertExitCode(0);
+    consolaArtisan('resumenes:conciliar')->assertExitCode(0);
     $primera = recalculoInstantanea();
-    consolaArtisan('alertas:recalcular')->assertExitCode(0);
+    consolaArtisan('resumenes:conciliar')->assertExitCode(0);
 
     // J1, J2, J3 y J5 tienen inscripciones; J4 no.
     expect($primera)->toHaveCount(4)
@@ -185,12 +185,12 @@ test('HU-09 (§7.10 fila 18): una fila borrada de resumenes_academicos se recons
     /** @var TestCase $this */
     $m = mundoDeDocentes();
     mundoCalificar($m['i1'], 'final', '7.20');
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
     $antes = recalculoInstantanea();
 
     DB::table('resumenes_academicos')->where('jugador_id', $m['j1'])->delete();
     expect(recalculoResumen($m['j1']))->toBeNull();
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     expect(recalculoInstantanea())->toEqual($antes);
 });
@@ -220,11 +220,11 @@ test('HU-07 (§7.10 fila 22): calculado_en es el instante del reloj truncado a s
     expect((new DateTimeImmutable(NoNulo::exigir(recalculoResumen($m['j1']), 'el resumen del jugador')->calculado_en))->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s.u'))->toBe('2026-03-10 12:00:00.000000');
 });
 
-test('HU-09 (§7.10 fila 24): alertas:recalcular está programado a las 02:00 de America/Mexico_City', function () {
+test('HU-09 (§7.10 fila 24): resumenes:conciliar está programado a las 02:00 de America/Mexico_City', function () {
     /** @var TestCase $this */
     $eventos = array_values(array_filter(
         app(Schedule::class)->events(),
-        fn ($evento) => str_contains((string) $evento->command, 'alertas:recalcular'),
+        fn ($evento) => str_contains((string) $evento->command, 'resumenes:conciliar'),
     ));
 
     expect($eventos)->toHaveCount(1)
@@ -232,11 +232,11 @@ test('HU-09 (§7.10 fila 24): alertas:recalcular está programado a las 02:00 de
         ->and($eventos[0]->timezone instanceof DateTimeZone ? $eventos[0]->timezone->getName() : $eventos[0]->timezone)->toBe('America/Mexico_City');
 });
 
-test('CONSOLA (§7.12 fila 8): alertas:recalcular sin datos de H2 sale con 0 y no crea filas', function () {
+test('CONSOLA (§7.12 fila 8): resumenes:conciliar sin datos de H2 sale con 0 y no crea filas', function () {
     /** @var TestCase $this */
     sesionesPrepararBase();
 
-    consolaArtisan('alertas:recalcular')->assertExitCode(0);
+    consolaArtisan('resumenes:conciliar')->assertExitCode(0);
 
     expect(DB::table('resumenes_academicos')->count())->toBe(0);
 });

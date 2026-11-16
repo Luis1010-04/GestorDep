@@ -3,6 +3,8 @@
 namespace Src\Rendimiento\Infraestructura;
 
 use Illuminate\Support\ServiceProvider;
+use Src\Compartido\Aplicacion\EvaluacionesVigentesDelEquipo;
+use Src\Compartido\Aplicacion\TarjetasPorPartido;
 use Src\Rendimiento\Aplicacion\CalificacionesDelEntrenador;
 use Src\Rendimiento\Aplicacion\ConsultaDeMetricas;
 use Src\Rendimiento\Aplicacion\ConsultaDePlantillas;
@@ -24,10 +26,12 @@ class RendimientoServiceProvider extends ServiceProvider
         $this->app->bind(ConsultaDeMetricas::class, CatalogoDeMetricasSql::class);
         $this->app->bind(ConsultaDePlantillas::class, RepositorioDePlantillasSql::class);
         $this->app->bind(ConsultaDeRendimientos::class, ConsultaDeRendimientosSql::class);
+        $this->app->bind(EvaluacionesVigentesDelEquipo::class, EvaluacionesVigentesDelEquipoSql::class);
         $this->app->bind(RepositorioDeEvaluaciones::class, RepositorioDeEvaluacionesSql::class);
         $this->app->bind(RepositorioDePlantillas::class, RepositorioDePlantillasSql::class);
         $this->app->bind(RepositorioDeRendimientos::class, RepositorioDeRendimientosEloquent::class);
         $this->app->bind(RepositorioDeUmbrales::class, RepositorioDeUmbralesSql::class);
+        $this->app->bind(TarjetasPorPartido::class, TarjetasPorPartidoSql::class);
         $this->app->bind(Transaccion::class, TransaccionSql::class);
         $this->app->bind(VisibilidadDeJugador::class, VisibilidadDeJugadorSql::class);
     }

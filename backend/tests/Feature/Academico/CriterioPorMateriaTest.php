@@ -207,7 +207,7 @@ test('RN-03 (§7.10 fila 5): un criterio propio de 8.00 con final 7.50 deja 1 re
     /** @var TestCase $this */
     $m = mundoDeDocentes();
     $calificacion = mundoCalificar($m['i1'], 'final', '7.50');
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
     expect(DB::table('resumenes_academicos')->where('jugador_id', $m['j1'])->value('materias_reprobadas'))->toBe(0);
 
     criterioDefinir($this, $m['m1'], ['calificacion_minima' => '8.00'])->assertOk();
@@ -215,7 +215,7 @@ test('RN-03 (§7.10 fila 5): un criterio propio de 8.00 con final 7.50 deja 1 re
 
     DB::connection('propietario')->table('calificaciones')->where('id', $calificacion)->update(['valor' => '8.00']);
     criterioDefinir($this, $m['m1'], ['calificacion_minima' => '8.00'])->assertOk();
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
     expect(DB::table('resumenes_academicos')->where('jugador_id', $m['j1'])->value('materias_reprobadas'))->toBe(0);
 });
 
@@ -223,7 +223,7 @@ test('RN-03 (§7.10 fila 6): un criterio propio de 6.00 con final 6.50 deja 0 re
     /** @var TestCase $this */
     $m = mundoDeDocentes();
     mundoCalificar($m['i1'], 'final', '6.50');
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
     expect(DB::table('resumenes_academicos')->where('jugador_id', $m['j1'])->first())->toMatchObject(['materias_reprobadas' => 1, 'nivel_riesgo' => 'en_riesgo']);
 
     criterioDefinir($this, $m['m1'], ['calificacion_minima' => '6.00'])->assertOk();

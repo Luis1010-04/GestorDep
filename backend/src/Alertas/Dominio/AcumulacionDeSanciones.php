@@ -24,6 +24,28 @@ final class AcumulacionDeSanciones
         DateTimeImmutable $fechaDeCalculo,
         ParametrosDeSanciones $parametros,
     ): bool {
+        $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+        return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+            || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
+    }
+
+    /**
+     * Lo que cuenta la regla, que es también la causa de la alerta (DA-105, DA-117): las tarjetas de la temporada y las
+     * faltas injustificadas de la ventana móvil.
+     *
+     * @param  list<TarjetasDePartido>  $tarjetas
+     * @param  list<InasistenciaAEntrenamiento>  $inasistencias
+     * @return array{tarjetas_amarillas: int, tarjetas_rojas: int, faltas_en_ventana: int}
+     */
+    public static function conteos(
+        array $tarjetas,
+        ?string $temporadaId,
+        array $inasistencias,
+        DateTimeImmutable $fechaDeCalculo,
+        ParametrosDeSanciones $parametros,
+    ): array {
         $amarillas = 0;
         $rojas = 0;
 
@@ -34,8 +56,10 @@ final class AcumulacionDeSanciones
             }
         }
 
-        return $rojas >= $parametros->tarjetasRojas()
-            || $amarillas >= $parametros->tarjetasAmarillas()
-            || VentanaDeFaltas::contar($inasistencias, $fechaDeCalculo, $parametros->faltasVentanaDias()) >= $parametros->faltasUmbral();
+        return [
+            'tarjetas_amarillas' => $amarillas,
+            'tarjetas_rojas' => $rojas,
+            'faltas_en_ventana' => VentanaDeFaltas::contar($inasistencias, $fechaDeCalculo, $parametros->faltasVentanaDias()),
+        ];
     }
 }

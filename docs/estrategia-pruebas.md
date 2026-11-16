@@ -65,7 +65,8 @@ Cada comando tiene pruebas Pest que lo invocan con `$this->artisan(...)` y compr
 | Comando | Hito | Qué debe cumplir |
 |---|---|---|
 | `usuarios:crear` | H1 | Crea un usuario con uno o dos roles; la contraseña se pide por consola o por opción y se guarda solo como hash; rechaza correo duplicado, rol inexistente y contraseña que no cumple RNF-10; no imprime la contraseña |
-| `alertas:recalcular` | H6 | Concilia resúmenes y alertas abiertas; es idempotente (dos ejecuciones dejan el mismo estado); no reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores; cierra las alertas cuya condición venció con el tiempo; una prueba confirma que está programado a diario en el planificador (`arquitectura.md` §11) |
+| `alertas:recalcular` | H6 | Recalcula las tres alertas de los jugadores sin baja y abre o cierra las que corresponda (DA-113); es idempotente (dos ejecuciones dejan el mismo estado); no reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores; cierra las alertas cuya condición venció con el tiempo; una prueba confirma que está programado a diario en el planificador (`arquitectura.md` §11) |
+| `resumenes:conciliar` | H2 | Concilia los resúmenes académicos de los jugadores con inscripciones (antes `alertas:recalcular`; DA-113); es idempotente; no crea ni cierra alertas; una prueba confirma que está programado a diario a las 02:00 (America/Mexico_City), igual que `alertas:recalcular` y sin depender de él |
 
 Ningún otro comando se crea sin aprobación.
 
