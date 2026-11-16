@@ -50,7 +50,39 @@ Solo lectura, con grep y lectura corta (rutas bajo `backend/`).
 
 ## 3. Puertos
 
-[pendiente]
+Todos son interfaces en `src/Compartido/Aplicacion/`, con tipos primitivos, `Identificador`, `DateTimeImmutable` y DTO propios de Compartido. Los consume la capa de **Aplicación** de Alertas; ella arma los objetos de Dominio de T02 (`TarjetasRegistradas`, `InasistenciaAEntrenamiento`, `ResultadoDeEvaluacion`) y llama a las reglas. El Dominio de Alertas no ve ningún puerto. Cada adaptador se registra con `bind` en el proveedor de su contexto, como los de DA-109. Todas las lecturas son de solo lectura. Cada puerto se valida con una prueba de contrato del adaptador (`tests/Feature/Alertas/Puertos/`), con PostgreSQL real, y con la prueba de la regla que lo usa (§7).
+
+### 3.1 Los cuatro de DA-112
+
+| Puerto | Firma | Adaptador | Qué hace y cómo lo usa Alertas |
+|---|---|---|---|
+| `TarjetasPorPartido` | `de(Identificador $jugador, Identificador $equipo): list<TarjetasDeUnRegistro>`; DTO `{partidoId: string, amarillas: int, rojas: int}` | Rendimiento (`rendimientos_partido`) | Una entrada por fila registrada por **cualquier** entrenador del equipo (DA-102): de ahí sale el máximo por partido y tipo (DA-103). Sin el entrenador en el DTO, porque la regla no lo necesita. Alertas lo convierte en `TarjetasRegistradas` (con la temporada, ver 3.3) y llama a `TarjetasDePartido::elMayorPorPartido()` |
+| `FaltasDeEntrenamiento` | `de(Identificador $jugador, Identificador $equipo, DateTimeImmutable $desde, DateTimeImmutable $hasta): list<FaltaDeEntrenamiento>`; DTO `{fecha: DateTimeImmutable, justificada: bool}` | Competencia (`asistencias_entrenamiento` y `entrenamientos` en estado `realizado`; DA-91) | Solo trae lo que cae en la ventana (de `fecha de cálculo − (días − 1)` a la fecha de cálculo, con `faltas_ventana_dias` de `parametros_institucionales`). Alertas lo convierte en `InasistenciaAEntrenamiento`; `VentanaDeFaltas::contar()` aplica el recorte por día de negocio. El adaptador no decide si la falta justificada cuenta: eso es del Dominio |
+| `TemporadaDeFecha` | `de(DateTimeImmutable $fecha): ?Identificador` | Competencia (`temporadas`; sin solape por §7.5 de arquitectura, así que hay a lo sumo una) | Da la temporada de la fecha de cálculo. `null` si ninguna la contiene: se pasa `null` a `AcumulacionDeSanciones::seCumple()` y no se cuentan tarjetas, pero sí faltas (DA-91, P-08b) |
+| `EvaluacionesVigentesDelEquipo` | `de(Identificador $jugador, Identificador $equipo): list<EvaluacionVigente>`; DTO `{entrenadorId: string, resultado: string, promedio: ?string}` (decimal como texto) | Rendimiento (`evaluaciones_rendimiento`) | La última fila por entrenador, por `calculado_en` (DA-92). Alertas convierte cada `resultado` a `ResultadoDeEvaluacion` y llama a `delEquipo()`: basta un `no_pasa`, y sin filas el resultado es `datos_insuficientes` (DA-107). De ahí sale también el `promedio` de la causa (el de la evaluación que decide: la `no_pasa` de menor promedio; si ninguna, la de mayor promedio; sin evaluaciones, `null`). **Esa elección es una propuesta de este plan, no de la spec**: DA-105 solo dice que `promedio` es `null` con `datos_insuficientes` |
+
+Dos notas: (a) el adaptador de evaluaciones no filtra por los entrenadores que hoy están asignados, porque Rendimiento no lee `entrenador_equipo`; en la Fase 1 no hay ruta para quitar ni agregar entrenadores a un equipo (DA-114), así que no hay diferencia observable. (b) Ninguno de los cuatro recibe usuario ni pasa por `AlcanceDeJugadores`: el comando corre sin sesión y la visibilidad se aplica al leer las alertas (T04).
+
+### 3.2 El del nivel de riesgo académico (P-09, ya decidido)
+
+| Puerto | Firma | Adaptador | Qué hace |
+|---|---|---|---|
+| `RiesgoAcademicoDelJugador` | `de(Identificador $jugador): ?RiesgoAcademico`; DTO `{nivel: string, promedio: ?string, materiasReprobadas: int}`; `null` si el jugador no tiene inscripciones del periodo vigente | Académico | Calcula el nivel con las mismas reglas del resumen (`ParametrosDeRiesgo`, `parametros_institucionales`), **sin leer `resumenes_academicos`** (P-09, opción A), de modo que el escucha de Alertas no depende del orden respecto al del resumen. Cuenta como `materiasReprobadas` todas las del periodo vigente (DA-110). Alertas pasa `nivel` y `parametros['alerta_academica_nivel']` a `AlertaAcademica::seCumple()`; `null` equivale a «sin riesgo» |
+| `JugadoresDeLaMateria` | `de(Identificador $materia): list<Identificador>` | Académico | Los jugadores con inscripción vigente en la materia. Lo necesita el escucha de `CriterioDeMateriaModificado`, que solo trae `materiaId` (`RecalcularResumenesDeMateria` hace lo mismo dentro de Académico). **No está en DA-112 ni en P-09**; se propone como segundo método del mismo puerto, o como puerto aparte. Ver pregunta 2 de §10 |
+
+La forma del DTO y el segundo puerto son lo que este plan agrega a lo ya decidido; el expediente P-09 solo fijó que el nivel se calcula por un puerto.
+
+### 3.3 La temporada de cada partido
+
+`TarjetasRegistradas` lleva `temporadaId` por partido, pero `partidos.temporada_id` es de Competencia y el adaptador de Rendimiento no puede leerla. Propuesta, sin puerto nuevo: Alertas obtiene la temporada de cada partido con el puerto que ya existe, `InicioDePartidos` (fecha de inicio del partido, adaptador en Competencia), y con `TemporadaDeFecha` aplicado a esa fecha. Eso coincide con `partidos.temporada_id` porque arquitectura §7.5 define esa columna como «la que contiene la fecha». Alternativa: un puerto `TemporadaDelPartido`. Ver pregunta 3 de §10.
+
+### 3.4 El que falta para el comando
+
+| Puerto | Firma | Adaptador | Qué hace |
+|---|---|---|---|
+| `MembresiasVigentes` | `todas(): list<MembresiaVigente>`; DTO `{jugadorId: string, equipoId: string}` | Plantel (`jugador_equipo` vigente, jugadores sin baja) | Las parejas (jugador, equipo) sobre las que el comando evalúa las deportivas y las de sanciones, y los jugadores para la académica (la lista de jugadores se obtiene de las mismas parejas, sin repetir). **No está en DA-112**, y `JugadoresDelEquipo` no sirve porque exige usuario. Ver pregunta 1 de §10 |
+
+Un jugador en baja no entra en esta lista: no se le abren alertas, y las abiertas se conservan sin tocar (P-08c, DA-99).
 
 ## 4. Comando y programación
 
