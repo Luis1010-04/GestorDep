@@ -250,7 +250,7 @@ Rutas bajo `backend/`. Los nombres de clase son una propuesta de este plan; los 
 | `src/Alertas/Infraestructura/AlertasServiceProvider.php` | `bind` de los repositorios; `Event::listen` del escucha; `commands([RecalcularAlertasComando::class])` en consola |
 | `src/Rendimiento/Infraestructura/RendimientoServiceProvider.php` y `src/Competencia/Infraestructura/CompetenciaServiceProvider.php` | `bind` de los adaptadores de DA-112 (solo el registro, como autoriza la spec) |
 | `src/Academico/Infraestructura/Consola/ConciliarResumenesComando.php` | Solo la firma (`resumenes:conciliar`) y el comentario. No hay reconciliación de alertas que quitar (§2, punto 1) |
-| `routes/console.php` | Mantiene `alertas:recalcular` a las 02:00 y agrega `resumenes:conciliar` a las 02:00, ambos en America/Mexico_City |
+| `routes/console.php` | Al final, `alertas:recalcular` y `resumenes:conciliar` a las 02:00, ambos en America/Mexico_City. La línea 6 actual se convierte primero en la de `resumenes:conciliar` (renombrado, §9.4) y la de `alertas:recalcular` se agrega con el comando nuevo |
 
 ### 8.3 Rutas que hay que pedir, porque no están en las permitidas de T03
 
@@ -309,8 +309,8 @@ Todas pasan a `resumenes:conciliar`. La prueba del horario (línea 223 a 233) si
 
 ### 9.4 Orden propuesto
 
-1. **Un solo commit del código del renombrado:** firma y comentario de `ConciliarResumenesComando`, comentario de `ConciliarResumenes`, el alta de `resumenes:conciliar` en `routes/console.php` y las 23 líneas de las pruebas de H2. Sin ese cambio de pruebas, `make verificar` falla; con él, la suite de H2 queda verde sin que el comando nuevo exista todavía.
-2. Después, el código de T03 (Alertas) en commits propios: puertos y adaptadores, repositorio y reglas de Aplicación, comando, escucha.
+1. **Un solo commit del código del renombrado:** firma y comentario de `ConciliarResumenesComando`, comentario de `ConciliarResumenes`, la línea 6 de `routes/console.php` (que pasa a programar `resumenes:conciliar` a las 02:00) y las 23 líneas de las pruebas de H2. Sin ese cambio de pruebas, `make verificar` falla; con él, la suite de H2 queda verde sin que el comando nuevo exista todavía.
+2. Después, el código de T03 (Alertas) en commits propios: puertos y adaptadores, repositorio y reglas de Aplicación, comando (con su línea de `alertas:recalcular` a las 02:00 en `routes/console.php`), escucha.
 3. Los documentos de §9.2 en un F1-DOC aparte, con la aprobación de este plan.
 
 Orden de 1 y 2: el renombrado va primero porque libera el nombre `alertas:recalcular`; mientras Académico lo use, el comando de Alertas no se puede registrar sin chocar.
