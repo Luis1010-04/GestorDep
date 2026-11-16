@@ -108,7 +108,30 @@ Cada decisión da `Abrir`, `Cerrar` o `Ninguna`, y el repositorio la aplica (§6
 
 ## 5. Escuchas de la alerta académica
 
-[pendiente]
+**Un escucha para los cuatro eventos**, como el de Académico: `Src\Alertas\Infraestructura\Escuchas\RecalcularAlertaAcademica`. Dos razones: los cuatro hacen lo mismo (recalcular la alerta académica de uno o más jugadores) y así queda un solo lugar para la idempotencia y los reintentos. Se registra en `AlertasServiceProvider::boot()` con `Event::listen([CalificacionRegistrada::class, AsistenciaDeClaseRegistrada::class, JugadorInscrito::class, CriterioDeMateriaModificado::class], RecalcularAlertaAcademica::class)`. Es un cambio del proveedor de Alertas, sin tocar el de Académico.
+
+**Cola.** `implements ShouldQueue`, `public bool $afterCommit = true`, `public int $tries = 3`, igual que `RecalcularResumenAcademico`. Los eventos ya se despachan con `DB::afterCommit` (`PublicadorDeEventosLaravel`), así que el trabajo en cola solo se encola con la transacción confirmada. En Docker corre el servicio `worker` (driver `database`); en pruebas el driver es `sync` (`phpunit.xml`).
+
+**Qué hace según el evento.**
+
+| Evento | Jugadores que recalcula |
+|---|---|
+| `CalificacionRegistrada`, `AsistenciaDeClaseRegistrada`, `JugadorInscrito` | El de `jugadorId` |
+| `CriterioDeMateriaModificado` (solo trae `materiaId`) | Los jugadores con inscripción vigente en esa materia, por `JugadoresDeLaMateria` (§3.2) |
+
+Para cada jugador llama a `RecalcularAlertaAcademicaDeJugador` (`src/Alertas/Aplicacion/`), el mismo caso de uso que usa el comando para la tercera regla de §4. Así el escucha y el comando no pueden divergir.
+
+**Cómo obtiene el nivel.** Por el puerto `RiesgoAcademicoDelJugador` (§3.2), que calcula el nivel, el promedio y las materias reprobadas con las reglas de Académico y los parámetros vigentes, **sin leer `resumenes_academicos`** (P-09, opción A). El escucha de Académico y el de Alertas pueden correr en cualquier orden o en paralelo; ninguno depende del otro.
+
+**Idempotencia.**
+
+- El escucha no guarda estado: cada ejecución recalcula desde los datos y decide con `DecisionDeAlerta::decidir($seCumple, $hayAbierta)`. Repetir el mismo evento da la misma decisión: la primera vez abre o cierra; las siguientes dan `Ninguna`.
+- Abrir es un `INSERT` protegido por el índice único parcial `uq_alertas_abierta`. Si el escucha y el comando abren a la vez, el segundo recibe la violación 23505 y la trata como «ya está abierta»: no falla ni reintenta.
+- Cerrar es `UPDATE alertas SET cerrada_en = :ahora WHERE id = :id AND cerrada_en IS NULL`; si no afecta filas, otro proceso ya la cerró.
+- Un jugador en baja no se recalcula (P-08c): el escucha termina sin escribir.
+- Si el trabajo falla tres veces, queda en `failed_jobs`, como el de Académico; el comando diario lo corrige a las 02:00.
+
+**Pruebas del escucha** (driver `sync`): por evento, la fila de §7.1 que corresponda, y el mismo evento despachado dos veces sin duplicar (§7).
 
 ## 6. Cierre y apertura
 
