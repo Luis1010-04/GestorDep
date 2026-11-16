@@ -67,7 +67,7 @@ Dos notas: (a) el adaptador de evaluaciones no filtra por los entrenadores que h
 
 | Puerto | Firma | Adaptador | Qué hace |
 |---|---|---|---|
-| `RiesgoAcademicoDelJugador` | `de(Identificador $jugador): ?RiesgoAcademico`; DTO `{nivel: string, promedio: ?string, materiasReprobadas: int}`; `null` si el jugador no tiene inscripciones del periodo vigente | Académico | Calcula el nivel con las mismas reglas del resumen (`ParametrosDeRiesgo`, `parametros_institucionales`), **sin leer `resumenes_academicos`** (P-09, opción A), de modo que el escucha de Alertas no depende del orden respecto al del resumen. Cuenta como `materiasReprobadas` todas las del periodo vigente (DA-110). Alertas pasa `nivel` y `parametros['alerta_academica_nivel']` a `AlertaAcademica::seCumple()`; `null` equivale a «sin riesgo» |
+| `RiesgoAcademicoDelJugador` | `de(Identificador $jugador): ?RiesgoAcademico`; DTO `{nivel: string, promedio: ?string, materiasReprobadas: int}`; `null` si el jugador no tiene inscripciones del periodo vigente | Académico | Calcula el nivel con las mismas reglas del resumen (`ParametrosDeRiesgo`, `parametros_institucionales`), **sin leer `resumenes_academicos`** (P-09, opción A), de modo que el escucha de Alertas no depende del orden respecto al del resumen. Cuenta como `materiasReprobadas` todas las del periodo vigente (DA-110). Alertas pasa `nivel` y `parametros['alerta_academica']` a `AlertaAcademica::seCumple()`; `null` equivale a «sin riesgo» |
 | `JugadoresDeLaMateria` | `de(Identificador $materia): list<Identificador>` | Académico | Los jugadores con inscripción vigente en la materia. Lo necesita el escucha de `CriterioDeMateriaModificado`, que solo trae `materiaId` (`RecalcularResumenesDeMateria` hace lo mismo dentro de Académico). **No está en DA-112 ni en P-09**; se propone como segundo método del mismo puerto, o como puerto aparte. Ver pregunta 2 de §10 |
 
 La forma del DTO y el segundo puerto son lo que este plan agrega a lo ya decidido; el expediente P-09 solo fijó que el nivel se calcula por un puerto.
@@ -90,7 +90,7 @@ Un jugador en baja no entra en esta lista: no se le abren alertas, y las abierta
 
 **Fecha de cálculo.** Se lee una sola vez al empezar, del reloj inyectable de Compartido (`Reloj`/`HoyDeNegocio`, vía `HoyDeNegocioSegunReloj`), y se pasa a todas las reglas; así una corrida que cruza la medianoche no mezcla dos días. `activada_en` y `cerrada_en` llevan el instante del reloj, no `now()` de la base. Las pruebas fijan el día con `RelojFijo`.
 
-**Parámetros.** Se leen una vez por corrida: `sanciones_deportivas` (tarjetas amarillas y rojas, umbral y ventana de faltas) y `alerta_academica_nivel`, de `parametros_institucionales` (DA-100), nunca de constantes (RNF-09). Se asume que Alertas puede leer esa tabla con su propio repositorio en `Infraestructura/`, porque arquitectura §7.9 la lista junto a `alertas` y T02 ya describe estos parámetros como suyos; si el responsable lo ve distinto, es un puerto más.
+**Parámetros.** Se leen una vez por corrida: `sanciones_deportivas` (tarjetas amarillas y rojas, umbral y ventana de faltas) y `alerta_academica`, de `parametros_institucionales` (DA-100), nunca de constantes (RNF-09). Se asume que Alertas puede leer esa tabla con su propio repositorio en `Infraestructura/`, porque arquitectura §7.9 la lista junto a `alertas` y T02 ya describe estos parámetros como suyos; si el responsable lo ve distinto, es un puerto más.
 
 **Orden dentro de una corrida.**
 
