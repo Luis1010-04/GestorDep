@@ -272,7 +272,48 @@ Sin aprobación, T03 no las toca. Las razones están en §2 (puntos 3, 4 y 6), �
 
 ## 9. Cambios de renombrado fuera de rutas permitidas
 
-[pendiente]
+**Esto se propone; no se toca hasta que el responsable apruebe el plan.** Los números de línea se verificaron con `grep -n "alertas:recalcular"` el 16/11/2026, en la rama `hito/f1-h6-especificacion`.
+
+### 9.1 Pruebas de H2 (`backend/tests/Feature/`)
+
+La spec habla de «23 llamadas en 5 archivos». El `grep` da **23 líneas** en 5 archivos, y no todas son llamadas: 17 son `consolaArtisan('alertas:recalcular')`, 5 son títulos de prueba y 1 es la comprobación del horario. Hay que cambiar las 23, pero la cifra de «llamadas» es 17.
+
+| Archivo | Líneas | Qué son |
+|---|---|---|
+| `Academico/ContratoDeAcademicoTest.php` | 172 | 1 llamada |
+| `Academico/CriterioPorMateriaTest.php` | 210, 218, 226 | 3 llamadas |
+| `Academico/RecalculoDelResumenTest.php` | 153 (título, fila 16 de §7.10), 157 y 161 (llamadas), 167 (título, fila 17), 174 y 176 (llamadas), 188 y 193 (llamadas), 223 (título, fila 24: horario), 227 (el `str_contains` del horario), 235 (título, fila 8 de §7.12), 239 (llamada) | 12 líneas: 7 llamadas, 4 títulos y 1 comprobación del horario |
+| `Academico/SituacionAcademicaTest.php` | 49, 186, 257, 292, 304 (llamadas), 283 (título, fila 16) | 6 líneas: 5 llamadas y 1 título |
+| `Seguridad/AcademicoSeguridadTest.php` | 226 | 1 llamada |
+
+Todas pasan a `resumenes:conciliar`. La prueba del horario (línea 223 a 233) sigue comprobando `0 2 * * *` en America/Mexico_City, ahora con `resumenes:conciliar`. La prueba nueva del horario de `alertas:recalcular` va en `tests/Feature/Alertas/` (§7.2).
+
+### 9.2 Documentos
+
+| Documento | Línea | Qué dice hoy | Propuesta |
+|---|---|---|---|
+| `docs/estrategia-pruebas.md` | 68 | La fila del comando `alertas:recalcular` dice «Concilia resúmenes y alertas abiertas…» | Dejar la fila para `alertas:recalcular`, quitar «Concilia resúmenes y», y agregar una fila `resumenes:conciliar` (H2): concilia resúmenes; idempotente; programado a las 02:00. **Se cambia** |
+| `docs/criterios-aceptacion-fase-1.md` | 33 | Criterio de H6: «`alertas:recalcular` es idempotente, está programado a diario y cierra las alertas que vencen con el tiempo» | Ya describe el comando de Alertas, que es el nuevo. **Sin cambio** |
+| `docs/CAMBIOS-v1.2.md` | 13 y 34 | Historia de la versión 1.2: «`alertas:recalcular` programado» | Documento histórico de lo que se cambió en v1.2. **Sin cambio** (recomendado) |
+| `docs/decisiones/registro-decisiones.md` | 32 (DD-21) | «`alertas:recalcular` programado a diario a las 02:00» | Sigue siendo cierto con el comando nuevo. **Sin cambio**; DA-113 ya registra el movimiento |
+| `docs/decisiones/registro-decisiones.md` | 57 (DD-46) y 43 (DD-32) | DD-46: el resumen se recalcula con los cuatro eventos «y con `alertas:recalcular`»; DD-32: `alertas:recalcular` (H6) concilia lo que ocurre sin evento | **No estaban en la lista de la spec.** Hoy nombran al comando que pasa a ser `resumenes:conciliar`. Propuesta: anotar «hoy `resumenes:conciliar` (DA-113)» en las dos filas, sin reescribir su texto |
+| `docs/hitos/f1-h1.md` (72), `f1-h2.md` (129, 589, 590, 591, 597, 634, 711, 793, 803), `f1-h5.md` (110) | | Especificaciones de hitos cerrados que nombran el comando | Históricos. **Sin cambio** (recomendado); la nota de DA-113 en `f1-h6.md` basta |
+| `docs/arquitectura.md` | 85, 399, 401, 412 | Ya marca el cambio como estado futuro, T03 (DA-113) | Al cerrar T03, un F1-DOC quita «estado futuro» |
+
+### 9.3 Dos comentarios de código
+
+| Archivo | Línea | Cambio | ¿Está en las rutas de T03? |
+|---|---|---|---|
+| `src/Academico/Infraestructura/Consola/ConciliarResumenesComando.php` | 9 | El comentario nombra `alertas:recalcular` | Sí, es el archivo de la firma |
+| `src/Academico/Aplicacion/ConciliarResumenes.php` | 6 | El comentario nombra `alertas:recalcular` | **No** |
+
+### 9.4 Orden propuesto
+
+1. **Un solo commit del código del renombrado:** firma y comentario de `ConciliarResumenesComando`, comentario de `ConciliarResumenes`, el alta de `resumenes:conciliar` en `routes/console.php` y las 23 líneas de las pruebas de H2. Sin ese cambio de pruebas, `make verificar` falla; con él, la suite de H2 queda verde sin que el comando nuevo exista todavía.
+2. Después, el código de T03 (Alertas) en commits propios: puertos y adaptadores, repositorio y reglas de Aplicación, comando, escucha.
+3. Los documentos de §9.2 en un F1-DOC aparte, con la aprobación de este plan.
+
+Orden de 1 y 2: el renombrado va primero porque libera el nombre `alertas:recalcular`; mientras Académico lo use, el comando de Alertas no se puede registrar sin chocar.
 
 ## 10. Preguntas abiertas para Luis
 
