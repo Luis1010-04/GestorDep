@@ -290,12 +290,14 @@ Todas pasan a `resumenes:conciliar`. La prueba del horario (línea 223 a 233) si
 
 ### 9.2 Documentos
 
+Estos textos, junto con la línea 68 de `docs/estrategia-pruebas.md` («Concilia resúmenes y alertas abiertas», bajo `alertas:recalcular`), se corrigen durante la implementación de T03, porque el comando de resúmenes pasa a `resumenes:conciliar`. No se corrigen antes, para que cada documento cambie junto con el código que describe.
+
 | Documento | Línea | Qué dice hoy | Propuesta |
 |---|---|---|---|
-| `docs/estrategia-pruebas.md` | 68 | La fila del comando `alertas:recalcular` dice «Concilia resúmenes y alertas abiertas…» | Dejar la fila para `alertas:recalcular`, quitar «Concilia resúmenes y», y agregar una fila `resumenes:conciliar` (H2): concilia resúmenes; idempotente; programado a las 02:00. **Se cambia** |
-| `docs/criterios-aceptacion-fase-1.md` | 33 | Criterio de H6: «`alertas:recalcular` es idempotente, está programado a diario y cierra las alertas que vencen con el tiempo» | Ya describe el comando de Alertas, que es el nuevo. **Sin cambio** |
-| `docs/CAMBIOS-v1.2.md` | 13 y 34 | Historia de la versión 1.2: «`alertas:recalcular` programado» | Documento histórico de lo que se cambió en v1.2. **Sin cambio** (recomendado) |
-| `docs/decisiones/registro-decisiones.md` | 32 (DD-21) | «`alertas:recalcular` programado a diario a las 02:00» | Sigue siendo cierto con el comando nuevo. **Sin cambio**; DA-113 ya registra el movimiento |
+| `docs/estrategia-pruebas.md` | 68 | La fila del comando `alertas:recalcular` dice «Concilia resúmenes y alertas abiertas…» | Dejar la fila para `alertas:recalcular`, quitar «Concilia resúmenes y», y agregar una fila `resumenes:conciliar` (H2): concilia resúmenes; idempotente; programado a las 02:00. **Se corrige durante la implementación de T03** |
+| `docs/criterios-aceptacion-fase-1.md` | 33 | Criterio de H6: «`alertas:recalcular` es idempotente, está programado a diario y cierra las alertas que vencen con el tiempo» | Nombra al comando por el nombre que cambia con DA-113 (el de resúmenes pasa a `resumenes:conciliar`). **Se corrige durante la implementación de T03** |
+| `docs/CAMBIOS-v1.2.md` | 13 y 34 | Historia de la versión 1.2: «`alertas:recalcular` programado» | Cita el comando por el nombre que cambia con DA-113. **Se corrige durante la implementación de T03** |
+| `docs/decisiones/registro-decisiones.md` | 32 (DD-21) | «`alertas:recalcular` programado a diario a las 02:00» | Nombra al comando por el nombre que cambia con DA-113. **Se corrige durante la implementación de T03** |
 | `docs/decisiones/registro-decisiones.md` | 57 (DD-46) y 43 (DD-32) | DD-46: el resumen se recalcula con los cuatro eventos «y con `alertas:recalcular`»; DD-32: `alertas:recalcular` (H6) concilia lo que ocurre sin evento | **No estaban en la lista de la spec.** Hoy nombran al comando que pasa a ser `resumenes:conciliar`. Propuesta: anotar «hoy `resumenes:conciliar` (DA-113)» en las dos filas, sin reescribir su texto |
 | `docs/hitos/f1-h1.md` (72), `f1-h2.md` (129, 589, 590, 591, 597, 634, 711, 793, 803), `f1-h5.md` (110) | | Especificaciones de hitos cerrados que nombran el comando | Históricos. **Sin cambio** (recomendado); la nota de DA-113 en `f1-h6.md` basta |
 | `docs/arquitectura.md` | 85, 399, 401, 412 | Ya marca el cambio como estado futuro, T03 (DA-113) | Al cerrar T03, un F1-DOC quita «estado futuro» |

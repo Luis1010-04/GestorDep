@@ -1,6 +1,6 @@
 # F1-H6-T05: plan de la vista para convocar y el orden por desempeño
 
-**Fecha:** 15 de noviembre de 2026; actualizado el 16 de noviembre con DA-106 · **Especificación:** `docs/hitos/f1-h6.md` v1.10 · **Estado:** plan aprobado el 16/11/2026 (recomendaciones de §5, puntos 1 a 6; DA-118 a DA-120). No se escribió código de T05: la implementación espera la orden del responsable.
+**Fecha:** 15 de noviembre de 2026; actualizado el 16 de noviembre con DA-106 · **Especificación:** `docs/hitos/f1-h6.md` v1.13 · **Estado:** plan aprobado el 16/11/2026 (recomendaciones de §5, puntos 1 a 6; DA-118 a DA-120). No se escribió código de T05: la implementación espera la orden del responsable.
 **Base:** DA-94, DA-95 y DA-98; formas de respuesta de DA-105 (§6.2).
 
 ## 1. Qué construye
