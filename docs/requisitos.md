@@ -15,7 +15,7 @@
 | 1.2.1 | 22/10/2026 | RN-22: la asignación de entrenadores adicionales pasa al backlog (ninguna historia la describe) |
 | 1.2.2 | 14/11/2026 | RN-16: quien creó un aviso deja de verlo si pierde el alcance sobre el jugador (DA-42, DA-83) |
 | 1.2.3 | 14/11/2026 | RN-22: las alertas de riesgo de baja deportiva y de acumulación de sanciones de un equipo se calculan con los datos de todos sus entrenadores y las ven todos ellos (DA-102) |
-| 1.2.4 | 16/11/2026 | RN-09 y RN-10: las alertas deportivas y de sanciones se calculan con lo que registró cualquier entrenador del equipo (DA-102, DA-103). RN-14: la excepción de las alertas. RN-22: en la Fase 1 no hay asignación de entrenadores adicionales (DA-114). Matriz de §7: el docente ve de la alerta académica el nivel, el promedio y las materias reprobadas (DA-110); el segundo entrenador ve lo que registró del rendimiento en partidos (RN-14, DD-17) y del estado físico (DD-59), y su riesgo deportivo es «De su equipo» si es del mismo equipo (DA-102) y «No» si es de otro equipo del jugador (RN-14); nota sobre la asistencia en la vista para convocar (DA-111). §10.2: se quita la pregunta sobre si los entrenadores comparten datos (resuelta por DA-102) |
+| 1.2.4 | 16/11/2026 | RN-09 y RN-10: las alertas deportivas y de sanciones se calculan con lo que registró cualquier entrenador del equipo (DA-102, DA-103). RN-14: la excepción de las alertas. RN-22: en la Fase 1 no hay asignación de entrenadores adicionales (DA-114). Matriz de §7: el docente ve de la alerta académica el nivel, el promedio y las materias reprobadas (DA-110); el segundo entrenador ve lo que registró del rendimiento en partidos (RN-14, DD-17), del estado físico (DD-59) y del detalle de la lesión (RN-15, DA-19 de H5, DD-63), y su riesgo deportivo es «De su equipo» si es del mismo equipo (DA-102) y «No» si es de otro equipo del jugador (RN-14); nota sobre la asistencia en la vista para convocar (DA-111). §10.2: se quita la pregunta sobre si los entrenadores comparten datos (resuelta por DA-102) |
 
 ## 1. Introducción
 
@@ -367,7 +367,7 @@ Como docente o entrenador, quiero dar de alta los datos de apoyo que necesito, p
 | Riesgo deportivo, segundo entrenador del mismo equipo | No | De su equipo | De su equipo (DA-102) |
 | Estado oficial y fecha estimada de regreso | Sí | Sí | Sí |
 | Aviso de lesión pendiente | Solo el que creó | Sí | Sí |
-| Detalle de la lesión (tipo, zona, causa) | No | Solo si la registró | No |
+| Detalle de la lesión (tipo, zona, causa) | No | Solo si la registró | Solo si la registró (RN-15, DA-19 de H5, DD-63) |
 | Estado físico (detalle) | No | Solo lo que registró | Solo lo que registró (DD-59) |
 | Asistencia a entrenamientos y convocatorias | No | Solo de sus equipos | Solo de sus equipos |
 | Gráficos e historial | Calificaciones y asistencia de su materia | Solo lo que registró, más el resumen académico simplificado | Solo lo que registró, más el resumen académico simplificado |
