@@ -2,7 +2,7 @@
 
 **Fecha:** 15 de noviembre de 2026
 **Origen:** lote ordenado por el responsable sobre `docs/hitos/f1-h6.md` v1.8, y la auditoría `docs/reportes/auditorias/auditoria-especificacion-h6-v1.8-20261115.md`.
-**Estado del lote:** detenido antes de T01 por los bloqueantes B1 a B5 de esa auditoría. T00 (DA-101) se ejecutó aparte.
+**Estado del lote:** se detuvo antes de T01 por los bloqueantes B1 a B5 de esa auditoría. El responsable los resolvió el 15/11/2026 (ver «Actualización» al final) y el lote siguió con T01.
 
 **Sobre el PDF del cliente.** El procedimiento pide citar la sección del PDF. El PDF no está en el repositorio (ver P-11). Donde dice «PDF», la cita es del mapa de `docs/requisitos.md` §11 y de `docs/alcance-fases.md` §3, que resumen sus puntos; no del texto original.
 
@@ -10,17 +10,17 @@
 
 | Id | Pregunta | Tarea | Estado |
 |---|---|---|---|
-| P-01 | Seeder de parámetros frente a tres pruebas de Académico | T01 | Bloqueo: ruta no permitida |
-| P-02 | `routes/api.php` fuera de las rutas permitidas | T04 a T07 | Bloqueo: ruta no permitida |
-| P-03 | DA-88 corregida sin aprobación explícita | T03, T05 | Bloqueo: falta aprobación |
+| P-01 | Seeder de parámetros frente a tres pruebas de Académico | T01 | Cerrado: opción A aprobada |
+| P-02 | `routes/api.php` fuera de las rutas permitidas | T04 a T07 | Cerrado: opción A aprobada |
+| P-03 | DA-88 corregida sin aprobación explícita | T03, T05 | Cerrado: DA-88 aprobada; T03 y T05 se detienen en su plan |
 | P-04 | Indicador de aviso pendiente para el docente | T04 | Responden los requisitos; sin aplicar |
 | P-05 | `filtro_invalido` o `validacion_fallida` | T04 | Sin respuesta |
-| P-06 | Formas de respuesta sin definir | T04, T05, T07 | Sin respuesta |
+| P-06 | Formas de respuesta sin definir | T04, T05, T07 | Cerrado: DA-105, [Decisión por defecto] |
 | P-07 | Guion de humo que no se puede ejecutar como está | T09 | Sin respuesta |
 | P-08 | Casos sin regla de DA-91, DA-92 y DA-99 | T02, T03 | Parcial: uno responde, dos sin respuesta |
 | P-09 | Orden de los dos escuchas del mismo evento | T03 | Sin respuesta |
 | P-10 | Qué recibe el Dominio con DA-102 y DA-103 | T02, T03 | Sin respuesta |
-| P-11 | El PDF del cliente no está en el repositorio | Todo el lote | Bloqueo del procedimiento |
+| P-11 | El PDF del cliente no está en el repositorio | Todo el lote | Cerrado: transcripción versionada |
 | P-12 | Valores que dependen de la institución | T01, T03 | Pendiente de institución |
 | P-13 | T00 tocó cuatro archivos de pruebas fuera de §7 de su plan | T00 | Cerrado: aprobado por el responsable (DA-104) |
 
@@ -239,3 +239,32 @@ No son preguntas para el agente. Se dejan como están, sin fijar:
 - **PDF y requisitos:** no aplican.
 - **Recomendación:** A.
 - **Estado:** cerrado. Aplicada como desviación declarada. Archivos fuera de §7: `backend/tests/Ayudantes/DominioDePrueba.php` (nuevo), `backend/tests/Pest.php` (una línea), `backend/tests/Unit/Academico/ParametrosDeRiesgoTest.php` y `backend/tests/Unit/Compartido/NumeroDecimalTest.php` (solo pierden la función). Es reversible con el `git revert` del commit de T00. **Aprobada por el responsable el 15/11/2026 y registrada como DA-104**, con la condición de que el cambio sea solo el traslado de las dos funciones, sin cambiar su lógica. Los cuatro archivos quedaron en §7 del plan.
+
+---
+
+## Actualización del 15 de noviembre de 2026: decisiones del responsable
+
+**Fuente.** La transcripción del PDF del cliente está en [`docs/fuentes/proceso-general-sistema-web.md`](../fuentes/proceso-general-sistema-web.md). Desde aquí, «PDF §N» cita esa transcripción. Las citas de los expedientes de arriba a `docs/requisitos.md` §11 y `docs/alcance-fases.md` §3 se escribieron antes de tenerla.
+
+| Id | Decisión | Dónde quedó |
+|---|---|---|
+| P-01 | Opción A: T01 actualiza las tres pruebas del seeder en `MigracionesDeAcademicoTest.php`, solo para comprobar los valores nuevos de DA-100; no se borran ni se debilitan | `docs/hitos/f1-h6.md` v1.9, T01 |
+| P-02 | Opción A: `routes/api.php` entra en las rutas permitidas de T04 a T07 | `docs/hitos/f1-h6.md` v1.9, T04 a T07 |
+| P-03 | DA-88 aprobada, con el apartamiento de ADR-07 por escrito. T03 y T05 se detienen en su plan | Registro, sección 10; especificación §3.1 |
+| P-06 | Formas de respuesta de T04, T05 y T07, aplicadas por defecto como DA-105 | Especificación §6.2; registro, sección 10 |
+| P-11 | La transcripción se versionó | `docs/fuentes/` |
+
+### Expedientes que siguen abiertos: recomendación en una línea
+
+El responsable pidió no decidirlos. PDF §7 dice que el sistema genera alertas automáticas y que las consultan docentes y entrenadores; PDF §8, qué análisis hay. Ninguna de las dos secciones responde estas preguntas, que son de diseño.
+
+| Id | Recomendación | Opción |
+|---|---|---|
+| P-05 | 422 `validacion_fallida` arriba y `filtro_invalido` en `errores[].codigo`; un id válido pero ajeno devuelve lista vacía, como los filtros de H1 a H3 | A |
+| P-07 | Reescribir el guion de §9: cinco partidos con rendimiento antes de consultar la alerta, un aviso antes del listado, un paso con filtro y el caso académico activo y cerrado | A |
+| P-08b | Si ninguna temporada contiene la fecha de cálculo, no se cuentan tarjetas; las faltas de 30 días sí | A |
+| P-08c | Las alertas abiertas de un jugador en baja se conservan y no se muestran, como dice DA-99 | A |
+| P-09 | El escucha de Alertas calcula el nivel de riesgo él mismo a través de un puerto, sin leer el resumen guardado, para no depender del orden de los escuchas | A |
+| P-10 | El Dominio recibe los datos por entrenador y aplica «basta un `no_pasa`» y «el mayor por partido»; §7.3 y §7.4 ganan una fila cada una | A |
+
+P-04 (aviso pendiente del docente) y P-08a (sin evaluación) los responden `docs/requisitos.md` §7, RN-16, RN-08 y RN-10; se aplican como decisión por defecto al ejecutar T04 y T02. Las lesiones no están en el PDF.
