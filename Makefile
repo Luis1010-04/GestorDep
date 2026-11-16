@@ -37,7 +37,7 @@ mutacion:
 	docker compose exec -T app bash bin/con-candado.sh composer mutacion
 
 pruebas:
-	docker compose exec -T app bash bin/con-candado.sh php vendor/bin/pest
+	docker compose exec -T app bash bin/con-candado.sh php -d memory_limit=1G vendor/bin/pest
 
 migrar:
 	docker compose exec -T app php artisan migrate --database=propietario --force
