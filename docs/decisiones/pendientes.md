@@ -13,17 +13,17 @@
 | P-01 | Seeder de parámetros frente a tres pruebas de Académico | T01 | Cerrado: opción A aprobada |
 | P-02 | `routes/api.php` fuera de las rutas permitidas | T04 a T07 | Cerrado: opción A aprobada |
 | P-03 | DA-88 corregida sin aprobación explícita | T03, T05 | Cerrado: DA-88 aprobada; T03 y T05 se detienen en su plan |
-| P-04 | Indicador de aviso pendiente para el docente | T04 | Responden los requisitos; sin aplicar |
-| P-05 | `filtro_invalido` o `validacion_fallida` | T04 | Sin respuesta |
+| P-04 | Indicador de aviso pendiente para el docente | T04 | Cerrado: DA-108, aplicado en T04 |
+| P-05 | `filtro_invalido` o `validacion_fallida` | T04 | Cerrado: opción A aprobada, aplicado en T04 |
 | P-06 | Formas de respuesta sin definir | T04, T05, T07 | Cerrado: DA-105, [Decisión por defecto] |
-| P-07 | Guion de humo que no se puede ejecutar como está | T09 | Sin respuesta |
-| P-08 | Casos sin regla de DA-91, DA-92 y DA-99 | T02, T03 | Parcial: uno responde, dos sin respuesta |
-| P-09 | Orden de los dos escuchas del mismo evento | T03 | Sin respuesta |
-| P-10 | Qué recibe el Dominio con DA-102 y DA-103 | T02, T03 | Sin respuesta |
+| P-07 | Guion de humo que no se puede ejecutar como está | T09 | Cerrado: opción A aprobada; guion reescrito en §9 |
+| P-08 | Casos sin regla de DA-91, DA-92 y DA-99 | T02, T03 | Cerrado: DA-107 y opción A aprobada en las otras dos; hecho en T02 |
+| P-09 | Orden de los dos escuchas del mismo evento | T03 | Cerrado: opción A aprobada; T03 sigue detenida en su plan |
+| P-10 | Qué recibe el Dominio con DA-102 y DA-103 | T02, T03 | Cerrado: opción A aprobada; hecho en T02 |
 | P-11 | El PDF del cliente no está en el repositorio | Todo el lote | Cerrado: transcripción versionada |
 | P-12 | Valores que dependen de la institución | T01, T03 | Pendiente de institución |
 | P-13 | T00 tocó cuatro archivos de pruebas fuera de §7 de su plan | T00 | Cerrado: aprobado por el responsable (DA-104) |
-| P-14 | Los porcentajes de asistencia de los gráficos | T07 | Bloqueo: reglas de otros contextos o rutas no permitidas |
+| P-14 | Los porcentajes de asistencia de los gráficos | T07 | Cerrado: opción A aprobada (DA-109); hecho en T07 |
 
 ---
 
@@ -330,3 +330,22 @@ Decisiones por defecto del agente, porque responden los requisitos: **DA-107** (
 | T06 | Bloqueada | Devuelve la vista de T05 (DA-96) |
 | T08 | Bloqueada | Recorre las rutas de T04 a T07; faltan las de T05 y T06 |
 | T09 | Bloqueada | El humo de §9 usa `alertas:recalcular` (T03) y la vista para convocar (T05) |
+
+---
+
+## Estado final del lote (16 de noviembre de 2026)
+
+| Tarea | Estado | Commit | Por qué |
+|---|---|---|---|
+| T00 | Completada | `2075659` | DA-101 |
+| T01 | Completada | `8fbd178` | Tabla `alertas` y parámetros de fábrica |
+| T02 | Completada | `9b31941` y `cf1e267` | Reglas de alerta; DA-102, DA-103 y P-08b en la segunda parte |
+| T03 | Detenida en su plan | — | La especificación manda detenerse en el plan (`docs/reportes/f1-h6-plan-t03.md`); quedan abiertos sus puntos 1 y 2 |
+| T04 | Completada | `75fe470` | Alertas del jugador y listado de estatus |
+| T05 | Detenida en su plan | — | La especificación manda detenerse en el plan (`docs/reportes/f1-h6-plan-t05.md`), actualizado con DA-106; quedan abiertos sus puntos 1 a 6 |
+| T06 | Bloqueada | — | Devuelve la vista para convocar de T05 (DA-96): no puede empezar antes |
+| T07 | Completada | `4339783` | Gráficos del jugador y del equipo |
+| T08 | Bloqueada | — | Recorre todas las rutas de H6; faltan las de T05 y T06 |
+| T09 | Bloqueada | — | El humo de §9 ejecuta `alertas:recalcular` (T03) y consulta la vista para convocar (T05); la trazabilidad y el registro de DA-87 a DA-100 son del cierre |
+
+Para desbloquear: aprobar el plan de T05 (y decidir sus puntos 1 a 6) y el de T03 (y decidir sus puntos 1 y 2). T06 sigue a T05; T08 y T09 siguen a todas.
