@@ -135,7 +135,31 @@ Para cada jugador llama a `RecalcularAlertaAcademicaDeJugador` (`src/Alertas/Apl
 
 ## 6. Cierre y apertura
 
-[pendiente]
+**Reglas (DA-87, arquitectura §7.9).**
+
+| Regla | Cómo la cumple T03 |
+|---|---|
+| A lo sumo una alerta abierta por (tipo, jugador, equipo); `equipo_id` nulo en la académica | La decisión pregunta antes si hay una abierta (`RepositorioDeAlertas::abiertaDe(tipo, jugador, equipo)`), y el índice único parcial `uq_alertas_abierta` (T01) lo garantiza ante carreras: una violación 23505 al abrir se trata como «ya abierta» |
+| `cerrada_en` se escribe una sola vez | Cerrar es `UPDATE … SET cerrada_en = :ahora WHERE id = :id AND cerrada_en IS NULL`. El disparador de T01 solo admite `cerrada_en` de nulo a una fecha; una alerta ya cerrada no se vuelve a escribir |
+| Una alerta cerrada no se reabre | El repositorio no tiene operación de reabrir. `abiertaDe()` solo mira `cerrada_en IS NULL`; si la condición vuelve a cumplirse, `Abrir` inserta una fila nueva con su propia `activada_en` |
+| El disparador rechaza todo otro UPDATE y todo DELETE | T03 no emite ninguno. El repositorio solo tiene `abrir()` (INSERT) y `cerrar()` (UPDATE de `cerrada_en`); no hay `delete`, ni `Model::delete()`, ni `forceDelete()` |
+| `activada_en` y `cerrada_en` no se reescriben nunca en alertas cerradas | El comando nunca hace UPDATE sobre filas con `cerrada_en` no nulo |
+
+**Decisión por alerta.** `DecisionDeAlerta::decidir($seCumple, $hayAbierta)`: `Abrir` si se cumple y no hay abierta; `Cerrar` si no se cumple y hay abierta; `Ninguna` en los otros dos casos (no duplica). Es la tabla de §7.1.
+
+**`causa` al abrir (DA-105, DA-110).** Se escribe una sola vez, al abrir, con las claves de §6.2 de la spec; el disparador impide cambiarla después, así que una alerta que sigue abierta conserva la causa de cuando se activó.
+
+| `tipo` | `causa` |
+|---|---|
+| `riesgo_baja_academica` | `{nivel_riesgo, promedio, materias_reprobadas}` del puerto de §3.2 |
+| `riesgo_baja_deportiva` | `{resultado, promedio, acumulacion_sanciones}`; `promedio` es `null` con `datos_insuficientes` |
+| `acumulacion_sanciones_deportivas` | `{tarjetas_amarillas, tarjetas_rojas, faltas_en_ventana}`, enteros |
+
+Los tres conteos de la causa de sanciones salen de la misma lectura que la regla; para no calcularlos dos veces, el caso de uso pide al Dominio los conteos y la decisión juntos. Eso exige un método de lectura en `AcumulacionDeSanciones` (por ejemplo, `conteos()`), que T02 no tiene: es un cambio al Dominio de T02 y **no está en las rutas permitidas de T03** (`src/Alertas/Dominio/` no figura). Se pide aprobarlo con el plan (ver §8, «Rutas que hay que pedir»); la alternativa es calcular los conteos en Aplicación, que duplica la regla y no se recomienda.
+
+**Jugador en baja (P-08c, DA-99).** Las alertas abiertas de un jugador en baja no se cierran ni se tocan; T04 no las muestra. T03 no abre alertas nuevas a quien está en baja, porque el jugador no figura en la lista de membresías vigentes (§3.4).
+
+**Cierre por tiempo.** Lo cubre el comando diario: las faltas salen de la ventana y la tarjeta roja deja de contar al terminar la temporada. Al recalcular, la regla ya no se cumple y la decisión es `Cerrar`.
 
 ## 7. Pruebas previstas
 
