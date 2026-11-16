@@ -163,7 +163,64 @@ Los tres conteos de la causa de sanciones salen de la misma lectura que la regla
 
 ## 7. Pruebas previstas
 
-[pendiente]
+Se escriben primero y deben fallar por la razón correcta (no por falta de clase). PostgreSQL real; un nombre por fila, con el identificador al principio; `RelojFijo` para el día. Datos con fábricas y los mundos de `tests/Ayudantes/` (los helpers compartidos van ahí, no dentro de un archivo de prueba, por el paralelismo de Pest). Archivos en `tests/Feature/Alertas/` salvo donde se indica.
+
+### 7.1 Las filas de las tablas de la spec
+
+| Archivo | Prueba (nombre) | Fila |
+|---|---|---|
+| `RecalculoDeAlertaAcademicaTest.php` | `RN-21 (§7.1 fila 1): en_riesgo sin alerta abierta, el comando crea la alerta` | §7.1 f1 |
+| | `RN-21 (§7.1 fila 2): en_riesgo con alerta abierta, el comando no la duplica` | f2 |
+| | `RN-21 (§7.1 fila 3): en_observacion sin alerta abierta, no se crea` | f3 |
+| | `RN-21 (§7.1 fila 4): en_observacion con alerta abierta, se cierra con cerrada_en` | f4 |
+| | `RN-21 (§7.1 fila 5): sin_riesgo con alerta abierta, se cierra` | f5 |
+| | `RN-21 (DA-88): CalificacionRegistrada, AsistenciaDeClaseRegistrada, JugadorInscrito y CriterioDeMateriaModificado recalculan la alerta académica` (cuatro pruebas, una por evento, con el driver `sync`) | f1 por evento |
+| | `RN-21 (DA-88): el mismo evento dos veces no duplica la alerta` | f2 por evento |
+| | `RN-21 (DA-88): la baja de nivel por un evento cierra la alerta` | f4 por evento |
+| `AcumulacionDeSancionesTest.php` | `RN-09 (§7.3 fila 1): 1 tarjeta roja en la temporada, se activa` | §7.3 f1 |
+| | `RN-09 (§7.3 fila 2): 2 amarillas en la temporada, no se activa` | f2 |
+| | `RN-09 (§7.3 fila 3): 3 amarillas en la temporada, se activa` | f3 |
+| | `RN-09 (§7.3 fila 4): 3 faltas en 30 días, se activa` | f4 |
+| | `RN-09 (§7.3 fila 5): 2 faltas y 1 justificada en 30 días, no se activa` | f5 |
+| | `RN-09 (§7.3 fila 6): 3 faltas repartidas en 31 días, no se activa` (la spec no da fechas; la prueba usa `fecha_calculo − 30`, `− 15` y `0`, que abarcan 31 días; es un dato de prueba, no una regla nueva) | f6 |
+| | `RN-09 (§7.3 fila 7): 1 tarjeta roja de la temporada anterior, no se activa` | f7 |
+| | `RN-09 (§7.3 fila 8): alerta abierta por 3 faltas; en el recálculo diario la más antigua ya salió de la ventana, se cierra` (se mueve `RelojFijo`) | f8 |
+| | `RN-09 (§7.3 fila 9): alerta abierta por 1 roja; el recálculo ocurre después del fin de la temporada, se cierra` | f9 |
+| `RiesgoDeBajaDeportivaTest.php` | `RN-10 (§7.4 fila 1): no_pasa sin sanciones, se activa` | §7.4 f1 |
+| | `RN-10 (§7.4 fila 2): pasa con sanciones, se activa` | f2 |
+| | `RN-10 (§7.4 fila 3): pasa sin sanciones, no se activa` | f3 |
+| | `RN-10 (§7.4 fila 4): datos_insuficientes sin sanciones, no se activa` | f4 |
+| | `RN-10 (§7.4 fila 5): datos_insuficientes con sanciones, se activa` | f5 |
+
+Las evaluaciones de §7.4 son filas reales de `evaluaciones_rendimiento`; las sanciones, filas reales de `rendimientos_partido` y `asistencias_entrenamiento`.
+
+### 7.2 Las pedidas además, y las que salen de las decisiones
+
+| Archivo | Prueba (nombre) |
+|---|---|
+| `RecalculoDiarioTest.php` | `RN-21, RN-09, RN-10 (ADR-07): alertas:recalcular dos veces da la misma tabla de alertas, mismos id, mismas fechas y sin duplicados` |
+| | `RN-09 (§7.3 fila 9, ADR-07): el recálculo posterior al fin de temporada cierra la acumulación y conserva activada_en` (la explícita que pide la spec, junto a la fila 9) |
+| | `DA-87: una alerta cerrada no se reabre; si la condición vuelve se crea una nueva` |
+| | `DA-87: alertas:recalcular no toca activada_en ni cerrada_en de alertas ya cerradas` |
+| | `DA-87 (T01): un UPDATE distinto de cerrada_en y todo DELETE sobre alertas siguen siendo rechazados tras el recálculo` (solo si T01 no lo prueba ya; se revisa antes de escribirla) |
+| | `P-08c (DA-99): un jugador en baja no recibe alertas nuevas y las abiertas se conservan` |
+| | `DA-91 (P-08b): sin temporada que contenga la fecha de cálculo no se cuentan tarjetas, pero 3 faltas sí activan` |
+| | `DA-105 (§6.2): la causa de cada alerta lleva las claves de su tipo` (tres pruebas, una por tipo) |
+| | `DA-113: alertas:recalcular sale con 0 y sin texto cuando no hay datos` |
+| | `DA-113: alertas:recalcular está programado a las 02:00 de America/Mexico_City` |
+| | `DA-113: resumenes:conciliar está programado a las 02:00 de America/Mexico_City` |
+| | `DA-113: resumenes:conciliar no crea ni cierra alertas` |
+| `EntrenadoresDelEquipoTest.php` | `DA-102: con dos entrenadores en el equipo, basta un no_pasa para activar el riesgo de baja deportiva` (las filas de `entrenador_equipo` se crean directamente en la prueba; DA-114) |
+| | `DA-102: con dos entrenadores, uno que pasa y otro sin evaluación, el resultado es pasa` |
+| | `DA-107: sin ninguna evaluación guardada el resultado es datos_insuficientes` |
+| | `DA-102: la tarjeta que registró solo el segundo entrenador cuenta para la acumulación` |
+| | `DA-103: dos entrenadores registran la misma tarjeta en un partido y cuenta una` |
+| | `DA-103: si los dos registran cantidades distintas, cuenta la mayor` |
+| | `DA-92: de cada entrenador cuenta su última evaluación, no las anteriores` |
+| `PuertosDeAlertasTest.php` | Una prueba de contrato por adaptador: `DA-112: TarjetasPorPartido devuelve las filas de todos los entrenadores del equipo`, `DA-112: FaltasDeEntrenamiento solo trae entrenamientos realizados y la ventana pedida`, `DA-112: TemporadaDeFecha devuelve la temporada que contiene la fecha, o nulo`, `DA-112: EvaluacionesVigentesDelEquipo devuelve la última por entrenador`, `P-09: RiesgoAcademicoDelJugador calcula sin leer resumenes_academicos` (se borra el resumen guardado y el nivel sale igual), `P-09: JugadoresDeLaMateria`, `DA-112: MembresiasVigentes excluye a los jugadores en baja` |
+| `tests/Unit/Alertas/` | Si se aprueba el cambio al Dominio de §6: una prueba por método nuevo de `AcumulacionDeSanciones`, con la regla de mutación (Infection) al 100 % sobre `Dominio/` |
+
+**Orden de escritura.** Primero `PuertosDeAlertasTest` y las pruebas de Dominio; luego RN-21, RN-09 y RN-10 por comando; después los escuchas, la idempotencia y la programación; al final las de DA-102 y DA-103. La suite de H2 con `alertas:recalcular` se renombra en el mismo commit que el comando (§9).
 
 ## 8. Archivos
 
