@@ -2,6 +2,7 @@
 
 use Src\Compartido\Aplicacion\PorcentajeDeAsistenciaAEntrenamientos;
 use Src\Compartido\Dominio\Identificador;
+use Tests\Ayudantes\NoNulo;
 use Tests\TestCase;
 
 /**
@@ -24,8 +25,7 @@ function paridadLeer(TestCase $prueba, array $m, string $jugador): array
     $filas = convocarPedir($prueba, "/api/v1/estatus-de-jugadores?filtro[equipo_id]={$m['a']}&por_pagina=100")->assertOk()->json('datos');
     /** @var array<string, mixed> $graficos */
     $graficos = convocarPedir($prueba, "/api/v1/jugadores/$jugador/graficos")->assertOk()->json('datos');
-    $fila = array_values(array_filter($filas, fn (array $fila): bool => $fila['jugador']['id'] === $jugador))[0] ?? null;
-    expect($fila)->not->toBeNull();
+    $fila = NoNulo::exigir(array_values(array_filter($filas, fn (array $fila): bool => $fila['jugador']['id'] === $jugador))[0] ?? null, 'la fila del jugador en el listado');
 
     return ['vista' => $vista, 'estatus' => $fila, 'graficos' => $graficos];
 }
