@@ -224,7 +224,51 @@ Las evaluaciones de §7.4 son filas reales de `evaluaciones_rendimiento`; las sa
 
 ## 8. Archivos
 
-[pendiente]
+Rutas bajo `backend/`. Los nombres de clase son una propuesta de este plan; los fija la aprobación.
+
+### 8.1 Código nuevo, dentro de las rutas permitidas de T03
+
+| Ruta | Contenido |
+|---|---|
+| `src/Alertas/Aplicacion/RecalcularTodasLasAlertas.php` | Lo que ejecuta el comando: lista las membresías y recorre los jugadores |
+| `src/Alertas/Aplicacion/RecalcularAlertasDeportivasDeMembresia.php` | RN-09 y después RN-10 de una pareja (jugador, equipo) |
+| `src/Alertas/Aplicacion/RecalcularAlertaAcademicaDeJugador.php` | RN-21 de un jugador; lo usan el comando y el escucha |
+| `src/Alertas/Aplicacion/RepositorioDeAlertas.php`, `RepositorioDeParametrosDeAlertas.php` | Interfaces: abiertaDe, abrir, cerrar; parámetros de sanciones y nivel académico |
+| `src/Alertas/Infraestructura/RepositorioDeAlertasSql.php`, `RepositorioDeParametrosDeAlertasSql.php` | SQL con `DB`; abrir captura la violación 23505 |
+| `src/Alertas/Infraestructura/Consola/RecalcularAlertasComando.php` | `alertas:recalcular` (DA-113) |
+| `src/Alertas/Infraestructura/Escuchas/RecalcularAlertaAcademica.php` | Escucha de los cuatro eventos (DA-88) |
+| `src/Compartido/Aplicacion/TarjetasPorPartido.php`, `FaltasDeEntrenamiento.php`, `TemporadaDeFecha.php`, `EvaluacionesVigentesDelEquipo.php` | Los cuatro puertos de DA-112 |
+| `src/Compartido/Aplicacion/TarjetasDeUnRegistro.php`, `FaltaDeEntrenamiento.php`, `EvaluacionVigente.php` | Los DTO de esos puertos |
+| `src/Rendimiento/Infraestructura/TarjetasPorPartidoSql.php`, `EvaluacionesVigentesDelEquipoSql.php` | Adaptadores de Rendimiento |
+| `src/Competencia/Infraestructura/FaltasDeEntrenamientoSql.php`, `TemporadaDeFechaSql.php` | Adaptadores de Competencia |
+| `tests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php`, `AcumulacionDeSancionesTest.php`, `RiesgoDeBajaDeportivaTest.php`, `RecalculoDiarioTest.php`, `EntrenadoresDelEquipoTest.php`, `PuertosDeAlertasTest.php` | Pruebas de §7 |
+
+### 8.2 Código modificado, dentro de las rutas permitidas
+
+| Ruta | Cambio |
+|---|---|
+| `src/Alertas/Infraestructura/AlertasServiceProvider.php` | `bind` de los repositorios; `Event::listen` del escucha; `commands([RecalcularAlertasComando::class])` en consola |
+| `src/Rendimiento/Infraestructura/RendimientoServiceProvider.php` y `src/Competencia/Infraestructura/CompetenciaServiceProvider.php` | `bind` de los adaptadores de DA-112 (solo el registro, como autoriza la spec) |
+| `src/Academico/Infraestructura/Consola/ConciliarResumenesComando.php` | Solo la firma (`resumenes:conciliar`) y el comentario. No hay reconciliación de alertas que quitar (§2, punto 1) |
+| `routes/console.php` | Mantiene `alertas:recalcular` a las 02:00 y agrega `resumenes:conciliar` a las 02:00, ambos en America/Mexico_City |
+
+### 8.3 Rutas que hay que pedir, porque no están en las permitidas de T03
+
+Sin aprobación, T03 no las toca. Las razones están en §2 (puntos 3, 4 y 6), §3 y §6.
+
+| Ruta | Para qué | Se aprueba con |
+|---|---|---|
+| `src/Compartido/Aplicacion/RiesgoAcademicoDelJugador.php`, `RiesgoAcademico.php`, `JugadoresDeLaMateria.php`, `MembresiasVigentes.php`, `MembresiaVigente.php` | El puerto P-09 con su forma, y los dos puertos que el comando y el escucha necesitan (DA-112 solo nombra cuatro) | Preguntas 1 y 2 |
+| `src/Academico/Infraestructura/` (adaptadores de P-09 y de `JugadoresDeLaMateria`) y su `bind` en `AcademicoServiceProvider` | Adaptador en el contexto dueño del dato | Pregunta 2 |
+| `src/Plantel/Infraestructura/` (adaptador de `MembresiasVigentes`) y su `bind` en `PlantelServiceProvider` | Idem | Pregunta 1 |
+| `src/Alertas/Dominio/AcumulacionDeSanciones.php` | Un método que dé los conteos de tarjetas (§6), para la causa de sanciones | Pregunta 1 |
+| `tests/Ayudantes/MundoDeAlertas.php` | Agregar los datos de tarjetas, faltas y evaluaciones que usan las pruebas de §7 | Pregunta 1 |
+| `tests/Unit/Alertas/` | Pruebas del método nuevo de Dominio | Pregunta 1 |
+| Las de §9 | Renombrado | Con el plan |
+
+### 8.4 Rutas que T03 no toca
+
+`frontend/`; `database/migrations/**` (no hay tablas ni columnas nuevas; la migración de `alertas` es de T01 y no se edita); `docker-compose*`, `Dockerfile` y `.github/**` (solo T00); `routes/api.php` y `app/Http/**` (no hay rutas, T04); `docs/api/openapi.yaml` (sin rutas nuevas); `lang/es/**` (el comando no escribe texto); `src/Consultas/**`; `docs/arquitectura.md` y `docs/requisitos.md`. Si se aprueban los puertos de §8.3, `docs/arquitectura.md` §4.3 los tendría que nombrar: eso es un F1-DOC aparte, con aprobación, no parte de T03.
 
 ## 9. Cambios de renombrado fuera de rutas permitidas
 
