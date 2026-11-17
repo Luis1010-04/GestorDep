@@ -1,9 +1,7 @@
-# P-16, opción A: propuesta de DA-122 y de la tarea T10
+# P-16: propuesta de DA-122 y de la tarea T10 (diferida)
 
 **Fecha:** 17 de noviembre de 2026
-**Estado: DIFERIDA.** Decisión del responsable del 17/11/2026 sobre P-16 («opción C»; ver la nota de letras abajo): no se implementa nada y no se crea T10. **El borrador de DA-122 de este documento queda como propuesta, no como decisión, y no está registrado en `docs/decisiones/registro-decisiones.md`.** Nada de lo de aquí se aplicó: ni código, ni `docs/hitos/f1-h6.md`, ni el registro, ni `docs/requisitos.md`. El documento se conserva para cuando aparezca en una fase posterior la salida de un jugador de un equipo.
-
-> **Nota de letras.** En la tabla de opciones de P-16 de `docs/decisiones/pendientes.md`, la «C» era «cerrarlas al dejar el equipo con un evento de dominio y un escucha». La decisión del 17/11/2026 (diferir, sin implementar) no es esa: se registra como «diferido», y se le pide al responsable que confirme la letra. Antes de esta decisión, el 17/11/2026, el responsable había elegido la opción A («la alerta abierta de un equipo que el jugador dejó se cierra al salir del equipo»), que es la que desarrolla este documento.
+**Estado: DIFERIDA.** Decisión del responsable del 17/11/2026 sobre P-16: diferirlo; no se implementa nada y no se crea T10. **El borrador de DA-122 de este documento queda como propuesta, no como decisión, y no está registrado en `docs/decisiones/registro-decisiones.md`.** Nada de lo de aquí se aplicó: ni código, ni `docs/hitos/f1-h6.md`, ni el registro, ni `docs/requisitos.md`. El documento se conserva para cuando aparezca en una fase posterior la salida de un jugador de un equipo.
 
 **Dónde aparece la salida de un equipo (citas verificadas en el texto, 17/11/2026).**
 - `docs/hitos/f1-h1.md` §2.3, «Qué NO se hace en H1», línea 56: «Asignar entrenadores adicionales a un equipo, editar o borrar equipos, **quitar a un jugador de un equipo**, editar o renombrar categorías (ver §3, decisión sobre RN-22).» Y en su T14, línea 645: «**No hagas:** quitar a un jugador de un equipo; mover estadísticas pasadas (no existen todavía).»
@@ -22,7 +20,7 @@ Consecuencia: la regla de DA-122 **solo podrá ejercitarse con filas creadas en 
 
 ## 1. Borrador de DA-122
 
-**DA-122. Alertas de un equipo que el jugador dejó (P-16, opción A).**
+**DA-122. Alertas de un equipo que el jugador dejó (P-16).**
 
 1. **Cuándo cuenta como dejada.** La pareja (jugador, equipo) de una alerta abierta de `riesgo_baja_deportiva` o de `acumulacion_sanciones_deportivas` ya no tiene membresía vigente: no existe una fila de `jugador_equipo` con ese jugador y ese equipo, con `hasta` nulo y `eliminado_en` nulo. Es la misma definición de «vigente» que ya usa el puerto `MembresiasVigentes` (DA-115, `MembresiasVigentesPlantel`: `whereNull('hasta')` y `whereNull('eliminado_en')`), de modo que no se agrega un concepto nuevo. Con esa definición, una fecha `hasta` futura también cuenta como dejada, igual que hoy en todas las consultas.
 2. **Quién la cierra y cuándo.** `alertas:recalcular` (DA-113), en su siguiente ejecución. No hay evento (DD-32: `JugadorAsignadoAEquipo` y `JugadorDadoDeBaja` no se crean y «`alertas:recalcular` (H6) concilia lo que ocurrió antes»), así que puede pasar hasta un día después de que el jugador deje el equipo (DA-88).
@@ -67,7 +65,7 @@ Consecuencia: la regla de DA-122 **solo podrá ejercitarse con filas creadas en 
 - §11: nota de que en la Fase 1 no hay ruta para salir de un equipo (§0 de esta propuesta).
 - §12 (control de cambios): entrada de la 1.16; y la cabecera de versión.
 
-**Otros documentos:** `docs/decisiones/registro-decisiones.md` §10 (fila de DA-122); `docs/decisiones/pendientes.md` (P-16 pasa a «Cerrado: opción A aprobada»); `docs/trazabilidad.md` (RN-09, RN-10 y HU-22 citan las pruebas de T10); un reporte `docs/reportes/f1-h6-t10.md`; y en `docs/reportes/f1-h6-reporte.md` el punto 7 de §10 deja de tener un criterio sin prueba, y §7 quita P-16 de lo abierto.
+**Otros documentos:** `docs/decisiones/registro-decisiones.md` §10 (fila de DA-122); `docs/decisiones/pendientes.md` (P-16 pasa a «Diferido»); `docs/trazabilidad.md` (RN-09, RN-10 y HU-22 citan las pruebas de T10); un reporte `docs/reportes/f1-h6-t10.md`; y en `docs/reportes/f1-h6-reporte.md` el punto 7 de §10 deja de tener un criterio sin prueba, y §7 quita P-16 de lo abierto.
 
 ## 3. Impacto
 

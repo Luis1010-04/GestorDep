@@ -15,7 +15,8 @@ class ParametrosInstitucionalesSeeder extends Seeder
      * - `riesgo_academico` (docs/hitos/f1-h2.md §5.3): [Propuesta] umbrales pendientes de validar con la institución
      *   (RN-04).
      * - `sanciones_deportivas` y `desactualizacion` (docs/hitos/f1-h6.md, DA-100): [Propuesta] pendientes de validar
-     *   con la institución (AB-13).
+     *   con la institución (AB-13). Aprobados por el responsable el 17/11/2026 como dato de fábrica pendiente de AB-13
+     *   (CLAUDE.md §5).
      * - `alerta_academica` (DA-100): el nivel que activa la alerta lo fija RN-21.
      */
     public function run(): void
