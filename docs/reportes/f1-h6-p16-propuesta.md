@@ -1,7 +1,13 @@
 # P-16, opción A: propuesta de DA-122 y de la tarea T10
 
-**Fecha:** 17 de noviembre de 2026 · **Decisión del responsable:** P-16, opción A: «la alerta abierta de un equipo que el jugador dejó se cierra al salir del equipo».
-**Estado: borrador para aprobación. No se ha implementado ni aplicado nada**: ni código, ni `docs/hitos/f1-h6.md`, ni el registro, ni `docs/requisitos.md`. Hasta que el responsable apruebe esta propuesta, H6 no se cierra.
+**Fecha:** 17 de noviembre de 2026
+**Estado: DIFERIDA.** Decisión del responsable del 17/11/2026 sobre P-16 («opción C»; ver la nota de letras abajo): no se implementa nada y no se crea T10. **El borrador de DA-122 de este documento queda como propuesta, no como decisión, y no está registrado en `docs/decisiones/registro-decisiones.md`.** Nada de lo de aquí se aplicó: ni código, ni `docs/hitos/f1-h6.md`, ni el registro, ni `docs/requisitos.md`. El documento se conserva para cuando aparezca en una fase posterior la salida de un jugador de un equipo.
+
+> **Nota de letras.** En la tabla de opciones de P-16 de `docs/decisiones/pendientes.md`, la «C» era «cerrarlas al dejar el equipo con un evento de dominio y un escucha». La decisión del 17/11/2026 (diferir, sin implementar) no es esa: se registra como «diferido», y se le pide al responsable que confirme la letra. Antes de esta decisión, el 17/11/2026, el responsable había elegido la opción A («la alerta abierta de un equipo que el jugador dejó se cierra al salir del equipo»), que es la que desarrolla este documento.
+
+**Dónde aparece la salida de un equipo (citas verificadas en el texto, 17/11/2026).**
+- `docs/hitos/f1-h1.md` §2.3, «Qué NO se hace en H1», línea 56: «Asignar entrenadores adicionales a un equipo, editar o borrar equipos, **quitar a un jugador de un equipo**, editar o renombrar categorías (ver §3, decisión sobre RN-22).» Y en su T14, línea 645: «**No hagas:** quitar a un jugador de un equipo; mover estadísticas pasadas (no existen todavía).»
+- **Esa frase dice que no se hace en H1; no dice «fuera de la Fase 1».** Y **no encontré ninguna frase que diga en qué fase aparece el traspaso de jugadores**: `docs/alcance-fases.md` (§3, §5 «Lo que la Fase 1 no hace» y §6) no lo menciona; tampoco el backlog de `docs/requisitos.md` §9 ni ninguna otra especificación de hito (H2 a H6). La única mención es la de H1. Verifiqué además que en el código no hay ruta ni escritura que cierre una membresía (§0).
 
 ## 0. Un hecho que condiciona la propuesta
 
@@ -91,10 +97,8 @@ Consecuencia: la regla de DA-122 **solo podrá ejercitarse con filas creadas en 
 
 **`docs/api/openapi.yaml`:** no cambia: ninguna ruta ni respuesta cambia.
 
-## 4. Qué necesito del responsable
+## 4. Resolución
 
-1. Aprobar o ajustar el texto de DA-122 (§1), en particular los puntos a, b y c de la tabla.
-2. Aprobar T10 (recomendada) o indicar que se reabra T03.
-3. Confirmar que, sabiendo que en la Fase 1 nadie puede dejar un equipo (§0), quiere la regla igualmente en H6.
+El responsable decidió el 17/11/2026 **diferir** (ver el estado al inicio): no se aprueba DA-122, no se crea T10 y no se reabre T03. Lo que quedaba por decidir (los puntos a, b y c de §1, T10 o T03) se retoma cuando exista la salida de un equipo. Mientras tanto, el criterio del punto 7 de §10 («una alerta que deja de cumplirse se cierra y se conserva») queda **sin prueba** para este caso, diferido a la fase donde aparezca el traspaso, que ningún documento fija.
 
 No toco `docs/requisitos.md`, `docs/arquitectura.md` ni `docs/hitos/f1-h6.md`.
