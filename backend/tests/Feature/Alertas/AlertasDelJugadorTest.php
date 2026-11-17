@@ -53,8 +53,8 @@ test('§7.6 fila 2 (DD-08, DA-90): el docente con materia del jugador recibe 200
 test('§7.6 fila 3 (DA-90): el entrenador del equipo de la alerta recibe 200 y la lista incluye la deportiva y la de sanciones', function () {
     /** @var TestCase $this */
     $m = avisosMundo();
-    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['a']);
-    alertaInsertar($m['f1'], ALERTA_SANCIONES, $m['a']);
+    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['a'], activadaEn: '2026-11-15 08:00:00+00');
+    alertaInsertar($m['f1'], ALERTA_SANCIONES, $m['a'], activadaEn: '2026-11-15 09:00:00+00');
     $sesion = sesionesIniciar($this, 'e1@x.com');
 
     expect(alertasTipos(sesionesPeticion($this, 'GET', alertasRuta($m['f1']), idDeSesion: $sesion)->assertOk()))->toBe([ALERTA_DEPORTIVA, ALERTA_SANCIONES]);
@@ -153,9 +153,9 @@ test('RN-13: un usuario con los dos roles ve lo que le toca por cada uno, sin du
     $m = avisosMundo();
     $materiaDeDe = mundoInsertar('materias', ['asignatura_id' => $m['asignatura'], 'periodo_id' => $m['periodo'], 'docente_id' => $m['de']]);
     mundoInscribir($materiaDeDe, $m['f1']);
-    alertaInsertar($m['f1'], ALERTA_ACADEMICA);
-    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['a']);
-    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['b']);
+    alertaInsertar($m['f1'], ALERTA_ACADEMICA, activadaEn: '2026-11-15 08:00:00+00');
+    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['a'], activadaEn: '2026-11-15 09:00:00+00');
+    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['b'], activadaEn: '2026-11-15 10:00:00+00');
     $sesion = sesionesIniciar($this, 'de@x.com');
 
     $respuesta = sesionesPeticion($this, 'GET', alertasRuta($m['f1']), idDeSesion: $sesion)->assertOk();

@@ -192,9 +192,9 @@ test('HU-23 c3: un jugador sin ningún estado registrado sale como apto implíci
 test('HU-22, HU-23 (DA-89, DA-90): la fila trae las alertas abiertas que el usuario puede ver, y solo esas', function () {
     /** @var TestCase $this */
     $m = estatusMundo();
-    alertaInsertar($m['f1'], ALERTA_ACADEMICA);
-    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['a']);
-    alertaInsertar($m['f1'], ALERTA_SANCIONES, $m['b']);
+    alertaInsertar($m['f1'], ALERTA_ACADEMICA, activadaEn: '2026-11-15 08:00:00+00');
+    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['a'], activadaEn: '2026-11-15 09:00:00+00');
+    alertaInsertar($m['f1'], ALERTA_SANCIONES, $m['b'], activadaEn: '2026-11-15 10:00:00+00');
     alertaInsertar($m['j1'], ALERTA_DEPORTIVA, $m['a'], cerradaEn: '2026-11-14 08:00:00+00');
     $tipos = fn (string $correo, string $jugador): array => array_map(
         fn (array $alerta): string => (string) $alerta['tipo'],

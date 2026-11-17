@@ -45,11 +45,11 @@ function estatusMundo(): array
  *
  * @param  array<string, mixed>  $causa
  */
-function alertaInsertar(string $jugador, string $tipo, ?string $equipo = null, array $causa = ['dato' => 'x'], ?string $cerradaEn = null): string
+function alertaInsertar(string $jugador, string $tipo, ?string $equipo = null, array $causa = ['dato' => 'x'], ?string $cerradaEn = null, string $activadaEn = '2026-11-15 08:00:00+00'): string
 {
     return mundoInsertar('alertas', [
         'tipo' => $tipo, 'jugador_id' => $jugador, 'equipo_id' => $equipo, 'causa' => json_encode($causa),
-        'activada_en' => '2026-11-15 08:00:00+00', 'cerrada_en' => $cerradaEn,
+        'activada_en' => $activadaEn, 'cerrada_en' => $cerradaEn,
     ]);
 }
 
