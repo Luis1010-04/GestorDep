@@ -62,6 +62,8 @@ test('RNF-01 (DA-96): el 404 de un partido ajeno, inexistente, con id que no es 
     foreach ($casos as $caso => $partido) {
         $respuesta = sesionesPeticion($this, 'GET', "/api/v1/partidos/$partido/convocatoria/vista", idDeSesion: $e1)->assertNotFound();
 
+        // El esquema `Error` de docs/api/openapi.yaml (líneas 7516 a 7532) exige las tres claves, y `additionalProperties: false`
+        // impide otras; el validador lo comprueba y la segunda aserción lo deja a la vista en la prueba.
         expect($validador->validate($respuesta->baseResponse, $plantilla, 'get'))->toBeTrue("404 $caso")
             ->and(array_keys($respuesta->json()))->toBe(['codigo', 'mensaje', 'errores'], $caso);
     }
