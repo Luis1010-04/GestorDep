@@ -10,6 +10,7 @@ use App\Http\Respuestas\Respuesta;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Src\Consultas\Aplicacion\ConsultarVistaDeLaConvocatoria;
 use Src\Consultas\Aplicacion\ConsultarVistaParaConvocar;
 use Src\Consultas\Aplicacion\ListarJugadoresParaConvocar;
 use Src\Consultas\Aplicacion\VistaParaConvocar;
@@ -39,6 +40,29 @@ class VistaParaConvocarController extends Controller
         ) ?? throw new NotFoundHttpException;
 
         return Respuesta::conDatos((new VistaParaConvocarRecurso($vista))->resolve($solicitud));
+    }
+
+    /**
+     * La vista de cada convocado de un partido (HU-12 c2, DA-96), paginada como la ruta de convocatoria de H3. Un partido
+     * inexistente, eliminado, con un id que no es UUID v7 o de un equipo que el usuario no entrena responde 404.
+     */
+    public function delPartido(Request $solicitud, string $partido, ConsultarVistaDeLaConvocatoria $consultar): ColeccionPaginada
+    {
+        $datos = $solicitud->validate([
+            'pagina' => ['integer', 'min:1'],
+            'por_pagina' => ['integer', 'min:1', 'max:100'],
+        ]);
+        $pagina = (int) ($datos['pagina'] ?? 1);
+        $porPagina = (int) ($datos['por_pagina'] ?? self::POR_PAGINA_PREDETERMINADO);
+
+        $convocatoria = $consultar->ejecutar(IdentificadorDeRuta::desde($partido), $pagina, $porPagina) ?? throw new NotFoundHttpException;
+
+        return new ColeccionPaginada(new LengthAwarePaginator(
+            array_map(fn (VistaParaConvocar $vista): VistaParaConvocarRecurso => new VistaParaConvocarRecurso($vista), $convocatoria['elementos']),
+            $convocatoria['total'],
+            $porPagina,
+            $pagina,
+        ));
     }
 
     /** Un equipo que el usuario no entrena, inexistente o con un id que no es UUID v7 responde 404. */

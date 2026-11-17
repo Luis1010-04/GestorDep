@@ -24,6 +24,13 @@ interface ConsultaDeVistaParaConvocar
      */
     public function jugadoresDelEquipo(Identificador $equipo): ?array;
 
+    /**
+     * Los convocados de un partido (HU-12 c2, DA-96), con la misma visibilidad que la ruta de convocatoria de H3: en orden de
+     * convocatoria, por `AlcanceDeJugadores` solo con la rama del entrenador y sin bajas, de modo que el total cuenta igual.
+     * Nulo si el partido no existe, está eliminado o es de un equipo que el usuario no entrena.
+     */
+    public function convocatoriaDelPartido(Identificador $partido, int $pagina, int $porPagina): ?ConvocatoriaDelPartido;
+
     /** El equipo de la evaluación más reciente del usuario para el jugador (DA-119). */
     public function equipoDeLaUltimaEvaluacion(Identificador $jugador): ?Identificador;
 

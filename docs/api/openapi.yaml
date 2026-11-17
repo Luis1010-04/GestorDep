@@ -6017,6 +6017,80 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /partidos/{partido}/convocatoria/vista:
+    get:
+      operationId: verVistaDeLaConvocatoria
+      summary: Vista para convocar de cada convocado de un partido
+      description: >-
+        Solo entrenadores del equipo del partido (HU-12 c2, DA-96). Cada elemento es la misma vista de
+        GET /jugadores/{jugador}/vista-para-convocar, con el rendimiento y el progreso del equipo del partido, y sin campos de
+        la convocatoria: GET /partidos/{partido}/convocatoria no cambia. Los convocados van en orden de convocatoria y la
+        lista pagina como esa ruta. Tiene la misma visibilidad que ella: un convocado dado de baja, o sin membresia vigente
+        en ningun equipo del usuario, se omite de datos y de meta.total, sin 404. Un partido inexistente, eliminado o de un
+        equipo que el usuario no entrena responde 404.
+      tags: [Consultas]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de vistas de los convocados.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VistaParaConvocar'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina:
+                        type: integer
+                      por_pagina:
+                        type: integer
+                      total:
+                        type: integer
+                      total_paginas:
+                        type: integer
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El partido no existe, esta eliminado o es de un equipo que el usuario no entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Un parametro de paginacion invalido (codigo validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     VistaParaConvocar:

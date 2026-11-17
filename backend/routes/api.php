@@ -153,6 +153,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/equipos/{equipo}/graficos', [GraficosController::class, 'delEquipo'])->whereUuid('equipo');
         Route::get('/jugadores/{jugador}/vista-para-convocar', [VistaParaConvocarController::class, 'delJugador'])->whereUuid('jugador');
         Route::get('/equipos/{equipo}/jugadores/para-convocar', [VistaParaConvocarController::class, 'delEquipo'])->whereUuid('equipo');
+        Route::get('/partidos/{partido}/convocatoria/vista', [VistaParaConvocarController::class, 'delPartido'])->whereUuid('partido');
 
         Route::post('/avisos-lesion/{aviso}/descarte', [AvisoDeLesionController::class, 'descartar'])->whereUuid('aviso');
         Route::post('/avisos-lesion/{aviso}/confirmacion', [AvisoDeLesionController::class, 'confirmar'])->whereUuid('aviso');

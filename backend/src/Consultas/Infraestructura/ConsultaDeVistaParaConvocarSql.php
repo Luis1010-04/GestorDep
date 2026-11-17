@@ -15,6 +15,7 @@ use Src\Compartido\Dominio\HoyDeNegocio;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\NumeroDecimal;
 use Src\Consultas\Aplicacion\ConsultaDeVistaParaConvocar;
+use Src\Consultas\Aplicacion\ConvocatoriaDelPartido;
 use Src\Consultas\Aplicacion\DatosDeAsistencia;
 use Src\Consultas\Aplicacion\DatosDeDisponibilidad;
 use Src\Consultas\Aplicacion\DatosDeEstadoFisico;
@@ -67,6 +68,40 @@ final class ConsultaDeVistaParaConvocarSql implements ConsultaDeVistaParaConvoca
             ->get(self::COLUMNAS_DEL_JUGADOR)
             ->map(fn (stdClass $fila): JugadorConvocable => self::jugadorConvocable($fila))
             ->all());
+    }
+
+    public function convocatoriaDelPartido(Identificador $partido, int $pagina, int $porPagina): ?ConvocatoriaDelPartido
+    {
+        $equipo = $this->conexion->table('partidos')->where('id', $partido->valor())->whereNull('eliminado_en')->value('equipo_id');
+        $equipoDelPartido = $equipo === null ? null : Identificador::desdeTexto((string) $equipo);
+        if ($equipoDelPartido === null || ! $this->entrena($equipoDelPartido)) {
+            return null;
+        }
+
+        // Como `ConsultaDeConvocatoriaSql` de H3: el total y la página salen de la misma consulta restringida por alcance.
+        $convocados = $this->alcance->restringir(
+            $this->usuarioActual,
+            $this->conexion->table('convocatorias')
+                ->join('jugadores', 'jugadores.id', '=', 'convocatorias.jugador_id')
+                ->where('convocatorias.partido_id', $partido->valor())
+                ->whereNull('convocatorias.eliminado_en')
+                ->whereNull('jugadores.eliminado_en'),
+            'convocatorias.jugador_id',
+            soloEntrenador: true,
+        );
+        $total = (clone $convocados)->count();
+        $filas = $convocados
+            ->orderBy('convocatorias.creado_en')
+            ->orderBy('convocatorias.id')
+            ->offset(($pagina - 1) * $porPagina)
+            ->limit($porPagina)
+            ->get(self::COLUMNAS_DEL_JUGADOR);
+
+        return new ConvocatoriaDelPartido(
+            $equipoDelPartido,
+            array_values($filas->map(fn (stdClass $fila): JugadorConvocable => self::jugadorConvocable($fila))->all()),
+            $total,
+        );
     }
 
     public function equipoDeLaUltimaEvaluacion(Identificador $jugador): ?Identificador

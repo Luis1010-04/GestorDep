@@ -29,3 +29,11 @@ Decisiones que el agente tomó al implementar y que no estaban escritas en la es
 | 16 | El porcentaje de `asistencia.equipo` y `asistencia.de_mis_capturas` es el total de los registros (no el de un mes) con la fórmula de DD-51, repetida en SQL | Los puertos de T07 devuelven el porcentaje por mes y T05 no puede ampliarlos; la duplicación queda anotada como deuda | `ConsultaDeVistaParaConvocarSql::porcentaje` |
 | 17 | La paginación de `GET /equipos/{equipo}/jugadores/para-convocar` es de 15 por página por defecto y máximo 100, como el listado de estatus | `docs/convenciones-api.md` solo fija el máximo de 100; **[Decisión por defecto]** | `VistaParaConvocarController` |
 | 18 | `make pruebas` no se cambió aunque se queda sin memoria (128 MB) en `ArquitecturaTest`; la suite se corrió con `php -d memory_limit=1G vendor/bin/pest` | El Makefile y Docker son de T00; `make verificar` ya usa 1 GB y pasa. Se reporta como duda | `docs/reportes/f1-h6-t05.md` §8 |
+
+## T06: vista consolidada de la convocatoria
+
+| # | Decisión | Por qué | Dónde está |
+|---|---|---|---|
+| 19 | Los convocados se leen con SQL de solo lectura en Consultas, con `AlcanceDeJugadores` aplicado a `convocatorias.jugador_id` en la misma consulta que cuenta y pagina | Decisión 5 (a) del responsable, apoyada en arquitectura §4.3 («Consultas puede leer las tablas de otros contextos con SQL de solo lectura»); así `meta.total` cuenta igual que H3 | `ConsultaDeVistaParaConvocarSql::convocatoriaDelPartido` |
+| 20 | Un convocado que dejó el equipo del partido pero sigue en otro equipo del mismo usuario aparece, con el rendimiento del equipo del partido | Es el comportamiento que ya tiene la ruta de H3 (la regla de alcance exige membresía en algún equipo del usuario, no en el del partido); el responsable pidió anotarlo en el reporte | `docs/reportes/f1-h6-t06.md` §2 |
+| 21 | Las pruebas de paridad comparan con el orden de H3 y no con uno fijo | Las convocatorias insertadas juntas comparten `creado_en` y el orden lo decide el `id` | `VistaDeLaConvocatoriaTest` |
