@@ -182,7 +182,7 @@ function esquemaReconstruir(): void
     // aserciones dependía del número de procesos y del reparto de pruebas. Si falla, lanza.
     $codigo = Artisan::call('migrate:fresh', ['--database' => 'propietario', '--force' => true]);
     if ($codigo !== 0) {
-        throw new RuntimeException("migrate:fresh terminó con el código $codigo");
+        throw new RuntimeException("migrate:fresh terminó con el código $codigo:\n".Artisan::output());
     }
     esquemaEstadoDePrueba(['preparado' => true, 'sucio' => false, 'estructura' => esquemaEstructura()]);
 }
