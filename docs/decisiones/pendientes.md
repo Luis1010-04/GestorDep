@@ -397,3 +397,10 @@ Para desbloquear: aprobar el plan de T05 (y decidir sus puntos 1 a 6) y el de T0
 | C | Se cierran al dejar el equipo, con un evento de dominio (`JugadorAsignadoAEquipo` o un evento de salida) y un escucha de Alertas | Cierre inmediato | Crea un evento y un escucha que H1 decidió no crear (DD-32); amplía el alcance de H1 y de Alertas |
 
 - **Recomendación:** ninguna; el responsable pidió no corregirlo en T08.
+
+## Deuda registrada tras T08 (17 de noviembre de 2026)
+
+- **Orden de las alertas:** `ConsultaDeAlertasSql::deLosJugadores`, que alimenta `GET /jugadores/{jugador}/alertas` y el campo `alertas` de `GET /estatus-de-jugadores`, ordena por `alertas.activada_en` y desempata por `alertas.id` (UUID v7). Dos alertas activadas en el mismo milisegundo pueden salir en un orden distinto al de su creación, porque un UUID v7 no garantiza el orden de inserción dentro del mismo milisegundo. Es la misma causa que la deuda del orden de convocatoria (tras T06). La encontró T08: tres pruebas de T03 y T04 afirmaban el orden entre alertas con el mismo `activada_en` y fallaban de forma intermitente (reporte de T08, §8 y §9). T08 corrigió las pruebas, no la consulta; el comportamiento de producción no cambió.
+- **Decisiones abiertas (no se decidieron ni se aplicaron):**
+  1. **El desempate:** qué columna o regla desempata cuando `activada_en` coincide (hoy `id`), y si el mismo criterio debe valer para las alertas y para la convocatoria.
+  2. **Si la especificación exige un orden:** `docs/hitos/f1-h6.md` y `docs/api/openapi.yaml` no fijan el orden de la lista de alertas (§6 solo define la forma de cada alerta). Hay que decidir si el orden es parte del contrato; si no lo es, las pruebas no deben depender de él, y si lo es, hay que escribirlo en la especificación y en el contrato.
