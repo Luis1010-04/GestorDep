@@ -1,0 +1,28 @@
+
+   FAIL  Tests\Unit\Herramientas\GuionDeHumoTest
+  ⨯ F1-H6-T09: toda captura de rendimiento de F en humo-h6.sh manda las… 0.04s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Herramientas\GuionDeHumoTest > F1-H6-T09: toda captura…   
+  Failed asserting that two arrays are identical.
+  -Array &0 []
+  +Array &0 [
+  +    2 => 'tiros_a_porteria',
+  +]
+  
+
+  at tests/Unit/Herramientas/GuionDeHumoTest.php:335
+    331▕     expect($guion)->toContain('\"posicion\":\"delantero\"')
+    332▕         ->and($obligatorias[1])->not->toBe([])
+    333▕         ->and($capturas[1])->not->toBe([]);
+    334▕     foreach ($capturas[1] as $enviadas) {
+  ➜ 335▕         expect(array_diff($obligatorias[1], explode(' ', trim($enviadas))))->toBe([]);
+    336▕     }
+    337▕ });
+    338▕
+
+  1   tests/Unit/Herramientas/GuionDeHumoTest.php:335
+
+
+  Tests:    1 failed (4 assertions)
+  Duration: 0.70s
+
