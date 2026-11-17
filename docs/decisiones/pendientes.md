@@ -356,3 +356,7 @@ Para desbloquear: aprobar el plan de T05 (y decidir sus puntos 1 a 6) y el de T0
 
 - **DA-98 y DD-51:** la vista para convocar repite en SQL (`ConsultaDeVistaParaConvocarSql`) la fórmula de asistencia de DD-51 y la lectura del estado oficial; la paridad con T04 y T07 está probada (`ParidadDeVistaParaConvocarTest`), pero si cambia alguna de las dos reglas hay que cambiarla en los dos lugares.
 - **Nombres casi iguales:** `CalculoDeDesempeno` (Rendimiento, RN-08) y `CalculadorDeDesempeno` (Consultas, RN-18) tienen responsabilidades distintas y nombres casi idénticos; resolver en H7.
+
+## Deuda registrada tras T06 (16 de noviembre de 2026)
+
+- **Orden de convocatoria:** `GET /partidos/{partido}/convocatoria` (H3) y `GET /partidos/{partido}/convocatoria/vista` (T06) ordenan por `convocatorias.creado_en` y después por `convocatorias.id`. Dos convocatorias con el mismo `creado_en` (por ejemplo, filas insertadas en la misma transacción) se desempatan por `id`, y un UUID v7 no garantiza el orden de inserción dentro del mismo milisegundo, así que ese orden puede no ser el de la convocatoria. Afecta a H3 y a T06 por igual, y el orden de las dos rutas coincide porque usan la misma regla. No se cambió en T06; queda por decidir.
