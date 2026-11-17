@@ -319,3 +319,19 @@ BASH;
         ->and($salida)->toContain("LLAMADAS=2\n{\"datos\":[$otro,$efe]}\n")
         ->and(substr_count($salida, "LLAMADAS=2\n{\"datos\":[$otro,$efe]}"))->toBe(2);
 });
+
+test('F1-H6-T09: toda captura de rendimiento de F en humo-h6.sh manda las métricas obligatorias de su posición, las de MetricasSeeder', function () {
+    $guion = (string) file_get_contents(carpetaDeHumo().'/humo-h6.sh');
+    $siembra = (string) file_get_contents(dirname(__DIR__, 3).'/database/seeders/MetricasSeeder.php');
+    preg_match("/'delantero' => \[([^\]]*)\]/", $siembra, $lista);
+    preg_match_all("/'([a-z_]+)'/", $lista[1] ?? '', $obligatorias);
+    preg_match_all('/\$\(metricas ([a-z_ ]+)\)/', $guion, $capturas);
+
+    // F es delantero en el guion; sus capturas salen todas de `captura_de_f`, así que se revisan todas las llamadas a `metricas`.
+    expect($guion)->toContain('\"posicion\":\"delantero\"')
+        ->and($obligatorias[1])->not->toBe([])
+        ->and($capturas[1])->not->toBe([]);
+    foreach ($capturas[1] as $enviadas) {
+        expect(array_diff($obligatorias[1], explode(' ', trim($enviadas))))->toBe([]);
+    }
+});

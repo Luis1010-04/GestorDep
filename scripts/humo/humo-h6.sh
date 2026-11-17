@@ -110,7 +110,7 @@ metricas() {
         $ids = array_column(json_decode(stream_get_contents(STDIN), true)["datos"], "id", "codigo");
         echo json_encode(array_map(fn ($c) => ["metrica_id" => $ids[$c], "valor" => 1], array_slice($argv, 1)));' -- "$@"
 }
-captura_de_f() { printf '{"jugador_id":"%s","minutos":90,"fue_titular":true,"tarjetas_amarillas":0,"tarjetas_rojas":0,"calificacion_general":4,"observacion":"Humo H6","metricas":%s}' "$f" "$(metricas goles asistencias)"; }
+captura_de_f() { printf '{"jugador_id":"%s","minutos":90,"fue_titular":true,"tarjetas_amarillas":0,"tarjetas_rojas":0,"calificacion_general":4,"observacion":"Humo H6","metricas":%s}' "$f" "$(metricas goles asistencias tiros_a_porteria)"; }
 for hora in 08:00 10:00 12:00 14:00 16:00; do
     humo_peticion "$e1" POST "/api/v1/equipos/$equipo_a/partidos" \
         "{\"inicia_en\":\"$(instante "$hora")\",\"lugar_id\":\"$lugar\",\"rival_id\":\"$rival\",\"tipo\":\"amistoso\",\"condicion\":\"local\"}"
