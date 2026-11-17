@@ -407,3 +407,7 @@ Para desbloquear: aprobar el plan de T05 (y decidir sus puntos 1 a 6) y el de T0
 - **Decisiones abiertas (no se decidieron ni se aplicaron):**
   1. **El desempate:** qué columna o regla desempata cuando `activada_en` coincide (hoy `id`), y si el mismo criterio debe valer para las alertas y para la convocatoria.
   2. **Si la especificación exige un orden:** `docs/hitos/f1-h6.md` y `docs/api/openapi.yaml` no fijan el orden de la lista de alertas (§6 solo define la forma de cada alerta). Hay que decidir si el orden es parte del contrato; si no lo es, las pruebas no deben depender de él, y si lo es, hay que escribirlo en la especificación y en el contrato.
+
+## Deuda para H7, registrada tras la auditoría de H6 (17 de noviembre de 2026)
+
+- **Título de la prueba de DA-106:** en `backend/tests/Feature/Consultas/OrdenPorDesempenoTest.php`, la prueba de la línea 52, «RN-18 (DA-106): el orden usa la última evaluación de cada jugador, no las anteriores», y el comentario de la línea 8 («El promedio sale de la última evaluación de E1 en A (DA-106)») hablan de «la última evaluación». DA-106 decidió que el orden usa **el promedio de las últimas N calificaciones generales de partido del jugador**, con N igual a la ventana del umbral, y corrigió el texto anterior que decía «promedio de la última evaluación». **El título debe reflejar la decisión de DA-106.** Se resuelve en H7; por orden del responsable no se toca el archivo en H6.
