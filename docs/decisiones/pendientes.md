@@ -360,3 +360,40 @@ Para desbloquear: aprobar el plan de T05 (y decidir sus puntos 1 a 6) y el de T0
 ## Deuda registrada tras T06 (16 de noviembre de 2026)
 
 - **Orden de convocatoria:** `GET /partidos/{partido}/convocatoria` (H3) y `GET /partidos/{partido}/convocatoria/vista` (T06) ordenan por `convocatorias.creado_en` y después por `convocatorias.id`. Dos convocatorias con el mismo `creado_en` (por ejemplo, filas insertadas en la misma transacción) se desempatan por `id`, y un UUID v7 no garantiza el orden de inserción dentro del mismo milisegundo, así que ese orden puede no ser el de la convocatoria. Afecta a H3 y a T06 por igual, y el orden de las dos rutas coincide porque usan la misma regla. No se cambió en T06; queda por decidir.
+
+## P-15. Jugadores en baja en los agregados de los gráficos del equipo (T07, T08)
+
+**Fecha:** 16 de noviembre de 2026. **Tarea que lo encontró:** T08 (recorrido de seguridad). **Estado:** pendiente de decisión del responsable. T08 no prueba ni el comportamiento actual ni el propuesto.
+
+- **Pregunta:** `GET /equipos/{equipo}/graficos`, sin `filtro[jugador_id]`, devuelve el promedio del equipo por partido (de lo que registró el consultante) y el porcentaje de asistencia del equipo por mes. Hoy esos agregados incluyen las calificaciones y la asistencia de los jugadores dados de baja: `ConsultaDeGraficosSql::rendimientoDelEquipo` y el puerto de asistencia del equipo no filtran por baja. ¿Deben incluirlos?
+- **Con `filtro[jugador_id]` de un jugador en baja** la ruta ya responde 404 (RNF-01, RN-23); lo que se decide es solo el agregado sin filtro.
+- **Texto en que se apoyan las dos lecturas:** RN-23: «Un jugador dado de baja deja de aparecer en convocatorias, listados y alertas, y su información se conserva (RN-17).» No habla de agregados.
+
+| Opción | Qué hace | A favor | En contra |
+|---|---|---|---|
+| A | Los agregados siguen incluyendo a los jugadores en baja | La información se conserva (RN-17) y el promedio del equipo es el histórico de lo que se registró; el jugador no «aparece» como persona en una lista | Los datos de un jugador en baja pesan en un gráfico del equipo que el usuario ve, aunque ya no pueda verlo a él |
+| B | Los agregados excluyen a los jugadores en baja | Coherente con RN-23: el jugador deja de aparecer en lo que se muestra del equipo | El promedio cambia al dar de baja a alguien y no coincide con la suma histórica de los partidos; exige cambiar `ConsultaDeGraficosSql` y el adaptador de asistencia de Competencia, y probar ambos |
+
+- **Recomendación:** ninguna; el responsable pidió no decidirlo.
+- **Qué se hace mientras tanto:** nada. T08 deja fuera del recorrido la fila de gráficos del equipo sin `filtro[jugador_id]`.
+
+## P-16. Alertas abiertas de un equipo que el jugador ya dejó (T03, T08)
+
+**Fecha:** 16 de noviembre de 2026. **Tarea que lo encontró:** T08 (la mutación 1.05 del filtro de visibilidad). **Estado:** pendiente de decisión del responsable. No se corrige en T08, y T08 no afirma si esas alertas quedan abiertas o cerradas.
+
+- **Qué pasa hoy:** `alertas:recalcular` (`RecalcularTodasLasAlertas`) recorre solo las membresías vigentes (`MembresiasVigentes`). Si un jugador deja el equipo A (su membresía en A recibe `hasta`), las alertas deportiva y de sanciones abiertas de A **no se vuelven a evaluar y nunca se cierran**. Lo único que las oculta es el filtro de visibilidad (`VisibilidadDeAlertasSql`, que exige una membresía vigente del jugador en el equipo de la alerta), probado por «DA-90 (visibilidad)» en `AlertasDelJugadorTest`.
+- **Lo que dice el texto, sin cubrir este caso:**
+  - RN-09, `docs/requisitos.md`: «Se calcula por equipo, con las tarjetas y las faltas registradas por cualquier entrenador del equipo»; RN-10: «Se calcula por equipo: se toma la evaluación vigente de cada entrenador del equipo…».
+  - RN-14: «las alertas de riesgo de baja deportiva y de acumulación de sanciones de un equipo se calculan con los datos de todos los entrenadores de ese equipo y las ven todos ellos».
+  - RN-23: «Un jugador dado de baja deja de aparecer en convocatorias, listados y alertas, y su información se conserva (RN-17).» Habla de la baja del jugador, no de dejar un equipo.
+  - `docs/arquitectura.md` §11, punto 3: «Si la condición se cumple y no hay alerta abierta, se crea; si deja de cumplirse, se cierra con `cerrada_en`.»
+  - DD-32 (`docs/decisiones/registro-decisiones.md`): los eventos `JugadorAsignadoAEquipo` y `JugadorDadoDeBaja` no se crean en H1, y «`alertas:recalcular` (H6) concilia lo que ocurrió antes».
+  - Ningún texto dice qué pasa con la alerta abierta de un equipo cuando el jugador lo deja.
+
+| Opción | Qué hace | A favor | En contra |
+|---|---|---|---|
+| A | `alertas:recalcular` también evalúa las alertas deportivas y de sanciones abiertas de equipos donde el jugador ya no tiene membresía vigente y las cierra (la condición «del equipo» ya no se cumple) | Lo que DD-32 y §11 esperan del comando diario; el cierre queda en `cerrada_en` y se conserva (RN-17) | Cambia T03 y exige una prueba nueva; hay que decidir si el cierre es por salida del equipo o por condición |
+| B | Se deja como está: la alerta sigue abierta y el filtro de visibilidad la oculta | Sin código nuevo | La tabla acumula alertas abiertas que nadie ve ni cierra, y si el jugador vuelve al equipo reaparece una alerta vieja |
+| C | Se cierran al dejar el equipo, con un evento de dominio (`JugadorAsignadoAEquipo` o un evento de salida) y un escucha de Alertas | Cierre inmediato | Crea un evento y un escucha que H1 decidió no crear (DD-32); amplía el alcance de H1 y de Alertas |
+
+- **Recomendación:** ninguna; el responsable pidió no corregirlo en T08.

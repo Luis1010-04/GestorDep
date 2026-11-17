@@ -1,0 +1,28 @@
+﻿Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 3: gráficos y roles 
+=== control antes: 30 passed (355 assertions)
+=== 3.01 los gráficos usan el rendimiento de cualquier entrenador (src/Consultas/Infraestructura/ConsultaDeGraficosSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 8 failed, 22 passed (329 assertions)
+MATADA por 8 prueba(s); las primeras:
+  ⨯ HU-25 c1 (RN-14, DA-97): el entrenador recibe el rendimiento en par…
+  ⨯ HU-25 c3 (RN-14, §7.7): un jugador en dos equipos con dos entrenado…
+  ⨯ HU-25, RNF-04: una serie sin datos va vacía, con actualizado_en nul…
+=== 3.02 los gráficos usan las mediciones de cualquier entrenador (src/Consultas/Infraestructura/ConsultaDeGraficosSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 2 failed, 28 passed (350 assertions)
+MATADA por 2 prueba(s); las primeras:
+  ⨯ HU-25 c1 (RN-14, DA-97): el entrenador recibe el rendimiento en par…
+  ⨯ HU-25 c3 (RN-14): las mediciones y la asistencia del entrenador de…
+=== 3.03 el docente ve materias de otro docente (lista de materias) (src/Consultas/Infraestructura/ConsultaDeGraficosSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 2 failed, 28 passed (352 assertions)
+MATADA por 2 prueba(s); las primeras:
+  ⨯ HU-25 (RN-13): el docente solo recibe sus materias, no las de otro…
+  ⨯ RN-13 (RN-14): un usuario con los dos roles recibe lo del entrenado…
+=== 3.04 el docente ve calificaciones de materias de otro docente (src/Consultas/Infraestructura/ConsultaDeGraficosSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 30 passed (355 assertions)
+SOBREVIVE: 3.04 ningún test falla con la mutación.
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory

@@ -1,0 +1,35 @@
+﻿Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 1: alertas y estatus 
+=== control antes: 40 passed (388 assertions)
+=== 1.01 las alertas cerradas se ven (src/Consultas/Infraestructura/VisibilidadDeAlertasSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 3 failed, 37 passed (367 assertions)
+MATADA por 3 prueba(s); las primeras:
+  ⨯ HU-22: una alerta cerrada no aparece, aunque quede en la base, y el…
+  ⨯ HU-22, HU-23 (DA-89, DA-90): la fila trae las alertas abiertas que…
+  ⨯ HU-23 c2, §7.6 fila 9: filtro[tipo_alerta] deja solo a quienes tien…
+=== 1.02 el entrenador de otro equipo ve la alerta deportiva (src/Consultas/Infraestructura/VisibilidadDeAlertasSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 4 failed, 36 passed (374 assertions)
+MATADA por 4 prueba(s); las primeras:
+  ⨯ §7.6 fila 4 (RN-14): el entrenador de otro equipo del jugador recib…
+  ⨯ RN-13: un usuario con los dos roles ve lo que le toca por cada uno,…
+  ⨯ HU-22, HU-23 (DA-89, DA-90): la fila trae las alertas abiertas que…
+=== 1.03 el docente ve alertas de materias que no son suyas (src/Consultas/Infraestructura/VisibilidadDeAlertasSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 1 failed, 39 passed (388 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ DA-89: la alerta académica la ve el docente con una materia del jug…
+=== 1.04 cualquier entrenador del equipo, no el del usuario, da visibilidad (src/Consultas/Infraestructura/VisibilidadDeAlertasSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 4 failed, 36 passed (374 assertions)
+MATADA por 4 prueba(s); las primeras:
+  ⨯ §7.6 fila 4 (RN-14): el entrenador de otro equipo del jugador recib…
+  ⨯ RN-13: un usuario con los dos roles ve lo que le toca por cada uno,…
+  ⨯ HU-22, HU-23 (DA-89, DA-90): la fila trae las alertas abiertas que…
+=== 1.05 una membresía vencida da visibilidad a las alertas (src/Consultas/Infraestructura/VisibilidadDeAlertasSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 40 passed (388 assertions)
+SOBREVIVE: 1.05 ningún test falla con la mutación.
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory

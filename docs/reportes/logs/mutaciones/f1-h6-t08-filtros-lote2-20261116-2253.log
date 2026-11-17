@@ -1,0 +1,56 @@
+﻿Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 2: vista para convocar y listas 
+=== control antes: 60 passed (584 assertions)
+=== 2.01 la vista deja pasar el alcance de docente (sin soloEntrenador) (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 2 failed, 58 passed (547 assertions)
+MATADA por 2 prueba(s); las primeras:
+  ⨯ RN-13, RN-14: un usuario con los dos roles recibe por cada rol lo q…
+  ⨯ DA-96 (paridad con H3): un usuario docente y entrenador no ve en la…
+=== 2.02 la vista incluye a los jugadores en baja (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 3 failed, 57 passed (554 assertions)
+MATADA por 3 prueba(s); las primeras:
+  ⨯ RNF-01 (RN-23): un jugador sin alcance, en baja o inexistente respo…
+  ⨯ RNF-01 (RN-23): la lista del equipo no incluye jugadores en baja
+  ⨯ RN-23 (DA-99, RNF-01): un jugador en baja responde 404 en las rutas…
+=== 2.03 la convocatoria de la vista incluye a los jugadores en baja (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 2 failed, 58 passed (561 assertions)
+MATADA por 2 prueba(s); las primeras:
+  ⨯ HU-29 (DA-29, paridad con H3): un convocado dado de baja se omite d…
+  ⨯ DA-96 (paridad con H3): un usuario docente y entrenador no ve en la…
+=== 2.04 la convocatoria de la vista deja pasar el alcance de docente (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 1 failed, 59 passed (563 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ DA-96 (paridad con H3): un usuario docente y entrenador no ve en la…
+=== 2.05 un partido eliminado se puede consultar (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 1 failed, 59 passed (570 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ RNF-01: un partido inexistente, con id que no es v7, eliminado o de…
+=== 2.06 una convocatoria eliminada cuenta como convocado (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 1 failed, 59 passed (560 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ DA-96 (paridad con H3): un jugador quitado de la convocatoria con l…
+=== 2.07 cualquier entrenador de un equipo, no el del usuario, lo «entrena» (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 5 failed, 55 passed (525 assertions)
+MATADA por 5 prueba(s); las primeras:
+  ⨯ DA-119 (RNF-01): un equipo que el consultante no entrena, o donde e…
+  ⨯ RNF-01: un entrenador que no entrena el equipo, un equipo inexisten…
+  ⨯ RNF-01: un partido inexistente, con id que no es v7, eliminado o de…
+=== 2.08 el filtro de equipo no exige que el usuario lo entrene (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 2 failed, 58 passed (576 assertions)
+MATADA por 2 prueba(s); las primeras:
+  ⨯ DA-119 (RNF-01): un equipo que el consultante no entrena, o donde e…
+  ⨯ DA-119 (RNF-01): en la vista para convocar, un filtro[equipo_id] co…
+=== 2.09 una membresía vencida cuenta como jugador del equipo (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 60 passed (584 assertions)
+SOBREVIVE: 2.09 ningún test falla con la mutación.
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory

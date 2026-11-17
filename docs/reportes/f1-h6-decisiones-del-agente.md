@@ -37,3 +37,12 @@ Decisiones que el agente tomó al implementar y que no estaban escritas en la es
 | 19 | Los convocados se leen con SQL de solo lectura en Consultas, con `AlcanceDeJugadores` aplicado a `convocatorias.jugador_id` en la misma consulta que cuenta y pagina | Decisión 5 (a) del responsable, apoyada en arquitectura §4.3 («Consultas puede leer las tablas de otros contextos con SQL de solo lectura»); así `meta.total` cuenta igual que H3 | `ConsultaDeVistaParaConvocarSql::convocatoriaDelPartido` |
 | 20 | Un convocado que dejó el equipo del partido pero sigue en otro equipo del mismo usuario aparece, con el rendimiento del equipo del partido | Es el comportamiento que ya tiene la ruta de H3 (la regla de alcance exige membresía en algún equipo del usuario, no en el del partido); el responsable pidió anotarlo en el reporte | `docs/reportes/f1-h6-t06.md` §2 |
 | 21 | Las pruebas de paridad comparan con el orden de H3 y no con uno fijo | Las convocatorias insertadas juntas comparten `creado_en` y el orden lo decide el `id` | `VistaDeLaConvocatoriaTest` |
+
+## T08: seguridad y baja
+
+| # | Decisión | Por qué | Dónde está |
+|---|---|---|---|
+| 22 | La mutación de filtros corre en una copia de `/tmp` del contenedor, con un guion en `docs/reportes/logs/mutaciones/` y un controlador en PHP con el texto exacto de cada reemplazo; una mutación que no se aplica exactamente una vez termina con el código 3 | Orden del responsable: una mutación no aplicada no cuenta como sobreviviente; precedente de H5 | `f1-h6-t08-filtros-guion.sh`, `f1-h6-t08-filtros-mutaciones.php` |
+| 23 | El control del lote 1 usa `AlertasDelJugadorTest`, `EstatusDeJugadoresTest` y el recorrido, no todo `tests/Feature/Alertas` | Cada lote debe caber en el tope de 20 minutos de `bin/con-candado.sh`; esas son las pruebas de los filtros del lote | `f1-h6-t08-filtros-mutaciones.php` |
+| 24 | Las pruebas del recorrido y las de cada mutación no tienen salida roja previa | Describen comportamiento que ya existe (T04 a T07); que pueden fallar lo demuestra la mutación que cada una mata | `docs/reportes/f1-h6-t08.md` §2 |
+| 25 | La mutación 3.04 se cubre con una guarda del adaptador, no con un criterio de la API | Es defensa en profundidad: por la ruta el filtro nunca excluye nada (§5 del reporte) | `GuardaDeDocenteEnGraficosTest` |

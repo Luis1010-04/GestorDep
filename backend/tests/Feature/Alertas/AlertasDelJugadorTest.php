@@ -171,3 +171,33 @@ test('HU-22: sin sesión responde 401; con un id que no es un UUID, 404', functi
     sesionesPeticion($this, 'GET', alertasRuta($m['f1']))->assertUnauthorized();
     sesionesPeticion($this, 'GET', '/api/v1/jugadores/no-es-un-uuid/alertas', idDeSesion: sesionesIniciar($this, 'e1@x.com'))->assertNotFound();
 });
+
+test('DA-90 (visibilidad): el entrenador de A y de B deja de ver la alerta deportiva de A cuando el jugador ya dejó A, y sigue viendo la de B', function () {
+    // Esta prueba fija el contrato de VisibilidadDeAlertasSql, no un requisito: la visibilidad de una alerta deportiva pide una
+    // membresía vigente del jugador en el equipo de la alerta. Ni RN-14 ni DA-90 dicen qué pasa con un jugador que ya dejó el equipo;
+    // DA-90 solo dice que las ven los entrenadores del equipo al que pertenece la alerta. No afirma si la alerta queda abierta o
+    // cerrada: eso es del recálculo (P-16).
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['a']);
+    alertaInsertar($m['f1'], ALERTA_DEPORTIVA, $m['b']);
+    $e3 = sesionesIniciar($this, 'e3@x.com');
+    $equipos = function () use ($m, $e3): array {
+        /** @var list<array{equipo_id: string}> $alertas */
+        $alertas = sesionesPeticion($this, 'GET', alertasRuta($m['f1']), idDeSesion: $e3)->assertOk()->json('datos');
+        $ids = array_map(fn (array $alerta): string => $alerta['equipo_id'], $alertas);
+        sort($ids);
+
+        return $ids;
+    };
+
+    $conAmbas = $equipos();
+    DB::connection('propietario')->table('jugador_equipo')->where('jugador_id', $m['f1'])->where('equipo_id', $m['a'])->update(['hasta' => '2026-11-01']);
+    $trasDejarA = $equipos();
+
+    $esperado = [$m['a'], $m['b']];
+    sort($esperado);
+
+    expect($conAmbas)->toBe($esperado)
+        ->and($trasDejarA)->toBe([$m['b']]);
+});

@@ -269,3 +269,32 @@ test('RNF-01: la vista no escribe nada en la base', function () {
 
     expect([DB::table('evaluaciones_rendimiento')->count(), DB::table('alertas')->count(), DB::table('resumenes_academicos')->count()])->toBe($antes);
 });
+
+test('DA-119 (v1.15 §6.2, RNF-01): un jugador que dejó el equipo A y sigue en B para el mismo entrenador responde 404 con filtro[equipo_id]=A y 200 con B; la lista de A ya no lo trae y la de B sí', function () {
+    // El 404 se apoya en DA-119 y en v1.15 §6.2 («un equipo … donde el jugador no tiene membresía vigente responde 404»). Que la lista
+    // de A ya no traiga al jugador NO tiene texto en la especificación (§6.1 solo dice «Entrenador del equipo»): esa parte fija el
+    // comportamiento de `ConsultaDeVistaParaConvocarSql::membresiaVigente`, que pide membresía vigente, y no lleva identificador.
+    // Los controles positivos (el mismo jugador sí sale en B) evitan que la prueba pase por otra razón.
+    /** @var TestCase $this */
+    $m = convocarMundo();
+    $ids = function (string $equipo): array {
+        /** @var list<array{jugador: array{id: string}}> $filas */
+        $filas = convocarPedir($this, convocarRutaDelEquipo($equipo, 'por_pagina=100'), 'e3@x.com')->assertOk()->json('datos');
+
+        return array_map(fn (array $fila): string => $fila['jugador']['id'], $filas);
+    };
+    $conA = fn (): array => $ids($m['a']);
+    $conB = fn (): array => $ids($m['b']);
+
+    expect($conA())->toContain($m['f1'])
+        ->and($conB())->toContain($m['f1']);
+    convocarPedir($this, convocarRuta($m['f1'], "filtro[equipo_id]={$m['a']}"), 'e3@x.com')->assertOk();
+
+    DB::connection('propietario')->table('jugador_equipo')->where('jugador_id', $m['f1'])->where('equipo_id', $m['a'])->update(['hasta' => '2026-09-01']);
+
+    expect($conA())->not->toContain($m['f1'])->and($conA())->toContain($m['p1'])
+        ->and($conB())->toContain($m['f1']);
+    expect(convocarPedir($this, convocarRuta($m['f1'], "filtro[equipo_id]={$m['a']}"), 'e3@x.com')->assertNotFound()->json())
+        ->toBe(['codigo' => 'recurso_no_encontrado', 'mensaje' => __('errores.recurso_no_encontrado'), 'errores' => []]);
+    expect(convocarPedir($this, convocarRuta($m['f1'], "filtro[equipo_id]={$m['b']}"), 'e3@x.com')->assertOk()->json('datos.jugador.id'))->toBe($m['f1']);
+});

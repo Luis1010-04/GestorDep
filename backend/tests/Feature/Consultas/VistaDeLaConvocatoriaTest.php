@@ -264,3 +264,32 @@ test('DA-96: la vista de la convocatoria no escribe nada en la base', function (
 
     expect($contar())->toBe($antes);
 });
+
+test('DA-96 (paridad con H3): un jugador quitado de la convocatoria con la API de H3 desaparece de la vista y de meta.total, igual que en H3', function () {
+    // La exclusión de una convocatoria eliminada sigue el comportamiento de H3 (`ConsultaDeConvocatoriaSql` no cuenta las
+    // convocatorias eliminadas); no es un requisito propio de la vista. DA-96 se cita solo como identificador de la paridad con la ruta de H3.
+    /** @var TestCase $this */
+    $m = convocarMundo();
+    // H3 solo deja quitar de la convocatoria de un partido programado (409 `partido_no_programado` si no): se usa uno nuevo.
+    $partido = vistaConvPartido($m, $m['a']);
+    foreach (['p1', 'd1', 'm1', 'f1'] as $jugador) {
+        mundoInsertar('convocatorias', ['partido_id' => $partido, 'jugador_id' => $m[$jugador]]);
+    }
+    $e1 = sesionesIniciar($this, 'e1@x.com');
+    /** @var list<array{id: string, jugador_id: string}> $convocatorias */
+    $convocatorias = sesionesPeticion($this, 'GET', vistaConvRutaDeH3($partido), idDeSesion: $e1)->assertOk()->json('datos');
+    $quitada = $convocatorias[2];
+    expect($convocatorias)->toHaveCount(4);
+
+    sesionesPeticion($this, 'DELETE', "/api/v1/convocatorias/{$quitada['id']}", idDeSesion: $e1)->assertNoContent();
+
+    foreach (['por_pagina=2&pagina=1', 'por_pagina=2&pagina=2', 'por_pagina=2&pagina=3', ''] as $consulta) {
+        $deH3 = vistaConvPagina($this, vistaConvRutaDeH3($partido, $consulta), 'e1@x.com', false);
+        $deLaVista = vistaConvPagina($this, vistaConvRuta($partido, $consulta), 'e1@x.com', true);
+
+        expect($deLaVista['jugadores'])->toBe($deH3['jugadores'], "página «{$consulta}»")
+            ->and($deLaVista['jugadores'])->not->toContain($quitada['jugador_id'])
+            ->and($deLaVista['meta'])->toBe($deH3['meta'], "meta «{$consulta}»");
+    }
+    expect(vistaConvPagina($this, vistaConvRuta($partido), 'e1@x.com', true)['meta']['total'])->toBe(3);
+});
