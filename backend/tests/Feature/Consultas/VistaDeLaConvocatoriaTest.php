@@ -231,6 +231,12 @@ test('RNF-01: un partido inexistente, con id que no es v7, eliminado o de un equ
     $noV7 = convocarPedir($this, vistaConvRuta('00000000-0000-0000-0000-000000000000'))->assertNotFound();
     $borrado = convocarPedir($this, vistaConvRuta($eliminado))->assertNotFound();
 
+    // La forma de error de docs/convenciones-api.md §3: exactamente `codigo`, `mensaje` y `errores`, con el texto de lang/es.
+    foreach (['ajeno' => $ajeno, 'inexistente' => $inexistente, 'no v7' => $noV7, 'eliminado' => $borrado] as $caso => $respuesta) {
+        expect($respuesta->getStatusCode())->toBe(404, $caso)
+            ->and($respuesta->json())->toBe(['codigo' => 'recurso_no_encontrado', 'mensaje' => 'El recurso solicitado no existe.', 'errores' => []], $caso);
+    }
+
     expect($inexistente->getContent())->toBe($ajeno->getContent())
         ->and($noV7->getContent())->toBe($ajeno->getContent())
         ->and($borrado->getContent())->toBe($ajeno->getContent())
