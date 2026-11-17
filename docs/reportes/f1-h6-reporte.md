@@ -42,14 +42,42 @@ Las cifras de cada tarea (pruebas, `make verificar`, lo no hecho, fuera de alcan
 
 ## 4. Rutas tocadas fuera de lo permitido
 
-Esta lista sale de los expedientes de `docs/decisiones/pendientes.md` y de los reportes de tarea; **no re-audité commit por commit** las rutas de T00 a T07 para este documento, y quien necesite la lista completa debe contrastarla con cada `f1-h6-tNN.md`.
+**Verificación hecha el 17/11/2026 sobre `3b8432b`** (reemplaza a la lista que antes salía de los expedientes). Script y salida: `docs/reportes/logs/verificar/f1-h6-rutas-por-tarea.sh` y `...-salida.txt`.
 
-- **T00:** cuatro archivos de pruebas por DA-104 (expediente P-13, aprobado), y `tests/Feature/EntornoDePruebasTest.php` (autorizado en DA-101).
-- **T01:** tres pruebas de Académico que fijaban una sola fila de `parametros_institucionales` (expediente P-01, opción A, aprobada).
-- **T04 a T07:** `routes/api.php` (expediente P-02, opción A, aprobada).
-- **`Makefile`, destino `pruebas`:** el ajuste de memoria de `make pruebas`, aprobado explícitamente en la sesión de T05.
-- **T08:** `tests/Ayudantes/MundoDeAlertas.php`, `AlertasDelJugadorTest.php` y `EstatusDeJugadoresTest.php`, de T03 y T04, en `8726374`: se corrigió un fallo intermitente por el desempate por `id` (`f1-h6-t08.md` §8 y §9).
-- **T09:** ninguna fuera de lo permitido (una línea del `Makefile`, el humo, `GuionDeHumoTest`, trazabilidad, registro y reportes).
+**Método.** Para cada tarea, los archivos de **sus** commits (los que empiezan con `F1-H6-Tnn:`), sin repetidos, comparados con las rutas permitidas de `docs/hitos/f1-h6.md` §8 (T00: `docs/reportes/f1-h6-plan-da101.md` §7). Los comandos son:
+
+```
+git log --reverse --format=%h --grep="^F1-H6-Tnn:"          # los commits de la tarea
+git show --name-only --format= <commit>                      # sus archivos; se juntan y se ordenan sin repetidos
+git rev-parse --short <primer commit>~1                      # el commit anterior al primero (en la salida)
+```
+
+No usé `git diff --name-only <anterior>..<último>` porque los commits de una tarea están intercalados con los de otras y con los F1-DOC (T03, por ejemplo, va de `93df2b3` a `468e68d` con otros commits en medio), y un diff de rango atribuiría a la tarea archivos que no son suyos. Para cada tarea, la salida dice el commit anterior al primero.
+
+**Supuestos.** (1) Los reportes y sus logs (`docs/reportes/**`) se dan por permitidos en todas las tareas, porque §0 pide un `f1-h6-tNN.md` por tarea aunque §8 no lo repita. (2) Las rutas se comparan por nombre de archivo: las restricciones «solo …» dentro de una ruta permitida (por ejemplo, «solo los adaptadores de DA-115») no se pueden verificar por nombre; revisé a mano los archivos de T03 que caen en esas rutas y todos son adaptadores, puertos o proveedores nombrados en §8.
+
+| Tarea | Commits | Archivos distintos | Fuera de las rutas permitidas |
+|---|---|---|---|
+| T00 | 1 (`2075659`; anterior `33a9910`) | 41 | ninguno |
+| T01 | 1 (`8fbd178`; anterior `8606ba3`) | 6 | ninguno |
+| T02 | 2 (`9b31941` a `cf1e267`; anterior `8fbd178`) | 20 | ninguno |
+| T03 | 14 (`93df2b3` a `468e68d`; anterior `d50969c`) | 74 | **13 archivos** (abajo) |
+| T04 | 1 (`75fe470`; anterior `cf1e267`) | 27 | ninguno |
+| T05 | 5 (`4677503` a `d956050`; anterior `155d6a0`) | 39 | **3 archivos** (abajo) |
+| T06 | 6 (`a2b1db1` a `d1f4772`; anterior `222df9d`) | 21 | ninguno |
+| T07 | 1 (`4339783`; anterior `75fe470`) | 38 | ninguno |
+| T08 | 3 (`bb91031` a `6951e33`; anterior `d1f4772`) | 31 | **2 archivos** (abajo) |
+| T09 | 8 (`1b03ba7` a `3b8432b`; anterior `6951e33`) | 20 | ninguno |
+
+**Discrepancias** (todas en archivos que no están en la lista de §8 de su tarea). No juzgo cuáles estaban aprobadas; indico lo que consta.
+
+- **T03, todo en el commit `468e68d`:**
+  - *Consecuencia del renombre del comando de resúmenes a `resumenes:conciliar` (DA-113, aprobada el 16/11/2026).* §8 de T03 permite el comando solo en `ConciliarResumenesComando.php`; el renombre tocó además `backend/src/Academico/Aplicacion/ConciliarResumenes.php` (un comentario) y cinco pruebas de Académico que invocaban el comando por su nombre: `ContratoDeAcademicoTest`, `CriterioPorMateriaTest`, `RecalculoDelResumenTest`, `SituacionAcademicaTest` y `tests/Feature/Seguridad/AcademicoSeguridadTest.php`; y en los documentos, `docs/CAMBIOS-v1.2.md`, `docs/criterios-aceptacion-fase-1.md`, `docs/decisiones/registro-decisiones.md` y `docs/estrategia-pruebas.md`. **El reporte de T03 no declara estos archivos y no encontré una aprobación de esas rutas concretas**; consta DA-113 para el renombre.
+  - *Consecuencia de DA-121 (aprobada; declarada en el reporte de T03, §7, punto 3):* `backend/tests/Arch/AlcanceDeJugadoresTest.php`, `backend/tests/Feature/Academico/AlcanceDelDocenteTest.php` y `backend/tests/Ayudantes/DeteccionDeConsultasDeJugadores.php` (una línea cada uno: el uso autorizado sin alcance).
+- **T05:** `Makefile` (`b971282`, el ajuste de memoria de `make pruebas`), `docs/hitos/f1-h6.md` y `docs/decisiones/pendientes.md` (`465118f`, especificación v1.15 y deudas). Ambos cambios constan en el reporte de T05 y se hicieron por orden del responsable en la sesión de T05.
+- **T08:** `backend/tests/Ayudantes/MundoDeAlertas.php` (`8726374`; declarado en `f1-h6-t08.md` §8) y `docs/decisiones/pendientes.md` (P-15, P-16 y la deuda del orden de las alertas, registrados por orden del responsable; declarados en `f1-h6-t08.md` §1).
+
+Quedan **sin discrepancia** T00, T01, T02, T04, T06, T07 y T09. En T00 `backend/docker/db/init/02-bases-por-proceso.sh` es «el guion idempotente junto a» `01-roles-y-bases.sh` de su plan §7.
 
 ## 5. Tiempos
 
