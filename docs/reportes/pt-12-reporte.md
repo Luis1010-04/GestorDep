@@ -144,19 +144,26 @@ Qué pasó: la instrucción anterior decía «Antes de commitear, confirma con `
 Efecto: ninguno sobre el contenido. El índice tenía las 521 entradas que el responsable aprobó después («Aprobado el índice de 521 entradas»), el `git status --short` solo mostraba `?? frontend/NiceAdmin/` y el commit no se publicó. **El commit no se reescribe** ni se cambia su hash. Regla que sigo desde ahora: cuando una instrucción pida confirmar o mostrar algo antes de commitear, entrego esa comprobación y espero la respuesta antes del commit.
 
 ## Comprobación en navegador y cambios posteriores (18/11/2026)
-**Alcance de esta sección.** La comprobación en navegador de hoy la ejecutó el responsable (con Chrome), con los usuarios de `UsuariosDemoSeeder`. **Yo no presencié esos pasos y no tengo capturas ni los valores observados en cada uno.** Lo que sigue es lo que el responsable indicó que se comprobó; no añado detalles que no recibí. Pantalla chica: se usó un `iframe` de 375 px de ancho sobre `/ingreso` y sobre `/panel`.
+**Quién y cómo.** La comprobación en navegador la ejecutó el asesor el 18/11/2026, en el Chrome del responsable, sobre `http://localhost:8000` y con los usuarios de `UsuariosDemoSeeder`. Para la pantalla chica se midió con un `iframe` de 375 px de ancho **del mismo origen**, sobre `/ingreso` y sobre `/panel`, y no con un redimensionado de ventana.
 
-Pasos comprobados en navegador (según el responsable):
-1. Ingreso correcto.
-2. Ingreso incorrecto (401, «Las credenciales no son válidas.»).
-3. Validación del ingreso con el cuerpo vacío (422), con los mensajes «El correo es obligatorio.» y «La contraseña es obligatoria.».
-4. Recarga del panel con la sesión iniciada.
-5. Salida.
-6. Sesión expirada.
-7. Doble clic en «Entrar»: una sola petición `POST`.
-8. Pantalla chica de 375 px en `/ingreso` y en `/panel`.
-9. Menú lateral.
-10. Bloqueo: cinco respuestas 401 seguidas y después el 429.
+**Resultados observados:**
+
+| # | Paso | Resultado observado |
+|---|---|---|
+| 1 | `/panel` sin sesión | Redirige a `/ingreso` |
+| 2 | `/ingreso` | Muestra el logo, los campos Correo y Contraseña, el botón «Entrar» y «Designed by BootstrapMade» |
+| 3 | Envío vacío | «El correo es obligatorio.» y «La contraseña es obligatoria.», debajo de cada campo y sin aviso global |
+| 4 | Credenciales inválidas | «Las credenciales no son válidas.»; el botón vuelve a habilitarse |
+| 5 | `docente@example.test` | Redirige a `/panel`; «Bienvenido, Docente de demostración.» y «Roles: docente»; consola sin errores; `GET /api/v1/sesion` 200 |
+| 6 | Recarga de `/panel` y `/ingreso` con sesión | La recarga conserva la sesión; `/ingreso` con sesión redirige a `/panel` |
+| 7 | Cerrar sesión | `DELETE` 204 y va a `/ingreso`; `/panel` redirige después a `/ingreso` |
+| 8 | Sesión caducada | Al cerrar sesión, `DELETE` 401 y va a `/ingreso?expirada=1` con «Su sesión terminó. Inicie sesión de nuevo.» |
+| 9 | `entrenador1@example.test` | «Bienvenido, Entrenador 1 de demostración.» y «Roles: entrenador» |
+| 10 | Doble clic en «Entrar» | Un solo `POST /api/v1/sesion`; el botón queda deshabilitado con «Procesando…» |
+| 11 | Botón de tres rayas | Abre y cierra el menú lateral |
+| 12 | Pantalla de 375 px | Sin desbordamiento horizontal en `/ingreso` ni en `/panel` (iframe del mismo origen) |
+| 13 | `entrenador2@example.test` | 5 respuestas 401 y luego 429 con «Demasiados intentos. Intente de nuevo en 15 minutos.» |
+| 14 | Título de la pestaña | «Panel · GestorDep» |
 
 **Cambios hechos tras esa comprobación, con sus commits:**
 - `60371e2`, `PT-12: mensajes de validación del ingreso`. Los mensajes de campo obligatorio pasan de «El campo correo es obligatorio.» y «El campo contrasena es obligatorio.» a «El correo es obligatorio.» y «La contraseña es obligatoria.», con `custom` en `backend/lang/es/validation.php`. La aserción del mensaje se añadió a la prueba «HU-01: un cuerpo sin correo o sin contraseña responde 422» (`IniciarSesionTest.php`), que falló antes solo por el mensaje. Log: `docs/reportes/logs/pt-12/pt-12-verificar-9.log`, escrito directamente en esa carpeta durante la corrida sobre el árbol con ese cambio sin commitear (commit base `47655d9`); es el de esa corrida y no el de otra anterior.
@@ -173,7 +180,9 @@ Pasos comprobados en navegador (según el responsable):
 
 Nota: ese patrón también bloquea `DELETE /api/v1/sesion` mientras esté activo, así que hay que quitarlo antes de probar la salida.
 
-**Lo que no se pudo verificar:** el encabezado `Retry-After` del 429 en la comprobación en navegador. Por eso no está comprobado en navegador si el aviso del bloqueo mostró los minutos («Intente de nuevo en 15 minutos.») o el mensaje genérico de la API: `ingreso.js` solo calcula los minutos si el encabezado llega. Lo cubre la prueba Pest «RNF-10: la contraseña correcta con la cuenta bloqueada responde 429 con Retry-After» y el contrato de OpenAPI.
+**Lo que no se pudo verificar:** el encabezado `Retry-After` del 429 en la comprobación en navegador, de forma directa. El texto observado, «Intente de nuevo en 15 minutos.», solo lo calcula `ingreso.js` si el encabezado llega, así que indica que el script lo recibió, pero el encabezado en sí no se comprobó.
+
+**Cobertura por pruebas del `Retry-After`:** sí hay pruebas de servidor. En `tests/Feature/Identidad/IniciarSesionTest.php`, la prueba «RNF-10: la contraseña correcta con la cuenta bloqueada responde 429 con Retry-After» (línea 163) exige `Retry-After: 900` en el 429 del ingreso, y la de la línea 174, «RNF-10: un intento a los 14 min 59 s del bloqueo responde 429», exige `Retry-After: 1`. Además, `tests/Feature/Api/FormatoDeErrorTest.php` (línea 58) comprueba que un código HTTP sin código propio conserva sus cabeceras, con `Retry-After: 60`.
 
 **La fila de PT-12 en `docs/trazabilidad.md` sigue en «Pendiente»** hasta que el responsable confirme H-06.
 
