@@ -121,3 +121,7 @@ Quedan **sin discrepancia** T00, T01, T02, T04, T06 y T07. En T00 `backend/docke
 ## 8. Siguiente paso
 
 Detenerse. La auditoría independiente de sistema (`docs/reportes/auditorias/`) y la etiqueta las hace el responsable; con la auditoría entregada y sin bloqueantes, el responsable revisa, prueba `make humo` y ordena la etiqueta.
+
+## Nota de erratas (18/11/2026)
+
+Este reporte nombra «DA-122» como la propuesta de P-16 (líneas 20 y 111). Ese número está asignado a otra decisión: el frontend en rama aparte (`docs/decisiones/registro-decisiones.md`, aprobada el 17/11/2026). La propuesta de P-16 queda sin número hasta su retoma. El texto original no se modifica.
