@@ -195,3 +195,14 @@ Tareas que no pertenecen a un hito ni a una historia de usuario. Cada fila cita 
 | PT-10 | `GET /api/v1/sesion`: devuelve el usuario de la sesión con la misma forma de datos que `POST /sesion`; sin sesión, o con el usuario con borrado lógico, responde 401 `no_autenticado`. | Hecha (`a9e6d81`, aprobada) | `VerSesionTest` (PT-10: seis pruebas, incluido el contrato OpenAPI). |
 | PT-11 | Error controlado de `POST /sesion` sin sesión de origen permitido: 403 `origen_no_permitido`, texto en `lang/es`, OpenAPI. | Hecha (rama `tecnico/pt-11`) | `OrigenNoPermitidoTest` (PT-11: siete pruebas, incluido el contrato OpenAPI). |
 | PT-12 | Estructura web de la rebanada 1 del frontend (ingreso, layout, panel, salida) en `backend/`. | Pendiente (tras fusionar PT-10 y PT-11 en `main`) | Criterios CA-AUT-001, CA-GEN-004, CA-GEN-005, CA-LAY-001, CA-LAY-002 y CA-PAN-001, y la existencia de los archivos de Bootstrap. Nombres de pruebas con identificador, fijados al iniciar PT-12. |
+
+## Rutas web (frontend, rama frontend/blade-niceadmin)
+
+Las rutas web devuelven vistas HTML y no forman parte del contrato de la API
+(`docs/api/openapi.yaml`). Se registran aquí.
+
+| Ruta | Método | Acceso | Tarea | Criterios |
+|---|---|---|---|---|
+| `/` | GET | Público; redirige a `/panel` | PT-12 | CA-GEN-005 |
+| `/ingreso` | GET | Invitado (`guest:web`) | PT-12 | CA-AUT-001, CA-LAY-001 |
+| `/panel` | GET | Autenticado (`auth:web`) | PT-12 | CA-GEN-005, CA-LAY-002, CA-PAN-001 |
