@@ -148,6 +148,7 @@ test('RNF-01 (§7.4 fila 14): las lecturas de jugadores siguen pasando por Alcan
     expect(array_keys(USOS_AUTORIZADOS_SIN_ALCANCE))->toBe([
         'src/Plantel/Infraestructura/RepositorioDeJugadoresEloquent.php',
         'src/Plantel/Infraestructura/BusquedaDeJugadorPorMatricula.php',
+        'src/Plantel/Infraestructura/MembresiasVigentesPlantel.php',
     ])->and(consultasDeJugadoresSinAlcance(
         archivosPhpDeLaAplicacion(),
         [IMPLEMENTACION_DEL_ALCANCE, DECLARACION_DEL_MODELO_JUGADOR, ...array_keys(USOS_AUTORIZADOS_SIN_ALCANCE)],

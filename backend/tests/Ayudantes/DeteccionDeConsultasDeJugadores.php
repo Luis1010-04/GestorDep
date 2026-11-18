@@ -17,6 +17,7 @@ const DECLARACION_DEL_MODELO_JUGADOR = 'src/Plantel/Infraestructura/Modelos/Juga
 const USOS_AUTORIZADOS_SIN_ALCANCE = [
     'src/Plantel/Infraestructura/RepositorioDeJugadoresEloquent.php' => 'Inserción del alta de un jugador (T12): escribe, no consulta lo que el usuario ve.',
     'src/Plantel/Infraestructura/BusquedaDeJugadorPorMatricula.php' => 'Búsqueda por matrícula (RN-20, T13): única excepción de visibilidad, devuelve solo nombres, apellidos y matrícula.',
+    'src/Plantel/Infraestructura/MembresiasVigentesPlantel.php' => 'Recálculo de alertas sin usuario de sesión (DA-121): solo devuelve identificadores.',
 ];
 
 /** @return list<string> */

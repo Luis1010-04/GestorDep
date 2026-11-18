@@ -1,0 +1,2074 @@
+Note: Pass `--debug` to log test-framework output.
+
+Escaped mutants:
+================
+
+Timed Out mutants:
+==================
+
+Skipped mutants:
+================
+
+Killed by Test Framework mutants:
+=================================
+
+1) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:20    [M] PublicVisibility [ID] 249916231009d7141e89119a575df6b4
+
+@@ @@
+      *                                    cuentan tarjetas y las faltas sí (P-08b)
+      * @param  list<InasistenciaAEntrenamiento>  $inasistencias
+      */
+-    public static function seCumple(
++    protected static function seCumple(
+         array $tarjetas,
+         ?string $temporadaId,
+         array $inasistencias,
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+2) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:29    [M] GreaterThanOrEqualTo [ID] 77145ee2c1aa4ff4330538ca0314cccc
+
+@@ @@
+     ): bool {
+         $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+-        return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
++        return $conteos['tarjetas_rojas'] > $parametros->tarjetasRojas()
+             || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+             || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+3) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:29    [M] GreaterThanOrEqualToNegotiation [ID] c9737b384f974a4e82c3ee5d8780678a
+
+@@ @@
+     ): bool {
+         $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+-        return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
++        return $conteos['tarjetas_rojas'] < $parametros->tarjetasRojas()
+             || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+             || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+4) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:29    [M] LogicalOr [ID] c264589152148db11e711b5362fd88f8
+
+@@ @@
+     ): bool {
+         $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+-        return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+-            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
++        return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas() && $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+             || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+5) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:29    [M] LogicalOr [ID] 06cf9b27be053b9fc6755bb5bb9e0b81
+
+@@ @@
+         $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+         return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+-            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+-            || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
++            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas() && $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
+     }
+
+     /**
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+6) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:29    [M] LogicalOrNegation [ID] ffa89a7a483dbb054455fa83b40df8aa
+
+@@ @@
+     ): bool {
+         $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+-        return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+-            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+-            || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
++        return !($conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
++            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas() || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral());
+     }
+
+     /**
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+7) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:29    [M] LogicalOrAllSubExprNegation [ID] 138cd0f71296057abd0f72adf1e7546e
+
+@@ @@
+     ): bool {
+         $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+-        return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+-            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+-            || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
++        return !($conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()) || !($conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()) || !($conteos['faltas_en_ventana'] >= $parametros->faltasUmbral());
+     }
+
+     /**
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+8) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:30    [M] GreaterThanOrEqualToNegotiation [ID] 01bedf3b5c2f1087b9e6d2406ee4409b
+
+@@ @@
+         $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+         return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+-            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
++            || $conteos['tarjetas_amarillas'] < $parametros->tarjetasAmarillas()
+             || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+9) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:30    [M] GreaterThanOrEqualTo [ID] d9c44c7f5984caeeae0093bdfa75e7b6
+
+@@ @@
+         $conteos = self::conteos($tarjetas, $temporadaId, $inasistencias, $fechaDeCalculo, $parametros);
+
+         return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+-            || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
++            || $conteos['tarjetas_amarillas'] > $parametros->tarjetasAmarillas()
+             || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+10) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:31    [M] GreaterThanOrEqualToNegotiation [ID] ce57fedd265fc6469bae18dbde77f97f
+
+@@ @@
+
+         return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+             || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+-            || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
++            || $conteos['faltas_en_ventana'] < $parametros->faltasUmbral();
+     }
+
+     /**
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+11) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:31    [M] GreaterThanOrEqualTo [ID] e1a85d768507a59d1a4f5bb686fb2818
+
+@@ @@
+
+         return $conteos['tarjetas_rojas'] >= $parametros->tarjetasRojas()
+             || $conteos['tarjetas_amarillas'] >= $parametros->tarjetasAmarillas()
+-            || $conteos['faltas_en_ventana'] >= $parametros->faltasUmbral();
++            || $conteos['faltas_en_ventana'] > $parametros->faltasUmbral();
+     }
+
+     /**
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+12) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:42    [M] PublicVisibility [ID] 47ccafe39a97b160154174bced7a6159
+
+@@ @@
+      * @param  list<InasistenciaAEntrenamiento>  $inasistencias
+      * @return array{tarjetas_amarillas: int, tarjetas_rojas: int, faltas_en_ventana: int}
+      */
+-    public static function conteos(
++    protected static function conteos(
+         array $tarjetas,
+         ?string $temporadaId,
+         array $inasistencias,
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+13) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:49    [M] DecrementInteger [ID] e45b3056926c6263473e354684c68f08
+
+@@ @@
+         DateTimeImmutable $fechaDeCalculo,
+         ParametrosDeSanciones $parametros,
+     ): array {
+-        $amarillas = 0;
++        $amarillas = -1;
+         $rojas = 0;
+
+         foreach ($tarjetas as $deUnPartido) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+14) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:50    [M] DecrementInteger [ID] 3a487ce3abb5cae98370f322d24466dc
+
+@@ @@
+         ParametrosDeSanciones $parametros,
+     ): array {
+         $amarillas = 0;
+-        $rojas = 0;
++        $rojas = -1;
+
+         foreach ($tarjetas as $deUnPartido) {
+             if ($deUnPartido->temporadaId() === $temporadaId) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+15) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:52    [M] Foreach_ [ID] 730cdbeeb58ac3fcef2a920dd27a2c9b
+
+@@ @@
+         $amarillas = 0;
+         $rojas = 0;
+
+-        foreach ($tarjetas as $deUnPartido) {
++        foreach ([] as $deUnPartido) {
+             if ($deUnPartido->temporadaId() === $temporadaId) {
+                 $amarillas += $deUnPartido->amarillas();
+                 $rojas += $deUnPartido->rojas();
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+16) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:53    [M] Identical [ID] 7c5b47b8d90f015528848986d6a0574e
+
+@@ @@
+         $rojas = 0;
+
+         foreach ($tarjetas as $deUnPartido) {
+-            if ($deUnPartido->temporadaId() === $temporadaId) {
++            if ($deUnPartido->temporadaId() !== $temporadaId) {
+                 $amarillas += $deUnPartido->amarillas();
+                 $rojas += $deUnPartido->rojas();
+             }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+17) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:54    [M] PlusEqual [ID] cb52b52f64cab4d91ae296a4211fdf56
+
+@@ @@
+
+         foreach ($tarjetas as $deUnPartido) {
+             if ($deUnPartido->temporadaId() === $temporadaId) {
+-                $amarillas += $deUnPartido->amarillas();
++                $amarillas -= $deUnPartido->amarillas();
+                 $rojas += $deUnPartido->rojas();
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+18) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:54    [M] Assignment [ID] 91ba6789442610fb7ba251039d5be84e
+
+@@ @@
+
+         foreach ($tarjetas as $deUnPartido) {
+             if ($deUnPartido->temporadaId() === $temporadaId) {
+-                $amarillas += $deUnPartido->amarillas();
++                $amarillas = $deUnPartido->amarillas();
+                 $rojas += $deUnPartido->rojas();
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+19) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:55    [M] Assignment [ID] 030baf5b98fb3d2fb5b85dcfa726524f
+
+@@ @@
+         foreach ($tarjetas as $deUnPartido) {
+             if ($deUnPartido->temporadaId() === $temporadaId) {
+                 $amarillas += $deUnPartido->amarillas();
+-                $rojas += $deUnPartido->rojas();
++                $rojas = $deUnPartido->rojas();
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+20) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:55    [M] PlusEqual [ID] 3586e82c389718c4c60dfd582310295b
+
+@@ @@
+         foreach ($tarjetas as $deUnPartido) {
+             if ($deUnPartido->temporadaId() === $temporadaId) {
+                 $amarillas += $deUnPartido->amarillas();
+-                $rojas += $deUnPartido->rojas();
++                $rojas -= $deUnPartido->rojas();
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+21) /var/www/html/src/Alertas/Dominio/AcumulacionDeSanciones.php:59    [M] ArrayItemRemoval [ID] cced9a5fc1c0208c97d15c348fa9724c
+
+@@ @@
+         }
+
+         return [
+-            'tarjetas_amarillas' => $amarillas,
+             'tarjetas_rojas' => $rojas,
+             'faltas_en_ventana' => VentanaDeFaltas::contar($inasistencias, $fechaDeCalculo, $parametros->faltasVentanaDias()),
+         ];
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+22) /var/www/html/src/Alertas/Dominio/AlertaAcademica.php:12    [M] PublicVisibility [ID] dbd3367567950807deefbe9ab171b3eb
+
+@@ @@
+ final class AlertaAcademica
+ {
+     /** @param  string|null  $nivelDeRiesgo  nulo cuando el jugador no tiene datos para calcular el riesgo */
+-    public static function seCumple(?string $nivelDeRiesgo, string $nivelQueActiva): bool
++    protected static function seCumple(?string $nivelDeRiesgo, string $nivelQueActiva): bool
+     {
+         return $nivelDeRiesgo === $nivelQueActiva;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+23) /var/www/html/src/Alertas/Dominio/AlertaAcademica.php:14    [M] Identical [ID] 5041a411b81c4580efff4ee0534bb394
+
+@@ @@
+     /** @param  string|null  $nivelDeRiesgo  nulo cuando el jugador no tiene datos para calcular el riesgo */
+     public static function seCumple(?string $nivelDeRiesgo, string $nivelQueActiva): bool
+     {
+-        return $nivelDeRiesgo === $nivelQueActiva;
++        return $nivelDeRiesgo !== $nivelQueActiva;
+     }
+ }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+24) /var/www/html/src/Alertas/Dominio/DecisionDeAlerta.php:11    [M] PublicVisibility [ID] c4f1cf1ae168202ff31d79fa782f47e8
+
+@@ @@
+  */
+ final class DecisionDeAlerta
+ {
+-    public static function decidir(bool $seCumple, bool $hayAbierta): AccionSobreAlerta
++    protected static function decidir(bool $seCumple, bool $hayAbierta): AccionSobreAlerta
+     {
+         if ($seCumple) {
+             return $hayAbierta ? AccionSobreAlerta::Ninguna : AccionSobreAlerta::Abrir;
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+25) /var/www/html/src/Alertas/Dominio/DecisionDeAlerta.php:13    [M] IfNegation [ID] 459b4246a2c5b121e9b7d69bcdcd012b
+
+@@ @@
+ {
+     public static function decidir(bool $seCumple, bool $hayAbierta): AccionSobreAlerta
+     {
+-        if ($seCumple) {
++        if (!$seCumple) {
+             return $hayAbierta ? AccionSobreAlerta::Ninguna : AccionSobreAlerta::Abrir;
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+26) /var/www/html/src/Alertas/Dominio/DecisionDeAlerta.php:14    [M] Ternary [ID] c9dfbe394c10a4aaa6bdfd595150c062
+
+@@ @@
+     public static function decidir(bool $seCumple, bool $hayAbierta): AccionSobreAlerta
+     {
+         if ($seCumple) {
+-            return $hayAbierta ? AccionSobreAlerta::Ninguna : AccionSobreAlerta::Abrir;
++            return $hayAbierta ? AccionSobreAlerta::Abrir : AccionSobreAlerta::Ninguna;
+         }
+
+         return $hayAbierta ? AccionSobreAlerta::Cerrar : AccionSobreAlerta::Ninguna;
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+27) /var/www/html/src/Alertas/Dominio/DecisionDeAlerta.php:14    [M] ReturnRemoval [ID] f4843212794511e9b9815e42e268451d
+
+@@ @@
+     public static function decidir(bool $seCumple, bool $hayAbierta): AccionSobreAlerta
+     {
+         if ($seCumple) {
+-            return $hayAbierta ? AccionSobreAlerta::Ninguna : AccionSobreAlerta::Abrir;
++
+         }
+
+         return $hayAbierta ? AccionSobreAlerta::Cerrar : AccionSobreAlerta::Ninguna;
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+28) /var/www/html/src/Alertas/Dominio/DecisionDeAlerta.php:17    [M] Ternary [ID] 5e605a85aae1d551096a77cde9450fe4
+
+@@ @@
+             return $hayAbierta ? AccionSobreAlerta::Ninguna : AccionSobreAlerta::Abrir;
+         }
+
+-        return $hayAbierta ? AccionSobreAlerta::Cerrar : AccionSobreAlerta::Ninguna;
++        return $hayAbierta ? AccionSobreAlerta::Ninguna : AccionSobreAlerta::Cerrar;
+     }
+ }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+29) /var/www/html/src/Alertas/Dominio/InasistenciaAEntrenamiento.php:15    [M] PublicVisibility [ID] e1366f7222d9dbe9e37cf0137e59198f
+
+@@ @@
+         private readonly bool $justificada,
+     ) {}
+
+-    public function fecha(): DateTimeImmutable
++    protected function fecha(): DateTimeImmutable
+     {
+         return $this->fecha;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+30) /var/www/html/src/Alertas/Dominio/InasistenciaAEntrenamiento.php:20    [M] PublicVisibility [ID] 0c53e0bd9f7587184c5790e1c104bbcf
+
+@@ @@
+         return $this->fecha;
+     }
+
+-    public function justificada(): bool
++    protected function justificada(): bool
+     {
+         return $this->justificada;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+31) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LessThan [ID] fc3c61dad988b58cefc31d2db769cbb2
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas <= 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+32) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LessThanNegotiation [ID] 20370d1138e0c395957b7bd938eb2200
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas >= 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+33) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LessThanNegotiation [ID] dfabe29acf3aaf55f704ddd2f6fd3896
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 || $tarjetasRojas >= 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+34) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LogicalOr [ID] ecc16c34b49a791dfff8defd442b347a
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 && $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+35) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LessThan [ID] 64f31dc3766be18273206898634b6f15
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 || $tarjetasRojas <= 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+36) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LessThan [ID] a144020876b90826e0931b28f37785eb
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral <= 1 || $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+37) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LogicalOr [ID] 943ff94d1b1e7af0d0309349d8a14057
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 && $faltasUmbral < 1 || $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+38) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LessThanNegotiation [ID] 35496b43370db6f48ae0a1ff4aaa7f5f
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral >= 1 || $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+39) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LessThan [ID] 26e30546e55daaa9b8d746f2697b072e
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias <= 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+40) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LessThanNegotiation [ID] 1b87bfb90afc3115c8c68e5ce28143e9
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias >= 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+41) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LogicalOr [ID] eb5f782a0ea0da56fdc3981fecc1b519
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 && $faltasVentanaDias < 1) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+42) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LogicalOrAllSubExprNegation [ID] d49bbf661ef7cba26ed98266dfa3d484
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if (!($tarjetasAmarillas < 1) || !($tarjetasRojas < 1) || !($faltasUmbral < 1) || !($faltasVentanaDias < 1)) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+43) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:20    [M] LogicalOrNegation [ID] 8db75d89dd0f6852d7af719f94691375
+
+@@ @@
+         private readonly int $faltasUmbral,
+         private readonly int $faltasVentanaDias,
+     ) {
+-        if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
++        if (!($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1)) {
+             throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+44) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:21    [M] Throw_ [ID] 34da18d4f04801c40aeb9f32b40445d4
+
+@@ @@
+         private readonly int $faltasVentanaDias,
+     ) {
+         if ($tarjetasAmarillas < 1 || $tarjetasRojas < 1 || $faltasUmbral < 1 || $faltasVentanaDias < 1) {
+-            throw new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
++            new ReglaDeNegocioViolada('parametros_de_sanciones_invalidos');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+45) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:25    [M] PublicVisibility [ID] 32c8013913109f0a65577c08b938a863
+
+@@ @@
+         }
+     }
+
+-    public function tarjetasAmarillas(): int
++    protected function tarjetasAmarillas(): int
+     {
+         return $this->tarjetasAmarillas;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+46) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:30    [M] PublicVisibility [ID] faa081bf0b25e275f626a5bf71203cd5
+
+@@ @@
+         return $this->tarjetasAmarillas;
+     }
+
+-    public function tarjetasRojas(): int
++    protected function tarjetasRojas(): int
+     {
+         return $this->tarjetasRojas;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+47) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:35    [M] PublicVisibility [ID] f6dfd119ec35cb5d2c52e0c8c13a43e3
+
+@@ @@
+         return $this->tarjetasRojas;
+     }
+
+-    public function faltasUmbral(): int
++    protected function faltasUmbral(): int
+     {
+         return $this->faltasUmbral;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+48) /var/www/html/src/Alertas/Dominio/ParametrosDeSanciones.php:40    [M] PublicVisibility [ID] b279111376ca713429a3c5b1e7927e50
+
+@@ @@
+         return $this->faltasUmbral;
+     }
+
+-    public function faltasVentanaDias(): int
++    protected function faltasVentanaDias(): int
+     {
+         return $this->faltasVentanaDias;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+49) /var/www/html/src/Alertas/Dominio/ResultadoDeEvaluacion.php:22    [M] PublicVisibility [ID] 803047feeafc26c4dff35a19d2340834
+
+@@ @@
+      *
+      * @param  list<self>  $porEntrenador
+      */
+-    public static function delEquipo(array $porEntrenador): self
++    protected static function delEquipo(array $porEntrenador): self
+     {
+         if (in_array(self::NoPasa, $porEntrenador, true)) {
+             return self::NoPasa;
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+50) /var/www/html/src/Alertas/Dominio/ResultadoDeEvaluacion.php:24    [M] IfNegation [ID] 93bbd23ee7af539584c6f39765ed2654
+
+@@ @@
+      */
+     public static function delEquipo(array $porEntrenador): self
+     {
+-        if (in_array(self::NoPasa, $porEntrenador, true)) {
++        if (!in_array(self::NoPasa, $porEntrenador, true)) {
+             return self::NoPasa;
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+51) /var/www/html/src/Alertas/Dominio/ResultadoDeEvaluacion.php:25    [M] ReturnRemoval [ID] aef72a05e337125ccc467b2c22f7c02e
+
+@@ @@
+     public static function delEquipo(array $porEntrenador): self
+     {
+         if (in_array(self::NoPasa, $porEntrenador, true)) {
+-            return self::NoPasa;
++
+         }
+
+         return in_array(self::Pasa, $porEntrenador, true) ? self::Pasa : self::DatosInsuficientes;
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+52) /var/www/html/src/Alertas/Dominio/ResultadoDeEvaluacion.php:28    [M] Ternary [ID] 9a032f39bb74de008eeff4b153a1d94f
+
+@@ @@
+             return self::NoPasa;
+         }
+
+-        return in_array(self::Pasa, $porEntrenador, true) ? self::Pasa : self::DatosInsuficientes;
++        return in_array(self::Pasa, $porEntrenador, true) ? self::DatosInsuficientes : self::Pasa;
+     }
+ }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+53) /var/www/html/src/Alertas/Dominio/RiesgoDeBajaDeportiva.php:11    [M] PublicVisibility [ID] 36007e6a09e3ab7acfe619b463bb617b
+
+@@ @@
+  */
+ final class RiesgoDeBajaDeportiva
+ {
+-    public static function seCumple(ResultadoDeEvaluacion $resultado, bool $hayAcumulacionDeSanciones): bool
++    protected static function seCumple(ResultadoDeEvaluacion $resultado, bool $hayAcumulacionDeSanciones): bool
+     {
+         return $resultado === ResultadoDeEvaluacion::NoPasa || $hayAcumulacionDeSanciones;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+54) /var/www/html/src/Alertas/Dominio/RiesgoDeBajaDeportiva.php:13    [M] LogicalOr [ID] 4109a51cc8472e7b8f0b62ff4cf40b59
+
+@@ @@
+ {
+     public static function seCumple(ResultadoDeEvaluacion $resultado, bool $hayAcumulacionDeSanciones): bool
+     {
+-        return $resultado === ResultadoDeEvaluacion::NoPasa || $hayAcumulacionDeSanciones;
++        return $resultado === ResultadoDeEvaluacion::NoPasa && $hayAcumulacionDeSanciones;
+     }
+ }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+55) /var/www/html/src/Alertas/Dominio/RiesgoDeBajaDeportiva.php:13    [M] Identical [ID] db2a803c23db44bcd9f55c7968559b8b
+
+@@ @@
+ {
+     public static function seCumple(ResultadoDeEvaluacion $resultado, bool $hayAcumulacionDeSanciones): bool
+     {
+-        return $resultado === ResultadoDeEvaluacion::NoPasa || $hayAcumulacionDeSanciones;
++        return $resultado !== ResultadoDeEvaluacion::NoPasa || $hayAcumulacionDeSanciones;
+     }
+ }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+56) /var/www/html/src/Alertas/Dominio/RiesgoDeBajaDeportiva.php:13    [M] LogicalOrAllSubExprNegation [ID] b1fb554850f74945ab20d6e3c67e64ac
+
+@@ @@
+ {
+     public static function seCumple(ResultadoDeEvaluacion $resultado, bool $hayAcumulacionDeSanciones): bool
+     {
+-        return $resultado === ResultadoDeEvaluacion::NoPasa || $hayAcumulacionDeSanciones;
++        return !($resultado === ResultadoDeEvaluacion::NoPasa) || !$hayAcumulacionDeSanciones;
+     }
+ }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+57) /var/www/html/src/Alertas/Dominio/RiesgoDeBajaDeportiva.php:13    [M] LogicalOrNegation [ID] 733d172f8c42fb68a5680ff73d1da793
+
+@@ @@
+ {
+     public static function seCumple(ResultadoDeEvaluacion $resultado, bool $hayAcumulacionDeSanciones): bool
+     {
+-        return $resultado === ResultadoDeEvaluacion::NoPasa || $hayAcumulacionDeSanciones;
++        return !($resultado === ResultadoDeEvaluacion::NoPasa || $hayAcumulacionDeSanciones);
+     }
+ }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+58) /var/www/html/src/Alertas/Dominio/RiesgoDeBajaDeportiva.php:13    [M] LogicalOrSingleSubExprNegation [ID] 4825231c0454cf6e320e4f24a9bc8ee5
+
+@@ @@
+ {
+     public static function seCumple(ResultadoDeEvaluacion $resultado, bool $hayAcumulacionDeSanciones): bool
+     {
+-        return $resultado === ResultadoDeEvaluacion::NoPasa || $hayAcumulacionDeSanciones;
++        return $resultado === ResultadoDeEvaluacion::NoPasa || !$hayAcumulacionDeSanciones;
+     }
+ }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+59) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:16    [M] LessThan [ID] 9713cbcefeab847f8f084e4907153e60
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas <= 0 || $rojas < 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+60) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:16    [M] LessThanNegotiation [ID] 5f36580d2b7bb74073897c97c31adafc
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas >= 0 || $rojas < 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+61) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:16    [M] LessThan [ID] 5f2c14a61c972e4b5e2e02cfe619604e
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas < 0 || $rojas <= 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+62) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:16    [M] LessThanNegotiation [ID] d94742b9f1de996123c07c92f8c4f505
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas < 0 || $rojas >= 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+63) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:16    [M] LogicalOr [ID] 49b06174e48f3c1148278dc6b85ad9c5
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas < 0 && $rojas < 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+64) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:16    [M] LogicalOrAllSubExprNegation [ID] 149bb2f8d7a2ef9d374db3124601265c
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if (!($amarillas < 0) || !($rojas < 0)) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+65) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:16    [M] LogicalOrNegation [ID] ff41f416b54bf79e69c2644907f56abc
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if (!($amarillas < 0 || $rojas < 0)) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+66) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:17    [M] Throw_ [ID] 1ac49ffd4cf6639223b899d130171806
+
+@@ @@
+         private readonly int $rojas,
+     ) {
+         if ($amarillas < 0 || $rojas < 0) {
+-            throw new ReglaDeNegocioViolada('tarjetas_invalidas');
++            new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+67) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:29    [M] PublicVisibility [ID] 531b9ae8bc91ee8cbb21590dae98fc91
+
+@@ @@
+      * @param  list<TarjetasRegistradas>  $registros  de un jugador en un equipo, de cualquier entrenador del equipo
+      * @return list<self> una entrada por partido, en el orden en que aparece cada partido
+      */
+-    public static function elMayorPorPartido(array $registros): array
++    protected static function elMayorPorPartido(array $registros): array
+     {
+         /** @var array<string, array{temporada: string, amarillas: int, rojas: int}> $porPartido */
+         $porPartido = [];
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+68) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:34    [M] Foreach_ [ID] bd3a9f0ed75fad552650448e9d4a574b
+
+@@ @@
+         /** @var array<string, array{temporada: string, amarillas: int, rojas: int}> $porPartido */
+         $porPartido = [];
+
+-        foreach ($registros as $registro) {
++        foreach ([] as $registro) {
+             $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
+-
+             $porPartido[$registro->partidoId()] = [
+                 'temporada' => $anterior['temporada'],
+                 'amarillas' => max($anterior['amarillas'], $registro->amarillas()),
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+69) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:35    [M] ArrayItem [ID] abd4134300102cd6e15a9ae43fcb911f
+
+@@ @@
+         $porPartido = [];
+
+         foreach ($registros as $registro) {
+-            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
++            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' > $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
+
+             $porPartido[$registro->partidoId()] = [
+                 'temporada' => $anterior['temporada'],
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+70) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:35    [M] DecrementInteger [ID] 7a9f0a43800020ca0018d701ee54bf17
+
+@@ @@
+         $porPartido = [];
+
+         foreach ($registros as $registro) {
+-            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
++            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => -1, 'rojas' => 0];
+
+             $porPartido[$registro->partidoId()] = [
+                 'temporada' => $anterior['temporada'],
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+71) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:35    [M] IncrementInteger [ID] 337ef1d3d2042c18d76e43ef242c3eee
+
+@@ @@
+         $porPartido = [];
+
+         foreach ($registros as $registro) {
+-            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
++            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 1, 'rojas' => 0];
+
+             $porPartido[$registro->partidoId()] = [
+                 'temporada' => $anterior['temporada'],
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+72) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:35    [M] DecrementInteger [ID] c5ec6a89ee473ad7a11bc3e89cb7e1ed
+
+@@ @@
+         $porPartido = [];
+
+         foreach ($registros as $registro) {
+-            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
++            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => -1];
+
+             $porPartido[$registro->partidoId()] = [
+                 'temporada' => $anterior['temporada'],
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+73) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:35    [M] IncrementInteger [ID] 093c41b010bb0f695b80f834d0392c57
+
+@@ @@
+         $porPartido = [];
+
+         foreach ($registros as $registro) {
+-            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
++            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 1];
+
+             $porPartido[$registro->partidoId()] = [
+                 'temporada' => $anterior['temporada'],
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+74) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:35    [M] ArrayItemRemoval [ID] ba924556f4a1f217c50d35a59aa393dc
+
+@@ @@
+         $porPartido = [];
+
+         foreach ($registros as $registro) {
+-            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
++            $anterior = $porPartido[$registro->partidoId()] ?? ['amarillas' => 0, 'rojas' => 0];
+
+             $porPartido[$registro->partidoId()] = [
+                 'temporada' => $anterior['temporada'],
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+75) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:35    [M] Coalesce [ID] 4e7311013fbaa61ac03dfc237a17c78f
+
+@@ @@
+         $porPartido = [];
+
+         foreach ($registros as $registro) {
+-            $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
++            $anterior = ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0] ?? $porPartido[$registro->partidoId()];
+
+             $porPartido[$registro->partidoId()] = [
+                 'temporada' => $anterior['temporada'],
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+76) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:37    [M] ArrayItemRemoval [ID] d27b8ddf5345bef80c6fd6bc20df3147
+
+@@ @@
+             $anterior = $porPartido[$registro->partidoId()] ?? ['temporada' => $registro->temporadaId(), 'amarillas' => 0, 'rojas' => 0];
+
+             $porPartido[$registro->partidoId()] = [
+-                'temporada' => $anterior['temporada'],
+                 'amarillas' => max($anterior['amarillas'], $registro->amarillas()),
+                 'rojas' => max($anterior['rojas'], $registro->rojas()),
+             ];
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+77) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:44    [M] UnwrapArrayMap [ID] 54ffcfe35509a877e26f41c5f68952c1
+
+@@ @@
+             ];
+         }
+
+-        return array_values(array_map(
+-            fn (array $partido): self => new self($partido['temporada'], $partido['amarillas'], $partido['rojas']),
+-            $porPartido,
+-        ));
++        return array_values($porPartido);
+     }
+
+     public function temporadaId(): string
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+78) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:44    [M] UnwrapArrayValues [ID] 67459d567cde861bbcb88cabd7fa6812
+
+@@ @@
+             ];
+         }
+
+-        return array_values(array_map(
++        return array_map(
+             fn (array $partido): self => new self($partido['temporada'], $partido['amarillas'], $partido['rojas']),
+             $porPartido,
+-        ));
++        );
+     }
+
+     public function temporadaId(): string
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+79) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:50    [M] PublicVisibility [ID] 54fd276f864c51805f56b0c05832d302
+
+@@ @@
+         ));
+     }
+
+-    public function temporadaId(): string
++    protected function temporadaId(): string
+     {
+         return $this->temporadaId;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+80) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:55    [M] PublicVisibility [ID] 959ccfa032fb3c11ea5e6e5c801f3df8
+
+@@ @@
+         return $this->temporadaId;
+     }
+
+-    public function amarillas(): int
++    protected function amarillas(): int
+     {
+         return $this->amarillas;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+81) /var/www/html/src/Alertas/Dominio/TarjetasDePartido.php:60    [M] PublicVisibility [ID] 9c5f9713028fc94f951756f7ba7d7fa5
+
+@@ @@
+         return $this->amarillas;
+     }
+
+-    public function rojas(): int
++    protected function rojas(): int
+     {
+         return $this->rojas;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+82) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:21    [M] LessThan [ID] 2451f04362fa3534850fdf51d609318c
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas <= 0 || $rojas < 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+83) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:21    [M] LessThanNegotiation [ID] 6949d9e5082011c9317449f7c52ab1f3
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas >= 0 || $rojas < 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+84) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:21    [M] LessThan [ID] a7966346f76dbbd1caeb2fb5902f4094
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas < 0 || $rojas <= 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+85) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:21    [M] LessThanNegotiation [ID] 2eeaacf2d0cf3f63de892b942ca2b722
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas < 0 || $rojas >= 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+86) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:21    [M] LogicalOr [ID] 7b325bc9ecfa554c8042756c170a17ac
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if ($amarillas < 0 && $rojas < 0) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+87) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:21    [M] LogicalOrAllSubExprNegation [ID] ac1fa34dc2eef81b2a6cfe6ca8f176ff
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if (!($amarillas < 0) || !($rojas < 0)) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+88) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:21    [M] LogicalOrNegation [ID] ab6e98d0de5f57d82cba53bbc9a0c9ab
+
+@@ @@
+         private readonly int $amarillas,
+         private readonly int $rojas,
+     ) {
+-        if ($amarillas < 0 || $rojas < 0) {
++        if (!($amarillas < 0 || $rojas < 0)) {
+             throw new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+89) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:22    [M] Throw_ [ID] e9e356c07b8a406d111e2280d8d9c0f3
+
+@@ @@
+         private readonly int $rojas,
+     ) {
+         if ($amarillas < 0 || $rojas < 0) {
+-            throw new ReglaDeNegocioViolada('tarjetas_invalidas');
++            new ReglaDeNegocioViolada('tarjetas_invalidas');
+         }
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+90) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:26    [M] PublicVisibility [ID] 4300a011b06f478a67c37362f98ab4b3
+
+@@ @@
+         }
+     }
+
+-    public function partidoId(): string
++    protected function partidoId(): string
+     {
+         return $this->partidoId;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+91) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:31    [M] PublicVisibility [ID] 946787d14c2c9701151efdf52e58db44
+
+@@ @@
+         return $this->partidoId;
+     }
+
+-    public function temporadaId(): string
++    protected function temporadaId(): string
+     {
+         return $this->temporadaId;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+92) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:36    [M] PublicVisibility [ID] cbec62f71d62354a95d786dc2a72678e
+
+@@ @@
+         return $this->temporadaId;
+     }
+
+-    public function amarillas(): int
++    protected function amarillas(): int
+     {
+         return $this->amarillas;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+93) /var/www/html/src/Alertas/Dominio/TarjetasRegistradas.php:41    [M] PublicVisibility [ID] 1e2841f9bd9f6e33331711a032d19265
+
+@@ @@
+         return $this->amarillas;
+     }
+
+-    public function rojas(): int
++    protected function rojas(): int
+     {
+         return $this->rojas;
+     }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ReglasDeAlertaTest.php" not found.
+  
+  
+  FAILURES!
+
+
+94) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:14    [M] PublicVisibility [ID] 848ac991fa0b0e66b868ca65dc2ae0bf
+
+@@ @@
+ final class VentanaDeFaltas
+ {
+     /** @param  list<InasistenciaAEntrenamiento>  $inasistencias */
+-    public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
++    protected static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+         $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+95) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:17    [M] DecrementInteger [ID] 5f9544bbfe42567a0066679e56c5bfad
+
+@@ @@
+     public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+-        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
++        $primerDia = $fechaDeCalculo->modify('-'.($dias - 0).' days')->format('Y-m-d');
+         $faltas = 0;
+
+         foreach ($inasistencias as $inasistencia) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+96) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:17    [M] IncrementInteger [ID] 58635f195a0556c39d49bd363ed8b0c4
+
+@@ @@
+     public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+-        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
++        $primerDia = $fechaDeCalculo->modify('-'.($dias - 2).' days')->format('Y-m-d');
+         $faltas = 0;
+
+         foreach ($inasistencias as $inasistencia) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+97) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:17    [M] Concat [ID] b65ff8f3f8e49687c54f4297b6cad5e6
+
+@@ @@
+     public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+-        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
++        $primerDia = $fechaDeCalculo->modify($dias - 1 . '-'.' days')->format('Y-m-d');
+         $faltas = 0;
+
+         foreach ($inasistencias as $inasistencia) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+98) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:17    [M] Minus [ID] 1d6621fa86249fdceea12c7c9ace6e29
+
+@@ @@
+     public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+-        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
++        $primerDia = $fechaDeCalculo->modify('-'.($dias + 1).' days')->format('Y-m-d');
+         $faltas = 0;
+
+         foreach ($inasistencias as $inasistencia) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+99) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:17    [M] ConcatOperandRemoval [ID] 7707f70fb70248a1b2b9d146a717f482
+
+@@ @@
+     public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+-        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
++        $primerDia = $fechaDeCalculo->modify($dias - 1.' days')->format('Y-m-d');
+         $faltas = 0;
+
+         foreach ($inasistencias as $inasistencia) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+100) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:17    [M] ConcatOperandRemoval [ID] 587a9a6db3fdf37c7192a121ea6101a3
+
+@@ @@
+     public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+-        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
++        $primerDia = $fechaDeCalculo->modify('-'.' days')->format('Y-m-d');
+         $faltas = 0;
+
+         foreach ($inasistencias as $inasistencia) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+101) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:17    [M] Concat [ID] 0846bc024e47cabc71f77356349d517f
+
+@@ @@
+     public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+-        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
++        $primerDia = $fechaDeCalculo->modify('-' . ' days' . $dias - 1)->format('Y-m-d');
+         $faltas = 0;
+
+         foreach ($inasistencias as $inasistencia) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+102) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:17    [M] ConcatOperandRemoval [ID] 895afe3b5ba4dc52fa0d3e959d335b46
+
+@@ @@
+     public static function contar(array $inasistencias, DateTimeImmutable $fechaDeCalculo, int $dias): int
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+-        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
++        $primerDia = $fechaDeCalculo->modify('-'.($dias - 1))->format('Y-m-d');
+         $faltas = 0;
+
+         foreach ($inasistencias as $inasistencia) {
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+103) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:18    [M] DecrementInteger [ID] 3199f8965660d05c66246da373b22ab9
+
+@@ @@
+     {
+         $ultimoDia = $fechaDeCalculo->format('Y-m-d');
+         $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
+-        $faltas = 0;
++        $faltas = -1;
+
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+104) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:20    [M] Foreach_ [ID] 9af1106bdaa050a34503da8e2d09bc59
+
+@@ @@
+         $primerDia = $fechaDeCalculo->modify('-'.($dias - 1).' days')->format('Y-m-d');
+         $faltas = 0;
+
+-        foreach ($inasistencias as $inasistencia) {
++        foreach ([] as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+-
+             if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
+                 $faltas++;
+             }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+105) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] LogicalNot [ID] dddc3b1642b16cb17edcd2595142c288
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if ($inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+106) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] GreaterThanOrEqualToNegotiation [ID] ee13d512d6c68287fb4caa16e71bccab
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if (! $inasistencia->justificada() && $dia < $primerDia && $dia <= $ultimoDia) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+107) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] GreaterThanOrEqualTo [ID] 10a2b02ddf00d06c6ee23d9c2faf3e69
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if (! $inasistencia->justificada() && $dia > $primerDia && $dia <= $ultimoDia) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+108) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] LogicalAnd [ID] e161fe94f30e28bc6240984d828b7bb5
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if ((! $inasistencia->justificada() || $dia >= $primerDia) && $dia <= $ultimoDia) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+109) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] LessThanOrEqualTo [ID] c226aa5c8f2879c61d0c7eb761ed1e98
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia < $ultimoDia) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+110) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] LessThanOrEqualToNegotiation [ID] c1e038053fce703c45738043b22af922
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia > $ultimoDia) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+111) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] LogicalAnd [ID] 7bea79b05c04f2b93063783c56a4288b
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if (! $inasistencia->justificada() && $dia >= $primerDia || $dia <= $ultimoDia) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+112) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] LogicalAndAllSubExprNegation [ID] 4de2e96fd7e4ce85fb8f45cf96f6f1d4
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if ($inasistencia->justificada() && !($dia >= $primerDia) && !($dia <= $ultimoDia)) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+113) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:23    [M] LogicalAndNegation [ID] 29c43dcfd7a9fdfd7ae0526be3316c73
+
+@@ @@
+         foreach ($inasistencias as $inasistencia) {
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+-            if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
++            if (!(! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia)) {
+                 $faltas++;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+114) /var/www/html/src/Alertas/Dominio/VentanaDeFaltas.php:24    [M] Increment [ID] 103204726667dab19ee129d965e939c0
+
+@@ @@
+             $dia = $inasistencia->fecha()->format('Y-m-d');
+
+             if (! $inasistencia->justificada() && $dia >= $primerDia && $dia <= $ultimoDia) {
+-                $faltas++;
++                $faltas--;
+             }
+         }
+
+     INFO  Test file "/tmp/infection/infection/tests/Unit/Alertas/ConteosDeSancionesTest.php" not found.
+  
+  
+  FAILURES!
+
+
+Killed by Static Analysis mutants:
+==================================
+
+Errors mutants:
+===============
+
+Syntax Errors mutants:
+======================
+
+Not Covered mutants:
+====================

@@ -21,6 +21,9 @@ use Src\Academico\Dominio\RepositorioDePeriodos;
 use Src\Academico\Dominio\RepositorioDeResumenes;
 use Src\Academico\Infraestructura\Consola\ConciliarResumenesComando;
 use Src\Academico\Infraestructura\Escuchas\RecalcularResumenAcademico;
+use Src\Compartido\Aplicacion\JugadoresDeLaMateria;
+use Src\Compartido\Aplicacion\PorcentajeDeAsistenciaAClases;
+use Src\Compartido\Aplicacion\RiesgoAcademicoDelJugador;
 use Src\Compartido\Dominio\Eventos\AsistenciaDeClaseRegistrada;
 use Src\Compartido\Dominio\Eventos\CalificacionRegistrada;
 use Src\Compartido\Dominio\Eventos\CriterioDeMateriaModificado;
@@ -30,12 +33,15 @@ class AcademicoServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(PorcentajeDeAsistenciaAClases::class, PorcentajeDeAsistenciaAClasesSql::class);
         $this->app->bind(ConsultaDeAsistencias::class, ConsultaDeAsistenciasSql::class);
         $this->app->bind(ConsultaDeCalificaciones::class, ConsultaDeCalificacionesSql::class);
         $this->app->bind(ConsultaDeInscripciones::class, ConsultaDeInscripcionesSql::class);
         $this->app->bind(ConsultaDeMaterias::class, ConsultaDeMateriasSql::class);
         $this->app->bind(ConsultaDeSituacionAcademica::class, ConsultaDeSituacionAcademicaSql::class);
         $this->app->bind(FuenteDeDatosAcademicos::class, FuenteDeDatosAcademicosSql::class);
+        $this->app->bind(JugadoresDeLaMateria::class, JugadoresDeLaMateriaAcademico::class);
+        $this->app->bind(RiesgoAcademicoDelJugador::class, RiesgoAcademicoDelJugadorAcademico::class);
         $this->app->bind(RepositorioDeAsignaturas::class, RepositorioDeAsignaturasEloquent::class);
         $this->app->bind(RepositorioDeAsistencias::class, RepositorioDeAsistenciasEloquent::class);
         $this->app->bind(RepositorioDeCalificaciones::class, RepositorioDeCalificacionesEloquent::class);

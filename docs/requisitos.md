@@ -1,8 +1,8 @@
 # Documento de Requisitos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas, Universidad del Fútbol y Ciencias del Deporte
-**Versión:** 1.2.2 (RN-16: excepción de DA-42; ver `docs/decisiones/registro-decisiones.md`, DA-83)
-**Fecha:** 21 de octubre de 2026
+**Versión:** 1.2.4 (RN-09, RN-10, RN-14, RN-22 y matriz de visibilidad: DA-102, DA-110, DA-111 y DA-114; ver `docs/decisiones/registro-decisiones.md`)
+**Fecha:** 16 de noviembre de 2026
 **Estado:** Pendiente de validación por la institución. Lo marcado **[Propuesta]** o **[Decisión por defecto]** debe validarse antes de construir la parte que lo usa (ver `docs/decisiones/registro-decisiones.md`)
 
 ## Control de versiones
@@ -14,6 +14,8 @@
 | 1.2 | 21/10/2026 | RN-04: tipo de redondeo. RN-09: ventana móvil de 30 días y vencimiento por tiempo. HU-17: cómo se confirma una corrección |
 | 1.2.1 | 22/10/2026 | RN-22: la asignación de entrenadores adicionales pasa al backlog (ninguna historia la describe) |
 | 1.2.2 | 14/11/2026 | RN-16: quien creó un aviso deja de verlo si pierde el alcance sobre el jugador (DA-42, DA-83) |
+| 1.2.3 | 14/11/2026 | RN-22: las alertas de riesgo de baja deportiva y de acumulación de sanciones de un equipo se calculan con los datos de todos sus entrenadores y las ven todos ellos (DA-102) |
+| 1.2.4 | 16/11/2026 | RN-09 y RN-10: las alertas deportivas y de sanciones se calculan con lo que registró cualquier entrenador del equipo (DA-102, DA-103). RN-14: la excepción de las alertas. RN-22: en la Fase 1 no hay asignación de entrenadores adicionales (DA-114). Matriz de §7: el docente ve de la alerta académica el nivel, el promedio y las materias reprobadas (DA-110); el segundo entrenador ve lo que registró del rendimiento en partidos (RN-14, DD-17), del estado físico (DD-59) y del detalle de la lesión (RN-15, DA-19 de H5, DD-63), y su riesgo deportivo es «De su equipo» si es del mismo equipo (DA-102) y «No» si es de otro equipo del jugador (RN-14); nota sobre la asistencia en la vista para convocar (DA-111). §10.2: la pregunta sobre si los entrenadores comparten datos queda acotada a lo que no son alertas, que DA-102 sí resuelve (punto 8). RN-16: sin la marca [Decisión por defecto], porque DD-03 está confirmada (31/10/2026) y DA-83 está decidida (14/11/2026) |
 
 ## 1. Introducción
 
@@ -92,16 +94,16 @@ Los valores marcados como **[Propuesta]** son valores de fábrica sugeridos por 
 - **RN-06.** La calificación general de partido usa una escala de números enteros de 1 a 10. **[Propuesta]** 1 a 4 deficiente, 5 a 6 regular, 7 a 8 bueno, 9 a 10 sobresaliente. Esto permite que un 8 signifique lo mismo en todos los equipos.
 - **RN-07.** Cada posición tiene una plantilla de captura y de umbrales. El entrenador puede usarla, ajustarla o crear la suya por jugador. Todo cambio de umbral queda registrado.
 - **RN-08.** "Bajo rendimiento" se determina así: el sistema promedia las últimas N calificaciones generales del jugador (N es la ventana de su umbral) y compara el promedio con el umbral; el resultado es "pasa" o "no pasa". Si el jugador tiene menos de N calificaciones, el resultado es "datos insuficientes" y no activa ninguna alerta. **[Propuesta]** Plantilla base: N = 5, umbral 6.0.
-- **RN-09.** Acumulación de sanciones deportivas. **[Propuesta]** Se activa con una tarjeta roja, o con tres amarillas en la temporada, o con tres inasistencias injustificadas ("falta", no "falta justificada") a entrenamientos en 30 días. Se calcula por equipo, con los datos que registró su entrenador. La tarjeta roja mantiene la acumulación activa hasta el final de la temporada en que ocurrió. **[Decisión por defecto]** Los 30 días son una ventana móvil que termina en la fecha de cálculo, inclusive; cuando las faltas salen de la ventana o termina la temporada, la acumulación deja de estar activa aunque no se haya capturado nada nuevo. Las sanciones académicas son una categoría separada y quedan en el backlog.
-- **RN-10.** Riesgo de baja deportiva: se activa cuando el jugador "no pasa" su umbral de rendimiento o tiene acumulación de sanciones deportivas. "Datos insuficientes" no lo activa. Se calcula por equipo, con el umbral del entrenador de ese equipo.
+- **RN-09.** Acumulación de sanciones deportivas. **[Propuesta]** Se activa con una tarjeta roja, o con tres amarillas en la temporada, o con tres inasistencias injustificadas ("falta", no "falta justificada") a entrenamientos en 30 días. Se calcula por equipo, con las tarjetas y las faltas registradas por cualquier entrenador del equipo (DA-91, DA-102); si dos entrenadores registran la misma tarjeta en un partido, por partido, jugador y tipo de tarjeta cuenta el mayor número registrado por uno solo (DA-103). La tarjeta roja mantiene la acumulación activa hasta el final de la temporada en que ocurrió. **[Decisión por defecto]** Los 30 días son una ventana móvil que termina en la fecha de cálculo, inclusive; cuando las faltas salen de la ventana o termina la temporada, la acumulación deja de estar activa aunque no se haya capturado nada nuevo. Las sanciones académicas son una categoría separada y quedan en el backlog.
+- **RN-10.** Riesgo de baja deportiva: se activa cuando el jugador "no pasa" su umbral de rendimiento o tiene acumulación de sanciones deportivas. "Datos insuficientes" no lo activa. Se calcula por equipo: se toma la evaluación vigente de cada entrenador del equipo, con el umbral de ese entrenador, y basta que una sea "no pasa" (DA-92, DA-102).
 - **RN-11.** Asistencia a entrenamientos: cada registro es presente, falta o falta justificada.
 
 ### 3.3 Reglas de datos y acceso
 - **RN-12.** La carga inicial de equipos y jugadores la realiza el entrenador. Los docentes dan de alta sus materias e inscriben a jugadores ya existentes según la retícula. Periodos escolares, asignaturas, categorías, lugares, torneos, rivales y temporadas son catálogos que dan de alta quienes los usan (HU-28).
 - **RN-13.** Cada perfil ve el detalle de su propia área y solo un resumen esencial del resto. El entrenador ve el resumen académico simplificado; el docente ve del lado deportivo únicamente el estado oficial de disponibilidad, no el riesgo deportivo, porque este se calcula por equipo (RN-14). **[Decisión por defecto]**
-- **RN-14.** Cuando un jugador pertenece a dos equipos, cada entrenador ve únicamente los datos que él registró, por protección de datos. Excepciones: el estado oficial de disponibilidad con su fecha estimada de regreso, y el resumen académico simplificado, visibles para todos sus entrenadores.
+- **RN-14.** Cuando un jugador pertenece a dos equipos, cada entrenador ve únicamente los datos que él registró, por protección de datos. Excepciones: el estado oficial de disponibilidad con su fecha estimada de regreso, y el resumen académico simplificado, visibles para todos sus entrenadores. Otra excepción: las alertas de riesgo de baja deportiva y de acumulación de sanciones de un equipo se calculan con los datos de todos los entrenadores de ese equipo y las ven todos ellos (RN-22, DA-102).
 - **RN-15.** El detalle de una lesión (tipo, zona, causa) lo ve solo quien la registró.
-- **RN-16.** Un aviso permanece "pendiente de confirmación" hasta que un entrenador del jugador lo confirme. Quien lo confirma queda como registrante de la lesión y es el único que después puede modificar ese estado y su detalle. Los avisos pendientes los ven los entrenadores del jugador y quien los creó. Excepción (DA-42, DA-83): si quien creó el aviso pierde después el alcance sobre el jugador (`docs/hitos/f1-h5.md` §6.1), deja de verlo y recibe la misma respuesta que con un jugador inexistente. **[Decisión por defecto]**
+- **RN-16.** Un aviso permanece "pendiente de confirmación" hasta que un entrenador del jugador lo confirme. Quien lo confirma queda como registrante de la lesión y es el único que después puede modificar ese estado y su detalle. Los avisos pendientes los ven los entrenadores del jugador y quien los creó. Excepción (DA-42, DA-83): si quien creó el aviso pierde después el alcance sobre el jugador (`docs/hitos/f1-h5.md` §6.1), deja de verlo y recibe la misma respuesta que con un jugador inexistente.
 - **RN-17.** El historial de cambios se conserva mientras el jugador permanezca en la institución, y solo existe borrado lógico. Al darse de baja un jugador el historial no se elimina; el plazo posterior se define con la institución.
 - **RN-18.** Los criterios de convocatoria son del entrenador; el sistema muestra información y no bloquea ni valida convocatorias. Se prioriza visualmente a quienes tienen mejor desempeño (ver definición en 1.5); los jugadores con datos insuficientes se muestran al final. **[Propuesta]**
 
@@ -110,7 +112,7 @@ Todas son **[Decisión por defecto]** y deben validarse con la institución.
 - **RN-19.** Mientras no exista perfil de administración, los usuarios (docentes y entrenadores) los crea el equipo del proyecto con un comando de consola o un seeder. Un usuario puede tener uno o los dos roles.
 - **RN-20.** Un usuario puede buscar a un jugador por matrícula aunque no esté asignado a él; la búsqueda devuelve solo nombres, apellidos y matrícula. Asignar al jugador a un equipo (HU-04) o inscribirlo en una materia (HU-06) le otorga acceso al usuario que lo hace.
 - **RN-21.** La alerta de riesgo de baja académica se activa cuando el nivel de riesgo es "en riesgo" (RN-04); "en observación" no genera alerta.
-- **RN-22.** Quien crea un equipo queda asignado a él como entrenador. Un equipo puede tener más de un entrenador; entre entrenadores de un mismo equipo se aplica la regla estricta de RN-14 hasta que la institución decida otra cosa. La asignación de entrenadores adicionales a un equipo existente queda en el backlog, porque ninguna historia la describe.
+- **RN-22.** Quien crea un equipo queda asignado a él como entrenador. Un equipo puede tener más de un entrenador; entre entrenadores de un mismo equipo se aplica la regla estricta de RN-14 hasta que la institución decida otra cosa, con una excepción: las alertas de riesgo de baja deportiva y de acumulación de sanciones de un equipo se calculan con los datos de todos los entrenadores de ese equipo y las ven todos ellos (DA-102). La asignación de entrenadores adicionales a un equipo existente queda en el backlog, porque ninguna historia la describe. En la Fase 1 no hay ruta para asignar entrenadores adicionales, así que la excepción de las alertas no se puede usar en producción hasta que exista esa asignación; las pruebas la ejercen con filas de `entrenador_equipo` creadas directamente (DA-114).
 - **RN-23.** Dar de baja a un jugador exige un motivo y una fecha, y queda en el historial. Un jugador dado de baja deja de aparecer en convocatorias, listados y alertas, y su información se conserva (RN-17).
 
 ## 4. Requisitos funcionales
@@ -359,17 +361,23 @@ Como docente o entrenador, quiero dar de alta los datos de apoyo que necesito, p
 | Información | Docente | Entrenador del equipo | Segundo entrenador del mismo jugador |
 |---|---|---|---|
 | Calificaciones y asistencia a clases (detalle) | Solo sus materias | Resumen simplificado | Resumen simplificado |
-| Riesgo académico | Sí | Sí | Sí |
-| Rendimiento en partidos (detalle) | No | Solo lo que registró | No |
-| Riesgo deportivo | No | De su equipo | No |
+| Riesgo académico | Sí, con nivel, promedio y materias reprobadas (DA-110) | Sí | Sí |
+| Rendimiento en partidos (detalle) | No | Solo lo que registró | Solo lo que registró (RN-14, DD-17) |
+| Riesgo deportivo | No | De su equipo | No, si entrena a otro equipo del jugador (RN-14) |
+| Riesgo deportivo, segundo entrenador del mismo equipo | No | De su equipo | De su equipo (DA-102) |
 | Estado oficial y fecha estimada de regreso | Sí | Sí | Sí |
 | Aviso de lesión pendiente | Solo el que creó | Sí | Sí |
-| Detalle de la lesión (tipo, zona, causa) | No | Solo si la registró | No |
-| Estado físico (detalle) | No | Solo lo que registró | No |
+| Detalle de la lesión (tipo, zona, causa) | No | Solo si la registró | Solo si la registró (RN-15, DA-19 de H5, DD-63) |
+| Estado físico (detalle) | No | Solo lo que registró | Solo lo que registró (DD-59) |
 | Asistencia a entrenamientos y convocatorias | No | Solo de sus equipos | Solo de sus equipos |
 | Gráficos e historial | Calificaciones y asistencia de su materia | Solo lo que registró, más el resumen académico simplificado | Solo lo que registró, más el resumen académico simplificado |
 
 Una celda con "No" significa que esa información no se muestra a ese perfil. El resumen simplificado se define en 1.5.
+
+Notas de la matriz:
+
+- **Riesgo académico (DA-110):** el docente recibe de la alerta académica el nivel de riesgo, el promedio y las materias reprobadas, y estas cuentan todas las del periodo vigente, no solo las suyas. Es la única excepción a «solo sus materias».
+- **Asistencia a entrenamientos en la vista para convocar (DA-111):** se muestra con dos campos: `asistencia.equipo` (por defecto; la asistencia de los equipos del consultante) y `asistencia.de_mis_capturas` (los registros que capturó el consultante). Los dos son datos de sus equipos.
 
 ## 8. Criterios de éxito del MVP
 
@@ -413,7 +421,8 @@ El detalle de lo que se espera en la Fase 2, punto por punto del PDF, está en `
 4. Si el aviso reportado por el jugador a través de un docente o entrenador (HU-19) cubre la necesidad planteada, mientras el futbolista no sea usuario.
 5. Meta de tiempo de captura (RNF-05) y plazo de captura posterior a un partido (sección 8).
 6. Decisiones por defecto aplicadas tras la auditoría (RN-19 a RN-23, HU-27 a HU-30, posición por equipo, alerta académica en "en riesgo", docente sin riesgo deportivo): ver `docs/decisiones/registro-decisiones.md`.
-7. Cifra estimada de futbolistas (RNF-06), plazo de conservación tras la baja (RN-17) y si los entrenadores de un mismo equipo comparten datos (RN-22).
+7. Cifra estimada de futbolistas (RNF-06) y plazo de conservación tras la baja (RN-17).
+8. Si los entrenadores de un mismo equipo comparten datos fuera de las alertas (RN-22, DA-102). Hoy solo las alertas están resueltas.
 
 ## 11. Trazabilidad con el documento original
 

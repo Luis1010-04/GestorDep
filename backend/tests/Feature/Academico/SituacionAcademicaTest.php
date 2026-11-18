@@ -46,7 +46,7 @@ function situacionResumenEsperado(array $cambios = []): array
 test('HU-09 (§7.10 fila 1): A consulta a J1 inscrito sin calificaciones: periodo P1, promedio nulo, 1 sin calificar, dato incompleto', function () {
     /** @var TestCase $this */
     $m = mundoDeDocentes();
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     $respuesta = situacionDe($this, $m['j1'], 'a@x.com')->assertOk();
 
@@ -183,7 +183,7 @@ test('DD-48 (§7.10 fila 10): D1 consulta a J3 y recibe el resumen con ambos doc
 test('DD-48: la materia del docente sin calificaciones sale con calificación y aprobada nulas y el criterio general', function () {
     /** @var TestCase $this */
     $m = mundoDeDocentes();
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     expect(situacionDe($this, $m['j1'], 'd1@x.com')->json('datos.materias'))->toBe([[
         'materia_id' => $m['m1'],
@@ -254,7 +254,7 @@ test('RN-14 (§7.10 fila 14): DE ve de J1 el resumen y M3 (como docente) y de J4
     $m = mundoAgregarEquipoYMateriaDeDocenteEntrenador(mundoDeDocentes());
     situacionCapturar($this, $m['i1'], ['tipo' => 'final', 'valor' => '8.00']);
     situacionCapturar($this, $m['i1m3'], ['tipo' => 'final', 'valor' => '9.00'], 'de@x.com');
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     $j1 = situacionDe($this, $m['j1'], 'de@x.com')->assertOk();
     expect($j1->json('datos'))->toMatchArray(['promedio' => '8.50', 'materias_sin_calificar' => 0])
@@ -280,7 +280,7 @@ test('DD-45 (§7.10 fila 15): sin periodo vigente, A recibe 200 con periodo nulo
     expect(situacionDe($this, $m['j1'], 'd1@x.com')->json('datos.materias'))->toBe([]);
 });
 
-test('DD-45 (§7.10 fila 16): con P2 vigente y alertas:recalcular, la situación pasa a P2 con dato incompleto y nulos', function () {
+test('DD-45 (§7.10 fila 16): con P2 vigente y resumenes:conciliar, la situación pasa a P2 con dato incompleto y nulos', function () {
     /** @var TestCase $this */
     $m = mundoDeDocentes();
     situacionCapturar($this, $m['i1'], ['tipo' => 'final', 'valor' => '8.00']);
@@ -289,7 +289,7 @@ test('DD-45 (§7.10 fila 16): con P2 vigente y alertas:recalcular, la situación
     $antes = situacionDe($this, $m['j1'], 'a@x.com')->json('datos');
     expect($antes)->toMatchArray(['periodo' => ['id' => $m['p2'], 'nombre' => '2026-2'], 'calculado_en' => null, 'dato_incompleto' => true]);
 
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     expect(situacionDe($this, $m['j1'], 'a@x.com')->json('datos'))->toBe([
         'periodo' => ['id' => $m['p2'], 'nombre' => '2026-2'], ...situacionResumenEsperado(), 'calculado_en' => '2026-08-03T12:00:00+00:00',
@@ -301,7 +301,7 @@ test('DD-52 (§7.10 fila 20): J5 en baja, inscrito y con calificaciones previas,
     $m = mundoDeDocentes();
     mundoMembresia($m['j5'], $m['ea']);
     mundoCalificar($m['i5'], 'final', '6.00');
-    consolaArtisan('alertas:recalcular')->assertSuccessful();
+    consolaArtisan('resumenes:conciliar')->assertSuccessful();
 
     expect(situacionDe($this, $m['j5'], 'a@x.com')->assertOk()->json('datos'))->toMatchArray(['promedio' => '6.00', 'materias_reprobadas' => 1, 'nivel_riesgo' => 'en_riesgo']);
     expect(situacionDe($this, $m['j5'], 'd1@x.com')->assertOk()->json('datos.materias.0.calificacion'))->toBe('6.00');

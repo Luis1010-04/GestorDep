@@ -253,3 +253,85 @@ test('F1-H5-T09: humo-h5.sh se detiene ante cualquier error y recorre los 18 pas
         ->and($guion)->toContain('humo_igual 9 ')
         ->and(array_values(array_unique(array_map('intval', $pasos[1]))))->toBe(range(1, 18));
 });
+
+/*
+ * F1-H6-T09: humo-h6.sh, con el mismo `curl` falso, se detiene en el primer paso roto; y recorre los 18 pasos de
+ * docs/hitos/f1-h6.md §9 (v1.15), con `alertas:recalcular` ejecutado por `artisan` en los pasos 4 y 15.
+ */
+
+test('F1-H6-T09: humo-h6.sh se detiene en el paso 1 con FALLA y código 1 si el inicio de sesión no responde 200', function () {
+    [$codigo, $salida] = ejecutarHumoH3ConCurlFalso(500, '{}', 'humo-h6.sh');
+
+    expect($codigo)->toBe(1)
+        ->and($salida)->toContain('FALLA  paso 1: E1 inicia sesión -> HTTP 500 (se esperaba 200)')
+        ->and($salida)->not->toContain('paso 2')
+        ->and($salida)->not->toContain('HUMO H6 OK');
+});
+
+test('F1-H6-T09: humo-h6.sh se detiene en el paso 1 con FALLA y código 1 si el cuerpo del inicio de sesión no cumple', function () {
+    [$codigo, $salida] = ejecutarHumoH3ConCurlFalso(200, '{"datos":{"roles":["docente"]}}', 'humo-h6.sh');
+
+    expect($codigo)->toBe(1)
+        ->and($salida)->toContain('FALLA  paso 1: E1 inicia sesión -> HTTP 200 (el cuerpo no cumple')
+        ->and($salida)->not->toContain('paso 2')
+        ->and($salida)->not->toContain('HUMO H6 OK');
+});
+
+test('F1-H6-T09: humo-h6.sh se detiene ante cualquier error, recalcula por artisan y recorre los 18 pasos de §9 en orden', function () {
+    $guion = (string) file_get_contents(carpetaDeHumo().'/humo-h6.sh');
+    preg_match_all('/^\s*(?:humo_paso|printf \'OK     paso) (\d+)[ :]/m', $guion, $pasos);
+
+    expect($guion)->toContain('set -euo pipefail')
+        ->and($guion)->toContain('source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"')
+        ->and($guion)->toContain('export QUEUE_CONNECTION=sync')
+        ->and(substr_count($guion, 'php /var/www/html/artisan alertas:recalcular'))->toBe(2)
+        ->and(array_values(array_unique(array_map('intval', $pasos[1]))))->toBe(range(1, 18));
+});
+
+test('F1-H6-T09: humo_estatus de humo-h6.sh recorre las páginas hasta encontrar al jugador, o hasta la última si no está', function () {
+    preg_match('/^humo_estatus\(\) \{.*?^\}/ms', (string) file_get_contents(carpetaDeHumo().'/humo-h6.sh'), $coincidencia);
+    $funcion = $coincidencia[0] ?? '';
+    expect($funcion)->not->toBe('');
+
+    // humo_peticion falso: dos páginas de una fila cada una ("otro" en la 1, "efe" en la 2). Cuenta las peticiones en LLAMADAS.
+    $servidor = <<<'BASH'
+LLAMADAS=0
+humo_peticion() {
+    LLAMADAS=$((LLAMADAS + 1))
+    HUMO_CODIGO=200
+    case "$3" in
+        *pagina=1) HUMO_CUERPO='{"datos":[{"jugador":{"id":"otro"}}],"meta":{"pagina":1,"total_paginas":2}}' ;;
+        *pagina=2) HUMO_CUERPO='{"datos":[{"jugador":{"id":"efe"}}],"meta":{"pagina":2,"total_paginas":2}}' ;;
+    esac
+}
+BASH;
+
+    $pruebas = 'humo_estatus x "" otro; echo "LLAMADAS=$LLAMADAS"; printf "%s\n" "$HUMO_CUERPO"; '
+        .'LLAMADAS=0; humo_estatus x "" efe; echo "LLAMADAS=$LLAMADAS"; printf "%s\n" "$HUMO_CUERPO"; '
+        .'LLAMADAS=0; humo_estatus x "" nadie; echo "LLAMADAS=$LLAMADAS"; printf "%s\n" "$HUMO_CUERPO"';
+    [$codigo, $salida] = ejecutarConLibreriaDeHumo($servidor."\n".$funcion."\n".$pruebas);
+
+    $otro = '{"jugador":{"id":"otro"}}';
+    $efe = '{"jugador":{"id":"efe"}}';
+
+    expect($codigo)->toBe(0)
+        ->and($salida)->toContain("LLAMADAS=1\n{\"datos\":[$otro]}\n")
+        ->and($salida)->toContain("LLAMADAS=2\n{\"datos\":[$otro,$efe]}\n")
+        ->and(substr_count($salida, "LLAMADAS=2\n{\"datos\":[$otro,$efe]}"))->toBe(2);
+});
+
+test('F1-H6-T09: toda captura de rendimiento de F en humo-h6.sh manda las métricas obligatorias de su posición, las de MetricasSeeder', function () {
+    $guion = (string) file_get_contents(carpetaDeHumo().'/humo-h6.sh');
+    $siembra = (string) file_get_contents(dirname(__DIR__, 3).'/database/seeders/MetricasSeeder.php');
+    preg_match("/'delantero' => \[([^\]]*)\]/", $siembra, $lista);
+    preg_match_all("/'([a-z_]+)'/", $lista[1] ?? '', $obligatorias);
+    preg_match_all('/\$\(metricas ([a-z_ ]+)\)/', $guion, $capturas);
+
+    // F es delantero en el guion; sus capturas salen todas de `captura_de_f`, así que se revisan todas las llamadas a `metricas`.
+    expect($guion)->toContain('\"posicion\":\"delantero\"')
+        ->and($obligatorias[1])->not->toBe([])
+        ->and($capturas[1])->not->toBe([]);
+    foreach ($capturas[1] as $enviadas) {
+        expect(array_diff($obligatorias[1], explode(' ', trim($enviadas))))->toBe([]);
+    }
+});

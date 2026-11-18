@@ -1,0 +1,6 @@
+﻿Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 1: alertas y estatus 
+=== control antes: 1 failed, 41 passed (419 assertions)
+El control inicial no pasa; no tiene sentido mutar.
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory

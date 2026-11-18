@@ -1,0 +1,248 @@
+﻿docker : Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+En línea: 1 Carácter: 355
++ ... \GestorDep; docker compose exec -T app bash bin/con-candado.sh php ve ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Entrada estanda...tope de 20 min.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+   FAIL  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest
+  ⨯ HU-12 c2 (DA-96): la ruta devuelve la vista de cada convocado, idén… 4.22s  
+  ✓ DA-96 (aditivo): GET /partidos/{partido}/convocatoria sigue devolvi… 0.60s  
+  ⨯ DA-96 (HU-12 c2): la vista de la convocatoria no trae campos de la…  0.38s  
+  ⨯ DA-96 (convenciones §1): la vista pagina con 15 por defecto, máximo… 0.38s  
+  ⨯ DA-96 (paridad con H3): página por página, la vista y la ruta de co… 0.43s  
+  ⨯ DA-96: la vista no filtra por el estado del partido, igual que H3    0.38s  
+  ⨯ HU-29 (DA-29, paridad con H3): un convocado dado de baja se omite d… 0.45s  
+  ⨯ RNF-01 (paridad con H3): un convocado sin membresía vigente en ning… 0.43s  
+  ⨯ DA-96 (matiz de alcance heredado de H3): un convocado que dejó el e… 0.39s  
+  ⨯ RN-14 (DD-17): con dos entrenadores en el equipo del partido, cada…  0.38s  
+  ⨯ DA-96: una convocatoria vacía da una lista vacía con total 0         0.38s  
+  ✓ RNF-01: un partido inexistente, con id que no es v7, eliminado o de… 0.49s  
+  ⨯ HU-12 c2: el docente recibe 403 y sin sesión 401                     0.39s  
+  ⨯ DA-96: la vista de la convocatoria no escribe nada en la base        0.40s  
+
+   FAIL  Tests\Feature\Consultas\ContratoDeVistaDeLaConvocatoriaTest
+  ⨯ HU-12 c2 (DA-96): las respuestas de GET /partidos/{partido}/convoca… 1.14s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > HU-12 c2 (DA-…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:55
+     51▕     $m = convocarMundo();
+     52▕     convocarEvaluar($m['p1'], $m['a'], $m['e1'], 'pasa', '8.00');
+     53▕     convocarMedir($m['d1'], $m['a'], $m['e1'], '2026-09-20');
+     54▕ 
+  ➜  55▕     $filas = convocarPedir($this, vistaConvRuta($m['pj1']))->assertOk()->json('datos');
+     56▕ 
+     57▕     expect($filas)->toHaveCount(4);
+     58▕     foreach ($filas as $fila) {
+     59▕         $individual = convocarPedir($this, convocarRuta($fila['jugador']['id'], "filtro[equipo_id]={$m['a']}"))->assertOk()->json('datos');
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > DA-96 (HU-12…    
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:80
+     76▕ test('DA-96 (HU-12 c2): la vista de la convocatoria no trae campos de la convocatoria, solo las siete dimensiones', function () {
+     77▕     /** @var TestCase $this */
+     78▕     $m = convocarMundo();
+     79▕ 
+  ➜  80▕     $fila = convocarPedir($this, vistaConvRuta($m['pj1']))->assertOk()->json('datos.0');
+     81▕ 
+     82▕     expect(array_keys($fila))->toBe(['jugador', 'disponibilidad', 'rendimiento_reciente', 'situacion_academica', 'asistencia', 'estado_fisico', 'progreso']);
+     83▕ });
+     84▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > DA-96 (conven…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:89
+     85▕ test('DA-96 (convenciones §1): la vista pagina con 15 por defecto, máximo 100, y meta como la ruta de H3', function () {
+     86▕     /** @var TestCase $this */
+     87▕     $m = convocarMundo();
+     88▕ 
+  ➜  89▕     $respuesta = convocarPedir($this, vistaConvRuta($m['pj1']))->assertOk();
+     90▕ 
+     91▕     expect($respuesta->json('meta'))->toBe(['pagina' => 1, 'por_pagina' => 15, 'total' => 4, 'total_paginas' => 1]);
+     92▕     convocarPedir($this, vistaConvRuta($m['pj1'], 'por_pagina=101'))->assertUnprocessable();
+     93▕     convocarPedir($this, vistaConvRuta($m['pj1'], 'pagina=0'))->assertUnprocessable();
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > DA-96 (parida…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:39
+     35▕ 
+     36▕ /** Ids de jugador, en orden, de una página de la ruta de H3 (`jugador_id`) o de la vista (`jugador.id`), y su meta. */
+     37▕ function vistaConvPagina(TestCase $prueba, string $ruta, string $correo, bool $esVista): array
+     38▕ {
+  ➜  39▕     $respuesta = convocarPedir($prueba, $ruta, $correo)->assertOk();
+     40▕     /** @var list<array<string, mixed>> $filas */
+     41▕     $filas = $respuesta->json('datos');
+     42▕ 
+     43▕     return [
+
+  1   tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:103
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > DA-96: la vis…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:39
+     35▕ 
+     36▕ /** Ids de jugador, en orden, de una página de la ruta de H3 (`jugador_id`) o de la vista (`jugador.id`), y su meta. */
+     37▕ function vistaConvPagina(TestCase $prueba, string $ruta, string $correo, bool $esVista): array
+     38▕ {
+  ➜  39▕     $respuesta = convocarPedir($prueba, $ruta, $correo)->assertOk();
+     40▕     /** @var list<array<string, mixed>> $filas */
+     41▕     $filas = $respuesta->json('datos');
+     42▕ 
+     43▕     return [
+
+  1   tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:118
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > HU-29 (DA-29,…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:39
+     35▕ 
+     36▕ /** Ids de jugador, en orden, de una página de la ruta de H3 (`jugador_id`) o de la vista (`jugador.id`), y su meta. */
+     37▕ function vistaConvPagina(TestCase $prueba, string $ruta, string $correo, bool $esVista): array
+     38▕ {
+  ➜  39▕     $respuesta = convocarPedir($prueba, $ruta, $correo)->assertOk();
+     40▕     /** @var list<array<string, mixed>> $filas */
+     41▕     $filas = $respuesta->json('datos');
+     42▕ 
+     43▕     return [
+
+  1   tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:128
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > RNF-01 (parid…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:39
+     35▕ 
+     36▕ /** Ids de jugador, en orden, de una página de la ruta de H3 (`jugador_id`) o de la vista (`jugador.id`), y su meta. */
+     37▕ function vistaConvPagina(TestCase $prueba, string $ruta, string $correo, bool $esVista): array
+     38▕ {
+  ➜  39▕     $respuesta = convocarPedir($prueba, $ruta, $correo)->assertOk();
+     40▕     /** @var list<array<string, mixed>> $filas */
+     41▕     $filas = $respuesta->json('datos');
+     42▕ 
+     43▕     return [
+
+  1   tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:142
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > DA-96 (matiz…    
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:159
+    155▕     DB::connection('propietario')->table('jugador_equipo')->where('jugador_id', $m['f1'])->where('equipo_id', $m['b'])->update(['hasta' => '2026-09-01']);
+    156▕     convocarEvaluar($m['f1'], $m['a'], $m['e3'], 'pasa', '8.00', '2026-09-25 12:00:00+00');
+    157▕     convocarEvaluar($m['f1'], $m['b'], $m['e3'], 'pasa', '9.00', '2026-09-10 12:00:00+00');
+    158▕ 
+  ➜ 159▕     $deLaVista = convocarPedir($this, vistaConvRuta($deB), 'e3@x.com')->assertOk();
+    160▕     $deH3 = vistaConvPagina($this, vistaConvRutaDeH3($deB), 'e3@x.com', false);
+    161▕ 
+    162▕     expect($deH3['jugadores'])->toBe([$m['f1']])
+    163▕         ->and($deLaVista->json('datos.0.jugador.id'))->toBe($m['f1'])
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > RN-14 (DD-17)…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:176
+    172▕     $m = convocarMundo();
+    173▕     convocarEvaluar($m['f1'], $m['a'], $m['e1'], 'no_pasa', '5.00');
+    174▕     convocarEvaluar($m['f1'], $m['a'], $m['e3'], 'pasa', '8.00');
+    175▕ 
+  ➜ 176▕     $promedio = fn (string $correo): ?string => collect(convocarPedir($this, vistaConvRuta($m['pj1']), $correo)->assertOk()->json('datos'))
+    177▕         ->firstWhere('jugador.id', $m['f1'])['rendimiento_reciente']['promedio'] ?? null;
+    178▕ 
+    179▕     expect($promedio('e1@x.com'))->toBe('5.00')
+    180▕         ->and($promedio('e3@x.com'))->toBe('8.00');
+
+  1   tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:179
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > DA-96: una co…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:188
+    184▕     /** @var TestCase $this */
+    185▕     $m = convocarMundo();
+    186▕     $vacio = vistaConvPartido($m, $m['a']);
+    187▕ 
+  ➜ 188▕     $respuesta = convocarPedir($this, vistaConvRuta($vacio))->assertOk();
+    189▕ 
+    190▕     expect($respuesta->json('datos'))->toBe([])
+    191▕         ->and($respuesta->json('meta'))->toBe(['pagina' => 1, 'por_pagina' => 15, 'total' => 0, 'total_paginas' => 1]);
+    192▕ });
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > HU-12 c2: el…    
+  Expected response status code [403] but received 404.
+Failed asserting that 404 is identical to 403.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:216
+    212▕ test('HU-12 c2: el docente recibe 403 y sin sesión 401', function () {
+    213▕     /** @var TestCase $this */
+    214▕     $m = convocarMundo();
+    215▕ 
+  ➜ 216▕     convocarPedir($this, vistaConvRuta($m['pj1']), 'd@x.com')->assertForbidden();
+    217▕     sesionesPeticion($this, 'GET', vistaConvRuta($m['pj1']))->assertUnauthorized();
+    218▕ });
+    219▕ 
+    220▕ test('DA-96: la vista de la convocatoria no escribe nada en la base', function () {
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\VistaDeLaConvocatoriaTest > DA-96: la vis…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php:227
+    223▕     convocarEvaluar($m['p1'], $m['a'], $m['e1'], 'pasa', '8.00');
+    224▕     $contar = fn (): array => [DB::table('convocatorias')->count(), DB::table('evaluaciones_rendimiento')->count(), DB::table('alertas')->count()];
+    225▕     $antes = $contar();
+    226▕ 
+  ➜ 227▕     convocarPedir($this, vistaConvRuta($m['pj1']))->assertOk();
+    228▕ 
+    229▕     expect($contar())->toBe($antes);
+    230▕ });
+    231▕
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Consultas\ContratoDeVistaDeLaConvocatoriaTest > HU-…   
+  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.
+
+  at tests/Feature/Consultas/ContratoDeVistaDeLaConvocatoriaTest.php:21
+     17▕     $plantilla = '/partidos/{partido}/convocatoria/vista';
+     18▕     $ruta = fn (string $partido, string $consulta = ''): string => "/api/v1/partidos/$partido/convocatoria/vista".($consulta === '' ? '' : "?$consulta");
+     19▕ 
+     20▕     $respuestas = [
+  ➜  21▕         sesionesPeticion($this, 'GET', $ruta($m['pj1']), idDeSesion: $e1)->assertOk(),
+     22▕         sesionesPeticion($this, 'GET', $ruta($m['pj1'], 'por_pagina=2&pagina=2'), idDeSesion: $e1)->assertOk(),
+     23▕         sesionesPeticion($this, 'GET', $ruta($m['pp1']), idDeSesion: $e1)->assertOk(),
+     24▕         sesionesPeticion($this, 'GET', $ruta($m['pj1']))->assertUnauthorized(),
+     25▕         sesionesPeticion($this, 'GET', $ruta($m['pj1']), idDeSesion: $d)->assertForbidden(),
+
+
+  Tests:    13 failed, 2 passed (59 assertions)
+  Duration: 11.46s
+

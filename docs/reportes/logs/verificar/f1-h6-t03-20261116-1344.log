@@ -1,0 +1,108 @@
+﻿docker compose exec -T app bash bin/con-candado.sh composer verificar
+make : Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+En línea: 1 Carácter: 355
++ ... n C:\Users\LOQ\Documents\repos\GestorDep; make verificar 2>&1 | Out-F ...
++                                               ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Entrada estanda...tope de 20 min.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ..............................................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 958 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   src/Competencia/Infraestructura/FaltasDeEntrenamientoSql.php           
+ ------ ----------------------------------------------------------------------- 
+  25     Method Src\Competencia\Infraestructura\FaltasDeEntrenamientoSql::de()  
+         should return list<Src\Compartido\Aplicacion\FaltaDeEntrenamiento> bu  
+         t returns array<int, Src\Compartido\Aplicacion\FaltaDeEntrenamiento>.  
+         🪪  return.type                                                        
+         💡  array<int, Src\Compartido\Aplicacion\FaltaDeEntrenamiento> might n  
+         ot be a list.                                                          
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   src/Plantel/Infraestructura/MembresiasVigentesPlantel.php              
+ ------ ----------------------------------------------------------------------- 
+  47     Method Src\Plantel\Infraestructura\MembresiasVigentesPlantel::filas()  
+         should return list<Src\Compartido\Aplicacion\MembresiaVigente> but re  
+         turns array<int, Src\Compartido\Aplicacion\MembresiaVigente>.          
+         🪪  return.type                                                        
+         💡  array<int, Src\Compartido\Aplicacion\MembresiaVigente> might not b  
+         e a list.                                                              
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   src/Rendimiento/Infraestructura/EvaluacionesVigentesDelEquipoSql.php   
+ ------ ----------------------------------------------------------------------- 
+  28     Method                                                                 
+         Src\Rendimiento\Infraestructura\EvaluacionesVigentesDelEquipoSql::de(  
+         ) should return list<Src\Compartido\Aplicacion\EvaluacionVigente> but  
+          returns array<Src\Compartido\Aplicacion\EvaluacionVigente>.           
+         🪪  return.type                                                        
+         💡  array<Src\Compartido\Aplicacion\EvaluacionVigente> might not be a   
+         list.                                                                  
+  29     Access to an undefined property object::$entrenador_id.                
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  29     Access to an undefined property object::$promedio.                     
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  29     Access to an undefined property object::$resultado.                    
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   src/Rendimiento/Infraestructura/TarjetasPorPartidoSql.php              
+ ------ ----------------------------------------------------------------------- 
+  20     Method Src\Rendimiento\Infraestructura\TarjetasPorPartidoSql::de()     
+         should return list<Src\Compartido\Aplicacion\TarjetasDeUnRegistro> bu  
+         t returns array<int, Src\Compartido\Aplicacion\TarjetasDeUnRegistro>.  
+         🪪  return.type                                                        
+         💡  array<int, Src\Compartido\Aplicacion\TarjetasDeUnRegistro> might n  
+         ot be a list.                                                          
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Ayudantes/MundoDeAlertas.php                                     
+ ------ ----------------------------------------------------------------------- 
+  108    Function alertasFalta() has parameter $m with no value type specified  
+         in iterable type array.                                                
+         🪪  missingType.iterableValue                                          
+         💡  See:                                                               
+         https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-i  
+         terable-type                                                           
+  126    Function alertasNivel() has parameter $m with no value type specified  
+         in iterable type array.                                                
+         🪪  missingType.iterableValue                                          
+         💡  See:                                                               
+         https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-i  
+         terable-type                                                           
+  128    Match expression does not handle remaining value: string               
+         🪪  match.unhandled                                                    
+ ------ ----------------------------------------------------------------------- 
+
+ [ERROR] Found 10 errors                                                        
+
+Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with 
+error code 1
+make: *** [Makefile:32: verificar] Error 1

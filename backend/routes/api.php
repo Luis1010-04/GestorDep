@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlertaController;
 use App\Http\Controllers\AlineacionYResultadoController;
 use App\Http\Controllers\AsignaturaController;
 use App\Http\Controllers\AsistenciaController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\EntrenamientoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\EstadoDeDisponibilidadController;
+use App\Http\Controllers\EstatusDeJugadoresController;
+use App\Http\Controllers\GraficosController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\LesionController;
@@ -33,6 +36,7 @@ use App\Http\Controllers\TemporadaController;
 use App\Http\Controllers\TipoDePruebaController;
 use App\Http\Controllers\TorneoController;
 use App\Http\Controllers\UmbralController;
+use App\Http\Controllers\VistaParaConvocarController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/salud', SaludController::class);
@@ -53,6 +57,9 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/jugadores/{jugador}/avisos-lesion', [AvisoDeLesionController::class, 'listar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/avisos-lesion', [AvisoDeLesionController::class, 'crear'])->whereUuid('jugador');
         Route::get('/jugadores/{jugador}/estado-disponibilidad', [EstadoDeDisponibilidadController::class, 'consultar'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/alertas', [AlertaController::class, 'delJugador'])->whereUuid('jugador');
+        Route::get('/estatus-de-jugadores', [EstatusDeJugadoresController::class, 'listar']);
+        Route::get('/jugadores/{jugador}/graficos', [GraficosController::class, 'delJugador'])->whereUuid('jugador');
     });
 
     Route::middleware('rol:docente')->group(function () {
@@ -143,6 +150,10 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/equipos/{equipo}/jugadores/{jugador}/umbral', [UmbralController::class, 'consultar'])->whereUuid(['equipo', 'jugador']);
         Route::put('/equipos/{equipo}/jugadores/{jugador}/umbral', [UmbralController::class, 'fijar'])->whereUuid(['equipo', 'jugador']);
         Route::get('/equipos/{equipo}/jugadores/{jugador}/desempeno', [DesempenoController::class, 'consultar'])->whereUuid(['equipo', 'jugador']);
+        Route::get('/equipos/{equipo}/graficos', [GraficosController::class, 'delEquipo'])->whereUuid('equipo');
+        Route::get('/jugadores/{jugador}/vista-para-convocar', [VistaParaConvocarController::class, 'delJugador'])->whereUuid('jugador');
+        Route::get('/equipos/{equipo}/jugadores/para-convocar', [VistaParaConvocarController::class, 'delEquipo'])->whereUuid('equipo');
+        Route::get('/partidos/{partido}/convocatoria/vista', [VistaParaConvocarController::class, 'delPartido'])->whereUuid('partido');
 
         Route::post('/avisos-lesion/{aviso}/descarte', [AvisoDeLesionController::class, 'descartar'])->whereUuid('aviso');
         Route::post('/avisos-lesion/{aviso}/confirmacion', [AvisoDeLesionController::class, 'confirmar'])->whereUuid('aviso');

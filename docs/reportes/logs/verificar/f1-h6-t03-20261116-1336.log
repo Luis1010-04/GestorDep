@@ -1,0 +1,932 @@
+﻿docker : Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+En línea: 1 Carácter: 355
++ ... \GestorDep; docker compose exec -T app bash bin/con-candado.sh php ve ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Entrada estanda...tope de 20 min.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (§7.1 fila 1): en_riesgo sin alerta abierta, el comando crea[39m[90m… [39m [90m6.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-21 (§7.1 fila 2): en_riesgo con alerta abierta, el comando no la[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-21 (§7.1 fila 3): en_observacion sin alerta abierta, no se crea[39m[90m  [39m [90m0.37s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (§7.1 fila 4): en_observacion con alerta abierta, se cierra c[39m[90m…[39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (§7.1 fila 5): sin_riesgo con alerta abierta, se cierra[39m[90m       [39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (DA-88): CalificacionRegistrada recalcula la alerta académica[39m[90m…[39m [90m0.45s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (DA-88): AsistenciaDeClaseRegistrada recalcula la alerta acad[39m[90m…[39m [90m0.37s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (DA-88): JugadorInscrito recalcula la alerta académica y la a[39m[90m…[39m [90m0.37s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (DA-88): CriterioDeMateriaModificado recalcula la alerta de l[39m[90m…[39m [90m0.38s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (DA-88): el mismo evento dos veces no duplica la alerta[39m[90m       [39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-21 (DA-88): al subir el nivel por un evento, la alerta abierta s[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mP-08c (DA-99): un evento sobre un jugador en baja no abre la alerta[39m[90m…[39m [90m0.31s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-88: el escucha es de cola, se despacha después del commit y está[39m[90m…[39m [90m0.14s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Alertas\AcumulacionDeSancionesTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mRN-09 (§7.3 fila 1): 1 tarjeta roja en la temporada, se activa[39m[90m      [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 2): 2 tarjetas amarillas en la temporada, no se ac[39m[90m…[39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-09 (§7.3 fila 3): 3 tarjetas amarillas en la temporada, se activ[39m[90m…[39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-09 (§7.3 fila 4): 3 faltas en 30 días, se activa[39m[90m                 [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 5): 2 faltas y 1 falta justificada en 30 días, no[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 6): 3 faltas repartidas en 31 días, no se activa[39m[90m   [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-09 (§7.3 fila 7): 1 tarjeta roja de la temporada anterior, no se[39m[90m…[39m [90m0.34s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-09 (§7.3 fila 8): alerta abierta por 3 faltas; en el recálculo d[39m[90m…[39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-09 (§7.3 fila 9, ADR-07): alerta abierta por 1 roja; el recálcul[39m[90m…[39m [90m0.35s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Alertas\RiesgoDeBajaDeportivaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mRN-10 (§7.4 fila 1): no_pasa sin sanciones acumuladas, se activa[39m[90m    [39m [90m0.39s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-10 (§7.4 fila 2): pasa con sanciones acumuladas, se activa[39m[90m       [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-10 (§7.4 fila 3): pasa sin sanciones acumuladas, no se activa[39m[90m    [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-10 (§7.4 fila 4): datos_insuficientes sin sanciones acumuladas,[39m[90m… [39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRN-10 (§7.4 fila 5): datos_insuficientes con sanciones acumuladas,[39m[90m… [39m [90m0.37s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Alertas\RecalculoDiarioTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mRN-21, RN-09, RN-10 (ADR-07): alertas:recalcular dos veces da la mi[39m[90m…[39m [90m0.40s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-87: una alerta cerrada no se reabre; si la condición vuelve se c[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-87: alertas:recalcular no toca activada_en ni cerrada_en de las[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mP-08c (DA-99): un jugador en baja no recibe alertas nuevas y las ab[39m[90m…[39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-91 (P-08b): sin temporada que contenga la fecha de cálculo no se[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-91 (P-08b): sin temporada y sin faltas suficientes, no se activa[39m[90m…[39m [90m0.33s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-105 (§6.2): la causa de la alerta académica lleva nivel_riesgo,[39m[90m… [39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-105 (§6.2): la causa de la alerta deportiva lleva resultado, pro[39m[90m…[39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-105 (§6.2): la causa de las sanciones lleva tarjetas_amarillas,[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-113: alertas:recalcular sale con 0 y no escribe texto[39m[90m            [39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-113: alertas:recalcular sigue con los demás jugadores y sale con[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-113: alertas:recalcular está programado a las 02:00 de America/M[39m[90m…[39m [90m0.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-113: resumenes:conciliar está programado a las 02:00 de America/[39m[90m…[39m [90m0.14s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-113: resumenes:conciliar concilia los resúmenes y no crea ni cie[39m[90m…[39m [90m0.33s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Alertas\EntrenadoresDelEquipoTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mDA-102: con dos entrenadores en el equipo, basta un no_pasa para ac[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-102: con dos entrenadores, uno que pasa y otro sin evaluación, e[39m[90m…[39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-107: sin ninguna evaluación guardada el resultado es datos_insuf[39m[90m…[39m [90m0.37s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-102: la tarjeta que registró solo el segundo entrenador cuenta p[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-103: dos entrenadores registran la misma tarjeta en un partido y[39m[90m…[39m [90m0.44s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-103: si dos entrenadores registran cantidades distintas en un pa[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-92: de cada entrenador cuenta su última evaluación y no las ante[39m[90m…[39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-116: con varios no_pasa, el promedio de la causa es el menor de[39m[90m… [39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-116: sin ningún no_pasa, el promedio de la causa es el mayor de[39m[90m… [39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-116: con un pasa de promedio menor y datos_insuficientes, el pro[39m[90m…[39m [90m0.38s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Alertas\PuertosDeAlertasTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mDA-112: TarjetasPorPartido devuelve las filas de todos los entrenad[39m[90m…[39m [90m0.34s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-112: TarjetasPorPartido no trae las filas eliminadas ni las de o[39m[90m…[39m [90m0.33s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-112: FaltasDeEntrenamiento solo trae entrenamientos realizados y[39m[90m…[39m [90m0.34s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-112: TemporadaDeFecha devuelve la temporada que contiene la fech[39m[90m…[39m [90m0.31s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-112: EvaluacionesVigentesDelEquipo devuelve la última evaluación[39m[90m…[39m [90m0.31s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mP-09: RiesgoAcademicoDelJugador calcula nivel, promedio y materias[39m[90m… [39m [90m0.32s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mP-09: RiesgoAcademicoDelJugador devuelve nulo sin calificaciones y[39m[90m… [39m [90m0.30s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mP-09: RiesgoAcademicoDelJugador devuelve nulo cuando hoy no cae en[39m[90m… [39m [90m0.30s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-115: JugadoresDeLaMateria devuelve los jugadores inscritos en la[39m[90m…[39m [90m0.32s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-115: MembresiasVigentes excluye a los jugadores en baja y trae u[39m[90m…[39m [90m0.32s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-115: MembresiasVigentes del jugador devuelve sus membresías, y n[39m[90m…[39m [90m0.32s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Alertas\ConteosDeSancionesTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mDA-117: los conteos suman las tarjetas de la temporada y cuentan la[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mDA-117 (P-08b): sin temporada los conteos no incluyen tarjetas, pero sí las faltas[39m
+  [31;1m⨯[39;22m[90m [39m[90mDA-117: la ventana de faltas sale del parámetro de días, no del código (RNF-09)[39m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (§7.…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m20[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (§7.…   
+[39;1m  Expecting null not to be null .[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39m:[32m56[39m
+     52▕     alertaInsertar($m['j1'], ALERTA_ACADEMICA);
+     53▕ 
+     54▕     alertasRecalcular();
+     55▕ 
+  ➜  56▕     expect(alertasUnica($m['j1'], ALERTA_ACADEMICA)->cerrada_en)->not->toBeNull();
+     57▕ });
+     58▕ 
+     59▕ test('RN-21 (§7.1 fila 5): sin_riesgo con alerta abierta, se cierra', function () {
+     60▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m56[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (§7.…   
+[39;1m  Expecting null not to be null .[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39m:[32m67[39m
+     63▕     alertaInsertar($m['j1'], ALERTA_ACADEMICA);
+     64▕ 
+     65▕     alertasRecalcular();
+     66▕ 
+  ➜  67▕     expect(alertasUnica($m['j1'], ALERTA_ACADEMICA)->cerrada_en)->not->toBeNull();
+     68▕ });
+     69▕ 
+     70▕ test('RN-21 (DA-88): CalificacionRegistrada recalcula la alerta académica y la abre', function () {
+     71▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m67[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (DA-…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39m:[32m77[39m
+     73▕     alertasNivel($m, 'en_riesgo');
+     74▕ 
+     75▕     event(new CalificacionRegistrada($m['i1'], $m['m1'], $m['j1']));
+     76▕ 
+  ➜  77▕     expect(alertasAbiertas($m['j1'], ALERTA_ACADEMICA))->toBe(1);
+     78▕ });
+     79▕ 
+     80▕ test('RN-21 (DA-88): AsistenciaDeClaseRegistrada recalcula la alerta académica y la abre', function () {
+     81▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m77[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (DA-…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39m:[32m87[39m
+     83▕     alertasNivel($m, 'en_riesgo');
+     84▕ 
+     85▕     event(new AsistenciaDeClaseRegistrada($m['i1'], $m['m1'], $m['j1']));
+     86▕ 
+  ➜  87▕     expect(alertasAbiertas($m['j1'], ALERTA_ACADEMICA))->toBe(1);
+     88▕ });
+     89▕ 
+     90▕ test('RN-21 (DA-88): JugadorInscrito recalcula la alerta académica y la abre', function () {
+     91▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m87[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (DA-…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39m:[32m97[39m
+     93▕     alertasNivel($m, 'en_riesgo');
+     94▕ 
+     95▕     event(new JugadorInscrito($m['i1'], $m['m1'], $m['j1']));
+     96▕ 
+  ➜  97▕     expect(alertasAbiertas($m['j1'], ALERTA_ACADEMICA))->toBe(1);
+     98▕ });
+     99▕ 
+    100▕ test('RN-21 (DA-88): CriterioDeMateriaModificado recalcula la alerta de los jugadores de la materia', function () {
+    101▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m97[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (DA-…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39m:[32m107[39m
+    103▕     alertasNivel($m, 'en_riesgo');
+    104▕ 
+    105▕     event(new CriterioDeMateriaModificado($m['m1']));
+    106▕ 
+  ➜ 107▕     expect(alertasAbiertas($m['j1'], ALERTA_ACADEMICA))->toBe(1)
+    108▕         ->and(alertasFilas($m['j3'], ALERTA_ACADEMICA))->toBe([]);
+    109▕ });
+    110▕ 
+    111▕ test('RN-21 (DA-88): el mismo evento dos veces no duplica la alerta', function () {
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m107[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (DA-…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m117[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcademicaTest[22m [90m>[39m RN-21 (DA-…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m134[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDeAlertaAcade[22m… [41;1m ReflectionException [49;22m  
+[39;1m  Class "Src\Alertas\Infraestructura\Escuchas\RecalcularAlertaAcademica" does not exist[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39m:[32m149[39m
+    145▕ });
+    146▕ 
+    147▕ test('DA-88: el escucha es de cola, se despacha después del commit y está registrado para los cuatro eventos', function () {
+    148▕     /** @var TestCase $this */
+  ➜ 149▕     $escucha = new ReflectionClass(RecalcularAlertaAcademica::class);
+    150▕ 
+    151▕     expect($escucha->implementsInterface(ShouldQueue::class))->toBeTrue()
+    152▕         ->and($escucha->getProperty('afterCommit')->getDefaultValue())->toBeTrue()
+    153▕         ->and($escucha->getProperty('tries')->getDefaultValue())->toBe(3);
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDeAlertaAcademicaTest.php[39;22m:[39;1m149[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\AcumulacionDeSancionesTest[22m [90m>[39m RN-09 (§7.3 fi…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/AcumulacionDeSancionesTest.php[39;22m:[39;1m16[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\AcumulacionDeSancionesTest[22m [90m>[39m RN-09 (§7.3 fi…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/AcumulacionDeSancionesTest.php[39m:[32m39[39m
+     35▕     alertasTarjetas(alertasPartido($m, $m['t2026'], '2026-03-05 18:00:00+00'), $m['j1'], $m['ea'], $m['a'], 1, 0);
+     36▕ 
+     37▕     alertasRecalcular();
+     38▕ 
+  ➜  39▕     expect(alertasAbiertas($m['j1'], ALERTA_SANCIONES))->toBe(1);
+     40▕ });
+     41▕ 
+     42▕ test('RN-09 (§7.3 fila 4): 3 faltas en 30 días, se activa', function () {
+     43▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/AcumulacionDeSancionesTest.php[39;22m:[39;1m39[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\AcumulacionDeSancionesTest[22m [90m>[39m RN-09 (§7.3 fi…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/AcumulacionDeSancionesTest.php[39m:[32m51[39m
+     47▕     }
+     48▕ 
+     49▕     alertasRecalcular();
+     50▕ 
+  ➜  51▕     expect(alertasAbiertas($m['j1'], ALERTA_SANCIONES))->toBe(1);
+     52▕ });
+     53▕ 
+     54▕ test('RN-09 (§7.3 fila 5): 2 faltas y 1 falta justificada en 30 días, no se activa', function () {
+     55▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/AcumulacionDeSancionesTest.php[39;22m:[39;1m51[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\AcumulacionDeSancionesTest[22m [90m>[39m RN-09 (§7.3 fi…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/AcumulacionDeSancionesTest.php[39;22m:[39;1m96[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\AcumulacionDeSancionesTest[22m [90m>[39m RN-09 (§7.3 fi…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/AcumulacionDeSancionesTest.php[39;22m:[39;1m113[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RiesgoDeBajaDeportivaTest[22m [90m>[39m RN-10 (§7.4 fil…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RiesgoDeBajaDeportivaTest.php[39;22m:[39;1m20[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RiesgoDeBajaDeportivaTest[22m [90m>[39m RN-10 (§7.4 fil…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/RiesgoDeBajaDeportivaTest.php[39m:[32m33[39m
+     29▕     riesgoConSanciones($m);
+     30▕ 
+     31▕     alertasRecalcular();
+     32▕ 
+  ➜  33▕     expect(alertasAbiertas($m['j1'], ALERTA_DEPORTIVA))->toBe(1);
+     34▕ });
+     35▕ 
+     36▕ test('RN-10 (§7.4 fila 3): pasa sin sanciones acumuladas, no se activa', function () {
+     37▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RiesgoDeBajaDeportivaTest.php[39;22m:[39;1m33[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RiesgoDeBajaDeportivaTest[22m [90m>[39m RN-10 (§7.4 fil…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/RiesgoDeBajaDeportivaTest.php[39m:[32m64[39m
+     60▕     riesgoConSanciones($m);
+     61▕ 
+     62▕     alertasRecalcular();
+     63▕ 
+  ➜  64▕     expect(alertasAbiertas($m['j1'], ALERTA_DEPORTIVA))->toBe(1);
+     65▕ });
+     66▕
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RiesgoDeBajaDeportivaTest.php[39;22m:[39;1m64[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTest[22m [90m>[39m RN-21, RN-09, RN-10 (…   
+[39;1m  Failed asserting that actual size 0 matches expected size 3.[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDiarioTest.php[39m:[32m38[39m
+     34▕     alertasRecalcular();
+     35▕     $primera = alertasInstantanea();
+     36▕     alertasRecalcular();
+     37▕ 
+  ➜  38▕     expect($primera)->toHaveCount(3)
+     39▕         ->and(alertasInstantanea())->toBe($primera);
+     40▕ });
+     41▕ 
+     42▕ test('DA-87: una alerta cerrada no se reabre; si la condición vuelve se crea una nueva', function () {
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDiarioTest.php[39;22m:[39;1m38[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTest[22m [90m>[39m DA-87: una alerta cer…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RecalculoDiarioTest.php[39;22m:[39;1m49[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTest[22m [90m>[39m DA-91 (P-08b): sin te…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RecalculoDiarioTest.php[39;22m:[39;1m98[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTest[22m [90m>[39m DA-105 (§6.2): la cau…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RecalculoDiarioTest.php[39;22m:[39;1m119[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTest[22m [90m>[39m DA-105 (§6.2): la cau…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RecalculoDiarioTest.php[39;22m:[39;1m129[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTest[22m [90m>[39m DA-105 (§6.2): la cau…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/RecalculoDiarioTest.php[39;22m:[39;1m140[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTest[22m [90m>[39m DA-113: alertas:recal…   
+[39;1m  Expected status code 1 but received 0.
+Failed asserting that 0 matches expected 1.[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDiarioTest.php[39m:[32m173[39m
+    169▕             return [];
+    170▕         }
+    171▕     });
+    172▕ 
+  ➜ 173▕     consolaArtisan('alertas:recalcular')->assertExitCode(1);
+    174▕ 
+    175▕     expect(alertasFilas($m['j1']))->toBe([])
+    176▕         ->and(alertasAbiertas($j2, ALERTA_SANCIONES))->toBe(1);
+    177▕ });
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTest[22m [90m>[39m DA-113: resumenes:con…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Feature/Alertas/RecalculoDiarioTest.php[39m:[32m192[39m
+    188▕ test('DA-113: resumenes:conciliar está programado a las 02:00 de America/Mexico_City', function () {
+    189▕     /** @var TestCase $this */
+    190▕     $eventos = diarioEventosDe('resumenes:conciliar');
+    191▕ 
+  ➜ 192▕     expect($eventos)->toHaveCount(1)
+    193▕         ->and($eventos[0]->expression)->toBe('0 2 * * *')
+    194▕         ->and($eventos[0]->timezone instanceof DateTimeZone ? $eventos[0]->timezone->getName() : $eventos[0]->timezone)->toBe('America/Mexico_City');
+    195▕ });
+    196▕
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/RecalculoDiarioTest.php[39;22m:[39;1m192[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\RecalculoDiarioTe[22m… [41;1m CommandNotFoundException [49;22m  
+[39;1m  The command "resumenes:conciliar" does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Console/Application.php[39m:[32m162[39m
+    158▕     {
+    159▕         [$command, $input] = $this->parseCommand($command, $parameters);
+    160▕ 
+    161▕         if (! $this->has($command)) {
+  ➜ 162▕             throw new CommandNotFoundException(sprintf('The command "%s" does not exist.', $command));
+    163▕         }
+    164▕ 
+    165▕         return $this->run(
+    166▕             $input, $this->lastOutput = $outputBuffer ?: new BufferedOutput
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Feature/Alertas/RecalculoDiarioTest.php[39;22m:[39;1m202[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\EntrenadoresDelEquipoTest[22m [90m>[39m DA-102: con dos…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39m:[32m18[39m
+     14▕     alertasEvaluacion($m['j1'], $m['ea'], $m['a2'], 'no_pasa', '5.00');
+     15▕ 
+     16▕     alertasRecalcular();
+     17▕ 
+  ➜  18▕     expect(alertasAbiertas($m['j1'], ALERTA_DEPORTIVA))->toBe(1);
+     19▕ });
+     20▕ 
+     21▕ test('DA-102: con dos entrenadores, uno que pasa y otro sin evaluación, el resultado es pasa y no se activa', function () {
+     22▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39;22m:[39;1m18[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\EntrenadoresDelEquipoTest[22m [90m>[39m DA-107: sin nin…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39;22m:[39;1m38[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\EntrenadoresDelEquipoTest[22m [90m>[39m DA-102: la tarj…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39m:[32m48[39m
+     44▕     alertasTarjetas(alertasPartido($m, $m['t2026'], '2026-03-01 18:00:00+00'), $m['j1'], $m['ea'], $m['a2'], 0, 1);
+     45▕ 
+     46▕     alertasRecalcular();
+     47▕ 
+  ➜  48▕     expect(alertasAbiertas($m['j1'], ALERTA_SANCIONES))->toBe(1);
+     49▕ });
+     50▕ 
+     51▕ test('DA-103: dos entrenadores registran la misma tarjeta en un partido y cuenta una sola vez', function () {
+     52▕     /** @var TestCase $this */
+
+  [33m1   [39m[39;1mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39;22m:[39;1m48[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\EntrenadoresDelEquipoTest[22m [90m>[39m DA-103: si dos…    
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39;22m:[39;1m73[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\EntrenadoresDelEquipoTest[22m [90m>[39m DA-116: con var…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39;22m:[39;1m95[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\EntrenadoresDelEquipoTest[22m [90m>[39m DA-116: sin nin…   
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39;22m:[39;1m107[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\EntrenadoresDelEquipoTest[22m [90m>[39m DA-116: con un…    
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Ayudantes/MundoDeAlertas.php[39m:[32m156[39m
+    152▕ /** La única alerta del jugador de ese tipo (abierta o cerrada); falla si hay otro número. */
+    153▕ function alertasUnica(string $jugador, string $tipo): stdClass
+    154▕ {
+    155▕     $filas = alertasFilas($jugador, $tipo);
+  ➜ 156▕     expect($filas)->toHaveCount(1);
+    157▕ 
+    158▕     return \Tests\Ayudantes\NoNulo::exigir($filas[0] ?? null, 'la alerta');
+    159▕ }
+    160▕
+
+  [33m1   [39m[39;1mtests/Ayudantes/MundoDeAlertas.php[39;22m:[39;1m156[39;22m
+  [33m2   [39m[39;1mtests/Feature/Alertas/EntrenadoresDelEquipoTest.php[39;22m:[39;1m119[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\TarjetasPorPartido] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m28[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\TarjetasPorPartido] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m43[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\FaltasDeEntrenamiento] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m56[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\TemporadaDeFecha] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m71[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\EvaluacionesVigentesDelEquipo] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m86[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\RiesgoAcademicoDelJugador] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m100[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\RiesgoAcademicoDelJugador] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m111[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\RiesgoAcademicoDelJugador] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\JugadoresDeLaMateria] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m130[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\MembresiasVigentes] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m143[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Alertas\PuertosDeAlerta[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [Src\Compartido\Aplicacion\MembresiasVigentes] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1151[39m
+    1147▕             }
+    1148▕         }
+    1149▕ 
+    1150▕         try {
+  ➜ 1151▕             $reflector = new ReflectionClass($concrete);
+    1152▕         } catch (ReflectionException $e) {
+    1153▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1154▕         }
+    1155▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Alertas/PuertosDeAlertasTest.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Alertas\ConteosDeSancionesTest[22m [90m>[39m DA-117: los co… [41;1m Error [49;22m  
+[39;1m  Call to undefined method Src\Alertas\Dominio\AcumulacionDeSanciones::conteos()[39;22m
+
+  at [32mtests/Unit/Alertas/ConteosDeSancionesTest.php[39m:[32m23[39m
+     19▕         new InasistenciaAEntrenamiento(new DateTimeImmutable('2026-02-08 12:00'), false),
+     20▕         new InasistenciaAEntrenamiento(new DateTimeImmutable('2026-03-01 12:00'), true),
+     21▕     ];
+     22▕ 
+  ➜  23▕     $conteos = AcumulacionDeSanciones::conteos($tarjetas, 'T-2026', $inasistencias, $hoy, new ParametrosDeSanciones(3, 1, 3, 30));
+     24▕ 
+     25▕     expect($conteos)->toBe(['tarjetas_amarillas' => 3, 'tarjetas_rojas' => 1, 'faltas_en_ventana' => 2]);
+     26▕ });
+     27▕
+
+  [33m1   [39m[39;1mtests/Unit/Alertas/ConteosDeSancionesTest.php[39;22m:[39;1m23[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Alertas\ConteosDeSancionesTest[22m [90m>[39m DA-117 (P-08b)… [41;1m Error [49;22m  
+[39;1m  Call to undefined method Src\Alertas\Dominio\AcumulacionDeSanciones::conteos()[39;22m
+
+  at [32mtests/Unit/Alertas/ConteosDeSancionesTest.php[39m:[32m29[39m
+     25▕     expect($conteos)->toBe(['tarjetas_amarillas' => 3, 'tarjetas_rojas' => 1, 'faltas_en_ventana' => 2]);
+     26▕ });
+     27▕ 
+     28▕ test('DA-117 (P-08b): sin temporada los conteos no incluyen tarjetas, pero sí las faltas', function () {
+  ➜  29▕     $conteos = AcumulacionDeSanciones::conteos(
+     30▕         [new TarjetasDePartido('T-2026', 2, 1)],
+     31▕         null,
+     32▕         [new InasistenciaAEntrenamiento(new DateTimeImmutable('2026-03-10'), false)],
+     33▕         new DateTimeImmutable('2026-03-10'),
+
+  [33m1   [39m[39;1mtests/Unit/Alertas/ConteosDeSancionesTest.php[39;22m:[39;1m29[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Alertas\ConteosDeSancionesTest[22m [90m>[39m DA-117: la ven… [41;1m Error [49;22m  
+[39;1m  Call to undefined method Src\Alertas\Dominio\AcumulacionDeSanciones::conteos()[39;22m
+
+  at [32mtests/Unit/Alertas/ConteosDeSancionesTest.php[39m:[32m41[39m
+     37▕     expect($conteos)->toBe(['tarjetas_amarillas' => 0, 'tarjetas_rojas' => 0, 'faltas_en_ventana' => 1]);
+     38▕ });
+     39▕ 
+     40▕ test('DA-117: la ventana de faltas sale del parámetro de días, no del código (RNF-09)', function () {
+  ➜  41▕     $conteos = AcumulacionDeSanciones::conteos(
+     42▕         [],
+     43▕         null,
+     44▕         [new InasistenciaAEntrenamiento(new DateTimeImmutable('2026-03-04'), false), new InasistenciaAEntrenamiento(new DateTimeImmutable('2026-03-03'), false)],
+     45▕         new DateTimeImmutable('2026-03-10'),
+
+  [33m1   [39m[39;1mtests/Unit/Alertas/ConteosDeSancionesTest.php[39;22m:[39;1m41[39;22m
+
+
+  [90mTests:[39m    [31;1m48 failed[39;22m[90m,[39m[39m [39m[32;1m17 passed[39;22m[90m (97 assertions)[39m
+  [90mDuration:[39m [39m28.55s[39m
+

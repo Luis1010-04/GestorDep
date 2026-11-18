@@ -46,6 +46,7 @@ return [
     'string' => 'El campo :attribute debe ser una cadena de texto.',
     'unique' => 'El valor de :attribute ya está registrado.',
     'uuid' => 'El campo :attribute debe ser un identificador válido.',
+    'filtro_invalido' => 'El filtro :attribute no tiene un valor válido.',
 
     'custom' => [],
     'attributes' => [],

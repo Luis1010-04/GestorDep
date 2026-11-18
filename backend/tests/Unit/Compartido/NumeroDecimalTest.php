@@ -5,11 +5,6 @@ use Src\Compartido\Dominio\NumeroDecimal;
 use Src\Compartido\Dominio\NumeroDecimalInvalido;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
 
-function decimal(string $texto): NumeroDecimal
-{
-    return NumeroDecimal::desdeTexto($texto);
-}
-
 test('RN-04 (§7.12 fila 3): 7.495 redondeado a dos decimales es 7.50', function () {
     expect(decimal('7.495')->redondear(2)->comoCadena())->toBe('7.50')
         ->and(decimal('7.495')->comoCadena())->toBe('7.50');

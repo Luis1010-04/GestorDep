@@ -525,7 +525,7 @@ Decisiones que tomó el agente donde la especificación de H5 callaba (`docs/hit
 
 - **Qué faltaba:** DA-57 dejó Pest en paralelo fuera de H5 y sin plan. En H5 seis corridas de `make verificar` pasaron el aviso de 13 min (780 s), la más alta de 868 s (`f1-h5-reporte.md` §3.1).
 - **Qué se eligió:** una tarea con su plan para Pest en paralelo, antes de H6 y fuera de H5. El plan debe cubrir su efecto en la cobertura y en el candado de la base. DA-57 no cambia.
-- **Estado:** decidida por Luis (14/11/2026), opción (a) del pendiente 11. La tarea aún no existe.
+- **Estado:** decidida por Luis (14/11/2026), opción (a) del pendiente 11. La tarea se hizo en H6 como F1-H6-T00 (DA-101, 15/11/2026); reporte en `docs/reportes/f1-h6-da101.md`.
 - **Privacidad o permisos:** no.
 - **Cómo se revierte:** con una decisión nueva que elija otra opción del pendiente 11.
 

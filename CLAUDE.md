@@ -1,6 +1,6 @@
 # Proyecto: seguimiento académico y deportivo de futbolistas
 
-Monorepo: `backend/` (API Laravel 13, Fase 1), `docs/` (documentación), `scripts/humo/`, `frontend/` (fuera de la Fase 1: no se toca).
+Monorepo: `backend/` (API Laravel 13, Fase 1), `docs/` (documentación), `scripts/humo/`, `frontend/` (Fase 2; se modifica solo en la rama `frontend/blade-niceadmin` y solo con tarea aprobada por el responsable).
 
 Las reglas del agente están en `backend/.ai/guidelines/proyecto.md` y Laravel Boost las copia a `backend/CLAUDE.md`. Si `backend/CLAUDE.md` todavía no existe (Boost aún no está instalado), lee directamente `backend/.ai/guidelines/proyecto.md`.
 

@@ -5663,8 +5663,809 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/alertas:
+    get:
+      operationId: listarAlertasDelJugador
+      summary: Alertas abiertas de un jugador que el usuario puede ver
+      description: >-
+        Docente o entrenador con el jugador en su alcance (HU-22). Solo las alertas abiertas: una alerta que dejo de
+        cumplirse se cierra, se conserva en la base y ya no aparece. La alerta academica la ven el entrenador de un equipo
+        del jugador y el docente con una materia suya del periodo vigente (DA-89). Las alertas deportivas y de sanciones
+        las ven los entrenadores del equipo de la alerta, sin importar cual de ellos registro los datos con que se
+        calculo (DA-90, DA-102); el entrenador de otro equipo del jugador y el docente no las ven (RN-14, DD-08), y no
+        hay error: la lista simplemente no las incluye. Un jugador fuera del alcance, dado de baja (RN-23), inexistente
+        o con un id que no es un UUID v7 responde el mismo 404.
+      tags: [Alertas]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Las alertas abiertas visibles, de la mas antigua a la mas reciente; vacia si no hay.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Alerta'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /estatus-de-jugadores:
+    get:
+      operationId: listarEstatusDeJugadores
+      summary: Listado de estatus de los jugadores del usuario
+      description: >-
+        Docente o entrenador (HU-23). Solo jugadores en su alcance y nunca uno dado de baja (RN-23), ordenados por
+        apellidos, nombres e identificador. Una forma por rol (DA-105): todos reciben jugador, estado_oficial (el mismo
+        objeto de GET /jugadores/{jugador}/estado-disponibilidad, con lesion_id solo para el registrante), aviso_pendiente y
+        las alertas que pueden ver; el entrenador recibe ademas resumen_academico (RN-13), y el docente, materias con el
+        detalle de las suyas del periodo vigente. Un campo que el usuario no puede ver se omite. aviso_pendiente es
+        verdadero para los entrenadores del jugador y para quien creo el aviso (RN-16, DA-108). Los filtros se combinan con
+        AND; filtro[equipo_id] y filtro[materia_id] solo aciertan con equipos que el usuario entrena y materias que da, y
+        un id valido pero ajeno o inexistente da una lista vacia, no un error (P-05).
+      tags: [Alertas]
+      parameters:
+        - name: filtro[equipo_id]
+          in: query
+          schema: {type: string, format: uuid}
+        - name: filtro[materia_id]
+          in: query
+          schema: {type: string, format: uuid}
+        - name: filtro[tipo_alerta]
+          in: query
+          schema: {type: string, enum: [riesgo_baja_academica, riesgo_baja_deportiva, acumulacion_sanciones_deportivas]}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de filas de estatus.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FilaDeEstatus'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: >-
+            Paginacion o filtro invalidos (codigo validacion_fallida). Un filtro con un valor que no corresponde, como un
+            tipo de alerta desconocido o un id que no es un UUID, trae filtro_invalido en errores[].codigo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/graficos:
+    get:
+      operationId: verGraficosDelJugador
+      summary: Series de historial de un jugador para graficar
+      description: >-
+        Docente o entrenador con el jugador en su alcance (HU-25, DA-97, DA-105). Devuelve series ya calculadas; el dibujo es
+        del frontend. El entrenador que entrena al jugador recibe rendimiento_partidos, asistencia_entrenamientos, mediciones
+        y resumen_academico, solo con lo que el registro (RN-14). El docente recibe calificaciones y asistencia_clases de sus
+        materias, sin mediciones (RN-13). Un usuario con los dos roles recibe lo de cada uno; un campo que no puede ver se
+        omite. Cada serie lleva actualizado_en y posiblemente_desactualizado (RNF-04), que se calcula al leer con el
+        parametro desactualizacion. Un jugador fuera del alcance, dado de baja (RN-23), inexistente o con un id que no es un
+        UUID v7 responde el mismo 404.
+      tags: [Consultas]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Las series que el usuario puede ver.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/GraficosDelJugador'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Jugador no encontrado para el usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/graficos:
+    get:
+      operationId: verGraficosDelEquipo
+      summary: Series de historial de un equipo, y de un jugador contra el promedio del equipo
+      description: >-
+        Solo entrenadores del equipo (HU-25 c2, DA-97). equipo trae el promedio por partido de lo que registro el usuario
+        (RN-14) y el porcentaje de asistencia del equipo por mes. Con filtro[jugador_id] llega tambien jugador, con las mismas
+        dos series para ese jugador en ese equipo. Un equipo que el usuario no entrena, o un jugador que no es del equipo, no
+        esta en su alcance, esta en baja o no existe, responde el mismo 404.
+      tags: [Consultas]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: filtro[jugador_id]
+          in: query
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: Las series del equipo y, si se pidio, las del jugador.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/GraficosDelEquipo'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no lo entrena, o el jugador pedido no es del equipo (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: filtro[jugador_id] no es un UUID (codigo validacion_fallida, con filtro_invalido en errores[].codigo).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/vista-para-convocar:
+    get:
+      operationId: verVistaParaConvocar
+      summary: Vista para convocar de un jugador
+      description: >-
+        Solo entrenadores con el jugador en su alcance (HU-24, DA-94). Todo lo que registra un entrenador es de lo que registro
+        el usuario (RN-14, DD-17): la evaluacion de rendimiento, el estado fisico, el progreso y asistencia.de_mis_capturas;
+        la disponibilidad y la situacion academica son compartidas. El equipo del rendimiento es el de filtro[equipo_id]; sin
+        el, el de la evaluacion mas reciente del usuario para el jugador (DA-119). Cada dimension lleva actualizado_en y
+        posiblemente_desactualizado (RNF-04, DA-98). Un jugador fuera del alcance, en baja o inexistente, y un equipo que el
+        usuario no entrena o donde el jugador no esta, responden el mismo 404 (RNF-01, RN-23).
+      tags: [Consultas]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: filtro[equipo_id]
+          in: query
+          schema: {type: string, format: uuid}
+      responses:
+        '200':
+          description: La vista del jugador.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/VistaParaConvocar'
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe, esta en baja o fuera del alcance, o el equipo pedido no es del usuario ni del jugador (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: filtro[equipo_id] no es un UUID (codigo validacion_fallida, con filtro_invalido en errores[].codigo).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /equipos/{equipo}/jugadores/para-convocar:
+    get:
+      operationId: listarJugadoresParaConvocar
+      summary: Jugadores de un equipo, con su vista para convocar, ordenados por desempeno
+      description: >-
+        Solo entrenadores del equipo (HU-24, RN-18, DD-12, DA-95). Cada elemento es la misma vista de
+        GET /jugadores/{jugador}/vista-para-convocar, con el rendimiento de ese equipo. Ordenada de mayor a menor por el
+        promedio de la ultima evaluacion del usuario (DA-106); los jugadores sin promedio van al final y los empates
+        conservan el orden de entrada: apellidos, nombres e identificador (DA-118). El orden se calcula sobre todos los
+        jugadores y despues se pagina. Un equipo que el usuario no entrena o que no existe responde 404.
+      tags: [Consultas]
+      parameters:
+        - name: equipo
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de vistas, ordenadas por desempeno.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VistaParaConvocar'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina:
+                        type: integer
+                      por_pagina:
+                        type: integer
+                      total:
+                        type: integer
+                      total_paginas:
+                        type: integer
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El equipo no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Un parametro de paginacion invalido (codigo validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /partidos/{partido}/convocatoria/vista:
+    get:
+      operationId: verVistaDeLaConvocatoria
+      summary: Vista para convocar de cada convocado de un partido
+      description: >-
+        Solo entrenadores del equipo del partido (HU-12 c2, DA-96). Cada elemento es la misma vista de
+        GET /jugadores/{jugador}/vista-para-convocar, con el rendimiento y el progreso del equipo del partido, y sin campos de
+        la convocatoria: GET /partidos/{partido}/convocatoria no cambia. Los convocados van en orden de convocatoria y la
+        lista pagina como esa ruta. Tiene la misma visibilidad que ella: un convocado dado de baja, o sin membresia vigente
+        en ningun equipo del usuario, se omite de datos y de meta.total, sin 404. Un partido inexistente, eliminado o de un
+        equipo que el usuario no entrena responde 404.
+      tags: [Consultas]
+      parameters:
+        - name: partido
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de vistas de los convocados.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VistaParaConvocar'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina:
+                        type: integer
+                      por_pagina:
+                        type: integer
+                      total:
+                        type: integer
+                      total_paginas:
+                        type: integer
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El partido no existe, esta eliminado o es de un equipo que el usuario no entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Un parametro de paginacion invalido (codigo validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    VistaParaConvocar:
+      type: object
+      additionalProperties: false
+      required: [jugador, disponibilidad, rendimiento_reciente, situacion_academica, asistencia, estado_fisico, progreso]
+      description: >-
+        La vista para convocar de un jugador (HU-24, DA-94, DA-111). Cada dimension lleva actualizado_en, nulo si no hay
+        dato, y posiblemente_desactualizado, verdadero si la ultima captura es anterior a hoy menos los dias del parametro
+        desactualizacion (RNF-04, DA-98); sin captura es falso.
+      properties:
+        jugador:
+          type: object
+          additionalProperties: false
+          required: [id, nombres, apellidos, matricula]
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombres:
+              type: string
+            apellidos:
+              type: string
+            matricula:
+              type: string
+        disponibilidad:
+          type: object
+          additionalProperties: false
+          required: [estado, fecha_estimada_regreso, aviso_pendiente, actualizado_en, posiblemente_desactualizado]
+          description: El estado oficial vigente, sin el detalle de la lesion (RN-15); apto, sin fecha y sin actualizado_en si no hay ninguno guardado.
+          properties:
+            estado:
+              type: string
+              enum: [apto, con_molestia, lesionado]
+            fecha_estimada_regreso:
+              type: string
+              format: date
+              nullable: true
+            aviso_pendiente:
+              type: boolean
+            actualizado_en:
+              type: string
+              format: date-time
+              nullable: true
+            posiblemente_desactualizado:
+              type: boolean
+        rendimiento_reciente:
+          type: object
+          additionalProperties: false
+          required: [promedio, resultado, actualizado_en, posiblemente_desactualizado]
+          description: La ultima evaluacion del usuario para el jugador en el equipo (RN-08). Sin evaluacion, promedio y actualizado_en son nulos y resultado es datos_insuficientes.
+          properties:
+            promedio:
+              type: string
+              description: Dos decimales.
+              nullable: true
+              example: '7.40'
+            resultado:
+              type: string
+              enum: [pasa, no_pasa, datos_insuficientes]
+            actualizado_en:
+              type: string
+              format: date-time
+              nullable: true
+            posiblemente_desactualizado:
+              type: boolean
+        situacion_academica:
+          type: object
+          additionalProperties: false
+          required: [periodo, promedio, materias_reprobadas, materias_sin_calificar, dato_incompleto, porcentaje_asistencia, nivel_riesgo, calculado_en, actualizado_en, posiblemente_desactualizado]
+          description: El resumen academico simplificado del periodo vigente, sin materias (RN-13); actualizado_en es igual a calculado_en.
+          properties:
+            periodo:
+              type: object
+              additionalProperties: false
+              required: [id, nombre]
+              nullable: true
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                nombre:
+                  type: string
+            promedio:
+              type: string
+              nullable: true
+            materias_reprobadas:
+              type: integer
+            materias_sin_calificar:
+              type: integer
+            dato_incompleto:
+              type: boolean
+            porcentaje_asistencia:
+              type: string
+              nullable: true
+            nivel_riesgo:
+              type: string
+              enum: [sin_riesgo, en_observacion, en_riesgo]
+              nullable: true
+            calculado_en:
+              type: string
+              format: date-time
+              nullable: true
+            actualizado_en:
+              type: string
+              format: date-time
+              nullable: true
+            posiblemente_desactualizado:
+              type: boolean
+        asistencia:
+          type: object
+          additionalProperties: false
+          required: [equipo, de_mis_capturas]
+          description: >-
+            Asistencia a entrenamientos realizados (DA-111). equipo es la de los equipos del usuario; de_mis_capturas, la de
+            los registros que capturo el usuario.
+          properties:
+            equipo:
+              $ref: '#/components/schemas/PorcentajeDeAsistenciaDeLaVista'
+            de_mis_capturas:
+              $ref: '#/components/schemas/PorcentajeDeAsistenciaDeLaVista'
+        estado_fisico:
+          type: object
+          additionalProperties: false
+          required: [ultima_medicion, pruebas, actualizado_en, posiblemente_desactualizado]
+          description: La ultima medicion y la ultima prueba de cada tipo que registro el usuario; actualizado_en es el mas reciente de los dos.
+          properties:
+            ultima_medicion:
+              nullable: true
+              allOf:
+                - $ref: '#/components/schemas/Medicion'
+            pruebas:
+              type: array
+              items:
+                $ref: '#/components/schemas/PruebaFisica'
+            actualizado_en:
+              type: string
+              format: date-time
+              nullable: true
+            posiblemente_desactualizado:
+              type: boolean
+        progreso:
+          type: object
+          additionalProperties: false
+          required: [primero, ultimo, actualizado_en, posiblemente_desactualizado]
+          description: El primer y el ultimo punto de la serie de calificaciones generales de partido que registro el usuario.
+          properties:
+            primero:
+              $ref: '#/components/schemas/PuntoDeProgreso'
+            ultimo:
+              $ref: '#/components/schemas/PuntoDeProgreso'
+            actualizado_en:
+              type: string
+              format: date-time
+              nullable: true
+            posiblemente_desactualizado:
+              type: boolean
+    PorcentajeDeAsistenciaDeLaVista:
+      type: object
+      additionalProperties: false
+      required: [porcentaje, actualizado_en, posiblemente_desactualizado]
+      properties:
+        porcentaje:
+          type: string
+          description: Dos decimales; la falta justificada cuenta en el denominador (DD-51).
+          nullable: true
+          example: '75.00'
+        actualizado_en:
+          type: string
+          format: date-time
+          nullable: true
+        posiblemente_desactualizado:
+          type: boolean
+    PuntoDeProgreso:
+      type: object
+      additionalProperties: false
+      required: [fecha, valor]
+      nullable: true
+      properties:
+        fecha:
+          type: string
+          format: date
+        valor:
+          type: integer
+          description: Calificacion general del partido.
+    PuntoDeSerie:
+      type: object
+      additionalProperties: false
+      required: [valor]
+      description: >-
+        Un punto de una serie. Las series por fecha traen fecha; las series por periodo traen periodo, que es un mes AAAA-MM o,
+        en el resumen academico, el periodo escolar con su id y su nombre. El valor es una cadena con los decimales del dato
+        (docs/convenciones-api.md seccion 1) o un entero donde el dato lo es.
+      properties:
+        fecha:
+          type: string
+          format: date
+        periodo:
+          oneOf:
+            - type: string
+              pattern: '^\d{4}-\d{2}$'
+            - type: object
+              additionalProperties: false
+              required: [id, nombre]
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                nombre:
+                  type: string
+        valor:
+          oneOf:
+            - type: string
+            - type: integer
+    SerieDeGrafico:
+      type: object
+      additionalProperties: false
+      required: [serie, actualizado_en, posiblemente_desactualizado]
+      description: >-
+        Los puntos de una serie, del mas antiguo al mas reciente. Sin datos, serie va vacia y actualizado_en es nulo.
+        posiblemente_desactualizado es verdadero si la ultima captura es anterior a hoy menos los dias del parametro
+        desactualizacion (RNF-04, DD-15); sin captura es falso.
+      properties:
+        serie:
+          type: array
+          items:
+            $ref: '#/components/schemas/PuntoDeSerie'
+        actualizado_en:
+          type: string
+          format: date-time
+          nullable: true
+        posiblemente_desactualizado:
+          type: boolean
+    SerieDeMateria:
+      type: object
+      additionalProperties: false
+      required: [materia_id, asignatura, serie]
+      properties:
+        materia_id:
+          type: string
+          format: uuid
+        asignatura:
+          type: object
+          additionalProperties: false
+          required: [clave, nombre]
+          properties:
+            clave:
+              type: string
+            nombre:
+              type: string
+        serie:
+          $ref: '#/components/schemas/SerieDeGrafico'
+    GraficosDelJugador:
+      type: object
+      additionalProperties: false
+      description: >-
+        Las series que el usuario puede ver (DA-105). rendimiento_partidos, asistencia_entrenamientos, mediciones y
+        resumen_academico solo para el entrenador del jugador; calificaciones y asistencia_clases solo para el docente.
+      properties:
+        rendimiento_partidos:
+          $ref: '#/components/schemas/SerieDeGrafico'
+        asistencia_entrenamientos:
+          $ref: '#/components/schemas/SerieDeGrafico'
+        mediciones:
+          type: object
+          additionalProperties: false
+          required: [peso_kg, estatura_cm, imc]
+          properties:
+            peso_kg:
+              $ref: '#/components/schemas/SerieDeGrafico'
+            estatura_cm:
+              $ref: '#/components/schemas/SerieDeGrafico'
+            imc:
+              $ref: '#/components/schemas/SerieDeGrafico'
+        resumen_academico:
+          $ref: '#/components/schemas/SerieDeGrafico'
+        calificaciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/SerieDeMateria'
+        asistencia_clases:
+          type: array
+          items:
+            $ref: '#/components/schemas/SerieDeMateria'
+    GraficosDelEquipo:
+      type: object
+      additionalProperties: false
+      required: [equipo]
+      properties:
+        equipo:
+          type: object
+          additionalProperties: false
+          required: [rendimiento_partidos, asistencia_entrenamientos]
+          properties:
+            rendimiento_partidos:
+              $ref: '#/components/schemas/SerieDeGrafico'
+            asistencia_entrenamientos:
+              $ref: '#/components/schemas/SerieDeGrafico'
+        jugador:
+          type: object
+          additionalProperties: false
+          required: [jugador_id, rendimiento_partidos, asistencia_entrenamientos]
+          description: Solo con filtro[jugador_id].
+          properties:
+            jugador_id:
+              type: string
+              format: uuid
+            rendimiento_partidos:
+              $ref: '#/components/schemas/SerieDeGrafico'
+            asistencia_entrenamientos:
+              $ref: '#/components/schemas/SerieDeGrafico'
+    Alerta:
+      type: object
+      additionalProperties: false
+      required: [id, tipo, jugador_id, equipo_id, causa, activada_en]
+      description: Una alerta abierta (HU-22). No lleva cerrada_en, porque solo se devuelven las abiertas.
+      properties:
+        id:
+          type: string
+          format: uuid
+        tipo:
+          type: string
+          enum: [riesgo_baja_academica, riesgo_baja_deportiva, acumulacion_sanciones_deportivas]
+        jugador_id:
+          type: string
+          format: uuid
+        equipo_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Nulo en la alerta academica.
+        causa:
+          type: object
+          description: >-
+            El dato que activa la alerta, nunca un texto libre (DA-105). riesgo_baja_academica: nivel_riesgo, promedio y
+            materias_reprobadas. riesgo_baja_deportiva: resultado, promedio y acumulacion_sanciones.
+            acumulacion_sanciones_deportivas: tarjetas_amarillas, tarjetas_rojas y faltas_en_ventana.
+        activada_en:
+          type: string
+          format: date-time
+    FilaDeEstatus:
+      type: object
+      additionalProperties: false
+      required: [jugador, estado_oficial, aviso_pendiente, alertas]
+      description: >-
+        Una fila del listado de estatus (HU-23); la forma depende del rol (DA-105). resumen_academico solo lo recibe el
+        entrenador (RN-13): la situacion academica sin el detalle de materias. materias solo la recibe el docente: el
+        detalle de sus materias del periodo vigente (DD-48), vacia sin periodo vigente.
+      properties:
+        jugador:
+          type: object
+          additionalProperties: false
+          required: [id, nombres, apellidos, matricula]
+          properties:
+            id:
+              type: string
+              format: uuid
+            nombres:
+              type: string
+            apellidos:
+              type: string
+            matricula:
+              type: string
+        estado_oficial:
+          $ref: '#/components/schemas/EstadoDeDisponibilidad'
+        aviso_pendiente:
+          type: boolean
+        alertas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alerta'
+        resumen_academico:
+          $ref: '#/components/schemas/SituacionAcademica'
+        materias:
+          $ref: '#/components/schemas/SituacionAcademica/properties/materias'
     EstadoDeDisponibilidad:
       type: object
       additionalProperties: false

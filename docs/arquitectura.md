@@ -1,13 +1,13 @@
 # Arquitectura de Software y Modelo de Datos del Sistema de Seguimiento Académico y Deportivo (MVP)
 
 **Proyecto:** Sistema web de gestión académica y deportiva de futbolistas
-**Versión:** 1.5.2 (ver sección 14)
-**Fecha:** 31 de octubre de 2026
-**Entrada:** Documento de Requisitos v1.1 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
+**Versión:** 1.5.7 (ver sección 14)
+**Fecha:** 16 de noviembre de 2026
+**Entrada:** Documento de Requisitos v1.2.4 (HU-01 a HU-30, RN-01 a RN-23, RNF-01 a RNF-11)
 
 ## 1. Propósito y alcance
 
-Este documento define la arquitectura lógica (DDD), el modelo de datos en PostgreSQL y la estrategia de migraciones en Laravel para el MVP. Cada decisión se vincula con los requisitos v1.1; los valores marcados [Propuesta] o [Decisión por defecto] siguen pendientes de validar por la institución. El documento es la fuente para construir las migraciones y la capa de dominio; cualquier cambio posterior debe reflejarse aquí antes de programarse. Durante una fase, una decisión nueva se registra como ADR en `docs/decisiones/` y se consolida en este documento al cerrar la fase.
+Este documento define la arquitectura lógica (DDD), el modelo de datos en PostgreSQL y la estrategia de migraciones en Laravel para el MVP. Cada decisión se vincula con los requisitos v1.2.4; los valores marcados [Propuesta] o [Decisión por defecto] siguen pendientes de validar por la institución. El documento es la fuente para construir las migraciones y la capa de dominio; cualquier cambio posterior debe reflejarse aquí antes de programarse. Durante una fase, una decisión nueva se registra como ADR en `docs/decisiones/` y se consolida en este documento al cerrar la fase.
 
 ## 2. Stack base
 
@@ -31,7 +31,7 @@ Este documento define la arquitectura lógica (DDD), el modelo de datos en Postg
 | ADR-04 | **Historial propio por entidad**: tabla `{entidad}_historial`, solo de inserción | Tabla de auditoría central; extensiones de auditoría externas | Cumple RN-17 con claves foráneas reales y consultas simples por entidad. Se guardan valores anteriores y nuevos en `jsonb` para no duplicar columnas. |
 | ADR-05 | **Borrado lógico** con `eliminado_en` y `eliminado_por`; unicidad mediante índices parciales (`WHERE eliminado_en IS NULL`) | Borrado físico | RN-17. Los índices parciales permiten reutilizar, por ejemplo, una matrícula solo si el registro anterior fue dado de baja lógicamente. |
 | ADR-06 | **Visibilidad por asignación** aplicada en la capa de aplicación (políticas y filtros obligatorios de consulta) | Seguridad a nivel de fila en PostgreSQL | Más simple de probar y de evolucionar. Se reserva la seguridad a nivel de fila para una fase con más perfiles. |
-| ADR-07 | **Alertas persistidas** y recalculadas al ocurrir eventos de dominio | Calcularlas en cada consulta | Permite listado rápido, filtro por tipo e historial de cuándo se activó y cerró cada alerta (HU-22). |
+| ADR-07 | **Alertas persistidas** y recalculadas al ocurrir eventos de dominio | Calcularlas en cada consulta | Permite listado rápido, filtro por tipo e historial de cuándo se activó y cerró cada alerta (HU-22). **Apartamiento por DA-88 (H6):** solo la alerta académica se recalcula por evento, con los eventos de Académico; las alertas de riesgo de baja deportiva y de acumulación de sanciones se recalculan con el comando diario `alertas:recalcular`, porque H3 a H5 no publican eventos de esos datos y crearlos sin consumidor sería código muerto. Se revierte si el responsable pide escuchas deportivas. |
 | ADR-08 | **Estadísticas por posición mediante catálogo de métricas** (`metricas` + `valores_metrica`) | Una columna por estadística; `jsonb` libre | Cada dato del backlog del PDF se agrega como fila de catálogo y no como migración. Se pueden hacer agregaciones SQL y validar tipo y rango. Costo: una unión adicional en lecturas. |
 | ADR-09 | **Parámetros y umbrales en tablas**, con valores de fábrica sembrados | Constantes en código | RNF-09: el futuro perfil de administración los editará sin tocar el código. |
 | ADR-10 | **Cadenas con `CHECK`** en lugar de tipos `ENUM` nativos de PostgreSQL; `enum` respaldado en PHP | `ENUM` nativo | Agregar un valor no exige alterar un tipo y es más sencillo de migrar. |
@@ -72,17 +72,28 @@ Este documento define la arquitectura lógica (DDD), el modelo de datos en Postg
 
 ### 4.2 Eventos de dominio
 
-`CalificacionRegistrada`, `AsistenciaDeClaseRegistrada`, `CriterioDeMateriaModificado`, `AsistenciaDeEntrenamientoRegistrada`, `PartidoJugado`, `RendimientoRegistrado`, `UmbralModificado`, `MedicionRegistrada`, `AvisoDeLesionCreado`, `AvisoDeLesionDescartado`, `EstadoDeDisponibilidadConfirmado`, `JugadorAsignadoAEquipo`, `JugadorDadoDeBaja`.
+Los eventos que existen, en `src/Compartido/Dominio/Eventos/`, llevan solo identificadores y valores primitivos. Los publica Académico, y solo Académico:
 
-Cada evento dispara el recalculo de riesgos y alertas del jugador afectado. Los escuchas son idempotentes.
+- `CalificacionRegistrada` (al registrar o corregir una calificación), `AsistenciaDeClaseRegistrada` (al registrar o corregir una asistencia a clase), `CriterioDeMateriaModificado` (al definir el criterio propio de una materia) y `JugadorInscrito` (al inscribir a un jugador en una materia; DD-46, DA-88).
+- Los cuatro recalculan el resumen académico del jugador afectado (DD-46) y, desde H6, la alerta académica (DA-88). Los escuchas son idempotentes.
+
+Eventos del catálogo original que **no existen**, porque ninguna tarea los pidió y crearlos sin consumidor sería código muerto:
+
+- `AsistenciaDeEntrenamientoRegistrada`, `PartidoJugado`, `RendimientoRegistrado`, `UmbralModificado` (H3 y H4), y `MedicionRegistrada`, `AvisoDeLesionCreado`, `AvisoDeLesionDescartado` y `EstadoDeDisponibilidadConfirmado` (H5 no emite eventos; DA-07 de H5).
+- `JugadorAsignadoAEquipo` y `JugadorDadoDeBaja`: H1 no los emite (DD-32).
+
+Por eso solo la alerta académica se recalcula por evento. Las alertas de riesgo de baja deportiva y de acumulación de sanciones se recalculan con el comando diario `alertas:recalcular` (DA-88, §11), que aún no existe: estado futuro, T03 (DA-113).
 
 ### 4.3 Reglas de relación entre contextos
 - **Plantel** es contexto proveedor: los demás lo referencian por `jugador_id`, `equipo_id` y `usuario_id`.
 - Se permiten claves foráneas físicas hacia tablas de Plantel e Identidad para garantizar integridad; no se comparten objetos ni modelos entre contextos.
-- **Alertas** es consumidor: escucha eventos de Plantel, Académico, Competencia, Rendimiento y Salud.
+- **Alertas** es consumidor: escucha los eventos de Académico (DA-88) y lee los datos de los demás contextos solo por puertos de `src/Compartido/Aplicacion/`, sin leer sus tablas (DA-112).
 - Una consulta que cruza contextos vive en el contexto que la consume, nunca dentro de un agregado. El listado, la vista consolidada, los gráficos, los pendientes de captura y el historial viven en **Consultas**; la situación académica, en **Académico** (DA-17 de H2). La consulta lee el dato de otro contexto a través de `AlcanceDeJugadores` o de un puerto de Compartido, nunca importando clases de dominio de otro contexto. Consultas puede leer las tablas de otros contextos con SQL de solo lectura.
 - `AlcanceDeJugadores` es una interfaz de Compartido; su implementación SQL vive en la Infraestructura de Consultas y lee `jugador_equipo`, `entrenador_equipo` e `inscripciones`.
 - Rendimiento no lee las tablas de Plantel ni de Competencia: usa dos puertos de `src/Compartido/Aplicacion/`. `PosicionEnEquipo` da la posición de un jugador en un equipo según su membresía vigente, y su adaptador vive en la Infraestructura de Plantel. `InicioDePartidos` da la fecha de inicio de los partidos para ordenar las últimas N calificaciones (RN-08), y su adaptador vive en la Infraestructura de Competencia.
+- Consultas calcula los gráficos de H6 con dos puertos de `src/Compartido/Aplicacion/` y no repite las fórmulas de asistencia (DA-109): uno da el porcentaje de asistencia a clases por mes de un jugador y de una materia, con su adaptador en la Infraestructura de Académico, y otro da el porcentaje de asistencia a entrenamientos por mes de un jugador y de un equipo, con su adaptador en la Infraestructura de Competencia. Cada adaptador usa la regla de su propio Dominio (`ConteoDeAsistencia` y `ConteoDeAsistenciaAEntrenamientos`). Alertas lee el nivel de riesgo académico de un jugador con un puerto de la misma forma, con su adaptador en Académico (P-09; su forma, en DA-115, más abajo); el puerto está decidido y lo construye T03.
+- Alertas no lee tablas de otros contextos (DA-112). Usa cuatro puertos de `src/Compartido/Aplicacion/`, cada uno con su adaptador en la Infraestructura del contexto dueño del dato: `TarjetasPorPartido` (adaptador en Rendimiento: las tarjetas por partido, jugador, tipo de tarjeta y entrenador; DA-103), `FaltasDeEntrenamiento` (Competencia: las faltas de los entrenamientos `realizado`, con su fecha; DA-91), `TemporadaDeFecha` (Competencia: qué temporada contiene una fecha; DA-91 y P-08b) y `EvaluacionesVigentesDelEquipo` (Rendimiento: la última evaluación de cada entrenador del equipo; DA-92). Con el último, el Dominio de Alertas no importa `CalculoDeDesempeno`: recibe el resultado de cada entrenador como un valor propio. Además, por DA-115, Alertas usa tres más: `MembresiasVigentes` (adaptador en Plantel: las parejas jugador y equipo con membresía vigente de jugadores sin baja, sin usuario de sesión, para el comando diario; excepción de §10, DA-121), `JugadoresDeLaMateria` (adaptador en Académico: los jugadores con inscripción vigente en una materia, para el escucha de `CriterioDeMateriaModificado`) y el de P-09, `RiesgoAcademicoDelJugador` (adaptador en Académico), que devuelve el nivel de riesgo, el promedio y las materias reprobadas del periodo vigente, calculados sin leer `resumenes_academicos`. La temporada de cada partido sale de `InicioDePartidos` y `TemporadaDeFecha`, sin puerto nuevo (DA-117). Estos puertos están decididos pero todavía no existen en el código: los construye T03.
+- Competencia lee el estado oficial de disponibilidad con el puerto `EstadoDeDisponibilidadOficial` de `src/Compartido/Aplicacion/` (DA-08 de H5), cuyo adaptador vive en la Infraestructura de Salud; solo expone el estado, nunca el detalle de la lesión (RN-15).
 
 ## 5. Estructura de carpetas
 
@@ -157,7 +168,7 @@ Los modelos Eloquent viven en `src/{Contexto}/Infraestructura/`, nunca en `app/M
 - **Unicidad con borrado lógico.** Toda restricción de unicidad sobre una tabla con `eliminado_en` es un índice parcial `WHERE eliminado_en IS NULL` (ADR-05), incluidos los catálogos. Cuando una tabla dice "UQ parcial" sin condición, la condición es esa.
 - **Nombres de catálogo sin distinguir mayúsculas.** Las columnas `nombre` de los catálogos (categorías, periodos escolares, lugares, temporadas, torneos, rivales) y `clave` de asignaturas son `citext`, para que "Sub-17" y "sub-17" choquen con 409 (HU-28).
 - **Decimales exactos.** Promedios, umbrales, IMC y porcentajes nunca se calculan con `float`. La base usa `numeric`; el dominio usa un objeto de valor decimal de Compartido (con `bcmath`) y redondea al medio hacia arriba (`HALF_UP`) a dos decimales cuando una regla lo pide (RN-04).
-- `resumenes_academicos` es **derivada**: se puede reconstruir desde los datos capturados. `evaluaciones_rendimiento` y `alertas` son registros **persistentes de solo inserción** (una evaluación nueva no reemplaza a la anterior y una alerta cerrada se conserva), porque lo que el entrenador vio al decidir y las fechas reales de activación y cierre no se reconstruyen.
+- `resumenes_academicos` es **derivada**: se puede reconstruir desde los datos capturados. `evaluaciones_rendimiento` y `alertas` son registros **persistentes de solo inserción** (una evaluación nueva no reemplaza a la anterior y una alerta cerrada se conserva), porque lo que el entrenador vio al decidir y las fechas reales de activación y cierre no se reconstruyen. La única excepción es `cerrada_en` de una alerta, que se asigna una sola vez (sección 7.9).
 
 ### 7.2 Identidad
 
@@ -211,6 +222,8 @@ Los usuarios se crean con el comando de consola `usuarios:crear` (RN-19) mientra
 
 El empalme de entrenamientos se **advierte** (HU-10) y no se impide, por lo que no se usa una restricción de exclusión. La categoría de un entrenamiento o partido se deduce de `equipos.categoria_id`. La visibilidad de `asistencias_entrenamiento` y `convocatorias` se resuelve por el equipo del entrenamiento o del partido (sección 10), no por `registrado_por`.
 
+**Temporadas sin solape.** Dos temporadas no se cruzan: se cruzan si comparten un día, con los extremos incluidos. El alta de una temporada que se cruza con otra no eliminada responde 409 `temporada_solapada`, bajo un candado consultivo; lo hace la aplicación y no una restricción de la base de datos (DD-07; DA-05 y DA-06 de H3). Un partido pertenece a la temporada que contiene su fecha.
+
 ### 7.6 Rendimiento
 
 | Tabla | Columnas | Restricciones e índices |
@@ -227,7 +240,7 @@ El mínimo de calificaciones para evaluar es `ventana_partidos` (RN-08): con men
 
 Notas de H4:
 
-- **Unicidad de `rendimientos_partido`:** es por registrante. Dos entrenadores del mismo equipo pueden registrar, cada uno, su propia calificación de un mismo jugador en un mismo partido, y cada uno ve y promedia solo la suya. La UQ por (`partido_id`, `jugador_id`, `registrado_por`) sustituye a la anterior por (`partido_id`, `jugador_id`) por DD-17 y DA-36 (`docs/hitos/f1-h4.md` v1.0.8).
+- **Unicidad de `rendimientos_partido`:** es por registrante. Dos entrenadores del mismo equipo pueden registrar, cada uno, su propia calificación de un mismo jugador en un mismo partido, y cada uno ve y promedia solo la suya. Las alertas son la excepción: se calculan con los registros de todos los entrenadores del equipo (DA-102), y las tarjetas cuentan, por partido, jugador y tipo, el mayor número registrado por un solo entrenador (DA-103). La UQ por (`partido_id`, `jugador_id`, `registrado_por`) sustituye a la anterior por (`partido_id`, `jugador_id`) por DD-17 y DA-36 (`docs/hitos/f1-h4.md` v1.0.8).
 - **`entrenador_id`:** está en `umbrales_rendimiento` y en `evaluaciones_rendimiento` porque RN-08 y HU-16 son por entrenador (DA-04 de H4).
 - **Las dos UQ de `plantillas_evaluacion`:** con ellas, un nombre repetido no revela las plantillas de otro entrenador (`docs/hitos/f1-h4.md` v1.0.4). La aplicación rechaza además una plantilla propia con el nombre de una de fábrica de la misma posición.
 - **Lo que guarda cada evaluación:** copia la calificación mínima y la ventana con que se calculó, para que lo que vio el entrenador se conserve aunque cambien el umbral o la plantilla (`docs/hitos/f1-h4.md` v1.0.2).
@@ -236,11 +249,12 @@ Notas de H4:
 
 | Tabla | Columnas | Restricciones e índices |
 |---|---|---|
-| `mediciones_corporales` (H) | jugador_id, equipo_id, registrado_por, periodo (`char(7)`, `AAAA-MM`), peso_kg `numeric(5,2)`, estatura_cm `numeric(5,1)`, imc (columna generada) | `imc = peso_kg / power(estatura_cm / 100, 2)`; UQ parcial (`jugador_id`, `registrado_por`, `periodo`); `CHECK` de valores positivos |
-| `tipos_prueba` | codigo (velocidad/resistencia/tiempo_prueba), nombre, unidad, mejor_resultado (mayor/menor) | UQ `codigo` |
-| `pruebas_fisicas` (H) | jugador_id, equipo_id, registrado_por, tipo_prueba_id, fecha, periodo (`char(7)`, `AAAA-MM`), resultado `numeric(8,2)` | IX (`jugador_id`, `tipo_prueba_id`, `fecha`) |
+| `mediciones_corporales` (H) | jugador_id, equipo_id, registrado_por, fecha (`date`; DA-03 de H5), periodo (`char(7)`, `AAAA-MM`), peso_kg `numeric(5,2)`, estatura_cm `numeric(5,1)`, imc (columna generada) | `imc = round(peso_kg / power(estatura_cm / 100, 2), 2)`, redondeado al medio hacia arriba (`HALF_UP`) a dos decimales (DA-05 de H5); UQ parcial (`jugador_id`, `registrado_por`, `periodo`); `CHECK` de valores positivos |
+| `tipos_prueba` | codigo (velocidad/resistencia/tiempo_prueba), nombre, unidad, mejor_resultado (mayor/menor), minimo `numeric(8,2)` y maximo `numeric(8,2)` **[Propuesta]** | UQ `codigo`; `CHECK (minimo > 0 AND maximo > minimo)` |
+| `pruebas_fisicas` (H) | jugador_id, equipo_id, registrado_por, tipo_prueba_id, fecha, periodo (`char(7)`, `AAAA-MM`), resultado `numeric(8,2)` | UQ parcial (`jugador_id`, `tipo_prueba_id`, `registrado_por`, `periodo`) (DA-04 de H5); `CHECK (resultado > 0)`; `CHECK` de que `periodo` es el mes de `fecha`; IX (`jugador_id`, `tipo_prueba_id`, `fecha`) |
+| `rangos_mediciones_corporales` | codigo (peso_kg/estatura_cm), nombre, unidad, minimo `numeric(6,2)` y maximo `numeric(6,2)` **[Propuesta]** | UQ `codigo`; `CHECK (minimo > 0 AND maximo > minimo)` |
 
-Peso y estatura se guardan en una sola fila por periodo; el IMC nunca se captura, se calcula.
+Peso y estatura se guardan en una sola fila por periodo; el IMC nunca se captura, se calcula. Los rangos de peso y estatura y los de cada tipo de prueba son **[Propuesta]** hasta H7 y se validan con la institución (AB-28; DA-85 de H5). Ni `tipos_prueba` ni `rangos_mediciones_corporales` llevan historial.
 
 ### 7.8 Salud
 
@@ -248,11 +262,11 @@ Se separa **el estado oficial** (visible para todos los entrenadores del jugador
 
 | Tabla | Columnas | Restricciones e índices |
 |---|---|---|
-| `avisos_lesion` (H) | jugador_id, creado_por, reportado_por_jugador (booleano), nota, estado (pendiente/confirmado/descartado), lesion_id (opcional), fecha_aviso, descartado_por, nota_descarte | IX (`jugador_id`, `estado`) |
+| `avisos_lesion` (H) | jugador_id, creado_por (obligatoria), reportado_por_jugador (booleano), nota, estado (pendiente/confirmado/descartado), lesion_id (opcional), fecha_aviso, confirmado_por (opcional; DA-19 de H5), descartado_por, nota_descarte | `CHECK` de que `confirmado_por` no es nulo si y solo si `estado = 'confirmado'`; `CHECK` de que `descartado_por` y `nota_descarte` no son nulos si y solo si `estado = 'descartado'`; `CHECK` de que `lesion_id` es nulo salvo en `confirmado`; IX (`jugador_id`, `estado`) |
 | `lesiones` (H) | jugador_id, registrada_por, tipo, zona, causa (entrenamiento/partido/otra), fecha_inicio, fecha_estimada_regreso, fecha_alta, nota | IX (`jugador_id`, `registrada_por`) |
 | `estados_disponibilidad` (H) | jugador_id, estado (apto/con_molestia/lesionado), lesion_id (opcional), fecha_estimada_regreso, confirmado_por, vigente_desde, vigente_hasta | UQ parcial `jugador_id` donde `vigente_hasta IS NULL` (un solo estado vigente) |
 
-`lesiones.registrada_por` es el entrenador que confirma el aviso (RN-16). Un aviso pendiente lo ven los entrenadores del jugador y quien lo creó (sección 10).
+`lesiones.registrada_por` es el entrenador que confirma el aviso (RN-16). `avisos_lesion.confirmado_por` es quién confirmó ese aviso y no cambia después; `estados_disponibilidad.confirmado_por` es quién sostiene el estado vigente y cambia con cada fila nueva (sustitución por DD-63, alta). Coinciden en la confirmación (DA-19 de H5). `avisos_lesion.creado_por` es obligatoria aquí, porque DD-58 depende de ese dato. Un aviso pendiente lo ven los entrenadores del jugador y quien lo creó (sección 10).
 
 ### 7.9 Alertas y parámetros
 
@@ -284,7 +298,7 @@ Una alerta cerrada se conserva: su historial es el propio registro (`activada_en
 | 030 | Académico: `periodos_escolares`, `asignaturas`, `materias`, `inscripciones`, `criterios_aprobacion`, `calificaciones`, `asistencias_clase`, `resumenes_academicos` |
 | 040 | Competencia: `lugares`, `temporadas`, `torneos`, `rivales`, `entrenamientos`, `asistencias_entrenamiento`, `partidos`, `convocatorias` |
 | 050 | Rendimiento: `metricas`, `metricas_posicion`, `rendimientos_partido`, `valores_metrica`, `plantillas_evaluacion`, `umbrales_rendimiento`, `evaluaciones_rendimiento` |
-| 060 | Condición Física: `mediciones_corporales`, `tipos_prueba`, `pruebas_fisicas` |
+| 060 | Condición Física: `mediciones_corporales`, `tipos_prueba`, `pruebas_fisicas`, `rangos_mediciones_corporales` |
 | 070 | Salud: `lesiones`, `avisos_lesion`, `estados_disponibilidad` |
 | 035 | Parámetros: `parametros_institucionales` (se crea en H2, porque el riesgo académico la lee) |
 | 080 | Alertas: `alertas` |
@@ -319,7 +333,8 @@ public function up(): void
 | `RolesSeeder` | docente, entrenador | Definitivo |
 | `PosicionesSeeder` | portero, defensa, medio, delantero | Definitivo |
 | `MetricasSeeder` | goles, asistencias, tiros_a_porteria, atajadas, goles_recibidos, recuperaciones, faltas_cometidas, pases_completados, balones_perdidos, con su relación a cada posición (`metricas_posicion`): goles y asistencias en las cuatro posiciones (HU-14) | Definitivo (según el MVP) |
-| `TiposPruebaSeeder` | velocidad, resistencia, tiempo_prueba | Definitivo |
+| `TiposPruebaSeeder` | velocidad (`s`, menor, 1.00 a 60.00), resistencia (`m`, mayor, 100.00 a 6000.00) y tiempo_prueba (`s`, menor, 1.00 a 3600.00), con su `minimo` y `maximo` | Los tipos, **definitivo**; unidades y rangos, **[Propuesta]**: validar (DA-85, AB-28) |
+| `RangosMedicionesCorporalesSeeder` | peso_kg (`kg`, 20.00 a 200.00) y estatura_cm (`cm`, 100.00 a 230.00) | **[Propuesta]**: validar (DA-85, AB-28) |
 | `CriterioGeneralSeeder` | Calificación mínima aprobatoria 7.0 | **[Propuesta]**: validar |
 | `ParametrosInstitucionalesSeeder` | Niveles de riesgo académico, reglas de sanción deportiva y niveles de calificación de partido | **[Propuesta]**: validar |
 | `UsuariosDemoSeeder` | Un docente y dos entrenadores de prueba | Solo desarrollo y pruebas; nunca en producción |
@@ -351,7 +366,7 @@ Restricciones: UQ (`{entidad}_id`, `version`) e IX (`{entidad}_id`, `ocurrido_en
 - El repositorio de cada agregado escribe el cambio y su registro de historial **en la misma transacción**; si una falla, fallan ambas.
 - Las tablas de historial son de solo inserción: se revoca `UPDATE` y `DELETE` al rol de la aplicación y se agrega un disparador que rechaza ambas operaciones.
 - **El historial hereda la visibilidad de su entidad.** El historial de `lesiones` solo lo ve quien la registró, y el de `rendimientos_partido` solo el entrenador que lo capturó (RN-14, RN-15).
-- `resumenes_academicos` no lleva historial propio: se reconstruye desde los datos capturados, que sí lo tienen. `alertas` y `evaluaciones_rendimiento` son su propio registro histórico (solo inserción) y no se reconstruyen.
+- `resumenes_academicos` no lleva historial propio: se reconstruye desde los datos capturados, que sí lo tienen. `alertas` y `evaluaciones_rendimiento` son su propio registro histórico (solo inserción) y no se reconstruyen; la única excepción es `cerrada_en` de una alerta, que se asigna una sola vez (sección 7.9).
 
 ## 10. Visibilidad por asignación (RNF-01, ADR-06)
 
@@ -365,25 +380,26 @@ Un jugador con baja registrada (RN-23) queda fuera de listados, convocatorias y 
 - Un servicio `AlcanceDeJugadores` devuelve la restricción de consulta; **ninguna consulta de jugadores se escribe sin pasar por él**.
 - Las pruebas de arquitectura verifican que las consultas de lectura lo usen.
 - **Única excepción:** la búsqueda por matrícula (RN-20) devuelve solo nombres, apellidos y matrícula de un jugador no asignado; asignarlo o inscribirlo (HU-04, HU-06) otorga el alcance.
+- **Excepción de procesos del sistema (DA-121):** el comando diario `alertas:recalcular` lee las membresías vigentes de jugadores sin baja por el puerto `MembresiasVigentes` (adaptador en Plantel), sin usuario de sesión. El puerto devuelve solo identificadores y no se expone a ninguna ruta. Las pruebas de arquitectura lo listan como uso autorizado sin alcance.
 - Reglas por dato:
-  - Rendimiento, estado físico y evaluaciones: filtro por `registrado_por` igual al usuario (RN-14).
+  - Rendimiento, estado físico y evaluaciones: filtro por `registrado_por` igual al usuario (RN-14). Excepción: el cálculo de las alertas deportivas y de sanciones de un equipo lee los registros de todos sus entrenadores (RN-22, DA-102).
   - Estado de disponibilidad: visible para todos los entrenadores con acceso al jugador.
   - Detalle de lesión: solo si `registrada_por` es el usuario.
   - Resumen académico: igual para todo entrenador asignado, sin calificaciones individuales.
-  - Alertas académicas: docentes y entrenadores del jugador. Alertas deportivas: solo el entrenador del equipo en `equipo_id`; el docente no las ve.
+  - Alertas académicas: docentes y entrenadores del jugador. El docente la ve si tiene al jugador inscrito en una materia suya del periodo vigente (DA-89) y recibe en `causa` el nivel de riesgo, el promedio y las materias reprobadas del periodo vigente, todas y no solo las suyas (DA-110; excepción a «solo sus materias» de `docs/requisitos.md` §7, solo para esta alerta). Alertas deportivas y de sanciones: los entrenadores del equipo en `equipo_id`, sin importar cuál de ellos registró los datos con que se calcularon (RN-22, DA-102); el entrenador de otro equipo del jugador y el docente no las ven.
   - Docente, del lado deportivo: solo el estado oficial de disponibilidad (RN-13).
   - Avisos pendientes: entrenadores del jugador y quien los creó.
-  - Asistencia a entrenamientos y convocatorias: entrenadores de los equipos del entrenamiento o del partido.
+  - Asistencia a entrenamientos y convocatorias: entrenadores de los equipos del entrenamiento o del partido. En la vista para convocar, la asistencia llega en dos campos: `asistencia.equipo` (la de los equipos del consultante) y `asistencia.de_mis_capturas` (los registros cuyo `creado_por` es el consultante) (DA-111).
   - Gráficos e historial: solo los datos que el usuario puede ver según estas reglas.
 
 ## 11. Alertas y recálculo (ADR-07)
 
 1. Un evento de dominio (por ejemplo, `CalificacionRegistrada`) se publica al confirmar la transacción.
-2. Un escucha en cola recalcula lo derivado del jugador: `resumenes_academicos` y alerta académica, o `evaluaciones_rendimiento` y alertas deportivas. La cola usa el driver `database` (no es un servicio externo): en Docker Compose corre un servicio `worker`; en las pruebas el driver es `sync`. Los eventos se despachan después de confirmar la transacción (`afterCommit`).
+2. Un escucha en cola recalcula lo derivado del jugador por evento: `resumenes_academicos` y la alerta académica, con los eventos de Académico (DA-88). `evaluaciones_rendimiento` se recalcula con las capturas de H4, y las alertas de riesgo de baja deportiva y de acumulación de sanciones se recalculan con el comando del punto 4, no por evento (apartamiento de ADR-07; ver la sección 3). La cola usa el driver `database` (no es un servicio externo): en Docker Compose corre un servicio `worker`; en las pruebas el driver es `sync`. Los eventos se despachan después de confirmar la transacción (`afterCommit`).
 3. Si la condición se cumple y no hay alerta abierta, se crea; si deja de cumplirse, se cierra con `cerrada_en`.
-4. Los escuchas son **idempotentes** y reintentables. Un comando de consola (`alertas:recalcular`) concilia los resúmenes y las alertas abiertas, útil tras cambiar parámetros de fábrica; nunca reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores.
+4. Los escuchas son **idempotentes** y reintentables. El comando de consola `alertas:recalcular` (DA-113; vive en `src/Alertas/Infraestructura/Consola/`) recalcula las tres alertas y las abiertas, y `resumenes:conciliar` (Académico) concilia los resúmenes (estado futuro, T03 (DA-113): hoy el comando de Académico se llama `alertas:recalcular` y Alertas todavía no tiene uno); son útiles tras cambiar parámetros de fábrica; nunca reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores.
 
-5. **Condiciones que vencen con el tiempo.** Algunas condiciones cambian sin que ocurra ningún evento: las faltas salen de la ventana de 30 días (RN-09), la tarjeta roja deja de contar al terminar la temporada y una fecha estimada de regreso se vence (HU-21). Por eso `alertas:recalcular` se programa en el planificador de Laravel **una vez al día a las 02:00 (America/Mexico_City)**, y en Docker Compose corre un servicio `scheduler` (`schedule:work`). Las marcas `requiere_actualizacion` (HU-21) y `posiblemente_desactualizado` (HU-24, RNF-04) no se guardan: se calculan al leer.
+5. **Condiciones que vencen con el tiempo.** Algunas condiciones cambian sin que ocurra ningún evento: las faltas salen de la ventana de 30 días (RN-09), la tarjeta roja deja de contar al terminar la temporada y una fecha estimada de regreso se vence (HU-21; esta última no genera alerta ni recálculo: se calcula al leer, DA-09 de H5). Por eso `alertas:recalcular` y `resumenes:conciliar` (estado futuro, T03 (DA-113)) se programan en el planificador de Laravel **una vez al día a las 02:00 (America/Mexico_City)**, y en Docker Compose corre un servicio `scheduler` (`schedule:work`). Las marcas `requiere_actualizacion` (HU-21) y `posiblemente_desactualizado` (HU-24, RNF-04) no se guardan: se calculan al leer.
 
 Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion` y `umbrales_rendimiento`, nunca constantes del código. La fecha de cálculo se obtiene de un reloj inyectable de Compartido, para que las pruebas fijen el día.
 
@@ -394,7 +410,7 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | Unitarias de dominio | RN-01 a RN-23: riesgo académico, pasa o no pasa, sanciones, criterio aplicable. Sin base de datos |
 | Integración | Repositorios, historial en la misma transacción, restricciones `CHECK` e índices parciales, migraciones `up` y `down` |
 | Funcionales | Casos de uso y criterios de aceptación de HU-01 a HU-30 (ver `docs/criterios-aceptacion-fase-1.md`) |
-| Consola | Comandos `usuarios:crear` y `alertas:recalcular`, y guion de humo de la API por hito (ver `docs/estrategia-pruebas.md`) |
+| Consola | Comandos `usuarios:crear`, `resumenes:conciliar` y `alertas:recalcular` (estado futuro, T03 (DA-113); hoy solo existe el de Académico, con la firma `alertas:recalcular`), y guion de humo de la API por hito (ver `docs/estrategia-pruebas.md`) |
 | Seguridad | Un entrenador o docente no accede a jugadores no asignados ni al detalle de lesiones de otro |
 | Arquitectura | Dominio sin dependencias del framework; consultas de jugadores pasan por `AlcanceDeJugadores` |
 
@@ -402,7 +418,7 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 
 | Tema | Riesgo o duda | Propuesta |
 |---|---|---|
-| Co-entrenadores | Si un equipo tiene dos entrenadores, RN-14 ("solo lo que él registró") impide que se vean entre sí | **Resuelto:** DD-17 está confirmada y se aplica la regla estricta. Cada entrenador registra su propia calificación de un jugador en un partido, y ve y promedia solo lo que él registró; la unicidad de `rendimientos_partido` es por registrante (sección 7.6; DA-36 de H4) |
+| Co-entrenadores | Si un equipo tiene dos entrenadores, RN-14 ("solo lo que él registró") impide que se vean entre sí | **Resuelto:** DD-17 está confirmada y se aplica la regla estricta, salvo en las alertas deportivas y de sanciones (DA-102). Cada entrenador registra su propia calificación de un jugador en un partido, y ve y promedia solo lo que él registró; la unicidad de `rendimientos_partido` es por registrante (sección 7.6; DA-36 de H4) |
 | Reglas de sanción | RN-09 y RN-10 son propuestas, no valores institucionales | Validar antes de sembrar |
 | Retención | El historial se conserva mientras el jugador esté en la institución; falta definir qué ocurre al darse de baja | Mantenerlo sin borrar y definir con la institución un plazo posterior |
 | Aviso del jugador | `reportado_por_jugador` asume que otro usuario lo registra | Se reemplaza por un perfil de futbolista en la fase siguiente |
@@ -425,3 +441,8 @@ Las reglas de cálculo leen `parametros_institucionales`, `criterios_aprobacion`
 | 1.5 | 31/10/2026 | Se alinea con lo construido en H4 (`docs/hitos/f1-h4.md` v1.0.8, §5.1), por decisión del responsable. Sección 4.3: puertos `PosicionEnEquipo` (adaptador en Plantel) e `InicioDePartidos` (adaptador en Competencia), en Compartido. Sección 7.6: unicidad de `rendimientos_partido` por (`partido_id`, `jugador_id`, `registrado_por`), que sustituye a la de (`partido_id`, `jugador_id`) (DD-17, DA-36); dos UQ parciales y el `CHECK` de origen en `plantillas_evaluacion`; `entrenador_id` en umbrales y evaluaciones, con la UQ del umbral vigente y el índice de evaluaciones que lo incluyen (DA-04); `evaluaciones_rendimiento` con `calificacion_minima` y `ventana_partidos` copiadas y obligatorias, `plantilla_id` anulable junto a `umbral_id` y el `CHECK` de promedio nulo. Sección 8.4: el seeder de plantillas se llama `PlantillasDeFabricaSeeder`. Sin cambios de código |
 | 1.5.1 | 31/10/2026 | Sección 13: la fila «Co-entrenadores» queda resuelta, porque DD-17 está confirmada (DA-36 de H4). Decisión del responsable |
 | 1.5.2 | 31/10/2026 | Sección 4.1: el servicio de RN-08 se llama `CalculoDeDesempeno` (`src/Rendimiento/Dominio/`), como en el código. `EvaluadorDeRendimiento` no existe y se quita. Decisión del responsable |
+| 1.5.3 | 15/11/2026 | Excepción de las alertas entre entrenadores de un mismo equipo (RN-22 de `docs/requisitos.md` v1.2.3, DA-102) y conteo de tarjetas (DA-103), por decisión del responsable. Sección 7.6: nota de unicidad de `rendimientos_partido`. Sección 10: reglas por dato de rendimiento y de alertas deportivas y de sanciones. Sección 13: fila «Co-entrenadores» |
+| 1.5.4 | 16/11/2026 | Sección 4.3: puertos de Compartido para el porcentaje de asistencia por mes (gráficos de H6, DA-109, P-14) y para el nivel de riesgo académico que lee Alertas (P-09), con su adaptador en Académico y Competencia. **Pendiente de revisión del responsable** (cambio aplicado por decisión por defecto de la orden del 16/11/2026) |
+| 1.5.5 | 16/11/2026 | Entrada: requisitos v1.2.4. Sección 3, ADR-07: apartamiento por DA-88. Sección 4.2: los eventos que existen (los cuatro de Académico) y los del catálogo que no se emiten (H1 por DD-32, H3 a H5). Sección 4.3: los cuatro puertos de Alertas (DA-112) y el puerto `EstadoDeDisponibilidadOficial` (DA-08 de H5). Sección 7.1 y 9.2: `alertas` y `evaluaciones_rendimiento` son de solo inserción, con la excepción de `cerrada_en`. Sección 7.5: temporadas sin solape. Sección 7.7 y 8.2: lo de H5 (DA-85, DA-03, DA-04, DA-05): `rangos_mediciones_corporales`, `minimo` y `maximo` de `tipos_prueba`, `fecha` de las mediciones, la unicidad de las pruebas y el redondeo del IMC. Sección 10: DA-110 y DA-111 y el periodo vigente del docente (DA-89). Sección 11: DA-88 y DA-113. Corrección posterior: entrada v1.2.4; `avisos_lesion.confirmado_por` en 7.8; seeders de rangos en 8.4; comandos de DA-113 marcados como estado futuro (T03); fecha vencida calculada al leer. Por decisión del responsable del 16/11/2026; **pendiente de revisión del responsable** |
+| 1.5.6 | 16/11/2026 | Sección 4.3: tres puertos de Alertas que DA-112 no nombraba (`MembresiasVigentes`, adaptador en Plantel; `JugadoresDeLaMateria`, adaptador en Académico) y la forma del puerto de P-09 (nivel, promedio y materias reprobadas), por DA-115; la temporada de cada partido sale de `InicioDePartidos` y `TemporadaDeFecha` (DA-117). Enmienda aprobada por el responsable el 16/11/2026 con el plan de T03. Sin cambios de código ni de tablas |
+| 1.5.7 | 16/11/2026 | §10: excepción de procesos del sistema sin usuario de sesión para `MembresiasVigentes` (DA-121), aprobada por el responsable. §4.3 la referencia. |

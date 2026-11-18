@@ -54,7 +54,10 @@ jobs:
           PGHOST: 127.0.0.1
           PGPASSWORD: clave_superusuario_solo_ci
           DB_DATABASE: gestordep_desarrollo_ci
-        run: bash docker/db/init/01-roles-y-bases.sh
+        # y las bases por proceso de Pest en paralelo (DA-101)
+        run: |
+          bash docker/db/init/01-roles-y-bases.sh
+          bash docker/db/init/02-bases-por-proceso.sh
 
       - name: Dependencias
         run: composer install --no-interaction --no-progress --prefer-dist

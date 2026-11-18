@@ -1,0 +1,58 @@
+﻿docker compose exec -T app bash bin/con-candado.sh composer verificar
+make : Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+En línea: 1 Carácter: 460
++ ... ruebas.txt; "pruebas exit=$LASTEXITCODE"; make verificar 2>&1 | Out-F ...
++                                               ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Entrada estanda...tope de 20 min.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ........................................................................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 984 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Feature/Consultas/VistaDeLaConvocatoriaTest.php                  
+ ------ ----------------------------------------------------------------------- 
+  28     PHPDoc tag @return with type array<string, mixed> is incompatible wit  
+         h native type string.                                                  
+         🪪  return.phpDocType                                                  
+  48     Function vistaConvPagina() return type has no value type specified in  
+         iterable type array.                                                   
+         🪪  missingType.iterableValue                                          
+         💡  See:                                                               
+         https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-i  
+         terable-type                                                           
+  190    Unable to resolve the template type TKey in call to function collect   
+         🪪  argument.templateType                                              
+         💡  See:                                                               
+         https://phpstan.org/blog/solving-phpstan-error-unable-to-resolve-temp  
+         late-type                                                              
+  190    Unable to resolve the template type TValue in call to function         
+         collect                                                                
+         🪪  argument.templateType                                              
+         💡  See:                                                               
+         https://phpstan.org/blog/solving-phpstan-error-unable-to-resolve-temp  
+         late-type                                                              
+ ------ ----------------------------------------------------------------------- 
+
+
+ [ERROR] Found 4 errors                                                         
+
+Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with 
+error code 1
+make: *** [Makefile:32: verificar] Error 1

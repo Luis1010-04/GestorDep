@@ -1,0 +1,81 @@
+docker compose exec -T app php artisan migrate --database=propietario --force
+
+   INFO  Running migrations.  
+
+  2026_10_20_000100_habilitar_extension_citext .................. 22.17ms DONE
+  2026_10_21_000200_crear_tabla_trabajos ........................ 16.43ms DONE
+  2026_10_21_000300_crear_tabla_trabajos_fallidos ............... 16.16ms DONE
+  2026_10_21_000400_crear_tabla_sessions ........................ 17.98ms DONE
+  2026_10_21_010100_crear_tabla_usuarios ........................ 20.35ms DONE
+  2026_10_21_010200_crear_tabla_roles ........................... 17.14ms DONE
+  2026_10_21_010300_crear_tabla_usuario_rol ..................... 11.99ms DONE
+  2026_10_21_020100_crear_tabla_categorias ...................... 19.83ms DONE
+  2026_10_21_020200_crear_tabla_posiciones ...................... 16.50ms DONE
+  2026_10_21_020300_crear_tabla_jugadores ....................... 16.32ms DONE
+  2026_10_21_020400_crear_tabla_equipos ......................... 16.43ms DONE
+  2026_10_21_020500_crear_tabla_jugador_equipo .................. 27.58ms DONE
+  2026_10_21_020600_crear_tabla_entrenador_equipo ............... 21.84ms DONE
+  2026_10_21_020700_crear_tabla_bajas_jugador ................... 28.21ms DONE
+  2026_10_21_020800_indice_de_matricula_sin_mayusculas ........... 7.31ms DONE
+  2026_10_21_090100_crear_tabla_usuarios_historial .............. 24.05ms DONE
+  2026_10_21_090200_crear_tabla_jugadores_historial ............. 23.61ms DONE
+  2026_10_21_090300_crear_tabla_equipos_historial ............... 22.73ms DONE
+  2026_10_21_090400_crear_tabla_jugador_equipo_historial ........ 21.66ms DONE
+  2026_10_21_090500_crear_tabla_entrenador_equipo_historial ..... 22.18ms DONE
+  2026_10_21_090600_crear_tabla_bajas_jugador_historial ......... 22.00ms DONE
+  2026_10_26_030100_crear_tabla_periodos_escolares .............. 22.67ms DONE
+  2026_10_26_030200_crear_tabla_asignaturas ..................... 23.02ms DONE
+  2026_10_26_030300_crear_tabla_materias ........................ 32.08ms DONE
+  2026_10_26_030400_crear_tabla_inscripciones ................... 25.09ms DONE
+  2026_10_26_030500_crear_tabla_criterios_aprobacion ............ 21.09ms DONE
+  2026_10_26_030600_crear_tabla_calificaciones .................. 20.43ms DONE
+  2026_10_26_030700_crear_tabla_asistencias_clase ............... 16.34ms DONE
+  2026_10_26_030800_crear_tabla_resumenes_academicos ............ 17.96ms DONE
+  2026_10_26_035100_crear_tabla_parametros_institucionales ...... 15.64ms DONE
+  2026_10_26_090701_crear_tabla_materias_historial .............. 23.80ms DONE
+  2026_10_26_090702_crear_tabla_inscripciones_historial ......... 20.72ms DONE
+  2026_10_26_090703_crear_tabla_criterios_aprobacion_historial .. 20.62ms DONE
+  2026_10_26_090704_crear_tabla_calificaciones_historial ........ 19.96ms DONE
+  2026_10_26_090705_crear_tabla_asistencias_clase_historial ..... 20.63ms DONE
+  2026_10_26_090800_crear_tabla_parametros_institucionales_historial  24.63ms DONE
+  2026_10_29_040100_crear_tabla_lugares ......................... 20.07ms DONE
+  2026_10_29_040200_crear_tabla_rivales ......................... 19.08ms DONE
+  2026_10_29_040300_crear_tabla_temporadas ...................... 19.12ms DONE
+  2026_10_29_040400_crear_tabla_torneos ......................... 22.61ms DONE
+  2026_10_29_040500_crear_tabla_entrenamientos .................. 26.50ms DONE
+  2026_10_29_040600_crear_tabla_asistencias_entrenamiento ....... 22.50ms DONE
+  2026_10_29_040700_crear_tabla_partidos ........................ 31.80ms DONE
+  2026_10_29_040800_crear_tabla_convocatorias ................... 21.21ms DONE
+  2026_10_29_090901_crear_tabla_lugares_historial ............... 22.30ms DONE
+  2026_10_29_090902_crear_tabla_rivales_historial ............... 20.60ms DONE
+  2026_10_29_090903_crear_tabla_temporadas_historial ............ 21.53ms DONE
+  2026_10_29_090904_crear_tabla_torneos_historial ............... 23.47ms DONE
+  2026_10_29_090905_crear_tabla_entrenamientos_historial ........ 25.00ms DONE
+  2026_10_29_090906_crear_tabla_asistencias_entrenamiento_historial  22.98ms DONE
+  2026_10_29_090907_crear_tabla_partidos_historial .............. 23.93ms DONE
+  2026_10_29_090908_crear_tabla_convocatorias_historial ......... 24.97ms DONE
+  2026_10_30_050100_crear_tabla_metricas ........................ 21.19ms DONE
+  2026_10_30_050200_crear_tabla_metricas_posicion ............... 12.00ms DONE
+  2026_10_30_050300_crear_tabla_rendimientos_partido ............ 40.77ms DONE
+  2026_10_30_050400_crear_tabla_valores_metrica ................. 21.99ms DONE
+  2026_10_30_050500_crear_tabla_plantillas_evaluacion ........... 27.55ms DONE
+  2026_10_30_050600_crear_tabla_umbrales_rendimiento ............ 26.37ms DONE
+  2026_10_30_050700_crear_tabla_evaluaciones_rendimiento ........ 28.55ms DONE
+  2026_10_30_090951_crear_tabla_rendimientos_partido_historial .. 24.11ms DONE
+  2026_10_30_090952_crear_tabla_valores_metrica_historial ....... 23.25ms DONE
+  2026_10_30_090953_crear_tabla_plantillas_evaluacion_historial . 23.40ms DONE
+  2026_10_30_090954_crear_tabla_umbrales_rendimiento_historial .. 21.83ms DONE
+  2026_11_03_060100_crear_tabla_mediciones_corporales ........... 30.21ms DONE
+  2026_11_03_060200_crear_tabla_tipos_prueba .................... 17.82ms DONE
+  2026_11_03_060300_crear_tabla_pruebas_fisicas ................. 30.13ms DONE
+  2026_11_03_060400_crear_tabla_rangos_mediciones_corporales .... 16.94ms DONE
+  2026_11_03_070100_crear_tabla_lesiones ........................ 24.75ms DONE
+  2026_11_03_070200_crear_tabla_avisos_lesion ................... 30.22ms DONE
+  2026_11_03_070300_crear_tabla_estados_disponibilidad .......... 22.53ms DONE
+  2026_11_03_090961_crear_tabla_mediciones_corporales_historial . 22.99ms DONE
+  2026_11_03_090962_crear_tabla_pruebas_fisicas_historial ....... 24.78ms DONE
+  2026_11_03_090971_crear_tabla_lesiones_historial .............. 22.80ms DONE
+  2026_11_03_090972_crear_tabla_avisos_lesion_historial ......... 26.36ms DONE
+  2026_11_03_090973_crear_tabla_estados_disponibilidad_historial  23.02ms DONE
+  2026_11_15_080100_crear_tabla_alertas ......................... 20.02ms DONE
+

@@ -1,0 +1,756 @@
+docker compose exec -T app bash bin/con-candado.sh composer verificar
+make : Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+En línea: 1 Carácter: 417
++ ... --short HEAD); "HEAD=$h"; $t0 = Get-Date; make verificar 2>&1 | Out-F ...
++                                               ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Entrada estanda...tope de 20 min.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ..........................................................................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 986 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+
+ [OK] No errors                                                                 
+
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ........................................................................
+
+  Tests:    2276 passed (13791 assertions)
+  Duration: 308.15s
+
+[1A  Parallel: 4 processes
+
+  app/Exceptions/FormatoDeError ....................................... 100.0%  
+  app/Exceptions/ServicioNoDisponible ................................. 100.0%  
+  app/Http/Controllers/AlertaController ............................... 100.0%  
+  app/Http/Controllers/AlineacionYResultadoController ................. 100.0%  
+  app/Http/Controllers/AsignaturaController ........................... 100.0%  
+  app/Http/Controllers/AsistenciaController ........................... 100.0%  
+  app/Http/Controllers/AsistenciaDeEntrenamientoController ............ 100.0%  
+  app/Http/Controllers/AvisoDeLesionController ........................ 100.0%  
+  app/Http/Controllers/CalificacionController ......................... 100.0%  
+  app/Http/Controllers/CategoriaController ............................ 100.0%  
+  app/Http/Controllers/ContrasenaController ........................... 100.0%  
+  app/Http/Controllers/ControladorDeSalud ............................. 100.0%  
+  app/Http/Controllers/Controller ..................................... 100.0%  
+  app/Http/Controllers/ConvocatoriaController ......................... 100.0%  
+  app/Http/Controllers/DesempenoController ............................ 100.0%  
+  app/Http/Controllers/EntrenamientoController ........................ 100.0%  
+  app/Http/Controllers/EquipoController ............................... 100.0%  
+  app/Http/Controllers/EquipoJugadorController ........................ 100.0%  
+  app/Http/Controllers/EstadoDeDisponibilidadController ............... 100.0%  
+  app/Http/Controllers/EstatusDeJugadoresController ................... 100.0%  
+  app/Http/Controllers/GraficosController ..................... 55..56 / 85.7%  
+  app/Http/Controllers/InscripcionController .......................... 100.0%  
+  app/Http/Controllers/JugadorController .............................. 100.0%  
+  app/Http/Controllers/LesionController ............................... 100.0%  
+  app/Http/Controllers/LugarController ................................ 100.0%  
+  app/Http/Controllers/MateriaController .............................. 100.0%  
+  app/Http/Controllers/MedicionController ............................. 100.0%  
+  app/Http/Controllers/PartidoController .............................. 100.0%  
+  app/Http/Controllers/PeriodoEscolarController ....................... 100.0%  
+  app/Http/Controllers/PlantillaEvaluacionController .................. 100.0%  
+  app/Http/Controllers/PruebaFisicaController ......................... 100.0%  
+  app/Http/Controllers/RendimientoController .......................... 100.0%  
+  app/Http/Controllers/RivalController ................................ 100.0%  
+  app/Http/Controllers/SaludController ................................ 100.0%  
+  app/Http/Controllers/SesionController ............................... 100.0%  
+  app/Http/Controllers/SituacionAcademicaController ................... 100.0%  
+  app/Http/Controllers/TemporadaController ............................ 100.0%  
+  app/Http/Controllers/TipoDePruebaController ......................... 100.0%  
+  app/Http/Controllers/TorneoController ............................... 100.0%  
+  app/Http/Controllers/UmbralController ............................... 100.0%  
+  app/Http/Controllers/VistaParaConvocarController .................... 100.0%  
+  app/Http/Middleware/ExigirRol ....................................... 100.0%  
+  app/Http/Reglas/FiltroInvalido ...................................... 100.0%  
+  app/Http/Requests/SolicitudDeActualizacionDeJugador ................. 100.0%  
+  app/Http/Requests/SolicitudDeAlineacion ............................. 100.0%  
+  app/Http/Requests/SolicitudDeAltaDeJugador .......................... 100.0%  
+  app/Http/Requests/SolicitudDeAsignacionDeJugador .................... 100.0%  
+  app/Http/Requests/SolicitudDeAsistenciasDeEntrenamiento ............. 100.0%  
+  app/Http/Requests/SolicitudDeBajaDeJugador .......................... 100.0%  
+  app/Http/Requests/SolicitudDeCambioDeContrasena ..................... 100.0%  
+  app/Http/Requests/SolicitudDeCambioDeEntrenamiento .................. 100.0%  
+  app/Http/Requests/SolicitudDeCambioDeEstado ......................... 100.0%  
+  app/Http/Requests/SolicitudDeCambioDePartido ........................ 100.0%  
+  app/Http/Requests/SolicitudDeCambioDePosicion ....................... 100.0%  
+  app/Http/Requests/SolicitudDeConfirmacionDeAviso .................... 100.0%  
+  app/Http/Requests/SolicitudDeConvocatoria ........................... 100.0%  
+  app/Http/Requests/SolicitudDeCorreccionDeAsistencia ................. 100.0%  
+  app/Http/Requests/SolicitudDeCorreccionDeAsistenciaDeEntrenamiento .. 100.0%  
+  app/Http/Requests/SolicitudDeCorreccionDeCalificacion ............... 100.0%  
+  app/Http/Requests/SolicitudDeCorreccionDeLesion ..................... 100.0%  
+  app/Http/Requests/SolicitudDeCorreccionDeRendimiento ................ 100.0%  
+  app/Http/Requests/SolicitudDeCriterioDeMateria ...................... 100.0%  
+  app/Http/Requests/SolicitudDeDescarteDeAviso ........................ 100.0%  
+  app/Http/Requests/SolicitudDeInicioDeSesion ......................... 100.0%  
+  app/Http/Requests/SolicitudDeJugadorDeEquipo ........................ 100.0%  
+  app/Http/Requests/SolicitudDeMedicion ............................... 100.0%  
+  app/Http/Requests/SolicitudDeNombreDeCatalogo ....................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevaAsignatura ........................ 100.0%  
+  app/Http/Requests/SolicitudDeNuevaAsistencia ........................ 100.0%  
+  app/Http/Requests/SolicitudDeNuevaCalificacion ...................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevaCategoria ......................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevaInscripcion ....................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevaMateria ........................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevaTemporada ......................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevoAvisoDeLesion ..................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevoEntrenamiento ..................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevoEquipo ............................ 100.0%  
+  app/Http/Requests/SolicitudDeNuevoJugador ........................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevoPartido ........................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevoPeriodo ........................... 100.0%  
+  app/Http/Requests/SolicitudDeNuevoTorneo ............................ 100.0%  
+  app/Http/Requests/SolicitudDePlantilla .............................. 100.0%  
+  app/Http/Requests/SolicitudDePruebaFisica ........................... 100.0%  
+  app/Http/Requests/SolicitudDeRendimiento ............................ 100.0%  
+  app/Http/Requests/SolicitudDeResultado .............................. 100.0%  
+  app/Http/Requests/SolicitudDeUmbral ................................. 100.0%  
+  app/Http/Resources/AlertaRecurso .................................... 100.0%  
+  app/Http/Resources/AsignaturaRecurso ................................ 100.0%  
+  app/Http/Resources/AsistenciaDeEntrenamientoRecurso ................. 100.0%  
+  app/Http/Resources/AsistenciaRecurso ................................ 100.0%  
+  app/Http/Resources/AvisoDeLesionRecurso ............................. 100.0%  
+  app/Http/Resources/BajaRecurso ...................................... 100.0%  
+  app/Http/Resources/CalificacionRecurso .............................. 100.0%  
+  app/Http/Resources/CategoriaRecurso ................................. 100.0%  
+  app/Http/Resources/ColeccionPaginada ................................ 100.0%  
+  app/Http/Resources/ConteoDeAsistenciaRecurso ........................ 100.0%  
+  app/Http/Resources/ConvocatoriaRecurso .............................. 100.0%  
+  app/Http/Resources/CriterioRecurso .................................. 100.0%  
+  app/Http/Resources/DecimalComoCadena ................................ 100.0%  
+  app/Http/Resources/DesempenoRecurso ................................. 100.0%  
+  app/Http/Resources/EntrenamientoRecurso ............................. 100.0%  
+  app/Http/Resources/EquipoRecurso .................................... 100.0%  
+  app/Http/Resources/EstadoDeDisponibilidadRecurso .................... 100.0%  
+  app/Http/Resources/FilaDeEstatusRecurso ............................. 100.0%  
+  app/Http/Resources/GraficosDelEquipoRecurso ......................... 100.0%  
+  app/Http/Resources/GraficosDelJugadorRecurso ........................ 100.0%  
+  app/Http/Resources/InscripcionRecurso ............................... 100.0%  
+  app/Http/Resources/JugadorBuscadoRecurso ............................ 100.0%  
+  app/Http/Resources/JugadorConsultadoRecurso ......................... 100.0%  
+  app/Http/Resources/JugadorRecurso ................................... 100.0%  
+  app/Http/Resources/LesionRecurso .................................... 100.0%  
+  app/Http/Resources/LugarRecurso ..................................... 100.0%  
+  app/Http/Resources/MateriaRecurso ................................... 100.0%  
+  app/Http/Resources/MedicionRecurso .................................. 100.0%  
+  app/Http/Resources/PartidoPendienteDeRendimientoRecurso ............. 100.0%  
+  app/Http/Resources/PartidoRecurso ................................... 100.0%  
+  app/Http/Resources/PeriodoEscolarRecurso ............................ 100.0%  
+  app/Http/Resources/PlantillaRecurso ................................. 100.0%  
+  app/Http/Resources/PruebaFisicaRecurso .............................. 100.0%  
+  app/Http/Resources/RendimientoRecurso ............................... 100.0%  
+  app/Http/Resources/SerieDeGraficoRecurso ............................ 100.0%  
+  app/Http/Resources/SituacionAcademicaRecurso ........................ 100.0%  
+  app/Http/Resources/TemporadaRecurso ................................. 100.0%  
+  app/Http/Resources/TipoDePruebaRecurso .............................. 100.0%  
+  app/Http/Resources/TorneoRecurso .................................... 100.0%  
+  app/Http/Resources/UmbralRecurso .................................... 100.0%  
+  app/Http/Resources/UsuarioRecurso ................................... 100.0%  
+  app/Http/Resources/VistaParaConvocarRecurso ......................... 100.0%  
+  app/Http/Respuestas/IdentificadorDeRuta ............................. 100.0%  
+  app/Http/Respuestas/Respuesta ....................................... 100.0%  
+  app/Providers/AppServiceProvider .................................... 100.0%  
+  src/Academico/Aplicacion/AsignaturaDuplicada ........................ 100.0%  
+  src/Academico/Aplicacion/AsignaturaInexistente ...................... 100.0%  
+  src/Academico/Aplicacion/AsistenciaDuplicada ........................ 100.0%  
+  src/Academico/Aplicacion/AsistenciaLeida ............................ 100.0%  
+  src/Academico/Aplicacion/CalificacionDuplicada ...................... 100.0%  
+  src/Academico/Aplicacion/CalificacionFueraDeRango ................... 100.0%  
+  src/Academico/Aplicacion/CalificacionLeida .......................... 100.0%  
+  src/Academico/Aplicacion/ComprobarAsistenciaDelDocente .............. 100.0%  
+  src/Academico/Aplicacion/ComprobarCalificacionDelDocente ............ 100.0%  
+  src/Academico/Aplicacion/ComprobarInscripcionDelDocente ............. 100.0%  
+  src/Academico/Aplicacion/ComprobarMateriaDelDocente ................. 100.0%  
+  src/Academico/Aplicacion/ConciliarResumenes ......................... 100.0%  
+  src/Academico/Aplicacion/ConsultaDeAsistencias ...................... 100.0%  
+  src/Academico/Aplicacion/ConsultaDeCalificaciones ................... 100.0%  
+  src/Academico/Aplicacion/ConsultaDeInscripciones .................... 100.0%  
+  src/Academico/Aplicacion/ConsultaDeMaterias ......................... 100.0%  
+  src/Academico/Aplicacion/ConsultaDeSituacionAcademica ............... 100.0%  
+  src/Academico/Aplicacion/CorregirAsistencia ......................... 100.0%  
+  src/Academico/Aplicacion/CorregirCalificacion ....................... 100.0%  
+  src/Academico/Aplicacion/CrearAsignatura ............................ 100.0%  
+  src/Academico/Aplicacion/CrearMateria ............................... 100.0%  
+  src/Academico/Aplicacion/CrearPeriodo ............................... 100.0%  
+  src/Academico/Aplicacion/DefinirCriterioDeMateria ................... 100.0%  
+  src/Academico/Aplicacion/EliminarAsignatura ......................... 100.0%  
+  src/Academico/Aplicacion/EliminarPeriodo ............................ 100.0%  
+  src/Academico/Aplicacion/FuenteDeDatosAcademicos .................... 100.0%  
+  src/Academico/Aplicacion/InscribirJugador ........................... 100.0%  
+  src/Academico/Aplicacion/InscripcionConJugador ...................... 100.0%  
+  src/Academico/Aplicacion/InscripcionDelDocente ...................... 100.0%  
+  src/Academico/Aplicacion/JugadorEnBajaNoInscribible ................. 100.0%  
+  src/Academico/Aplicacion/JugadorEnBajaSinCaptura .................... 100.0%  
+  src/Academico/Aplicacion/JugadorNoRegistrado ........................ 100.0%  
+  src/Academico/Aplicacion/JugadorYaInscrito .......................... 100.0%  
+  src/Academico/Aplicacion/ListarAsignaturas .......................... 100.0%  
+  src/Academico/Aplicacion/ListarAsistencias .......................... 100.0%  
+  src/Academico/Aplicacion/ListarCalificaciones ....................... 100.0%  
+  src/Academico/Aplicacion/ListarInscripciones ........................ 100.0%  
+  src/Academico/Aplicacion/ListarMaterias ............................. 100.0%  
+  src/Academico/Aplicacion/ListarPeriodos ............................. 100.0%  
+  src/Academico/Aplicacion/MateriaConCriterio ......................... 100.0%  
+  src/Academico/Aplicacion/MateriaConDetalle .......................... 100.0%  
+  src/Academico/Aplicacion/MateriaDeLaSituacion ....................... 100.0%  
+  src/Academico/Aplicacion/MateriaDelDocente .......................... 100.0%  
+  src/Academico/Aplicacion/MateriaDuplicada ........................... 100.0%  
+  src/Academico/Aplicacion/PeriodoConVigencia ......................... 100.0%  
+  src/Academico/Aplicacion/PeriodoDuplicado ........................... 100.0%  
+  src/Academico/Aplicacion/PeriodoInexistente ......................... 100.0%  
+  src/Academico/Aplicacion/PeriodoVigente ............................. 100.0%  
+  src/Academico/Aplicacion/RecalcularResumenDeJugador ................. 100.0%  
+  src/Academico/Aplicacion/RecalcularResumenesDeMateria ............... 100.0%  
+  src/Academico/Aplicacion/RegistrarAsistencia ........................ 100.0%  
+  src/Academico/Aplicacion/RegistrarCalificacion ...................... 100.0%  
+  src/Academico/Aplicacion/ResumenLeido ............................... 100.0%  
+  src/Academico/Aplicacion/SituacionAcademica ......................... 100.0%  
+  src/Academico/Aplicacion/VerMateria ................................. 100.0%  
+  src/Academico/Aplicacion/VerSituacionAcademica ...................... 100.0%  
+  src/Academico/Dominio/AmbitoDeCriterio .............................. 100.0%  
+  src/Academico/Dominio/Asignatura .................................... 100.0%  
+  src/Academico/Dominio/AsistenciaDeClase ............................. 100.0%  
+  src/Academico/Dominio/Calificacion .................................. 100.0%  
+  src/Academico/Dominio/CalificacionDeMateria ......................... 100.0%  
+  src/Academico/Dominio/ConteoDeAsistencia ............................ 100.0%  
+  src/Academico/Dominio/CriterioDeAprobacion .......................... 100.0%  
+  src/Academico/Dominio/CriterioVigente ............................... 100.0%  
+  src/Academico/Dominio/EscalaDeCalificaciones ........................ 100.0%  
+  src/Academico/Dominio/EstadoDeAsistencia ............................ 100.0%  
+  src/Academico/Dominio/Inscripcion ................................... 100.0%  
+  src/Academico/Dominio/Materia ....................................... 100.0%  
+  src/Academico/Dominio/MateriaEvaluada ............................... 100.0%  
+  src/Academico/Dominio/NivelDeRiesgo ................................. 100.0%  
+  src/Academico/Dominio/ParametrosDeRiesgo ............................ 100.0%  
+  src/Academico/Dominio/PeriodoEscolar ................................ 100.0%  
+  src/Academico/Dominio/RepositorioDeAsignaturas ...................... 100.0%  
+  src/Academico/Dominio/RepositorioDeAsistencias ...................... 100.0%  
+  src/Academico/Dominio/RepositorioDeCalificaciones ................... 100.0%  
+  src/Academico/Dominio/RepositorioDeCriterios ........................ 100.0%  
+  src/Academico/Dominio/RepositorioDeInscripciones .................... 100.0%  
+  src/Academico/Dominio/RepositorioDeMaterias ......................... 100.0%  
+  src/Academico/Dominio/RepositorioDeParametros ....................... 100.0%  
+  src/Academico/Dominio/RepositorioDePeriodos ......................... 100.0%  
+  src/Academico/Dominio/RepositorioDeResumenes ........................ 100.0%  
+  src/Academico/Dominio/ResumenAcademico .............................. 100.0%  
+  src/Academico/Dominio/RiesgoAcademico ............................... 100.0%  
+  src/Academico/Dominio/TipoDeCalificacion ............................ 100.0%  
+  src/Academico/Infraestructura/AcademicoServiceProvider .............. 100.0%  
+  src/Academico/Infraestructura/Consola/ConciliarResumenesComando ..... 100.0%  
+  src/Academico/Infraestructura/ConsultaDeAsistenciasSql .............. 100.0%  
+  src/Academico/Infraestructura/ConsultaDeCalificacionesSql ........... 100.0%  
+  src/Academico/Infraestructura/ConsultaDeInscripcionesSql ............ 100.0%  
+  src/Academico/Infraestructura/ConsultaDeMateriasSql ................. 100.0%  
+  src/Academico/Infraestructura/ConsultaDeSituacionAcademicaSql ... 44 / 97.8%  
+  src/Academico/Infraestructura/Escuchas/RecalcularResumenAcademico ... 100.0%  
+  src/Academico/Infraestructura/FuenteDeDatosAcademicosSql ............ 100.0%  
+  src/Academico/Infraestructura/JugadoresDeLaMateriaAcademico ......... 100.0%  
+  src/Academico/Infraestructura/PorcentajeDeAsistenciaAClasesSql ...... 100.0%  
+  src/Academico/Infraestructura/RepositorioDeAsignaturasEloquent ...... 100.0%  
+  src/Academico/Infraestructura/RepositorioDeAsistenciasEloquent .. 70 / 98.2%  
+  src/Academico/Infraestructura/RepositorioDeCalificacionesEloquent  73 / 98.5%  
+  src/Academico/Infraestructura/RepositorioDeCriteriosEloquent .... 83 / 98.9%  
+  src/Academico/Infraestructura/RepositorioDeInscripcionesEloquent  57 / 96.4%  
+  src/Academico/Infraestructura/RepositorioDeMateriasEloquent ..... 62 / 97.0%  
+  src/Academico/Infraestructura/RepositorioDeParametrosEloquent ....... 100.0%  
+  src/Academico/Infraestructura/RepositorioDePeriodosEloquent ......... 100.0%  
+  src/Academico/Infraestructura/RepositorioDeResumenesEloquent ........ 100.0%  
+  src/Academico/Infraestructura/RiesgoAcademicoDelJugadorAcademico .... 100.0%  
+  src/Alertas/Aplicacion/AplicarDecisionDeAlerta ...................... 100.0%  
+  src/Alertas/Aplicacion/RecalcularAlertaAcademicaDeJugador ........... 100.0%  
+  src/Alertas/Aplicacion/RecalcularAlertasDeJugador ................... 100.0%  
+  src/Alertas/Aplicacion/RecalcularAlertasDeportivasDeMembresia ....... 100.0%  
+  src/Alertas/Aplicacion/RecalcularTodasLasAlertas .................... 100.0%  
+  src/Alertas/Aplicacion/RepositorioDeAlertas ......................... 100.0%  
+  src/Alertas/Aplicacion/RepositorioDeParametrosDeAlertas ............. 100.0%  
+  src/Alertas/Aplicacion/ResultadoDelRecalculo ........................ 100.0%  
+  src/Alertas/Aplicacion/TipoDeAlerta ................................. 100.0%  
+  src/Alertas/Aplicacion/Transaccion .................................. 100.0%  
+  src/Alertas/Dominio/AccionSobreAlerta ............................... 100.0%  
+  src/Alertas/Dominio/AcumulacionDeSanciones .......................... 100.0%  
+  src/Alertas/Dominio/AlertaAcademica ................................. 100.0%  
+  src/Alertas/Dominio/DecisionDeAlerta ................................ 100.0%  
+  src/Alertas/Dominio/InasistenciaAEntrenamiento ...................... 100.0%  
+  src/Alertas/Dominio/ParametrosDeSanciones ........................... 100.0%  
+  src/Alertas/Dominio/ResultadoDeEvaluacion ........................... 100.0%  
+  src/Alertas/Dominio/RiesgoDeBajaDeportiva ........................... 100.0%  
+  src/Alertas/Dominio/TarjetasDePartido ............................... 100.0%  
+  src/Alertas/Dominio/TarjetasRegistradas ............................. 100.0%  
+  src/Alertas/Dominio/VentanaDeFaltas ................................. 100.0%  
+  src/Alertas/Infraestructura/AlertasServiceProvider .................. 100.0%  
+  src/Alertas/Infraestructura/Consola/RecalcularAlertasComando ........ 100.0%  
+  src/Alertas/Infraestructura/Escuchas/RecalcularAlertaAcademica ...... 100.0%  
+  src/Alertas/Infraestructura/RepositorioDeAlertasSql ................. 100.0%  
+  src/Alertas/Infraestructura/RepositorioDeParametrosDeAlertasSql ..... 100.0%  
+  src/Alertas/Infraestructura/TransaccionSql .......................... 100.0%  
+  src/Compartido/Aplicacion/AlcanceDeJugadores ........................ 100.0%  
+  src/Compartido/Aplicacion/AsistenciaPorMes .......................... 100.0%  
+  src/Compartido/Aplicacion/ConvocatoriaDePartido ..................... 100.0%  
+  src/Compartido/Aplicacion/EquiposDelEntrenador ...................... 100.0%  
+  src/Compartido/Aplicacion/EstadoDeDisponibilidadOficial ............. 100.0%  
+  src/Compartido/Aplicacion/EvaluacionVigente ......................... 100.0%  
+  src/Compartido/Aplicacion/EvaluacionesVigentesDelEquipo ............. 100.0%  
+  src/Compartido/Aplicacion/FaltaDeEntrenamiento ...................... 100.0%  
+  src/Compartido/Aplicacion/FaltasDeEntrenamiento ..................... 100.0%  
+  src/Compartido/Aplicacion/InicioDePartidos .......................... 100.0%  
+  src/Compartido/Aplicacion/JugadorDelEquipo .......................... 100.0%  
+  src/Compartido/Aplicacion/JugadorLocalizado ......................... 100.0%  
+  src/Compartido/Aplicacion/JugadoresDeLaMateria ...................... 100.0%  
+  src/Compartido/Aplicacion/JugadoresDelEquipo ........................ 100.0%  
+  src/Compartido/Aplicacion/LocalizadorDeJugadores .................... 100.0%  
+  src/Compartido/Aplicacion/MembresiaVigente .......................... 100.0%  
+  src/Compartido/Aplicacion/MembresiasVigentes ........................ 100.0%  
+  src/Compartido/Aplicacion/PartidoConConvocatoria .................... 100.0%  
+  src/Compartido/Aplicacion/PorcentajeDeAsistenciaAClases ............. 100.0%  
+  src/Compartido/Aplicacion/PorcentajeDeAsistenciaAEntrenamientos ..... 100.0%  
+  src/Compartido/Aplicacion/PosicionEnEquipo .......................... 100.0%  
+  src/Compartido/Aplicacion/PublicadorDeEventos ....................... 100.0%  
+  src/Compartido/Aplicacion/RiesgoAcademico ........................... 100.0%  
+  src/Compartido/Aplicacion/RiesgoAcademicoDelJugador ................. 100.0%  
+  src/Compartido/Aplicacion/TarjetasDeUnRegistro ...................... 100.0%  
+  src/Compartido/Aplicacion/TarjetasPorPartido ........................ 100.0%  
+  src/Compartido/Aplicacion/TemporadaDeFecha .......................... 100.0%  
+  src/Compartido/Aplicacion/UsuarioActual ............................. 100.0%  
+  src/Compartido/Dominio/Eventos/AsistenciaDeClaseRegistrada .......... 100.0%  
+  src/Compartido/Dominio/Eventos/CalificacionRegistrada ............... 100.0%  
+  src/Compartido/Dominio/Eventos/CriterioDeMateriaModificado .......... 100.0%  
+  src/Compartido/Dominio/Eventos/JugadorInscrito ...................... 100.0%  
+  src/Compartido/Dominio/HoyDeNegocio ................................. 100.0%  
+  src/Compartido/Dominio/Identificador ................................ 100.0%  
+  src/Compartido/Dominio/Instante ..................................... 100.0%  
+  src/Compartido/Dominio/NumeroDecimal ................................ 100.0%  
+  src/Compartido/Dominio/NumeroDecimalInvalido ........................ 100.0%  
+  src/Compartido/Dominio/ReglaDeNegocioViolada ........................ 100.0%  
+  src/Compartido/Dominio/Reloj ........................................ 100.0%  
+  src/Compartido/Infraestructura/CompartidoServiceProvider ............ 100.0%  
+  src/Compartido/Infraestructura/Esquema/MacrosDeEsquema .............. 100.0%  
+  src/Compartido/Infraestructura/Historial/EscritorDeHistorial ........ 100.0%  
+  src/Compartido/Infraestructura/HoyDeNegocioSegunReloj ............... 100.0%  
+  src/Compartido/Infraestructura/PublicadorDeEventosLaravel ........... 100.0%  
+  src/Compartido/Infraestructura/RelojDelSistema ...................... 100.0%  
+  src/Compartido/Infraestructura/RelojFijo ............................ 100.0%  
+  src/Competencia/Aplicacion/AdvertenciasDeLesion ..................... 100.0%  
+  src/Competencia/Aplicacion/AsistenciaDelEquipo ...................... 100.0%  
+  src/Competencia/Aplicacion/AsistenciaYaRegistrada ................... 100.0%  
+  src/Competencia/Aplicacion/BuscarAsistenciaDelEntrenador ............ 100.0%  
+  src/Competencia/Aplicacion/BuscarConvocatoriaDelEntrenador .......... 100.0%  
+  src/Competencia/Aplicacion/BuscarEntrenamientoDelEntrenador ......... 100.0%  
+  src/Competencia/Aplicacion/BuscarPartidoDelEntrenador ............... 100.0%  
+  src/Competencia/Aplicacion/CambiosDePartido ......................... 100.0%  
+  src/Competencia/Aplicacion/CapturarResultado ........................ 100.0%  
+  src/Competencia/Aplicacion/ComprobarEquipoEntrenado ................. 100.0%  
+  src/Competencia/Aplicacion/ConsultaDeAsistencia ..................... 100.0%  
+  src/Competencia/Aplicacion/ConsultaDeConvocatoria ................... 100.0%  
+  src/Competencia/Aplicacion/ConvocarJugador .......................... 100.0%  
+  src/Competencia/Aplicacion/CorregirAsistencia ....................... 100.0%  
+  src/Competencia/Aplicacion/CrearLugar ............................... 100.0%  
+  src/Competencia/Aplicacion/CrearRival ............................... 100.0%  
+  src/Competencia/Aplicacion/CrearTemporada ........................... 100.0%  
+  src/Competencia/Aplicacion/CrearTorneo .............................. 100.0%  
+  src/Competencia/Aplicacion/DefinirAlineacion ........................ 100.0%  
+  src/Competencia/Aplicacion/EliminarLugar ............................ 100.0%  
+  src/Competencia/Aplicacion/EliminarRival ............................ 100.0%  
+  src/Competencia/Aplicacion/EliminarTemporada ........................ 100.0%  
+  src/Competencia/Aplicacion/EliminarTorneo ........................... 100.0%  
+  src/Competencia/Aplicacion/EntrenamientoConJugadores ................ 100.0%  
+  src/Competencia/Aplicacion/EntrenamientoNoRealizado ................. 100.0%  
+  src/Competencia/Aplicacion/JugadorNoConvocado ....................... 100.0%  
+  src/Competencia/Aplicacion/JugadorNoPerteneceAlEquipo ............... 100.0%  
+  src/Competencia/Aplicacion/JugadorYaConvocado ....................... 100.0%  
+  src/Competencia/Aplicacion/ListarAsistencias ........................ 100.0%  
+  src/Competencia/Aplicacion/ListarConvocatoria ....................... 100.0%  
+  src/Competencia/Aplicacion/ListarEntrenamientos ..................... 100.0%  
+  src/Competencia/Aplicacion/ListarLugares ............................ 100.0%  
+  src/Competencia/Aplicacion/ListarPartidos ........................... 100.0%  
+  src/Competencia/Aplicacion/ListarRivales ............................ 100.0%  
+  src/Competencia/Aplicacion/ListarTemporadas ......................... 100.0%  
+  src/Competencia/Aplicacion/ListarTorneos ............................ 100.0%  
+  src/Competencia/Aplicacion/LugarDuplicado ........................... 100.0%  
+  src/Competencia/Aplicacion/LugarInexistente ......................... 100.0%  
+  src/Competencia/Aplicacion/ModificarEntrenamiento ................... 100.0%  
+  src/Competencia/Aplicacion/ModificarPartido ......................... 100.0%  
+  src/Competencia/Aplicacion/PosicionInexistente ...................... 100.0%  
+  src/Competencia/Aplicacion/ProgramarEntrenamiento ................... 100.0%  
+  src/Competencia/Aplicacion/ProgramarPartido ......................... 100.0%  
+  src/Competencia/Aplicacion/QuitarDeLaConvocatoria ................... 100.0%  
+  src/Competencia/Aplicacion/RecursoNoEncontrado ...................... 100.0%  
+  src/Competencia/Aplicacion/ReferenciasDeEntrenamiento ............... 100.0%  
+  src/Competencia/Aplicacion/ReferenciasDePartido ..................... 100.0%  
+  src/Competencia/Aplicacion/RegistrarAsistencias ..................... 100.0%  
+  src/Competencia/Aplicacion/ResponsableNoAsignado .................... 100.0%  
+  src/Competencia/Aplicacion/RivalDuplicado ........................... 100.0%  
+  src/Competencia/Aplicacion/RivalInexistente ......................... 100.0%  
+  src/Competencia/Aplicacion/SinTemporada ............................. 100.0%  
+  src/Competencia/Aplicacion/TemporadaDuplicada ....................... 100.0%  
+  src/Competencia/Aplicacion/TemporadaInexistente ..................... 100.0%  
+  src/Competencia/Aplicacion/TemporadaSolapada ........................ 100.0%  
+  src/Competencia/Aplicacion/TorneoDeOtraTemporada .................... 100.0%  
+  src/Competencia/Aplicacion/TorneoDuplicado .......................... 100.0%  
+  src/Competencia/Aplicacion/TorneoInexistente ........................ 100.0%  
+  src/Competencia/Aplicacion/TorneoObligatorio ........................ 100.0%  
+  src/Competencia/Aplicacion/VerAsistenciaDelEquipo ................... 100.0%  
+  src/Competencia/Aplicacion/VerAsistenciaDelJugador .................. 100.0%  
+  src/Competencia/Aplicacion/VerEntrenamiento ......................... 100.0%  
+  src/Competencia/Aplicacion/VisibilidadDeJugador ..................... 100.0%  
+  src/Competencia/Dominio/AsistenciaDeEntrenamiento ................... 100.0%  
+  src/Competencia/Dominio/CondicionDePartido .......................... 100.0%  
+  src/Competencia/Dominio/ConteoDeAsistenciaAEntrenamientos ........... 100.0%  
+  src/Competencia/Dominio/Convocatoria ................................ 100.0%  
+  src/Competencia/Dominio/Entrenamiento ............................... 100.0%  
+  src/Competencia/Dominio/EntrenamientoNoProgramado ................... 100.0%  
+  src/Competencia/Dominio/EstadoDeAsistencia .......................... 100.0%  
+  src/Competencia/Dominio/EstadoDeEntrenamiento ....................... 100.0%  
+  src/Competencia/Dominio/EstadoDePartido ............................. 100.0%  
+  src/Competencia/Dominio/Lugar ....................................... 100.0%  
+  src/Competencia/Dominio/Partido ..................................... 100.0%  
+  src/Competencia/Dominio/PartidoNoProgramado ......................... 100.0%  
+  src/Competencia/Dominio/ReglaDeCampoViolada ......................... 100.0%  
+  src/Competencia/Dominio/RepositorioDeAsistenciasDeEntrenamiento ..... 100.0%  
+  src/Competencia/Dominio/RepositorioDeConvocatorias .................. 100.0%  
+  src/Competencia/Dominio/RepositorioDeEntrenamientos ................. 100.0%  
+  src/Competencia/Dominio/RepositorioDeLugares ........................ 100.0%  
+  src/Competencia/Dominio/RepositorioDePartidos ....................... 100.0%  
+  src/Competencia/Dominio/RepositorioDeRivales ........................ 100.0%  
+  src/Competencia/Dominio/RepositorioDeTemporadas ..................... 100.0%  
+  src/Competencia/Dominio/RepositorioDeTorneos ........................ 100.0%  
+  src/Competencia/Dominio/Rival ....................................... 100.0%  
+  src/Competencia/Dominio/RolDeAlineacion ............................. 100.0%  
+  src/Competencia/Dominio/Temporada ................................... 100.0%  
+  src/Competencia/Dominio/TipoDePartido ............................... 100.0%  
+  src/Competencia/Dominio/Torneo ...................................... 100.0%  
+  src/Competencia/Dominio/TransicionNoPermitida ....................... 100.0%  
+  src/Competencia/Dominio/ValorFueraDeRango ........................... 100.0%  
+  src/Competencia/Infraestructura/CompetenciaServiceProvider .......... 100.0%  
+  src/Competencia/Infraestructura/ConsultaDeAsistenciaSql ............. 100.0%  
+  src/Competencia/Infraestructura/ConsultaDeConvocatoriaSql ........... 100.0%  
+  src/Competencia/Infraestructura/ConvocatoriaDePartidoCompetencia .... 100.0%  
+  src/Competencia/Infraestructura/EscrituraDeCatalogo ................. 100.0%  
+  src/Competencia/Infraestructura/FaltasDeEntrenamientoSql ............ 100.0%  
+  src/Competencia/Infraestructura/InicioDePartidosCompetencia ......... 100.0%  
+  src/Competencia/Infraestructura/PorcentajeDeAsistenciaAEntrenamient…  100.0%  
+  src/Competencia/Infraestructura/RepositorioDeAsistenciasDeEntrenami…  65..66 / 97.3%  
+  src/Competencia/Infraestructura/RepositorioDeConvocatoriasEloquent  63..64 / 97.5%  
+  src/Competencia/Infraestructura/RepositorioDeEntrenamientosEloquent . 100.0%  
+  src/Competencia/Infraestructura/RepositorioDeLugaresEloquent  37..38 / 90.9%  
+  src/Competencia/Infraestructura/RepositorioDePartidosEloquent ....... 100.0%  
+  src/Competencia/Infraestructura/RepositorioDeRivalesEloquent  37..38 / 90.9%  
+  src/Competencia/Infraestructura/RepositorioDeTemporadasEloquent . 70 / 97.7%  
+  src/Competencia/Infraestructura/RepositorioDeTorneosEloquent  42..43 / 92.6%  
+  src/Competencia/Infraestructura/TemporadaDeFechaSql ................. 100.0%  
+  src/Competencia/Infraestructura/VisibilidadDeJugadorSql ............. 100.0%  
+  src/CondicionFisica/Aplicacion/ComprobarJugadorDelEntrenador ........ 100.0%  
+  src/CondicionFisica/Aplicacion/ConsultarPeriodoDePruebas ............ 100.0%  
+  src/CondicionFisica/Aplicacion/JugadorEnBajaSinMedicion ............. 100.0%  
+  src/CondicionFisica/Aplicacion/JugadorEnBajaSinPrueba ............... 100.0%  
+  src/CondicionFisica/Aplicacion/ListarMediciones ..................... 100.0%  
+  src/CondicionFisica/Aplicacion/ListarPruebas ........................ 100.0%  
+  src/CondicionFisica/Aplicacion/ListarTiposDePrueba .................. 100.0%  
+  src/CondicionFisica/Aplicacion/MedicionConcurrente .................. 100.0%  
+  src/CondicionFisica/Aplicacion/PruebaConcurrente .................... 100.0%  
+  src/CondicionFisica/Aplicacion/RecursoNoEncontrado .................. 100.0%  
+  src/CondicionFisica/Aplicacion/RegistrarMedicion .................... 100.0%  
+  src/CondicionFisica/Aplicacion/RegistrarPrueba ...................... 100.0%  
+  src/CondicionFisica/Aplicacion/Transaccion .......................... 100.0%  
+  src/CondicionFisica/Aplicacion/VisibilidadDeJugador ................. 100.0%  
+  src/CondicionFisica/Dominio/CatalogoDeRangos ........................ 100.0%  
+  src/CondicionFisica/Dominio/CatalogoDeTiposDePrueba ................. 100.0%  
+  src/CondicionFisica/Dominio/EquipoInexistente ....................... 100.0%  
+  src/CondicionFisica/Dominio/MedicionCorporal ........................ 100.0%  
+  src/CondicionFisica/Dominio/MedicionYaRegistrada .................... 100.0%  
+  src/CondicionFisica/Dominio/NadaQueCorregir ......................... 100.0%  
+  src/CondicionFisica/Dominio/PruebaFisica ............................ 100.0%  
+  src/CondicionFisica/Dominio/PruebaYaRegistrada ...................... 100.0%  
+  src/CondicionFisica/Dominio/RangoDeMedida ........................... 100.0%  
+  src/CondicionFisica/Dominio/RangoNoConfigurado ...................... 100.0%  
+  src/CondicionFisica/Dominio/ReglaDeCampoViolada ..................... 100.0%  
+  src/CondicionFisica/Dominio/RepositorioDeMediciones ................. 100.0%  
+  src/CondicionFisica/Dominio/RepositorioDePruebasFisicas ............. 100.0%  
+  src/CondicionFisica/Dominio/TipoDePrueba ............................ 100.0%  
+  src/CondicionFisica/Dominio/TipoPruebaInexistente ................... 100.0%  
+  src/CondicionFisica/Dominio/ValorFueraDeRango ....................... 100.0%  
+  src/CondicionFisica/Infraestructura/CatalogoDeRangosSql ............. 100.0%  
+  src/CondicionFisica/Infraestructura/CatalogoDeTiposDePruebaSql ...... 100.0%  
+  src/CondicionFisica/Infraestructura/CondicionFisicaServiceProvider .. 100.0%  
+  src/CondicionFisica/Infraestructura/RepositorioDeMedicionesSql ...... 100.0%  
+  src/CondicionFisica/Infraestructura/RepositorioDePruebasFisicasSql .. 100.0%  
+  src/CondicionFisica/Infraestructura/TransaccionSql .................. 100.0%  
+  src/CondicionFisica/Infraestructura/VisibilidadDeJugadorSql ......... 100.0%  
+  src/Consultas/Aplicacion/AlertaVisible .............................. 100.0%  
+  src/Consultas/Aplicacion/CalculadorDeDesempeno ...................... 100.0%  
+  src/Consultas/Aplicacion/ConstructorDeLaVista ....................... 100.0%  
+  src/Consultas/Aplicacion/ConsultaDeAlertas .......................... 100.0%  
+  src/Consultas/Aplicacion/ConsultaDeEstatus .......................... 100.0%  
+  src/Consultas/Aplicacion/ConsultaDeGraficos ......................... 100.0%  
+  src/Consultas/Aplicacion/ConsultaDePendientesDeRendimiento .......... 100.0%  
+  src/Consultas/Aplicacion/ConsultaDeVistaParaConvocar ................ 100.0%  
+  src/Consultas/Aplicacion/ConsultarAlertasDelJugador ................. 100.0%  
+  src/Consultas/Aplicacion/ConsultarGraficosDelEquipo ................. 100.0%  
+  src/Consultas/Aplicacion/ConsultarGraficosDelJugador ................ 100.0%  
+  src/Consultas/Aplicacion/ConsultarVistaDeLaConvocatoria ............. 100.0%  
+  src/Consultas/Aplicacion/ConsultarVistaParaConvocar ................. 100.0%  
+  src/Consultas/Aplicacion/ConvocatoriaDelPartido ..................... 100.0%  
+  src/Consultas/Aplicacion/DatosDeAsistencia .......................... 100.0%  
+  src/Consultas/Aplicacion/DatosDeDisponibilidad ...................... 100.0%  
+  src/Consultas/Aplicacion/DatosDeEstadoFisico ........................ 100.0%  
+  src/Consultas/Aplicacion/DatosDeSerie ............................... 100.0%  
+  src/Consultas/Aplicacion/DatosDeSituacionAcademica .................. 100.0%  
+  src/Consultas/Aplicacion/EvaluacionReciente ......................... 100.0%  
+  src/Consultas/Aplicacion/FilaDeEstatus .............................. 100.0%  
+  src/Consultas/Aplicacion/FiltrosDeEstatus ........................... 100.0%  
+  src/Consultas/Aplicacion/GraficosDelEquipo .......................... 100.0%  
+  src/Consultas/Aplicacion/GraficosDelJugador ......................... 100.0%  
+  src/Consultas/Aplicacion/JugadorConvocable .......................... 100.0%  
+  src/Consultas/Aplicacion/ListarEstatusDeJugadores ................... 100.0%  
+  src/Consultas/Aplicacion/ListarJugadoresParaConvocar ................ 100.0%  
+  src/Consultas/Aplicacion/MarcaDeDesactualizacion .................... 100.0%  
+  src/Consultas/Aplicacion/MateriaDelGrafico .......................... 100.0%  
+  src/Consultas/Aplicacion/ParametroDeDesactualizacion ................ 100.0%  
+  src/Consultas/Aplicacion/PartidoPendienteDeRendimiento .............. 100.0%  
+  src/Consultas/Aplicacion/PorcentajeDeAsistencia ..................... 100.0%  
+  src/Consultas/Aplicacion/PuntoDeSerie ............................... 100.0%  
+  src/Consultas/Aplicacion/SerieDeGrafico ............................. 100.0%  
+  src/Consultas/Aplicacion/SerieDeMateria ............................. 100.0%  
+  src/Consultas/Aplicacion/VistaParaConvocar .......................... 100.0%  
+  src/Consultas/Infraestructura/AlcanceDeJugadoresSql ................. 100.0%  
+  src/Consultas/Infraestructura/ConsultaDeAlertasSql .................. 100.0%  
+  src/Consultas/Infraestructura/ConsultaDeEstatusSql .............. 35 / 98.4%  
+  src/Consultas/Infraestructura/ConsultaDeGraficosSql ................. 100.0%  
+  src/Consultas/Infraestructura/ConsultaDePendientesDeRendimientoSql .. 100.0%  
+  src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql ........ 100.0%  
+  src/Consultas/Infraestructura/ConsultasServiceProvider .............. 100.0%  
+  src/Consultas/Infraestructura/ParametroDeDesactualizacionSql .... 22 / 88.9%  
+  src/Consultas/Infraestructura/VisibilidadDeAlertasSql ........... 43 / 97.6%  
+  src/Identidad/Aplicacion/CambiarContrasena .......................... 100.0%  
+  src/Identidad/Aplicacion/CierreDeSesiones ........................... 100.0%  
+  src/Identidad/Aplicacion/ContrasenaNuevaMuyCorta .................... 100.0%  
+  src/Identidad/Aplicacion/CrearUsuario ............................... 100.0%  
+  src/Identidad/Aplicacion/CredencialesInvalidas ...................... 100.0%  
+  src/Identidad/Aplicacion/CuentaBloqueada ............................ 100.0%  
+  src/Identidad/Aplicacion/IniciarSesion .............................. 100.0%  
+  src/Identidad/Dominio/PoliticaDeContrasena .......................... 100.0%  
+  src/Identidad/Dominio/RepositorioDeUsuarios ......................... 100.0%  
+  src/Identidad/Dominio/Usuario ....................................... 100.0%  
+  src/Identidad/Infraestructura/CierreDeSesionesEnBaseDeDatos ......... 100.0%  
+  src/Identidad/Infraestructura/Consola/CrearUsuarioComando ........... 100.0%  
+  src/Identidad/Infraestructura/IdentidadServiceProvider .............. 100.0%  
+  src/Identidad/Infraestructura/Modelos/UsuarioModelo ................. 100.0%  
+  src/Identidad/Infraestructura/RepositorioDeUsuariosEloquent ......... 100.0%  
+  src/Identidad/Infraestructura/UsuarioActualDeSesion ................. 100.0%  
+  src/Plantel/Aplicacion/ActualizarExpedienteDeJugador ................ 100.0%  
+  src/Plantel/Aplicacion/AsignarJugadorAEquipo ........................ 100.0%  
+  src/Plantel/Aplicacion/Baja ......................................... 100.0%  
+  src/Plantel/Aplicacion/BuscadorDeJugadorPorMatricula ................ 100.0%  
+  src/Plantel/Aplicacion/BuscarJugadorPorMatricula .................... 100.0%  
+  src/Plantel/Aplicacion/CambiarPosicionDeJugador ..................... 100.0%  
+  src/Plantel/Aplicacion/CategoriaDuplicada ........................... 100.0%  
+  src/Plantel/Aplicacion/CategoriaInexistente ......................... 100.0%  
+  src/Plantel/Aplicacion/ComprobarEquipoDelEntrenador ................. 100.0%  
+  src/Plantel/Aplicacion/ComprobarJugadorEscribible ................... 100.0%  
+  src/Plantel/Aplicacion/ConsultaDeJugadores .......................... 100.0%  
+  src/Plantel/Aplicacion/CrearCategoria ............................... 100.0%  
+  src/Plantel/Aplicacion/CrearEquipo .................................. 100.0%  
+  src/Plantel/Aplicacion/DarDeBajaAJugador ............................ 100.0%  
+  src/Plantel/Aplicacion/EliminarCategoria ............................ 100.0%  
+  src/Plantel/Aplicacion/EquipoConCategoria ........................... 100.0%  
+  src/Plantel/Aplicacion/EquipoDelJugador ............................. 100.0%  
+  src/Plantel/Aplicacion/EquipoDuplicado .............................. 100.0%  
+  src/Plantel/Aplicacion/EquipoNoEncontrado ........................... 100.0%  
+  src/Plantel/Aplicacion/JugadorBuscado ............................... 100.0%  
+  src/Plantel/Aplicacion/JugadorConEquipos ............................ 100.0%  
+  src/Plantel/Aplicacion/JugadorEnBaja ................................ 100.0%  
+  src/Plantel/Aplicacion/JugadorNoEncontrado .......................... 100.0%  
+  src/Plantel/Aplicacion/JugadorParaAsignar ........................... 100.0%  
+  src/Plantel/Aplicacion/JugadorRegistrado ............................ 100.0%  
+  src/Plantel/Aplicacion/JugadorYaEnBaja .............................. 100.0%  
+  src/Plantel/Aplicacion/JugadorYaEnEquipo ............................ 100.0%  
+  src/Plantel/Aplicacion/ListarCategorias ............................. 100.0%  
+  src/Plantel/Aplicacion/ListarEquipos ................................ 100.0%  
+  src/Plantel/Aplicacion/ListarJugadores .............................. 100.0%  
+  src/Plantel/Aplicacion/MatriculaDuplicada ........................... 100.0%  
+  src/Plantel/Aplicacion/MotivoObligatorio ............................ 100.0%  
+  src/Plantel/Aplicacion/PosicionInvalida ............................. 100.0%  
+  src/Plantel/Aplicacion/RegistrarJugador ............................. 100.0%  
+  src/Plantel/Aplicacion/VerJugador ................................... 100.0%  
+  src/Plantel/Dominio/Categoria ....................................... 100.0%  
+  src/Plantel/Dominio/Equipo .......................................... 100.0%  
+  src/Plantel/Dominio/Jugador ......................................... 100.0%  
+  src/Plantel/Dominio/RepositorioDeCategorias ......................... 100.0%  
+  src/Plantel/Dominio/RepositorioDeEquipos ............................ 100.0%  
+  src/Plantel/Dominio/RepositorioDeJugadores .......................... 100.0%  
+  src/Plantel/Dominio/RepositorioDeMembresias ......................... 100.0%  
+  src/Plantel/Dominio/RepositorioDePosiciones ......................... 100.0%  
+  src/Plantel/Infraestructura/BusquedaDeJugadorPorMatricula ........... 100.0%  
+  src/Plantel/Infraestructura/ConsultaDeJugadoresSql .................. 100.0%  
+  src/Plantel/Infraestructura/EquiposDelEntrenadorPlantel ............. 100.0%  
+  src/Plantel/Infraestructura/JugadoresDelEquipoPlantel ............... 100.0%  
+  src/Plantel/Infraestructura/LocalizadorDeJugadoresPlantel ........... 100.0%  
+  src/Plantel/Infraestructura/MembresiasVigentesPlantel ............... 100.0%  
+  src/Plantel/Infraestructura/PlantelServiceProvider .................. 100.0%  
+  src/Plantel/Infraestructura/PosicionEnEquipoPlantel ................. 100.0%  
+  src/Plantel/Infraestructura/RepositorioDeCategoriasEloquent ......... 100.0%  
+  src/Plantel/Infraestructura/RepositorioDeEquiposEloquent ............ 100.0%  
+  src/Plantel/Infraestructura/RepositorioDeJugadoresEloquent .......... 100.0%  
+  src/Plantel/Infraestructura/RepositorioDeMembresiasEloquent ......... 100.0%  
+  src/Plantel/Infraestructura/RepositorioDePosicionesEloquent ......... 100.0%  
+  src/Rendimiento/Aplicacion/BuscarPartidoDelEntrenador ............... 100.0%  
+  src/Rendimiento/Aplicacion/BuscarRendimientoDelRegistrante .......... 100.0%  
+  src/Rendimiento/Aplicacion/CalificacionesDelEntrenador .............. 100.0%  
+  src/Rendimiento/Aplicacion/CapturarRendimiento ...................... 100.0%  
+  src/Rendimiento/Aplicacion/ComprobarJugadorDelEquipo ................ 100.0%  
+  src/Rendimiento/Aplicacion/ConsultaDeMetricas ....................... 100.0%  
+  src/Rendimiento/Aplicacion/ConsultaDePlantillas ..................... 100.0%  
+  src/Rendimiento/Aplicacion/ConsultaDeRendimientos ................... 100.0%  
+  src/Rendimiento/Aplicacion/ConsultarDesempeno ....................... 100.0%  
+  src/Rendimiento/Aplicacion/ConsultarUmbral .......................... 100.0%  
+  src/Rendimiento/Aplicacion/CorregirRendimiento ...................... 100.0%  
+  src/Rendimiento/Aplicacion/CrearPlantilla ........................... 100.0%  
+  src/Rendimiento/Aplicacion/FijarUmbral .............................. 100.0%  
+  src/Rendimiento/Aplicacion/JugadorNoConvocado ....................... 100.0%  
+  src/Rendimiento/Aplicacion/ListarRendimientosDelPartido ............. 100.0%  
+  src/Rendimiento/Aplicacion/MetricaDelCatalogo ....................... 100.0%  
+  src/Rendimiento/Aplicacion/PartidoNoJugado .......................... 100.0%  
+  src/Rendimiento/Aplicacion/PlantillaDeOtraPosicion .................. 100.0%  
+  src/Rendimiento/Aplicacion/PlantillaDuplicada ....................... 100.0%  
+  src/Rendimiento/Aplicacion/PlantillaInexistente ..................... 100.0%  
+  src/Rendimiento/Aplicacion/PosicionInexistente ...................... 100.0%  
+  src/Rendimiento/Aplicacion/RecalcularEvaluacion ..................... 100.0%  
+  src/Rendimiento/Aplicacion/RecursoNoEncontrado ...................... 100.0%  
+  src/Rendimiento/Aplicacion/RendimientoDuplicado ..................... 100.0%  
+  src/Rendimiento/Aplicacion/SinUmbralAplicable ....................... 100.0%  
+  src/Rendimiento/Aplicacion/Transaccion .............................. 100.0%  
+  src/Rendimiento/Aplicacion/UmbralAmbiguo ............................ 100.0%  
+  src/Rendimiento/Aplicacion/UmbralAplicable .......................... 100.0%  
+  src/Rendimiento/Aplicacion/UmbralConcurrente ........................ 100.0%  
+  src/Rendimiento/Aplicacion/VisibilidadDeJugador ..................... 100.0%  
+  src/Rendimiento/Dominio/CalculoDeDesempeno .......................... 100.0%  
+  src/Rendimiento/Dominio/CatalogoDeMetricas .......................... 100.0%  
+  src/Rendimiento/Dominio/CategoriaDeCalificacion ..................... 100.0%  
+  src/Rendimiento/Dominio/CriterioDeEvaluacion ........................ 100.0%  
+  src/Rendimiento/Dominio/DatosDeJuego ................................ 100.0%  
+  src/Rendimiento/Dominio/EvaluacionCalculada ......................... 100.0%  
+  src/Rendimiento/Dominio/EvaluacionDeRendimiento ..................... 100.0%  
+  src/Rendimiento/Dominio/Metrica ..................................... 100.0%  
+  src/Rendimiento/Dominio/MetricaDeLaPosicion ......................... 100.0%  
+  src/Rendimiento/Dominio/MetricaNoAplicaAPosicion .................... 100.0%  
+  src/Rendimiento/Dominio/MetricaObligatoriaFaltante .................. 100.0%  
+  src/Rendimiento/Dominio/MetricasDeLaPosicion ........................ 100.0%  
+  src/Rendimiento/Dominio/PlantillaDeEvaluacion ....................... 100.0%  
+  src/Rendimiento/Dominio/ReglaDeCampoViolada ......................... 100.0%  
+  src/Rendimiento/Dominio/RendimientoDePartido ........................ 100.0%  
+  src/Rendimiento/Dominio/RepositorioDeEvaluaciones ................... 100.0%  
+  src/Rendimiento/Dominio/RepositorioDePlantillas ..................... 100.0%  
+  src/Rendimiento/Dominio/RepositorioDeRendimientos ................... 100.0%  
+  src/Rendimiento/Dominio/RepositorioDeUmbrales ....................... 100.0%  
+  src/Rendimiento/Dominio/ResultadoDeRendimiento ...................... 100.0%  
+  src/Rendimiento/Dominio/TipoDeDato .................................. 100.0%  
+  src/Rendimiento/Dominio/UmbralDeRendimiento ......................... 100.0%  
+  src/Rendimiento/Dominio/ValorDeMetrica .............................. 100.0%  
+  src/Rendimiento/Dominio/ValorFueraDeRango ........................... 100.0%  
+  src/Rendimiento/Infraestructura/CalificacionesDelEntrenadorSql ...... 100.0%  
+  src/Rendimiento/Infraestructura/CatalogoDeMetricasSql ............... 100.0%  
+  src/Rendimiento/Infraestructura/ConsultaDeRendimientosSql ........... 100.0%  
+  src/Rendimiento/Infraestructura/EvaluacionesVigentesDelEquipoSql .... 100.0%  
+  src/Rendimiento/Infraestructura/RendimientoServiceProvider .......... 100.0%  
+  src/Rendimiento/Infraestructura/RepositorioDeEvaluacionesSql ........ 100.0%  
+  src/Rendimiento/Infraestructura/RepositorioDePlantillasSql .......... 100.0%  
+  src/Rendimiento/Infraestructura/RepositorioDeRendimientosEloquent ... 100.0%  
+  src/Rendimiento/Infraestructura/RepositorioDeUmbralesSql ............ 100.0%  
+  src/Rendimiento/Infraestructura/TarjetasPorPartidoSql ............... 100.0%  
+  src/Rendimiento/Infraestructura/TransaccionSql ...................... 100.0%  
+  src/Rendimiento/Infraestructura/VisibilidadDeJugadorSql ............. 100.0%  
+  src/Salud/Aplicacion/AvisoVisible ................................... 100.0%  
+  src/Salud/Aplicacion/BuscarLesionDelRegistrante ..................... 100.0%  
+  src/Salud/Aplicacion/CambiarEstado .................................. 100.0%  
+  src/Salud/Aplicacion/ComprobarAvisoDelEntrenador .................... 100.0%  
+  src/Salud/Aplicacion/ComprobarJugadorDelEntrenador .................. 100.0%  
+  src/Salud/Aplicacion/ComprobarJugadorVisible ........................ 100.0%  
+  src/Salud/Aplicacion/ConfirmarAviso ................................. 100.0%  
+  src/Salud/Aplicacion/ConsultarEstado ................................ 100.0%  
+  src/Salud/Aplicacion/CorregirLesion ................................. 100.0%  
+  src/Salud/Aplicacion/CrearAviso ..................................... 100.0%  
+  src/Salud/Aplicacion/DarDeAlta ...................................... 100.0%  
+  src/Salud/Aplicacion/DescartarAviso ................................. 100.0%  
+  src/Salud/Aplicacion/EstadoConcurrente .............................. 100.0%  
+  src/Salud/Aplicacion/EstadoVisible .................................. 100.0%  
+  src/Salud/Aplicacion/JugadorEnBajaSinAviso .......................... 100.0%  
+  src/Salud/Aplicacion/JugadorEnBajaSinCambioDeEstado ................. 100.0%  
+  src/Salud/Aplicacion/ListarAvisos ................................... 100.0%  
+  src/Salud/Aplicacion/ListarLesiones ................................. 100.0%  
+  src/Salud/Aplicacion/RecursoNoEncontrado ............................ 100.0%  
+  src/Salud/Aplicacion/Transaccion .................................... 100.0%  
+  src/Salud/Aplicacion/VisibilidadDeJugador ........................... 100.0%  
+  src/Salud/Dominio/AvisoDeLesion ..................................... 100.0%  
+  src/Salud/Dominio/AvisoNoPendiente .................................. 100.0%  
+  src/Salud/Dominio/CausaDeLesion ..................................... 100.0%  
+  src/Salud/Dominio/EstadoDeAviso ..................................... 100.0%  
+  src/Salud/Dominio/EstadoEnElMismoInstante ........................... 100.0%  
+  src/Salud/Dominio/EstadoOficial ..................................... 100.0%  
+  src/Salud/Dominio/FechaAnteriorAlInicio ............................. 100.0%  
+  src/Salud/Dominio/Lesion ............................................ 100.0%  
+  src/Salud/Dominio/NoEsRegistrante ................................... 100.0%  
+  src/Salud/Dominio/RepositorioDeAvisos ............................... 100.0%  
+  src/Salud/Dominio/RepositorioDeEstados .............................. 100.0%  
+  src/Salud/Dominio/RepositorioDeLesiones ............................. 100.0%  
+  src/Salud/Dominio/SinLesionVigente .................................. 100.0%  
+  src/Salud/Dominio/TipoDeEstado ...................................... 100.0%  
+  src/Salud/Infraestructura/EstadoDeDisponibilidadOficialSalud ........ 100.0%  
+  src/Salud/Infraestructura/RepositorioDeAvisosSql .................... 100.0%  
+  src/Salud/Infraestructura/RepositorioDeEstadosSql ................... 100.0%  
+  src/Salud/Infraestructura/RepositorioDeLesionesSql .................. 100.0%  
+  src/Salud/Infraestructura/SaludServiceProvider ...................... 100.0%  
+  src/Salud/Infraestructura/TransaccionSql ............................ 100.0%  
+  src/Salud/Infraestructura/VisibilidadDeJugadorSql ................... 100.0%  
+  ────────────────────────────────────────────────────────────────────────────  
+                                                                 Total: 99.6 %  
+
+Capa                      Cobertura   Umbral  Estado
+Dominio                      100.0%      95%  ok
+Aplicación                  100.0%      85%  ok
+Infraestructura y HTTP        99.5%      70%  ok
+No security vulnerability advisories found.
+EXIT_CODE=0 HEAD=7a1e910 inicio=15:49:00 fin=15:55:33

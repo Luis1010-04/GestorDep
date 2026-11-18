@@ -12,6 +12,7 @@
  */
 
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\PendingCommand;
 
@@ -176,7 +177,13 @@ function esquemaVaciarDatos(): void
 function esquemaReconstruir(): void
 {
     esquemaMarcarSucio();
-    consolaArtisan('migrate:fresh', ['--database' => 'propietario', '--force' => true])->assertSuccessful();
+    // Sin `assertSuccessful()`: esto es preparación, no una aserción de la prueba, y una aserción aquí se cuenta en la prueba que
+    // dispara la reconstrucción (la primera de cada proceso, o la siguiente a `esquemaMarcarSucio()`), así que el total de
+    // aserciones dependía del número de procesos y del reparto de pruebas. Si falla, lanza.
+    $codigo = Artisan::call('migrate:fresh', ['--database' => 'propietario', '--force' => true]);
+    if ($codigo !== 0) {
+        throw new RuntimeException("migrate:fresh terminó con el código $codigo:\n".Artisan::output());
+    }
     esquemaEstadoDePrueba(['preparado' => true, 'sucio' => false, 'estructura' => esquemaEstructura()]);
 }
 

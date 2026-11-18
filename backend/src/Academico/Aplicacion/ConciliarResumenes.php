@@ -3,7 +3,7 @@
 namespace Src\Academico\Aplicacion;
 
 /**
- * Concilia los resúmenes de todos los jugadores con inscripciones (arquitectura §11, `alertas:recalcular`): útil tras
+ * Concilia los resúmenes de todos los jugadores con inscripciones (arquitectura §11, `resumenes:conciliar`): útil tras
  * cambiar parámetros de fábrica o al cambiar el día vigente. Idempotente.
  */
 final class ConciliarResumenes

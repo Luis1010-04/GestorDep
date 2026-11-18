@@ -1,0 +1,26 @@
+﻿Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 2: vista para convocar y listas 
+=== control antes: 58 passed (516 assertions)
+=== 2.01 la vista deja pasar el alcance de docente (sin soloEntrenador) (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 1 failed, 57 passed (507 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ RN-13, RN-14: un usuario con los dos roles recibe por cada rol lo q…
+=== 2.02 la vista incluye a los jugadores en baja (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 3 failed, 55 passed (486 assertions)
+MATADA por 3 prueba(s); las primeras:
+  ⨯ RNF-01 (RN-23): un jugador sin alcance, en baja o inexistente respo…
+  ⨯ RNF-01 (RN-23): la lista del equipo no incluye jugadores en baja
+  ⨯ RN-23 (DA-99, RNF-01): un jugador en baja responde 404 en las rutas…
+=== 2.03 la convocatoria de la vista incluye a los jugadores en baja (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 1 failed, 57 passed (514 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ HU-29 (DA-29, paridad con H3): un convocado dado de baja se omite d…
+=== 2.04 la convocatoria de la vista deja pasar el alcance de docente (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas con la mutación: 58 passed (516 assertions)
+SOBREVIVE: 2.04 ningún test falla con la mutación.
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory

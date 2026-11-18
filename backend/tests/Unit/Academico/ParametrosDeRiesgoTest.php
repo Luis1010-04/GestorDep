@@ -1,18 +1,6 @@
 <?php
 
-use Src\Academico\Dominio\ParametrosDeRiesgo;
-use Src\Compartido\Dominio\NumeroDecimal;
 use Src\Compartido\Dominio\ReglaDeNegocioViolada;
-
-function parametrosDePrueba(string $sinRiesgo = '7.50', string $observacion = '7.00', int $reprobadasObservacion = 1, int $reprobadasRiesgo = 2): ParametrosDeRiesgo
-{
-    return new ParametrosDeRiesgo(
-        NumeroDecimal::desdeTexto($sinRiesgo),
-        NumeroDecimal::desdeTexto($observacion),
-        $reprobadasObservacion,
-        $reprobadasRiesgo,
-    );
-}
 
 test('RN-04: los parámetros válidos exponen sus cuatro valores', function () {
     $parametros = parametrosDePrueba();

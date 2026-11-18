@@ -18,7 +18,7 @@ Este documento es una fuente de verdad del agente. Define cómo se demuestra que
 
 | Qué se verifica | Herramienta | Notas |
 |---|---|---|
-| Pruebas unitarias, de integración y de API | Pest sobre PHPUnit | PostgreSQL real en contenedor |
+| Pruebas unitarias, de integración y de API | Pest sobre PHPUnit | PostgreSQL real en contenedor. En `make verificar`, Pest corre en paralelo con una base por proceso (DA-101) |
 | Reglas de arquitectura | Pest Arch | Dominio sin framework, dirección de dependencias, aislamiento entre contextos |
 | Análisis estático | Larastan (PHPStan) | Nivel 6 en H0 y H1; nivel 7 de H2 a H4; nivel 8 desde H5. Se sube al abrir el hito y nunca se baja |
 | Estilo | Laravel Pint | En modo de comprobación |
@@ -65,7 +65,8 @@ Cada comando tiene pruebas Pest que lo invocan con `$this->artisan(...)` y compr
 | Comando | Hito | Qué debe cumplir |
 |---|---|---|
 | `usuarios:crear` | H1 | Crea un usuario con uno o dos roles; la contraseña se pide por consola o por opción y se guarda solo como hash; rechaza correo duplicado, rol inexistente y contraseña que no cumple RNF-10; no imprime la contraseña |
-| `alertas:recalcular` | H6 | Concilia resúmenes y alertas abiertas; es idempotente (dos ejecuciones dejan el mismo estado); no reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores; cierra las alertas cuya condición venció con el tiempo; una prueba confirma que está programado a diario en el planificador (`arquitectura.md` §11) |
+| `alertas:recalcular` | H6 | Recalcula las tres alertas de los jugadores sin baja y abre o cierra las que corresponda (DA-113); es idempotente (dos ejecuciones dejan el mismo estado); no reescribe `activada_en` ni `cerrada_en` de alertas cerradas ni borra evaluaciones anteriores; cierra las alertas cuya condición venció con el tiempo; una prueba confirma que está programado a diario en el planificador (`arquitectura.md` §11) |
+| `resumenes:conciliar` | H2 | Concilia los resúmenes académicos de los jugadores con inscripciones (antes `alertas:recalcular`; DA-113); es idempotente; no crea ni cierra alertas; una prueba confirma que está programado a diario a las 02:00 (America/Mexico_City), igual que `alertas:recalcular` y sin depender de él |
 
 Ningún otro comando se crea sin aprobación.
 

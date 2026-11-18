@@ -90,6 +90,7 @@ Nada de esto autoriza a anticipar tablas, endpoints o campos de la Fase 2.
 3. Se decidió quién construye el frontend y cuándo, porque la Fase 2 depende de él para los perfiles nuevos, los reportes y los gráficos.
 4. Se priorizó con MoSCoW cada elemento de la columna Fase 2, empezando por los de mayor impacto en la decisión de convocar o dar de baja.
 5. Se hizo un nuevo descubrimiento con los usuarios del MVP en operación.
+6. El frontend es precondición de la Fase 2 y se desarrolla en la rama `frontend/blade-niceadmin`, creada desde `main` después de fusionar H6 (`docs/decisiones/registro-decisiones.md`, DA-122).
 
 ## 8. Qué historias entran en cada hito
 
