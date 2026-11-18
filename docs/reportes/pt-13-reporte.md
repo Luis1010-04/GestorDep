@@ -30,9 +30,10 @@ Las desactivaciones se hacen por la conexión del propietario, como un cambio ma
 
 ## Resultado de `make verificar`
 1. `docs/reportes/logs/pt-13/pt-13-verificar-1-phpstan.log`: **falló**. PHPStan: el tipo de retorno `?Identificador` de una clase anónima de mi prueba nunca es nulo. Código de salida 2, 29 s. Se corrigió la prueba.
-2. `docs/reportes/logs/pt-13/pt-13-verificar-2.log`: **pasó**. 2321 pruebas y 14014 aserciones, Pint y PHPStan sin errores, sin avisos de seguridad. Cobertura: Dominio 100,0 %, Aplicación 100,0 %, Infraestructura y HTTP 99,5 %. Código de salida 0. Los 1974 s incluyen una pausa pedida por el responsable durante la corrida; no son el tiempo real de la suite (unos 430 a 520 s en corridas anteriores).
+2. `docs/reportes/logs/pt-13/pt-13-verificar-2.log`: **pasó**. 2321 pruebas y 14014 aserciones, Pint y PHPStan sin errores, sin avisos de seguridad. Cobertura: Dominio 100,0 %, Aplicación 100,0 %, Infraestructura y HTTP 99,5 %. Código de salida 0, 1974 s. Ese tiempo es mucho mayor que el de las corridas anteriores de PT-12 (413 a 564 s) y la causa no se conoce: el proceso corría en segundo plano y no consta qué lo alargó. No se investigó.
+3. `docs/reportes/logs/pt-13/pt-13-verificar-3.log`: **pasó**, con el árbol limpio sobre el commit final `a22698c` (solo `frontend/NiceAdmin/` sin seguimiento). 2321 pruebas y 14014 aserciones, sin avisos de seguridad. Cobertura: Dominio 100,0 %, Aplicación 100,0 %, Infraestructura y HTTP 99,5 %. Código de salida 0, 408 s. El log se escribió fuera del repositorio durante la corrida, para no ensuciar el árbol, y se copió después sin cambios.
 
-Ambas corridas fueron con los cambios sin commitear, sobre la base `6d996c3`. `make humo` no se ejecutó (no se pidió). No se tocó ningún umbral ni regla de análisis.
+Las corridas 1 y 2 fueron con los cambios sin commitear, sobre la base `6d996c3`. `make humo` no se ejecutó (no se pidió). No se tocó ningún umbral ni regla de análisis.
 
 ## Lo que no se hizo
 - No se purgan las filas de `sessions` del usuario desactivado: la sesión sigue guardada y responde 401 hasta caducar.
