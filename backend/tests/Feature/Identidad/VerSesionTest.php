@@ -148,3 +148,96 @@ test('PT-10: las respuestas 200 y 401 de GET /sesion cumplen el contrato', funct
         expect($validador->validate($respuesta->baseResponse, '/sesion', 'get'))->toBeTrue();
     }
 });
+
+/** Desactiva al usuario por la conexión del propietario, como lo haría un cambio manual de `activo`. */
+function desactivarUsuarioDeMarta(string $id): void
+{
+    DB::connection('propietario')->table('usuarios')->where('id', $id)->update(['activo' => false]);
+}
+
+test('PT-13: un usuario desactivado con sesión viva recibe 401 no_autenticado en GET /sesion', function () {
+    /** @var TestCase $this */
+    $id = crearUsuarioDeMarta();
+    [$idDeSesion] = abrirSesionDeMarta($this);
+    desactivarUsuarioDeMarta($id);
+
+    peticionDeMarta($this, 'GET', '/sesion', idDeSesion: $idDeSesion)
+        ->assertUnauthorized()
+        ->assertJsonPath('codigo', 'no_autenticado');
+});
+
+test('PT-13: un usuario desactivado con sesión viva recibe 401 en una ruta protegida por auth:web', function () {
+    /** @var TestCase $this */
+    $id = crearUsuarioDeMarta();
+    [$idDeSesion] = abrirSesionDeMarta($this);
+    desactivarUsuarioDeMarta($id);
+
+    peticionDeMarta($this, 'GET', '/jugadores', idDeSesion: $idDeSesion)
+        ->assertUnauthorized()
+        ->assertJsonPath('codigo', 'no_autenticado');
+});
+
+test('PT-13: un usuario desactivado con sesión viva recibe 401 y no 403 en una ruta con rol', function () {
+    /** @var TestCase $this */
+    $id = crearUsuarioDeMarta(['docente']);
+    [$idDeSesion] = abrirSesionDeMarta($this);
+    desactivarUsuarioDeMarta($id);
+
+    peticionDeMarta($this, 'GET', '/categorias', idDeSesion: $idDeSesion)
+        ->assertUnauthorized()
+        ->assertJsonPath('codigo', 'no_autenticado');
+});
+
+test('PT-13: un usuario activo conserva su sesión en GET /sesion y en una ruta con rol', function () {
+    /** @var TestCase $this */
+    crearUsuarioDeMarta();
+    [$idDeSesion] = abrirSesionDeMarta($this);
+
+    peticionDeMarta($this, 'GET', '/sesion', idDeSesion: $idDeSesion)->assertOk();
+    peticionDeMarta($this, 'GET', '/categorias', idDeSesion: $idDeSesion)->assertOk();
+});
+
+test('PT-13: GET /panel con la sesión de un usuario desactivado redirige a /ingreso y /ingreso no redirige', function () {
+    /** @var TestCase $this */
+    $id = crearUsuarioDeMarta();
+    [$idDeSesion] = abrirSesionDeMarta($this);
+    desactivarUsuarioDeMarta($id);
+
+    $paginaDeMarta = function (string $ruta) use ($idDeSesion): TestResponse {
+        Auth::forgetGuards();
+        app('session')->forgetDrivers();
+        app()->forgetInstance('session.store');
+        (fn () => $this->defaultCookies = [config('session.cookie') => $idDeSesion])->call($this);
+
+        return $this->get($ruta);
+    };
+
+    $paginaDeMarta('/panel')->assertRedirect('/ingreso');
+    $paginaDeMarta('/ingreso')->assertOk();
+});
+
+test('PT-13: VerSesion no devuelve al usuario desactivado', function () {
+    /** @var TestCase $this */
+    $id = crearUsuarioDeMarta();
+    $actual = new class($id) implements UsuarioActual
+    {
+        public function __construct(private readonly string $usuarioId) {}
+
+        public function identificador(): Identificador
+        {
+            return Identificador::desdeTexto($this->usuarioId);
+        }
+
+        public function roles(): array
+        {
+            return [];
+        }
+    };
+    $verSesion = new VerSesion($actual, app(RepositorioDeUsuarios::class));
+
+    expect($verSesion->ejecutar()?->correo())->toBe(CORREO_DE_MARTA);
+
+    desactivarUsuarioDeMarta($id);
+
+    expect($verSesion->ejecutar())->toBeNull();
+});

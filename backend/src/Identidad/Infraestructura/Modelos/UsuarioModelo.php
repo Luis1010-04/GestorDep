@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Modelo de autenticación sobre `usuarios`; no es una entidad de dominio. Los usuarios con borrado
- * lógico no se recuperan, y su contraseña es `contrasena_hash`.
+ * lógico o desactivados (`activo = false`) no se recuperan, y su contraseña es `contrasena_hash`.
  *
  * @property string $id
  */
@@ -27,6 +27,7 @@ class UsuarioModelo extends Authenticatable
     protected static function booted(): void
     {
         static::addGlobalScope('no_eliminados', fn (Builder $consulta) => $consulta->whereNull('eliminado_en'));
+        static::addGlobalScope('activos', fn (Builder $consulta) => $consulta->where('activo', true));
     }
 
     public function getAuthPassword(): string
