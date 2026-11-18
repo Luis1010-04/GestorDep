@@ -379,7 +379,7 @@ Para desbloquear: aprobar el plan de T05 (y decidir sus puntos 1 a 6) y el de T0
 
 ## P-16. Alertas abiertas de un equipo que el jugador ya dejó (T03, T08)
 
-**Fecha:** 16 de noviembre de 2026. **Tarea que lo encontró:** T08 (la mutación 1.05 del filtro de visibilidad). **Estado: DIFERIDO (decisión del responsable del 17/11/2026).** No se implementa, no se crea T10 y no se registra DA-122; se retoma cuando aparezca el traspaso de jugadores. No se corrigió en T08, y T08 no afirma si esas alertas quedan abiertas o cerradas.
+**Fecha:** 16 de noviembre de 2026. **Tarea que lo encontró:** T08 (la mutación 1.05 del filtro de visibilidad). **Estado: DIFERIDO (decisión del responsable del 17/11/2026).** No se implementa, no se crea T10 y no se registra decisión alguna (sin número hasta su retoma); se retoma cuando aparezca el traspaso de jugadores. No se corrigió en T08, y T08 no afirma si esas alertas quedan abiertas o cerradas.
 
 - **Qué pasa hoy:** `alertas:recalcular` (`RecalcularTodasLasAlertas`) recorre solo las membresías vigentes (`MembresiasVigentes`). Si un jugador deja el equipo A (su membresía en A recibe `hasta`), las alertas deportiva y de sanciones abiertas de A **no se vuelven a evaluar y nunca se cierran**. Lo único que las oculta es el filtro de visibilidad (`VisibilidadDeAlertasSql`, que exige una membresía vigente del jugador en el equipo de la alerta), probado por «DA-90 (visibilidad)» en `AlertasDelJugadorTest`.
 - **Lo que dice el texto, sin cubrir este caso:**
@@ -398,7 +398,7 @@ Para desbloquear: aprobar el plan de T05 (y decidir sus puntos 1 a 6) y el de T0
 
 - **Recomendación:** ninguna; el responsable pidió no corregirlo en T08.
 
-- **Decisión del 17/11/2026: diferido, sin letra de la tabla de opciones.** El responsable decidió que P-16 queda diferido. No se implementa nada, no se crea T10 y no se registra DA-122; la propuesta de cerrar la alerta al salir del equipo está en `docs/reportes/f1-h6-p16-propuesta.md`, marcada como diferida.
+- **Decisión del 17/11/2026: diferido, sin letra de la tabla de opciones.** El responsable decidió que P-16 queda diferido. No se implementa nada, no se crea T10 y no se registra decisión alguna (sin número hasta su retoma); la propuesta de cerrar la alerta al salir del equipo está en `docs/reportes/f1-h6-p16-propuesta.md`, marcada como diferida.
 - **Criterio sin prueba, diferido a la fase donde aparezca el traspaso de jugadores** (§10, punto 7, de `docs/hitos/f1-h6.md`: «una alerta que deja de cumplirse se cierra y se conserva»). Cita verificada: `docs/hitos/f1-h1.md` §2.3, «Qué NO se hace en H1», línea 56: «Asignar entrenadores adicionales a un equipo, editar o borrar equipos, **quitar a un jugador de un equipo**, editar o renombrar categorías (ver §3, decisión sobre RN-22).» Esa frase dice que no se hace en H1, no «fuera de la Fase 1». **No encontré ninguna frase en `docs/alcance-fases.md` ni en otra especificación que diga en qué fase aparece el traspaso**, así que la fase de destino no está fijada por escrito. Mientras tanto ningún jugador puede dejar un equipo (no hay ruta ni código que lo haga), por lo que el caso solo existe con filas creadas en pruebas.
 
 ## Deuda registrada tras T08 (17 de noviembre de 2026)

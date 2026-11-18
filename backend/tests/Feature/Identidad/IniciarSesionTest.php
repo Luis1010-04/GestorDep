@@ -216,17 +216,18 @@ test('RNF-10: con el bloqueo vencido, un nuevo fallo reinicia el contador en 1',
         ->and(bloqueadoHasta())->toBeNull();
 });
 
-test('HU-01: un cuerpo sin correo o sin contraseña responde 422', function (array $cuerpo, string $campo) {
+test('HU-01: un cuerpo sin correo o sin contraseña responde 422', function (array $cuerpo, string $campo, string $mensaje) {
     /** @var TestCase $this */
     usuarioParaSesion();
 
     iniciarSesion($this, $cuerpo)
         ->assertStatus(422)
         ->assertJsonPath('codigo', 'validacion_fallida')
-        ->assertJsonPath('errores.0.campo', $campo);
+        ->assertJsonPath('errores.0.campo', $campo)
+        ->assertJsonPath('errores.0.mensaje', $mensaje);
 })->with([
-    'sin correo' => [['contrasena' => CLAVE_CORRECTA], 'correo'],
-    'sin contraseña' => [['correo' => CORREO_DE_ANA], 'contrasena'],
+    'sin correo' => [['contrasena' => CLAVE_CORRECTA], 'correo', 'El correo es obligatorio.'],
+    'sin contraseña' => [['correo' => CORREO_DE_ANA], 'contrasena', 'La contraseña es obligatoria.'],
 ]);
 
 /**

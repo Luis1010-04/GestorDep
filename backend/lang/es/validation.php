@@ -48,6 +48,9 @@ return [
     'uuid' => 'El campo :attribute debe ser un identificador válido.',
     'filtro_invalido' => 'El filtro :attribute no tiene un valor válido.',
 
-    'custom' => [],
+    'custom' => [
+        'correo' => ['required' => 'El correo es obligatorio.'],
+        'contrasena' => ['required' => 'La contraseña es obligatoria.'],
+    ],
     'attributes' => [],
 ];

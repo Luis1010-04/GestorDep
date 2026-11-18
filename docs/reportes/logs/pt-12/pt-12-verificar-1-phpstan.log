@@ -1,0 +1,55 @@
+commit base: be4a7d6420bb153cbe6cd90932946766fac8ceda (frontend/blade-niceadmin, con cambios sin commitear)
+inicio: 2026-11-18T16:52:53Z
+comando: make verificar
+
+docker compose exec -T app bash bin/con-candado.sh composer verificar
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  .........
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 997 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Feature/Web/PaginasWebTest.php                                   
+ ------ ----------------------------------------------------------------------- 
+  25     Access to an undefined property Pest\Mixins\Expectation<mixed>::$not.  
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Feature/Web/PanelTest.php                                        
+ ------ ----------------------------------------------------------------------- 
+  27     Access to an undefined property Pest\Mixins\Expectation<mixed>::$not.  
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  60     Call to an undefined method                                            
+         Illuminate\Contracts\Auth\StatefulGuard::forgetUser().                 
+         🪪  method.notFound                                                    
+  61     Access to protected property Tests\TestCase::$app.                     
+         🪪  property.protected                                                 
+ ------ ----------------------------------------------------------------------- 
+
+ [ERROR] Found 4 errors                                                         
+
+Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with error code 1
+make: *** [Makefile:32: verificar] Error 1
+codigo de salida: 2
+segundos: 32

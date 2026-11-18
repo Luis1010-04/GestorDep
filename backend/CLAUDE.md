@@ -94,7 +94,7 @@ Usa la búsqueda de documentación de Boost antes de escribir código de Laravel
 
 - Prefijo `/api/v1`, solo JSON. Errores, advertencias, códigos HTTP y paginación: `docs/convenciones-api.md`.
 - Un recurso fuera del alcance del usuario responde 404.
-- Toda ruta nueva se documenta en `docs/api/openapi.yaml` en la misma tarea; no existen rutas sin documentar.
+- Toda ruta de la API (`/api/v1`) se documenta en `docs/api/openapi.yaml` en la misma tarea; no existen rutas de la API sin documentar. Las rutas web (vistas HTML, fuera de `/api/v1`) no van en `openapi.yaml`: se registran en `docs/trazabilidad.md`, sección "Rutas web".
 - Ningún texto visible al usuario se escribe en el código: va en `lang/es`.
 
 ## 10. Pruebas
