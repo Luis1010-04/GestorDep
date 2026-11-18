@@ -44,6 +44,22 @@ services:
       timeout: 5s
       retries: 10
 
+  # Servidor de desarrollo de la aplicacion y de la api (PT-09): un solo origen, http://localhost:8000. Se publica solo
+  # en el loopback del anfitrion, nunca en la red local. Dentro del contenedor escucha en 0.0.0.0 para que el puerto
+  # publicado lo alcance. Es `php -S` y no `artisan serve`, que descarta las variables DB_* del contenedor. Los guiones
+  # de humo siguen usando su propio servidor en el 8099.
+  web:
+    <<: *aplicacion
+    command: php -S 0.0.0.0:8000 -t public
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:8000/api/v1/salud') === false ? 1 : 0);"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   # Cola `database` (docs/arquitectura.md §11); usa el rol de aplicacion
   worker:
     <<: *aplicacion
