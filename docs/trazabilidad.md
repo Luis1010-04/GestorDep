@@ -182,3 +182,11 @@ Origen de la columna **Hito**:
 - **Abiertos o diferidos al cierre de H6** (sin prueba; ninguno se corrige en H6):
   - **P-15 (abierto):** los agregados de los gráficos del equipo, sin `filtro[jugador_id]`, frente a jugadores en baja (HU-25, RN-23). Decisión del responsable pendiente; opciones A y B en `docs/decisiones/pendientes.md`.
   - **P-16 (diferido el 17/11/2026):** el cierre de una alerta deportiva o de sanciones cuando el jugador deja el equipo (HU-22, RN-09, RN-10). En la Fase 1 ningún jugador puede dejar un equipo (`docs/hitos/f1-h1.md` §2.3, línea 56) y ningún documento fija la fase donde aparezca el traspaso; la propuesta (DA-122, sin registrar) está en `docs/reportes/f1-h6-p16-propuesta.md`.
+
+## Tareas técnicas
+
+Tareas que no pertenecen a un hito ni a una historia de usuario. Cada fila cita las pruebas que las cubren.
+
+| Tarea | Qué hace | Pruebas |
+|---|---|---|
+| PT-10 | `GET /api/v1/sesion`: devuelve el usuario de la sesión con la misma forma de datos que `POST /sesion`; sin sesión, o con el usuario con borrado lógico, responde 401 `no_autenticado`. | `VerSesionTest` (PT-10: seis pruebas, incluido el contrato OpenAPI). |

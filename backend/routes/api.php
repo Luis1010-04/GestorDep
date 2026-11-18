@@ -44,6 +44,7 @@ Route::get('/salud', SaludController::class);
 Route::post('/sesion', [SesionController::class, 'iniciar']);
 
 Route::middleware('auth:web')->group(function () {
+    Route::get('/sesion', [SesionController::class, 'ver']);
     Route::delete('/sesion', [SesionController::class, 'cerrar']);
     Route::put('/contrasena', [ContrasenaController::class, 'cambiar']);
 

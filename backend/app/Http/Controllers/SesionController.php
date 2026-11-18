@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SolicitudDeInicioDeSesion;
 use App\Http\Resources\UsuarioRecurso;
 use App\Http\Respuestas\Respuesta;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Src\Identidad\Aplicacion\IniciarSesion;
+use Src\Identidad\Aplicacion\VerSesion;
 
 class SesionController extends Controller
 {
@@ -22,6 +24,13 @@ class SesionController extends Controller
 
         Auth::guard('web')->loginUsingId($usuario->id()->valor());
         $solicitud->session()->regenerate();
+
+        return Respuesta::conDatos((new UsuarioRecurso($usuario))->resolve($solicitud));
+    }
+
+    public function ver(Request $solicitud, VerSesion $verSesion): JsonResponse
+    {
+        $usuario = $verSesion->ejecutar() ?? throw new AuthenticationException;
 
         return Respuesta::conDatos((new UsuarioRecurso($usuario))->resolve($solicitud));
     }
