@@ -171,20 +171,28 @@ Efecto: ninguno sobre el contenido. El índice tenía las 521 entradas que el re
 
 **`make verificar` sobre `HEAD` (`60371e2`)** con el árbol limpio salvo `frontend/NiceAdmin/` sin seguimiento: `docs/reportes/logs/pt-12/pt-12-verificar-10.log`. **Pasó**: 2313 pruebas y 13994 aserciones, PHPStan y Pint sin errores, sin avisos de seguridad; cobertura Dominio 100,0 %, Aplicación 100,0 % e Infraestructura y HTTP 99,5 %; código de salida 0, 514 s.
 
-**H-06: pendiente de verificación manual del responsable.** La corrección de `sesion.js` (un error distinto de 401 al cargar `/panel` muestra un aviso) no está comprobada en navegador. Procedimiento exacto:
+**H-06: verificado en navegador por el responsable el 18/11/2026.** La corrección de `sesion.js` (un error distinto de 401 al cargar `/panel` muestra un aviso) se comprobó con el procedimiento siguiente. El patrón `*api/v1/sesion*` no funcionó, porque Chrome no lo analizó como URLPattern; se usó `*://localhost:8000/api/v1/sesion*`.
 1. Iniciar sesión con un usuario demo y abrir `http://localhost:8000/panel`.
-2. Abrir las herramientas de desarrollo y, en las **condiciones de solicitud** (bloqueo de solicitudes de red), añadir el patrón `*api/v1/sesion*` y dejarlo activado.
+2. Abrir las herramientas de desarrollo y, en las **condiciones de solicitud** (bloqueo de solicitudes de red), añadir el patrón `*://localhost:8000/api/v1/sesion*` y dejarlo activado.
 3. Recargar `/panel`.
-4. Resultado esperado: la página no queda vacía; se ven el título «Panel» y los textos, y al inicio del contenido un aviso rojo «No hay conexión con el servidor.». En la consola aparece la solicitud bloqueada, lo cual es normal. No debe redirigir a `/ingreso`.
+4. Resultado esperado: la página no queda vacía; se ve el título «Panel» y, al inicio del contenido, un aviso rojo «Hay problemas de conexión. Revise su internet e intente de nuevo.». En la consola aparece la solicitud bloqueada, lo cual es normal. No debe redirigir a `/ingreso`.
 5. Quitar o desactivar el patrón. Recargar de nuevo: el aviso desaparece y se ve el nombre y el rol.
 
 Nota: ese patrón también bloquea `DELETE /api/v1/sesion` mientras esté activo, así que hay que quitarlo antes de probar la salida.
+
+**Resultado observado:** el aviso «Hay problemas de conexión. Revise su internet e intente de nuevo.» aparece, el título del panel se mantiene, y no aparecen «Bienvenido, .» ni «Roles:». Los cambios de esta verificación son el texto del aviso y el ocultamiento de esos párrafos (`a7f9aef`, `PT-12: aviso amigable de conexión y panel sin datos vacíos de sesión`).
+
+**Sin prueba automatizada:** el comportamiento de `sesion.js` es JavaScript y no forma parte de la suite PHP. No tiene prueba automatizada y quedó verificado solo en navegador.
+
+**Observaciones no bloqueantes** (ninguna impide el cierre):
+1. Si falla la carga de la sesión, el nombre de la cabecera (`#usuario-nombre`) queda vacío: solo se ven el ícono y la flecha del menú.
+2. Mientras no llega la respuesta de `GET /sesion`, el panel muestra por un instante «Bienvenido, .» y «Roles: ».
 
 **Lo que no se pudo verificar:** el encabezado `Retry-After` del 429 en la comprobación en navegador, de forma directa. El texto observado, «Intente de nuevo en 15 minutos.», solo lo calcula `ingreso.js` si el encabezado llega, así que indica que el script lo recibió, pero el encabezado en sí no se comprobó.
 
 **Cobertura por pruebas del `Retry-After`:** sí hay pruebas de servidor. En `tests/Feature/Identidad/IniciarSesionTest.php`, la prueba «RNF-10: la contraseña correcta con la cuenta bloqueada responde 429 con Retry-After» (línea 163) exige `Retry-After: 900` en el 429 del ingreso, y la de la línea 174, «RNF-10: un intento a los 14 min 59 s del bloqueo responde 429», exige `Retry-After: 1`. Además, `tests/Feature/Api/FormatoDeErrorTest.php` (línea 58) comprueba que un código HTTP sin código propio conserva sus cabeceras, con `Retry-After: 60`.
 
-**La fila de PT-12 en `docs/trazabilidad.md` sigue en «Pendiente»** hasta que el responsable confirme H-06.
+**La fila de PT-12 en `docs/trazabilidad.md` pasa a «Hecha» el 18/11/2026**, con los commits `47655d9`, `60371e2`, `2a85bd8` y `a7f9aef`, tras la confirmación de H-06 por el responsable.
 
 ## Dudas
 - Cómo y quién hace la comprobación manual en navegador, y si PT-12 se acepta sin ella o queda condicionada a ella.
