@@ -182,3 +182,16 @@ Origen de la columna **Hito**:
 - **Abiertos o diferidos al cierre de H6** (sin prueba; ninguno se corrige en H6):
   - **P-15 (abierto):** los agregados de los gráficos del equipo, sin `filtro[jugador_id]`, frente a jugadores en baja (HU-25, RN-23). Decisión del responsable pendiente; opciones A y B en `docs/decisiones/pendientes.md`.
   - **P-16 (diferido el 17/11/2026):** el cierre de una alerta deportiva o de sanciones cuando el jugador deja el equipo (HU-22, RN-09, RN-10). En la Fase 1 ningún jugador puede dejar un equipo (`docs/hitos/f1-h1.md` §2.3, línea 56) y ningún documento fija la fase donde aparezca el traspaso; la propuesta (DA-122, sin registrar) está en `docs/reportes/f1-h6-p16-propuesta.md`.
+
+## Tareas técnicas
+
+Tareas que no pertenecen a un hito ni a una historia de usuario. Cada fila cita las pruebas que las cubren.
+
+**Excepción de formato de commit.** `CLAUDE.md` §4 pide `F1-HN-TNN: descripción`. Las tareas técnicas posteriores a H6 usan `PT-NN: descripción`, porque no pertenecen a un hito. Aprobado por el responsable el 18/11/2026.
+
+| Tarea | Qué hace | Estado | Pruebas |
+|---|---|---|---|
+| PT-09 | Servicio `web` de Docker Compose en `127.0.0.1:8000` (solo loopback) y valores de `.env.example` para servir desde `http://localhost:8000`. | Hecha (rama `tecnico/pt-09`, commit `48a6ade` y addendum `a575da6`; aceptada) | Sin pruebas nuevas; `make verificar` y `make humo` en el reporte de la rama. |
+| PT-10 | `GET /api/v1/sesion`: devuelve el usuario de la sesión con la misma forma de datos que `POST /sesion`; sin sesión, o con el usuario con borrado lógico, responde 401 `no_autenticado`. | Hecha (`a9e6d81`, aprobada) | `VerSesionTest` (PT-10: seis pruebas, incluido el contrato OpenAPI). |
+| PT-11 | Error controlado de `POST /sesion` sin sesión de origen permitido: 403 `origen_no_permitido`, texto en `lang/es`, OpenAPI. | Pendiente | Pruebas por definir en el plan de sesión, que presento y espero aprobación antes de codificar. |
+| PT-12 | Estructura web de la rebanada 1 del frontend (ingreso, layout, panel, salida) en `backend/`. | Pendiente (tras fusionar PT-10 y PT-11 en `main`) | Criterios CA-AUT-001, CA-GEN-004, CA-GEN-005, CA-LAY-001, CA-LAY-002 y CA-PAN-001, y la existencia de los archivos de Bootstrap. Nombres de pruebas con identificador, fijados al iniciar PT-12. |

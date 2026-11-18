@@ -106,6 +106,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    get:
+      operationId: verSesion
+      summary: Devuelve el usuario de la sesion actual
+      description: >-
+        Misma forma de datos que POST /sesion. Sirve para recuperar la identidad y los roles al recargar
+        la pagina (PT-10). Un usuario con borrado logico y sesion viva recibe 401.
+      tags: [Sesion]
+      responses:
+        '200':
+          description: Usuario de la sesion.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos]
+                properties:
+                  datos:
+                    $ref: '#/components/schemas/Usuario'
+        '401':
+          description: No hay sesion vigente (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       operationId: cerrarSesion
       summary: Cierra la sesion actual
