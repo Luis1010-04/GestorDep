@@ -4,6 +4,7 @@
 return [
     'no_autenticado' => 'Se requiere iniciar sesión.',
     'sin_permiso' => 'No tiene permiso para realizar esta acción.',
+    'origen_no_permitido' => 'La solicitud no proviene de un origen permitido para iniciar sesión.',
     'recurso_no_encontrado' => 'El recurso solicitado no existe.',
     'metodo_no_permitido' => 'El método no está permitido para esta ruta.',
     'conflicto' => 'La operación entra en conflicto con los datos existentes.',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\OrigenNoPermitido;
 use App\Http\Requests\SolicitudDeInicioDeSesion;
 use App\Http\Resources\UsuarioRecurso;
 use App\Http\Respuestas\Respuesta;
@@ -17,6 +18,10 @@ class SesionController extends Controller
 {
     public function iniciar(SolicitudDeInicioDeSesion $solicitud, IniciarSesion $iniciarSesion): JsonResponse
     {
+        if (! $solicitud->hasSession()) {
+            throw new OrigenNoPermitido;
+        }
+
         $usuario = $iniciarSesion->ejecutar(
             (string) $solicitud->input('correo'),
             (string) $solicitud->input('contrasena'),
