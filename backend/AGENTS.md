@@ -35,7 +35,7 @@ No modifiques `docs/requisitos.md`, `docs/arquitectura.md` ni este archivo salvo
 Lo que no está en la tarea actual ni aparece como "Fase 1" en `docs/alcance-fases.md` no se construye, aunque parezca útil, fácil, "de paso" o esté en el PDF original o en el backlog.
 
 - Haz exactamente lo que pide la tarea, ni menos ni más.
-- Modifica solo las rutas que la tarea permite; cualquier otra requiere aprobación. Nunca toques `frontend/`.
+- Modifica solo las rutas que la tarea permite; cualquier otra requiere aprobación. `frontend/` (Fase 2; se modifica solo en la rama `frontend/blade-niceadmin` y solo con tarea aprobada por el responsable).
 - No agregues endpoints, rutas, campos, columnas, tablas, migraciones, comandos de consola, eventos, servicios, enumeraciones, valores ni dependencias que la tarea y los documentos no nombren.
 - No anticipes la Fase 2: reportes, exportación, notificaciones, perfiles de administrador, coordinador, directivo, futbolista o preparador físico, árbitros, incidencias, alertas distintas de las tres del MVP, subida de archivos, métricas o pruebas físicas fuera de las sembradas, análisis comparativo.
 - No refactorices, renombres ni "mejores" código que la tarea no toca.
