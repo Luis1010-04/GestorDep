@@ -89,6 +89,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '403':
+          description: >-
+            La solicitud no trae el Origin o el Referer de un dominio con estado de Sanctum, asi que no
+            se abre sesion (codigo origen_no_permitido). No consulta credenciales ni cuenta intentos.
+            Con el cuerpo invalido y sin origen responde 422, porque la validacion va antes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '422':
           description: Falta el correo o la contrasena (codigo validacion_fallida).
           content:

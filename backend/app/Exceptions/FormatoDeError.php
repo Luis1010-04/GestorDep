@@ -113,6 +113,7 @@ final class FormatoDeError
             $e instanceof ReglaDeNegocioViolada => self::reglaDeNegocio($e),
             $e instanceof AuthenticationException => self::respuesta(401, 'no_autenticado'),
             $e instanceof ServicioNoDisponible => self::respuesta(503, 'servicio_no_disponible'),
+            $e instanceof OrigenNoPermitido => self::respuesta(403, 'origen_no_permitido'),
             // Se conservan las cabeceras de la excepcion, como Allow en el 405 o Retry-After.
             $e instanceof HttpExceptionInterface => self::respuesta(
                 $e->getStatusCode(),
