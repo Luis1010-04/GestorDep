@@ -16,12 +16,14 @@ test('F1-H0-T03 (DA-101): las pruebas usan la base de pruebas, o la de su proces
         ->and((string) DB::connection('propietario')->scalar('select current_database()'))->toBe($esperada);
 });
 
-test('F1-H0-T03: toda ruta registrada esta bajo /api/v1 o es la cookie csrf de Sanctum (DD-28)', function () {
+test('F1-H0-T03: toda ruta registrada esta bajo /api/v1 o es la cookie csrf de Sanctum (DD-28, excepcion de DA-122 para las rutas web del frontend)', function () {
     $rutas = collect(app('router')->getRoutes()->getRoutes())
         ->map(fn (Route $ruta) => $ruta->uri())
         ->reject(fn (string $uri) => str_starts_with($uri, 'api/v1/'))
+        ->sort()
         ->values()
         ->all();
 
-    expect($rutas)->toBe(['sanctum/csrf-cookie']);
+    // Fuera de /api/v1 solo se permiten la cookie csrf (DD-28) y las tres rutas web de PT-12 (DA-122); cualquier otra falla.
+    expect($rutas)->toBe(['/', 'ingreso', 'panel', 'sanctum/csrf-cookie']);
 });
