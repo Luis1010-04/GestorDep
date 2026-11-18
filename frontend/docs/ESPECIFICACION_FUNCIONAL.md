@@ -118,8 +118,9 @@ La auditoría identificó:
 - Prefijo API: `/api/v1`.
 - Inicio de sesión: `POST /api/v1/sesion`.
 - Cierre de sesión: `DELETE /api/v1/sesion`.
-- No se identificó inicialmente `GET /api/v1/sesion`; cualquier incorporación debe estar aprobada, implementada, documentada en OpenAPI y cubierta por pruebas antes de consumirla.
+- No se identificó inicialmente `GET /api/v1/sesion`. El responsable aprobó añadirlo en una tarea de backend (misma forma de datos que `POST /api/v1/sesion`, 401 `no_autenticado` sin sesión); el front no lo consume hasta que esa tarea esté integrada, documentada en OpenAPI y probada.
 - Protección CSRF: obtener la cookie mediante `GET /sanctum/csrf-cookie`.
+- Requisito de origen: las vistas Blade y la API se sirven desde un único origen (Laravel, `http://localhost:8000` en desarrollo), y ese origen debe figurar en `SANCTUM_STATEFUL_DOMAINS`. Las peticiones a `/api/v1` deben llevar `Origin` o `Referer` de un dominio de esa lista (el navegador lo envía solo). Sin ellos Sanctum no abre sesión y hoy `POST /api/v1/sesion` responde 500; una tarea de backend aprobada lo cambia por un error controlado. No se configura CORS: no hay segundo origen.
 - Respuesta de inicio de sesión con identidad y roles: `id`, `nombre`, `correo`, `roles`.
 - Errores con forma `{codigo, mensaje, errores}`.
 - Listados paginados con forma `{datos, meta: {pagina, por_pagina, total, total_paginas}}`.
