@@ -69,7 +69,7 @@ No se tocó ningún umbral ni regla de análisis. `make humo` no se ejecutó (no
 - **El menú de la rebanada 1 solo tiene «Panel», visible para todo usuario con sesión.** No implementé el filtrado de ítems por rol: no hay ítems con rol que filtrar, y se añadirá con el primer ítem que dependa de un rol. Por eso CA-LAY-002 («el menú se construye con los roles reales») se cumple solo de forma trivial en esta rebanada.
 
 ## Lo que no se hizo
-- **Lista de comprobación manual en navegador, con capturas: no se hizo.** No hay navegador en esta sesión, y la base de desarrollo no tiene un usuario que yo pueda crear sin tocar datos. Quedan sin comprobar en navegador: CA-AUT-001 (flujo de la cookie CSRF y los errores 401, 422, 429, 403), CA-AUT-002 (recarga recupera la sesión por `GET /sesion`), CA-AUT-003 (salida), CA-GEN-002 (botón deshabilitado y recuperación), CA-GEN-003 (manejo de errores) y el aspecto responsivo.
+- **[Actualizado el 18/11/2026: la comprobación en navegador se hizo después; ver «Comprobación en navegador y cambios posteriores». El texto de abajo es el de la primera entrega.]** **Lista de comprobación manual en navegador, con capturas: no se hizo.** No hay navegador en esta sesión, y la base de desarrollo no tiene un usuario que yo pueda crear sin tocar datos. Quedan sin comprobar en navegador: CA-AUT-001 (flujo de la cookie CSRF y los errores 401, 422, 429, 403), CA-AUT-002 (recarga recupera la sesión por `GET /sesion`), CA-AUT-003 (salida), CA-GEN-002 (botón deshabilitado y recuperación), CA-GEN-003 (manejo de errores) y el aspecto responsivo.
 - Lo único que verifiqué en vivo fue con `curl` contra `http://127.0.0.1:8000` (servicio `web`): `/ingreso` responde 200, `/panel` y `/` redirigen, los seis activos responden 200 y `GET /api/v1/sesion` sin sesión responde 401.
 - No se ejecutó `make fresh`, `migrate:rollback` ni nada que borre datos.
 
@@ -142,6 +142,40 @@ Cambio de estructura: la plantilla completa pasa a `backend/public/NiceAdmin/` y
 Qué pasó: la instrucción anterior decía «Antes de commitear, confirma con `git status --short` que solo están en el índice los archivos aprobados». Hice esa comprobación y, en el mismo turno, commiteé, sin esperar a que el responsable viera la comprobación y aprobara. El mensaje que entregué después daba el commit por hecho y pedía órdenes solo para publicar. No debí commitear en ese turno.
 
 Efecto: ninguno sobre el contenido. El índice tenía las 521 entradas que el responsable aprobó después («Aprobado el índice de 521 entradas»), el `git status --short` solo mostraba `?? frontend/NiceAdmin/` y el commit no se publicó. **El commit no se reescribe** ni se cambia su hash. Regla que sigo desde ahora: cuando una instrucción pida confirmar o mostrar algo antes de commitear, entrego esa comprobación y espero la respuesta antes del commit.
+
+## Comprobación en navegador y cambios posteriores (18/11/2026)
+**Alcance de esta sección.** La comprobación en navegador de hoy la ejecutó el responsable (con Chrome), con los usuarios de `UsuariosDemoSeeder`. **Yo no presencié esos pasos y no tengo capturas ni los valores observados en cada uno.** Lo que sigue es lo que el responsable indicó que se comprobó; no añado detalles que no recibí. Pantalla chica: se usó un `iframe` de 375 px de ancho sobre `/ingreso` y sobre `/panel`.
+
+Pasos comprobados en navegador (según el responsable):
+1. Ingreso correcto.
+2. Ingreso incorrecto (401, «Las credenciales no son válidas.»).
+3. Validación del ingreso con el cuerpo vacío (422), con los mensajes «El correo es obligatorio.» y «La contraseña es obligatoria.».
+4. Recarga del panel con la sesión iniciada.
+5. Salida.
+6. Sesión expirada.
+7. Doble clic en «Entrar»: una sola petición `POST`.
+8. Pantalla chica de 375 px en `/ingreso` y en `/panel`.
+9. Menú lateral.
+10. Bloqueo: cinco respuestas 401 seguidas y después el 429.
+
+**Cambios hechos tras esa comprobación, con sus commits:**
+- `60371e2`, `PT-12: mensajes de validación del ingreso`. Los mensajes de campo obligatorio pasan de «El campo correo es obligatorio.» y «El campo contrasena es obligatorio.» a «El correo es obligatorio.» y «La contraseña es obligatoria.», con `custom` en `backend/lang/es/validation.php`. La aserción del mensaje se añadió a la prueba «HU-01: un cuerpo sin correo o sin contraseña responde 422» (`IniciarSesionTest.php`), que falló antes solo por el mensaje. Log: `docs/reportes/logs/pt-12/pt-12-verificar-9.log`, escrito directamente en esa carpeta durante la corrida sobre el árbol con ese cambio sin commitear (commit base `47655d9`); es el de esa corrida y no el de otra anterior.
+- `2a85bd8`, `PT-12: renombra la aplicación a GestorDep en la interfaz`. Las claves `aplicacion` y `pie` de `backend/lang/es/interfaz.php` pasan a «GestorDep» y «GestorDep: seguimiento académico y deportivo de futbolistas». Ninguna prueba comprobaba el nombre antiguo. Log de esa corrida: `backend/build/renombre-gestordep-verificar.log` (ignorado por git).
+
+**`make verificar` sobre `HEAD` (`60371e2`)** con el árbol limpio salvo `frontend/NiceAdmin/` sin seguimiento: `docs/reportes/logs/pt-12/pt-12-verificar-10.log`. **Pasó**: 2313 pruebas y 13994 aserciones, PHPStan y Pint sin errores, sin avisos de seguridad; cobertura Dominio 100,0 %, Aplicación 100,0 % e Infraestructura y HTTP 99,5 %; código de salida 0, 514 s.
+
+**H-06: pendiente de verificación manual del responsable.** La corrección de `sesion.js` (un error distinto de 401 al cargar `/panel` muestra un aviso) no está comprobada en navegador. Procedimiento exacto:
+1. Iniciar sesión con un usuario demo y abrir `http://localhost:8000/panel`.
+2. Abrir las herramientas de desarrollo y, en las **condiciones de solicitud** (bloqueo de solicitudes de red), añadir el patrón `*api/v1/sesion*` y dejarlo activado.
+3. Recargar `/panel`.
+4. Resultado esperado: la página no queda vacía; se ven el título «Panel» y los textos, y al inicio del contenido un aviso rojo «No hay conexión con el servidor.». En la consola aparece la solicitud bloqueada, lo cual es normal. No debe redirigir a `/ingreso`.
+5. Quitar o desactivar el patrón. Recargar de nuevo: el aviso desaparece y se ve el nombre y el rol.
+
+Nota: ese patrón también bloquea `DELETE /api/v1/sesion` mientras esté activo, así que hay que quitarlo antes de probar la salida.
+
+**Lo que no se pudo verificar:** el encabezado `Retry-After` del 429 en la comprobación en navegador. Por eso no está comprobado en navegador si el aviso del bloqueo mostró los minutos («Intente de nuevo en 15 minutos.») o el mensaje genérico de la API: `ingreso.js` solo calcula los minutos si el encabezado llega. Lo cubre la prueba Pest «RNF-10: la contraseña correcta con la cuenta bloqueada responde 429 con Retry-After» y el contrato de OpenAPI.
+
+**La fila de PT-12 en `docs/trazabilidad.md` sigue en «Pendiente»** hasta que el responsable confirme H-06.
 
 ## Dudas
 - Cómo y quién hace la comprobación manual en navegador, y si PT-12 se acepta sin ella o queda condicionada a ella.
