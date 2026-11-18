@@ -1,3 +1,8 @@
-<footer id="pie" class="pie text-center text-muted small py-3">
-    {{ __('interfaz.pie') }}
+<footer id="footer" class="footer">
+    <div class="copyright">
+        {{ __('interfaz.pie') }}
+    </div>
+    <div class="credits">
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
 </footer>

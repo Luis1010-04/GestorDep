@@ -83,6 +83,8 @@ No se tocó ningún umbral ni regla de análisis. `make humo` no se ejecutó (no
 ## Desviaciones
 - Las dos enmiendas a la lista aprobada, ya aprobadas por el responsable.
 - La lista de comprobación manual con capturas (D8) no se cumplió.
+- **Nombres de las pruebas:** el plan aprobado decía «PT-12:» sin número. Los nombres llevan el formato «PT-12 N:» (y «PT-12 H-01:» las de auditoría); el número se añadió para trazabilidad con la numeración 1 a 22 del plan y de sus enmiendas. Aprobado por el responsable el 18/11/2026.
+- **Archivo de más en `backend/public/NiceAdmin/`:** la cuenta es 504 y no 503 porque se conserva `assets/vendor/bootstrap/LICENSE` (MIT, del paquete oficial de npm), que la plantilla no trae. Es la cuenta correcta según el responsable.
 
 ## Correcciones de auditoría (commit aparte, sobre `6e2ceda`)
 La fila de PT-12 en `docs/trazabilidad.md` vuelve a «Pendiente» hasta la comprobación manual en navegador.
@@ -104,6 +106,35 @@ La fila de PT-12 en `docs/trazabilidad.md` vuelve a «Pendiente» hasta la compr
 - `pt-12-verificar-4-phpstan.log`: **falló**. PHPStan: faltaba el tipo de retorno `list<string>` de un ayudante de prueba. Código de salida 2, 28 s.
 - `pt-12-verificar-5-auditoria-red.log`: **falló** en la auditoría de dependencias por un tiempo de espera de red hacia packagist.org; pruebas, PHPStan y cobertura pasaron. Código de salida 2, 515 s.
 - `pt-12-verificar-6.log`: **pasó**. 2306 pruebas y 13926 aserciones, PHPStan sin errores, sin avisos de seguridad. Cobertura: Dominio 100,0 %, Aplicación 100,0 %, Infraestructura y HTTP 99,5 %. Código de salida 0, 510 s.
+
+## Enmienda 3: plantilla NiceAdmin (decisiones del responsable del 18/11/2026)
+Cambio de estructura: la plantilla completa pasa a `backend/public/NiceAdmin/` y los scripts propios se quedan en `backend/public/assets/js/`. **Uso: académico, no comercial.** Licencia: gratuita de BootstrapMade (`https://bootstrapmade.com/license/`), con el crédito «Designed by BootstrapMade» en el pie. Detalle de activos en `frontend/docs/ACTIVOS_NICEADMIN.md`.
+
+- **Copia de la plantilla:** `frontend/NiceAdmin/` a `backend/public/NiceAdmin/` sin modificar ningún archivo (sus SHA-256 de `main.js` y `style.css` los fija la prueba 20), **sin la carpeta `forms/`** (`contact.php` es PHP de la versión Pro). La copia coincidía con el origen salvo `forms/` (`diff -rq`); después se retiraron las 34 páginas de ejemplo `*.html` de la raíz (ver más abajo). Quedan 504 archivos versionados bajo `backend/public/NiceAdmin/`.
+- **`LICENCIA.md`** nuevo en `backend/public/NiceAdmin/`: enlace oficial de la licencia, obligación del pie y el uso académico, sin resumen propio de las condiciones.
+- **`assets/vendor/bootstrap/LICENSE`** (MIT, del paquete oficial `bootstrap@5.3.3`) se movió desde `backend/public/assets/vendor/bootstrap/`, con el mismo SHA-256 (`8c14611ae41ac6fd543c13349f22188eb12c69b3e59105c5eca3925a8e4eca3e`). Los `bootstrap.min.css` y `bootstrap.bundle.min.js` de `backend/public/assets/vendor/bootstrap/` se eliminaron: los de la plantilla son idénticos (mismos SHA-256 y misma integridad npm `sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==`).
+- **`main.js` sin modificar** y `backend/public/assets/js/tinymce-vacio.js` nuevo: define `window.tinymce` vacío antes de `main.js`, porque `main.js` llama a `tinymce.init` sin comprobar que exista (línea 190). Documentado en `ACTIVOS_NICEADMIN.md`.
+- **Vistas** reescritas con la estructura de NiceAdmin: `layouts/app`, `layouts/autenticacion`, `parciales/cabecera`, `menu`, `pie`, `ingreso` y `panel`. Los identificadores pasan a `#header`, `#sidebar`, `#main` y `#footer`. El pie conserva «Designed by BootstrapMade» con su enlace; es la única URL externa en las vistas. `backend/public/assets/css/app.css` se eliminó porque ya no hace falta.
+- **Pruebas actualizadas y nuevas** (`tests/Feature/Web/`): ajusté 4, 6, 7, 8, 12, 13 y 14 a las rutas e identificadores nuevos (los mismos SHA-256), y añadí:
+  - 16: el pie conserva el crédito con su enlace (ingreso y panel).
+  - 17: ninguna vista ni script propio carga recursos externos, salvo el enlace del crédito.
+  - 18: no existe `forms/` ni ningún `.php` en `public/NiceAdmin/`.
+  - 19: el layout carga Bootstrap, el `tinymce` vacío, `main.js`, `api.js` y `sesion.js`, en ese orden.
+  - 20: `main.js` y `style.css` conservan su encabezado de licencia y su SHA-256.
+  - 21: `LICENCIA.md` enlaza la licencia oficial, la obligación del pie y el uso académico.
+  - 22: no existe ningún `.html` ni `.htm` dentro de `public/NiceAdmin/`. **Falló antes** de retirar las 34 páginas, listándolas, y pasa ahora.
+- **Antes de implementar** fallaron 10 de 23 (12, 13, 14, 20, 21: faltaban los archivos; 18: la carpeta `NiceAdmin` no existía; 6, 8, 16 y 19: el layout aún tenía los identificadores y los scripts anteriores) y 13 pasaban (1 a 5, 7, 9, 10, 11, 15, 17, H-01 ×2): esas ya cubrían comportamiento que no cambia. En la corrida posterior a copiar la plantilla y reescribir las vistas, la prueba 14 falló una vez por mi aserción (la cabecera de la plantilla JS trae un solo espacio en «Bootstrap v5.3.3» y la de la hoja CSS dos); la corregí con una expresión tolerante al espacio y no se debilitó el contenido comprobado.
+- **`make verificar`:** `pt-12-verificar-7.log`, **pasó** a la primera, todavía con las páginas `.html` presentes: 2312 pruebas, 13991 aserciones, sin avisos de seguridad, cobertura Dominio 100,0 %, Aplicación 100,0 % e Infraestructura y HTTP 99,5 %, código de salida 0, 564 s. Tras retirar las páginas y añadir la prueba 22, `pt-12-verificar-8.log` **pasó**: 2313 pruebas, 13992 aserciones, PHPStan y Pint sin errores, sin avisos de seguridad, misma cobertura, código de salida 0, 522 s.
+- **Comprobación en vivo con `curl`** contra el servicio `web`: `/ingreso` responde 200, `/panel` redirige, y `style.css`, `main.js`, Bootstrap, la fuente de íconos, el logo, `tinymce-vacio.js` y `LICENCIA.md` responden 200.
+
+**Páginas de ejemplo `*.html` retiradas.** Eran públicas: con `php -S`, una dirección inexistente bajo `/NiceAdmin/` respondía 200 con `NiceAdmin/index.html`. Se retiraron las 34 (ninguna estaba fuera de la raíz), conservando `Readme.txt`, `LICENCIA.md` y todo `assets/`. La prueba 22 lo fija. La plantilla original en `frontend/NiceAdmin/` no se tocó.
+
+**Recursos externos que el navegador cargaría desde la plantilla** (revisión de `style.css`, `bootstrap.min.css` y `bootstrap-icons.css`, sin modificarlos y sin contar los comentarios de licencia):
+- `assets/css/style.css`: ninguno. No tiene `@import` ni `url()`; solo cita «Open Sans», «Nunito» y «Poppins» por nombre, y el navegador no las descarga.
+- `assets/vendor/bootstrap-icons/bootstrap-icons.css`, líneas 10 y 11: `url("./fonts/bootstrap-icons.woff2?…")` y `.woff`, locales.
+- `assets/vendor/bootstrap/css/bootstrap.min.css`, línea 5 (archivo minificado): 23 apariciones de `http://www.w3.org/2000/svg`, todas dentro de `url("data:image/svg+xml,…")`. Es el identificador de espacio de nombres del SVG incrustado, no una petición de red.
+- Scripts cargados por las vistas: `assets/js/main.js`, líneas 204, 208, 213, 217, 233, 240 y 249, con URLs de `tiny.cloud`, `moxiecode.com` y `google.com/logos` dentro de la configuración de `tinymce.init`, que no se ejecuta con el `tinymce` vacío; `bootstrap.bundle.min.js` cita `https://popper.js.org` en mensajes de error. Ninguna es una carga.
+- Resultado: el navegador no pide ningún recurso externo desde esos archivos. Sin cambios en la plantilla, a la espera de la decisión del responsable.
 
 ## Dudas
 - Cómo y quién hace la comprobación manual en navegador, y si PT-12 se acepta sin ella o queda condicionada a ella.

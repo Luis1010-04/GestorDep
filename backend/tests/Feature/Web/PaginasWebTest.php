@@ -50,6 +50,62 @@ test('PT-12 11: los textos de ingreso y panel salen de lang/es/interfaz.php', fu
     expect(__('interfaz.ingreso.titulo'))->not->toBe('interfaz.ingreso.titulo');
 });
 
+test('PT-12 17: ninguna vista ni script propio carga recursos externos, salvo el enlace del crédito de BootstrapMade', function () {
+    $archivos = [
+        ...File::allFiles(resource_path('views')),
+        ...File::allFiles(public_path('assets/js')),
+    ];
+
+    expect($archivos)->not->toBeEmpty();
+
+    foreach ($archivos as $archivo) {
+        $contenido = str_replace('https://bootstrapmade.com/', '', File::get($archivo->getPathname()));
+
+        expect(preg_match('~https?://|(?<![:\w])//[a-z]~i', $contenido))->toBe(0, $archivo->getFilename());
+    }
+});
+
+test('PT-12 18: la plantilla se versiona sin forms/ y sin ningún archivo PHP en public/NiceAdmin', function () {
+    expect(File::isDirectory(public_path('NiceAdmin/forms')))->toBeFalse();
+
+    $php = collect(File::allFiles(public_path('NiceAdmin')))
+        ->filter(fn ($archivo) => $archivo->getExtension() === 'php')
+        ->map(fn ($archivo) => $archivo->getPathname())
+        ->values()
+        ->all();
+
+    expect($php)->toBe([]);
+});
+
+test('PT-12 22: no existe ningún archivo .html dentro de public/NiceAdmin', function () {
+    $paginas = collect(File::allFiles(public_path('NiceAdmin')))
+        ->filter(fn ($archivo) => in_array(strtolower($archivo->getExtension()), ['html', 'htm'], true))
+        ->map(fn ($archivo) => $archivo->getRelativePathname())
+        ->sort()
+        ->values()
+        ->all();
+
+    expect($paginas)->toBe([]);
+});
+
+test('PT-12 19: el layout define el tinymce vacío antes de main.js y carga Bootstrap antes que main.js', function () {
+    $layout = File::get(resource_path('views/layouts/app.blade.php'));
+    $posiciones = array_map(
+        fn (string $script) => strpos($layout, $script),
+        [
+            '/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js',
+            '/assets/js/tinymce-vacio.js',
+            '/NiceAdmin/assets/js/main.js',
+            '/assets/js/api.js',
+            '/assets/js/sesion.js',
+        ],
+    );
+
+    expect($posiciones)->not->toContain(false)
+        ->and($posiciones)->toBe(collect($posiciones)->sort()->values()->all())
+        ->and(File::get(public_path('assets/js/tinymce-vacio.js')))->toContain('window.tinymce');
+});
+
 test('PT-12 15: las rutas web registradas son exactamente /, /ingreso y /panel con su middleware', function () {
     $rutas = collect(Route::getRoutes()->getRoutes())
         ->filter(fn ($ruta) => in_array('web', $ruta->gatherMiddleware(), true) && ! str_starts_with($ruta->uri(), 'sanctum/'))

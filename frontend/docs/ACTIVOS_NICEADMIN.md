@@ -8,7 +8,7 @@ Registro de la plantilla NiceAdmin y de los activos que el frontend puede usar. 
 |---|---|
 | Plantilla | NiceAdmin, de BootstrapMade.com (`https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/`) |
 | Versión | Actualizada el 20/04/2024 con Bootstrap v5.3.3 (encabezado de `main.js` y de `style.css`) |
-| Licencia | Gratuita de BootstrapMade (`https://bootstrapmade.com/license/`). El texto vinculante es el de esa dirección; lo que sigue es un resumen. |
+| Licencia | Gratuita de BootstrapMade (`https://bootstrapmade.com/license/`). El texto vinculante es el de esa dirección. Uso en este proyecto: académico, no comercial. |
 | Bootstrap | v5.3.3, licencia MIT. Los archivos `bootstrap.min.css` y `bootstrap.bundle.min.js` de la plantilla tienen los mismos SHA-256 que los del paquete oficial de npm `bootstrap@5.3.3` (ver `docs/reportes/pt-12-reporte.md`). |
 | Bootstrap Icons | v1.11.3, licencia MIT. |
 
@@ -21,7 +21,7 @@ Registro de la plantilla NiceAdmin y de los activos que el frontend puede usar. 
 
 ## 2. Carpeta de destino
 
-La plantilla completa se versiona en `backend/public/NiceAdmin/`, con la misma estructura que `frontend/NiceAdmin/` (`assets/css`, `assets/js`, `assets/img`, `assets/scss`, `assets/vendor` y las páginas de ejemplo). Se conservan sin cambios los encabezados de licencia de cada archivo. `main.js` se incluye sin modificar.
+La plantilla completa se versiona en `backend/public/NiceAdmin/`, con la misma estructura que `frontend/NiceAdmin/`, salvo la carpeta `forms/` que no se copia (`assets/css`, `assets/js`, `assets/img`, `assets/scss`, `assets/vendor` y las páginas de ejemplo). Se conservan sin cambios los encabezados de licencia de cada archivo. `main.js` se incluye sin modificar.
 
 `frontend/NiceAdmin/` es la copia de origen y no se versiona. Las vistas Blade apuntan a `/NiceAdmin/...`, servido desde `backend/public/`.
 
@@ -53,9 +53,16 @@ Se versionan por decisión del responsable, pero **ninguna vista los carga ni lo
 - Una prueba o una búsqueda con `grep` sobre `backend/resources/views/` y los scripts propios no debe encontrar `http://` ni `https://`, salvo el enlace del crédito de BootstrapMade.
 - Las páginas de ejemplo de `backend/public/NiceAdmin/*.html` sí contienen enlaces a Google Fonts y a otros sitios, porque son de la plantilla. No forman parte de la aplicación y no se enlazan desde ella.
 
-## 6. Puntos pendientes de decisión
+## 6. Decisiones aplicadas y puntos abiertos
 
-1. **`main.js` falla sin TinyMCE.** En la línea 190, `tinymce.init({...})` se ejecuta sin comprobar que TinyMCE esté cargado. Sin TinyMCE, `main.js` lanza `ReferenceError: tinymce is not defined` en cada página. El código anterior a esa línea ya se ejecutó (menú lateral, búsqueda y tooltips), pero el posterior no: la validación de formularios `.needs-validation` y el redimensionado de ECharts. Por decisión del responsable `main.js` no se modifica. Opciones: cargar `tinymce.min.js` (8,8 MB por página, contradice «inactivo»); definir antes de `main.js` un objeto `tinymce` vacío con un `init` que no hace nada, en un script propio; o no usar `main.js`.
-2. **Tipografías.** `style.css` pide «Open Sans», «Nunito» y «Poppins», y la plantilla las carga desde Google Fonts. Con la regla de no usar CDN, la interfaz usa la tipografía de reserva del sistema (`sans-serif`) hasta que se decida alojar esas fuentes en local.
-3. **Tamaño.** La plantilla completa pesa unos 88 MB (46 MB solo de ECharts, 11 MB de Remix Icon, 8,8 MB de TinyMCE) y entraría al historial de git.
-4. **Archivos de Bootstrap duplicados.** Los de `backend/public/assets/vendor/bootstrap/` (PT-12) quedarían duplicados con los de `NiceAdmin/assets/vendor/bootstrap/`, que son idénticos. La enmienda a PT-12 propone eliminar los primeros.
+**Decisiones del responsable (18/11/2026)**
+1. **`main.js` se incluye sin modificar y se evita su fallo con un script propio.** En la línea 190, `main.js` llama a `tinymce.init({...})` sin comprobar que TinyMCE esté cargado; sin TinyMCE lanza `ReferenceError: tinymce is not defined` en cada página y no ejecuta lo que sigue (validación `.needs-validation` y redimensionado de ECharts). El script propio `backend/public/assets/js/tinymce-vacio.js` define `window.tinymce = { init: function () {} }` y se carga antes de `main.js`. Una prueba (`PT-12 19`) fija ese orden. Si algún día se activa TinyMCE, este script se retira.
+2. **La carpeta `forms/` no se copia.** Contiene `contact.php`, el formulario PHP de la versión Pro, que el servidor ejecutaría desde `public/`. Una prueba (`PT-12 18`) exige que no exista `forms/` ni ningún archivo `.php` en `public/NiceAdmin/`.
+3. **Estructura.** La plantilla vive en `backend/public/NiceAdmin/`; los scripts propios, en `backend/public/assets/js/`. No se mezcla código propio con archivos de la plantilla.
+4. **`backend/public/NiceAdmin/LICENCIA.md`** enlaza la licencia oficial (`https://bootstrapmade.com/license/`), recuerda la obligación del pie y declara el uso: **académico, no comercial**.
+5. **Bootstrap.** Se usan los archivos de la plantilla, idénticos a los del paquete oficial de npm. Se añadió `assets/vendor/bootstrap/LICENSE` (MIT) del paquete oficial, que la plantilla no trae.
+
+**Puntos abiertos**
+1. **Tipografías.** `style.css` pide «Open Sans», «Nunito» y «Poppins», y la plantilla las carga desde Google Fonts. Con la regla de no usar CDN, la interfaz usa la tipografía de reserva del sistema (`sans-serif`) hasta que se decida alojar esas fuentes en local.
+2. **Páginas de ejemplo retiradas.** Las 34 páginas `*.html` de la plantilla no se versionan en `backend/public/NiceAdmin/`: con el servidor `php -S` de desarrollo eran públicas, y una dirección inexistente bajo `/NiceAdmin/` respondía con `index.html`. Se conservan `Readme.txt`, `LICENCIA.md` y `assets/`. Una prueba (`PT-12 22`) falla si existe cualquier `.html` o `.htm` dentro de `public/NiceAdmin/`.
+3. **Tamaño.** La plantilla pesa unos 88 MB (46 MB solo de ECharts, 11 MB de Remix Icon, 8,8 MB de TinyMCE) y entra al historial de git.
