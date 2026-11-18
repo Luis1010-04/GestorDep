@@ -23,7 +23,9 @@ No se tocó `docs/api/openapi.yaml`, `docker-compose.yml`, `docs/convenciones-ap
 1. **Cuatro archivos de prueba en lugar de dos** (`IngresoTest`, `PanelTest`, `PaginasWebTest`, `BootstrapLocalTest`). Aprobado el 18/11/2026.
 2. **`backend/tests/Feature/EntornoDePruebasTest.php`.** Su segunda prueba exigía que toda ruta fuera de `/api/v1` fuese solo `sanctum/csrf-cookie` (DD-28), y fallaba con las tres rutas web de PT-12. Motivo: DA-122 autoriza el frontend en esta rama. Cambio aprobado el 18/11/2026: la lista permitida pasa a ser exacta, `/`, `ingreso`, `panel` y `sanctum/csrf-cookie`, ordenada para no depender del orden de registro. Cualquier otra ruta fuera de `/api/v1` sigue fallando. El nombre de la prueba cita ahora «excepcion de DA-122». No cambió el texto de DD-28 en `registro-decisiones.md`.
 
-## Pruebas agregadas (numeradas 1 a 15 según el plan)
+## Pruebas agregadas (24 en `tests/Feature/Web/`: PT-12 1 a 22 y dos de H-01)
+Las filas 1 a 15 son las del plan original; las 16 a 22 y las H-01 se añadieron en la enmienda 3 y en las correcciones de auditoría (ver más abajo). Las filas 4, 6, 7, 8, 12, 13 y 14 se ajustaron en la enmienda 3 a las rutas e identificadores de NiceAdmin. Además, la prueba «HU-01: un cuerpo sin correo o sin contraseña responde 422» (`IniciarSesionTest.php`) ganó la aserción de los mensajes (`60371e2`).
+
 | N.º | Archivo | Prueba | Antes de implementar |
 |---|---|---|---|
 | 1 | `IngresoTest` | GET /ingreso sin sesión responde 200 con el formulario, solo correo y contrasena (CA-AUT-001) | Falló |
@@ -41,8 +43,17 @@ No se tocó `docs/api/openapi.yaml`, `docker-compose.yml`, `docs/convenciones-ap
 | 13 | `BootstrapLocalTest` | Sus SHA-256 coinciden con los registrados | **Pasaba desde el inicio** |
 | 14 | `BootstrapLocalTest` | El LICENSE es MIT | **Pasaba desde el inicio** |
 | 15 | `PaginasWebTest` | Las rutas web son exactamente /, /ingreso y /panel con su middleware | Falló |
+| 16 | `PanelTest` | El pie conserva el crédito «Designed by BootstrapMade» con su enlace | Falló (enmienda 3) |
+| 17 | `PaginasWebTest` | Ninguna vista ni script propio carga recursos externos, salvo el crédito | Pasaba desde el inicio |
+| 18 | `PaginasWebTest` | No existe `forms/` ni ningún `.php` en `public/NiceAdmin/` | Falló (enmienda 3) |
+| 19 | `PaginasWebTest` | El layout carga Bootstrap, el `tinymce` vacío y `main.js` en ese orden | Falló (enmienda 3) |
+| 20 | `BootstrapLocalTest` | `main.js` y `style.css` conservan su encabezado y su SHA-256 | Falló (enmienda 3) |
+| 21 | `BootstrapLocalTest` | `LICENCIA.md` enlaza la licencia oficial y la obligación del pie | Falló (enmienda 3) |
+| 22 | `PaginasWebTest` | No existe ningún `.html` ni `.htm` en `public/NiceAdmin/` | Falló (enmienda 3) |
+| H-01 a | `ErroresWebTest` | Un error interno fuera de /api con APP_DEBUG=true no expone trazas | Falló |
+| H-01 b | `ErroresWebTest` | Un 404 web con APP_DEBUG=true no expone trazas | Pasaba desde el inicio |
 
-Antes de implementar fallaron 12 de 15 y 3 pasaron. El resumen de la corrida agrupa los mensajes: cuatro con «esperaba 200 y recibió 404», tres con «esperaba una redirección y recibió 404», una con «la carpeta resources/views no existe», dos con «dos arreglos no son idénticos» y tres con «false no es true». No registré el mensaje de cada prueba por separado, así que no atribuyo cada mensaje a un número. Las pruebas 12 a 14 pasaron desde el inicio, porque los archivos de Bootstrap ya estaban copiados en `backend/public/assets/vendor/bootstrap/`. Cubren existencia y hashes de los archivos, no comportamiento, y no prueban código nuevo. Todas usan `gestordep_pruebas`.
+Antes de implementar el plan original fallaron 12 de las 15 primeras y 3 pasaron. El resumen de la corrida agrupa los mensajes: cuatro con «esperaba 200 y recibió 404», tres con «esperaba una redirección y recibió 404», una con «la carpeta resources/views no existe», dos con «dos arreglos no son idénticos» y tres con «false no es true». No registré el mensaje de cada prueba por separado, así que no atribuyo cada mensaje a un número. Las pruebas 12 a 14 pasaron desde el inicio, porque los archivos de Bootstrap ya estaban copiados en `backend/public/assets/vendor/bootstrap/`. Cubren existencia y hashes de los archivos, no comportamiento, y no prueban código nuevo. Todas usan `gestordep_pruebas`.
 
 ## Bootstrap (opción A: reutilizados, sin descargar)
 Los tres archivos vienen del tarball de `bootstrap@5.3.3` descargado el 18/11/2026, con la integridad que publica npm:
@@ -53,7 +64,7 @@ Se volvieron a comprobar sus SHA-256 antes de las pruebas, y la prueba 13 los fi
 - `LICENSE` (MIT, The Bootstrap Authors): `8c14611ae41ac6fd543c13349f22188eb12c69b3e59105c5eca3925a8e4eca3e`
 
 ## Resultado de `make verificar`
-Tres corridas, un archivo por cada una, cada una con el commit base al inicio y el código de salida y los segundos al final:
+Corridas de la primera entrega (las siguientes están en las secciones de correcciones, enmienda 3 y comprobación en navegador; el registro completo de las 12 está al final, en «Registro de corridas de `make verificar`»). Un archivo por corrida, con el commit base al inicio y el código de salida y los segundos al final:
 1. `docs/reportes/logs/pt-12/pt-12-verificar-1-phpstan.log`: **falló**. PHPStan marcó 4 errores en mis pruebas (`->not` encadenado, `forgetUser` y `$this->app` protegido). Código de salida 2, 32 s. Se corrigieron las pruebas.
 2. `docs/reportes/logs/pt-12/pt-12-verificar-2.log`: **falló**. 2303 pruebas pasaron y falló una: `EntornoDePruebasTest`, que exigía que toda ruta fuera de `/api/v1` fuese solo la cookie csrf. Código de salida 2, 430 s. Se resolvió con la enmienda 2.
 3. `docs/reportes/logs/pt-12/pt-12-verificar-3.log`: **pasó**. Pint y PHPStan sin errores, 2304 pruebas y 13912 aserciones, sin avisos de seguridad. Cobertura: Dominio 100,0 % (mínimo 95 %), Aplicación 100,0 % (85 %), Infraestructura y HTTP 99,5 % (70 %). Código de salida 0, 525 s.
@@ -69,8 +80,8 @@ No se tocó ningún umbral ni regla de análisis. `make humo` no se ejecutó (no
 - **El menú de la rebanada 1 solo tiene «Panel», visible para todo usuario con sesión.** No implementé el filtrado de ítems por rol: no hay ítems con rol que filtrar, y se añadirá con el primer ítem que dependa de un rol. Por eso CA-LAY-002 («el menú se construye con los roles reales») se cumple solo de forma trivial en esta rebanada.
 
 ## Lo que no se hizo
-- **[Actualizado el 18/11/2026: la comprobación en navegador se hizo después; ver «Comprobación en navegador y cambios posteriores». El texto de abajo es el de la primera entrega.]** **Lista de comprobación manual en navegador, con capturas: no se hizo.** No hay navegador en esta sesión, y la base de desarrollo no tiene un usuario que yo pueda crear sin tocar datos. Quedan sin comprobar en navegador: CA-AUT-001 (flujo de la cookie CSRF y los errores 401, 422, 429, 403), CA-AUT-002 (recarga recupera la sesión por `GET /sesion`), CA-AUT-003 (salida), CA-GEN-002 (botón deshabilitado y recuperación), CA-GEN-003 (manejo de errores) y el aspecto responsivo.
-- Lo único que verifiqué en vivo fue con `curl` contra `http://127.0.0.1:8000` (servicio `web`): `/ingreso` responde 200, `/panel` y `/` redirigen, los seis activos responden 200 y `GET /api/v1/sesion` sin sesión responde 401.
+- **Capturas de la comprobación en navegador: no se archivaron.** La comprobación se hizo el 18/11/2026 (ver «Comprobación en navegador y cambios posteriores»), pero solo queda su tabla de resultados; no hay capturas, registro de red ni log. Por eso PT-12 consta como «Hecha con verificación manual declarada». La lista manual con capturas (D8) no se cumplió.
+- Antes de esa comprobación, la primera entrega solo verificó en vivo con `curl` contra `http://127.0.0.1:8000` (servicio `web`): `/ingreso` responde 200, `/panel` y `/` redirigen, los seis activos responden 200 y `GET /api/v1/sesion` sin sesión responde 401.
 - No se ejecutó `make fresh`, `migrate:rollback` ni nada que borre datos.
 
 ## Fuera de alcance
@@ -82,12 +93,12 @@ No se tocó ningún umbral ni regla de análisis. `make humo` no se ejecutó (no
 
 ## Desviaciones
 - Las dos enmiendas a la lista aprobada, ya aprobadas por el responsable.
-- La lista de comprobación manual con capturas (D8) no se cumplió.
+- La lista de comprobación manual con capturas (D8) no se cumplió: la comprobación se hizo, pero sin capturas archivadas.
 - **Nombres de las pruebas:** el plan aprobado decía «PT-12:» sin número. Los nombres llevan el formato «PT-12 N:» (y «PT-12 H-01:» las de auditoría); el número se añadió para trazabilidad con la numeración 1 a 22 del plan y de sus enmiendas. Aprobado por el responsable el 18/11/2026.
 - **Archivo de más en `backend/public/NiceAdmin/`:** la cuenta es 504 y no 503 porque se conserva `assets/vendor/bootstrap/LICENSE` (MIT, del paquete oficial de npm), que la plantilla no trae. Es la cuenta correcta según el responsable.
 
 ## Correcciones de auditoría (commit aparte, sobre `6e2ceda`)
-La fila de PT-12 en `docs/trazabilidad.md` vuelve a «Pendiente» hasta la comprobación manual en navegador.
+En el momento de este commit la fila de PT-12 en `docs/trazabilidad.md` volvió a «Pendiente» hasta la comprobación manual en navegador; pasó a «Hecha» después (ver «Comprobación en navegador y cambios posteriores»).
 
 **H-01: errores fuera de `/api/*` no deben exponer trazas ni detalles con `APP_DEBUG=true`.**
 - Causa: el manejador solo daba formato propio a `/api/*`; un error interno de una ruta web caía en la página de depuración de Laravel.
@@ -194,5 +205,29 @@ Nota: ese patrón también bloquea `DELETE /api/v1/sesion` mientras esté activo
 
 **La fila de PT-12 en `docs/trazabilidad.md` pasa a «Hecha» el 18/11/2026**, con los commits `47655d9`, `60371e2`, `2a85bd8` y `a7f9aef`, tras la confirmación de H-06 por el responsable.
 
-## Dudas
-- Cómo y quién hace la comprobación manual en navegador, y si PT-12 se acepta sin ella o queda condicionada a ella.
+## Corrida sobre los cambios de `a7f9aef` (log 11)
+`a7f9aef` cambió `backend/public/assets/js/sesion.js` (aviso de conexión y ocultamiento de los datos de sesión) y `backend/lang/es/interfaz.php` (texto de `sin_conexion`). La corrida de `make verificar` sobre esos cambios se hizo **con ellos sin commitear**: `docs/reportes/logs/pt-12/pt-12-verificar-11.log`, commit base `a287a25`. **Pasó**: 2313 pruebas y 13994 aserciones, sin avisos de seguridad, cobertura Dominio 100,0 %, Aplicación 100,0 % e Infraestructura y HTTP 99,5 %, código de salida 0, 429 s. No hubo corrida sobre `a7f9aef` ya commiteado; `a1f192f` solo cambia documentación. La corrida 12 (más abajo) se hace sobre el commit de esta auditoría y cubre el árbol completo.
+
+## Riesgos aceptados
+- **Sin límite de tasa por IP ni por origen en `POST /api/v1/sesion` (auditoría M-3).** Decisión documentada: el único freno es el bloqueo por cuenta (RNF-10, DD-29). Consecuencias asumidas: un tercero puede bloquear cuentas ajenas con intentos fallidos, y puede probar una contraseña contra muchos correos sin freno por origen. Añadir un límite por IP es alcance nuevo y requiere aprobación del responsable.
+
+## Registro de corridas de `make verificar`
+Todas en `docs/reportes/logs/pt-12/`.
+
+| N.º | Archivo | Commit base | Resultado |
+|---|---|---|---|
+| 1 | `pt-12-verificar-1-phpstan.log` | primera entrega | falló (PHPStan) |
+| 2 | `pt-12-verificar-2.log` | primera entrega | falló (`EntornoDePruebasTest`) |
+| 3 | `pt-12-verificar-3.log` | primera entrega | pasó |
+| 4 | `pt-12-verificar-4-phpstan.log` | correcciones de auditoría | falló (PHPStan) |
+| 5 | `pt-12-verificar-5-auditoria-red.log` | correcciones de auditoría | falló (red hacia packagist.org) |
+| 6 | `pt-12-verificar-6.log` | correcciones de auditoría | pasó |
+| 7 | `pt-12-verificar-7.log` | enmienda 3, con páginas `.html` | pasó |
+| 8 | `pt-12-verificar-8.log` | enmienda 3, sin páginas `.html` | pasó |
+| 9 | `pt-12-verificar-9.log` | `47655d9`, con el cambio de mensajes sin commitear | pasó |
+| 10 | `pt-12-verificar-10.log` | `60371e2` | pasó |
+| 11 | `pt-12-verificar-11.log` | `a287a25`, con los cambios de `a7f9aef` sin commitear | pasó |
+| 12 | `pt-12-verificar-12.log` | commit de la auditoría (`tecnico/pt-12-auditoria`) | véase el log |
+
+## Nota sobre la auditoría dirigida
+La auditoría dirigida del 18/11/2026 se hizo sobre la rama `frontend/blade-niceadmin` con una referencia local de `origin/main` desactualizada; tras `git fetch`, el PR #16 aparece fusionado (`6d996c3`) y todos los commits de PT-12 están en `origin/main`. Hallazgos que no se corrigen aquí y quedan como deuda: H-03 (usuario desactivado conserva la sesión), H-08 (diferencia de tiempo de respuesta en el ingreso), H-02 (GET anónimo escribe en `sessions`) y H-05 (419 sin prueba ni OpenAPI). Esta tarea solo corrige la documentación.
