@@ -61,7 +61,7 @@ Un hito se da por completado solo si cumple los criterios de `docs/criterios-ace
 
 Está prohibido construirlo en la Fase 1, aunque parezca fácil o útil:
 
-- Cualquier cosa dentro de `frontend/`: pantallas, componentes, estilos.
+- Cualquier cosa dentro de `frontend/`: pantallas, componentes, estilos. Excepción (DA-122): el frontend se desarrolla en la rama `frontend/blade-niceadmin`, solo con tarea aprobada por el responsable, después de fusionar H6 (§7, punto 6). En cualquier otra rama la prohibición se mantiene.
 - Reportes y exportación (PDF, Excel, CSV).
 - Notificaciones (correo, mensajes, notificaciones push).
 - Perfiles de administrador, coordinador, directivo, futbolista o preparador físico, y cualquier pantalla o endpoint para administrar usuarios.
