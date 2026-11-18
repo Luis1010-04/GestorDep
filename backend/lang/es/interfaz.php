@@ -2,7 +2,7 @@
 
 // Textos de las vistas web y de sus scripts. Las vistas los leen con __(); los scripts, del atributo data-textos del <body>.
 return [
-    'aplicacion' => 'Seguimiento de futbolistas',
+    'aplicacion' => 'GestorDep',
     'navegacion' => 'Navegación principal',
 
     'ingreso' => [
@@ -24,7 +24,7 @@ return [
         'sin_secciones' => 'Aún no hay secciones habilitadas en esta versión.',
     ],
 
-    'pie' => 'Seguimiento académico y deportivo de futbolistas',
+    'pie' => 'GestorDep: seguimiento académico y deportivo de futbolistas',
 
     // Mensajes que muestran los scripts (public/assets/js).
     'js' => [
