@@ -11,7 +11,7 @@ Por la API: las alertas abiertas de un jugador con su causa (`GET /jugadores/{ju
 
 | # | Punto | Estado | Evidencia |
 |---|---|---|---|
-| 1 | `make verificar` pasa en local y en la integración continua; `make mutacion` pasa al cerrar, con log | **Local: cumplido. Integración continua: sin comprobar** (no hay push; se comprueba con el primer push) | `make verificar` sobre `4112157`: exit 0, 2276 pruebas, 13791 aserciones, PHPStan nivel 8, cobertura 99.6 % (Dominio 100.0, Aplicación 100.0, Infraestructura y HTTP 99.5). `make mutacion`: exit 0, 999 de 999 mutantes matados, MSI 100 %, con el árbol de `40180f2` (§5) |
+| 1 | `make verificar` pasa en local y en la integración continua; `make mutacion` pasa al cerrar, con log | **Local: cumplido. Integración continua: sin comprobar** (no hay push; se comprueba con el primer push) | `make verificar` sobre `7a1e910`: **exit 0** (`EXIT_CODE=0` en el log), 2276 pruebas, 13791 aserciones, PHPStan nivel 8, cobertura 99.6 % (Dominio 100.0, Aplicación 100.0, Infraestructura y HTTP 99.5). `make mutacion` sobre el mismo `7a1e910`: **exit 0** (`EXIT_CODE=0`), 999 de 999 mutantes matados, MSI 100 %. Desde `7a1e910` solo se añadieron logs y se retiró `frontend/NiceAdmin/` del índice (§4); el código de `backend/` y de `scripts/` no cambió (§5) |
 | 2 | Cada historia de §2.1 tiene pruebas con su identificador; los diferidos de §2.2 anotados en `docs/trazabilidad.md` | **Cumplido** | `1b03ba7`: filas de HU-22 a HU-25, HU-12 c2, HU-29 c3 y las reglas; «Estado al cierre de H6» anota HU-26 (H7) y las alertas y notificaciones de Fase 2 |
 | 3 | `openapi.yaml` incluye las rutas de §6.1 y las respuestas reales coinciden | **Cumplido** | Las siete rutas de §6.1 están en `docs/api/openapi.yaml` y cada una tiene una prueba de contrato con `ValidatorBuilder`: `ContratoDeEstatusTest` (alertas y estatus), `ContratoDeGraficosTest` (jugador y equipo), `ContratoDeVistaParaConvocarTest` (vista y convocables) y `ContratoDeVistaDeLaConvocatoriaTest` |
 | 4 | `make fresh` y `migrate:rollback` funcionan sin errores | **Cumplido** | `make fresh` exit 0; `migrate:rollback` exit 0 (76 migraciones, `Ran=76` a `Ran=0`); `make migrar` exit 0 (`Ran=76 Pending=0`). Logs en `docs/reportes/logs/humo/` |
@@ -30,19 +30,19 @@ Por la API: las alertas abiertas de un jugador con su causa (`GET /jugadores/{ju
 | T00 Pest en paralelo (DA-101) | `2075659` | `f1-h6-plan-da101.md` (no hay `f1-h6-t00.md`) |
 | T01 Tabla `alertas` y parámetros | `8fbd178` | `f1-h6-t01.md` |
 | T02 Reglas de alerta en el Dominio | `9b31941` a `cf1e267` (2) | `f1-h6-t02.md` |
-| T03 Recálculo de alertas | `93df2b3` a `468e68d` (14) | `f1-h6-t03.md`, `f1-h6-plan-t03.md` |
+| T03 Recálculo de alertas | `93df2b3` a `ca2b5b2` (16) | `f1-h6-t03.md`, `f1-h6-plan-t03.md` |
 | T04 Alertas del jugador y estatus | `75fe470` | `f1-h6-t04.md` |
 | T05 Vista para convocar y orden | `4677503` a `d956050` (5) | `f1-h6-t05.md`, `f1-h6-plan-t05.md` |
 | T06 Vista de la convocatoria | `a2b1db1` a `d1f4772` (6) | `f1-h6-t06.md` |
 | T07 Gráficos | `4339783` | `f1-h6-t07.md` |
-| T08 Seguridad y baja (aprobada en `6951e33`) | `bb91031`, `8726374`, `6951e33` | `f1-h6-t08.md` |
-| T09 Humo, trazabilidad y cierre documental | `1b03ba7` a `a3a8956` (7), más el de estos reportes | `f1-h6-t09.md` |
+| T08 Seguridad y baja (aprobada en `6951e33`) | `bb91031`, `8726374`, `6951e33`, `d1969d4` (addendum) | `f1-h6-t08.md` |
+| T09 Humo, trazabilidad y cierre documental | `1b03ba7` a `ad77d42` (17), más el de la verificación final | `f1-h6-t09.md` |
 
 Las cifras de cada tarea (pruebas, `make verificar`, lo no hecho, fuera de alcance) están en su reporte; no las repito aquí. La suite pasó de 2271 pruebas al cierre de T08 a **2276** (13769 a 13791 aserciones) con las cinco de T09.
 
 ## 4. Rutas tocadas fuera de lo permitido
 
-**Verificación hecha el 17/11/2026 sobre `3b8432b`** (reemplaza a la lista que antes salía de los expedientes). Script y salida: `docs/reportes/logs/verificar/f1-h6-rutas-por-tarea.sh` y `...-salida.txt`.
+**Verificación recalculada el 17/11/2026 sobre el HEAD `ad77d42`** (reemplaza a la de `3b8432b`, que queda en `...-salida.txt`, y a la lista que antes salía de los expedientes). Script y salida: `docs/reportes/logs/verificar/f1-h6-rutas-por-tarea.sh` y `f1-h6-rutas-por-tarea-salida-ad77d42.txt` (con las 538 líneas de `frontend/NiceAdmin/` colapsadas en una). Los commits de T09 posteriores a `3b8432b` se listan con `git show --name-only` en `docs/reportes/f1-h6-t09.md` §10.
 
 **Método.** Para cada tarea, los archivos de **sus** commits (los que empiezan con `F1-H6-Tnn:`), sin repetidos, comparados con las rutas permitidas de `docs/hitos/f1-h6.md` §8 (T00: `docs/reportes/f1-h6-plan-da101.md` §7). Los comandos son:
 
@@ -61,13 +61,13 @@ No usé `git diff --name-only <anterior>..<último>` porque los commits de una t
 | T00 | 1 (`2075659`; anterior `33a9910`) | 41 | ninguno |
 | T01 | 1 (`8fbd178`; anterior `8606ba3`) | 6 | ninguno |
 | T02 | 2 (`9b31941` a `cf1e267`; anterior `8fbd178`) | 20 | ninguno |
-| T03 | 14 (`93df2b3` a `468e68d`; anterior `d50969c`) | 74 | **13 archivos** (abajo) |
+| T03 | 16 (`93df2b3` a `ca2b5b2`; anterior `d50969c`) | 75 | **13 archivos** (abajo) |
 | T04 | 1 (`75fe470`; anterior `cf1e267`) | 27 | ninguno |
 | T05 | 5 (`4677503` a `d956050`; anterior `155d6a0`) | 39 | **3 archivos** (abajo) |
 | T06 | 6 (`a2b1db1` a `d1f4772`; anterior `222df9d`) | 21 | ninguno |
 | T07 | 1 (`4339783`; anterior `75fe470`) | 38 | ninguno |
-| T08 | 3 (`bb91031` a `6951e33`; anterior `d1f4772`) | 31 | **2 archivos** (abajo) |
-| T09 | 8 (`1b03ba7` a `3b8432b`; anterior `6951e33`) | 20 | ninguno |
+| T08 | 4 (`bb91031` a `d1969d4`; anterior `d1f4772`) | 31 | **2 archivos** (abajo) |
+| T09 | 17 (`1b03ba7` a `ad77d42`; anterior `6951e33`) | 565 | **3 grupos** (abajo): `frontend/NiceAdmin/` (538 archivos, por error), el comentario de `ParametrosInstitucionalesSeeder.php` y `docs/decisiones/pendientes.md` |
 
 **Discrepancias** (todas en archivos que no están en la lista de §8 de su tarea). Las tres tareas tienen la discrepancia cubierta por una aprobación y declarada en su reporte; la correspondencia archivo por archivo de T03 y T08 está en un addendum de cada reporte. (En una versión anterior de este apartado dije que el reporte de T03 no declaraba los archivos del renombrado y que no constaba su aprobación: era inexacto; ver abajo.)
 
@@ -77,20 +77,26 @@ No usé `git diff --name-only <anterior>..<último>` porque los commits de una t
   - *Sin archivo pendiente de decisión.* Dos notas, sin tratarlas como aprobadas: (1) el plan §9.2 proponía además anotar DD-46 y DD-32 del registro y `468e68d` no lo hizo; (2) el plan §9.4 proponía tres pasos (renombrado primero, código de T03 en commits propios, documentos en un F1-DOC aparte) y `468e68d` es un solo commit con todo; no consta que esa agrupación se haya ordenado; **el responsable la aceptó como desviación declarada el 17/11/2026, sin reescribir el historial**.
 - **T05 (3 archivos):** `Makefile` (`b971282`), `docs/hitos/f1-h6.md` y `docs/decisiones/pendientes.md` (`465118f`). Declarados en `docs/reportes/f1-h6-t05.md` §9, «Ajustes aprobados el 16/11/2026», con su commit; el `Makefile` ya figuraba como duda en §8 del mismo reporte. No se añadió nada: ya constan el reporte y el encabezado de la aprobación.
 - **T08 (2 archivos):** `backend/tests/Ayudantes/MundoDeAlertas.php` (`8726374`) y `docs/decisiones/pendientes.md` (`bb91031` y `6951e33`). Declarados en `docs/reportes/f1-h6-t08.md` §1 y §8; la **orden que cada uno autorizó** se añadió en el addendum §10 de ese reporte.
+- **T09 (3 grupos, declarados en `docs/reportes/f1-h6-t09.md` §6 y §10):**
+  - **`frontend/NiceAdmin/**` (538 archivos): error mío.** El commit `7a1e910` ejecutó `git add -A` sin revisar el estado y arrastró una carpeta sin seguimiento que apareció en el árbol durante la sesión; `ad77d42` la sacó del índice sin tocar los archivos de disco. **No es una ruta autorizada.** Sigue en el historial local (en `7a1e910`, añadida, y en `ad77d42`, retirada); no se reescribió el historial sin orden del responsable. Ningún archivo de `frontend/` se modificó: solo se añadió y se retiró del índice.
+  - `backend/database/seeders/ParametrosInstitucionalesSeeder.php` (`87cacf4`): solo un comentario, por orden del responsable del 17/11/2026.
+  - `docs/decisiones/pendientes.md` (`24372fb`, `d7896d3`, `87cacf4` y `7a1e910`): P-16 diferido y la deuda de H7, por orden del responsable.
 
-Quedan **sin discrepancia** T00, T01, T02, T04, T06, T07 y T09. En T00 `backend/docker/db/init/02-bases-por-proceso.sh` es «el guion idempotente junto a» `01-roles-y-bases.sh` de su plan §7.
+Quedan **sin discrepancia** T00, T01, T02, T04, T06 y T07. En T00 `backend/docker/db/init/02-bases-por-proceso.sh` es «el guion idempotente junto a» `01-roles-y-bases.sh` de su plan §7.
 
 ## 5. Tiempos
 
 | | Duración |
 |---|---|
-| `make verificar` (final, sobre `4112157`) | 7 min 4 s en total (13:34:50 a 13:41:54); 327.20 s las pruebas |
+| `make verificar` (final, sobre `7a1e910`) | 6 min 33 s en total (15:49:00 a 15:55:33); 308.15 s las pruebas |
+| `make verificar` (sobre `4112157`) | 7 min 4 s (13:34:50 a 13:41:54); 327.20 s las pruebas |
 | `make verificar` (primera de T09, sobre `40180f2`) | 7 min 28 s (448 s); pruebas 297.52 s |
-| `make mutacion` | 4 min 5 s (247 s), con 4 hilos; 999 mutantes |
+| `make mutacion` (final, sobre `7a1e910`) | 3 min 48 s (15:55:33 a 15:59:23), con 4 hilos; 999 mutantes |
+| `make mutacion` (primera de T09, sobre `40180f2`) | 4 min 5 s (247 s); 999 mutantes |
 | `make pruebas` (serie, T08) | 732.67 s a 792.11 s en siete corridas |
 | `make humo` (H0 a H6) | 83 s (13:32:08 a 13:33:31) |
 
-**Aclaración sobre la mutación:** corrió con `40180f2` como HEAD (13:22:22 a 13:26:29). `a42820b` solo agregó logs, y los commits posteriores solo cambiaron `scripts/humo/humo-h6.sh` y `GuionDeHumoTest.php`, fuera de `Dominio/`. No se repitió. DA-101 fijó 450 s como meta de `make verificar`, no como bloqueo: la corrida final tardó 424 s.
+**Aclaración sobre las corridas finales:** `make verificar` y `make mutacion` se repitieron sobre `7a1e910` (por la auditoría, B2 y B3) y las dos terminaron con `EXIT_CODE=0` anotado al final de cada log; el HEAD actual `ad77d42` solo añade a ese estado logs y el retiro de `frontend/NiceAdmin/` del índice, sin cambios en `backend/` ni `scripts/`. La corrida de `make verificar` sobre `87cacf4` (15:39:36 a 15:47:15, exit 0) no tiene su log archivado: la sustituye la de `7a1e910`. Antes, la mutación había corrido sobre `40180f2` (13:22:22 a 13:26:29). DA-101 fijó 450 s como meta de `make verificar`, no como bloqueo: la corrida final tardó 424 s.
 
 ## 6. Decisiones
 

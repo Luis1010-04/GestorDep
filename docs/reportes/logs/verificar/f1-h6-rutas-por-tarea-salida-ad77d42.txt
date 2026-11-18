@@ -1,0 +1,42 @@
+== T00: 1 commits (2075659 a 2075659), anterior al primero: 33a9910; 41 archivos distintos
+   sin discrepancias
+== T01: 1 commits (8fbd178 a 8fbd178), anterior al primero: 8606ba3; 6 archivos distintos
+   sin discrepancias
+== T02: 2 commits (9b31941 a cf1e267), anterior al primero: 8fbd178; 20 archivos distintos
+   sin discrepancias
+== T03: 16 commits (93df2b3 a ca2b5b2), anterior al primero: d50969c; 75 archivos distintos
+   FUERA DE LAS RUTAS PERMITIDAS:
+     backend/src/Academico/Aplicacion/ConciliarResumenes.php
+     backend/tests/Arch/AlcanceDeJugadoresTest.php
+     backend/tests/Ayudantes/DeteccionDeConsultasDeJugadores.php
+     backend/tests/Feature/Academico/AlcanceDelDocenteTest.php
+     backend/tests/Feature/Academico/ContratoDeAcademicoTest.php
+     backend/tests/Feature/Academico/CriterioPorMateriaTest.php
+     backend/tests/Feature/Academico/RecalculoDelResumenTest.php
+     backend/tests/Feature/Academico/SituacionAcademicaTest.php
+     backend/tests/Feature/Seguridad/AcademicoSeguridadTest.php
+     docs/CAMBIOS-v1.2.md
+     docs/criterios-aceptacion-fase-1.md
+     docs/decisiones/registro-decisiones.md
+     docs/estrategia-pruebas.md
+== T04: 1 commits (75fe470 a 75fe470), anterior al primero: cf1e267; 27 archivos distintos
+   sin discrepancias
+== T05: 5 commits (4677503 a d956050), anterior al primero: 155d6a0; 39 archivos distintos
+   FUERA DE LAS RUTAS PERMITIDAS:
+     Makefile
+     docs/decisiones/pendientes.md
+     docs/hitos/f1-h6.md
+== T06: 6 commits (a2b1db1 a d1f4772), anterior al primero: 222df9d; 21 archivos distintos
+   sin discrepancias
+== T07: 1 commits (4339783 a 4339783), anterior al primero: 75fe470; 38 archivos distintos
+   sin discrepancias
+== T08: 4 commits (bb91031 a d1969d4), anterior al primero: d1f4772; 31 archivos distintos
+   FUERA DE LAS RUTAS PERMITIDAS:
+     backend/tests/Ayudantes/MundoDeAlertas.php
+     docs/decisiones/pendientes.md
+== T09: 17 commits (1b03ba7 a ad77d42), anterior al primero: 6951e33; 565 archivos distintos
+   FUERA DE LAS RUTAS PERMITIDAS:
+     frontend/NiceAdmin/** (538 archivos: los añadió por error 7a1e910 con git add -A y los retiró del índice ad77d42; ver reporte de T09)
+     backend/database/seeders/ParametrosInstitucionalesSeeder.php
+     docs/decisiones/pendientes.md
+HEAD=ad77d42
