@@ -32,7 +32,7 @@ return [
         'entrar' => 'Entrar',
         'error_generico' => 'No se pudo completar la operación. Intente de nuevo.',
         'error_de_sesion' => 'No se pudo abrir la sesión desde este origen. Recargue la página e intente de nuevo.',
-        'sin_conexion' => 'No hay conexión con el servidor.',
+        'sin_conexion' => 'Hay problemas de conexión. Revise su internet e intente de nuevo.',
         'bloqueada' => 'Demasiados intentos. Intente de nuevo en :minutos minutos.',
         'sesion_expirada' => 'Su sesión terminó. Inicie sesión de nuevo.',
         'roles_ninguno' => 'Ninguno',

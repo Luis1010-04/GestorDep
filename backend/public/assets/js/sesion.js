@@ -19,6 +19,13 @@
         aviso.textContent = mensaje;
     }
 
+    /** Sin datos de sesión no se muestran «Bienvenido, .» ni «Roles: »: se oculta el párrafo entero. */
+    function ocultarDatosDeSesion() {
+        ['bienvenida-nombre', 'bienvenida-roles'].forEach(function (id) {
+            document.getElementById(id).parentElement.classList.add('d-none');
+        });
+    }
+
     window.Api.solicitar('GET', '/sesion')
         .then(function (respuesta) {
             var usuario = respuesta.datos;
@@ -31,6 +38,7 @@
                 irAlIngreso(true);
                 return;
             }
+            ocultarDatosDeSesion();
             mostrarAviso(error.status === 0 ? textos.sin_conexion : textos.error_generico);
         });
 
