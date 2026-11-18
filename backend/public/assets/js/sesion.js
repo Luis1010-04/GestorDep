@@ -7,6 +7,18 @@
         window.location.assign(expirada ? '/ingreso?expirada=1' : '/ingreso');
     }
 
+    function mostrarAviso(mensaje) {
+        var aviso = document.getElementById('aviso');
+        if (!aviso) {
+            aviso = document.createElement('div');
+            aviso.id = 'aviso';
+            aviso.className = 'alert alert-danger';
+            aviso.setAttribute('role', 'alert');
+            document.querySelector('main').prepend(aviso);
+        }
+        aviso.textContent = mensaje;
+    }
+
     window.Api.solicitar('GET', '/sesion')
         .then(function (respuesta) {
             var usuario = respuesta.datos;
@@ -17,7 +29,9 @@
         .catch(function (error) {
             if (error.status === 401) {
                 irAlIngreso(true);
+                return;
             }
+            mostrarAviso(error.status === 0 ? textos.sin_conexion : textos.error_generico);
         });
 
     document.getElementById('cerrar-sesion').addEventListener('click', function (evento) {

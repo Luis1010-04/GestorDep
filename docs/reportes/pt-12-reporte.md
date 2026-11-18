@@ -84,5 +84,26 @@ No se tocó ningún umbral ni regla de análisis. `make humo` no se ejecutó (no
 - Las dos enmiendas a la lista aprobada, ya aprobadas por el responsable.
 - La lista de comprobación manual con capturas (D8) no se cumplió.
 
+## Correcciones de auditoría (commit aparte, sobre `6e2ceda`)
+La fila de PT-12 en `docs/trazabilidad.md` vuelve a «Pendiente» hasta la comprobación manual en navegador.
+
+**H-01: errores fuera de `/api/*` no deben exponer trazas ni detalles con `APP_DEBUG=true`.**
+- Causa: el manejador solo daba formato propio a `/api/*`; un error interno de una ruta web caía en la página de depuración de Laravel.
+- Corrección en `backend/bootstrap/app.php`: fuera de la api, toda excepción pasa por `FormatoDeError` (500 `error_interno`, sin detalle), salvo las que Laravel resuelve por sí mismo: excepciones HTTP (páginas 404 y 419), `HttpResponseException`, `AuthenticationException` y `ValidationException`. Así siguen funcionando las redirecciones de `auth:web` y `guest:web`.
+- Pruebas nuevas en `backend/tests/Feature/Web/ErroresWebTest.php`:
+  - `PT-12 H-01: un error interno fuera de /api con APP_DEBUG=true no expone trazas ni detalles`. **Falló antes de implementar** (se filtraba el detalle) y pasa ahora.
+  - `PT-12 H-01: un 404 web con APP_DEBUG=true no expone trazas ni detalles`. **Pasaba desde el inicio** (regresión).
+- Efecto secundario: un error interno web responde ahora con el JSON de `FormatoDeError`, no con una página HTML.
+
+**H-06: un error distinto de 401 al cargar `/panel` debe mostrar un aviso.**
+- Corrección en `backend/public/assets/js/sesion.js`: si `GET /sesion` falla con un código distinto de 401, se inserta un aviso `alert-danger` al inicio de `<main>` con `textos.error_generico`, o `textos.sin_conexion` si no hubo respuesta. Reutiliza los textos que ya salen de `lang/es/interfaz.php`; no se tocaron vistas ni `lang`.
+- Sin prueba Pest: no hay forma de ejecutar JavaScript en la suite. **Comprobación manual:** con la sesión iniciada, en las herramientas del navegador bloquear o hacer fallar `GET /api/v1/sesion` (por ejemplo, desconectar la red o forzar 500) y recargar `/panel`. Debe verse un aviso rojo en la parte superior del contenido, con la página no vacía. Con 401 debe seguir redirigiendo a `/ingreso?expirada=1`.
+- Observación, sin cambio: al cerrar sesión, un error distinto de 401 solo vuelve a habilitar el botón y no muestra aviso. No estaba en la corrección pedida.
+
+**`make verificar` de las correcciones** (seis corridas en total para PT-12; cada una con su archivo en `docs/reportes/logs/pt-12/`):
+- `pt-12-verificar-4-phpstan.log`: **falló**. PHPStan: faltaba el tipo de retorno `list<string>` de un ayudante de prueba. Código de salida 2, 28 s.
+- `pt-12-verificar-5-auditoria-red.log`: **falló** en la auditoría de dependencias por un tiempo de espera de red hacia packagist.org; pruebas, PHPStan y cobertura pasaron. Código de salida 2, 515 s.
+- `pt-12-verificar-6.log`: **pasó**. 2306 pruebas y 13926 aserciones, PHPStan sin errores, sin avisos de seguridad. Cobertura: Dominio 100,0 %, Aplicación 100,0 %, Infraestructura y HTTP 99,5 %. Código de salida 0, 510 s.
+
 ## Dudas
 - Cómo y quién hace la comprobación manual en navegador, y si PT-12 se acepta sin ella o queda condicionada a ella.
