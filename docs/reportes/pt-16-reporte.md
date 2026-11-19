@@ -106,17 +106,28 @@ En la corrida 1, la fila de trazabilidad, este reporte y el log se agregaron des
 5. **Recolección de basura.** El sorteo no corre en las visitas anónimas; sigue corriendo en las demás peticiones.
 6. **Lista de rutas fija.** Una página web nueva no queda cubierta hasta que se agregue a `PAGINAS`.
 
-## Verificación en Chrome (pendiente, a cargo del responsable)
+## Verificación en Chrome (hecha por el responsable)
+El responsable la hizo en Chrome y la declaró el 19/11/2026. El agente no la presenció y en el repositorio no hay capturas ni registro de red de ella. Según el responsable, se comprobaron:
+- las redirecciones;
+- el ingreso;
+- la recarga del panel;
+- el cierre de sesión;
+- el conteo de `sessions`;
+- la cookie `gestordep-session` en DevTools.
+
+Los pasos previstos eran:
 1. En una ventana privada, abrir `/ingreso`. En DevTools → Application → Cookies no debe aparecer `gestordep-session`.
 2. Abrir `/panel`: debe redirigir a `/ingreso`.
 3. Pulsar «Entrar» con un usuario de demostración: aparece `gestordep-session` y se abre `/panel`.
 4. Recargar `/panel`: sigue en el panel.
 5. Cerrar la sesión: vuelve a `/ingreso`.
 
+La declaración no detalla el resultado de cada paso; aquí solo consta lo que el responsable dijo haber comprobado.
+
 ## Lo que no se hizo
 - No se limitaron las escrituras de `/sanctum/csrf-cookie` ni de `POST /sesion`.
 - No se dejó de enviar `XSRF-TOKEN` en la visita anónima.
-- No se hizo la verificación en Chrome, que queda a cargo del responsable.
+- La verificación en Chrome no la hizo el agente: la hizo el responsable (sección anterior).
 
 ## Fuera de alcance
 - Nada nuevo detectado.
