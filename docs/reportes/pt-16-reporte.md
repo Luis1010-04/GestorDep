@@ -26,20 +26,36 @@ En ese caso la sesión se arranca en memoria, porque `ShareErrorsFromSession`, e
 
 No se tocaron `routes/web.php`, `frontend/`, NiceAdmin, las rutas de `/api`, `config/`, migraciones ni `lang/`. **OpenAPI no cambia**: las tres rutas son web.
 
-## Pruebas agregadas (9)
+## Pruebas agregadas (10)
 | Prueba | Antes de implementar |
 |---|---|
-| PT-16: GET / anónimo sin cookie redirige a /panel sin crear fila en sessions ni enviar cookie de sesión | Falló (se enviaba la cookie y se creaba la fila) |
-| PT-16: GET /ingreso anónimo sin cookie responde 200 sin crear fila en sessions ni enviar cookie de sesión | Falló (ídem) |
-| PT-16: GET /panel anónimo sin cookie redirige a /ingreso sin crear fila en sessions ni enviar cookie de sesión | Falló (ídem) |
-| PT-16: una cookie de sesión que no se puede descifrar se trata como ausente y no crea fila | Falló (1 fila) |
+| PT-16: GET / anónimo sin cookie redirige a /panel sin crear fila en sessions ni enviar cookie de sesión | Falló en `assertCookieMissing`: se enviaba la cookie de sesión |
+| PT-16: GET /ingreso anónimo sin cookie responde 200 sin crear fila en sessions ni enviar cookie de sesión | Falló en `assertCookieMissing` (ídem) |
+| PT-16: GET /panel anónimo sin cookie redirige a /ingreso sin crear fila en sessions ni enviar cookie de sesión | Falló en `assertCookieMissing` (ídem) |
+| PT-16: una cookie de sesión que no se puede descifrar se trata como ausente y no crea fila | Falló: se creó 1 fila |
+| PT-16: HEAD /ingreso anónimo sin cookie responde 200 sin crear fila en sessions ni enviar cookie de sesión | Agregada en la corrección de la auditoría; falla sin el middleware (ver abajo) |
 | PT-16: con la cookie de una sesión autenticada, GET /panel responde 200 y sigue guardando su fila | Pasaba (regresión) |
 | PT-16: con la cookie de una sesión anónima existente, GET /ingreso responde 200 y la conserva | Pasaba (regresión) |
 | PT-16: un usuario autenticado en GET /ingreso sigue redirigido a /panel | Pasaba (regresión) |
 | PT-16: GET /sanctum/csrf-cookie sin cookie sigue creando la sesión y entregando sus cookies | Pasaba (regresión) |
 | PT-16: una cookie de sesión válida con fila inexistente crea la fila con ese id, como hoy | Pasaba (regresión pedida por el responsable) |
 
-En la primera corrida, las regresiones 5 y 6 fallaron por un error de la propia prueba. Comparaban `_previous.url` con `http://localhost/...`, pero el entorno de pruebas usa `APP_URL` con el puerto 8000. Se corrigieron con `url(...)` antes de implementar. Las pruebas de PT-12 (`IngresoTest`, `PanelTest`, `PaginasWebTest`, `ErroresWebTest`, `BootstrapLocalTest`) pasan sin cambios.
+En las pruebas 1 a 3 la primera aserción que falla es la de la cookie, así que el conteo de filas no llegó a evaluarse. La creación de la fila solo se observó directamente en la prueba 4.
+
+En la primera corrida, las regresiones 6 y 7 fallaron por un error de la propia prueba. Comparaban `_previous.url` con `http://localhost/...`, pero el entorno de pruebas usa `APP_URL` con el puerto 8000. Se corrigieron con `url(...)` antes de implementar. Las pruebas de PT-12 (`IngresoTest`, `PanelTest`, `PaginasWebTest`, `ErroresWebTest`, `BootstrapLocalTest`) pasan sin cambios.
+
+## Corrección de la auditoría
+La auditoría de `c0f2a1d` dejó cuatro observaciones, corregidas en un commit aparte:
+1. Se agregó la prueba de HEAD en `/ingreso` (prueba 5).
+2. La prueba de la cookie que no se puede descifrar ahora también comprueba que la respuesta no envía la cookie de sesión.
+3. El ayudante `abrirSesionAutenticada` quita la cabecera `Origin` con `withoutHeader('Origin')`, en lugar de dejarla vacía.
+4. Se corrigió en este reporte la frase sobre por qué fallaban las pruebas 1 a 3.
+
+**Pruebas sin el middleware.** Para comprobarlo, se borró temporalmente la línea `web(replace: ...)` de `bootstrap/app.php`, se ejecutó `SesionesAnonimasTest` y se restauró el archivo con `git checkout`. Salida: `docs/reportes/logs/pt-16/pt-16-sin-middleware.log`.
+- Fallaron las pruebas 1 a 5, todas con «Cookie [gestordep-session] is present on response.».
+- Pasaron las 5 de regresión.
+
+Con la aserción de cookie agregada a la prueba 4, ahora también falla primero por la cookie.
 
 ## Resultado de `make verificar`
 `docs/reportes/logs/pt-16/pt-16-verificar-1.log`: **pasó**, con los cambios sin commitear sobre la base `66edef2`.
@@ -49,7 +65,14 @@ En la primera corrida, las regresiones 5 y 6 fallaron por un error de la propia 
 - Cobertura: Dominio 100,0 %, Aplicación 100,0 %, Infraestructura y HTTP 99,5 %.
 - Código de salida 0, 395 s.
 
-La fila de trazabilidad, este reporte y el log se agregaron después de la corrida; ninguna prueba lee esos archivos. El log se escribió fuera del repositorio y se copió sin cambios. `make humo` no se ejecutó (no se pidió). No se tocó ningún umbral ni regla de análisis.
+`docs/reportes/logs/pt-16/pt-16-verificar-2.log`, sobre las correcciones de la auditoría sin commitear (base `c0f2a1d`): **pasó**.
+- 2336 pruebas y 14068 aserciones.
+- Pint y PHPStan sin errores.
+- Sin avisos de seguridad.
+- Cobertura: Dominio 100,0 %, Aplicación 100,0 %, Infraestructura y HTTP 99,5 %.
+- Código de salida 0, 392 s.
+
+En la corrida 1, la fila de trazabilidad, este reporte y el log se agregaron después de la corrida; ninguna prueba lee esos archivos. El log se escribió fuera del repositorio y se copió sin cambios. `make humo` no se ejecutó (no se pidió). No se tocó ningún umbral ni regla de análisis.
 
 ## Riesgos
 1. **Cookie de sesión en el navegador.**

@@ -63,7 +63,7 @@ function abrirSesionAutenticada(TestCase $prueba): string
     $prueba->withCredentials()->withHeaders(['Origin' => 'http://localhost'])
         ->postJson('/api/v1/sesion', ['correo' => CORREO_ANONIMAS, 'contrasena' => CLAVE_ANONIMAS])
         ->assertOk();
-    $prueba->withHeaders(['Origin' => '']);
+    $prueba->withoutHeader('Origin');
 
     return (string) DB::table('sessions')->where('user_id', $id)->value('id');
 }
@@ -111,7 +111,21 @@ test('PT-16: una cookie de sesión que no se puede descifrar se trata como ausen
 
     $this->withUnencryptedCookie((string) config('session.cookie'), 'basura-sin-cifrar')
         ->get('/ingreso')
-        ->assertOk();
+        ->assertOk()
+        ->assertCookieMissing((string) config('session.cookie'));
+
+    expect(filasDeSesion())->toBe(0);
+});
+
+test('PT-16: HEAD /ingreso anónimo sin cookie responde 200 sin crear fila en sessions ni enviar cookie de sesión', function () {
+    /** @var TestCase $this */
+    Auth::forgetGuards();
+    app('session')->forgetDrivers();
+    app()->forgetInstance('session.store');
+
+    $this->call('HEAD', '/ingreso')
+        ->assertOk()
+        ->assertCookieMissing((string) config('session.cookie'));
 
     expect(filasDeSesion())->toBe(0);
 });
