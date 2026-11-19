@@ -1,0 +1,157 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\SesionesAnonimasTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mPT-16: GET / anónimo sin cookie redirige a /panel sin crear fila en[39m[90m…[39m [90m4.59s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPT-16: GET /ingreso anónimo sin cookie responde 200 sin crear fila[39m[90m… [39m [90m0.29s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPT-16: GET /panel anónimo sin cookie redirige a /ingreso sin crear[39m[90m… [39m [90m0.24s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPT-16: una cookie de sesión que no se puede descifrar se trata como[39m[90m…[39m [90m0.26s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPT-16: HEAD /ingreso anónimo sin cookie responde 200 sin crear fila[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: con la cookie de una sesión autenticada, GET /panel responde[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: con la cookie de una sesión anónima existente, GET /ingreso[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: un usuario autenticado en GET /ingreso sigue redirigido a /p[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /sanctum/csrf-cookie sin cookie sigue creando la sesión[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: una cookie de sesión válida con fila inexistente crea la fil[39m[90m…[39m [90m0.30s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\SesionesAnonimasTest[22m [90m>[39m PT-16: GET / anónimo sin…   
+[39;1m  Cookie [gestordep-session] is present on response.
+Failed asserting that Symfony\Component\HttpFoundation\Cookie Object #1898 (
+    'expire' => 1795115600,
+    'path' => '/',
+    'sameSite' => 'lax',
+    'secureDefault' => false,
+    'name' => 'gestordep-session',
+    'value' => 'eyJpdiI6Im5KbmplOS93aW5OQmVCa3Z4SWIvZkE9PSIsInZhbHVlIjoiODZmVGhtMXgreVV4Z2x6YkdMTG1sUmR6OGxSTDZCYTF0YnlDTkREYzhqV21EVVZqY3RwV1UxN0ZweGFnbDU4K3hySGJNQzdTOXpGR1dFc3dMSFB4ckgyRnpSWFVxOGkwYlQyRithOVVVZGhVWnFJa29jcmNrbGwzb1VhMW44LzciLCJtYWMiOiJlYTI0Nzg5ZDU3MzY1ZWM3YWE3OGJhYzllMWNkNjFjMTZjMmY1ZTIwYzczMTMyMGMzMjU0YWU0ZTYzY2Y0MjU1IiwidGFnIjoiIn0=',
+    'domain' => null,
+    'secure' => null,
+    'httpOnly' => true,
+    'raw' => false,
+    'partitioned' => false,
+) is null.[39;22m
+
+  at [32mtests/Feature/Web/SesionesAnonimasTest.php[39m:[32m83[39m
+     79▕ test('PT-16: GET / anónimo sin cookie redirige a /panel sin crear fila en sessions ni enviar cookie de sesión', function () {
+     80▕     /** @var TestCase $this */
+     81▕     visitaWeb($this, '/')
+     82▕         ->assertRedirect('/panel')
+  ➜  83▕         ->assertCookieMissing((string) config('session.cookie'));
+     84▕ 
+     85▕     expect(filasDeSesion())->toBe(0);
+     86▕ });
+     87▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\SesionesAnonimasTest[22m [90m>[39m PT-16: GET /ingreso anón…   
+[39;1m  Cookie [gestordep-session] is present on response.
+Failed asserting that Symfony\Component\HttpFoundation\Cookie Object #2164 (
+    'expire' => 1795115601,
+    'path' => '/',
+    'sameSite' => 'lax',
+    'secureDefault' => false,
+    'name' => 'gestordep-session',
+    'value' => 'eyJpdiI6IlhwcWIvZlNESWFNdkZGQUxXZHp1NGc9PSIsInZhbHVlIjoiQWZMcGQ1aGlkc0MvWW5sY21jVi9jSmVMY3EvNmdXZE5Mc1hIY21YbzRLeStyVWlSWktFSjRKNEI5TlBscjJHcm5lM2dtNUh2SzNHYmtOakt0MjZGQTlvMEtKZDdqWXFFOGZRcTNOM21VaFNRdkFWOXVMMUljdUNyTGRPdWFlc1AiLCJtYWMiOiJhZjZhMTBhNjQ5Y2RmNmFhODk0ZmY3ZTAwN2FmMmI0ODk0YzE2ZGJiZjMwMjA5NDkwZDFmYTNlMjBlMTdkYTlkIiwidGFnIjoiIn0=',
+    'domain' => null,
+    'secure' => null,
+    'httpOnly' => true,
+    'raw' => false,
+    'partitioned' => false,
+) is null.[39;22m
+
+  at [32mtests/Feature/Web/SesionesAnonimasTest.php[39m:[32m92[39m
+     88▕ test('PT-16: GET /ingreso anónimo sin cookie responde 200 sin crear fila en sessions ni enviar cookie de sesión', function () {
+     89▕     /** @var TestCase $this */
+     90▕     visitaWeb($this, '/ingreso')
+     91▕         ->assertOk()
+  ➜  92▕         ->assertCookieMissing((string) config('session.cookie'));
+     93▕ 
+     94▕     expect(filasDeSesion())->toBe(0);
+     95▕ });
+     96▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\SesionesAnonimasTest[22m [90m>[39m PT-16: GET /panel anónim…   
+[39;1m  Cookie [gestordep-session] is present on response.
+Failed asserting that Symfony\Component\HttpFoundation\Cookie Object #2436 (
+    'expire' => 1795115601,
+    'path' => '/',
+    'sameSite' => 'lax',
+    'secureDefault' => false,
+    'name' => 'gestordep-session',
+    'value' => 'eyJpdiI6InZIU1Z6dW1kYTF1bDRvUUViTWN6MHc9PSIsInZhbHVlIjoiZlArOFB1a3FsYTBXeElpSDl0Z1ZtSTgwRkpSZFE2b000akNhQll1VnVWN1FqU2NjVjVJdzZkbjJPejVoOW02U2VsTVZQSERWZUVQNTZ1ZCt0cG5CTysxcVNlRkI3bmNjdjBOVjNHT0lwN2ExTnBJZWFVaDlQSHpEOXcxREdZWXQiLCJtYWMiOiI1ZGEwNzM3N2ExNjJiYjdkOTk5ZWJmYTM0ZjAwZTlkN2Q5YzQwZGNiMzhiYzc0YmM2YzY0YmE3NWNkZmIxNGM0IiwidGFnIjoiIn0=',
+    'domain' => null,
+    'secure' => null,
+    'httpOnly' => true,
+    'raw' => false,
+    'partitioned' => false,
+) is null.[39;22m
+
+  at [32mtests/Feature/Web/SesionesAnonimasTest.php[39m:[32m101[39m
+     97▕ test('PT-16: GET /panel anónimo sin cookie redirige a /ingreso sin crear fila en sessions ni enviar cookie de sesión', function () {
+     98▕     /** @var TestCase $this */
+     99▕     visitaWeb($this, '/panel')
+    100▕         ->assertRedirect('/ingreso')
+  ➜ 101▕         ->assertCookieMissing((string) config('session.cookie'));
+    102▕ 
+    103▕     expect(filasDeSesion())->toBe(0);
+    104▕ });
+    105▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\SesionesAnonimasTest[22m [90m>[39m PT-16: una cookie de ses…   
+[39;1m  Cookie [gestordep-session] is present on response.
+Failed asserting that Symfony\Component\HttpFoundation\Cookie Object #2704 (
+    'expire' => 1795115601,
+    'path' => '/',
+    'sameSite' => 'lax',
+    'secureDefault' => false,
+    'name' => 'gestordep-session',
+    'value' => 'eyJpdiI6IkpZTFdMdGJ4UFZrQ2szaHc4dFgwaXc9PSIsInZhbHVlIjoiYzhpQ2NZQytQUmtxbklXTGpKcEE1V2dUc01wakZZOWY5cW1NalZiR0dTUkxNU1dSTUpLekxNT0NyNlI4bktRUEZiOEQ3dFFQL2FuUDd5L29NOTJnZ28wUERKSDkveTV4ODYraytHTUx2Uk4rQWI0NzdVeEduTmpNRDNQYkF2TCsiLCJtYWMiOiI4Mjc0Y2JlZTEwNjE3ZDhiZmRhMzVlMGFmMDU1M2Q1OWJlMTFlOTFhODFhMDU2ZTNjMmMxNzZjMmRhMzZmMmEyIiwidGFnIjoiIn0=',
+    'domain' => null,
+    'secure' => null,
+    'httpOnly' => true,
+    'raw' => false,
+    'partitioned' => false,
+) is null.[39;22m
+
+  at [32mtests/Feature/Web/SesionesAnonimasTest.php[39m:[32m115[39m
+    111▕ 
+    112▕     $this->withUnencryptedCookie((string) config('session.cookie'), 'basura-sin-cifrar')
+    113▕         ->get('/ingreso')
+    114▕         ->assertOk()
+  ➜ 115▕         ->assertCookieMissing((string) config('session.cookie'));
+    116▕ 
+    117▕     expect(filasDeSesion())->toBe(0);
+    118▕ });
+    119▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\SesionesAnonimasTest[22m [90m>[39m PT-16: HEAD /ingreso anó…   
+[39;1m  Cookie [gestordep-session] is present on response.
+Failed asserting that Symfony\Component\HttpFoundation\Cookie Object #2980 (
+    'expire' => 1795115602,
+    'path' => '/',
+    'sameSite' => 'lax',
+    'secureDefault' => false,
+    'name' => 'gestordep-session',
+    'value' => 'eyJpdiI6IkR5bkp1M0pKbDQvRWIxeXpvL0ZZR0E9PSIsInZhbHVlIjoiRURBeXBvMHJoNkpVMGQwR283OHlrWGpacXh6S3hEMGVkbjlHUkE1YWJuZE9mZ08zSGRMYksrM2ZsSkdGdWRFeU5CNVA1YUxJMTFpSkY1NzUrS1duUzgwN1FDcGQyN3RweHNXeDcya0xVOEt5aVg2TXI0TU9aUHI0bHFEY1drSWIiLCJtYWMiOiI2ZDE2NjZhZjk3ZmQ0NjQ0YzBjNWM5OWU5MzE4YmQ0ZTcwYzVjODU4OTE5MTMwMTBjYjcxMWNlNDg3YWVkZjI0IiwidGFnIjoiIn0=',
+    'domain' => null,
+    'secure' => null,
+    'httpOnly' => true,
+    'raw' => false,
+    'partitioned' => false,
+) is null.[39;22m
+
+  at [32mtests/Feature/Web/SesionesAnonimasTest.php[39m:[32m128[39m
+    124▕     app()->forgetInstance('session.store');
+    125▕ 
+    126▕     $this->call('HEAD', '/ingreso')
+    127▕         ->assertOk()
+  ➜ 128▕         ->assertCookieMissing((string) config('session.cookie'));
+    129▕ 
+    130▕     expect(filasDeSesion())->toBe(0);
+    131▕ });
+    132▕
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m,[39m[39m [39m[32;1m5 passed[39;22m[90m (33 assertions)[39m
+  [90mDuration:[39m [39m7.99s[39m
+
