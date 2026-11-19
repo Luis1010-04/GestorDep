@@ -60,3 +60,19 @@ test('RNF-03: un usuario con borrado lógico no se recupera para autenticar', fu
 
     expect(UsuarioModelo::find($usuario->id))->toBeNull();
 });
+
+test('PT-13: un usuario desactivado no se recupera para autenticar', function () {
+    $usuario = crearUsuarioPersistido('ana@example.test');
+    DB::connection('propietario')->table('usuarios')->where('id', $usuario->id)->update(['activo' => false]);
+
+    expect(UsuarioModelo::find($usuario->id))->toBeNull();
+});
+
+test('PT-13: con la sesión de un usuario desactivado no hay usuario actual ni roles', function () {
+    $usuario = crearUsuarioPersistido('ana@example.test', ['docente']);
+    Auth::guard('web')->login($usuario);
+    DB::connection('propietario')->table('usuarios')->where('id', $usuario->id)->update(['activo' => false]);
+    Auth::guard('web')->forgetUser();
+
+    expect(app(UsuarioActual::class)->roles())->toBe([]);
+});

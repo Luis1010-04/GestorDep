@@ -6,7 +6,7 @@ use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Identidad\Dominio\RepositorioDeUsuarios;
 use Src\Identidad\Dominio\Usuario;
 
-/** Consulta de la sesión vigente (PT-10): el usuario de la sesión, o nada si no hay sesión o el usuario tiene borrado lógico. */
+/** Consulta de la sesión vigente (PT-10): el usuario de la sesión, o nada si no hay sesión o el usuario tiene borrado lógico o está desactivado (PT-13). */
 final class VerSesion
 {
     public function __construct(
@@ -18,6 +18,12 @@ final class VerSesion
     {
         $id = $this->actual->identificador();
 
-        return $id === null ? null : $this->usuarios->buscarPorId($id);
+        if ($id === null) {
+            return null;
+        }
+
+        $usuario = $this->usuarios->buscarPorId($id);
+
+        return $usuario !== null && $usuario->activo() ? $usuario : null;
     }
 }
