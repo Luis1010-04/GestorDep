@@ -19,13 +19,17 @@ final class IniciarSesion
     ) {}
 
     /**
-     * @throws CredencialesInvalidas usuario inexistente, desactivado o contraseña incorrecta
+     * @throws CredencialesInvalidas usuario inexistente, desactivado o contraseña incorrecta; en los dos primeros casos
+     *                               se genera un hash de la contraseña para igualar el tiempo de respuesta
      * @throws CuentaBloqueada la cuenta está bloqueada; no se revisa la contraseña ni se cuenta el intento
      */
     public function ejecutar(string $correo, string $contrasena): Usuario
     {
         $usuario = $this->usuarios->buscarPorCorreo($correo);
         if ($usuario === null || ! $usuario->activo()) {
+            // Mismo costo que comparar una contraseña, para que el tiempo no revele si el correo existe (PT-14).
+            $this->hasher->make($contrasena);
+
             throw new CredencialesInvalidas;
         }
 
