@@ -205,7 +205,7 @@ test('RNF-09 (DA-100): ParametrosInstitucionalesSeeder siembra los tres parámet
         ->and(alertasParametro('alerta_academica'))->toBe(['nivel' => 'en_riesgo'])
         ->and(alertasParametro('desactualizacion'))->toBe(['dias' => 30])
         ->and(DB::connection('propietario')->table('parametros_institucionales')->whereNull('vigente_hasta')->orderBy('clave')->pluck('clave')->all())
-        ->toBe(['alerta_academica', 'desactualizacion', 'riesgo_academico', 'sanciones_deportivas']);
+        ->toBe(['alerta_academica', 'conservacion_historial', 'desactualizacion', 'riesgo_academico', 'sanciones_deportivas']);
 });
 
 test('RNF-09 (DA-100): el seeder es idempotente y no escribe historial', function () {
@@ -215,7 +215,7 @@ test('RNF-09 (DA-100): el seeder es idempotente y no escribe historial', functio
     (new ParametrosInstitucionalesSeeder)->run();
 
     expect(DB::connection('propietario')->table('parametros_institucionales')->orderBy('clave')->pluck('id', 'clave')->all())->toBe($ids)
-        ->and($ids)->toHaveCount(4)
+        ->and($ids)->toHaveCount(5)
         ->and(DB::connection('propietario')->table('parametros_institucionales_historial')->count())->toBe(0);
 });
 
@@ -228,13 +228,13 @@ test('RNF-09 (DA-100): el seeder no sobrescribe una clave vigente ya ajustada y 
 
     expect(alertasParametro($clave))->toBe(['ajustado' => true])
         ->and(DB::connection('propietario')->table('parametros_institucionales')->where('clave', $clave)->count())->toBe(1)
-        ->and(DB::connection('propietario')->table('parametros_institucionales')->whereNull('vigente_hasta')->count())->toBe(4);
+        ->and(DB::connection('propietario')->table('parametros_institucionales')->whereNull('vigente_hasta')->count())->toBe(5);
 })->with(['riesgo_academico', 'sanciones_deportivas', 'alerta_academica', 'desactualizacion']);
 
 test('RNF-09 (DA-100): DatabaseSeeder siembra los parámetros de H6 y repetirlo no duplica nada', function () {
     (new DatabaseSeeder)->run();
     (new DatabaseSeeder)->run();
 
-    expect(DB::connection('propietario')->table('parametros_institucionales')->count())->toBe(4)
+    expect(DB::connection('propietario')->table('parametros_institucionales')->count())->toBe(5)
         ->and(alertasParametro('desactualizacion'))->toBe(['dias' => 30]);
 });

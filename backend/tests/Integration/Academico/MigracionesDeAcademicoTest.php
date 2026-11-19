@@ -524,7 +524,7 @@ test('RN-04: ParametrosInstitucionalesSeeder siembra riesgo_academico con los va
     $parametros = DB::connection('propietario')->table('parametros_institucionales')->orderBy('clave')->get();
     $riesgo = $parametros->firstWhere('clave', 'riesgo_academico');
 
-    expect($parametros->pluck('clave')->all())->toBe(['alerta_academica', 'desactualizacion', 'riesgo_academico', 'sanciones_deportivas'])
+    expect($parametros->pluck('clave')->all())->toBe(['alerta_academica', 'conservacion_historial', 'desactualizacion', 'riesgo_academico', 'sanciones_deportivas'])
         ->and(NoNulo::exigir($riesgo, 'la fila de riesgo_academico')->clave)->toBe('riesgo_academico')
         ->and(NoNulo::exigir($riesgo, 'la fila de riesgo_academico')->vigente_hasta)->toBeNull()
         ->and(json_decode(NoNulo::exigir($riesgo, 'la fila de riesgo_academico')->valor, true))->toEqual([
@@ -545,7 +545,7 @@ test('RN-04: ParametrosInstitucionalesSeeder no pisa un parámetro vigente ya aj
 
     // DA-100: el seeder siembra además los tres parámetros de H6; el de riesgo sigue siendo uno solo y no se pisa.
     expect(DB::connection('propietario')->table('parametros_institucionales')->where('clave', 'riesgo_academico')->count())->toBe(1)
-        ->and(DB::connection('propietario')->table('parametros_institucionales')->count())->toBe(4)
+        ->and(DB::connection('propietario')->table('parametros_institucionales')->count())->toBe(5)
         ->and(json_decode((string) DB::connection('propietario')->table('parametros_institucionales')->where('clave', 'riesgo_academico')->value('valor'), true))->toBe(['ajustado' => true]);
 });
 
@@ -558,6 +558,6 @@ test('RN-04: DatabaseSeeder siembra el criterio general y los parámetros, tambi
     // DA-100: riesgo_academico más los tres parámetros de H6.
     expect(DB::connection('propietario')->table('criterios_aprobacion')->count())->toBe(1)
         ->and(DB::connection('propietario')->table('parametros_institucionales')->where('clave', 'riesgo_academico')->count())->toBe(1)
-        ->and(DB::connection('propietario')->table('parametros_institucionales')->count())->toBe(4)
+        ->and(DB::connection('propietario')->table('parametros_institucionales')->count())->toBe(5)
         ->and(DB::connection('propietario')->table('usuarios')->count())->toBe(0);
 });

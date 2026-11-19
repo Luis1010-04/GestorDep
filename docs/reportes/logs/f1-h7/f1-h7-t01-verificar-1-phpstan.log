@@ -1,0 +1,64 @@
+commit base: 11790a0285d8adace1f83bad47704ae1650f26c5 (tecnico/f1-h7-t01; cambios de T01 sin commitear sobre main 11790a0)
+inicio: 2026-11-19T22:16:28Z
+comando: make verificar
+
+docker compose exec -T app bash bin/con-candado.sh composer verificar
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ..............
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ........................................................ 1002 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Integration/Academico/ParametrosInstitucionalesSeederTest.php    
+ ------ ----------------------------------------------------------------------- 
+  19     Function conservacionVigente() should return list<object> but returns  
+          array<int, stdClass>.                                                 
+         🪪  return.type                                                        
+         💡  array<int, stdClass> might not be a list.                          
+  32     Access to an undefined property object::$valor.                        
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  44     Access to an undefined property object::$id.                           
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  44     Access to an undefined property object::$id.                           
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  44     Unable to resolve the template type TAndValue in call to method        
+         Pest\Expectation<list<object>|null>::and()                             
+         🪪  argument.templateType                                              
+         💡  See:                                                               
+         https://phpstan.org/blog/solving-phpstan-error-unable-to-resolve-temp  
+         late-type                                                              
+  60     Access to an undefined property object::$valor.                        
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+
+ [ERROR] Found 6 errors                                                         
+
+Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with error code 1
+make: *** [Makefile:32: verificar] Error 1
+codigo de salida: 2
+segundos: 25

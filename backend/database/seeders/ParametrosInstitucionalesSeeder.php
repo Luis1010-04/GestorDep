@@ -18,6 +18,8 @@ class ParametrosInstitucionalesSeeder extends Seeder
      *   con la institución (AB-13). Aprobados por el responsable el 17/11/2026 como dato de fábrica pendiente de AB-13
      *   (CLAUDE.md §5).
      * - `alerta_academica` (DA-100): el nivel que activa la alerta lo fija RN-21.
+     * - `conservacion_historial` (docs/hitos/f1-h7.md §5.2): [Propuesta] provisional (AB-03); ningún proceso la lee
+     *   en H7 (D-4).
      */
     public function run(): void
     {
@@ -73,6 +75,10 @@ class ParametrosInstitucionalesSeeder extends Seeder
             'desactualizacion' => [
                 'valor' => ['dias' => 30],
                 'descripcion' => 'Días sin captura para marcar un dato como posiblemente desactualizado (RNF-04, DD-15)',
+            ],
+            'conservacion_historial' => [
+                'valor' => ['meses_tras_baja' => 6],
+                'descripcion' => 'Meses de conservación del historial tras la baja (AB-03, RN-17)',
             ],
         ];
     }
