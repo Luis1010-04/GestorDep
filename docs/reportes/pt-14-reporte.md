@@ -45,7 +45,11 @@ Usan un espía del `Hasher` que delega en el real y registra `make` y `check`; n
 - Nada nuevo detectado.
 
 ## Desviaciones
-- Ninguna con la especificación aprobada.
+- Respecto al plan presentado, el responsable aprobó el 19/11/2026 la opción B: `hasher->make($contrasena)` para el usuario inexistente o desactivado, en lugar de `check` contra un hash ficticio fijo (opción A, la recomendada en el plan). En consecuencia, el espía registra llamadas a `make` y las pruebas 1 y 2 cambiaron de `check` a `make`; la prueba 3 (regresión con `check`) se mantiene. Con la opción B desaparece la prueba "el hash ficticio es un hash bcrypt válido", que ya no aplica.
+- Ninguna otra con la especificación aprobada.
+
+## Alcance de la verificación
+`make verificar` corrió sobre la base `0cbf68d` con `IniciarSesion.php` y `IniciarSesionTiempoTest.php` ya en su forma final (Pint aplicado antes de la corrida). El reporte, la fila de `docs/trazabilidad.md` y el log se agregaron después, por lo que el árbol del commit no es idéntico byte a byte al verificado: difiere solo en archivos de `docs/`, que ninguna prueba lee.
 
 ## Dudas
 - Ninguna.
