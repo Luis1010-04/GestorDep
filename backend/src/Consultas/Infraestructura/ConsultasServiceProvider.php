@@ -7,6 +7,7 @@ use Src\Compartido\Aplicacion\AlcanceDeJugadores;
 use Src\Consultas\Aplicacion\ConsultaDeAlertas;
 use Src\Consultas\Aplicacion\ConsultaDeEstatus;
 use Src\Consultas\Aplicacion\ConsultaDeGraficos;
+use Src\Consultas\Aplicacion\ConsultaDeHistorialAcademico;
 use Src\Consultas\Aplicacion\ConsultaDePendientesDeRendimiento;
 use Src\Consultas\Aplicacion\ConsultaDeVistaParaConvocar;
 use Src\Consultas\Aplicacion\ParametroDeDesactualizacion;
@@ -22,5 +23,6 @@ class ConsultasServiceProvider extends ServiceProvider
         $this->app->bind(ParametroDeDesactualizacion::class, ParametroDeDesactualizacionSql::class);
         $this->app->bind(ConsultaDePendientesDeRendimiento::class, ConsultaDePendientesDeRendimientoSql::class);
         $this->app->bind(ConsultaDeVistaParaConvocar::class, ConsultaDeVistaParaConvocarSql::class);
+        $this->app->bind(ConsultaDeHistorialAcademico::class, ConsultaDeHistorialAcademicoSql::class);
     }
 }

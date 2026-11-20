@@ -1440,6 +1440,141 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/historial/calificaciones:
+    get:
+      operationId: historialDeCalificaciones
+      summary: Historial de cambios de las calificaciones de un jugador
+      description: >-
+        HU-26 (docs/hitos/f1-h7.md, T02). Solo el docente, y solo de las calificaciones de sus propias materias (DD-48).
+        Cada entrada trae autor, fecha, valor anterior y nuevo; una calificacion con borrado logico sigue en el historial.
+        Responde igual que la lectura de calificaciones de una inscripcion: 403 sin el rol docente y 404 si el docente no
+        tiene ninguna materia con el jugador, antes de validar los parametros (DA-124). Un jugador en baja sigue visible
+        (DD-52). Orden: de la entrada mas reciente a la mas antigua, por ocurrido_en y luego por id.
+      tags: [Historial]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de entradas de historial.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntradaDeHistorial'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o el docente no tiene ninguna materia con el (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/historial/asistencias-clase:
+    get:
+      operationId: historialDeAsistenciasDeClase
+      summary: Historial de cambios de la asistencia a clase de un jugador
+      description: >-
+        HU-26 (docs/hitos/f1-h7.md, T02). Solo el docente, y solo de la asistencia de sus propias materias (DD-48). Misma
+        visibilidad, respuestas y orden que el historial de calificaciones (DA-124).
+      tags: [Historial]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de entradas de historial.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntradaDeHistorial'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o el docente no tiene ninguna materia con el (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos:
     get:
       operationId: listarEquipos
@@ -7547,6 +7682,30 @@ components:
           items:
             type: string
             enum: [docente, entrenador]
+    EntradaDeHistorial:
+      type: object
+      additionalProperties: false
+      description: >-
+        Una entrada de un historial (HU-26; docs/arquitectura.md 9.1). El autor es nulo en los cambios hechos sin sesion
+        (DD-35). datos_anteriores es nulo al crear y datos_nuevos es nulo al eliminar; ambos son la fila completa (DD-39).
+      required: [recurso, entidad_id, version, operacion, autor, ocurrido_en, motivo, datos_anteriores, datos_nuevos]
+      properties:
+        recurso: {type: string, enum: [calificaciones, asistencias-clase]}
+        entidad_id: {type: string, format: uuid}
+        version: {type: integer, minimum: 1}
+        operacion: {type: string, enum: [crear, actualizar, eliminar, restaurar]}
+        autor:
+          type: object
+          nullable: true
+          additionalProperties: false
+          required: [id, nombre]
+          properties:
+            id: {type: string, format: uuid}
+            nombre: {type: string, nullable: true}
+        ocurrido_en: {type: string, format: date-time}
+        motivo: {type: string, nullable: true}
+        datos_anteriores: {type: object, nullable: true}
+        datos_nuevos: {type: object, nullable: true}
     Error:
       type: object
       additionalProperties: false
