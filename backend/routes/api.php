@@ -17,6 +17,7 @@ use App\Http\Controllers\EquipoJugadorController;
 use App\Http\Controllers\EstadoDeDisponibilidadController;
 use App\Http\Controllers\EstatusDeJugadoresController;
 use App\Http\Controllers\GraficosController;
+use App\Http\Controllers\HistorialAcademicoController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\LesionController;
@@ -86,6 +87,9 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/inscripciones/{inscripcion}/asistencias', [AsistenciaController::class, 'listar'])->whereUuid('inscripcion');
         Route::post('/inscripciones/{inscripcion}/asistencias', [AsistenciaController::class, 'crear'])->whereUuid('inscripcion');
         Route::patch('/asistencias-clase/{asistencia}', [AsistenciaController::class, 'corregir'])->whereUuid('asistencia');
+
+        Route::get('/jugadores/{jugador}/historial/calificaciones', [HistorialAcademicoController::class, 'calificaciones'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/historial/asistencias-clase', [HistorialAcademicoController::class, 'asistenciasClase'])->whereUuid('jugador');
     });
 
     Route::middleware('rol:entrenador')->group(function () {
