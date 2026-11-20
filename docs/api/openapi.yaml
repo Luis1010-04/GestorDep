@@ -1575,6 +1575,211 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/historial/avisos-lesion:
+    get:
+      operationId: historialDeAvisosDeLesion
+      summary: Historial de cambios de los avisos de lesion de un jugador
+      description: >-
+        HU-26 (docs/hitos/f1-h7.md, T03). Responde igual que la lectura de avisos: 403 sin el rol entrenador o docente y 404
+        si el jugador no existe o no esta en el alcance del usuario, antes de validar los parametros. Solo trae los avisos
+        cuya fila completa ve el usuario (D-2): los que creo y, si entrena al jugador, los que confirmo. Sin autor ni
+        creado_por, confirmado_por ni descartado_por; lesion_id solo para quien registro la lesion (DA-18, DA-125). Orden:
+        de la entrada mas reciente a la mas antigua, por ocurrido_en y luego por id.
+      tags: [Historial]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de entradas de historial.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntradaDeHistorialDeSalud'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/historial/lesiones:
+    get:
+      operationId: historialDeLesiones
+      summary: Historial de cambios de las lesiones de un jugador
+      description: >-
+        HU-26 y RN-15 (docs/hitos/f1-h7.md, T03). Responde igual que la lectura de lesiones: 403 sin el rol entrenador y 404
+        si el usuario no entrena al jugador, antes de validar los parametros. Solo trae las lesiones que registro el
+        usuario (RN-15), incluidas las que no tienen fecha_alta (AB-30). Sin autor ni registrada_por (DA-18, DA-125). Mismo
+        orden que el historial de avisos.
+      tags: [Historial]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de entradas de historial.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntradaDeHistorialDeSalud'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/historial/estados-disponibilidad:
+    get:
+      operationId: historialDeEstadosDeDisponibilidad
+      summary: Historial de cambios del estado de disponibilidad de un jugador
+      description: >-
+        HU-26 (docs/hitos/f1-h7.md, T03). Responde igual que la lectura del estado: 403 sin el rol entrenador o docente y
+        404 si el jugador no existe o no esta en el alcance del usuario, antes de validar los parametros. Trae todos los
+        estados del jugador. Sin autor ni confirmado_por; lesion_id solo para quien registro la lesion, y para los demas el
+        campo no aparece (DA-18, DA-125). Mismo orden que el historial de avisos.
+      tags: [Historial]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de entradas de historial.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntradaDeHistorialDeSalud'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador ni docente (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o no esta en el alcance del usuario (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos:
     get:
       operationId: listarEquipos
@@ -7702,6 +7907,24 @@ components:
           properties:
             id: {type: string, format: uuid}
             nombre: {type: string, nullable: true}
+        ocurrido_en: {type: string, format: date-time}
+        motivo: {type: string, nullable: true}
+        datos_anteriores: {type: object, nullable: true}
+        datos_nuevos: {type: object, nullable: true}
+    EntradaDeHistorialDeSalud:
+      type: object
+      additionalProperties: false
+      description: >-
+        Una entrada de un historial de Salud (HU-26; docs/hitos/f1-h7.md 6.2). Sin la clave autor: en los historiales de H5
+        se omite, no va en nulo (DA-18, DA-125). datos_anteriores es nulo al crear y datos_nuevos es nulo al eliminar. De
+        ambos se omiten creado_por, confirmado_por, descartado_por y registrada_por; lesion_id solo aparece para quien
+        registro la lesion.
+      required: [recurso, entidad_id, version, operacion, ocurrido_en, motivo, datos_anteriores, datos_nuevos]
+      properties:
+        recurso: {type: string, enum: [avisos-lesion, lesiones, estados-disponibilidad]}
+        entidad_id: {type: string, format: uuid}
+        version: {type: integer, minimum: 1}
+        operacion: {type: string, enum: [crear, actualizar, eliminar, restaurar]}
         ocurrido_en: {type: string, format: date-time}
         motivo: {type: string, nullable: true}
         datos_anteriores: {type: object, nullable: true}

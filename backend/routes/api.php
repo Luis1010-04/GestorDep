@@ -18,6 +18,7 @@ use App\Http\Controllers\EstadoDeDisponibilidadController;
 use App\Http\Controllers\EstatusDeJugadoresController;
 use App\Http\Controllers\GraficosController;
 use App\Http\Controllers\HistorialAcademicoController;
+use App\Http\Controllers\HistorialDeSaludController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\LesionController;
@@ -61,6 +62,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/jugadores/{jugador}/estado-disponibilidad', [EstadoDeDisponibilidadController::class, 'consultar'])->whereUuid('jugador');
         Route::get('/jugadores/{jugador}/alertas', [AlertaController::class, 'delJugador'])->whereUuid('jugador');
         Route::get('/estatus-de-jugadores', [EstatusDeJugadoresController::class, 'listar']);
+        Route::get('/jugadores/{jugador}/historial/avisos-lesion', [HistorialDeSaludController::class, 'avisos'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/historial/estados-disponibilidad', [HistorialDeSaludController::class, 'estados'])->whereUuid('jugador');
         Route::get('/jugadores/{jugador}/graficos', [GraficosController::class, 'delJugador'])->whereUuid('jugador');
     });
 
@@ -165,6 +168,7 @@ Route::middleware('auth:web')->group(function () {
         Route::patch('/jugadores/{jugador}/estado-disponibilidad', [EstadoDeDisponibilidadController::class, 'cambiar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/estado-disponibilidad/alta', [EstadoDeDisponibilidadController::class, 'darDeAlta'])->whereUuid('jugador');
         Route::get('/jugadores/{jugador}/lesiones', [LesionController::class, 'listar'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/historial/lesiones', [HistorialDeSaludController::class, 'lesiones'])->whereUuid('jugador');
         Route::get('/lesiones/{lesion}', [LesionController::class, 'ver'])->whereUuid('lesion');
         Route::patch('/lesiones/{lesion}', [LesionController::class, 'corregir'])->whereUuid('lesion');
 
