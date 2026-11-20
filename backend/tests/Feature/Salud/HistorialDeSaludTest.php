@@ -286,6 +286,57 @@ test('AB-30: una lesión sin fecha_alta aparece en el historial', function () {
         ->and($datos[0]['datos_nuevos']['fecha_alta'])->toBeNull();
 });
 
+test('Orden 404 antes de 422: jugador inexistente con por_pagina=0 responde 404', function (string $recurso) {
+    /** @var TestCase $this */
+    avisosMundo();
+
+    historialDeSaludPedir($this, Identificador::generar()->valor(), $recurso, 'e1@x.com', '?por_pagina=0')
+        ->assertNotFound()
+        ->assertJsonPath('codigo', 'recurso_no_encontrado');
+})->with(RUTAS_DE_HISTORIAL_DE_SALUD);
+
+test('D-2 y DA-25: quien confirmó un aviso y solo da clase al jugador no ve la entrada de ese aviso', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    // DE (docente y entrenador de A) confirma el aviso de E1 mientras entrena a F1.
+    $aviso = historialDeSaludCrearAviso($this, $m['f1'], 'e1@x.com');
+    historialDeSaludConfirmar($this, $aviso, 'de@x.com');
+    expect(array_column(historialDeSaludDatos($this, $m['f1'], 'avisos-lesion', 'de@x.com'), 'entidad_id'))->toBe([$aviso, $aviso]);
+
+    // DE deja de entrenar A y pasa a dar clase a F1: lo sigue viendo, solo como docente.
+    DB::connection('propietario')->table('entrenador_equipo')->where('usuario_id', $m['de'])->update(['hasta' => '2026-11-15']);
+    mundoInscribir(mundoInsertar('materias', ['asignatura_id' => $m['asignatura'], 'periodo_id' => $m['periodo'], 'docente_id' => $m['de']]), $m['f1']);
+    $lectura = sesionesPeticion($this, 'GET', avisosRuta($m['f1']), [], sesionesIniciar($this, 'de@x.com'))->assertOk()->json('datos');
+    expect(array_column($lectura, 'id'))->not->toContain($aviso);
+
+    historialDeSaludPedir($this, $m['f1'], 'avisos-lesion', 'de@x.com')
+        ->assertOk()
+        ->assertJsonPath('datos', [])
+        ->assertJsonPath('meta.total', 0);
+});
+
+test('DA-125: un estado apto sin lesión no incluye lesion_id', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    historialDeSaludConfirmar($this, historialDeSaludCrearAviso($this, $m['f1'], 'd1@x.com'), 'e1@x.com');
+    relojAdelantar('2026-11-15 18:00:09');
+    sesionesPeticion($this, 'POST', altaRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk();
+    // El historial guarda `lesion_id` en nulo para el estado apto.
+    $guardado = DB::table('estados_disponibilidad_historial')->where('operacion', 'crear')->pluck('datos_nuevos')
+        ->map(fn (string $json) => json_decode($json, true))
+        ->filter(fn (array $datos) => $datos['estado'] === 'apto')
+        ->values();
+    expect($guardado)->toHaveCount(1)->and($guardado[0])->toHaveKey('lesion_id')->and($guardado[0]['lesion_id'])->toBeNull();
+
+    // E1 registró la lesión del estado anterior; aun así, el estado apto no lleva `lesion_id`.
+    $datos = historialDeSaludDatos($this, $m['f1'], 'estados-disponibilidad', 'e1@x.com');
+    $apto = array_values(array_filter($datos, fn (array $e) => $e['operacion'] === 'crear' && $e['datos_nuevos']['estado'] === 'apto'));
+
+    expect($apto)->toHaveCount(1)
+        ->and($apto[0]['datos_anteriores'])->toBeNull()
+        ->and($apto[0]['datos_nuevos'])->not->toHaveKey('lesion_id');
+});
+
 test('HU-26: el historial de salud cumple el contrato de OpenAPI (200, 401, 403, 404 y 422)', function () {
     /** @var TestCase $this */
     $m = avisosMundo();
