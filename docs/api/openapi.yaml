@@ -1780,6 +1780,141 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/historial/mediciones:
+    get:
+      operationId: historialDeMediciones
+      summary: Historial de cambios de las mediciones corporales de un jugador
+      description: >-
+        HU-26 y RN-14 (docs/hitos/f1-h7.md, T04). Responde igual que la lectura de mediciones: 403 sin el rol entrenador y
+        404 si el usuario no entrena al jugador, antes de validar los parametros. Solo trae las mediciones que registro el
+        usuario (RN-14). Sin autor ni registrado_por (DA-18, DA-125). Orden por ocurrido_en descendente y despues por id
+        descendente.
+      tags: [Historial]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de entradas de historial.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntradaDeHistorialDeCondicionFisica'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jugadores/{jugador}/historial/pruebas-fisicas:
+    get:
+      operationId: historialDePruebasFisicas
+      summary: Historial de cambios de las pruebas fisicas de un jugador
+      description: >-
+        HU-26 y RN-14 (docs/hitos/f1-h7.md, T04). Responde igual que la lectura de pruebas fisicas: 403 sin el rol entrenador
+        y 404 si el usuario no entrena al jugador, antes de validar los parametros. Solo trae las pruebas que registro el
+        usuario (RN-14). Sin autor ni registrado_por (DA-18, DA-125). Mismo orden que el historial de mediciones.
+      tags: [Historial]
+      parameters:
+        - name: jugador
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: pagina
+          in: query
+          schema: {type: integer, minimum: 1, default: 1}
+        - name: por_pagina
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 15}
+      responses:
+        '200':
+          description: Pagina de entradas de historial.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [datos, meta]
+                properties:
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntradaDeHistorialDeCondicionFisica'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    required: [pagina, por_pagina, total, total_paginas]
+                    properties:
+                      pagina: {type: integer}
+                      por_pagina: {type: integer}
+                      total: {type: integer}
+                      total_paginas: {type: integer}
+        '401':
+          description: No hay sesion (codigo no_autenticado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: El usuario no tiene el rol entrenador (codigo sin_permiso).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El jugador no existe o el usuario no lo entrena (codigo recurso_no_encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Parametro de paginacion invalido (validacion_fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /equipos:
     get:
       operationId: listarEquipos
@@ -7922,6 +8057,23 @@ components:
       required: [recurso, entidad_id, version, operacion, ocurrido_en, motivo, datos_anteriores, datos_nuevos]
       properties:
         recurso: {type: string, enum: [avisos-lesion, lesiones, estados-disponibilidad]}
+        entidad_id: {type: string, format: uuid}
+        version: {type: integer, minimum: 1}
+        operacion: {type: string, enum: [crear, actualizar, eliminar, restaurar]}
+        ocurrido_en: {type: string, format: date-time}
+        motivo: {type: string, nullable: true}
+        datos_anteriores: {type: object, nullable: true}
+        datos_nuevos: {type: object, nullable: true}
+    EntradaDeHistorialDeCondicionFisica:
+      type: object
+      additionalProperties: false
+      description: >-
+        Una entrada de un historial de Condicion fisica (HU-26; docs/hitos/f1-h7.md 6.2). Sin la clave autor: en los
+        historiales de H5 se omite, no va en nulo (DA-18, DA-125). datos_anteriores es nulo al crear y datos_nuevos es nulo
+        al eliminar. De ambos se omite registrado_por.
+      required: [recurso, entidad_id, version, operacion, ocurrido_en, motivo, datos_anteriores, datos_nuevos]
+      properties:
+        recurso: {type: string, enum: [mediciones, pruebas-fisicas]}
         entidad_id: {type: string, format: uuid}
         version: {type: integer, minimum: 1}
         operacion: {type: string, enum: [crear, actualizar, eliminar, restaurar]}

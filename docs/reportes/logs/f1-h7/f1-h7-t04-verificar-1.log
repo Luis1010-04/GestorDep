@@ -1,0 +1,50 @@
+commit base: 8e87e5f886a7e52f3b914b5fd10fa8f38d2b57e1 (tecnico/f1-h7-t04; cambios de T04 sin commitear sobre main 8e87e5f)
+inicio: 2026-11-20T21:22:38Z
+comando: make verificar (cada línea lleva al inicio el segundo Unix en que se recibió)
+
+1795209759 docker compose exec -T app bash bin/con-candado.sh composer verificar
+1795209759 Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+1795209765 
+1795209765   ............................................................................
+1795209766   ............................................................................
+1795209766   ............................................................................
+1795209767   ............................................................................
+1795209767   ............................................................................
+1795209768   ............................................................................
+1795209768   ............................................................................
+1795209769   ............................................................................
+1795209769   ............................................................................
+1795209770   ............................................................................
+1795209770   ............................................................................
+1795209771   ............................................................................
+1795209771   ............................................................................
+1795209771   ...................................
+1795209771 
+1795209771   ──────────────────────────────────────────────────────────────────── Laravel  
+1795209771     PASS   ........................................................ 1023 files  
+1795209771 
+1795209772 Note: Using configuration file /var/www/html/phpstan.neon.
+1795209783  ------ ----------------------------------------------------------------------- 
+1795209783   Line   tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php       
+1795209783  ------ ----------------------------------------------------------------------- 
+1795209783   37     Function historialFisicoMedir() has parameter $cambios with no value   
+1795209783          type specified in iterable type array.                                 
+1795209783          🪪  missingType.iterableValue                                          
+1795209783          💡  See:                                                               
+1795209783          https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-i  
+1795209783          terable-type                                                           
+1795209783   44     Function historialFisicoProbar() has parameter $cambios with no value  
+1795209783          type specified in iterable type array.                                 
+1795209783          🪪  missingType.iterableValue                                          
+1795209783          💡  See:                                                               
+1795209783          https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-i  
+1795209784          terable-type                                                           
+1795209784  ------ ----------------------------------------------------------------------- 
+1795209784 
+1795209784 
+1795209784  [ERROR] Found 2 errors                                                         
+1795209784 
+1795209784 Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with error code 1
+1795209784 make: *** [Makefile:32: verificar] Error 1
+codigo de salida: 2
+segundos: 26
