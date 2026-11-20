@@ -18,6 +18,7 @@ use App\Http\Controllers\EstadoDeDisponibilidadController;
 use App\Http\Controllers\EstatusDeJugadoresController;
 use App\Http\Controllers\GraficosController;
 use App\Http\Controllers\HistorialAcademicoController;
+use App\Http\Controllers\HistorialDeCondicionFisicaController;
 use App\Http\Controllers\HistorialDeSaludController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\JugadorController;
@@ -174,9 +175,11 @@ Route::middleware('auth:web')->group(function () {
 
         Route::get('/jugadores/{jugador}/mediciones', [MedicionController::class, 'listar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/mediciones', [MedicionController::class, 'registrar'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/historial/mediciones', [HistorialDeCondicionFisicaController::class, 'mediciones'])->whereUuid('jugador');
 
         Route::get('/tipos-prueba', [TipoDePruebaController::class, 'listar']);
         Route::get('/jugadores/{jugador}/pruebas-fisicas', [PruebaFisicaController::class, 'listar'])->whereUuid('jugador');
         Route::post('/jugadores/{jugador}/pruebas-fisicas', [PruebaFisicaController::class, 'registrar'])->whereUuid('jugador');
+        Route::get('/jugadores/{jugador}/historial/pruebas-fisicas', [HistorialDeCondicionFisicaController::class, 'pruebas'])->whereUuid('jugador');
     });
 });
