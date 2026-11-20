@@ -4,6 +4,7 @@ namespace Src\Salud\Infraestructura;
 
 use Illuminate\Support\ServiceProvider;
 use Src\Compartido\Aplicacion\EstadoDeDisponibilidadOficial;
+use Src\Salud\Aplicacion\ConsultaDeHistorialDeSalud;
 use Src\Salud\Aplicacion\Transaccion;
 use Src\Salud\Aplicacion\VisibilidadDeJugador;
 use Src\Salud\Dominio\RepositorioDeAvisos;
@@ -14,6 +15,7 @@ class SaludServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(ConsultaDeHistorialDeSalud::class, ConsultaDeHistorialDeSaludSql::class);
         $this->app->bind(EstadoDeDisponibilidadOficial::class, EstadoDeDisponibilidadOficialSalud::class);
         $this->app->bind(RepositorioDeAvisos::class, RepositorioDeAvisosSql::class);
         $this->app->bind(RepositorioDeEstados::class, RepositorioDeEstadosSql::class);
