@@ -5,6 +5,7 @@ use Illuminate\Testing\TestResponse;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Reloj;
+use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Compartido\Infraestructura\RelojFijo;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -192,4 +193,38 @@ test('HU-26: el historial académico cumple el contrato de OpenAPI (200, 401, 40
             expect($validador->validate($respuesta->baseResponse, $ruta, 'get'))->toBeTrue("GET $ruta {$respuesta->getStatusCode()}");
         }
     }
+});
+
+test('RN-17: el historial de un jugador en baja sigue visible para el docente con materia', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    $sesion = sesionesIniciar($this, 'd1@x.com');
+    $id = (string) sesionesPeticion($this, 'POST', "/api/v1/inscripciones/{$m['i1']}/calificaciones", ['tipo' => 'final', 'valor' => '8.00'], $sesion)
+        ->assertCreated()->json('datos.id');
+    // J1 pasa a baja después de la captura; su inscripción en M1 se conserva (DD-52).
+    DB::connection('propietario')->table('jugadores')->where('id', $m['j1'])->update(['estatus_academico' => 'baja', 'estatus_deportivo' => 'baja']);
+
+    foreach (RUTAS_DE_HISTORIAL_ACADEMICO as $recurso) {
+        historialAcademicoPedir($this, $m['j1'], $recurso, 'd1@x.com')->assertOk();
+    }
+    $datos = historialAcademicoPedir($this, $m['j1'], 'calificaciones', 'd1@x.com')->json('datos');
+
+    expect($datos)->toHaveCount(1)
+        ->and($datos[0])->toMatchArray(['entidad_id' => $id, 'operacion' => 'crear', 'autor' => ['id' => $m['d1'], 'nombre' => 'D1']]);
+});
+
+test('HU-26 c1: un cambio hecho sin sesión entrega `autor` nulo', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    // DD-35: sin sesión (por ejemplo, desde la consola) el historial se escribe con `usuario_id` nulo.
+    $id = mundoCalificar($m['i1'], 'final', '7.00');
+    app(EscritorDeHistorial::class)->registrar('calificaciones', 'calificacion_id', Identificador::desdeTexto($id), 'crear', null, ['valor' => '7.00'], fn () => null);
+    expect(DB::table('calificaciones_historial')->where('calificacion_id', $id)->value('usuario_id'))->toBeNull();
+
+    $datos = historialAcademicoPedir($this, $m['j1'], 'calificaciones', 'd1@x.com')->assertOk()->json('datos');
+
+    expect($datos)->toHaveCount(1)
+        ->and($datos[0])->toHaveKey('autor')
+        ->and($datos[0]['autor'])->toBeNull()
+        ->and($datos[0])->toMatchArray(['entidad_id' => $id, 'operacion' => 'crear', 'ocurrido_en' => '2026-03-10T12:00:00+00:00']);
 });
