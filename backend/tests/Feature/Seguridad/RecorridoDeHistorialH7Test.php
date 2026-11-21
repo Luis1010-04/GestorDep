@@ -143,8 +143,11 @@ test('RNF-01: un jugador ajeno responde 404 con el mismo cuerpo que uno inexiste
         foreach ($usuarios as $usuario) {
             $jugadores = [...$ajenos[$usuario], 'inexistente' => Identificador::generar()->valor(), 'UUID v4' => UUID_V4_DEL_RECORRIDO_H7];
             foreach ($jugadores as $jugador => $id) {
-                expect(sesionesPeticion($this, 'GET', "/api/v1/jugadores/$id/historial/$recurso", [], $sesiones[$usuario])->json())
-                    ->toBe(recorridoH7Cuerpo404(), "$recurso, $usuario, $jugador");
+                $respuesta = sesionesPeticion($this, 'GET', "/api/v1/jugadores/$id/historial/$recurso", [], $sesiones[$usuario]);
+                $caso = "$recurso, $usuario, $jugador";
+
+                expect($respuesta->getStatusCode())->toBe(404, $caso)
+                    ->and($respuesta->json())->toBe(recorridoH7Cuerpo404(), $caso);
             }
         }
     }
