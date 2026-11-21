@@ -1,0 +1,53 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 3: historial de condición física 
+=== control antes: 50 passed (1295 assertions)
+=== 3.01 el historial de mediciones no se limita a las que registró el lector (src/CondicionFisica/Infraestructura/ConsultaDeHistorialDeCondicionFisicaSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 2 failed, 48 passed (1268 assertions)
+MATADA por 2 prueba(s); las primeras:
+  ⨯ HU-26 c3 (§7.1 fila 7): E2 no recibe las mediciones de F registrada…
+  ⨯ RN-14: el segundo entrenador no ve en el historial las mediciones n…
+=== 3.02 el historial de pruebas físicas no se limita a las que registró el lector (src/CondicionFisica/Infraestructura/ConsultaDeHistorialDeCondicionFisicaSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 1 failed, 49 passed (1278 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ RN-14: el segundo entrenador no ve en el historial las mediciones n…
+=== 3.03 el historial de mediciones no comprueba el jugador (app/Http/Controllers/HistorialDeCondicionFisicaController.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 8 failed, 42 passed (1139 assertions)
+MATADA por 8 prueba(s); las primeras:
+  ⨯ Orden 404 antes de 422: jugador inexistente con por_pagina=0 respon…
+  ⨯ HU-26: el historial de condición física cumple el contrato de OpenA…
+  ⨯ RNF-01: la ruta de historial de cada recurso responde igual que su…
+=== 3.04 el historial de pruebas físicas no comprueba el jugador (app/Http/Controllers/HistorialDeCondicionFisicaController.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 8 failed, 42 passed (1167 assertions)
+MATADA por 8 prueba(s); las primeras:
+  ⨯ Orden 404 antes de 422: jugador inexistente con por_pagina=0 respon…
+  ⨯ HU-26: el historial de condición física cumple el contrato de OpenA…
+  ⨯ RNF-01: la ruta de historial de cada recurso responde igual que su…
+=== 3.05 el docente cuenta como entrenador en Condición física (src/CondicionFisica/Infraestructura/VisibilidadDeJugadorSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 50 passed (1295 assertions)
+SOBREVIVE (declarada): El mundo de §7.1 no tiene un usuario con los dos roles que dé clase a F sin entrenarlo; a un docente sin el rol entrenador lo detiene antes el middleware rol:entrenador.
+=== 3.06 mediciones y pruebas físicas excluyen a los jugadores en baja (src/CondicionFisica/Aplicacion/ComprobarJugadorDelEntrenador.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 50 passed (1295 assertions)
+SOBREVIVE (declarada): RN-23 pendiente de decisión (encargo 47): ninguna prueba de historial de Condición física recorre un jugador en baja.
+=== 3.07 el historial de Condición física entrega registrado_por (src/CondicionFisica/Aplicacion/ListarHistorialDeCondicionFisica.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 2 failed, 48 passed (1287 assertions)
+MATADA por 2 prueba(s); las primeras:
+  ⨯ HU-26 c1 (DA-18): el historial de mediciones entrega fecha, valor a…
+  ⨯ HU-26 c1 (DA-18): el historial de pruebas físicas entrega fecha, va…
+=== control después: 50 passed (1295 assertions)
+Lote 3: 7 mutaciones; matadas: 5 (3.01, 3.02, 3.03, 3.04, 3.07); sobreviven declaradas: 2 (3.05, 3.06); sobreviven no declaradas: 0 ().
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory

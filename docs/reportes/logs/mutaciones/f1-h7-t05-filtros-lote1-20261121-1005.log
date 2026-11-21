@@ -1,0 +1,52 @@
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 1: historial académico y AlcanceDeJugadores 
+=== control antes: 50 passed (1295 assertions)
+=== 1.01 el historial académico no se limita a las materias del docente (src/Consultas/Infraestructura/ConsultaDeHistorialAcademicoSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 4 failed, 46 passed (1227 assertions)
+MATADA por 4 prueba(s); las primeras:
+  ⨯ HU-26 c3 (§7.1 fila 1): D1 ve el historial de F solo de sus materia…
+  ⨯ HU-26 c3 (§7.1 fila 2, DA-124): un docente sin ninguna materia con…
+  ⨯ HU-26: el historial académico cumple el contrato de OpenAPI (200, 4…
+=== 1.02 el historial académico no pasa por AlcanceDeJugadores (src/Consultas/Infraestructura/ConsultaDeHistorialAcademicoSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 50 passed (1295 assertions)
+SOBREVIVE (declarada): Equivalente hoy: la consulta externa ya exige materias.docente_id del usuario, y la rama del docente de AlcanceDeJugadoresSql, con la columna inscripciones.jugador_id, se cumple siempre (hallazgo 5 de la auditoría de T02).
+=== 1.03 el historial académico no comprueba que el docente tenga una materia con el jugador (app/Http/Controllers/HistorialAcademicoController.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 7 failed, 43 passed (1093 assertions)
+MATADA por 7 prueba(s); las primeras:
+  ⨯ HU-26 c3 (§7.1 fila 2, DA-124): un docente sin ninguna materia con…
+  ⨯ HU-26 c3 (DA-124): un usuario con los dos roles que entrena a F per…
+  ⨯ HU-26: el historial académico cumple el contrato de OpenAPI (200, 4…
+=== 1.04 el historial académico excluye a los jugadores en baja (src/Consultas/Infraestructura/ConsultaDeHistorialAcademicoSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 1 failed, 49 passed (1285 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ RN-17: el historial de un jugador en baja sigue visible para el doc…
+=== 1.05 la rama del docente de AlcanceDeJugadoresSql no filtra por el docente (solo pruebas del historial académico) (src/Consultas/Infraestructura/AlcanceDeJugadoresSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php
+pruebas con la mutación: 12 passed (173 assertions)
+SOBREVIVE (declarada): Hallazgo 5 de la auditoría de T02: con la columna inscripciones.jugador_id, la subconsulta sin alias compara la columna consigo misma y la rama del docente no restringe nada en el historial académico.
+=== 1.06 la rama del docente de AlcanceDeJugadoresSql no filtra por el docente (todas las pruebas de historial) (src/Consultas/Infraestructura/AlcanceDeJugadoresSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 1 failed, 49 passed (1272 assertions)
+MATADA por 1 prueba(s); las primeras:
+  ⨯ RNF-01: un jugador ajeno responde 404 con el mismo cuerpo que uno i…
+=== 1.07 la rama del entrenador de AlcanceDeJugadoresSql no filtra por el entrenador (src/Consultas/Infraestructura/AlcanceDeJugadoresSql.php)
+reemplazos: antes=1 cambios=1 despues=0
+pruebas: tests/Feature/Academico/HistorialAcademicoTest.php tests/Feature/Salud/HistorialDeSaludTest.php tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php tests/Feature/Seguridad/RecorridoDeHistorialH7Test.php
+pruebas con la mutación: 2 failed, 48 passed (1258 assertions)
+MATADA por 2 prueba(s); las primeras:
+  ⨯ D-2 y DA-25: quien confirmó un aviso y solo da clase al jugador no…
+  ⨯ RNF-01: un jugador ajeno responde 404 con el mismo cuerpo que uno i…
+=== control después: 50 passed (1295 assertions)
+Lote 1: 7 mutaciones; matadas: 5 (1.01, 1.03, 1.04, 1.06, 1.07); sobreviven declaradas: 2 (1.02, 1.05); sobreviven no declaradas: 0 ().
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory
