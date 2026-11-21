@@ -13,7 +13,11 @@ use Tests\TestCase;
  * La paridad compara el código HTTP de cada ruta de historial con el de la ruta de lectura de su recurso y, cuando no es
  * 200, también el cuerpo. El contenido de los 200 ya lo prueban T02 a T04. Las lecturas de calificaciones y asistencia a
  * clase van por inscripción: para F1 se usa su inscripción en la materia de D1; para un jugador sin inscripción, una
- * inscripción inexistente. RN-13 y RN-23 quedan pendientes de decisión (encargo 47) y no se prueban aquí.
+ * inscripción inexistente. RN-13 queda pendiente de decisión (encargo 47) y no se prueba aquí.
+ *
+ * RN-23 (opción A de Luis, 21/11/2026): JB está en baja, en A e inscrito en la materia de D1. Además de la paridad, la
+ * prueba fija la respuesta de quien ya tenía acceso a JB (DD-30, DA-99, §5.3), porque la lectura y el historial comparten
+ * la guardia y la paridad sola no detecta que ambas dejen de mostrar al jugador en baja.
  */
 const UUID_V4_DEL_RECORRIDO_H7 = '9b2e6c1a-3f4d-4e8b-a1c2-7d5e9f0b3a64';
 
@@ -55,6 +59,29 @@ function recorridoH7Pares(string $jugador, string $inscripcion): array
 function recorridoH7Cuerpo404(): array
 {
     return ['codigo' => 'recurso_no_encontrado', 'mensaje' => __('errores.recurso_no_encontrado'), 'errores' => []];
+}
+
+/**
+ * La respuesta que fija RN-23 para JB, en baja, por usuario y recurso (tabla aprobada por Luis el 21/11/2026): 200 a quien
+ * ya tenía acceso a JB (DD-30, DA-99) y 404 a quien no lo tenía, en las rutas que su rol puede consultar. Las demás
+ * combinaciones solo se comparan con la lectura.
+ *
+ * @return array<string, array<string, int>>
+ */
+function recorridoH7RespuestasConJugadorEnBaja(): array
+{
+    $deportivas = ['avisos-lesion', 'lesiones', 'estados-disponibilidad', 'mediciones', 'pruebas-fisicas'];
+    $deDocente = ['calificaciones', 'asistencias-clase', 'avisos-lesion', 'estados-disponibilidad'];
+
+    return [
+        'e1@x.com' => array_fill_keys($deportivas, 200),
+        'e3@x.com' => array_fill_keys($deportivas, 200),
+        'de@x.com' => array_fill_keys($deportivas, 200),
+        'd1@x.com' => array_fill_keys($deDocente, 200),
+        'e2@x.com' => array_fill_keys($deportivas, 404),
+        'd2@x.com' => array_fill_keys($deDocente, 404),
+        'e4@x.com' => array_fill_keys($deportivas, 404),
+    ];
 }
 
 dataset('usuarios del recorrido de historial', [
@@ -122,6 +149,27 @@ test('RNF-01: un jugador ajeno responde 404 con el mismo cuerpo que uno inexiste
         }
     }
 });
+
+test('RN-23: un jugador en baja responde en el historial lo mismo que en la lectura del recurso', function (?string $correo) {
+    /** @var TestCase $this */
+    $m = recorridoH7Mundo();
+    $sesion = $correo === null ? null : sesionesIniciar($this, $correo);
+    $esperadas = $correo === null ? [] : (recorridoH7RespuestasConJugadorEnBaja()[$correo] ?? []);
+
+    foreach (recorridoH7Pares($m['jb'], $m['inscripcion_jb']) as $recurso => [$historial, $lectura]) {
+        $respuestaDeLectura = sesionesPeticion($this, 'GET', $lectura, [], $sesion);
+        $respuestaDeHistorial = sesionesPeticion($this, 'GET', $historial, [], $sesion);
+        $caso = "JB, $recurso: lectura {$respuestaDeLectura->getStatusCode()}, historial {$respuestaDeHistorial->getStatusCode()}";
+
+        expect($respuestaDeHistorial->getStatusCode())->toBe($respuestaDeLectura->getStatusCode(), $caso);
+        if ($respuestaDeLectura->getStatusCode() !== 200) {
+            expect($respuestaDeHistorial->json())->toBe($respuestaDeLectura->json(), $caso);
+        }
+        if (isset($esperadas[$recurso])) {
+            expect($respuestaDeHistorial->getStatusCode())->toBe($esperadas[$recurso], "$caso; se esperaba {$esperadas[$recurso]}");
+        }
+    }
+})->with('usuarios del recorrido de historial');
 
 test('RNF-01: sin sesión, las siete rutas de historial responden 401 con el mismo cuerpo', function () {
     /** @var TestCase $this */
