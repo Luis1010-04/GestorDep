@@ -29,7 +29,7 @@
 | Priorización | MoSCoW: todo lo del MVP es Must salvo indicación contraria |
 | Desarrollo | Primero la prueba (TDD) a partir de los criterios de aceptación, y luego la implementación mínima |
 | Arquitectura | Monolito modular con DDD: un contexto por carpeta, dominio puro en PHP, eventos de dominio entre contextos |
-| Control de versiones | Una rama por hito, un commit por tarea con el formato `F1-H0-T03: descripción breve` |
+| Control de versiones | Una rama por tarea, creada desde `main`, y un PR a `main` por tarea; una tarea puede tener varios commits, todos con el formato `F1-H0-T03: descripción breve` (DA-130) |
 | Revisión | Una sola persona, el responsable del proyecto; cada tarea y cada compuerta se aprueban manualmente |
 | Árbitro de "terminado" | `make verificar` (estilo, análisis estático, pruebas con cobertura y auditoría de dependencias) |
 | Especificación | Cada hito tiene su especificación en `docs/hitos/f1-hN.md`, escrita justo antes de empezarlo |
@@ -97,7 +97,7 @@ Un hito se da por cerrado cuando se cumple todo lo siguiente:
 8. El agente entregó el reporte de **fuera de alcance** (`backend/.ai/guidelines/proyecto.md` §6) y no hay trabajo no pedido.
 9. El responsable revisa los reportes de las tareas, prueba manualmente los flujos principales y aprueba.
 10. A partir de H6, `make mutacion` pasa al cerrar cada hito (Infection sobre `Dominio/`, umbrales de DD-53), con su log en `docs/reportes/logs/`.
-11. Se crea la etiqueta de git `f1-hN` y se fusiona la rama del hito.
+11. Se crea la etiqueta de git `f1-hN`; las tareas del hito ya llegaron a `main` por sus PR (DA-130).
 
 ## 5. Qué se escribe y cuándo
 
