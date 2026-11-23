@@ -1,5 +1,11 @@
 .PHONY: levantar bajar consola dependencias vendor-local verificar mutacion pruebas migrar fresh humo humo-h3
 
+# Docker Compose v5 construye con bake. En Windows, si la terminal hereda el directorio con la unidad en minuscula
+# (c:\...), Compose pasa a bake el contexto como c:\... y el Dockerfile como C:\..., bake cree que el Dockerfile esta
+# fuera del contexto, pide `--allow=fs.read=...` y `--build` falla. Compose no tiene opcion para conceder ese permiso,
+# asi que se desactiva esa comprobacion de bake, solo para las construcciones que lanzan estas recetas (F1-H7-T06c, D13).
+export BUILDX_BAKE_ENTITLEMENTS_FS := 0
+
 # `vendor` vive en un volumen nombrado: si esta vacio (primer arranque o tras `docker compose down -v`) se instala solo.
 # El worker y el scheduler arrancan despues, cuando ya hay dependencias.
 # Las bases de pruebas por proceso (DA-101) se crean aqui si faltan: el guion es idempotente y un volumen de datos que
