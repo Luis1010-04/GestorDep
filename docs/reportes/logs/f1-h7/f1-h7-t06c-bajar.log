@@ -1,0 +1,27 @@
+base: 82b6119 con el Makefile de T06c sin commitear; inicio: 2026-11-23T20:08:52Z
+cwd: c:\Users\LOQ\Documents\repos\GestorDep
+docker compose down
+ Container gestordep-web-1 Stopping 
+ Container gestordep-worker-1 Stopping 
+ Container gestordep-scheduler-1 Stopping 
+ Container gestordep-app-1 Stopping 
+ Container gestordep-app-1 Stopped 
+ Container gestordep-app-1 Removing 
+ Container gestordep-app-1 Removed 
+ Container gestordep-scheduler-1 Stopped 
+ Container gestordep-scheduler-1 Removing 
+ Container gestordep-scheduler-1 Removed 
+ Container gestordep-worker-1 Stopped 
+ Container gestordep-worker-1 Removing 
+ Container gestordep-worker-1 Removed 
+ Container gestordep-web-1 Stopped 
+ Container gestordep-web-1 Removing 
+ Container gestordep-web-1 Removed 
+ Container gestordep-db-1 Stopping 
+ Container gestordep-db-1 Stopped 
+ Container gestordep-db-1 Removing 
+ Container gestordep-db-1 Removed 
+ Network gestordep_default Removing 
+ Network gestordep_default Removed 
+codigo de salida: 0
+segundos: 8

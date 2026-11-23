@@ -1,0 +1,193 @@
+base: 82b6119 con el Makefile de T06c sin commitear; inicio: 2026-11-23T20:09:05Z
+cwd: c:\Users\LOQ\Documents\repos\GestorDep
+docker compose up -d --build --wait db app
+ Image gestordep-app Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 575B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 477B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/php:8.4-cli
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/composer:2
+#4 DONE 0.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [stage-0 1/4] FROM docker.io/library/php:8.4-cli@sha256:7e7413ed31b8c42b31c939cc83b3758b1cd618f7bf3803f5a0c39f98d4adcbee
+#6 resolve docker.io/library/php:8.4-cli@sha256:7e7413ed31b8c42b31c939cc83b3758b1cd618f7bf3803f5a0c39f98d4adcbee 0.0s done
+#6 DONE 0.0s
+
+#7 FROM docker.io/library/composer:2@sha256:50ea4d33fdcde1adb0f045547295faa1548b33872e5f789dae5b02ce2fb5de93
+#7 resolve docker.io/library/composer:2@sha256:50ea4d33fdcde1adb0f045547295faa1548b33872e5f789dae5b02ce2fb5de93 0.0s done
+#7 DONE 0.3s
+
+#7 FROM docker.io/library/composer:2@sha256:50ea4d33fdcde1adb0f045547295faa1548b33872e5f789dae5b02ce2fb5de93
+#7 sha256:e5457eb4ec032c6d5df11d639bdb13afc0c2c2e8c68ab5732847aaa6a018d579 92B / 92B 0.1s done
+#7 sha256:a16f709362bd0b7b3cab7d70e3a5a0200ad0b6c06961481f29c6659410885e4d 418B / 418B 0.2s done
+#7 sha256:73873ef0ff75b3a63bd405fb5386de8e46e4c1f3cd24f9b1aa54164fca26b0c6 260B / 260B 0.2s done
+#7 sha256:c4c87643b8cee02592699398cab5466f6f66da02a95e0fa6f5a3cddf4dae0aa9 0B / 1.09MB 0.2s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 0B / 32.03MB 0.2s
+#7 sha256:eb34cdb4b6ac7c2f937349bb85655d935a606e0eb5464d0dc91de635e4bdd555 2.44kB / 2.44kB 0.1s done
+#7 sha256:53d65f6f231d99b136bb11fa5923017d7ead3225256ad9295599a2de605b312d 22.39kB / 22.39kB 0.1s done
+#7 sha256:c4c87643b8cee02592699398cab5466f6f66da02a95e0fa6f5a3cddf4dae0aa9 1.09MB / 1.09MB 0.4s done
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 0B / 22.98MB 0.2s
+#7 sha256:21b824381d747ab82eeaa07efb3ec7e27c9ef0a525d342fdf2758169b2ef8a10 486B / 486B 0.1s done
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 0B / 14.62MB 0.2s
+#7 sha256:0d6926b212715e0610590550c3853ea11245c18b7099d4f8e3c6a92d09e82fb9 215B / 215B 0.1s done
+#7 sha256:e81c43fcee137a331af6613c6c015b731afdfe7b7893cbfd53e1c531242bed32 930B / 930B 0.1s done
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 2.10MB / 32.03MB 0.8s
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 2.10MB / 22.98MB 0.6s
+#7 sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e 0B / 5.97MB 0.2s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 1.05MB / 14.62MB 0.6s
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 4.19MB / 22.98MB 0.9s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 2.10MB / 14.62MB 0.8s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 4.19MB / 32.03MB 1.4s
+#7 sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e 1.05MB / 5.97MB 0.8s
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 6.29MB / 22.98MB 1.4s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 3.15MB / 14.62MB 1.2s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 4.19MB / 14.62MB 1.5s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 6.29MB / 32.03MB 2.0s
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 8.39MB / 22.98MB 2.0s
+#7 sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e 2.10MB / 5.97MB 1.5s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 5.24MB / 14.62MB 2.0s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 8.39MB / 32.03MB 2.4s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 6.29MB / 14.62MB 2.3s
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 10.49MB / 22.98MB 2.6s
+#7 sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e 3.15MB / 5.97MB 2.1s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 7.34MB / 14.62MB 2.6s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 10.49MB / 32.03MB 3.0s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 8.39MB / 14.62MB 2.9s
+#7 sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e 4.19MB / 5.97MB 2.7s
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 12.58MB / 22.98MB 3.3s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 9.44MB / 14.62MB 3.2s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 12.58MB / 32.03MB 3.6s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 10.49MB / 14.62MB 3.5s
+#7 sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e 5.24MB / 5.97MB 3.2s
+#7 sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e 5.97MB / 5.97MB 3.4s done
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 15.73MB / 32.03MB 4.4s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 11.53MB / 14.62MB 3.9s
+#7 extracting sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 14.68MB / 22.98MB 4.2s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 12.58MB / 14.62MB 4.2s
+#7 extracting sha256:fa8181c2cd967207e3556cb60d1c7a2715e128024faa69f6fa1da191a247a93e 0.5s done
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 18.87MB / 32.03MB 4.8s
+#7 extracting sha256:e81c43fcee137a331af6613c6c015b731afdfe7b7893cbfd53e1c531242bed32 0.0s done
+#7 extracting sha256:0d6926b212715e0610590550c3853ea11245c18b7099d4f8e3c6a92d09e82fb9 0.0s done
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 16.78MB / 22.98MB 4.7s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 13.63MB / 14.62MB 4.5s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 20.97MB / 32.03MB 5.3s
+#7 sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 14.62MB / 14.62MB 4.8s done
+#7 extracting sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 18.87MB / 22.98MB 5.1s
+#7 extracting sha256:ce76d85d80ca202cd3d69d966e6bfc1e920063f2c682c02bf9111daef6f3acae 0.2s done
+#7 extracting sha256:21b824381d747ab82eeaa07efb3ec7e27c9ef0a525d342fdf2758169b2ef8a10 0.0s done
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 23.07MB / 32.03MB 5.7s
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 20.97MB / 22.98MB 5.4s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 25.17MB / 32.03MB 6.0s
+#7 sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 22.98MB / 22.98MB 5.7s done
+#7 extracting sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 27.26MB / 32.03MB 6.2s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 30.41MB / 32.03MB 6.5s
+#7 sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 32.03MB / 32.03MB 6.6s done
+#7 extracting sha256:70aeb896379a30fa7e2353240e9cdfd46f01b3121f593585c233caf2caf74fdd 1.0s done
+#7 DONE 7.3s
+
+#7 FROM docker.io/library/composer:2@sha256:50ea4d33fdcde1adb0f045547295faa1548b33872e5f789dae5b02ce2fb5de93
+#7 extracting sha256:eb34cdb4b6ac7c2f937349bb85655d935a606e0eb5464d0dc91de635e4bdd555 0.0s done
+#7 extracting sha256:53d65f6f231d99b136bb11fa5923017d7ead3225256ad9295599a2de605b312d 0.0s done
+#7 extracting sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f
+#7 extracting sha256:295c7d339315e47102ec5649315065b92ad659b8b890bd87a099900836e9511f 1.1s done
+#7 DONE 8.5s
+
+#7 FROM docker.io/library/composer:2@sha256:50ea4d33fdcde1adb0f045547295faa1548b33872e5f789dae5b02ce2fb5de93
+#7 extracting sha256:73873ef0ff75b3a63bd405fb5386de8e46e4c1f3cd24f9b1aa54164fca26b0c6 0.0s done
+#7 extracting sha256:c4c87643b8cee02592699398cab5466f6f66da02a95e0fa6f5a3cddf4dae0aa9 0.0s done
+#7 extracting sha256:a16f709362bd0b7b3cab7d70e3a5a0200ad0b6c06961481f29c6659410885e4d 0.0s done
+#7 extracting sha256:e5457eb4ec032c6d5df11d639bdb13afc0c2c2e8c68ab5732847aaa6a018d579 0.0s done
+#7 DONE 8.6s
+
+#8 [stage-0 3/4] COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+#8 CACHED
+
+#9 [stage-0 2/4] RUN apt-get update     && apt-get install -y --no-install-recommends git unzip libpq-dev libzip-dev autoconf 		dpkg-dev 		file 		g++ 		gcc 		libc-dev 		make 		pkg-config 		re2c     && docker-php-ext-install pdo_pgsql pgsql zip bcmath     && pecl install pcov     && docker-php-ext-enable pcov     && apt-get purge -y --auto-remove autoconf 		dpkg-dev 		file 		g++ 		gcc 		libc-dev 		make 		pkg-config 		re2c     && rm -rf /var/lib/apt/lists/* /tmp/pear
+#9 CACHED
+
+#10 [stage-0 4/4] WORKDIR /var/www/html
+#10 CACHED
+
+#11 exporting to image
+#11 exporting layers done
+#11 exporting manifest sha256:fb08469bcf134ff89fbe8b6fbdedcc84976d42926fa562a159048f8bc2577927 done
+#11 exporting config sha256:be910bc743933437350ac00c3c47150ccbee19d4bda8b72d9eb508f704981cb5 done
+#11 exporting attestation manifest sha256:407e43439f3d59e5c12ad0c853f82ce534a59e877ae06529fe6fa075307f4d0b 0.0s done
+#11 exporting manifest list sha256:56ff8fc6a4005db1634a27335abc405fc4a4dfd2eb2c0e7628a1649e0d5dd774 0.0s done
+#11 naming to docker.io/library/gestordep-app:latest done
+#11 unpacking to docker.io/library/gestordep-app:latest
+#11 unpacking to docker.io/library/gestordep-app:latest 0.7s done
+#11 DONE 0.8s
+
+#12 resolving provenance for metadata file
+#12 DONE 0.0s
+ Image gestordep-app Built 
+ Network gestordep_default Creating 
+ Network gestordep_default Creating 
+ Network gestordep_default Created 
+ Network gestordep_default Created 
+ Container gestordep-db-1 Creating 
+ Container gestordep-db-1 Created 
+ Container gestordep-app-1 Creating 
+ Container gestordep-app-1 Created 
+ Container gestordep-db-1 Starting 
+ Container gestordep-db-1 Started 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-app-1 Starting 
+ Container gestordep-app-1 Started 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-app-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-app-1 Healthy 
+docker compose exec -T db bash /docker-entrypoint-initdb.d/02-bases-por-proceso.sh
+docker compose exec -T app sh -c 'test -f vendor/autoload.php || composer install --no-interaction --no-progress'
+docker compose up -d --wait
+ Container gestordep-db-1 Running 
+ Container gestordep-app-1 Running 
+ Container gestordep-worker-1 Creating 
+ Container gestordep-scheduler-1 Creating 
+ Container gestordep-web-1 Creating 
+ Container gestordep-worker-1 Created 
+ Container gestordep-web-1 Created 
+ Container gestordep-scheduler-1 Created 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-web-1 Starting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-worker-1 Starting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-scheduler-1 Starting 
+ Container gestordep-web-1 Started 
+ Container gestordep-worker-1 Started 
+ Container gestordep-scheduler-1 Started 
+ Container gestordep-worker-1 Waiting 
+ Container gestordep-scheduler-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-app-1 Waiting 
+ Container gestordep-web-1 Waiting 
+ Container gestordep-app-1 Healthy 
+ Container gestordep-scheduler-1 Healthy 
+ Container gestordep-worker-1 Healthy 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-web-1 Healthy 
+codigo de salida: 0
+segundos: 31

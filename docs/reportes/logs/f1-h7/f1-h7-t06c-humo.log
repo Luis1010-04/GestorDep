@@ -1,0 +1,11 @@
+base: 82b6119 con el Makefile de T06c sin commitear; inicio: 2026-11-23T20:16:38Z; sin make fresh previo
+docker compose exec -T app bash -s < scripts/humo/humo-h0.sh
+HUMO H0 OK: GET /api/v1/salud -> 200
+docker compose exec -T app bash /scripts/humo/humo-h1.sh
+OK     paso 1: GET /api/v1/salud -> HTTP 200
+OK     paso 2: el entrenador 1 inicia sesión -> HTTP 200
+FALLA  paso 3: crea la categoría Sub-17 -> HTTP 409 (se esperaba 201)
+       cuerpo: {"codigo":"categoria_duplicada","mensaje":"Ya existe una categor\u00eda con ese nombre.","errores":[]}
+make: *** [Makefile:56: humo] Error 1
+codigo de salida: 2
+segundos: 5
