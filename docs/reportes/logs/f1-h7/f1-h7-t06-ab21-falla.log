@@ -1,0 +1,71 @@
+inicio: 2026-11-24T15:45:28Z; base: b12a7f8 con la prueba de AB-21, sin la corrección
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Identidad\RelojDeUsuariosTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAB-21: usuarios.actualizado_en sale de Reloj al cambiar la contrase[39m[90m…[39m [90m3.65s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAB-21: bloqueado_hasta sale de Reloj, truncado a segundos[39m[90m           [39m [90m0.29s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAB-21: usuarios:crear escribe creado_en y actualizado_en desde Relo[39m[90m…[39m [90m0.20s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Identidad\RelojDeUsuariosTest[22m [90m>[39m AB-21: usuarios.act…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'2030-01-02 03:04:05.000000'[39m[39;1m
+  [39;22m[32m+'2026-11-24 15:45:33.000000'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Identidad/RelojDeUsuariosTest.php[39m:[32m38[39m
+     34▕ 
+     35▕     sesionesPeticion($this, 'PUT', '/api/v1/contrasena', ['contrasena_actual' => CLAVE_DE_SESIONES_DE_PRUEBA, 'contrasena_nueva' => 'otra-clave-larga-2'], $sesion)
+     36▕         ->assertNoContent();
+     37▕ 
+  ➜  38▕     expect(relojDeUsuariosEnUtc(DB::table('usuarios')->where('id', $id)->value('actualizado_en')))->toBe('2030-01-02 03:04:05.000000')
+     39▕         ->and(relojDeUsuariosEnUtc(DB::table('usuarios_historial')->where('usuario_afectado_id', $id)->where('operacion', 'actualizar')->value('ocurrido_en')))
+     40▕         ->toBe('2030-01-02 03:04:05.000000');
+     41▕ });
+     42▕
+
+  [33m1   [39m[39;1mtests/Feature/Identidad/RelojDeUsuariosTest.php[39;22m:[39;1m38[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Identidad\RelojDeUsuariosTest[22m [90m>[39m AB-21: bloqueado_ha…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'2030-01-02 03:19:05.000000'[39m[39;1m
+  [39;22m[32m+'2030-01-02 03:19:06.000000'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Identidad/RelojDeUsuariosTest.php[39m:[32m52[39m
+     48▕     for ($intento = 1; $intento <= 5; $intento++) {
+     49▕         sesionesPeticion($this, 'POST', '/api/v1/sesion', ['correo' => 'ana@x.com', 'contrasena' => 'incorrecta-1234'])->assertUnauthorized();
+     50▕     }
+     51▕ 
+  ➜  52▕     expect(relojDeUsuariosEnUtc(DB::table('usuarios')->where('id', $id)->value('bloqueado_hasta')))->toBe('2030-01-02 03:19:05.000000');
+     53▕ });
+     54▕ 
+     55▕ test('AB-21: usuarios:crear escribe creado_en y actualizado_en desde Reloj', function () {
+     56▕     relojDeUsuariosFijar();
+
+  [33m1   [39m[39;1mtests/Feature/Identidad/RelojDeUsuariosTest.php[39;22m:[39;1m52[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Identidad\RelojDeUsuariosTest[22m [90m>[39m AB-21: usuarios:cre…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'2030-01-02 03:04:05.000000'[39m[39;1m
+  [39;22m[32m+'2026-11-24 15:45:34.000000'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Identidad/RelojDeUsuariosTest.php[39m:[32m61[39m
+     57▕ 
+     58▕     consolaArtisan('usuarios:crear', ['correo' => 'nuevo@x.com', 'nombre' => 'Nuevo', '--rol' => ['docente'], '--contrasena' => 'una-clave-larga-1'])
+     59▕         ->assertSuccessful();
+     60▕ 
+  ➜  61▕     expect(relojDeUsuariosEnUtc(DB::table('usuarios')->where('correo', 'nuevo@x.com')->value('creado_en')))->toBe('2030-01-02 03:04:05.000000')
+     62▕         ->and(relojDeUsuariosEnUtc(DB::table('usuarios')->where('correo', 'nuevo@x.com')->value('actualizado_en')))->toBe('2030-01-02 03:04:05.000000');
+     63▕ });
+     64▕
+
+  [33m1   [39m[39;1mtests/Feature/Identidad/RelojDeUsuariosTest.php[39;22m:[39;1m61[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m (12 assertions)[39m
+  [90mDuration:[39m [39m4.69s[39m
+
+codigo de salida: 1

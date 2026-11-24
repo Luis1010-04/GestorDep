@@ -3,6 +3,7 @@
 namespace Src\Identidad\Aplicacion;
 
 use Illuminate\Contracts\Hashing\Hasher;
+use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
 use Src\Identidad\Dominio\RepositorioDeUsuarios;
 use Src\Identidad\Dominio\Usuario;
@@ -34,7 +35,8 @@ final class IniciarSesion
             throw new CredencialesInvalidas;
         }
 
-        $ahora = $this->reloj->ahora();
+        // Truncado a segundos, como el resto de los instantes guardados (AB-21, PT-04).
+        $ahora = Instante::truncadoASegundos($this->reloj->ahora());
         $bloqueadoHasta = $usuario->bloqueadoHasta();
         if ($bloqueadoHasta !== null && $usuario->estaBloqueado($ahora)) {
             throw new CuentaBloqueada($bloqueadoHasta->getTimestamp() - $ahora->getTimestamp());
