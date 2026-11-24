@@ -3,6 +3,7 @@
 namespace Src\Salud\Aplicacion;
 
 use DateTimeImmutable;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\HoyDeNegocio;
 use Src\Compartido\Dominio\Identificador;
@@ -37,6 +38,7 @@ final class ConfirmarAviso
         private readonly UsuarioActual $usuarioActual,
         private readonly Reloj $reloj,
         private readonly HoyDeNegocio $hoyDeNegocio,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /**
@@ -55,6 +57,12 @@ final class ConfirmarAviso
             if (! $this->visibilidad->esVisible($aviso->jugadorId(), incluirBajas: false)) {
                 throw new JugadorEnBajaSinCambioDeEstado;
             }
+            // Bloquea la fila del jugador hasta el final de la transacción: una baja simultánea se serializa (AB-29).
+            $this->candado->conJugadoresActivos(
+                [$aviso->jugadorId()],
+                fn (): JugadorEnBajaSinCambioDeEstado => new JugadorEnBajaSinCambioDeEstado,
+                fn (): null => null,
+            );
 
             $tipo = TipoDeEstado::from($datos['estado']);
             $lesion = $tipo === TipoDeEstado::Apto ? null : self::lesionDe($aviso, $autor, $datos, $instante);

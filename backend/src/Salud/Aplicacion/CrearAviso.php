@@ -2,6 +2,7 @@
 
 namespace Src\Salud\Aplicacion;
 
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Instante;
@@ -20,6 +21,7 @@ final class CrearAviso
         private readonly VisibilidadDeJugador $visibilidad,
         private readonly UsuarioActual $usuarioActual,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /** @throws RecursoNoEncontrado|JugadorEnBajaSinAviso */
@@ -34,7 +36,12 @@ final class CrearAviso
             Identificador::generar(), $jugadorId, $autor, $reportadoPorJugador, $nota, $fecha,
             Instante::truncadoASegundos($this->reloj->ahora()),
         );
-        $this->avisos->guardarNuevo($aviso);
+        // Con la fila del jugador bloqueada: una baja simultánea se serializa con el aviso (AB-29).
+        $this->candado->conJugadoresActivos(
+            [$jugadorId],
+            fn (): JugadorEnBajaSinAviso => new JugadorEnBajaSinAviso,
+            fn () => $this->avisos->guardarNuevo($aviso),
+        );
 
         return AvisoVisible::para($aviso, $autor);
     }
