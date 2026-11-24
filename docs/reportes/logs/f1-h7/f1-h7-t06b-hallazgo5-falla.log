@@ -1,0 +1,44 @@
+inicio: 2026-11-24T20:26:45Z; base: 97c7628 con las pruebas del hallazgo 5, sin la corrección
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Integration\Consultas\RamaDelDocenteConAliasTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mRNF-01 (hallazgo 5): la rama del docente de AlcanceDeJugadores no s[39m[90m…[39m [90m5.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mRNF-01 (hallazgo 5): la rama del docente de VisibilidadDeAlertasSql[39m[90m…[39m [90m0.47s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Integration\Consultas\RamaDelDocenteConAliasTest[22m [90m>[39m RNF-01 (…   
+[39;1m  Failed asserting that true is false.[39;22m
+
+  at [32mtests/Integration/Consultas/RamaDelDocenteConAliasTest.php[39m:[32m55[39m
+     51▕ 
+     52▕ test('RNF-01 (hallazgo 5): la rama del docente de AlcanceDeJugadores no se cumple sola cuando la columna externa es inscripciones.jugador_id', function () {
+     53▕     $m = mundoDeDocentes();
+     54▕ 
+  ➜  55▕     expect(ramaDelDocenteVeLaInscripcion($m['d1'], $m['i2']))->toBeFalse()
+     56▕         ->and(ramaDelDocenteVeLaInscripcion($m['d1'], $m['i1']))->toBeTrue();
+     57▕ });
+     58▕ 
+     59▕ test('RNF-01 (hallazgo 5): la rama del docente de VisibilidadDeAlertasSql no se cumple sola con esa columna', function () {
+
+  [33m1   [39m[39;1mtests/Integration/Consultas/RamaDelDocenteConAliasTest.php[39;22m:[39;1m55[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Integration\Consultas\RamaDelDocenteConAliasTest[22m [90m>[39m RNF-01 (…   
+[39;1m  Failed asserting that true is false.[39;22m
+
+  at [32mtests/Integration/Consultas/RamaDelDocenteConAliasTest.php[39m:[32m64[39m
+     60▕     $m = mundoDeDocentes();
+     61▕     $deJ2 = alertaInsertar($m['j2'], ALERTA_ACADEMICA);
+     62▕     $deJ1 = alertaInsertar($m['j1'], ALERTA_ACADEMICA);
+     63▕ 
+  ➜  64▕     expect(ramaDelDocenteVeLaAlerta($m['d1'], $deJ2))->toBeFalse()
+     65▕         ->and(ramaDelDocenteVeLaAlerta($m['d1'], $deJ1))->toBeTrue();
+     66▕ });
+     67▕
+
+  [33m1   [39m[39;1mtests/Integration/Consultas/RamaDelDocenteConAliasTest.php[39;22m:[39;1m64[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m (2 assertions)[39m
+  [90mDuration:[39m [39m6.48s[39m
+
+codigo de salida: 1
