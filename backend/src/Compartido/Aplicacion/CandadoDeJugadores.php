@@ -15,11 +15,12 @@ interface CandadoDeJugadores
     /**
      * Abre una transacción (o un punto de guardado, si ya hay una), bloquea en modo compartido a los jugadores, en orden de
      * id, y ejecuta `$escritura` si todos siguen sin baja y sin borrar. Si alguno no, lanza lo que devuelva
-     * `$siHayInactivos` con esos jugadores y no escribe nada. Cada caso de uso decide su excepción (DA-141).
+     * `$siHayInactivos` con esos jugadores y no escribe nada. Cada caso de uso decide su excepción (DA-141). Con la lista
+     * vacía (una alineación sin jugadores, por ejemplo) no bloquea nada y solo ejecuta `$escritura` en la transacción.
      *
      * @template T
      *
-     * @param  non-empty-list<Identificador>  $jugadores
+     * @param  list<Identificador>  $jugadores
      * @param  callable(list<Identificador>): Throwable  $siHayInactivos
      * @param  callable(): T  $escritura
      * @return T

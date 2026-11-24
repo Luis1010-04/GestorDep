@@ -41,7 +41,7 @@ interface RepositorioDeJugadores
      * los pedidos que no lo están (baja: `estatus_deportivo`, como el alcance, DA-140). Se llama dentro de una transacción:
      * el candado dura hasta que termina (DA-139).
      *
-     * @param  non-empty-list<Identificador>  $jugadores
+     * @param  list<Identificador>  $jugadores  vacía: no bloquea nada
      * @return list<Identificador>
      */
     public function bloquearActivos(array $jugadores): array;

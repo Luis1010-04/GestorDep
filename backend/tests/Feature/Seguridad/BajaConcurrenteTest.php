@@ -8,7 +8,27 @@
  */
 
 use Illuminate\Support\Facades\DB;
+use Src\Compartido\Dominio\Reloj;
+use Src\Compartido\Infraestructura\RelojFijo;
 use Tests\TestCase;
+
+function bajaConcurrenteReloj(string $momentoUtc): void
+{
+    app()->instance(Reloj::class, new RelojFijo(new DateTimeImmutable($momentoUtc, new DateTimeZone('UTC'))));
+}
+
+/**
+ * Un partido programado de A en T1, como el de las pruebas de convocatoria y alineación de H3.
+ *
+ * @param  array<string, string>  $m
+ */
+function bajaConcurrentePartido(array $m): string
+{
+    return mundoInsertar('partidos', [
+        'equipo_id' => $m['a'], 'temporada_id' => $m['t1'], 'rival_id' => $m['r1'], 'lugar_id' => $m['l1'],
+        'inicia_en' => '2026-09-12 23:00:00+00', 'tipo' => 'amistoso', 'condicion' => 'local', 'estado' => 'programado',
+    ]);
+}
 
 test('AB-20: una asignación concurrente con la baja responde 409 jugador_en_baja y no crea la membresía', function () {
     /** @var TestCase $this */
@@ -179,5 +199,85 @@ test('AB-29: una prueba física concurrente con la baja responde 409 y no se gua
 
     $respuesta->assertStatus(409)->assertJsonPath('codigo', 'jugador_en_baja');
     expect(DB::table('pruebas_fisicas')->where('jugador_id', $m['f1'])->count())->toBe(0)
+        ->and($espero)->toBeTrue();
+});
+
+test('AB-31: una convocatoria concurrente con la baja responde 404 y no se guarda', function () {
+    /** @var TestCase $this */
+    sesionesPrepararBase();
+    bajaConcurrenteReloj('2026-09-05 15:00:00');
+    $m = mundoDeCompetencia();
+    $partido = bajaConcurrentePartido($m);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    ['resultado' => $respuesta, 'hubo_espera' => $espero] = concurrenciaMientrasOtraTransaccion(
+        concurrenciaBajaDe($m['j1']),
+        fn () => sesionesPeticion($this, 'POST', "/api/v1/partidos/$partido/convocatoria", ['jugador_id' => $m['j1']], $sesion),
+    );
+
+    $respuesta->assertNotFound()->assertJsonPath('codigo', 'recurso_no_encontrado');
+    expect(DB::table('convocatorias')->where('jugador_id', $m['j1'])->count())->toBe(0)
+        ->and($espero)->toBeTrue();
+});
+
+test('AB-31: una alineación concurrente con la baja responde 404 y no cambia', function () {
+    /** @var TestCase $this */
+    sesionesPrepararBase();
+    bajaConcurrenteReloj('2026-09-13 01:00:00');
+    $m = mundoDeCompetencia();
+    $partido = bajaConcurrentePartido($m);
+    mundoInsertar('convocatorias', ['partido_id' => $partido, 'jugador_id' => $m['j1']]);
+    $defensa = (string) DB::table('posiciones')->where('codigo', 'defensa')->value('id');
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    ['resultado' => $respuesta, 'hubo_espera' => $espero] = concurrenciaMientrasOtraTransaccion(
+        concurrenciaBajaDe($m['j1']),
+        fn () => sesionesPeticion($this, 'PUT', "/api/v1/partidos/$partido/alineacion", ['alineacion' => [
+            ['jugador_id' => $m['j1'], 'posicion_id' => $defensa, 'rol_alineacion' => 'titular'],
+        ]], $sesion),
+    );
+
+    $respuesta->assertNotFound()->assertJsonPath('codigo', 'recurso_no_encontrado');
+    expect(DB::table('convocatorias')->where('partido_id', $partido)->whereNotNull('rol_alineacion')->count())->toBe(0)
+        ->and($espero)->toBeTrue();
+});
+
+test('AB-31: una asistencia de entrenamiento concurrente con la baja responde 422 jugador_no_pertenece_al_equipo (JugadorNoPerteneceAlEquipo) y no se guarda', function () {
+    /** @var TestCase $this */
+    sesionesPrepararBase();
+    bajaConcurrenteReloj('2026-09-20 15:00:00');
+    $m = mundoDeCompetencia();
+    $entrenamiento = mundoEntrenamiento($m['a'], $m['l1'], $m['e1'], '2026-09-10 23:00:00+00', '2026-09-10 23:59:00+00', ['estado' => 'realizado']);
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    ['resultado' => $respuesta, 'hubo_espera' => $espero] = concurrenciaMientrasOtraTransaccion(
+        concurrenciaBajaDe($m['j1']),
+        fn () => sesionesPeticion($this, 'POST', "/api/v1/entrenamientos/$entrenamiento/asistencias", ['registros' => [
+            ['jugador_id' => $m['j1'], 'estado' => 'presente'],
+        ]], $sesion),
+    );
+
+    $respuesta->assertUnprocessable()
+        ->assertJsonPath('codigo', 'jugador_no_pertenece_al_equipo')
+        ->assertJsonPath('errores.0.campo', 'registros.0.jugador_id')
+        ->assertJsonPath('errores.0.codigo', 'jugador_no_pertenece_al_equipo');
+    expect(DB::table('asistencias_entrenamiento')->where('entrenamiento_id', $entrenamiento)->count())->toBe(0)
+        ->and($espero)->toBeTrue();
+});
+
+test('AB-31: un rendimiento concurrente con la baja responde 404 y no se guarda', function () {
+    /** @var TestCase $this */
+    sesionesPrepararBase();
+    bajaConcurrenteReloj('2026-09-20 15:00:00');
+    $m = capturaMundo();
+    $sesion = sesionesIniciar($this, 'e1@x.com');
+
+    ['resultado' => $respuesta, 'hubo_espera' => $espero] = concurrenciaMientrasOtraTransaccion(
+        concurrenciaBajaDe($m['f1']),
+        fn () => sesionesPeticion($this, 'POST', "/api/v1/partidos/{$m['pj1']}/rendimientos", capturaCuerpo($m['f1'], 'delantero'), $sesion),
+    );
+
+    $respuesta->assertNotFound()->assertJsonPath('codigo', 'recurso_no_encontrado');
+    expect(DB::table('rendimientos_partido')->where('jugador_id', $m['f1'])->count())->toBe(0)
         ->and($espero)->toBeTrue();
 });
