@@ -6,3 +6,4 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/panel');
 Route::get('/ingreso', [PaginaController::class, 'ingreso'])->middleware('guest:web');
 Route::get('/panel', [PaginaController::class, 'panel'])->middleware('auth:web');
+Route::get('/contrasena', [PaginaController::class, 'contrasena'])->middleware('auth:web');

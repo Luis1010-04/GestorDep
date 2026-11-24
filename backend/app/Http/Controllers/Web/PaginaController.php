@@ -16,4 +16,9 @@ class PaginaController extends Controller
     {
         return view('panel');
     }
+
+    public function contrasena(): View
+    {
+        return view('modulos.contrasena.editar');
+    }
 }

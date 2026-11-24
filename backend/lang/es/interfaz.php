@@ -14,7 +14,16 @@ return [
 
     'menu' => [
         'panel' => 'Panel',
+        'cambiar_contrasena' => 'Cambiar contraseña',
         'cerrar_sesion' => 'Cerrar sesión',
+    ],
+
+    'contrasena' => [
+        'titulo' => 'Cambiar contraseña',
+        'actual' => 'Contraseña actual',
+        'nueva' => 'Contraseña nueva',
+        'guardar' => 'Guardar la contraseña nueva',
+        'nota' => 'Al cambiarla se cierran sus demás sesiones abiertas; esta sesión sigue activa.',
     ],
 
     'panel' => [
@@ -36,5 +45,16 @@ return [
         'bloqueada' => 'Demasiados intentos. Intente de nuevo en :minutos minutos.',
         'sesion_expirada' => 'Su sesión terminó. Inicie sesión de nuevo.',
         'roles_ninguno' => 'Ninguno',
+        'aceptar' => 'Aceptar',
+        'cancelar' => 'Cancelar',
+        'sin_autorizacion' => 'No tiene autorización para esta acción.',
+        'no_disponible' => 'El recurso no existe o no está disponible para usted.',
+
+        'contrasena' => [
+            'confirmar_titulo' => '¿Cambiar la contraseña?',
+            'confirmar_texto' => 'Se cerrarán sus demás sesiones abiertas. Esta sesión sigue activa.',
+            'confirmar_boton' => 'Sí, cambiarla',
+            'exito' => 'La contraseña se cambió y sus demás sesiones se cerraron.',
+        ],
     ],
 ];

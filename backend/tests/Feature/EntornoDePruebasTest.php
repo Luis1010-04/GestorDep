@@ -24,6 +24,7 @@ test('F1-H0-T03: toda ruta registrada esta bajo /api/v1 o es la cookie csrf de S
         ->values()
         ->all();
 
-    // Fuera de /api/v1 solo se permiten la cookie csrf (DD-28) y las tres rutas web de PT-12 (DA-122); cualquier otra falla.
-    expect($rutas)->toBe(['/', 'ingreso', 'panel', 'sanctum/csrf-cookie']);
+    // Fuera de /api/v1 solo se permiten la cookie csrf (DD-28) y las rutas web aprobadas del frontend (DA-122): las tres de
+    // PT-12 y la de FRONT-R2 (ampliacion autorizada por el responsable el 24/11/2026); cualquier otra falla.
+    expect($rutas)->toBe(['/', 'contrasena', 'ingreso', 'panel', 'sanctum/csrf-cookie']);
 });

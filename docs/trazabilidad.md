@@ -210,3 +210,4 @@ Las rutas web devuelven vistas HTML y no forman parte del contrato de la API
 | `/` | GET | Público; redirige a `/panel` | PT-12 | CA-GEN-005 |
 | `/ingreso` | GET | Invitado (`guest:web`) | PT-12 | CA-AUT-001, CA-LAY-001 |
 | `/panel` | GET | Autenticado (`auth:web`) | PT-12 | CA-GEN-005, CA-LAY-002, CA-PAN-001 |
+| `/contrasena` | GET | Autenticado (`auth:web`); la página usa `PUT /api/v1/contrasena` | FRONT-R2 | CA-FOR-001 a 003, CA-GEN-002 a 005, CA-LAY-001 |

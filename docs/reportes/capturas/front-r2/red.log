@@ -1,0 +1,13 @@
+10. [GET] http://localhost:8001/sanctum/csrf-cookie => [204] No Content
+11. [POST] http://localhost:8001/api/v1/sesion => [200] OK
+23. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+40. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+41. [PUT] http://localhost:8001/api/v1/contrasena => [422] Unprocessable Content
+42. [PUT] http://localhost:8001/api/v1/contrasena => [422] Unprocessable Content
+43. [PUT] http://localhost:8001/api/v1/contrasena => [422] Unprocessable Content
+44. [PUT] http://localhost:8001/api/v1/contrasena => [204] No Content
+61. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+62. [PUT] http://localhost:8001/api/v1/contrasena => [204] No Content
+63. [PUT] http://localhost:8001/api/v1/contrasena => [401] Unauthorized
+
+Note: 59 static requests not shown, run with "static" option to see them.

@@ -19,19 +19,30 @@
         aviso.textContent = mensaje;
     }
 
+    /** Escribe el texto si la página tiene ese elemento; la bienvenida solo existe en el panel. */
+    function escribir(id, texto) {
+        var nodo = document.getElementById(id);
+        if (nodo) {
+            nodo.textContent = texto;
+        }
+    }
+
     /** Sin datos de sesión no se muestran «Bienvenido, .» ni «Roles: »: se oculta el párrafo entero. */
     function ocultarDatosDeSesion() {
         ['bienvenida-nombre', 'bienvenida-roles'].forEach(function (id) {
-            document.getElementById(id).parentElement.classList.add('d-none');
+            var nodo = document.getElementById(id);
+            if (nodo) {
+                nodo.parentElement.classList.add('d-none');
+            }
         });
     }
 
     window.Api.solicitar('GET', '/sesion')
         .then(function (respuesta) {
             var usuario = respuesta.datos;
-            document.getElementById('usuario-nombre').textContent = usuario.nombre;
-            document.getElementById('bienvenida-nombre').textContent = usuario.nombre;
-            document.getElementById('bienvenida-roles').textContent = usuario.roles.length > 0 ? usuario.roles.join(', ') : textos.roles_ninguno;
+            escribir('usuario-nombre', usuario.nombre);
+            escribir('bienvenida-nombre', usuario.nombre);
+            escribir('bienvenida-roles', usuario.roles.length > 0 ? usuario.roles.join(', ') : textos.roles_ninguno);
         })
         .catch(function (error) {
             if (error.status === 401) {

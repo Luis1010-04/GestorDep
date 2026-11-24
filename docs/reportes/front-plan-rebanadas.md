@@ -20,6 +20,14 @@ El responsable aprobó este plan con los ajustes siguientes. Donde el resto del 
 6. **PB-01 a PB-05** quedan en cola para el backend, después de la etiqueta `f1-h7`.
 7. **Entorno:** `worker` y `scheduler` van apagados en el override local del front (perfil `apagado`).
 8. **Autorizadas para implementar:** R2 y R3, con la prueba primero, después la vista y la comprobación en navegador con capturas; commits `FRONT-R2: …` y `FRONT-R3: …`. El PR #38 sigue en borrador y acumula el trabajo del front hasta que cierre H7. No se fusiona nada.
+9. **Estructura de vistas y scripts (orden del responsable del 24/11/2026, 14:15).** Toma como referencia de organización `resources/views/` del repositorio `Luis1010-04/sistema_ventas`, adaptada a las reglas de GestorDep. Rige desde R2 y sustituye las rutas de archivo que nombra §4:
+   - **Vistas:** `backend/resources/views/modulos/{modulo}/`, con `index`, `crear`, `editar` y `ver` cuando apliquen. `layouts/` y `parciales/` se conservan donde están, igual que las vistas `ingreso` y `panel` de la rebanada 1. Cada vista usa `@yield('titulo')`, `@yield('contenido')` y `@stack('scripts')`; el layout ya tiene `@stack('scripts')`, y también `@stack('estilos')` para las hojas de estilo de las bibliotecas (DAF-07).
+   - **Scripts:** los comunes en `backend/public/assets/js/comun/` (`avisos.js`, `formularios.js`, `tabla.js`); los de cada módulo en `backend/public/assets/js/modulos/{modulo}/{vista}.js`. Los de la rebanada 1 (`api.js`, `sesion.js`, `ingreso.js` y `tinymce-vacio.js`) no se mueven.
+   - **`comun/avisos.js`** ofrece `exito()`, `error()`, `aviso()` (esquina superior derecha, sin botón, 1,5 s) y `confirmar()`, sobre SweetAlert2. Ninguna vista ni otro script llama a `Swal.fire`, y los errores usan `icon: 'error'`.
+   - **`comun/tabla.js`** configura DataTables con los textos en español de `lang/es` y los botones de descarga de DAF-09 ajustada.
+   - **Sin CDN, sin jQuery y ningún cambio de datos por GET:** las rutas web solo devuelven vistas, y toda escritura va por `POST`, `PUT`, `PATCH` o `DELETE` de la API.
+   - **Correspondencia en R2 y R3:** R2, `modulos/contrasena/editar` con `js/modulos/contrasena/editar.js`. R3, `modulos/jugadores/index` (listado y búsqueda) y `modulos/jugadores/ver` (ficha), con `js/modulos/jugadores/index.js` y `ver.js`.
+   - **Pruebas que lo fijan:** FRONT-R2 11 a 14 (`EstructuraDelFrontTest`).
 
 ---
 

@@ -15,6 +15,15 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li>
+                        <a class="dropdown-item d-flex align-items-center" href="/contrasena">
+                            <i class="bi bi-key"></i>
+                            <span>{{ __('interfaz.menu.cambiar_contrasena') }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
                         <button type="button" id="cerrar-sesion" class="dropdown-item d-flex align-items-center">
                             <i class="bi bi-box-arrow-right"></i>
                             <span>{{ __('interfaz.menu.cerrar_sesion') }}</span>

@@ -88,7 +88,7 @@ test('PT-12 22: no existe ningún archivo .html dentro de public/NiceAdmin', fun
     expect($paginas)->toBe([]);
 });
 
-test('PT-12 19: el layout define el tinymce vacío antes de main.js y carga Bootstrap antes que main.js', function () {
+test('PT-12 19: el layout define el tinymce vacío antes de main.js, carga Bootstrap antes que main.js y deja las bibliotecas y los scripts de cada página al final (enmienda FRONT-R2)', function () {
     $layout = File::get(resource_path('views/layouts/app.blade.php'));
     $posiciones = array_map(
         fn (string $script) => strpos($layout, $script),
@@ -98,15 +98,28 @@ test('PT-12 19: el layout define el tinymce vacío antes de main.js y carga Boot
             '/NiceAdmin/assets/js/main.js',
             '/assets/js/api.js',
             '/assets/js/sesion.js',
+            "@stack('scripts')",
         ],
     );
 
     expect($posiciones)->not->toContain(false)
         ->and($posiciones)->toBe(collect($posiciones)->sort()->values()->all())
+        ->and(strpos($layout, "@stack('estilos')"))->toBeGreaterThan((int) strpos($layout, '/NiceAdmin/assets/css/style.css'))
         ->and(File::get(public_path('assets/js/tinymce-vacio.js')))->toContain('window.tinymce');
 });
 
-test('PT-12 15: las rutas web registradas son exactamente /, /ingreso y /panel con su middleware', function () {
+test('FRONT-R2 10: ninguna vista usa las clases que main.js de la plantilla inicializa sin comprobar su biblioteca (DAF-12)', function () {
+    $prohibidas = ['echart', 'quill-editor-default', 'quill-editor-bubble', 'quill-editor-full', 'tinymce-editor'];
+
+    foreach (File::allFiles(resource_path('views')) as $archivo) {
+        preg_match_all('/\bclass="([^"]*)"/', File::get($archivo->getPathname()), $clases);
+        $usadas = collect($clases[1])->flatMap(fn (string $lista) => preg_split('/\s+/', trim($lista)) ?: [])->all();
+
+        expect(array_intersect($prohibidas, $usadas))->toBe([], $archivo->getFilename());
+    }
+});
+
+test('PT-12 15: las rutas web registradas son exactamente las aprobadas, con su middleware (enmienda FRONT-R2)', function () {
     $rutas = collect(Route::getRoutes()->getRoutes())
         ->filter(fn ($ruta) => in_array('web', $ruta->gatherMiddleware(), true) && ! str_starts_with($ruta->uri(), 'sanctum/'))
         ->mapWithKeys(fn ($ruta) => [$ruta->uri() => array_values(array_diff($ruta->gatherMiddleware(), ['web']))])
@@ -115,6 +128,7 @@ test('PT-12 15: las rutas web registradas son exactamente /, /ingreso y /panel c
 
     expect($rutas)->toBe([
         '/' => [],
+        'contrasena' => ['auth:web'],
         'ingreso' => ['guest:web'],
         'panel' => ['auth:web'],
     ]);

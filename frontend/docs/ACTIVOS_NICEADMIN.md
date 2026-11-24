@@ -47,6 +47,16 @@ Se versionan por decisión del responsable, pero **ninguna vista los carga ni lo
 - **ECharts** (`assets/vendor/echarts/`), **ApexCharts** (`assets/vendor/apexcharts/`) y **Chart.js** (`assets/vendor/chart.js/`): gráficas. La librería de gráficas sigue diferida hasta la rebanada 9.
 - Sin uso por ahora, y no pedidos como inactivos por el responsable: **simple-datatables** (sin biblioteca de tablas hasta la rebanada 4), **Boxicons**, **Remix Icon** y **php-email-form** (Pro, prohibido por la licencia gratuita).
 
+## 4 bis. Bibliotecas fuera de la plantilla
+
+Decisiones F2 y F3 del responsable (24/11/2026) y DAF-05, DAF-07 y DAF-08 del plan del front (`docs/reportes/front-plan-rebanadas.md`). Cada biblioteca se copia sin cambios de su paquete npm, después de verificar la integridad `sha512` del tarball contra el registro, en `backend/public/assets/vendor/{biblioteca}/`, junto con su licencia. Se carga solo en las vistas que la usan, con `@push('estilos')` y `@push('scripts')`. Sin CDN, sin jQuery y sin Node en el proyecto. La prueba `BibliotecasLocalesTest` fija el SHA-256 de cada archivo.
+
+| Biblioteca | Versión | Licencia | Integridad npm | Archivos (SHA-256) | Entra en | Vistas que la cargan |
+|---|---|---|---|---|---|---|
+| SweetAlert2 | 11.26.26 | MIT | `sha512-ihhDJ/0wA+jpuakxnD5CTBzhos96NVSnt7iHoIS6IaqHFwkQNQ2Q4BJwXeHARfsCvhVH4o1GMm80LZRWN9ST6g==` | `sweetalert2.min.js` (`f4bfbd11…ccd3`), `sweetalert2.min.css` (`a1173e56…1743`), `LICENSE` (`879aa33f…c4b4`) | FRONT-R2 | `modulos/contrasena/editar` |
+
+- **SweetAlert2:** se usan los archivos separados `.min.js` y `.min.css`, no la variante `all`, que inyecta estilos al ejecutarse (DAF-05). La 11.4.9 tenía código que dependía del idioma del navegador y del dominio; la 11.26.26 no contiene `location` (prueba FRONT-R2 9). Solo `backend/public/assets/js/comun/avisos.js` llama a `Swal` (prueba FRONT-R2 13).
+
 ## 5. Regla de no usar CDN
 
 - Las vistas y los scripts propios no cargan nada desde una red externa: ni CDN, ni Google Fonts, ni imágenes remotas. Todo recurso se sirve desde `/NiceAdmin/` o desde `/assets/`.
@@ -58,7 +68,7 @@ Se versionan por decisión del responsable, pero **ninguna vista los carga ni lo
 **Decisiones del responsable (18/11/2026)**
 1. **`main.js` se incluye sin modificar y se evita su fallo con un script propio.** En la línea 190, `main.js` llama a `tinymce.init({...})` sin comprobar que TinyMCE esté cargado; sin TinyMCE lanza `ReferenceError: tinymce is not defined` en cada página y no ejecuta lo que sigue (validación `.needs-validation` y redimensionado de ECharts). El script propio `backend/public/assets/js/tinymce-vacio.js` define `window.tinymce = { init: function () {} }` y se carga antes de `main.js`. Una prueba (`PT-12 19`) fija ese orden. Si algún día se activa TinyMCE, este script se retira.
 2. **La carpeta `forms/` no se copia.** Contiene `contact.php`, el formulario PHP de la versión Pro, que el servidor ejecutaría desde `public/`. Una prueba (`PT-12 18`) exige que no exista `forms/` ni ningún archivo `.php` en `public/NiceAdmin/`.
-3. **Estructura.** La plantilla vive en `backend/public/NiceAdmin/`; los scripts propios, en `backend/public/assets/js/`. No se mezcla código propio con archivos de la plantilla.
+3. **Estructura.** La plantilla vive en `backend/public/NiceAdmin/`; los scripts propios, en `backend/public/assets/js/`. No se mezcla código propio con archivos de la plantilla. Desde FRONT-R2 (orden del responsable del 24/11/2026, 14:15), los scripts comunes van en `assets/js/comun/` y los de cada módulo en `assets/js/modulos/{modulo}/`; las bibliotecas ajenas a la plantilla, en `assets/vendor/` (§4 bis).
 4. **`backend/public/NiceAdmin/LICENCIA.md`** enlaza la licencia oficial (`https://bootstrapmade.com/license/`), recuerda la obligación del pie y declara el uso: **académico, no comercial**.
 5. **Bootstrap.** Se usan los archivos de la plantilla, idénticos a los del paquete oficial de npm. Se añadió `assets/vendor/bootstrap/LICENSE` (MIT) del paquete oficial, que la plantilla no trae.
 

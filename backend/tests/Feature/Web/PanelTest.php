@@ -15,6 +15,9 @@ function usuarioDelPanel(TestCase $prueba): void
     $prueba->actingAs($usuario, 'web');
 }
 
+/** Rutas web propias que las páginas enlazan; no son activos (enmienda FRONT-R2). */
+const PAGINAS_PROPIAS = ['/panel', '/ingreso', '/contrasena'];
+
 /**
  * Direcciones de recursos y enlaces de una página, sin las rutas web propias ni el enlace del crédito de BootstrapMade.
  *
@@ -28,8 +31,7 @@ function direccionesDeActivos(string $html): array
         $direcciones[1],
         fn (string $direccion) => $direccion !== '/'
             && $direccion !== ENLACE_DEL_CREDITO
-            && ! str_starts_with($direccion, '/panel')
-            && ! str_starts_with($direccion, '/ingreso'),
+            && ! in_array(strtok($direccion, '?'), PAGINAS_PROPIAS, true),
     ));
 }
 
