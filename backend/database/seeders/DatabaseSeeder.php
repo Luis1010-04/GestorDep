@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call(TiposPruebaSeeder::class);
         $this->call(RangosMedicionesCorporalesSeeder::class);
 
-        if (! app()->environment('production')) {
+        // Solo desarrollo y pruebas (docs/arquitectura.md, tabla de seeders): lista blanca de entornos (A6-16). El seeder se
+        // sigue negando por su cuenta a correr con `production`.
+        if (app()->environment(['local', 'testing'])) {
             $this->call(UsuariosDemoSeeder::class);
         }
     }
