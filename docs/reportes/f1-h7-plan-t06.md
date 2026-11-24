@@ -1,7 +1,8 @@
 # F1-H7-T06: plan formal (AB-17, AB-20, AB-21, AB-26, AB-29 y AB-31)
 
-- **Rama:** `tecnico/f1-h7-t06`, desde `main` en `82b6119`.
-- **Especificación:** `docs/hitos/f1-h7.md` v0.6 (PR #35, en borrador; en `main` sigue la v0.5), §8 (T06).
+- **Rama:** `tecnico/f1-h7-t06`, rebasada sobre `main` en `ae680a7` (después de fusionar los PR #35 y #36).
+- **Especificación:** `docs/hitos/f1-h7.md` v0.6, §8 (T06). La v0.6 está en `main` desde la fusión del PR #35 (`43007bf`).
+- **Aprobación:** plan aprobado por el responsable el 24/11/2026 a las 09:31 (PR #37, punta `96f5508`).
 - **Decisiones del responsable:** DA-126 a DA-128 y la orden del 23/11/2026 a las 11:31, punto 4 (S1 a S4).
 - **Decisiones del agente:** las de este plan son DA-139 a DA-147; DA-134 a DA-138 son de las actividades 1.1 y 1.2. Todas están en `docs/reportes/f1-h7-decisiones-del-agente.md`.
 - **Encargo:** actividad 1.3 de la orden del 23/11/2026 a las 13:52.
@@ -218,7 +219,7 @@ La trazabilidad va en T09.
 
 ## 9. Verificación previa del entorno
 
-Es la comprobación de solo lectura de la actividad 1.3, paso 4. Se hizo el 23/11/2026 con el entorno que dejó T06c (`make levantar` del PR #36):
+Es la comprobación de solo lectura de la actividad 1.3, paso 4. Se hizo el 23/11/2026 con el entorno que dejó T06c (`make levantar` con el arreglo de T06c, que está en `main` desde la fusión del PR #36, `ae680a7`):
 
 | Qué | Resultado | Estado |
 |---|---|---|
