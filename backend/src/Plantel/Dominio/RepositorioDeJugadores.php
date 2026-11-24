@@ -35,4 +35,14 @@ interface RepositorioDeJugadores
 
     /** Solo para asignar (DD-31): el llamador nunca entrega el identificador al usuario. Matrícula ya recortada, sin distinguir mayúsculas. */
     public function buscarParaAsignar(string $matricula): ?JugadorParaAsignar;
+
+    /**
+     * Bloquea en modo compartido (FOR SHARE), en orden de id, las filas de los jugadores sin borrar y sin baja, y devuelve
+     * los pedidos que no lo están (baja: `estatus_deportivo`, como el alcance, DA-140). Se llama dentro de una transacción:
+     * el candado dura hasta que termina (DA-139).
+     *
+     * @param  non-empty-list<Identificador>  $jugadores
+     * @return list<Identificador>
+     */
+    public function bloquearActivos(array $jugadores): array;
 }
