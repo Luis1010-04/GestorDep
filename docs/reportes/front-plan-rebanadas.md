@@ -1,10 +1,25 @@
 # Plan de las rebanadas 2 a 9 del frontend
 
-**Rama:** `frontend/blade-niceadmin`, en `ae680a7`, que es `main` fusionada por avance rápido el 24/11/2026. **Orden:** del responsable, 24/11/2026, con las decisiones F1 a F4. **Estado:** propuesta. No se instaló ninguna biblioteca ni se escribió ninguna vista; eso va en las tareas siguientes, con este plan aprobado. Cada rebanada tendrá además su propio plan, con la ficha de módulo de `frontend/docs/CRITERIOS_ACEPTACION.md` §8, antes de construirse.
+**Rama:** `frontend/blade-niceadmin`, en `ae680a7`, que es `main` fusionada por avance rápido el 24/11/2026. **Orden:** del responsable, 24/11/2026, con las decisiones F1 a F4. **Estado:** aprobado el 24/11/2026 con los ajustes de §0. El plan original no instaló bibliotecas ni escribió vistas; R2 y R3 se construyen en tareas aparte. Cada rebanada tendrá además su propio plan, con la ficha de módulo de `frontend/docs/CRITERIOS_ACEPTACION.md` §8, antes de construirse.
 
 **Qué se leyó:** `frontend/docs/` (los cuatro documentos), `docs/reportes/front-diagnostico.md`, `docs/reportes/pt-12-reporte.md`, `docs/api/openapi.yaml` (77 rutas y los esquemas de `components`), `backend/routes/api.php` y `web.php`, `docs/decisiones/registro-decisiones.md` (DA-105, DA-122 y DA-131), `docs/hitos/f1-h6.md` §6.2 (gráficos), `docs/alcance-fases.md` §3 y §5, `backend/public/NiceAdmin/assets/js/main.js` y las vistas, scripts y pruebas de la rebanada 1. Versiones, licencias, pesos e integridad de las bibliotecas: registro de npm y jsDelivr, consultados el 24/11/2026, solo lectura.
 
 **Qué no se hizo:** no se leyeron los Resource ni los Request del backend uno por uno; lo exige la ficha de cada rebanada. Lo que es inferencia se marca como tal.
+
+---
+
+## 0. Aprobación del responsable (24/11/2026) y ajustes
+
+El responsable aprobó este plan con los ajustes siguientes. Donde el resto del documento diga otra cosa, manda esta sección.
+
+1. **Arquitectura:** se mantiene el monolito (opción A). Laravel sirve la API y las vistas, y front y back se separan por carpetas. El front solo modifica `backend/resources/views/`, `backend/routes/web.php`, `backend/public/NiceAdmin/`, `backend/public/assets/`, el controlador de páginas (`app/Http/Controllers/Web/PaginaController.php`) y sus pruebas web, `backend/lang/es/interfaz.php` y `frontend/docs/`. **Todas las páginas van en `PaginaController`**: los controladores por área que nombra §4 (`CuentaController`, `JugadoresController`, etc.) no se crean. Cualquier otro archivo de `backend/` es del agente de backend y se pide como petición.
+2. **Autorizaciones puntuales del responsable** (respuestas del 24/11/2026): se amplía la lista exacta de `tests/Feature/EntornoDePruebasTest.php` con las rutas web de cada rebanada, sin debilitarla; y el front puede modificar `docs/reportes/` (este plan, reportes, capturas y logs) y la sección «Rutas web» de `docs/trazabilidad.md`.
+3. **Aprobadas tal como se proponen:** DAF-03 (DataTables 3.1.6 sin jQuery), DAF-04 (ApexCharts 4.4.0), DAF-05 a DAF-08 y DAF-10 a DAF-16. DataTables entra desde R3.
+4. **DAF-09 cambia:** cada tabla ofrece «Descargar esta página» y «Descargar todo». La segunda pide todas las páginas a la API, con un tope de 1000 filas y una confirmación de SweetAlert2 que dice cuántas filas se van a descargar (§3.1).
+5. **DAF-17. F4 es una excepción del responsable a `docs/alcance-fases.md` §5:** se permite descargar en el navegador las tablas que la pantalla muestra; los reportes formales siguen en la Fase 2. La fila del registro de decisiones la agrega el backend.
+6. **PB-01 a PB-05** quedan en cola para el backend, después de la etiqueta `f1-h7`.
+7. **Entorno:** `worker` y `scheduler` van apagados en el override local del front (perfil `apagado`).
+8. **Autorizadas para implementar:** R2 y R3, con la prueba primero, después la vista y la comprobación en navegador con capturas; commits `FRONT-R2: …` y `FRONT-R3: …`. El PR #38 sigue en borrador y acumula el trabajo del front hasta que cierre H7. No se fusiona nada.
 
 ---
 
@@ -81,7 +96,7 @@
 - **Rutas sin paginar** (`/metricas`, `/tipos-prueba`, `/jugadores/{id}/alertas`, la vista de un periodo de pruebas físicas y `por_jugador` de la asistencia del equipo): modo cliente.
 - **Estados:** cargando (indicador de DataTables), vacío (texto propio) y error (texto en la tabla más el aviso de `avisos.js`) (CA-TAB-001).
 - **Descarga:** botones `excelHtml5` y `pdfHtml5`. Se exportan las columnas visibles, salvo las de acciones. El título es el de la pantalla con los filtros aplicados, y `messageTop` lleva página, total de registros (de `meta`) y la fecha en que se generó. El archivo se llama `{pantalla}-{AAAA-MM-DD}`.
-- **DAF-09: en modo servidor se descarga solo la página cargada**, que es lo que la pantalla ya obtuvo (F4), y el botón lo dice («Descargar esta página»). La alternativa B, pedir todas las páginas una tras otra al pulsar, sigue sin endpoints nuevos, pero multiplica las solicitudes contra `php -S`, que atiende una a la vez (D9). Requiere aprobación.
+- **DAF-09 (ajustada por el responsable el 24/11/2026): cada tabla ofrece «Descargar esta página» y «Descargar todo»**, cada una en Excel y PDF. «Esta página» exporta las filas que la tabla ya muestra. «Todo» pide a la API las páginas una tras otra, con `por_pagina=100` y los mismos filtros y orden, hasta un tope de 1000 filas. Antes pide confirmación con SweetAlert2, que dice cuántas filas se descargarán y, si hay más de 1000, que se descargan las primeras 1000 del total. En las tablas sin paginar, «todo» exporta las filas ya cargadas, con la misma confirmación y el mismo tope.
 - **DAF-16: sin descarga en las tablas de salud** (avisos, lesiones, estados y sus historiales) mientras el responsable no lo confirme. Son datos sensibles con visibilidad por registrante (RN-15, DD-58), y un archivo descargado sale de ese control. El resto de las tablas descargables se lista en cada rebanada.
 
 ---
@@ -329,26 +344,27 @@ Nota: la convocatoria va sin datos del jugador por decisión (DA-29); no se pide
 
 ## 9. Decisiones del front (DAF)
 
-Numeración propia del front. «Tomada» quiere decir aplicada en esta tarea; «propuesta», pendiente de aprobación con este plan.
+Numeración propia del front. Estados al 24/11/2026, tras la aprobación de §0.
 
 | N.º | Decisión | Estado |
 |---|---|---|
-| DAF-01 | Entorno aparte: carpeta `..\GestorDep-front`, proyecto `gestordep-front` (también en `COMPOSE_PROJECT_NAME` del `.env` local, para que `make` no toque el del backend), imagen `gestordep-front-app` (la del backend, `gestordep-app`, no se vuelve a etiquetar), web en `127.0.0.1:8001` y base sin publicar. `docker-compose.override.yml` y los `.env` son locales y no se versionan | Tomada |
+| DAF-01 | Entorno aparte: carpeta `..\GestorDep-front`, proyecto `gestordep-front` (también en `COMPOSE_PROJECT_NAME` del `.env` local, para que `make` no toque el del backend), imagen `gestordep-front-app` (la del backend, `gestordep-app`, no se vuelve a etiquetar), web en `127.0.0.1:8001` y base sin publicar; `worker` y `scheduler` apagados por orden del responsable. `docker-compose.override.yml` y los `.env` son locales y no se versionan | Tomada |
 | DAF-02 | La fusión de `main` en la rama del front fue por avance rápido: la rama no tenía commits propios (0 por delante, 65 por detrás). No se forzó un commit de fusión | Tomada |
-| DAF-03 | DataTables 3.1.6 sin jQuery (§1) | Propuesta |
-| DAF-04 | ApexCharts 4.4.0 de la plantilla (MIT), sin actualizar a una versión con la «ApexCharts License»; se añade su `LICENSE` | Propuesta |
-| DAF-05 | SweetAlert2 11.26.26 en archivos separados (`.min.js` y `.min.css`), no la variante `all`, que inyecta estilos al ejecutarse | Propuesta |
-| DAF-06 | pdfmake 0.3.15, con 0.2.x como respaldo si la comprobación de §2.3 falla | Propuesta |
-| DAF-07 | Bibliotecas en `backend/public/assets/vendor/`, con su licencia, integridad npm verificada y SHA-256 fijado en prueba, y cargadas solo en las vistas que las usan | Propuesta |
-| DAF-08 | Cada biblioteca entra con su primer consumidor: SweetAlert2 en R2; DataTables, Buttons, JSZip y pdfmake en R3; ApexCharts en R9 | Propuesta |
-| DAF-09 | Tablas paginadas en modo servidor; la descarga es la de la página cargada | Propuesta |
-| DAF-10 | Menú, pestañas y acciones por rol en el cliente (`data-roles` y `hidden`); rutas web solo con `auth:web` | Propuesta |
-| DAF-11 | Textos de bibliotecas y gráficas en `lang/es/interfaz.php`, sin archivos de idioma remotos | Propuesta |
-| DAF-12 | Clases prohibidas por `main.js` (§3), con una prueba que lo revisa | Propuesta |
-| DAF-13 | Decimales y fechas tal como llegan; conversión a número solo para dibujar | Propuesta |
-| DAF-14 | Orden y partición de §7 | Propuesta |
-| DAF-15 | Evidencia: Pest, prueba de contrato de vistas y navegador con capturas archivadas (§5) | Propuesta |
-| DAF-16 | Sin descarga en las tablas de salud hasta que el responsable lo confirme | Propuesta |
+| DAF-03 | DataTables 3.1.6 sin jQuery (§1) | Aprobada |
+| DAF-04 | ApexCharts 4.4.0 de la plantilla (MIT), sin actualizar a una versión con la «ApexCharts License»; se añade su `LICENSE` | Aprobada |
+| DAF-05 | SweetAlert2 11.26.26 en archivos separados (`.min.js` y `.min.css`), no la variante `all`, que inyecta estilos al ejecutarse | Aprobada |
+| DAF-06 | pdfmake 0.3.15, con 0.2.x como respaldo si la comprobación de §2.3 falla | Aprobada |
+| DAF-07 | Bibliotecas en `backend/public/assets/vendor/`, con su licencia, integridad npm verificada y SHA-256 fijado en prueba, y cargadas solo en las vistas que las usan | Aprobada |
+| DAF-08 | Cada biblioteca entra con su primer consumidor: SweetAlert2 en R2; DataTables, Buttons, JSZip y pdfmake en R3; ApexCharts en R9 | Aprobada |
+| DAF-09 | Tablas paginadas en modo servidor; cada tabla ofrece «Descargar esta página» y «Descargar todo» (tope de 1000 filas, con confirmación que dice cuántas) | Aprobada con el ajuste de §0.4 |
+| DAF-10 | Menú, pestañas y acciones por rol en el cliente (`data-roles` y `hidden`); rutas web solo con `auth:web` | Aprobada |
+| DAF-11 | Textos de bibliotecas y gráficas en `lang/es/interfaz.php`, sin archivos de idioma remotos | Aprobada |
+| DAF-12 | Clases prohibidas por `main.js` (§3), con una prueba que lo revisa | Aprobada |
+| DAF-13 | Decimales y fechas tal como llegan; conversión a número solo para dibujar | Aprobada |
+| DAF-14 | Orden y partición de §7 | Aprobada |
+| DAF-15 | Evidencia: Pest, prueba de contrato de vistas y navegador con capturas archivadas (§5) | Aprobada |
+| DAF-16 | Sin descarga en las tablas de salud hasta que el responsable lo confirme | Aprobada |
+| DAF-17 | F4 es una excepción del responsable a `docs/alcance-fases.md` §5; la fila del registro la agrega el backend | Decisión del responsable |
 
 ## 10. Qué necesita aprobación
 
