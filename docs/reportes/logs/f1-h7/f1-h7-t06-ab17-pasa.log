@@ -1,0 +1,80 @@
+inicio: 2026-11-24T15:37:36Z; base: 18fd2e9 con la corrección de AB-17 sin commitear
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Seguridad\AccesoConcurrenteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAB-17: dos intentos fallidos simultáneos cuentan dos[39m[90m                [39m [90m3.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-17: un fallo que llega con la cuenta recién bloqueada por otro i[39m[90m…[39m [90m0.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Identidad\CerrarSesionYContrasenaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-27: cerrar sesión invalida la cookie[39m[90m                             [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-27: cerrar sesión sin sesión responde 401[39m[90m                        [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-27: cambiar la contraseña sin sesión responde 401[39m[90m                [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: una contraseña nueva de 9 caracteres se rechaza con contras[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: una contraseña nueva de 10 caracteres se acepta[39m[90m             [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-27: una contraseña actual incorrecta responde 422 sin más detall[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-27: un cuerpo sin contraseña actual o sin contraseña nueva respo[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-27: un cuerpo sin contraseña actual o sin contraseña nueva respo[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-27: el cambio correcto conserva la sesión actual, cierra la otra[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-27: no se tocan las sesiones de otro usuario al cambiar la contr[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-27: las respuestas de DELETE /sesion y PUT /contrasena cumplen e[39m[90m…[39m [90m0.96s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Identidad\ControlDeRolTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un docente recibe 403 en una función de entrenador[39m[90m           [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un usuario con los dos roles accede a ambas[39m[90m                  [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un entrenador recibe 403 en una función de docente[39m[90m           [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: varios usuarios con sesión propia en una misma prueba conser[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: rol con varios roles deja pasar a quien tenga cualquiera de[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: sin sesión el control de rol responde 401[39m[90m                    [39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Identidad\IniciarSesionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-01: credenciales válidas devuelven el usuario y regeneran la ses[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: contraseña incorrecta de un usuario existente responde 401 y[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un correo inexistente responde lo mismo que una contraseña i[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un usuario desactivado con la contraseña correcta responde l[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: el correo no distingue mayúsculas[39m[90m                            [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: la quinta contraseña incorrecta responde 401 y bloquea 15 m[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: la contraseña correcta con la cuenta bloqueada responde 429[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: un intento a los 14 min 59 s del bloqueo responde 429[39m[90m       [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: un intento correcto a los 15 min 00 s del bloqueo responde[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: cuatro fallos y un acierto reinician el contador[39m[90m            [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-10: con el bloqueo vencido, un nuevo fallo reinicia el contador[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un cuerpo sin correo o sin contraseña responde 422 with data[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un cuerpo sin correo o sin contraseña responde 422 with data[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: una sesión inactiva 119 minutos sigue vigente[39m[90m                [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: una sesión inactiva 121 minutos responde 401[39m[90m                 [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: las respuestas 200, 401 y 429 de POST /sesion cumplen el con[39m[90m…[39m [90m0.85s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Identidad\IniciarSesionTiempoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-14: un correo inexistente genera un hash de la contraseña recibi[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-14: un usuario desactivado genera un hash de la contraseña recib[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-14: una contraseña incorrecta compara una vez con el hash del us[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-14: la respuesta de un correo inexistente es idéntica a la de un[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-14: una cuenta bloqueada responde 429 sin generar hash ni compar[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Identidad\OrigenNoPermitidoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-11: POST /sesion sin Origin ni Referer responde 403 origen_no_pe[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-11: POST /sesion con un Origin que no es de un dominio con estad[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-11: el 403 de origen no cuenta un intento fallido ni consulta cr[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-11: sin Origin ni Referer y con cuerpo inválido responde 422 val[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-11: POST /sesion con Referer permitido y sin Origin sigue respon[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-11: POST /sesion con un Origin permitido no cambia su respuesta[39m[90m… [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-11: el 403 de POST /sesion cumple el contrato de OpenAPI[39m[90m         [39m [90m0.78s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Identidad\VerSesionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-10: GET /sesion con sesión devuelve la misma forma de datos que[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-10: GET /sesion sin sesión responde 401 no_autenticado[39m[90m           [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-10: GET /sesion tras cerrar la sesión responde 401 no_autenticad[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-10: un usuario con borrado lógico y sesión viva recibe 401 no_au[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-10: VerSesion no devuelve usuario sin identificador ni con borra[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-10: las respuestas 200 y 401 de GET /sesion cumplen el contrato[39m[90m  [39m [90m0.80s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-13: un usuario desactivado con sesión viva recibe 401 no_autenti[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-13: un usuario desactivado con sesión viva recibe 401 en una rut[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-13: un usuario desactivado con sesión viva recibe 401 y no 403 e[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-13: un usuario activo conserva su sesión en GET /sesion y en una[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-13: GET /panel con la sesión de un usuario desactivado redirige[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-13: VerSesion no devuelve al usuario desactivado[39m[90m                 [39m [90m0.18s[39m  
+
+  [90mTests:[39m    [32;1m59 passed[39;22m[90m (215 assertions)[39m
+  [90mDuration:[39m [39m20.97s[39m
+
+codigo de salida: 0

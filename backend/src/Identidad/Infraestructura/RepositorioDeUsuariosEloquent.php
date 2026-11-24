@@ -82,6 +82,21 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
         ]);
     }
 
+    public function modificarAccesoConCandado(Identificador $id, callable $cambio): void
+    {
+        $this->conexion->transaction(function () use ($id, $cambio): void {
+            $usuario = $this->reconstituir(
+                $this->conexion->table('usuarios')->where('id', $id->valor())->whereNull('eliminado_en')->lockForUpdate()->first(),
+            );
+            if ($usuario === null) {
+                return;
+            }
+
+            $cambio($usuario);
+            $this->guardarAcceso($usuario);
+        });
+    }
+
     public function guardarContrasena(Usuario $usuario): void
     {
         $this->historial->registrar(

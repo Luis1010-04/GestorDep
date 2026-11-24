@@ -1,0 +1,11 @@
+inicio: 2026-11-24T15:36:32Z; base: 18fd2e9 con el ayudante sin commitear
+== 1) bloqueo real: el guion toma pg_advisory_xact_lock(424242); otra sesión pide el mismo candado
+la otra sesión obtuvo el candado tras 0.008 s
+salida del guion:
+LISTO
+ESPERA=1
+== 2) control: nadie espera; el guion debe agotar el máximo (1 s) y decir ESPERA=0
+LISTO
+ESPERA=0
+duración: 1059 ms
+codigo de salida: 0

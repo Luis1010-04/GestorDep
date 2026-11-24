@@ -21,7 +21,8 @@ final class IniciarSesion
     /**
      * @throws CredencialesInvalidas usuario inexistente, desactivado o contraseña incorrecta; en los dos primeros casos
      *                               se genera un hash de la contraseña para igualar el tiempo de respuesta
-     * @throws CuentaBloqueada la cuenta está bloqueada; no se revisa la contraseña ni se cuenta el intento
+     * @throws CuentaBloqueada la cuenta está bloqueada; no se revisa la contraseña ni se cuenta el intento. También si
+     *                         otro intento simultáneo la bloqueó mientras se revisaba la contraseña (DA-126)
      */
     public function ejecutar(string $correo, string $contrasena): Usuario
     {
@@ -40,8 +41,14 @@ final class IniciarSesion
         }
 
         if (! $this->hasher->check($contrasena, $usuario->contrasenaHash())) {
-            $usuario->registrarIntentoFallido($ahora, $this->intentosMaximos, $this->minutosDeBloqueo);
-            $this->usuarios->guardarAcceso($usuario);
+            // El hash se compara fuera del candado; el fallo se cuenta con la fila bloqueada (AB-17).
+            $this->usuarios->modificarAccesoConCandado($usuario->id(), function (Usuario $actual) use ($ahora): void {
+                $hasta = $actual->bloqueadoHasta();
+                if ($hasta !== null && $actual->estaBloqueado($ahora)) {
+                    throw new CuentaBloqueada($hasta->getTimestamp() - $ahora->getTimestamp());
+                }
+                $actual->registrarIntentoFallido($ahora, $this->intentosMaximos, $this->minutosDeBloqueo);
+            });
 
             throw new CredencialesInvalidas;
         }
