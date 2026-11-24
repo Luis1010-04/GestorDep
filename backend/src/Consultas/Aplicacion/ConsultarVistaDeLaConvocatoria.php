@@ -16,6 +16,12 @@ final class ConsultarVistaDeLaConvocatoria
         private readonly ConstructorDeLaVista $constructor,
     ) {}
 
+    /** Si el partido existe y es de un equipo que el usuario entrena: el 404 va antes que el 422 (A6-10, DD-50). */
+    public function puedeVer(Identificador $partido): bool
+    {
+        return $this->consulta->convocatoriaDelPartido($partido, 1, 1) !== null;
+    }
+
     /** @return array{elementos: list<VistaParaConvocar>, total: int}|null */
     public function ejecutar(Identificador $partido, int $pagina, int $porPagina): ?array
     {

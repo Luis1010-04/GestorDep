@@ -17,6 +17,12 @@ final class ConsultarVistaParaConvocar
         private readonly ConstructorDeLaVista $constructor,
     ) {}
 
+    /** Si el jugador está en el alcance del usuario como entrenador y sin baja: el 404 va antes que el 422 (A6-10, DD-50). */
+    public function puedeVer(Identificador $jugador): bool
+    {
+        return $this->consulta->jugador($jugador) !== null;
+    }
+
     public function ejecutar(Identificador $jugador, ?Identificador $equipo = null): ?VistaParaConvocar
     {
         $datos = $this->consulta->jugador($jugador);

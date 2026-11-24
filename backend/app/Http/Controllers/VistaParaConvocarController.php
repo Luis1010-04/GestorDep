@@ -27,6 +27,10 @@ class VistaParaConvocarController extends Controller
      */
     public function delJugador(Request $solicitud, string $jugador, ConsultarVistaParaConvocar $consultar): JsonResponse
     {
+        // El 404 va antes que el 422 (A6-10, DD-50).
+        if (! $consultar->puedeVer(IdentificadorDeRuta::desde($jugador))) {
+            throw new NotFoundHttpException;
+        }
         $datos = $solicitud->validate([
             'filtro' => ['array'],
             'filtro.equipo_id' => [FiltroInvalido::uuid()],
@@ -48,6 +52,10 @@ class VistaParaConvocarController extends Controller
      */
     public function delPartido(Request $solicitud, string $partido, ConsultarVistaDeLaConvocatoria $consultar): ColeccionPaginada
     {
+        // El 404 va antes que el 422 (A6-10, DD-50).
+        if (! $consultar->puedeVer(IdentificadorDeRuta::desde($partido))) {
+            throw new NotFoundHttpException;
+        }
         $datos = $solicitud->validate([
             'pagina' => ['integer', 'min:1'],
             'por_pagina' => ['integer', 'min:1', 'max:100'],
@@ -68,6 +76,10 @@ class VistaParaConvocarController extends Controller
     /** Un equipo que el usuario no entrena, inexistente o con un id que no es UUID v7 responde 404. */
     public function delEquipo(Request $solicitud, string $equipo, ListarJugadoresParaConvocar $listar): ColeccionPaginada
     {
+        // El 404 va antes que el 422 (A6-10, DD-50).
+        if (! $listar->puedeVer(IdentificadorDeRuta::desde($equipo))) {
+            throw new NotFoundHttpException;
+        }
         $datos = $solicitud->validate([
             'pagina' => ['integer', 'min:1'],
             'por_pagina' => ['integer', 'min:1', 'max:100'],

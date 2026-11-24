@@ -6352,6 +6352,7 @@ paths:
         (RN-14) y el porcentaje de asistencia del equipo por mes. Con filtro[jugador_id] llega tambien jugador, con las mismas
         dos series para ese jugador en ese equipo. Un equipo que el usuario no entrena, o un jugador que no es del equipo, no
         esta en su alcance, esta en baja o no existe, responde el mismo 404.
+        Un equipo que el usuario no entrena responde el 404 antes de validar filtro[jugador_id] (A6-10).
       tags: [Consultas]
       parameters:
         - name: equipo
@@ -6408,6 +6409,7 @@ paths:
         el, el de la evaluacion mas reciente del usuario para el jugador (DA-119). Cada dimension lleva actualizado_en y
         posiblemente_desactualizado (RNF-04, DA-98). Un jugador fuera del alcance, en baja o inexistente, y un equipo que el
         usuario no entrena o donde el jugador no esta, responden el mismo 404 (RNF-01, RN-23).
+        Un jugador fuera del alcance responde el 404 antes de validar filtro[equipo_id] (A6-10).
       tags: [Consultas]
       parameters:
         - name: jugador
@@ -6462,7 +6464,8 @@ paths:
         GET /jugadores/{jugador}/vista-para-convocar, con el rendimiento de ese equipo. Ordenada de mayor a menor por el
         promedio de la ultima evaluacion del usuario (DA-106); los jugadores sin promedio van al final y los empates
         conservan el orden de entrada: apellidos, nombres e identificador (DA-118). El orden se calcula sobre todos los
-        jugadores y despues se pagina. Un equipo que el usuario no entrena o que no existe responde 404.
+        jugadores y despues se pagina.
+        Un equipo que el usuario no entrena o que no existe responde 404, antes de validar pagina y por_pagina (A6-10).
       tags: [Consultas]
       parameters:
         - name: equipo
@@ -6536,7 +6539,7 @@ paths:
         la convocatoria: GET /partidos/{partido}/convocatoria no cambia. Los convocados van en orden de convocatoria y la
         lista pagina como esa ruta. Tiene la misma visibilidad que ella: un convocado dado de baja, o sin membresia vigente
         en ningun equipo del usuario, se omite de datos y de meta.total, sin 404. Un partido inexistente, eliminado o de un
-        equipo que el usuario no entrena responde 404.
+        equipo que el usuario no entrena responde 404, antes de validar pagina y por_pagina (A6-10).
       tags: [Consultas]
       parameters:
         - name: partido

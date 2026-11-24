@@ -17,6 +17,12 @@ final class ListarJugadoresParaConvocar
         private readonly CalculadorDeDesempeno $calculador,
     ) {}
 
+    /** Si el usuario entrena el equipo: el 404 va antes que el 422 (A6-10, DD-50). */
+    public function puedeVer(Identificador $equipo): bool
+    {
+        return $this->consulta->jugadoresDelEquipo($equipo) !== null;
+    }
+
     /** @return array{elementos: list<VistaParaConvocar>, total: int}|null nulo si el usuario no entrena el equipo (404) */
     public function ejecutar(Identificador $equipo, int $pagina, int $porPagina): ?array
     {
