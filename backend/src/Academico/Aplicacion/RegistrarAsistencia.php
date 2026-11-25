@@ -7,6 +7,7 @@ use LogicException;
 use Src\Academico\Dominio\AsistenciaDeClase;
 use Src\Academico\Dominio\EstadoDeAsistencia;
 use Src\Academico\Dominio\RepositorioDeAsistencias;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\PublicadorDeEventos;
 use Src\Compartido\Dominio\Eventos\AsistenciaDeClaseRegistrada;
 use Src\Compartido\Dominio\HoyDeNegocio;
@@ -28,6 +29,7 @@ final class RegistrarAsistencia
         private readonly PublicadorDeEventos $eventos,
         private readonly HoyDeNegocio $hoyDeNegocio,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /** @throws JugadorEnBajaSinCaptura|AsistenciaDuplicada */
@@ -45,7 +47,12 @@ final class RegistrarAsistencia
             $estado,
             Instante::truncadoASegundos($this->reloj->ahora()),
         );
-        $this->asistencias->guardarNueva($asistencia);
+        // Con la fila del jugador bloqueada: una baja simultánea se serializa con la captura (AB-26).
+        $this->candado->conJugadoresActivos(
+            [$inscripcion->jugadorId],
+            fn (): JugadorEnBajaSinCaptura => new JugadorEnBajaSinCaptura,
+            fn () => $this->asistencias->guardarNueva($asistencia),
+        );
         $this->eventos->publicar(new AsistenciaDeClaseRegistrada($inscripcion->id->valor(), $inscripcion->materiaId->valor(), $inscripcion->jugadorId->valor()));
 
         return $this->consulta->buscar($asistencia->id()) ?? throw new LogicException('asistencia_inexistente_tras_guardar');

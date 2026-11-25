@@ -4098,7 +4098,9 @@ paths:
       description: >-
         Solo entrenadores del equipo del partido (HU-12). Uno ajeno, inexistente o con un UUID que no es v7 responde
         el mismo 404, antes que el 422. Pasa por AlcanceDeJugadores sin bajas: un jugador dado de baja no aparece
-        (HU-29 criterio 3). Sin datos del jugador (DA-29); en orden de convocatoria.
+        (HU-29 criterio 3). Sin datos del jugador (DA-29); en orden de convocatoria: por fecha de creacion (creado_en) y
+        despues por id. Dos convocatorias creadas en el mismo milisegundo salen por id, que dentro de ese milisegundo no
+        sigue necesariamente el orden de creacion: el UUID v7 solo ordena hasta el milisegundo.
       tags: [Convocatoria]
       parameters:
         - name: partido
@@ -6183,7 +6185,9 @@ paths:
         las ven los entrenadores del equipo de la alerta, sin importar cual de ellos registro los datos con que se
         calculo (DA-90, DA-102); el entrenador de otro equipo del jugador y el docente no las ven (RN-14, DD-08), y no
         hay error: la lista simplemente no las incluye. Un jugador fuera del alcance, dado de baja (RN-23), inexistente
-        o con un id que no es un UUID v7 responde el mismo 404.
+        o con un id que no es un UUID v7 responde el mismo 404. Las alertas salen por fecha de creacion (activada_en) y
+        despues por id. Dos alertas creadas en el mismo milisegundo salen por id, que dentro de ese milisegundo no sigue
+        necesariamente el orden de creacion: el UUID v7 solo ordena hasta el milisegundo.
       tags: [Alertas]
       parameters:
         - name: jugador
@@ -6230,7 +6234,8 @@ paths:
         Docente o entrenador (HU-23). Solo jugadores en su alcance y nunca uno dado de baja (RN-23), ordenados por
         apellidos, nombres e identificador. Una forma por rol (DA-105): todos reciben jugador, estado_oficial (el mismo
         objeto de GET /jugadores/{jugador}/estado-disponibilidad, con lesion_id solo para el registrante), aviso_pendiente y
-        las alertas que pueden ver; el entrenador recibe ademas resumen_academico (RN-13), y el docente, materias con el
+        las alertas que pueden ver, en el orden de GET /jugadores/{jugador}/alertas: por fecha de creacion (activada_en) y
+        despues por id, con la misma limitacion del UUID v7 dentro de un mismo milisegundo; el entrenador recibe ademas resumen_academico (RN-13), y el docente, materias con el
         detalle de las suyas del periodo vigente. Un campo que el usuario no puede ver se omite. aviso_pendiente es
         verdadero para los entrenadores del jugador y para quien creo el aviso (RN-16, DA-108). Los filtros se combinan con
         AND; filtro[equipo_id] y filtro[materia_id] solo aciertan con equipos que el usuario entrena y materias que da, y
@@ -6536,8 +6541,9 @@ paths:
       description: >-
         Solo entrenadores del equipo del partido (HU-12 c2, DA-96). Cada elemento es la misma vista de
         GET /jugadores/{jugador}/vista-para-convocar, con el rendimiento y el progreso del equipo del partido, y sin campos de
-        la convocatoria: GET /partidos/{partido}/convocatoria no cambia. Los convocados van en orden de convocatoria y la
-        lista pagina como esa ruta. Tiene la misma visibilidad que ella: un convocado dado de baja, o sin membresia vigente
+        la convocatoria: GET /partidos/{partido}/convocatoria no cambia. Los convocados van en orden de convocatoria, por
+        fecha de creacion (creado_en) y despues por id, con la misma limitacion del UUID v7 dentro de un mismo milisegundo,
+        y la lista pagina como esa ruta. Tiene la misma visibilidad que ella: un convocado dado de baja, o sin membresia vigente
         en ningun equipo del usuario, se omite de datos y de meta.total, sin 404. Un partido inexistente, eliminado o de un
         equipo que el usuario no entrena responde 404, antes de validar pagina y por_pagina (A6-10).
       tags: [Consultas]

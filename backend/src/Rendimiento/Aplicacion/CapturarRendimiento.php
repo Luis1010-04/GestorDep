@@ -3,6 +3,7 @@
 namespace Src\Rendimiento\Aplicacion;
 
 use InvalidArgumentException;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\PosicionEnEquipo;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
@@ -33,6 +34,7 @@ final class CapturarRendimiento
         private readonly Reloj $reloj,
         private readonly Transaccion $transaccion,
         private readonly RecalcularEvaluacion $recalcular,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /**
@@ -69,6 +71,8 @@ final class CapturarRendimiento
             Instante::truncadoASegundos($this->reloj->ahora()),
         );
         $this->transaccion->ejecutar(function () use ($rendimiento, $jugador, $partido, $registrante, $posicion): void {
+            // Bloquea la fila del jugador hasta el final de la transacción: una baja simultánea se serializa (AB-31).
+            $this->candado->conJugadoresActivos([$jugador], fn (): RecursoNoEncontrado => new RecursoNoEncontrado, fn (): null => null);
             $this->rendimientos->guardarNuevo($rendimiento);
             $this->recalcular->ejecutar($jugador, $partido->equipoId, $registrante, $posicion);
         });

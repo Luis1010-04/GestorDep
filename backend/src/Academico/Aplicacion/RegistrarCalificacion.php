@@ -9,6 +9,7 @@ use Src\Academico\Dominio\EscalaDeCalificaciones;
 use Src\Academico\Dominio\RepositorioDeCalificaciones;
 use Src\Academico\Dominio\RepositorioDeCriterios;
 use Src\Academico\Dominio\TipoDeCalificacion;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\PublicadorDeEventos;
 use Src\Compartido\Dominio\Eventos\CalificacionRegistrada;
 use Src\Compartido\Dominio\HoyDeNegocio;
@@ -32,6 +33,7 @@ final class RegistrarCalificacion
         private readonly PublicadorDeEventos $eventos,
         private readonly HoyDeNegocio $hoyDeNegocio,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /** @throws CalificacionFueraDeRango|JugadorEnBajaSinCaptura|CalificacionDuplicada */
@@ -61,7 +63,12 @@ final class RegistrarCalificacion
             $fecha ?? $this->hoyDeNegocio->hoy(),
             Instante::truncadoASegundos($this->reloj->ahora()),
         );
-        $this->calificaciones->guardarNueva($calificacion);
+        // Con la fila del jugador bloqueada: una baja simultánea se serializa con la captura (AB-26).
+        $this->candado->conJugadoresActivos(
+            [$inscripcion->jugadorId],
+            fn (): JugadorEnBajaSinCaptura => new JugadorEnBajaSinCaptura,
+            fn () => $this->calificaciones->guardarNueva($calificacion),
+        );
         $this->eventos->publicar(new CalificacionRegistrada($inscripcion->id->valor(), $inscripcion->materiaId->valor(), $inscripcion->jugadorId->valor()));
 
         return $this->consulta->buscar($calificacion->id()) ?? throw new LogicException('calificacion_inexistente_tras_guardar');

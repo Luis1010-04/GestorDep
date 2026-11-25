@@ -2,6 +2,7 @@
 
 namespace Src\Salud\Aplicacion;
 
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\HoyDeNegocio;
 use Src\Compartido\Dominio\Identificador;
@@ -31,6 +32,7 @@ final class CambiarEstado
         private readonly UsuarioActual $usuarioActual,
         private readonly Reloj $reloj,
         private readonly HoyDeNegocio $hoyDeNegocio,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /** @throws RecursoNoEncontrado|SinLesionVigente|NoEsRegistrante|JugadorEnBajaSinCambioDeEstado|FechaAnteriorAlInicio|EstadoEnElMismoInstante|EstadoConcurrente */
@@ -44,6 +46,12 @@ final class CambiarEstado
             if (! $this->visibilidad->esVisible($jugadorId, incluirBajas: false)) {
                 throw new JugadorEnBajaSinCambioDeEstado;
             }
+            // Bloquea la fila del jugador hasta el final de la transacción: una baja simultánea se serializa (AB-29).
+            $this->candado->conJugadoresActivos(
+                [$jugadorId],
+                fn (): JugadorEnBajaSinCambioDeEstado => new JugadorEnBajaSinCambioDeEstado,
+                fn (): null => null,
+            );
             if ($fechaEstimadaRegreso !== null) {
                 $this->comprobarFecha($vigente, $fechaEstimadaRegreso);
             }

@@ -20,6 +20,15 @@ interface RepositorioDeUsuarios
     /** Guarda solo `intentos_fallidos` y `bloqueado_hasta`; no escribe historial (DD-33). */
     public function guardarAcceso(Usuario $usuario): void;
 
+    /**
+     * Relee al usuario con su fila bloqueada, le aplica `$cambio` y guarda como `guardarAcceso`, todo en una transacción:
+     * dos intentos simultáneos no pisan el contador (AB-17). Si `$cambio` lanza, no se guarda nada. Un usuario que ya no
+     * existe no se toca.
+     *
+     * @param  callable(Usuario): void  $cambio
+     */
+    public function modificarAccesoConCandado(Identificador $id, callable $cambio): void;
+
     /** Guarda el usuario, sus roles y su fila de historial en una sola transacción. */
     public function guardarNuevo(Usuario $usuario): void;
 

@@ -1,0 +1,347 @@
+inicio: 2026-11-24T16:03:23Z; base: 60948df con la corrección de AB-26 sin commitear
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Seguridad\BajaConcurrenteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAB-20: una asignación concurrente con la baja responde 409 jugador_[39m[90m…[39m [90m3.82s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una inscripción concurrente con la baja responde 409 jugador[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una calificación concurrente con la baja responde 409 y no s[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: la corrección de una calificación concurrente con la baja re[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una asistencia a clase concurrente con la baja responde 409[39m[90m… [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: la corrección de una asistencia a clase concurrente con la b[39m[90m…[39m [90m0.39s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\AlcanceDelDocenteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-02 (§7.4 fila 1): D1 lista a J1 y J3, no a J2, J4 ni J5 (en baja[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-13 (§7.4 fila 2): D1 consulta a J3 y sus equipos salen vacíos[39m[90m    [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.4 filas 3 y 4): D1 consulta a J2 y a J4 y recibe un 404[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-30 (§7.4 fila 5): D1 consulta a J5 en baja y recibe 200 con esta[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20 (§7.4 fila 6): D1 busca por matrícula a J4 y recibe exactamen[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02 (§7.4 fila 7): D2 lista a J2 y J3[39m[90m                             [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.4 fila 8): J3 inscrito en dos materias de D1 sale una ve[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.4 fila 9): DE con el equipo ED (J4) y la materia M3 (J1)[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un jugador que DE ve por las dos ramas (equipo ED y materia[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02 (§7.4 fila 10): A lista solo a los de sus equipos, sin cambio[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01 (§7.4 fila 11): D1 recibe 403 al crear equipo, categoría y ju[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01 (§7.4 fila 12): A recibe 403 en materias, periodos y asignatu[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.4 fila 13): el filtro por equipo no amplía el alcance de[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.4 fila 14): las lecturas de jugadores siguen pasando por[39m[90m…[39m [90m3.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: una inscripción eliminada o una materia eliminada ya no oto[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un docente sin ninguna inscripción recibe una lista vacía c[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un usuario sin los roles docente ni entrenador no ve a nadi[39m[90m…[39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\AsignaturasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 1): un docente crea MAT-101 Matemáticas grado 1[39m[90m    [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 2): repetir la clave con otras mayúsculas o espaci[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 3): un grado de 0, 13, texto o decimal da 422 con[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 3): un grado de 0, 13, texto o decimal da 422 con[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 3): un grado de 0, 13, texto o decimal da 422 con[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 3): un grado de 0, 13, texto o decimal da 422 con[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 3): un grado de 0, 13, texto o decimal da 422 con[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: los grados 1 y 12 son válidos[39m[90m                                [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 4): clave de más de 20, nombre vacío o de más de 1[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 4): clave de más de 20, nombre vacío o de más de 1[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 4): clave de más de 20, nombre vacío o de más de 1[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 4): clave de más de 20, nombre vacío o de más de 1[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: una clave de 20 y un nombre de 150 caracteres son válidos[39m[90m    [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 5): el listado va ordenado por clave y paginado[39m[90m    [39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 6): borrar da 204, se puede crear la misma clave y[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: borrar una asignatura inexistente, ya eliminada o con id que[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 7): un entrenador sin el rol docente recibe 403 en[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.2 fila 8): sin sesión las tres rutas responden 401[39m[90m        [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: si otra petición ganó la carrera por la misma clave, el índi[39m[90m…[39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\AsistenciasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 1): D1 registra presente el 2026-03-09 en I1, con[39m[90m… [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 2): un estado inválido o una fecha con formato inv[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 2): un estado inválido o una fecha con formato inv[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 2): un estado inválido o una fecha con formato inv[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 2): un estado inválido o una fecha con formato inv[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 2): un estado inválido o una fecha con formato inv[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 3): la misma inscripción y fecha otra vez da 409 a[39m[90m…[39m [90m0.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 4): PATCH a falta_justificada responde 200 y escri[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 5): PATCH con el mismo estado responde 200 sin his[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 6): PATCH con otro campo (fecha) da 422 prohibited[39m[90m…[39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-50 (§7.8 fila 7): D2 sobre I1 o sus asistencias recibe un 404 id[39m[90m…[39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01 (§7.8 fila 8): un entrenador sin el rol docente recibe 403 en[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-52 (§7.8 fila 9): la asistencia de I5 (J5 en baja) da 409 jugado[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.8 fila 10): el listado de I1 va por -fecha, solo de I1 y[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-55 (§7.8 fila 11): sin fecha se usa hoy de negocio; una fecha fu[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02 (§7.8 fila 12): si falla el historial al capturar no queda l[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02 (§7.11 fila 16): si falla el historial al corregir el estado[39m[90m…[39m [90m2.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: sin sesión las rutas de asistencias responden 401[39m[90m            [39m [90m1.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-05 (§7.10 fila 8): con 7 presentes, 1 falta justificada y 2 falt[39m[90m…[39m [90m0.80s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-05: corregir una falta a falta justificada recalcula el porcenta[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07: dos capturas simultáneas de la misma fecha: el índice único[39m[90m… [39m [90m0.25s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\CalificacionesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 1): D1 captura el parcial 1 de I1 con 8.50; fecha[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 2): final con número, parcial sin número o número[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 2): final con número, parcial sin número o número[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 2): final con número, parcial sin número o número[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 2): final con número, parcial sin número o número[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 2): final con número, parcial sin número o número[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 2): final con número, parcial sin número o número[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 2): final con número, parcial sin número o número[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 2): final con número, parcial sin número o número[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 3): 10.01 y -0.01 dan 422 calificacion_fuera_de_ra[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 3): 10.01 y -0.01 dan 422 calificacion_fuera_de_ra[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-01 (§7.7 fila 4): los límites 0, 0.00, 10 y 10.00 se aceptan[39m[90m     [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.7 fila 5): "abc", vacío, "8.555" o el número JSON 8.5 dan[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.7 fila 5): "abc", vacío, "8.555" o el número JSON 8.5 dan[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.7 fila 5): "abc", vacío, "8.555" o el número JSON 8.5 dan[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.7 fila 5): "abc", vacío, "8.555" o el número JSON 8.5 dan[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.7 fila 5): "abc", vacío, "8.555" o el número JSON 8.5 dan[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.7 fila 5): "abc", vacío, "8.555" o el número JSON 8.5 dan[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.7 fila 5): "abc", vacío, "8.555" o el número JSON 8.5 dan[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.7 fila 5): "abc", vacío, "8.555" o el número JSON 8.5 dan[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 6): repetir el tipo y número de parcial, o una seg[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 7): PATCH con 9.00 responde 200 y escribe actualiz[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 8): PATCH con el mismo valor responde 200 sin hist[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 9): PATCH con 10.01 da calificacion_fuera_de_rango[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-50 (§7.7 fila 10): D2 sobre I1 o una calificación de I1 recibe u[39m[90m…[39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01 (§7.7 fila 11): un entrenador sin el rol docente recibe 403 e[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-52 (§7.7 fila 12): calificar a I5 (J5 en baja) da 409 jugador_en[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.7 fila 13): el listado de I1 trae los parciales por númer[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-47 (§7.7 fila 14): con criterio propio 6.00 se captura y, al sub[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-55 (§7.7 fila 15): una fecha explícita se respeta, sin ella es h[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02 (§7.7 fila 16): si falla el historial al capturar no queda l[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02 (§7.11 fila 16): si falla el historial al corregir el valor[39m[90m… [39m [90m2.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01 (§7.7 fila 17): sin sesión las rutas de calificaciones respon[39m[90m…[39m [90m2.00s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.10 fila 2): D1 captura la final 8.00 de J1 y el resumen q[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.10 filas 3 y 4): D1 corrige la final a 7.20 (en_observaci[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.10 fila 7): J3 con final 9.00 en M1 (D1) y 6.00 en M2 (D2[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07: dos capturas simultáneas de la misma calificación: el índice[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\ContratoDeAcademicoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-06: las respuestas de materias cumplen el contrato[39m[90m               [39m [90m1.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06: las respuestas de inscripciones cumplen el contrato[39m[90m          [39m [90m1.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07: las respuestas de calificaciones cumplen el contrato[39m[90m         [39m [90m1.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07: las respuestas de asistencias cumplen el contrato[39m[90m            [39m [90m1.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-09: las respuestas de la situación académica cumplen el contrato[39m[90m [39m [90m1.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: las respuestas de asignaturas cumplen el contrato[39m[90m            [39m [90m0.91s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: las respuestas de periodos escolares cumplen el contrato[39m[90m     [39m [90m1.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\CriterioPorMateriaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 1): sin criterio propio, la materia muestra el gen[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 2): D1 define 6.00, queda ámbito materia con histo[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 3): un segundo PUT cierra el anterior y crea el nu[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 4): un PUT con el mismo valor vigente responde 200[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 5): 10.01 y -0.01 dan 422 calificacion_fuera_de_ra[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 6): un número JSON, vacío, "abc" o "6.555" da 422[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 6): un número JSON, vacío, "abc" o "6.555" da 422[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 6): un número JSON, vacío, "abc" o "6.555" da 422[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 6): un número JSON, vacío, "abc" o "6.555" da 422[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 6): un número JSON, vacío, "abc" o "6.555" da 422[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 6): un número JSON, vacío, "abc" o "6.555" da 422[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 6): un número JSON, vacío, "abc" o "6.555" da 422[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08 (§7.6 fila 6): un número JSON, vacío, "abc" o "6.555" da 422[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.6 fila 7): D1 define el criterio de M2 (de D2) y recibe[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01 (§7.6 fila 8): un entrenador sin el rol docente recibe 403 al[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-46 (§7.6 fila 9): al confirmarse el PUT se publica CriterioDeMat[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02 (§7.6 fila 10): si falla el historial no queda criterio nuev[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-08: GET /materias muestra el criterio propio de cada materia y e[39m[90m…[39m [90m2.00s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.10 fila 5): un criterio propio de 8.00 con final 7.50 dej[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.10 fila 6): un criterio propio de 6.00 con final 6.50 dej[39m[90m…[39m [90m0.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\EscrituraDeUsuarioConDosRolesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-10: DE no edita el expediente de J1 (solo lo enseña) y sí el de[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-10: DE no da de baja a J1 (solo lo enseña) y sí a J4 (de su equi[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-10: DE no cambia la posición de J1 en ED, donde no tiene membres[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-10 / RN-20: DE asigna a J1 a su equipo ED por matrícula y la res[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-10: escribir sobre un jugador que DE solo enseña da un 404 byte[39m[90m… [39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-10: un docente puro no escribe sobre ningún jugador de plantel ([39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-10: el entrenador A sigue editando y dando de baja a J1, de su e[39m[90m…[39m [90m0.30s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\HistorialAcademicoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1: el historial de una calificación muestra autor (con nombr[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1: el historial de una asistencia a clase muestra autor (con[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 1): D1 ve el historial de F solo de sus materia[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 2, DA-124): un docente sin ninguna materia con[39m[90m… [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 3): E1 recibe lo mismo que en la ruta de lectur[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 11, DA-124): E3, entrenador sin rol docente y s[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (DA-124): un usuario con los dos roles que entrena a F per[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 12): sin sesión, las dos rutas responden 401[39m[90m    [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2: una calificación con borrado lógico no aparece en la lect[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26: el historial académico cumple el contrato de OpenAPI (200, 4[39m[90m…[39m [90m1.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-17: el historial de un jugador en baja sigue visible para el doc[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1: un cambio hecho sin sesión entrega [39m[37mautor[39m[90m nulo[39m[90m             [39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\InscripcionesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 1): D1 inscribe a J4 por matrícula, queda el histo[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-37 (§7.5 fila 2): la matrícula con otras mayúsculas o espacios r[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 3): una matrícula sin expediente da 404 jugador_no[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 4): inscribir a quien ya está inscrito da 409 juga[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-52 (§7.5 fila 5): inscribir a un jugador en baja da 409 jugador_[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.5 fila 6): D1 inscribe en M2 (de D2) y recibe un 404 idé[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01 (§7.5 fila 7): un entrenador sin el rol docente recibe 403 en[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 8): GET inscripciones lista J1 y J3 por apellidos[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.5 fila 9): D1 inscribe al mismo jugador en una segunda m[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14 (§7.5 fila 10): tras inscribir a J4, su detalle para D1 no tr[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 11): matrícula ausente, vacía, de solo espacios o[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 11): matrícula ausente, vacía, de solo espacios o[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 11): matrícula ausente, vacía, de solo espacios o[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 11): matrícula ausente, vacía, de solo espacios o[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.5 fila 11): matrícula ausente, vacía, de solo espacios o[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06: una matrícula de 30 caracteres se acepta y se busca (404 si[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01 (§7.5 fila 12): sin sesión las rutas de inscripciones respond[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.10 fila 23): al inscribir a J4 se publica JugadorInscrito[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.10 fila 23): con el despachador real, el resumen de J4 ap[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial no queda la inscripción ni se publica[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: una inscripción eliminada no se lista ni otorga alcance, y[39m[90m… [39m [90m2.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\MateriasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 1): D1 crea una materia para S2 y P1 y queda como[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 2): repetir asignatura y periodo da 409 materia_du[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 3): otro docente crea la misma asignatura y period[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 4): una asignatura o un periodo inexistente o elim[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 5): un campo faltante o un UUID mal formado da 422[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 5): un campo faltante o un UUID mal formado da 422[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 5): un campo faltante o un UUID mal formado da 422[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 5): un campo faltante o un UUID mal formado da 422[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 5): un campo faltante o un UUID mal formado da 422[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 6): GET /materias solo muestra las de D1 y filtra[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02 (§7.3 fila 7): D1 consulta M2 (de D2) y recibe un 404 idénti[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06: el dueño consulta su materia con el criterio general[39m[90m         [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 8): si se elimina la asignatura (y el periodo) de[39m[90m… [39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 9): un entrenador sin el rol docente recibe 403 en[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-06 (§7.3 fila 10): sin sesión las tres rutas responden 401[39m[90m       [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial no queda la materia (misma transacció[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-01: sin criterio general sembrado, consultar una materia respond[39m[90m…[39m [90m1.95s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\PeriodosEscolaresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 1): un docente crea un periodo futuro, no vigente,[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 2): un periodo que contiene hoy se crea vigente[39m[90m    [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 3): repetir el nombre con otras mayúsculas o espac[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 4): una fecha_fin igual o anterior a fecha_inicio[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 5): un campo faltante o una fecha con formato invá[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 5): un campo faltante o una fecha con formato invá[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 5): un campo faltante o una fecha con formato invá[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 5): un campo faltante o una fecha con formato invá[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 5): un campo faltante o una fecha con formato invá[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 5): un campo faltante o una fecha con formato invá[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 6): el listado va por -fecha_inicio y solo el peri[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: el listado admite orden ascendente, paginación y rechaza par[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-45 (§7.1 fila 7): con dos periodos que contienen hoy, solo el de[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-45: los extremos del rango cuentan como vigentes y sin periodo q[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-45: un periodo eliminado no puede ser el vigente[39m[90m                 [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 8): borrar P0 da 204, deja de listarse y una mater[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 9): tras borrar un periodo se puede crear otro con[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 10): borrar un id inexistente, ya eliminado o que[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-49 (§7.1 fila 11): un entrenador sin el rol docente recibe 403 e[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-49 (§7.1 fila 12): un usuario con los roles docente y entrenador[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 13): sin sesión las tres rutas responden 401[39m[90m       [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: si otra petición ganó la carrera por el mismo nombre, el índ[39m[90m…[39m [90m0.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\RecalculoDelResumenTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.10 fila 1, caso de uso): J1 inscrito sin calificaciones t[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.10 fila 2): con la final 8.00 el promedio es 8.00 y sin_r[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-02: la final prevalece sobre los parciales y sin final se promed[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.10 fila 7): el riesgo de J3 es único por jugador con cali[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.10 filas 5 y 6): el criterio propio vigente decide si la[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-05 (§7.10 fila 8): 7 presentes, 1 falta justificada y 2 faltas d[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: las calificaciones y las inscripciones eliminadas no cuenta[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-45 (§7.10 fila 15, caso de uso): sin periodo vigente no se calcu[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-45 (§7.10 fila 16): al cambiar el día vigente, resumenes:concili[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-09 (§7.10 fila 17): resumenes:conciliar dos veces da el mismo re[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-09 (§7.10 fila 18): una fila borrada de resumenes_academicos se[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.10 fila 19): el mismo evento procesado dos veces deja una[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.10 fila 22): calculado_en es el instante del reloj trunca[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-09 (§7.10 fila 24): resumenes:conciliar está programado a las 02[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mCONSOLA (§7.12 fila 8): resumenes:conciliar sin datos de H2 sale co[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-09: sin el parámetro riesgo_academico el recálculo falla y no e[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07: el escucha recalcula al jugador de cada evento y, ante un cr[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90marquitectura §11: el escucha va en cola, después del commit, y los[39m[90m… [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90marquitectura §11: el publicador despacha después del commit y nada[39m[90m… [39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Academico\SituacionAcademicaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-09 (§7.10 fila 1): A consulta a J1 inscrito sin calificaciones:[39m[90m… [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.10 fila 2): D1 captura la final 8.00 de J1 y A ve 8.00, s[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-07 (§7.10 filas 3 y 4): D1 corrige la final a 7.20 (en_observaci[39m[90m…[39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.10 fila 5): con final 7.50, un criterio propio de 8.00 de[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-03 (§7.10 fila 6): con final 6.50, un criterio propio de 6.00 de[39m[90m…[39m [90m0.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-04 (§7.10 fila 7): J3 con 9.00 en M1 (D1) y 6.00 en M2 (D2): 7.5[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-05 (§7.10 fila 8): J1 con 7 presentes, 1 falta justificada y 2 f[39m[90m…[39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-13 (§7.10 fila 9): la respuesta del entrenador no contiene mater[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-48 (§7.10 fila 10): D1 consulta a J3 y recibe el resumen con amb[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-48: la materia del docente sin calificaciones sale con calificac[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-02: la calificación de la materia del docente es la media de los[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-15: las materias del docente son solo las del periodo vigente[39m[90m    [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.10 fila 11): D2 consulta a J1, no inscrito en sus materi[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.10 fila 12): D1 consulta a J2 y recibe 404[39m[90m               [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.10 fila 13): A consulta a J2 (no es suyo) y un id inexis[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14 (§7.10 fila 14): DE ve de J1 el resumen y M3 (como docente) y[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-45 (§7.10 fila 15): sin periodo vigente, A recibe 200 con period[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-45 (§7.10 fila 16): con P2 vigente y resumenes:conciliar, la sit[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-52 (§7.10 fila 20): J5 en baja, inscrito y con calificaciones pr[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51 (§7.10 fila 21): promedio y porcentaje de asistencia son cade[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04 (§7.10 fila 22): calculado_en es el instante del reloj trunc[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-09: con periodo vigente y sin fila de resumen, responde el perio[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: sin sesión la situación académica responde 401[39m[90m               [39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\AlcanceDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la lista de usos autorizados sin alcance es exactamente la[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: el detector marca consultas de jugadores sin alcance y deja[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un archivo exento no se revisa[39m[90m                              [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: ninguna consulta de jugadores en src ni app evita AlcanceDe[39m[90m…[39m [90m8.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la implementación del alcance existe donde la lista la espe[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\ArquitecturaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: existen los contextos con sus capas[39m[90m                      [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: cada contexto tiene su proveedor de servicios registrado[39m[90m [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: el dominio no depende del framework[39m[90m                     [39m [90m14.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Compartido no depende de su infraestruc[39m[90m…[39m [90m0.72s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Compartido no importa el dominio de otro contexto[39m[90m        [39m [90m2.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Identidad no depende de su infraestruct[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Identidad no importa el dominio de otro contexto[39m[90m         [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Plantel no depende de su infraestructur[39m[90m…[39m [90m0.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Plantel no importa el dominio de otro contexto[39m[90m           [39m [90m0.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Academico no depende de su infraestruct[39m[90m…[39m [90m1.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Academico no importa el dominio de otro contexto[39m[90m         [39m [90m1.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Competencia no depende de su infraestru[39m[90m…[39m [90m1.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Competencia no importa el dominio de otro contexto[39m[90m       [39m [90m1.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Rendimiento no depende de su infraestru[39m[90m…[39m [90m0.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Rendimiento no importa el dominio de otro contexto[39m[90m       [39m [90m0.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de CondicionFisica no depende de su infrae[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: CondicionFisica no importa el dominio de otro contexto[39m[90m   [39m [90m0.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Salud no depende de su infraestructura[39m[90m  [39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Salud no importa el dominio de otro contexto[39m[90m             [39m [90m0.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Alertas no depende de su infraestructur[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Alertas no importa el dominio de otro contexto[39m[90m           [39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Consultas no depende de su infraestruct[39m[90m…[39m [90m1.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Consultas no importa el dominio de otro contexto[39m[90m         [39m [90m0.81s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\BorradoLogicoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: la lista de tablas del framework permitidas es exactamen[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: el detector marca borrados de negocio y deja pasar las t[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: ningun codigo de src ni app borra fisicamente tablas de[39m[90m… [39m [90m3.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\CompetenciaSinPlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T03: el detector encuentra importaciones de Plantel y tablas[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T03: Competencia no importa Plantel ni lee sus tablas[39m[90m         [39m [90m2.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\CompetenciaSinSaludTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T04: el detector encuentra importaciones de Salud y tablas de[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T04: Competencia no importa Salud ni lee sus tablas[39m[90m           [39m [90m2.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\DecimalesEnDominioTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el detector reconoce float y las funciones de redondeo, y d[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el dominio no usa float ni round, floor, ceil ni number_for[39m[90m…[39m [90m0.98s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el dominio no usa round, floor, ceil ni number_format (arch[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\LocalizadorDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el detector encuentra los archivos que nombran el localizado[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: solo la declaración, el adaptador, su enlace y el caso de us[39m[90m…[39m [90m2.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el puerto devuelve solo el identificador y si el jugador est[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el adaptador del localizador no consulta la tabla de jugador[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\RendimientoSinPlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T02: el detector encuentra importaciones de Plantel y tablas[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T02: Rendimiento no importa Plantel ni lee sus tablas[39m[90m         [39m [90m2.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\TextosEnLangTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T09: el detector reconoce texto visible y deja pasar codigos[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T09: ningun texto visible esta escrito fuera de lang/es[39m[90m       [39m [90m2.28s[39m  
+
+  [90mTests:[39m    [32;1m294 passed[39;22m[90m (2435 assertions)[39m
+  [90mDuration:[39m [39m169.87s[39m
+
+codigo de salida: 0

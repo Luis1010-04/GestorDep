@@ -1,0 +1,35 @@
+inicio: 2026-11-24T20:14:30Z; base: 3678f44 (las seis correcciones de T06 commiteadas); lote 1
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 1: AB-17 y AB-21 (Identidad) 
+=== control antes: 5 passed (22 assertions)
+=== 1.01 el fallo se cuenta sin bloquear la fila del usuario (src/Identidad/Infraestructura/RepositorioDeUsuariosEloquent.php)
+pruebas (tests/Feature/Seguridad/AccesoConcurrenteTest.php --filter="AB-17"): 2 failed (3 assertions)
+  falla: AB-17: dos intentos fallidos simultáneos cuentan dos
+  falla: AB-17: un fallo que llega con la cuenta recién bloqueada por otro i…
+MUERE
+restaurado: src/Identidad/Infraestructura/RepositorioDeUsuariosEloquent.php idéntico al original
+=== 1.02 sin la regla de DA-126: un fallo con la cuenta recién bloqueada se cuenta (src/Identidad/Aplicacion/IniciarSesion.php)
+pruebas (tests/Feature/Seguridad/AccesoConcurrenteTest.php --filter="AB-17"): 1 failed, 1 passed (4 assertions)
+  falla: AB-17: un fallo que llega con la cuenta recién bloqueada por otro i…
+MUERE
+restaurado: src/Identidad/Aplicacion/IniciarSesion.php idéntico al original
+=== 1.03 bloqueado_hasta con fracción de segundo (src/Identidad/Aplicacion/IniciarSesion.php)
+pruebas (tests/Feature/Identidad/RelojDeUsuariosTest.php --filter="AB-21"): 1 failed, 2 passed (14 assertions)
+  falla: AB-21: bloqueado_hasta sale de Reloj, truncado a segundos
+MUERE
+restaurado: src/Identidad/Aplicacion/IniciarSesion.php idéntico al original
+=== 1.04 actualizado_en de la contraseña desde el reloj de la base (src/Identidad/Infraestructura/RepositorioDeUsuariosEloquent.php)
+pruebas (tests/Feature/Identidad/RelojDeUsuariosTest.php --filter="AB-21"): 1 failed, 2 passed (13 assertions)
+  falla: AB-21: usuarios.actualizado_en sale de Reloj al cambiar la contrase…
+MUERE
+restaurado: src/Identidad/Infraestructura/RepositorioDeUsuariosEloquent.php idéntico al original
+=== 1.05 creado_en de usuarios:crear desde el reloj de la base (src/Identidad/Infraestructura/RepositorioDeUsuariosEloquent.php)
+pruebas (tests/Feature/Identidad/RelojDeUsuariosTest.php --filter="AB-21"): 1 failed, 2 passed (13 assertions)
+  falla: AB-21: usuarios:crear escribe creado_en y actualizado_en desde Relo…
+MUERE
+restaurado: src/Identidad/Infraestructura/RepositorioDeUsuariosEloquent.php idéntico al original
+=== control después: 5 passed (22 assertions)
+=== resultado: mueren 5 (1.01, 1.02, 1.03, 1.04, 1.05); sobreviven 0 ()
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory
+codigo de salida: 0

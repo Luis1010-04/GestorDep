@@ -1,0 +1,24 @@
+inicio: 2026-11-25T04:55:23Z; punta: 1d59453 (tecnico/f1-h7-t07), con el arnés sin commit
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 1: desempate por id de las alertas y de la convocatoria 
+=== control antes: 2 passed (11 assertions)
+=== 8.01 las alertas con el mismo activada_en se desempatan por id descendente (src/Consultas/Infraestructura/ConsultaDeAlertasSql.php)
+pruebas (tests/Feature/Alertas/OrdenDeAlertasTest.php --filter="Orden"): 1 failed (4 assertions)
+  falla: Orden: con el mismo activada_en, las alertas salen por id
+MUERE
+restaurado: src/Consultas/Infraestructura/ConsultaDeAlertasSql.php idéntico al original
+=== 8.02 GET /partidos/{partido}/convocatoria desempata por id descendente (src/Competencia/Infraestructura/ConsultaDeConvocatoriaSql.php)
+pruebas (tests/Feature/Competencia/OrdenDeConvocatoriaTest.php --filter="Orden"): 1 failed (3 assertions)
+  falla: Orden: con el mismo creado_en, la convocatoria sale por id
+MUERE
+restaurado: src/Competencia/Infraestructura/ConsultaDeConvocatoriaSql.php idéntico al original
+=== 8.03 GET /partidos/{partido}/convocatoria/vista desempata por id descendente (src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php)
+pruebas (tests/Feature/Competencia/OrdenDeConvocatoriaTest.php --filter="Orden"): 1 failed (6 assertions)
+  falla: Orden: con el mismo creado_en, la convocatoria sale por id
+MUERE
+restaurado: src/Consultas/Infraestructura/ConsultaDeVistaParaConvocarSql.php idéntico al original
+=== control después: 2 passed (11 assertions)
+=== resultado: mueren 3 (8.01, 8.02, 8.03); sobreviven 0 ()
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory
+codigo de salida: 0; fin: 2026-11-25T04:56:27Z

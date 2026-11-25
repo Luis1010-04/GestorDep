@@ -3,6 +3,7 @@
 namespace Src\Competencia\Aplicacion;
 
 use InvalidArgumentException;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Dominio\Identificador;
 use Src\Compartido\Dominio\Instante;
 use Src\Compartido\Dominio\Reloj;
@@ -24,6 +25,7 @@ final class DefinirAlineacion
         private readonly BuscarPartidoDelEntrenador $buscarPartido,
         private readonly VisibilidadDeJugador $visibilidad,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /**
@@ -42,9 +44,11 @@ final class DefinirAlineacion
         }
 
         $alineados = [];
+        $jugadoresAlineados = [];
         foreach ($alineacion as $indice => $entrada) {
             $convocatoria = $convocados[strtolower($entrada['jugador_id'])] ?? throw $this->noConvocado($entrada['jugador_id'], $indice);
             $alineados[$convocatoria->id()->valor()] = ['posicion' => $this->posicion($entrada['posicion_id']), 'rol' => $entrada['rol_alineacion']];
+            $jugadoresAlineados[] = $convocatoria->jugadorId();
         }
 
         $instante = Instante::truncadoASegundos($this->reloj->ahora());
@@ -55,7 +59,12 @@ final class DefinirAlineacion
                 $cambios[] = ['anterior' => $convocatoria, 'nueva' => $convocatoria->conAlineacion($destino['posicion'], $destino['rol'], $instante)];
             }
         }
-        $this->convocatorias->actualizarAlineacion($cambios);
+        // Bloquea solo a los jugadores a los que la alineación da un rol (DA-146): una baja simultánea se serializa (AB-31).
+        $this->candado->conJugadoresActivos(
+            $jugadoresAlineados,
+            fn (): RecursoNoEncontrado => new RecursoNoEncontrado,
+            fn () => $this->convocatorias->actualizarAlineacion($cambios),
+        );
 
         return $this->consulta->todasDelPartido($partidoId);
     }
