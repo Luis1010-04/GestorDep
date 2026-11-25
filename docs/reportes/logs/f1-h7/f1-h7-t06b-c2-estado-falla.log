@@ -1,0 +1,65 @@
+inicio: 2026-11-25T04:24:38Z; base: 35c93a5 con las pruebas de c2 en H5 (sin código de producción)
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Salud\HistorialDeSaludTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de avisos entrega fecha, valor anter[39m[90m…[39m [90m6.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (§7.2 fila 4, DA-125): el historial de un aviso confirmado[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de lesiones entrega fecha, valor ant[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de estados entrega fecha, valor ante[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-125: el historial de estados no incluye lesion_id para quien no[39m[90m… [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 4): E1 ve el historial de la lesión que registr[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 5): E2 recibe 200 sin la lesión registrada por[39m[90m… [39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 6): D1 recibe en el historial de lesiones lo mi[39m[90m…[39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 8): D1 ve en el historial de avisos solo el avi[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 9, D-2): E2 no recibe las entradas de un aviso[39m[90m… [39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 10): E1, E2 y D1 reciben 200 en el historial de[39m[90m…[39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-15: el historial de una lesión solo lo ve quien la registró[39m[90m      [39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mD-2: el historial de un aviso no se entrega a quien ve el aviso per[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-30: una lesión sin fecha_alta aparece en el historial[39m[90m            [39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mD-2 y DA-25: quien confirmó un aviso y solo da clase al jugador no[39m[90m… [39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-125: un estado apto sin lesión no incluye lesion_id[39m[90m              [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26: el historial de salud cumple el contrato de OpenAPI (200, 40[39m[90m…[39m [90m1.98s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2 (DA-18): un aviso con borrado lógico no aparece en la lect[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2 (DA-18): una lesión con borrado lógico no aparece en la le[39m[90m…[39m [90m0.40s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mHU-26 c2 (DA-18): un estado con borrado lógico no aparece en la lec[39m[90m…[39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CondicionFisica\HistorialDeCondicionFisicaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de mediciones entrega fecha, valor a[39m[90m…[39m [90m0.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de pruebas físicas entrega fecha, va[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 7): E2 no recibe las mediciones de F registrada[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: el segundo entrenador no ve en el historial las mediciones n[39m[90m…[39m [90m0.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (§7.2 fila 2): una medición corregida con motivo lleva el[39m[90m… [39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26: el historial de condición física cumple el contrato de OpenA[39m[90m…[39m [90m1.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2 (DA-18): una medición con borrado lógico no aparece en la[39m[90m… [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2 (DA-18): una prueba física con borrado lógico no aparece e[39m[90m…[39m [90m0.45s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Salud\HistorialDeSaludTest[22m [90m>[39m HU-26 c2 (DA-18): un e…   
+[39;1m  Failed asserting that an array has a key 'estado' with the value 'lesionado'.
+Failed asserting that two strings are equal.
+  [39;22m[31m-'apto'[39m[39;1m
+  [39;22m[32m+'lesionado'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Salud/HistorialDeSaludTest.php[39m:[32m419[39m
+    415▕ 
+    416▕     $lectura = sesionesPeticion($this, 'GET', estadoRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk()->json('datos');
+    417▕     $historial = historialDeSaludDatos($this, $m['f1'], 'estados-disponibilidad', 'e1@x.com');
+    418▕ 
+  ➜ 419▕     expect($lectura)->toMatchArray(['estado' => 'apto', 'es_implicito' => true])
+    420▕         ->and($historial)->toHaveCount(1)
+    421▕         ->and($historial[0])->toMatchArray(['entidad_id' => $estado, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
+    422▕     historialDeSaludSinCamposDeDa18($historial);
+    423▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Salud/HistorialDeSaludTest.php[39;22m:[39;1m419[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m32 passed[39;22m[90m (725 assertions)[39m
+  [90mDuration:[39m [39m27.96s[39m
+
+codigo de salida: 1

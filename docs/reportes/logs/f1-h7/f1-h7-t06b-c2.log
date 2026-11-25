@@ -1,0 +1,42 @@
+inicio: 2026-11-25T04:25:48Z; base: 35c93a5 con las pruebas de c2 de avisos, lesiones, mediciones y pruebas (sin código de producción; la de estados se retiró, ver f1-h7-t06b-c2-estado-falla.log)
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Salud\HistorialDeSaludTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de avisos entrega fecha, valor anter[39m[90m…[39m [90m7.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (§7.2 fila 4, DA-125): el historial de un aviso confirmado[39m[90m…[39m [90m1.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de lesiones entrega fecha, valor ant[39m[90m…[39m [90m1.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de estados entrega fecha, valor ante[39m[90m…[39m [90m1.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-125: el historial de estados no incluye lesion_id para quien no[39m[90m… [39m [90m1.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 4): E1 ve el historial de la lesión que registr[39m[90m…[39m [90m1.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 5): E2 recibe 200 sin la lesión registrada por[39m[90m… [39m [90m1.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 6): D1 recibe en el historial de lesiones lo mi[39m[90m…[39m [90m1.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 8): D1 ve en el historial de avisos solo el avi[39m[90m…[39m [90m1.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 9, D-2): E2 no recibe las entradas de un aviso[39m[90m… [39m [90m1.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 10): E1, E2 y D1 reciben 200 en el historial de[39m[90m…[39m [90m1.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-15: el historial de una lesión solo lo ve quien la registró[39m[90m      [39m [90m1.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mD-2: el historial de un aviso no se entrega a quien ve el aviso per[39m[90m…[39m [90m1.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-30: una lesión sin fecha_alta aparece en el historial[39m[90m            [39m [90m1.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m1.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m1.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m1.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mD-2 y DA-25: quien confirmó un aviso y solo da clase al jugador no[39m[90m… [39m [90m1.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-125: un estado apto sin lesión no incluye lesion_id[39m[90m              [39m [90m1.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26: el historial de salud cumple el contrato de OpenAPI (200, 40[39m[90m…[39m [90m2.97s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2 (DA-18): un aviso con borrado lógico no aparece en la lect[39m[90m…[39m [90m0.71s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2 (DA-18): una lesión con borrado lógico no aparece en la le[39m[90m…[39m [90m1.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CondicionFisica\HistorialDeCondicionFisicaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de mediciones entrega fecha, valor a[39m[90m…[39m [90m1.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de pruebas físicas entrega fecha, va[39m[90m…[39m [90m1.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 7): E2 no recibe las mediciones de F registrada[39m[90m…[39m [90m0.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: el segundo entrenador no ve en el historial las mediciones n[39m[90m…[39m [90m1.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (§7.2 fila 2): una medición corregida con motivo lleva el[39m[90m… [39m [90m0.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26: el historial de condición física cumple el contrato de OpenA[39m[90m…[39m [90m2.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2 (DA-18): una medición con borrado lógico no aparece en la[39m[90m… [39m [90m0.91s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c2 (DA-18): una prueba física con borrado lógico no aparece e[39m[90m…[39m [90m0.96s[39m  
+
+  [90mTests:[39m    [32;1m32 passed[39;22m[90m (719 assertions)[39m
+  [90mDuration:[39m [39m47.17s[39m
+
+codigo de salida: 0
