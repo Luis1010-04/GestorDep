@@ -15,8 +15,8 @@ function usuarioDelPanel(TestCase $prueba): void
     $prueba->actingAs($usuario, 'web');
 }
 
-/** Rutas web propias que las páginas enlazan; no son activos (enmienda FRONT-R2). */
-const PAGINAS_PROPIAS = ['/panel', '/ingreso', '/contrasena'];
+/** Rutas web propias que las páginas enlazan; no son activos (enmiendas FRONT-R2 y FRONT-R3). */
+const PAGINAS_PROPIAS = ['/panel', '/ingreso', '/contrasena', '/jugadores'];
 
 /**
  * Direcciones de recursos y enlaces de una página, sin las rutas web propias ni el enlace del crédito de BootstrapMade.
@@ -87,7 +87,7 @@ test('PT-12 7: las páginas cargan activos solo desde /assets/ o /NiceAdmin/ y t
     }
 });
 
-test('PT-12 8: el menú del panel solo contiene «Panel» y ningún enlace a pantallas no construidas', function () {
+test('PT-12 8: el menú lateral contiene exactamente los ítems aprobados y ningún enlace a pantallas no construidas (enmienda FRONT-R3: «Jugadores»)', function () {
     /** @var TestCase $this */
     usuarioDelPanel($this);
     $html = (string) $this->get('/panel')->getContent();
@@ -95,8 +95,8 @@ test('PT-12 8: el menú del panel solo contiene «Panel» y ningún enlace a pan
     preg_match('/<aside id="sidebar".*?<\/aside>/s', $html, $menu);
     preg_match_all('/<a\b[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/s', $menu[0] ?? '', $enlaces);
 
-    expect($enlaces[1])->toBe(['/panel'])
-        ->and(trim(strip_tags($enlaces[2][0])))->toBe(__('interfaz.menu.panel'));
+    expect($enlaces[1])->toBe(['/panel', '/jugadores'])
+        ->and(array_map(fn (string $texto) => trim(strip_tags($texto)), $enlaces[2]))->toBe([__('interfaz.menu.panel'), __('interfaz.menu.jugadores')]);
 });
 
 test('PT-12 9: el panel no contiene tarjetas, tablas, lienzos de gráfica ni cifras', function () {

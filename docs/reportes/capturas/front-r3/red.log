@@ -1,0 +1,97 @@
+8. [GET] http://localhost:8001/sanctum/csrf-cookie => [204] No Content
+9. [POST] http://localhost:8001/api/v1/sesion => [200] OK
+21. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+48. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+49. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+50. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+51. [GET] http://localhost:8001/api/v1/jugadores?orden=apellidos&pagina=1&por_pagina=15 => [200] OK
+52. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=1&por_pagina=15 => [200] OK
+53. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=1&por_pagina=100 => [200] OK
+54. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=2&por_pagina=100 => [200] OK
+55. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a20f39-fb8c-7360-bbea-b10af70f5467&orden=-apellidos&pagina=1&por_pagina=100 => [200] OK
+56. [POST] http://localhost:8001/_boost/browser-logs => [200] OK
+83. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+84. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+85. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+86. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a20f39-fb8c-7360-bbea-b10af70f5467&pagina=1&por_pagina=15 => [200] OK
+87. [GET] http://localhost:8001/assets/js/comun/tabla.js => [200] OK
+114. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+115. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+116. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+117. [GET] http://localhost:8001/assets/js/comun/tabla.js => [200] OK
+118. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a20f39-fb8c-7360-bbea-b10af70f5467&pagina=1&por_pagina=15 => [200] OK
+119. [GET] http://localhost:8001/assets/js/comun/tabla.js => [200] OK
+146. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+147. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+148. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+149. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a20f39-fb8c-7360-bbea-b10af70f5467&pagina=1&por_pagina=15 => [200] OK
+150. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a20f39-fb8c-7360-bbea-b10af70f5467&pagina=1&por_pagina=100 => [200] OK
+151. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+152. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=100 => [200] OK
+153. [GET] http://localhost:8001/api/v1/jugadores?pagina=2&por_pagina=100 => [200] OK
+154. [GET] http://localhost:8001/api/v1/jugadores?pagina=3&por_pagina=100 => [200] OK
+155. [GET] http://localhost:8001/api/v1/jugadores?pagina=4&por_pagina=100 => [200] OK
+156. [GET] http://localhost:8001/api/v1/jugadores?pagina=5&por_pagina=100 => [200] OK
+157. [GET] http://localhost:8001/api/v1/jugadores?pagina=6&por_pagina=100 => [200] OK
+158. [GET] http://localhost:8001/api/v1/jugadores?pagina=7&por_pagina=100 => [200] OK
+159. [GET] http://localhost:8001/api/v1/jugadores?pagina=8&por_pagina=100 => [200] OK
+160. [GET] http://localhost:8001/api/v1/jugadores?pagina=9&por_pagina=100 => [200] OK
+161. [GET] http://localhost:8001/api/v1/jugadores?pagina=10&por_pagina=100 => [200] OK
+162. [GET] http://localhost:8001/api/v1/jugadores?orden=apellidos&pagina=1&por_pagina=15 => [200] OK
+163. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=1&por_pagina=15 => [200] OK
+164. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=1&por_pagina=100 => [200] OK
+165. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=2&por_pagina=100 => [200] OK
+166. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=3&por_pagina=100 => [200] OK
+167. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=4&por_pagina=100 => [200] OK
+168. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=5&por_pagina=100 => [200] OK
+169. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=6&por_pagina=100 => [200] OK
+170. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=7&por_pagina=100 => [200] OK
+171. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=8&por_pagina=100 => [200] OK
+172. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=9&por_pagina=100 => [200] OK
+173. [GET] http://localhost:8001/api/v1/jugadores?orden=-apellidos&pagina=10&por_pagina=100 => [200] OK
+174. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a20f39-fb8c-7360-bbea-b10af70f5467&orden=-apellidos&pagina=1&por_pagina=15 => [200] OK
+175. [GET] http://localhost:8001/api/v1/jugadores/busqueda?matricula=++prb-0002+ => [200] OK
+176. [GET] http://localhost:8001/api/v1/jugadores/busqueda?matricula=NO-EXISTE-99 => [404] Not Found
+177. [GET] http://localhost:8001/api/v1/jugadores/busqueda?matricula= => [422] Unprocessable Content
+204. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+205. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+206. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+232. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+233. [GET] http://localhost:8001/api/v1/jugadores/01a20f39-fe78-7800-b237-ec70ea001b15 => [200] OK
+234. [GET] http://localhost:8001/api/v1/jugadores/01a20f39-fe78-7800-b237-ec70ea001b15/situacion-academica => [200] OK
+235. [GET] http://localhost:8001/api/v1/jugadores/01a20f39-fe78-7800-b237-ec70ea001b15/asistencia-entrenamientos => [200] OK
+261. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+262. [GET] http://localhost:8001/api/v1/jugadores/0193b2c4-1111-7222-8333-444455556666 => [404] Not Found
+289. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+290. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+291. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+292. [POST] http://localhost:8001/_boost/browser-logs => [200] OK
+294. [POST] http://localhost:8001/_boost/browser-logs => [FAILED] net::ERR_ABORTED
+321. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+322. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+323. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+324. [POST] http://localhost:8001/_boost/browser-logs => [200] OK
+325. [POST] http://localhost:8001/_boost/browser-logs => [200] OK
+333. [GET] http://localhost:8001/sanctum/csrf-cookie => [204] No Content
+334. [POST] http://localhost:8001/api/v1/sesion => [200] OK
+346. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+374. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+375. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+402. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+403. [GET] http://localhost:8001/api/v1/jugadores/01a20f39-fe78-7800-b237-ec70ea001b15 => [200] OK
+404. [GET] http://localhost:8001/api/v1/jugadores/01a20f39-fe78-7800-b237-ec70ea001b15/situacion-academica => [200] OK
+405. [GET] http://localhost:8001/assets/js/comun/tabla.js => [200] OK
+432. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+433. [GET] http://localhost:8001/api/v1/jugadores/01a20f39-fe78-7800-b237-ec70ea001b15 => [200] OK
+435. [GET] http://localhost:8001/api/v1/jugadores/01a20f39-fe78-7800-b237-ec70ea001b15/situacion-academica => [200] OK
+463. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+464. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [200] OK
+465. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=25 => [401] Unauthorized
+473. [GET] http://localhost:8001/sanctum/csrf-cookie => [204] No Content
+474. [POST] http://localhost:8001/api/v1/sesion => [200] OK
+486. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+514. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+515. [GET] http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15 => [FAILED] net::ERR_FAILED
+516. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+
+Note: 421 static requests not shown, run with "static" option to see them.

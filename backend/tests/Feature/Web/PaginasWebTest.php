@@ -119,7 +119,7 @@ test('FRONT-R2 10: ninguna vista usa las clases que main.js de la plantilla inic
     }
 });
 
-test('PT-12 15: las rutas web registradas son exactamente las aprobadas, con su middleware (enmienda FRONT-R2)', function () {
+test('PT-12 15: las rutas web registradas son exactamente las aprobadas, con su middleware (enmiendas FRONT-R2 y FRONT-R3)', function () {
     $rutas = collect(Route::getRoutes()->getRoutes())
         ->filter(fn ($ruta) => in_array('web', $ruta->gatherMiddleware(), true) && ! str_starts_with($ruta->uri(), 'sanctum/'))
         ->mapWithKeys(fn ($ruta) => [$ruta->uri() => array_values(array_diff($ruta->gatherMiddleware(), ['web']))])
@@ -130,6 +130,8 @@ test('PT-12 15: las rutas web registradas son exactamente las aprobadas, con su 
         '/' => [],
         'contrasena' => ['auth:web'],
         'ingreso' => ['guest:web'],
+        'jugadores' => ['auth:web'],
+        'jugadores/{jugador}' => ['auth:web'],
         'panel' => ['auth:web'],
     ]);
 });

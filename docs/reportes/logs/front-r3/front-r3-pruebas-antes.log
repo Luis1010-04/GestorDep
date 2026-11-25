@@ -1,0 +1,382 @@
+# FRONT-R3, pruebas antes de implementar. Base: 692e8f8 con las pruebas de R3 sin commitear. 24/11/2026 14:33
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\BibliotecasLocalesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 7: los archivos de SweetAlert2 existen y su SHA-256 coinci[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 8: SweetAlert2 es la versión 11.26.26 y su licencia es MIT[39m[90m [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 9: SweetAlert2 no contiene código que dependa del dominio[39m[90m… [39m [90m0.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 12: los archivos de DataTables, Buttons, JSZip y pdfmake e[39m[90m…[39m [90m0.14s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 13: las versiones son DataTables 3.1.6, Buttons 4.1.4, JSZ[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 14: no hay jQuery: ningún archivo de public/assets ni de p[39m[90m…[39m [90m4.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\BootstrapLocalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 12: existen los archivos de NiceAdmin que usa la rebanada 1 y[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 13: el SHA-256 de cada archivo de Bootstrap coincide con el r[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 14: Bootstrap declara su licencia MIT en el encabezado de sus[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 20: main.js y style.css conservan su encabezado de licencia y[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 21: LICENCIA.md remite a la licencia oficial de BootstrapMade[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\ContrasenaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 1: GET /contrasena sin sesión redirige a /ingreso y no env[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 2: GET /contrasena con sesión responde 200 con el layout y[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 3: el formulario envía a PUT /contrasena solo contrasena_a[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 4: los textos de la página salen de lang/es/interfaz.php[39m[90m   [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 5: la cabecera de las páginas con sesión enlaza a /contras[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 6: la página carga SweetAlert2 y sus scripts después de se[39m[90m…[39m [90m0.22s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\ContratoDeVistasTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 9: cada columna y dato de las vistas (data-campo) existe e[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 10: cada control de formulario existe en el contrato (pará[39m[90m…[39m [90m0.55s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 11: cada columna ordenable (data-orden) usa un valor del p[39m[90m…[39m [90m0.53s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\ErroresWebTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 H-01: un error interno fuera de /api con APP_DEBUG=true no ex[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 H-01: un 404 web con APP_DEBUG=true no expone trazas ni detal[39m[90m…[39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\EstructuraDelFrontTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 11: las vistas nuevas viven en modulos/{modulo}/ con los n[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 12: cada vista de módulo extiende el layout, define titulo[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 13: solo comun/avisos.js usa SweetAlert2; ninguna vista ni[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 14: comun/avisos.js ofrece exito, error, aviso y confirmar[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\IngresoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 1: GET /ingreso sin sesión responde 200 con el formulario de[39m[90m… [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 2: GET /ingreso con sesión redirige a /panel[39m[90m                  [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 3: GET / redirige a /panel[39m[90m                                    [39m [90m0.16s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\JugadoresTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 1: /jugadores y la ficha sin sesión redirigen a /ingreso s[39m[90m…[39m [90m0.21s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 2: /jugadores con sesión responde 200 con el layout, la bú[39m[90m…[39m [90m0.23s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 3: la ficha con sesión responde 200 y lleva el identificad[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 4: el menú lateral muestra «Jugadores» a docente y entrena[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 5: la tabla de jugadores solo ordena por apellidos y nombr[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 6: los textos de las páginas de jugadores y de las tablas[39m[90m… [39m [90m0.18s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 7: las páginas de jugadores cargan SweetAlert2, DataTables[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 8: comun/tabla.js traduce la paginación al contrato y ofre[39m[90m…[39m [90m0.14s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\PaginasWebTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 10: ninguna vista ni script propio usa localStorage ni sessio[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 11: los textos de ingreso y panel salen de lang/es/interfaz.p[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 17: ninguna vista ni script propio carga recursos externos, s[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 18: la plantilla se versiona sin forms/ y sin ningún archivo[39m[90m… [39m [90m1.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 22: no existe ningún archivo .html dentro de public/NiceAdmin[39m[90m [39m [90m1.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 19: el layout define el tinymce vacío antes de main.js, carga[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 10: ninguna vista usa las clases que main.js de la plantil[39m[90m…[39m [90m0.20s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPT-12 15: las rutas web registradas son exactamente las aprobadas,[39m[90m… [39m [90m0.39s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\PanelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 4: GET /panel sin sesión redirige a /ingreso y no envía conte[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 5: GET /panel con sesión responde 200[39m[90m                         [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 6: el panel usa el layout y los tres parciales[39m[90m                [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 7: las páginas cargan activos solo desde /assets/ o /NiceAdmi[39m[90m…[39m [90m0.24s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPT-12 8: el menú lateral contiene exactamente los ítems aprobados y[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 9: el panel no contiene tarjetas, tablas, lienzos de gráfica[39m[90m… [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 16: el pie conserva el crédito «Designed by BootstrapMade» co[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\SesionesAnonimasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET / anónimo sin cookie redirige a /panel sin crear fila en[39m[90m…[39m [90m3.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /ingreso anónimo sin cookie responde 200 sin crear fila[39m[90m… [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /panel anónimo sin cookie redirige a /ingreso sin crear[39m[90m… [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: una cookie de sesión que no se puede descifrar se trata como[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: HEAD /ingreso anónimo sin cookie responde 200 sin crear fila[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: con la cookie de una sesión autenticada, GET /panel responde[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: con la cookie de una sesión anónima existente, GET /ingreso[39m[90m… [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: un usuario autenticado en GET /ingreso sigue redirigido a /p[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /sanctum/csrf-cookie sin cookie sigue creando la sesión[39m[90m… [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: una cookie de sesión válida con fila inexistente crea la fil[39m[90m…[39m [90m0.20s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\EntornoDePruebasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T03 (DA-101): las pruebas usan la base de pruebas, o la de su[39m[90m…[39m [90m0.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mF1-H0-T03: toda ruta registrada esta bajo /api/v1 o es la cookie cs[39m[90m…[39m [90m0.11s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\BibliotecasLocalesTest[22m [90m>[39m FRONT-R3 12: los archi…   
+[39;1m  assets/vendor/datatables/js/dataTables.min.js
+Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/Web/BibliotecasLocalesTest.php[39m:[32m54[39m
+     50▕ });
+     51▕ 
+     52▕ test('FRONT-R3 12: los archivos de DataTables, Buttons, JSZip y pdfmake existen y su SHA-256 coincide con el de su paquete npm (DAF-03, DAF-06, DAF-07)', function () {
+     53▕     foreach (BIBLIOTECAS_DE_TABLAS as $archivo => $hash) {
+  ➜  54▕         expect(File::exists(public_path($archivo)))->toBeTrue($archivo)
+     55▕             ->and(hash_file('sha256', public_path($archivo)))->toBe($hash, $archivo);
+     56▕     }
+     57▕ });
+     58▕
+
+  [33m1   [39m[39;1mtests/Feature/Web/BibliotecasLocalesTest.php[39;22m:[39;1m54[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\BibliotecasLocalesTest[22m [90m>[39m… [41;1m FileNotFoundException [49;22m  
+[39;1m  File does not exist at path /var/www/html/public/assets/vendor/datatables/js/dataTables.min.js.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php[39m:[32m62[39m
+     58▕         if ($this->isFile($path)) {
+     59▕             return $lock ? $this->sharedGet($path) : file_get_contents($path);
+     60▕         }
+     61▕ 
+  ➜  62▕         throw new FileNotFoundException("File does not exist at path {$path}.");
+     63▕     }
+     64▕ 
+     65▕     /**
+     66▕      * Get the contents of a file as decoded JSON.
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Feature/Web/BibliotecasLocalesTest.php[39;22m:[39;1m60[39;22m
+  [33m4   [39m[39;1mtests/Feature/Web/BibliotecasLocalesTest.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\ContratoDeVistasTest[22m [90m>[39m FRONT-R3 9: cada columna…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Web/ContratoDeVistasTest.php[39m:[32m150[39m
+    146▕     usuarioDelContrato($this);
+    147▕     $contrato = contratoDeVistas();
+    148▕ 
+    149▕     foreach (paginasConContrato() as $pagina) {
+  ➜ 150▕         $xpath = paginaComoDocumento((string) $this->get($pagina)->assertOk()->getContent());
+    151▕         expect($xpath->query('//*[@data-endpoint]')->length)->toBeGreaterThan(0, $pagina);
+    152▕ 
+    153▕         foreach ($xpath->query('//*[@data-campo]') ?: [] as $nodo) {
+    154▕             /** @var DOMElement $nodo */
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\ContratoDeVistasTest[22m [90m>[39m FRONT-R3 11: cada column…   
+[39;1m  Failed asserting that 0 is greater than 0.[39;22m
+
+  at [32mtests/Feature/Web/ContratoDeVistasTest.php[39m:[32m208[39m
+    204▕             $revisadas++;
+    205▕         }
+    206▕     }
+    207▕ 
+  ➜ 208▕     expect($revisadas)->toBeGreaterThan(0);
+    209▕ });
+    210▕
+
+  [33m1   [39m[39;1mtests/Feature/Web/ContratoDeVistasTest.php[39;22m:[39;1m208[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\JugadoresTest[22m [90m>[39m FRONT-R3 1: /jugadores y la fic…   
+[39;1m  Expected response status code [201, 301, 302, 303, 307, 308] but received 404.
+Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/Web/JugadoresTest.php[39m:[32m41[39m
+     37▕ 
+     38▕ test('FRONT-R3 1: /jugadores y la ficha sin sesión redirigen a /ingreso sin contenido privado (CA-GEN-005)', function () {
+     39▕     /** @var TestCase $this */
+     40▕     foreach (['/jugadores', '/jugadores/'.Identificador::generar()->valor()] as $pagina) {
+  ➜  41▕         $respuesta = $this->get($pagina)->assertRedirect('/ingreso');
+     42▕ 
+     43▕         expect((string) $respuesta->getContent())->not->toContain('id="header"')
+     44▕             ->and((string) $respuesta->getContent())->not->toContain('data-endpoint');
+     45▕     }
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\JugadoresTest[22m [90m>[39m FRONT-R3 2: /jugadores con sesi…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Web/JugadoresTest.php[39m:[32m53[39m
+     49▕     /** @var TestCase $this */
+     50▕     usuarioDeJugadores($this);
+     51▕ 
+     52▕     $this->get('/jugadores')
+  ➜  53▕         ->assertOk()
+     54▕         ->assertSee('id="header"', false)
+     55▕         ->assertSee('id="sidebar"', false)
+     56▕         ->assertSee('id="footer"', false)
+     57▕         ->assertSee('id="formulario-busqueda"', false)
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\JugadoresTest[22m [90m>[39m FRONT-R3 3: la ficha con sesión…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Web/JugadoresTest.php[39m:[32m67[39m
+     63▕     usuarioDeJugadores($this);
+     64▕     $id = Identificador::generar()->valor();
+     65▕ 
+     66▕     $this->get('/jugadores/'.$id)
+  ➜  67▕         ->assertOk()
+     68▕         ->assertSee('data-jugador="'.$id.'"', false)
+     69▕         ->assertSee('data-zona="'.config('app.zona_presentacion').'"', false);
+     70▕ 
+     71▕     $this->get('/jugadores/no-es-uuid')->assertNotFound();
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\JugadoresTest[22m [90m>[39m FRONT-R3 4: el menú lateral mue…   
+[39;1m  Failed asserting that '' matches PCRE pattern "/[39;22m[39;1m<li class="nav-item" data-roles="docente entrenador" hidden>[39;22m[39;1m\s*[39;22m[39;1m<a class="nav-link" href="\/jugadores" aria-current="page">[39;22m[39;1m/".[39;22m
+
+  at [32mtests/Feature/Web/JugadoresTest.php[39m:[32m82[39m
+     78▕     foreach (['/jugadores', '/jugadores/'.Identificador::generar()->valor()] as $pagina) {
+     79▕         $html = (string) $this->get($pagina)->getContent();
+     80▕         preg_match('/<aside id="sidebar".*?<\/aside>/s', $html, $menu);
+     81▕ 
+  ➜  82▕         expect($menu[0] ?? '')->toMatch('/<li class="nav-item" data-roles="docente entrenador" hidden>\s*<a class="nav-link" href="\/jugadores" aria-current="page">/');
+     83▕     }
+     84▕ 
+     85▕     $panel = (string) $this->get('/panel')->getContent();
+     86▕     expect($panel)->toMatch('/<a class="nav-link collapsed" href="\/jugadores">/');
+
+  [33m1   [39m[39;1mtests/Feature/Web/JugadoresTest.php[39;22m:[39;1m82[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\JugadoresTest[22m [90m>[39m FRONT-R3 5: la tabla de jugador…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'apellidos',[39m[39;1m
+  [39;22m[31m-    1 => 'nombres',[39m[39;1m
+  [39;22m[31m-][39m[39;1m
+  [39;22m[32m+Array &0 [][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Web/JugadoresTest.php[39m:[32m96[39m
+     92▕     $html = (string) $this->get('/jugadores')->getContent();
+     93▕     preg_match('/<table id="tabla-jugadores".*?<\/table>/s', $html, $tabla);
+     94▕     preg_match_all('/data-orden="([^"]+)"/', $tabla[0] ?? '', $ordenes);
+     95▕ 
+  ➜  96▕     expect($ordenes[1])->toBe(['apellidos', 'nombres'])
+     97▕         ->and($tabla[0] ?? '')->toContain('<th class="no-exportar"');
+     98▕ });
+     99▕ 
+    100▕ test('FRONT-R3 6: los textos de las páginas de jugadores y de las tablas salen de lang/es/interfaz.php', function () {
+
+  [33m1   [39m[39;1mtests/Feature/Web/JugadoresTest.php[39;22m:[39;1m96[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\JugadoresTest[22m [90m>[39m FRONT-R3 6: los textos de las p…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Web/JugadoresTest.php[39m:[32m104[39m
+    100▕ test('FRONT-R3 6: los textos de las páginas de jugadores y de las tablas salen de lang/es/interfaz.php', function () {
+    101▕     /** @var TestCase $this */
+    102▕     usuarioDeJugadores($this);
+    103▕ 
+  ➜ 104▕     $this->get('/jugadores')->assertOk()
+    105▕         ->assertSee(__('interfaz.jugadores.titulo'))
+    106▕         ->assertSee(__('interfaz.jugadores.buscar_titulo'))
+    107▕         ->assertSee(__('interfaz.jugadores.listado_titulo'));
+    108▕     $this->get('/jugadores/'.Identificador::generar()->valor())->assertOk()
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\JugadoresTest[22m [90m>[39m FRONT-R3 7: las páginas de juga…   
+[39;1m  Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/Web/JugadoresTest.php[39m:[32m133[39m
+    129▕     usuarioDeJugadores($this);
+    130▕     $listado = (string) $this->get('/jugadores')->getContent();
+    131▕     $ficha = (string) $this->get('/jugadores/'.Identificador::generar()->valor())->getContent();
+    132▕ 
+  ➜ 133▕     expect(cargaEnOrden($listado, [...SCRIPTS_DE_TABLAS, '/assets/js/modulos/jugadores/index.js']))->toBeTrue()
+    134▕         ->and(cargaEnOrden($ficha, [...SCRIPTS_DE_TABLAS, '/assets/js/modulos/jugadores/ver.js']))->toBeTrue()
+    135▕         ->and($listado)->toContain('<link href="/assets/vendor/datatables/css/dataTables.bootstrap5.min.css" rel="stylesheet">')
+    136▕         ->and($listado)->toContain('<link href="/assets/vendor/datatables/css/buttons.bootstrap5.min.css" rel="stylesheet">')
+    137▕         ->and((string) $this->get('/panel')->getContent())->not->toContain('datatables')
+
+  [33m1   [39m[39;1mtests/Feature/Web/JugadoresTest.php[39;22m:[39;1m133[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\JugadoresTest[22m [90m>[39m FRONT-R3… [41;1m FileNotFoundException [49;22m  
+[39;1m  File does not exist at path /var/www/html/public/assets/js/comun/tabla.js.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php[39m:[32m62[39m
+     58▕         if ($this->isFile($path)) {
+     59▕             return $lock ? $this->sharedGet($path) : file_get_contents($path);
+     60▕         }
+     61▕ 
+  ➜  62▕         throw new FileNotFoundException("File does not exist at path {$path}.");
+     63▕     }
+     64▕ 
+     65▕     /**
+     66▕      * Get the contents of a file as decoded JSON.
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Feature/Web/JugadoresTest.php[39;22m:[39;1m142[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PaginasWebTest[22m [90m>[39m PT-12 15: las rutas web regist…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m     'ingreso' => Array &3 [[39m[39;1m
+  [39;22m[32m         0 => 'guest:web',[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[31m-    'jugadores' => Array &4 [[39m[39;1m
+  [39;22m[31m-        0 => 'auth:web',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-    'jugadores/{jugador}' => Array &5 [[39m[39;1m
+  [39;22m[31m-        0 => 'auth:web',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-    'panel' => Array &6 [[39m[39;1m
+  [39;22m[32m+    'panel' => Array &4 [[39m[39;1m
+  [39;22m[32m         0 => 'auth:web',[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Web/PaginasWebTest.php[39m:[32m129[39m
+    125▕         ->mapWithKeys(fn ($ruta) => [$ruta->uri() => array_values(array_diff($ruta->gatherMiddleware(), ['web']))])
+    126▕         ->sortKeys()
+    127▕         ->all();
+    128▕ 
+  ➜ 129▕     expect($rutas)->toBe([
+    130▕         '/' => [],
+    131▕         'contrasena' => ['auth:web'],
+    132▕         'ingreso' => ['guest:web'],
+    133▕         'jugadores' => ['auth:web'],
+
+  [33m1   [39m[39;1mtests/Feature/Web/PaginasWebTest.php[39;22m:[39;1m129[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PanelTest[22m [90m>[39m PT-12 8: el menú lateral contiene e…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => '/panel',[39m[39;1m
+  [39;22m[31m-    1 => '/jugadores',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Web/PanelTest.php[39m:[32m98[39m
+     94▕ 
+     95▕     preg_match('/<aside id="sidebar".*?<\/aside>/s', $html, $menu);
+     96▕     preg_match_all('/<a\b[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/s', $menu[0] ?? '', $enlaces);
+     97▕ 
+  ➜  98▕     expect($enlaces[1])->toBe(['/panel', '/jugadores'])
+     99▕         ->and(array_map(fn (string $texto) => trim(strip_tags($texto)), $enlaces[2]))->toBe([__('interfaz.menu.panel'), __('interfaz.menu.jugadores')]);
+    100▕ });
+    101▕ 
+    102▕ test('PT-12 9: el panel no contiene tarjetas, tablas, lienzos de gráfica ni cifras', function () {
+
+  [33m1   [39m[39;1mtests/Feature/Web/PanelTest.php[39;22m:[39;1m98[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\EntornoDePruebasTest[22m [90m>[39m F1-H0-T03: toda ruta registr…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m     0 => '/',[39m[39;1m
+  [39;22m[32m     1 => 'contrasena',[39m[39;1m
+  [39;22m[32m     2 => 'ingreso',[39m[39;1m
+  [39;22m[31m-    3 => 'jugadores',[39m[39;1m
+  [39;22m[31m-    4 => 'jugadores/{jugador}',[39m[39;1m
+  [39;22m[31m-    5 => 'panel',[39m[39;1m
+  [39;22m[31m-    6 => 'sanctum/csrf-cookie',[39m[39;1m
+  [39;22m[32m+    3 => 'panel',[39m[39;1m
+  [39;22m[32m+    4 => 'sanctum/csrf-cookie',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/EntornoDePruebasTest.php[39m:[32m29[39m
+     25▕         ->all();
+     26▕ 
+     27▕     // Fuera de /api/v1 solo se permiten la cookie csrf (DD-28) y las rutas web aprobadas del frontend (DA-122): las tres de
+     28▕     // PT-12, la de FRONT-R2 y las dos de FRONT-R3 (ampliacion autorizada por el responsable el 24/11/2026); cualquier otra falla.
+  ➜  29▕     expect($rutas)->toBe(['/', 'contrasena', 'ingreso', 'jugadores', 'jugadores/{jugador}', 'panel', 'sanctum/csrf-cookie']);
+     30▕ });
+     31▕
+
+  [33m1   [39m[39;1mtests/Feature/EntornoDePruebasTest.php[39;22m:[39;1m29[39;22m
+
+
+  [90mTests:[39m    [31;1m15 failed[39;22m[90m,[39m[39m [39m[32;1m49 passed[39;22m[90m (332 assertions)[39m
+  [90mDuration:[39m [39m24.16s[39m
+
+# codigo de salida: 2

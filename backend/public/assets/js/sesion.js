@@ -37,12 +37,25 @@
         });
     }
 
-    window.Api.solicitar('GET', '/sesion')
-        .then(function (respuesta) {
-            var usuario = respuesta.datos;
-            escribir('usuario-nombre', usuario.nombre);
-            escribir('bienvenida-nombre', usuario.nombre);
-            escribir('bienvenida-roles', usuario.roles.length > 0 ? usuario.roles.join(', ') : textos.roles_ninguno);
+    /** Muestra los elementos con data-roles que comparten algún rol con el usuario (CA-LAY-002). Solo oculta: autoriza la API. */
+    function mostrarPorRol(roles) {
+        document.querySelectorAll('[data-roles]').forEach(function (nodo) {
+            var permitidos = nodo.dataset.roles.split(' ');
+            if (permitidos.some(function (rol) { return roles.indexOf(rol) !== -1; })) {
+                nodo.hidden = false;
+            }
+        });
+    }
+
+    /** El usuario de la sesión, para los scripts de cada página (window.Sesion.usuario). */
+    var usuario = window.Api.solicitar('GET', '/sesion').then(function (respuesta) { return respuesta.datos; });
+
+    usuario
+        .then(function (datos) {
+            escribir('usuario-nombre', datos.nombre);
+            escribir('bienvenida-nombre', datos.nombre);
+            escribir('bienvenida-roles', datos.roles.length > 0 ? datos.roles.join(', ') : textos.roles_ninguno);
+            mostrarPorRol(datos.roles);
         })
         .catch(function (error) {
             if (error.status === 401) {
@@ -52,6 +65,8 @@
             ocultarDatosDeSesion();
             mostrarAviso(error.status === 0 ? textos.sin_conexion : textos.error_generico);
         });
+
+    window.Sesion = { usuario: usuario };
 
     document.getElementById('cerrar-sesion').addEventListener('click', function (evento) {
         var boton = evento.currentTarget;

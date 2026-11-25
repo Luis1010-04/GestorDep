@@ -1,0 +1,7 @@
+/*
+ * Tablas de DataTables en pantallas angostas (CA-GEN-006): solo la celda que contiene la tabla se desplaza en
+ * horizontal; la página, los botones de descarga y la paginación no se desbordan.
+ */
+div.dt-container div.dt-layout-table > div {
+    overflow-x: auto;
+}

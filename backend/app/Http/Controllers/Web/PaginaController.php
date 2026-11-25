@@ -21,4 +21,15 @@ class PaginaController extends Controller
     {
         return view('modulos.contrasena.editar');
     }
+
+    public function jugadores(): View
+    {
+        return view('modulos.jugadores.index');
+    }
+
+    /** Solo entrega la página; los datos del jugador y su alcance los decide la API. */
+    public function jugador(string $jugador): View
+    {
+        return view('modulos.jugadores.ver', ['jugador' => $jugador]);
+    }
 }

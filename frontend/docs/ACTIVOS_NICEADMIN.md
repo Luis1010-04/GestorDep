@@ -45,7 +45,7 @@ Se versionan por decisión del responsable, pero **ninguna vista los carga ni lo
 - **Quill** (`assets/vendor/quill/`): editor de texto.
 - **TinyMCE** (`assets/vendor/tinymce/`): editor de texto.
 - **ECharts** (`assets/vendor/echarts/`), **ApexCharts** (`assets/vendor/apexcharts/`) y **Chart.js** (`assets/vendor/chart.js/`): gráficas. La librería de gráficas sigue diferida hasta la rebanada 9.
-- Sin uso por ahora, y no pedidos como inactivos por el responsable: **simple-datatables** (sin biblioteca de tablas hasta la rebanada 4), **Boxicons**, **Remix Icon** y **php-email-form** (Pro, prohibido por la licencia gratuita).
+- Sin uso, y no pedidos como inactivos por el responsable: **simple-datatables** (la biblioteca de tablas es DataTables 3 desde FRONT-R3, por decisión F2 del responsable del 24/11/2026; ver §4 bis), **Boxicons**, **Remix Icon** y **php-email-form** (Pro, prohibido por la licencia gratuita).
 
 ## 4 bis. Bibliotecas fuera de la plantilla
 
@@ -53,9 +53,19 @@ Decisiones F2 y F3 del responsable (24/11/2026) y DAF-05, DAF-07 y DAF-08 del pl
 
 | Biblioteca | Versión | Licencia | Integridad npm | Archivos (SHA-256) | Entra en | Vistas que la cargan |
 |---|---|---|---|---|---|---|
-| SweetAlert2 | 11.26.26 | MIT | `sha512-ihhDJ/0wA+jpuakxnD5CTBzhos96NVSnt7iHoIS6IaqHFwkQNQ2Q4BJwXeHARfsCvhVH4o1GMm80LZRWN9ST6g==` | `sweetalert2.min.js` (`f4bfbd11…ccd3`), `sweetalert2.min.css` (`a1173e56…1743`), `LICENSE` (`879aa33f…c4b4`) | FRONT-R2 | `modulos/contrasena/editar` |
+| SweetAlert2 | 11.26.26 | MIT | `sha512-ihhDJ/0wA+jpuakxnD5CTBzhos96NVSnt7iHoIS6IaqHFwkQNQ2Q4BJwXeHARfsCvhVH4o1GMm80LZRWN9ST6g==` | `sweetalert2.min.js` (`f4bfbd11…ccd3`), `sweetalert2.min.css` (`a1173e56…1743`), `LICENSE` (`879aa33f…c4b4`) | FRONT-R2 | `modulos/contrasena/editar`, `modulos/jugadores/index` y `ver` |
+| DataTables | 3.1.6 | MIT | `sha512-gHQ2TCiDmN7t5FajFAnCiT8AYxLOtmVaDZELedy79mStrRqxJM7yIU/suknM77b5FeqXrHEYDsitAz8jZGJ1Dw==` | `datatables/js/dataTables.min.js` (`7d0e64e8…1887`) | FRONT-R3 | `modulos/jugadores/index` y `ver` |
+| DataTables para Bootstrap 5 | 3.1.6 | MIT | `sha512-1ajIPTG2t7SdKh4ggd1hPtfpjubDDor2V2g3tunQ1fN9VYIQV7hyBQcy1p8DOF5JwXUAAe/iiPRBvNMJaNS9uw==` | `datatables/js/dataTables.bootstrap5.min.js` (`f21ebd37…6503`), `datatables/css/dataTables.bootstrap5.min.css` (`5ff84d55…aa05`) | FRONT-R3 | Las mismas |
+| Buttons | 4.1.4 | MIT | `sha512-OvJ9q1u3OSuZP+9WXQPFrWMbeOaG2BZ5YgbtYMnAg5dQNlivZ6Xi0r/Ugvu0XFvbpiTftG+GD8tndpcTug33kA==` | `datatables/js/dataTables.buttons.min.js` (`274d1189…ebe1`) | FRONT-R3 | Las mismas |
+| Buttons para Bootstrap 5 | 4.1.4 | MIT | `sha512-e0LDHUUKtuqiyrvZx6eYcDknciGL3sQucIGRZ5p0GYqfICbM1fG2ye8Y5jZUDY3PDW0CQaA7JS7ENHNe+YM9gQ==` | `datatables/js/buttons.bootstrap5.min.js` (`0fea4aa0…51b4`), `datatables/css/buttons.bootstrap5.min.css` (`d226de22…3b3a`) | FRONT-R3 | Las mismas |
+| Licencia de los cuatro paquetes de DataTables | — | MIT | — | `datatables/License.txt` (`62b5fdd5…5382`, idéntica en los cuatro paquetes) | FRONT-R3 | — |
+| JSZip (Excel) | 3.10.2 | MIT o GPL-3.0-or-later; **se usa bajo MIT** | `sha512-3l+rb15IOWtUhU0H5MFqES/T6Kh7abYwjosBey/vD6hDt8zoEffkSC5Ws5SGtgVw3gBx2NEbhTeSW1+kWkpyTQ==` | `jszip/jszip.min.js` (`7f839b2d…d2c1`), `jszip/LICENSE.markdown` (`566c953c…a9c4`) | FRONT-R3 | `modulos/jugadores/index` y `ver` |
+| pdfmake (PDF) | 0.3.15 | MIT | `sha512-szzvtHyDEf8N/ZSPKy2t41fCiGnZgwaFXdZqAl6MhBj3O5l36/MDEq4GJRjIojdvgC2ICb3lrSO5LDDhuf3njg==` | `pdfmake/pdfmake.min.js` (`a3453acc…e0f6`), `pdfmake/vfs_fonts.js` (`f3db5ac3…d5c4`), `pdfmake/LICENSE` (`ab919430…c954`) | FRONT-R3 | `modulos/jugadores/index` y `ver` |
 
 - **SweetAlert2:** se usan los archivos separados `.min.js` y `.min.css`, no la variante `all`, que inyecta estilos al ejecutarse (DAF-05). La 11.4.9 tenía código que dependía del idioma del navegador y del dominio; la 11.26.26 no contiene `location` (prueba FRONT-R2 9). Solo `backend/public/assets/js/comun/avisos.js` llama a `Swal` (prueba FRONT-R2 13).
+- **DataTables 3 sin jQuery (DAF-03):** DataTables 3 no declara dependencias y usa jQuery solo si ya está cargado; Buttons 4.1.4 y las integraciones de Bootstrap 5 tampoco lo piden. Ningún archivo ni vista carga jQuery (prueba FRONT-R3 14). Consecuencia comprobada en navegador: los pseudoselectores de jQuery, como `:visible`, no sirven en las opciones de DataTables, y `comun/tabla.js` usa una función para elegir las columnas exportables. En Buttons 4, `buttons.html5.min.js` es un envoltorio vacío: la exportación HTML5 vive en `dataTables.buttons.min.js`, y no se copia.
+- **pdfmake 0.3.15 con Buttons 4.1.4 (DAF-06):** compatibles, comprobado en navegador en FRONT-R3 (PDF de 7 filas y de 1000 filas en 46 páginas). `vfs_fonts.js` se registra solo con `addVirtualFileSystem` y pesa 854 773 bytes. Incrusta la fuente **Roboto 3.016**, que según los metadatos de sus TTF se licencia bajo la **SIL Open Font License 1.1** (`https://openfontlicense.org`); el paquete npm no trae ese archivo de licencia.
+- **Hoja propia `backend/public/assets/css/comun/tablas.css`:** da desplazamiento horizontal a la celda de la tabla en pantallas angostas (CA-GEN-006). No es de ninguna biblioteca.
 
 ## 5. Regla de no usar CDN
 

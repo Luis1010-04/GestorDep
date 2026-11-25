@@ -211,3 +211,5 @@ Las rutas web devuelven vistas HTML y no forman parte del contrato de la API
 | `/ingreso` | GET | Invitado (`guest:web`) | PT-12 | CA-AUT-001, CA-LAY-001 |
 | `/panel` | GET | Autenticado (`auth:web`) | PT-12 | CA-GEN-005, CA-LAY-002, CA-PAN-001 |
 | `/contrasena` | GET | Autenticado (`auth:web`); la página usa `PUT /api/v1/contrasena` | FRONT-R2 | CA-FOR-001 a 003, CA-GEN-002 a 005, CA-LAY-001 |
+| `/jugadores` | GET | Autenticado (`auth:web`); la página usa `GET /api/v1/jugadores`, `/jugadores/busqueda` y, para el entrenador, `/equipos` | FRONT-R3 | CA-TAB-001 a 004, CA-GEN-001 a 006, CA-LAY-002 |
+| `/jugadores/{jugador}` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET /api/v1/jugadores/{jugador}`, `/situacion-academica` y `/asistencia-entrenamientos` | FRONT-R3 | CA-GEN-001, 003 y 005, CA-TAB-001 |

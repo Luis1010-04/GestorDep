@@ -6,5 +6,11 @@
                 <span>{{ __('interfaz.menu.panel') }}</span>
             </a>
         </li>
+        <li class="nav-item" data-roles="docente entrenador" hidden>
+            <a class="nav-link{{ request()->is('jugadores*') ? '' : ' collapsed' }}" href="/jugadores"@if (request()->is('jugadores*')) aria-current="page"@endif>
+                <i class="bi bi-people"></i>
+                <span>{{ __('interfaz.menu.jugadores') }}</span>
+            </a>
+        </li>
     </ul>
 </aside>

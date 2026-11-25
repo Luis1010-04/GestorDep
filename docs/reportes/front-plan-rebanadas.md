@@ -373,6 +373,9 @@ Numeración propia del front. Estados al 24/11/2026, tras la aprobación de §0.
 | DAF-15 | Evidencia: Pest, prueba de contrato de vistas y navegador con capturas archivadas (§5) | Aprobada |
 | DAF-16 | Sin descarga en las tablas de salud hasta que el responsable lo confirme | Aprobada |
 | DAF-17 | F4 es una excepción del responsable a `docs/alcance-fases.md` §5; la fila del registro la agrega el backend | Decisión del responsable |
+| DAF-18 | Las fechas con hora (por ejemplo, `calculado_en`) se muestran en la zona de presentación de la aplicación (`config('app.zona_presentacion')`, que la vista pasa en `data-zona`), con `Intl.DateTimeFormat('es-MX')`. Las fechas `AAAA-MM-DD` y los decimales siguen tal como llegan (DAF-13) | Tomada en FRONT-R3; a confirmar |
+| DAF-19 | Hoja propia `backend/public/assets/css/comun/tablas.css` y clase `text-nowrap` en las tablas de datos: en pantallas angostas solo la tabla se desplaza en horizontal (CA-GEN-006) | Tomada en FRONT-R3; a confirmar |
+| DAF-20 | En las tablas sin paginar, «Descargar todo» exporta las filas ya cargadas con la misma confirmación y el mismo tope, sin pedir nada a la API; «Descargar esta página» exporta la página visible de DataTables | Tomada en FRONT-R3 (aplica §0.4) |
 
 ## 10. Qué necesita aprobación
 
