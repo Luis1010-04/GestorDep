@@ -19,7 +19,30 @@ use Tests\TestCase;
  */
 function paginasConContrato(): array
 {
-    return ['/contrasena', '/jugadores', '/jugadores/'.Identificador::generar()->valor()];
+    return [
+        '/contrasena',
+        '/jugadores',
+        '/jugadores/'.Identificador::generar()->valor(),
+        '/plantel/categorias',
+        '/plantel/equipos',
+        '/plantel/equipos/'.Identificador::generar()->valor(),
+        '/jugadores/crear',
+        '/jugadores/'.Identificador::generar()->valor().'/editar',
+    ];
+}
+
+/**
+ * Valores del enum de un campo del cuerpo de la operación; vacío si el campo no tiene enum.
+ *
+ * @return list<string>
+ */
+function enumDelCuerpo(Operation $operacion, string $campo): array
+{
+    $cuerpo = $operacion->requestBody;
+    $esquema = $cuerpo instanceof RequestBody ? ($cuerpo->content['application/json']->schema ?? null) : null;
+    $propiedad = $esquema instanceof Schema ? ($esquema->properties[$campo] ?? null) : null;
+
+    return $propiedad instanceof Schema ? array_values(array_map(fn ($valor) => (string) $valor, $propiedad->enum ?? [])) : [];
 }
 
 function contratoDeVistas(): OpenApi
@@ -202,6 +225,38 @@ test('FRONT-R3 11: cada columna ordenable (data-orden) usa un valor del parámet
             $campo = $columna->getAttribute('data-orden');
 
             expect($valores)->toContain($campo)->toContain('-'.$campo);
+            $revisadas++;
+        }
+    }
+
+    expect($revisadas)->toBeGreaterThan(0);
+});
+
+test('FRONT-R6 10: cada lista fija de opciones de un formulario usa exactamente los valores del enum de su campo en el contrato (CA-FOR-001: no se inventan catálogos)', function () {
+    /** @var TestCase $this */
+    usuarioDelContrato($this);
+    $contrato = contratoDeVistas();
+    $revisadas = 0;
+
+    foreach (paginasConContrato() as $pagina) {
+        $xpath = paginaComoDocumento((string) $this->get($pagina)->getContent());
+
+        foreach ($xpath->query('//form[@data-endpoint]//select[@name]') ?: [] as $lista) {
+            /** @var DOMElement $lista */
+            $valores = [];
+            foreach ($xpath->query('.//option[@value!=""]', $lista) ?: [] as $opcion) {
+                /** @var DOMElement $opcion */
+                $valores[] = $opcion->getAttribute('value');
+            }
+            if ($valores === []) {
+                continue; // Lista que se llena con datos de la API (equipos, categorías): no tiene valores fijos.
+            }
+
+            $enum = enumDelCuerpo(operacionDelContrato($contrato, endpointDe($lista)), $lista->getAttribute('name'));
+            sort($valores);
+            sort($enum);
+
+            expect($valores)->toBe($enum, $pagina.': '.$lista->getAttribute('name'));
             $revisadas++;
         }
     }

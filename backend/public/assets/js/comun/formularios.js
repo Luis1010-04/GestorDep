@@ -50,11 +50,46 @@
         }
     }
 
+    /** Los valores de los controles con name del formulario, tal como los escribió el usuario (la API los recorta y valida). */
+    function datos(formulario) {
+        var valores = {};
+        Array.prototype.forEach.call(formulario.elements, function (control) {
+            if (control.name) {
+                valores[control.name] = control.value;
+            }
+        });
+        return valores;
+    }
+
+    function ocultarAviso(aviso) {
+        aviso.textContent = '';
+        aviso.classList.add('d-none');
+    }
+
+    /**
+     * Error de un envío. 422 y 409 se quedan en el formulario: junto a su campo si la API lo indica y, si no, en el aviso
+     * del formulario con el mensaje de la API (las reglas de negocio llegan sin campo). El resto lo trata Avisos.error.
+     */
+    function mostrarError(formulario, aviso, error) {
+        if (error.status !== 422 && error.status !== 409) {
+            return window.Avisos.error(error);
+        }
+        var sinCampo = mostrarErrores(formulario, error.errores);
+        if (error.errores.length === 0 || sinCampo.length > 0) {
+            aviso.textContent = error.mensaje || textos.error_generico;
+            aviso.classList.remove('d-none');
+        }
+        return null;
+    }
+
     window.Formularios = {
         limpiar: limpiar,
         mostrarErrores: mostrarErrores,
         vaciarContrasenas: vaciarContrasenas,
         ocupar: ocupar,
-        liberar: liberar
+        liberar: liberar,
+        datos: datos,
+        ocultarAviso: ocultarAviso,
+        mostrarError: mostrarError
     };
 })();

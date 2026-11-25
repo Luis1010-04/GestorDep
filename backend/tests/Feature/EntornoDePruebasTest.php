@@ -25,6 +25,10 @@ test('F1-H0-T03: toda ruta registrada esta bajo /api/v1 o es la cookie csrf de S
         ->all();
 
     // Fuera de /api/v1 solo se permiten la cookie csrf (DD-28) y las rutas web aprobadas del frontend (DA-122): las tres de
-    // PT-12, la de FRONT-R2 y las dos de FRONT-R3 (ampliacion autorizada por el responsable el 24/11/2026); cualquier otra falla.
-    expect($rutas)->toBe(['/', 'contrasena', 'ingreso', 'jugadores', 'jugadores/{jugador}', 'panel', 'sanctum/csrf-cookie']);
+    // PT-12, la de FRONT-R2, las dos de FRONT-R3 y las cinco de FRONT-R6 (ampliacion autorizada por el responsable el 24/11/2026
+    // y para cada rebanada nueva el 25/11/2026); cualquier otra falla.
+    expect($rutas)->toBe([
+        '/', 'contrasena', 'ingreso', 'jugadores', 'jugadores/crear', 'jugadores/{jugador}', 'jugadores/{jugador}/editar', 'panel',
+        'plantel/categorias', 'plantel/equipos', 'plantel/equipos/{equipo}', 'sanctum/csrf-cookie',
+    ]);
 });

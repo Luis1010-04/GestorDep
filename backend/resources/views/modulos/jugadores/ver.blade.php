@@ -21,6 +21,33 @@
     </div>
     <section class="section" id="ficha" data-jugador="{{ $jugador }}" data-zona="{{ config('app.zona_presentacion') }}">
         <div id="aviso-ficha" class="alert alert-warning d-none" role="alert"></div>
+        <div id="acciones-del-entrenador" class="mb-3" data-roles="entrenador" hidden>
+            <a id="enlace-editar" class="btn btn-outline-primary btn-sm" href="/jugadores/{{ $jugador }}/editar">{{ __('interfaz.jugadores.editar_datos') }}</a>
+            <button type="button" id="boton-baja" class="btn btn-outline-danger btn-sm">{{ __('interfaz.jugadores.registrar_baja') }}</button>
+        </div>
+        <div class="card" id="tarjeta-baja" hidden>
+            <div class="card-body pt-3">
+                <h2 class="card-title">{{ __('interfaz.jugadores.baja_titulo') }}</h2>
+                <p class="text-muted small">{{ __('interfaz.jugadores.baja_ayuda') }}</p>
+                <div id="aviso-baja" class="alert alert-danger d-none" role="alert"></div>
+                <form id="formulario-baja" data-endpoint="POST /jugadores/{jugador}/baja" class="row g-3" novalidate hidden>
+                    <div class="col-12">
+                        <label for="motivo" class="form-label">{{ __('interfaz.jugadores.motivo') }}</label>
+                        <textarea class="form-control" id="motivo" name="motivo" rows="2"></textarea>
+                        <div class="invalid-feedback" data-error-de="motivo"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="fecha" class="form-label">{{ __('interfaz.jugadores.fecha_baja') }}</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha">
+                        <div class="invalid-feedback" data-error-de="fecha"></div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-danger">{{ __('interfaz.jugadores.registrar_baja') }}</button>
+                        <button type="button" class="btn btn-outline-secondary" id="cancelar-baja">{{ __('interfaz.formulario.cancelar') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="card" id="tarjeta-ficha">
             <div class="card-body pt-3">
                 <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
@@ -126,6 +153,7 @@
 @push('scripts')
     <script src="/assets/vendor/sweetalert2/sweetalert2.min.js"></script>
     <script src="/assets/js/comun/avisos.js"></script>
+    <script src="/assets/js/comun/formularios.js"></script>
     <script src="/assets/vendor/datatables/js/dataTables.min.js"></script>
     <script src="/assets/vendor/datatables/js/dataTables.bootstrap5.min.js"></script>
     <script src="/assets/vendor/datatables/js/dataTables.buttons.min.js"></script>

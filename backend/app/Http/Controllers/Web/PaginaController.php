@@ -32,4 +32,30 @@ class PaginaController extends Controller
     {
         return view('modulos.jugadores.ver', ['jugador' => $jugador]);
     }
+
+    public function crearJugador(): View
+    {
+        return view('modulos.jugadores.crear');
+    }
+
+    public function editarJugador(string $jugador): View
+    {
+        return view('modulos.jugadores.editar', ['jugador' => $jugador]);
+    }
+
+    public function categorias(): View
+    {
+        return view('modulos.categorias.index');
+    }
+
+    public function equipos(): View
+    {
+        return view('modulos.equipos.index');
+    }
+
+    /** Solo entrega la página; el equipo y si el usuario lo entrena los decide la API. */
+    public function equipo(string $equipo): View
+    {
+        return view('modulos.equipos.ver', ['equipo' => $equipo]);
+    }
 }

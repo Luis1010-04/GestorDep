@@ -50,6 +50,8 @@
         aviso.textContent = tj.no_disponible;
         aviso.classList.remove('d-none');
         document.getElementById('tarjeta-ficha').hidden = true;
+        // d-none y no hidden: sesion.js quita hidden a los elementos por rol cuando llega la sesión.
+        document.getElementById('acciones-del-entrenador').classList.add('d-none');
     }
 
     function cargarDatos() {
@@ -78,6 +80,10 @@
                 fila.insertCell().textContent = equipo.categoria.nombre;
                 fila.insertCell().textContent = tj.posiciones[equipo.posicion];
             });
+            nombreDelJugador = jugador.nombres + ' ' + jugador.apellidos;
+            if (jugador.estatus_deportivo === 'baja' || jugador.estatus_academico === 'baja') {
+                document.getElementById('boton-baja').classList.add('d-none');
+            }
             listo(contenedor);
         }, function (error) {
             if (error.status === 404) {
@@ -158,6 +164,63 @@
             }
         });
     }
+
+    /*
+     * Baja del jugador (FRONT-R6, entrenador): POST /jugadores/{id}/baja con motivo y fecha (HU-29, RN-23). Es definitiva
+     * y la API no ofrece forma de revertirla, así que pide confirmación de peligro antes de enviar (CA-FOR-003).
+     */
+    var tarjetaBaja = document.getElementById('tarjeta-baja');
+    var formularioBaja = document.getElementById('formulario-baja');
+    var avisoBaja = document.getElementById('aviso-baja');
+    var nombreDelJugador = '';
+
+    function mostrarBaja(visible) {
+        tarjetaBaja.hidden = !visible;
+        formularioBaja.hidden = !visible;
+    }
+
+    document.getElementById('boton-baja').addEventListener('click', function () {
+        window.Formularios.limpiar(formularioBaja);
+        window.Formularios.ocultarAviso(avisoBaja);
+        mostrarBaja(true);
+        formularioBaja.elements.motivo.focus();
+    });
+
+    document.getElementById('cancelar-baja').addEventListener('click', function () {
+        mostrarBaja(false);
+    });
+
+    formularioBaja.addEventListener('submit', function (evento) {
+        evento.preventDefault();
+        var boton = formularioBaja.querySelector('button[type="submit"]');
+        if (boton.disabled) {
+            return;
+        }
+        window.Avisos.confirmar({
+            titulo: textos.plantel.baja_titulo.replace(':nombre', nombreDelJugador),
+            texto: textos.plantel.baja_texto,
+            boton: textos.plantel.baja_boton,
+            peligro: true
+        }).then(function (confirmado) {
+            if (!confirmado) {
+                return;
+            }
+            window.Formularios.limpiar(formularioBaja);
+            window.Formularios.ocultarAviso(avisoBaja);
+            window.Formularios.ocupar(boton);
+            window.Api.solicitar('POST', ruta + '/baja', window.Formularios.datos(formularioBaja))
+                .then(function () {
+                    return window.Avisos.exito(textos.plantel.baja_registrada).then(function () {
+                        window.location.reload();
+                    });
+                }, function (error) {
+                    return window.Formularios.mostrarError(formularioBaja, avisoBaja, error);
+                })
+                .then(function () {
+                    window.Formularios.liberar(boton);
+                });
+        });
+    });
 
     alAbrirPorPrimeraVez(document.getElementById('boton-academica'), cargarSituacionAcademica);
     alAbrirPorPrimeraVez(document.getElementById('boton-asistencia'), cargarAsistencia);

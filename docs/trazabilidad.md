@@ -212,4 +212,9 @@ Las rutas web devuelven vistas HTML y no forman parte del contrato de la API
 | `/panel` | GET | Autenticado (`auth:web`) | PT-12 | CA-GEN-005, CA-LAY-002, CA-PAN-001 |
 | `/contrasena` | GET | Autenticado (`auth:web`); la página usa `PUT /api/v1/contrasena` | FRONT-R2 | CA-FOR-001 a 003, CA-GEN-002 a 005, CA-LAY-001 |
 | `/jugadores` | GET | Autenticado (`auth:web`); la página usa `GET /api/v1/jugadores`, `/jugadores/busqueda` y, para el entrenador, `/equipos` | FRONT-R3 | CA-TAB-001 a 004, CA-GEN-001 a 006, CA-LAY-002 |
-| `/jugadores/{jugador}` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET /api/v1/jugadores/{jugador}`, `/situacion-academica` y `/asistencia-entrenamientos` | FRONT-R3 | CA-GEN-001, 003 y 005, CA-TAB-001 |
+| `/jugadores/{jugador}` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET /api/v1/jugadores/{jugador}`, `/situacion-academica` y `/asistencia-entrenamientos` y, desde FRONT-R6, `POST /api/v1/jugadores/{jugador}/baja` | FRONT-R3, FRONT-R6 | CA-GEN-001, 003 y 005, CA-TAB-001, CA-FOR-001 a 003 |
+| `/jugadores/crear` | GET | Autenticado (`auth:web`); la página usa `GET /api/v1/equipos` y `POST /api/v1/jugadores` | FRONT-R6 | CA-FOR-001 a 003, CA-GEN-002 a 005 |
+| `/jugadores/{jugador}/editar` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET` y `PATCH /api/v1/jugadores/{jugador}` | FRONT-R6 | CA-FOR-001 a 003, CA-GEN-002 a 005 |
+| `/plantel/categorias` | GET | Autenticado (`auth:web`); la página usa `GET` y `POST /api/v1/categorias` y `DELETE /api/v1/categorias/{id}` | FRONT-R6 | CA-TAB-001 a 004, CA-FOR-001 a 003, CA-LAY-002 |
+| `/plantel/equipos` | GET | Autenticado (`auth:web`); la página usa `GET` y `POST /api/v1/equipos` y `GET /api/v1/categorias` | FRONT-R6 | CA-TAB-001 a 004, CA-FOR-001 a 003, CA-LAY-002 |
+| `/plantel/equipos/{equipo}` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET /api/v1/equipos`, `GET /api/v1/jugadores?filtro[equipo_id]`, `POST /api/v1/equipos/{equipo}/jugadores` y `PATCH /api/v1/equipos/{equipo}/jugadores/{jugador}` | FRONT-R6 | CA-TAB-001 a 004, CA-FOR-001 a 003 |

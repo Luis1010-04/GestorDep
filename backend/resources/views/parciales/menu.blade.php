@@ -12,5 +12,18 @@
                 <span>{{ __('interfaz.menu.jugadores') }}</span>
             </a>
         </li>
+        <li class="nav-heading" data-roles="entrenador" hidden>{{ __('interfaz.menu.plantel') }}</li>
+        <li class="nav-item" data-roles="entrenador" hidden>
+            <a class="nav-link{{ request()->is('plantel/categorias*') ? '' : ' collapsed' }}" href="/plantel/categorias"@if (request()->is('plantel/categorias*')) aria-current="page"@endif>
+                <i class="bi bi-tags"></i>
+                <span>{{ __('interfaz.menu.categorias') }}</span>
+            </a>
+        </li>
+        <li class="nav-item" data-roles="entrenador" hidden>
+            <a class="nav-link{{ request()->is('plantel/equipos*') ? '' : ' collapsed' }}" href="/plantel/equipos"@if (request()->is('plantel/equipos*')) aria-current="page"@endif>
+                <i class="bi bi-shield"></i>
+                <span>{{ __('interfaz.menu.equipos') }}</span>
+            </a>
+        </li>
     </ul>
 </aside>

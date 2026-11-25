@@ -1,0 +1,613 @@
+# FRONT-R6, pruebas antes de implementar. Base: bcfdb86 con las pruebas de R6 sin commitear. 25/11/2026 10:48
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\BibliotecasLocalesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 7: los archivos de SweetAlert2 existen y su SHA-256 coinci[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 8: SweetAlert2 es la versión 11.26.26 y su licencia es MIT[39m[90m [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 9: SweetAlert2 no contiene código que dependa del dominio[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 12: los archivos de DataTables, Buttons, JSZip y pdfmake e[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 13: las versiones son DataTables 3.1.6, Buttons 4.1.4, JSZ[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 14: no hay jQuery: ningún archivo de public/assets ni de p[39m[90m…[39m [90m4.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\BootstrapLocalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 12: existen los archivos de NiceAdmin que usa la rebanada 1 y[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 13: el SHA-256 de cada archivo de Bootstrap coincide con el r[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 14: Bootstrap declara su licencia MIT en el encabezado de sus[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 20: main.js y style.css conservan su encabezado de licencia y[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 21: LICENCIA.md remite a la licencia oficial de BootstrapMade[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\ContrasenaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 1: GET /contrasena sin sesión redirige a /ingreso y no env[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 2: GET /contrasena con sesión responde 200 con el layout y[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 3: el formulario envía a PUT /contrasena solo contrasena_a[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 4: los textos de la página salen de lang/es/interfaz.php[39m[90m   [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 5: la cabecera de las páginas con sesión enlaza a /contras[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 6: la página carga SweetAlert2 y sus scripts después de se[39m[90m…[39m [90m0.18s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\ContratoDeVistasTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R3 9: cada columna y dato de las vistas (data-campo) existe e[39m[90m…[39m [90m6.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 10: cada control de formulario existe en el contrato (pará[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 11: cada columna ordenable (data-orden) usa un valor del p[39m[90m…[39m [90m0.48s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 10: cada lista fija de opciones de un formulario usa exact[39m[90m…[39m [90m0.49s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\ErroresWebTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 H-01: un error interno fuera de /api con APP_DEBUG=true no ex[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 H-01: un 404 web con APP_DEBUG=true no expone trazas ni detal[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\EstructuraDelFrontTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 11: las vistas nuevas viven en modulos/{modulo}/ con los n[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 12: cada vista de módulo extiende el layout, define titulo[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 13: solo comun/avisos.js usa SweetAlert2; ninguna vista ni[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 14: comun/avisos.js ofrece exito, error, aviso y confirmar[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\IngresoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 1: GET /ingreso sin sesión responde 200 con el formulario de[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 2: GET /ingreso con sesión redirige a /panel[39m[90m                  [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 3: GET / redirige a /panel[39m[90m                                    [39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\JugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 1: /jugadores y la ficha sin sesión redirigen a /ingreso s[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 2: /jugadores con sesión responde 200 con el layout, la bú[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 3: la ficha con sesión responde 200 y lleva el identificad[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 4: el menú lateral muestra «Jugadores» a docente y entrena[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 5: la tabla de jugadores solo ordena por apellidos y nombr[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 6: los textos de las páginas de jugadores y de las tablas[39m[90m… [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 7: las páginas de jugadores cargan SweetAlert2, DataTables[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 8: comun/tabla.js traduce la paginación al contrato y ofre[39m[90m…[39m [90m0.14s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\PaginasWebTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 10: ninguna vista ni script propio usa localStorage ni sessio[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 11: los textos de ingreso y panel salen de lang/es/interfaz.p[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 17: ninguna vista ni script propio carga recursos externos, s[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 18: la plantilla se versiona sin forms/ y sin ningún archivo[39m[90m… [39m [90m1.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 22: no existe ningún archivo .html dentro de public/NiceAdmin[39m[90m [39m [90m1.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 19: el layout define el tinymce vacío antes de main.js, carga[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 10: ninguna vista usa las clases que main.js de la plantil[39m[90m…[39m [90m0.25s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPT-12 15: las rutas web registradas son exactamente las aprobadas,[39m[90m… [39m [90m0.42s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\PanelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 4: GET /panel sin sesión redirige a /ingreso y no envía conte[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 5: GET /panel con sesión responde 200[39m[90m                         [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 6: el panel usa el layout y los tres parciales[39m[90m                [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 7: las páginas cargan activos solo desde /assets/ o /NiceAdmi[39m[90m…[39m [90m0.44s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPT-12 8: el menú lateral contiene exactamente los ítems aprobados y[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 9: el panel no contiene tarjetas, tablas, lienzos de gráfica[39m[90m… [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 16: el pie conserva el crédito «Designed by BootstrapMade» co[39m[90m…[39m [90m0.24s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Web\PlantelTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 1: las páginas del plantel sin sesión redirigen a /ingreso[39m[90m…[39m [90m0.21s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 2: con sesión responden 200 con el layout; las que llevan[39m[90m… [39m [90m0.18s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 3: el menú lateral agrupa «Plantel» con Categorías y Equip[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 4: cada formulario del plantel tiene exactamente los campo[39m[90m…[39m [90m0.25s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 5: las tablas del plantel solo ordenan por los campos que[39m[90m… [39m [90m0.16s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 6: los textos del plantel salen de lang/es/interfaz.php[39m[90m    [39m [90m0.16s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 7: cada página del plantel carga SweetAlert2, avisos, form[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 8: eliminar una categoría y registrar una baja piden confi[39m[90m…[39m [90m0.13s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFRONT-R6 9: en la ficha, editar datos y registrar la baja solo se m[39m[90m…[39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\SesionesAnonimasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET / anónimo sin cookie redirige a /panel sin crear fila en[39m[90m…[39m [90m3.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /ingreso anónimo sin cookie responde 200 sin crear fila[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /panel anónimo sin cookie redirige a /ingreso sin crear[39m[90m… [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: una cookie de sesión que no se puede descifrar se trata como[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: HEAD /ingreso anónimo sin cookie responde 200 sin crear fila[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: con la cookie de una sesión autenticada, GET /panel responde[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: con la cookie de una sesión anónima existente, GET /ingreso[39m[90m… [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: un usuario autenticado en GET /ingreso sigue redirigido a /p[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /sanctum/csrf-cookie sin cookie sigue creando la sesión[39m[90m… [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: una cookie de sesión válida con fila inexistente crea la fil[39m[90m…[39m [90m0.22s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\EntornoDePruebasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T03 (DA-101): las pruebas usan la base de pruebas, o la de su[39m[90m…[39m [90m0.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mF1-H0-T03: toda ruta registrada esta bajo /api/v1 o es la cookie cs[39m[90m…[39m [90m0.13s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\ContratoDeVistasTest[22m [90m>[39m FRONT-R3 9: cada columna…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Web/ContratoDeVistasTest.php[39m:[32m173[39m
+    169▕     usuarioDelContrato($this);
+    170▕     $contrato = contratoDeVistas();
+    171▕ 
+    172▕     foreach (paginasConContrato() as $pagina) {
+  ➜ 173▕         $xpath = paginaComoDocumento((string) $this->get($pagina)->assertOk()->getContent());
+    174▕         $declaraciones = $xpath->query('//*[@data-endpoint]');
+    175▕         expect($declaraciones === false ? 0 : $declaraciones->length)->toBeGreaterThan(0, $pagina);
+    176▕ 
+    177▕         foreach ($xpath->query('//*[@data-campo]') ?: [] as $nodo) {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\ContratoDeVistasTest[22m [90m>[39m FRONT-R6 10: cada lista…    
+[39;1m  Failed asserting that 0 is greater than 0.[39;22m
+
+  at [32mtests/Feature/Web/ContratoDeVistasTest.php[39m:[32m264[39m
+    260▕             $revisadas++;
+    261▕         }
+    262▕     }
+    263▕ 
+  ➜ 264▕     expect($revisadas)->toBeGreaterThan(0);
+    265▕ });
+    266▕
+
+  [33m1   [39m[39;1mtests/Feature/Web/ContratoDeVistasTest.php[39;22m:[39;1m264[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PaginasWebTest[22m [90m>[39m PT-12 15: las rutas web regist…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m     'jugadores' => Array &4 [[39m[39;1m
+  [39;22m[32m         0 => 'auth:web',[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[31m-    'jugadores/crear' => Array &5 [[39m[39;1m
+  [39;22m[32m+    'jugadores/{jugador}' => Array &5 [[39m[39;1m
+  [39;22m[32m         0 => 'auth:web',[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[31m-    'jugadores/{jugador}' => Array &6 [[39m[39;1m
+  [39;22m[31m-        0 => 'auth:web',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-    'jugadores/{jugador}/editar' => Array &7 [[39m[39;1m
+  [39;22m[31m-        0 => 'auth:web',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-    'panel' => Array &8 [[39m[39;1m
+  [39;22m[31m-        0 => 'auth:web',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-    'plantel/categorias' => Array &9 [[39m[39;1m
+  [39;22m[31m-        0 => 'auth:web',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-    'plantel/equipos' => Array &10 [[39m[39;1m
+  [39;22m[31m-        0 => 'auth:web',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-    'plantel/equipos/{equipo}' => Array &11 [[39m[39;1m
+  [39;22m[32m+    'panel' => Array &6 [[39m[39;1m
+  [39;22m[32m         0 => 'auth:web',[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Web/PaginasWebTest.php[39m:[32m129[39m
+    125▕         ->mapWithKeys(fn ($ruta) => [$ruta->uri() => array_values(array_diff($ruta->gatherMiddleware(), ['web']))])
+    126▕         ->sortKeys()
+    127▕         ->all();
+    128▕ 
+  ➜ 129▕     expect($rutas)->toBe([
+    130▕         '/' => [],
+    131▕         'contrasena' => ['auth:web'],
+    132▕         'ingreso' => ['guest:web'],
+    133▕         'jugadores' => ['auth:web'],
+
+  [33m1   [39m[39;1mtests/Feature/Web/PaginasWebTest.php[39;22m:[39;1m129[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PanelTest[22m [90m>[39m PT-12 8: el menú lateral contiene e…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => '/panel',[39m[39;1m
+  [39;22m[32m     1 => '/jugadores',[39m[39;1m
+  [39;22m[31m-    2 => '/plantel/categorias',[39m[39;1m
+  [39;22m[31m-    3 => '/plantel/equipos',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Web/PanelTest.php[39m:[32m98[39m
+     94▕ 
+     95▕     preg_match('/<aside id="sidebar".*?<\/aside>/s', $html, $menu);
+     96▕     preg_match_all('/<a\b[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/s', $menu[0] ?? '', $enlaces);
+     97▕ 
+  ➜  98▕     expect($enlaces[1])->toBe(['/panel', '/jugadores', '/plantel/categorias', '/plantel/equipos'])
+     99▕         ->and(array_map(fn (string $texto) => trim(strip_tags($texto)), $enlaces[2]))->toBe([
+    100▕             __('interfaz.menu.panel'), __('interfaz.menu.jugadores'), __('interfaz.menu.categorias'), __('interfaz.menu.equipos'),
+    101▕         ]);
+    102▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Web/PanelTest.php[39;22m:[39;1m98[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 1: las páginas del plant…   
+[39;1m  Expected response status code [201, 301, 302, 303, 307, 308] but received 404.
+Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/Web/PlantelTest.php[39m:[32m54[39m
+     50▕     /** @var TestCase $this */
+     51▕     $prueba = $this;
+     52▕ 
+     53▕     foreach (paginasDelPlantel() as $pagina) {
+  ➜  54▕         $respuesta = $prueba->get($pagina)->assertRedirect('/ingreso');
+     55▕ 
+     56▕         expect((string) $respuesta->getContent())->not->toContain('data-endpoint', $pagina);
+     57▕     }
+     58▕ });
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 2: con sesión responden…    
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Web/PlantelTest.php[39m:[32m67[39m
+     63▕     $equipo = Identificador::generar()->valor();
+     64▕     $jugador = Identificador::generar()->valor();
+     65▕ 
+     66▕     foreach (paginasDelPlantel() as $pagina) {
+  ➜  67▕         $this->get($pagina)->assertOk()->assertSee('id="header"', false)->assertSee('id="sidebar"', false)->assertSee('id="footer"', false);
+     68▕     }
+     69▕ 
+     70▕     $this->get('/plantel/equipos/'.$equipo)->assertSee('data-equipo="'.$equipo.'"', false);
+     71▕     $this->get('/jugadores/'.$jugador.'/editar')->assertSee('data-jugador="'.$jugador.'"', false);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 3: el menú lateral agrup…   
+[39;1m  Failed asserting that '' matches PCRE pattern "/[39;22m[39;1m<li class="nav-heading" data-roles="entrenador" hidden>[39;22m[39;1minterfaz\.menu\.plantel<\/li>/".[39;22m
+
+  at [32mtests/Feature/Web/PlantelTest.php[39m:[32m83[39m
+     79▕     $html = (string) $this->get('/plantel/categorias')->getContent();
+     80▕     preg_match('/<aside id="sidebar".*?<\/aside>/s', $html, $menu);
+     81▕ 
+     82▕     expect($menu[0] ?? '')
+  ➜  83▕         ->toMatch('/<li class="nav-heading" data-roles="entrenador" hidden>'.preg_quote(__('interfaz.menu.plantel'), '/').'<\/li>/')
+     84▕         ->toMatch('/<li class="nav-item" data-roles="entrenador" hidden>\s*<a class="nav-link" href="\/plantel\/categorias" aria-current="page">/')
+     85▕         ->toMatch('/<li class="nav-item" data-roles="entrenador" hidden>\s*<a class="nav-link collapsed" href="\/plantel\/equipos">/');
+     86▕ 
+     87▕     $equipo = (string) $this->get('/plantel/equipos/'.Identificador::generar()->valor())->getContent();
+
+  [33m1   [39m[39;1mtests/Feature/Web/PlantelTest.php[39;22m:[39;1m83[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 4: cada formulario del p…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => Array &1 [[39m[39;1m
+  [39;22m[31m-        0 => 'nombre',[39m[39;1m
+  [39;22m[31m-        1 => 'text',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-][39m[39;1m
+  [39;22m[32m+Array &0 [][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Web/PlantelTest.php[39m:[32m103[39m
+     99▕         'editar' => (string) $this->get('/jugadores/'.Identificador::generar()->valor().'/editar')->getContent(),
+    100▕         'ficha' => (string) $this->get('/jugadores/'.Identificador::generar()->valor())->getContent(),
+    101▕     ];
+    102▕ 
+  ➜ 103▕     expect(controlesDelFormulario($paginas['categorias'], 'formulario-categoria'))->toBe([['nombre', 'text']])
+    104▕         ->and(controlesDelFormulario($paginas['equipos'], 'formulario-equipo'))->toBe([['nombre', 'text'], ['categoria_id', 'select']])
+    105▕         ->and(controlesDelFormulario($paginas['equipo'], 'formulario-asignar'))->toBe([['matricula', 'text'], ['posicion', 'select']])
+    106▕         ->and(controlesDelFormulario($paginas['equipo'], 'formulario-posicion'))->toBe([['posicion', 'select']])
+    107▕         ->and(controlesDelFormulario($paginas['crear'], 'formulario-jugador'))->toBe([
+
+  [33m1   [39m[39;1mtests/Feature/Web/PlantelTest.php[39;22m:[39;1m103[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 5: las tablas del plante…   
+[39;1m  tabla-categorias
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'nombre',[39m[39;1m
+  [39;22m[31m-][39m[39;1m
+  [39;22m[32m+Array &0 [][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Web/PlantelTest.php[39m:[32m127[39m
+    123▕     foreach ($casos as [$pagina, $id, $ordenes]) {
+    124▕         preg_match('/<table id="'.$id.'".*?<\/table>/s', (string) $this->get($pagina)->getContent(), $tabla);
+    125▕         preg_match_all('/data-orden="([^"]+)"/', $tabla[0] ?? '', $encontradas);
+    126▕ 
+  ➜ 127▕         expect($encontradas[1])->toBe($ordenes, $id)
+    128▕             ->and($tabla[0] ?? '')->toContain('<th class="no-exportar"');
+    129▕     }
+    130▕ });
+    131▕
+
+  [33m1   [39m[39;1mtests/Feature/Web/PlantelTest.php[39;22m:[39;1m127[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 6: los textos del plante…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Web/PlantelTest.php[39m:[32m136[39m
+    132▕ test('FRONT-R6 6: los textos del plantel salen de lang/es/interfaz.php', function () {
+    133▕     /** @var TestCase $this */
+    134▕     usuarioDelPlantel($this);
+    135▕ 
+  ➜ 136▕     $this->get('/plantel/categorias')->assertOk()->assertSee(__('interfaz.categorias.titulo'))->assertSee(__('interfaz.categorias.nueva'));
+    137▕     $this->get('/plantel/equipos')->assertOk()->assertSee(__('interfaz.equipos.titulo'))->assertSee(__('interfaz.equipos.nuevo'));
+    138▕     $this->get('/plantel/equipos/'.Identificador::generar()->valor())->assertOk()
+    139▕         ->assertSee(__('interfaz.equipos.asignar_titulo'))->assertSee(__('interfaz.equipos.registrar_jugador'));
+    140▕     $this->get('/jugadores/crear')->assertOk()->assertSee(__('interfaz.jugadores.crear_titulo'));
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 7: cada página del plant…   
+[39;1m  Expecting […] not to contain false.[39;22m
+
+  at [32mtests/Feature/Web/PlantelTest.php[39m:[32m175[39m
+    171▕             fn (string $archivo) => strpos($html, '<script src="'.$archivo.'"></script>'),
+    172▕             ['/assets/js/sesion.js', '/assets/vendor/sweetalert2/sweetalert2.min.js', '/assets/js/comun/avisos.js', '/assets/js/comun/formularios.js', $script],
+    173▕         );
+    174▕ 
+  ➜ 175▕         expect($orden)->not->toContain(false)
+    176▕             ->and($orden)->toBe(collect($orden)->sort()->values()->all())
+    177▕             ->and(str_contains($html, '/assets/vendor/datatables/js/dataTables.min.js'))->toBe($conTabla, $pagina)
+    178▕             ->and(str_contains($html, '/assets/css/comun/tablas.css'))->toBe($conTabla, $pagina);
+    179▕     }
+
+  [33m1   [39m[39;1mtests/Feature/Web/PlantelTest.php[39;22m:[39;1m175[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 8… [41;1m FileNotFoundException [49;22m  
+[39;1m  File does not exist at path /var/www/html/public/assets/js/modulos/categorias/index.js.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php[39m:[32m62[39m
+     58▕         if ($this->isFile($path)) {
+     59▕             return $lock ? $this->sharedGet($path) : file_get_contents($path);
+     60▕         }
+     61▕ 
+  ➜  62▕         throw new FileNotFoundException("File does not exist at path {$path}.");
+     63▕     }
+     64▕ 
+     65▕     /**
+     66▕      * Get the contents of a file as decoded JSON.
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Feature/Web/PlantelTest.php[39;22m:[39;1m183[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Web\PlantelTest[22m [90m>[39m FRONT-R6 9: en la ficha, editar d…   
+[39;1m  Failed asserting that '<!DOCTYPE html>\n
+[39;22m[39;1m<html lang="es">[39;22m[39;1m\n
+[39;22m[39;1m<head>[39;22m[39;1m\n
+    [39;22m[39;1m<meta charset="utf-8">[39;22m[39;1m\n
+    [39;22m[39;1m<meta content="width=device-width, initial-scale=1.0" name="viewport">[39;22m[39;1m\n
+    [39;22m[39;1m<title>[39;22m[39;1mFicha del jugador · GestorDep[39;22m[39;1m</title>[39;22m[39;1m\n
+    [39;22m[39;1m<link href="/NiceAdmin/assets/img/favicon.png" rel="icon">[39;22m[39;1m\n
+    [39;22m[39;1m<link href="/NiceAdmin/assets/img/apple-touch-icon.png" rel="apple-touch-icon">[39;22m[39;1m\n
+    [39;22m[39;1m<link href="/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">[39;22m[39;1m\n
+    [39;22m[39;1m<link href="/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">[39;22m[39;1m\n
+    [39;22m[39;1m<link href="/NiceAdmin/assets/css/style.css" rel="stylesheet">[39;22m[39;1m\n
+        [39;22m[39;1m<link href="/assets/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">[39;22m[39;1m\n
+    [39;22m[39;1m<link href="/assets/vendor/datatables/css/dataTables.bootstrap5.min.css" rel="stylesheet">[39;22m[39;1m\n
+    [39;22m[39;1m<link href="/assets/vendor/datatables/css/buttons.bootstrap5.min.css" rel="stylesheet">[39;22m[39;1m\n
+    [39;22m[39;1m<link href="/assets/css/comun/tablas.css" rel="stylesheet">[39;22m[39;1m\n
+[39;22m[39;1m</head>[39;22m[39;1m\n
+[39;22m[39;1m<body data-textos="{&quot;cargando&quot;:&quot;Procesando…&quot;,&quot;entrar&quot;:&quot;Entrar&quot;,&quot;error_generico&quot;:&quot;No se pudo completar la operación. Intente de nuevo.&quot;,&quot;error_de_sesion&quot;:&quot;No se pudo abrir la sesión desde este origen. Recargue la página e intente de nuevo.&quot;,&quot;sin_conexion&quot;:&quot;Hay problemas de conexión. Revise su internet e intente de nuevo.&quot;,&quot;bloqueada&quot;:&quot;Demasiados intentos. Intente de nuevo en :minutos minutos.&quot;,&quot;sesion_expirada&quot;:&quot;Su sesión terminó. Inicie sesión de nuevo.&quot;,&quot;roles_ninguno&quot;:&quot;Ninguno&quot;,&quot;aceptar&quot;:&quot;Aceptar&quot;,&quot;cancelar&quot;:&quot;Cancelar&quot;,&quot;sin_autorizacion&quot;:&quot;No tiene autorización para esta acción.&quot;,&quot;no_disponible&quot;:&quot;El recurso no existe o no está disponible para usted.&quot;,&quot;contrasena&quot;:{&quot;confirmar_titulo&quot;:&quot;¿Cambiar la contraseña?&quot;,&quot;confirmar_texto&quot;:&quot;Se cerrarán sus demás sesiones abiertas. Esta sesión sigue activa.&quot;,&quot;confirmar_boton&quot;:&quot;Sí, cambiarla&quot;,&quot;exito&quot;:&quot;La contraseña se cambió y sus demás sesiones se cerraron.&quot;},&quot;tabla&quot;:{&quot;vacia&quot;:&quot;No hay registros.&quot;,&quot;error_carga&quot;:&quot;No se pudieron cargar los registros.&quot;,&quot;info&quot;:&quot;Registros _START_ a _END_ de _TOTAL_&quot;,&quot;info_vacia&quot;:&quot;Sin registros&quot;,&quot;por_pagina&quot;:&quot;_MENU_ por página&quot;,&quot;cargando&quot;:&quot;Cargando…&quot;,&quot;primera&quot;:&quot;Primera&quot;,&quot;ultima&quot;:&quot;Última&quot;,&quot;siguiente&quot;:&quot;Siguiente&quot;,&quot;anterior&quot;:&quot;Anterior&quot;,&quot;descargar_pagina&quot;:&quot;Descargar esta página&quot;,&quot;descargar_todo&quot;:&quot;Descargar todo&quot;,&quot;excel&quot;:&quot;Excel&quot;,&quot;pdf&quot;:&quot;PDF&quot;,&quot;descargar&quot;:&quot;Descargar&quot;,&quot;todo_titulo&quot;:&quot;¿Descargar todos los registros?&quot;,&quot;todo_confirmar&quot;:&quot;Se descargarán :filas filas.&quot;,&quot;todo_confirmar_una&quot;:&quot;Se descargará 1 fila.&quot;,&quot;todo_tope&quot;:&quot;Se descargarán las primeras :filas filas de :total (tope de :tope).&quot;,&quot;sin_filas&quot;:&quot;No hay filas para descargar.&quot;,&quot;descarga_lista&quot;:&quot;Descarga generada.&quot;,&quot;mensaje_pagina&quot;:&quot;Página :pagina de :paginas · Filas: :filas de :total · Generado el :fecha&quot;,&quot;mensaje_todo&quot;:&quot;Filas: :filas de :total · Generado el :fecha&quot;},&quot;jugadores&quot;:{&quot;titulo&quot;:&quot;Jugadores&quot;,&quot;ver_ficha&quot;:&quot;Ver ficha&quot;,&quot;busqueda_sin_resultado&quot;:&quot;No hay ningún jugador con esa matrícula.&quot;,&quot;no_disponible&quot;:&quot;El jugador no existe o no está disponible para usted.&quot;,&quot;error_de_carga&quot;:&quot;No se pudieron cargar estos datos.&quot;,&quot;asistencia_no_disponible&quot;:&quot;No hay datos de asistencia a entrenamientos que usted pueda ver para este jugador.&quot;,&quot;sin_equipos&quot;:&quot;No comparte ningún equipo con este jugador.&quot;,&quot;sin_periodo&quot;:&quot;No hay periodo escolar vigente.&quot;,&quot;sin_dato&quot;:&quot;Sin dato&quot;,&quot;materias_titulo&quot;:&quot;Mis materias del periodo vigente&quot;,&quot;si&quot;:&quot;Sí&quot;,&quot;no&quot;:&quot;No&quot;,&quot;estatus&quot;:{&quot;activo&quot;:&quot;Activo&quot;,&quot;baja&quot;:&quot;Baja&quot;},&quot;posiciones&quot;:{&quot;portero&quot;:&quot;Portero&quot;,&quot;defensa&quot;:&quot;Defensa&quot;,&quot;medio&quot;:&quot;Medio&quot;,&quot;delantero&quot;:&quot;Delantero&quot;},&quot;niveles&quot;:{&quot;sin_riesgo&quot;:&quot;Sin riesgo&quot;,&quot;en_observacion&quot;:&quot;En observación&quot;,&quot;en_riesgo&quot;:&quot;En riesgo&quot;}}}">[39;22m[39;1m\n
+    [39;22m[39;1m<header id="header" class="header fixed-top d-flex align-items-center">[39;22m[39;1m\n
+    [39;22m[39;1m<div class="d-flex align-items-center justify-content-between">[39;22m[39;1m\n
+        [39;22m[39;1m<a href="/panel" class="logo d-flex align-items-center">[39;22m[39;1m\n
+            [39;22m[39;1m<img src="/NiceAdmin/assets/img/logo.png" alt="">[39;22m[39;1m\n
+            [39;22m[39;1m<span class="d-none d-lg-block">[39;22m[39;1mGestorDep[39;22m[39;1m</span>[39;22m[39;1m\n
+        [39;22m[39;1m</a>[39;22m[39;1m\n
+        [39;22m[39;1m<i class="bi bi-list toggle-sidebar-btn">[39;22m[39;1m</i>[39;22m[39;1m\n
+    [39;22m[39;1m</div>[39;22m[39;1m\n
+    [39;22m[39;1m<nav class="header-nav ms-auto">[39;22m[39;1m\n
+        [39;22m[39;1m<ul class="d-flex align-items-center">[39;22m[39;1m\n
+            [39;22m[39;1m<li class="nav-item dropdown pe-3">[39;22m[39;1m\n
+                [39;22m[39;1m<a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">[39;22m[39;1m\n
+                    [39;22m[39;1m<i class="bi bi-person-circle fs-4">[39;22m[39;1m</i>[39;22m[39;1m\n
+                    [39;22m[39;1m<span id="usuario-nombre" class="d-none d-md-block dropdown-toggle ps-2">[39;22m[39;1m</span>[39;22m[39;1m\n
+                [39;22m[39;1m</a>[39;22m[39;1m\n
+                [39;22m[39;1m<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">[39;22m[39;1m\n
+                    [39;22m[39;1m<li>[39;22m[39;1m\n
+                        [39;22m[39;1m<a class="dropdown-item d-flex align-items-center" href="/contrasena">[39;22m[39;1m\n
+                            [39;22m[39;1m<i class="bi bi-key">[39;22m[39;1m</i>[39;22m[39;1m\n
+                            [39;22m[39;1m<span>[39;22m[39;1mCambiar contraseña[39;22m[39;1m</span>[39;22m[39;1m\n
+                        [39;22m[39;1m</a>[39;22m[39;1m\n
+                    [39;22m[39;1m</li>[39;22m[39;1m\n
+                    [39;22m[39;1m<li>[39;22m[39;1m\n
+                        [39;22m[39;1m<hr class="dropdown-divider">[39;22m[39;1m\n
+                    [39;22m[39;1m</li>[39;22m[39;1m\n
+                    [39;22m[39;1m<li>[39;22m[39;1m\n
+                        [39;22m[39;1m<button type="button" id="cerrar-sesion" class="dropdown-item d-flex align-items-center">[39;22m[39;1m\n
+                            [39;22m[39;1m<i class="bi bi-box-arrow-right">[39;22m[39;1m</i>[39;22m[39;1m\n
+                            [39;22m[39;1m<span>[39;22m[39;1mCerrar sesión[39;22m[39;1m</span>[39;22m[39;1m\n
+                        [39;22m[39;1m</button>[39;22m[39;1m\n
+                    [39;22m[39;1m</li>[39;22m[39;1m\n
+                [39;22m[39;1m</ul>[39;22m[39;1m\n
+            [39;22m[39;1m</li>[39;22m[39;1m\n
+        [39;22m[39;1m</ul>[39;22m[39;1m\n
+    [39;22m[39;1m</nav>[39;22m[39;1m\n
+[39;22m[39;1m</header>[39;22m[39;1m\n
+    [39;22m[39;1m<aside id="sidebar" class="sidebar" aria-label="Navegación principal">[39;22m[39;1m\n
+    [39;22m[39;1m<ul class="sidebar-nav" id="sidebar-nav">[39;22m[39;1m\n
+        [39;22m[39;1m<li class="nav-item">[39;22m[39;1m\n
+            [39;22m[39;1m<a class="nav-link collapsed" href="/panel">[39;22m[39;1m\n
+                [39;22m[39;1m<i class="bi bi-grid">[39;22m[39;1m</i>[39;22m[39;1m\n
+                [39;22m[39;1m<span>[39;22m[39;1mPanel[39;22m[39;1m</span>[39;22m[39;1m\n
+            [39;22m[39;1m</a>[39;22m[39;1m\n
+        [39;22m[39;1m</li>[39;22m[39;1m\n
+        [39;22m[39;1m<li class="nav-item" data-roles="docente entrenador" hidden>[39;22m[39;1m\n
+            [39;22m[39;1m<a class="nav-link" href="/jugadores" aria-current="page">[39;22m[39;1m\n
+                [39;22m[39;1m<i class="bi bi-people">[39;22m[39;1m</i>[39;22m[39;1m\n
+                [39;22m[39;1m<span>[39;22m[39;1mJugadores[39;22m[39;1m</span>[39;22m[39;1m\n
+            [39;22m[39;1m</a>[39;22m[39;1m\n
+        [39;22m[39;1m</li>[39;22m[39;1m\n
+    [39;22m[39;1m</ul>[39;22m[39;1m\n
+[39;22m[39;1m</aside>[39;22m[39;1m\n
+    [39;22m[39;1m<main id="main" class="main">[39;22m[39;1m\n
+            [39;22m[39;1m<div class="pagetitle">[39;22m[39;1m\n
+        [39;22m[39;1m<h1 id="titulo-ficha">[39;22m[39;1mFicha del jugador[39;22m[39;1m</h1>[39;22m[39;1m\n
+        [39;22m[39;1m<nav>[39;22m[39;1m\n
+            [39;22m[39;1m<ol class="breadcrumb">[39;22m[39;1m\n
+                [39;22m[39;1m<li class="breadcrumb-item">[39;22m[39;1m<a href="/jugadores">[39;22m[39;1mJugadores[39;22m[39;1m</a>[39;22m[39;1m</li>[39;22m[39;1m\n
+                [39;22m[39;1m<li class="breadcrumb-item active">[39;22m[39;1mFicha del jugador[39;22m[39;1m</li>[39;22m[39;1m\n
+            [39;22m[39;1m</ol>[39;22m[39;1m\n
+        [39;22m[39;1m</nav>[39;22m[39;1m\n
+    [39;22m[39;1m</div>[39;22m[39;1m\n
+    [39;22m[39;1m<section class="section" id="ficha" data-jugador="01a2139b-da20-7e25-b9b5-f88e17b94bf8" data-zona="America/Mexico_City">[39;22m[39;1m\n
+        [39;22m[39;1m<div id="aviso-ficha" class="alert alert-warning d-none" role="alert">[39;22m[39;1m</div>[39;22m[39;1m\n
+        [39;22m[39;1m<div class="card" id="tarjeta-ficha">[39;22m[39;1m\n
+            [39;22m[39;1m<div class="card-body pt-3">[39;22m[39;1m\n
+                [39;22m[39;1m<ul class="nav nav-tabs nav-tabs-bordered" role="tablist">[39;22m[39;1m\n
+                    [39;22m[39;1m<li class="nav-item" role="presentation">[39;22m[39;1m\n
+                        [39;22m[39;1m<button class="nav-link active" id="boton-datos" data-bs-toggle="tab" data-bs-target="#pestana-datos" type="button" role="tab">[39;22m[39;1mDatos[39;22m[39;1m</button>[39;22m[39;1m\n
+                    [39;22m[39;1m</li>[39;22m[39;1m\n
+                    [39;22m[39;1m<li class="nav-item" role="presentation">[39;22m[39;1m\n
+                        [39;22m[39;1m<button class="nav-link" id="boton-academica" data-bs-toggle="tab" data-bs-target="#pestana-academica" type="button" role="tab">[39;22m[39;1mSituación académica[39;22m[39;1m</button>[39;22m[39;1m\n
+                    [39;22m[39;1m</li>[39;22m[39;1m\n
+                    [39;22m[39;1m<li class="nav-item" role="presentation" data-roles="entrenador" hidden>[39;22m[39;1m\n
+                        [39;22m[39;1m<button class="nav-link" id="boton-asistencia" data-bs-toggle="tab" data-bs-target="#pestana-asistencia" type="button" role="tab">[39;22m[39;1mAsistencia a entrenamientos[39;22m[39;1m</button>[39;22m[39;1m\n
+                    [39;22m[39;1m</li>[39;22m[39;1m\n
+                [39;22m[39;1m</ul>[39;22m[39;1m\n
+                [39;22m[39;1m<div class="tab-content pt-3">[39;22m[39;1m\n
+                    [39;22m[39;1m<div class="tab-pane fade show active" id="pestana-datos" role="tabpanel" data-endpoint="GET /jugadores/{jugador}">[39;22m[39;1m\n
+                        [39;22m[39;1m<p class="text-muted" data-mensaje>[39;22m[39;1mCargando…[39;22m[39;1m</p>[39;22m[39;1m\n
+                        [39;22m[39;1m<div data-contenido hidden>[39;22m[39;1m\n
+                            [39;22m[39;1m<dl class="row">[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mApellidos[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="apellidos">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mNombres[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="nombres">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mMatrícula[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="matricula">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mFecha de nacimiento[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="fecha_nacimiento">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mEstatus académico[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="estatus_academico">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mEstatus deportivo[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="estatus_deportivo">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                            [39;22m[39;1m</dl>[39;22m[39;1m\n
+                            [39;22m[39;1m<h2 class="card-title">[39;22m[39;1mEquipos[39;22m[39;1m</h2>[39;22m[39;1m\n
+                            [39;22m[39;1m<table class="table table-sm">[39;22m[39;1m\n
+                                [39;22m[39;1m<thead>[39;22m[39;1m\n
+                                    [39;22m[39;1m<tr>[39;22m[39;1m\n
+                                        [39;22m[39;1m<th data-campo="equipos.nombre">[39;22m[39;1mEquipo[39;22m[39;1m</th>[39;22m[39;1m\n
+                                        [39;22m[39;1m<th data-campo="equipos.categoria.nombre">[39;22m[39;1mCategoría[39;22m[39;1m</th>[39;22m[39;1m\n
+                                        [39;22m[39;1m<th data-campo="equipos.posicion">[39;22m[39;1mPosición[39;22m[39;1m</th>[39;22m[39;1m\n
+                                    [39;22m[39;1m</tr>[39;22m[39;1m\n
+                                [39;22m[39;1m</thead>[39;22m[39;1m\n
+                                [39;22m[39;1m<tbody id="equipos-del-jugador">[39;22m[39;1m</tbody>[39;22m[39;1m\n
+                            [39;22m[39;1m</table>[39;22m[39;1m\n
+                        [39;22m[39;1m</div>[39;22m[39;1m\n
+                    [39;22m[39;1m</div>[39;22m[39;1m\n
+                    [39;22m[39;1m<div class="tab-pane fade" id="pestana-academica" role="tabpanel" data-endpoint="GET /jugadores/{jugador}/situacion-academica">[39;22m[39;1m\n
+                        [39;22m[39;1m<p class="text-muted" data-mensaje>[39;22m[39;1mCargando…[39;22m[39;1m</p>[39;22m[39;1m\n
+                        [39;22m[39;1m<div data-contenido hidden>[39;22m[39;1m\n
+                            [39;22m[39;1m<dl class="row">[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mPeriodo vigente[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="periodo.nombre">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mPromedio[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="promedio">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mMaterias reprobadas[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="materias_reprobadas">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mMaterias sin calificar[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="materias_sin_calificar">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mAsistencia a clase (%)[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="porcentaje_asistencia">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mNivel de riesgo[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="nivel_riesgo">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mDatos incompletos[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="dato_incompleto">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mCalculado el[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="calculado_en">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                            [39;22m[39;1m</dl>[39;22m[39;1m\n
+                            [39;22m[39;1m<div id="bloque-materias" hidden>[39;22m[39;1m\n
+                                [39;22m[39;1m<h2 class="card-title">[39;22m[39;1mMis materias del periodo vigente[39;22m[39;1m</h2>[39;22m[39;1m\n
+                                [39;22m[39;1m<table id="tabla-materias" class="table table-striped text-nowrap w-100">[39;22m[39;1m\n
+                                    [39;22m[39;1m<thead>[39;22m[39;1m\n
+                                        [39;22m[39;1m<tr>[39;22m[39;1m\n
+                                            [39;22m[39;1m<th data-campo="materias.asignatura.clave">[39;22m[39;1mClave[39;22m[39;1m</th>[39;22m[39;1m\n
+                                            [39;22m[39;1m<th data-campo="materias.asignatura.nombre">[39;22m[39;1mAsignatura[39;22m[39;1m</th>[39;22m[39;1m\n
+                                            [39;22m[39;1m<th data-campo="materias.calificacion">[39;22m[39;1mCalificación[39;22m[39;1m</th>[39;22m[39;1m\n
+                                            [39;22m[39;1m<th data-campo="materias.criterio.calificacion_minima">[39;22m[39;1mCalificación mínima[39;22m[39;1m</th>[39;22m[39;1m\n
+                                            [39;22m[39;1m<th data-campo="materias.aprobada">[39;22m[39;1mAprobada[39;22m[39;1m</th>[39;22m[39;1m\n
+                                        [39;22m[39;1m</tr>[39;22m[39;1m\n
+                                    [39;22m[39;1m</thead>[39;22m[39;1m\n
+                                [39;22m[39;1m</table>[39;22m[39;1m\n
+                            [39;22m[39;1m</div>[39;22m[39;1m\n
+                        [39;22m[39;1m</div>[39;22m[39;1m\n
+                    [39;22m[39;1m</div>[39;22m[39;1m\n
+                    [39;22m[39;1m<div class="tab-pane fade" id="pestana-asistencia" role="tabpanel" data-endpoint="GET /jugadores/{jugador}/asistencia-entrenamientos">[39;22m[39;1m\n
+                        [39;22m[39;1m<p class="text-muted" data-mensaje>[39;22m[39;1mCargando…[39;22m[39;1m</p>[39;22m[39;1m\n
+                        [39;22m[39;1m<div data-contenido hidden>[39;22m[39;1m\n
+                            [39;22m[39;1m<dl class="row">[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mAsistencia (%)[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="porcentaje">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mPresentes[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="presentes">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mFaltas[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="faltas">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                                [39;22m[39;1m<dt class="col-sm-4">[39;22m[39;1mFaltas justificadas[39;22m[39;1m</dt>[39;22m[39;1m\n
+                                [39;22m[39;1m<dd class="col-sm-8" data-campo="faltas_justificadas">[39;22m[39;1m</dd>[39;22m[39;1m\n
+                            [39;22m[39;1m</dl>[39;22m[39;1m\n
+                        [39;22m[39;1m</div>[39;22m[39;1m\n
+                    [39;22m[39;1m</div>[39;22m[39;1m\n
+                [39;22m[39;1m</div>[39;22m[39;1m\n
+            [39;22m[39;1m</div>[39;22m[39;1m\n
+        [39;22m[39;1m</div>[39;22m[39;1m\n
+    [39;22m[39;1m</section>[39;22m[39;1m\n
+    [39;22m[39;1m</main>[39;22m[39;1m\n
+    [39;22m[39;1m<footer id="footer" class="footer">[39;22m[39;1m\n
+    [39;22m[39;1m<div class="copyright">[39;22m[39;1m\n
+        GestorDep: seguimiento académico y deportivo de futbolistas\n
+    [39;22m[39;1m</div>[39;22m[39;1m\n
+    [39;22m[39;1m<div class="credits">[39;22m[39;1m\n
+        Designed by [39;22m[39;1m<a href="https://bootstrapmade.com/">[39;22m[39;1mBootstrapMade[39;22m[39;1m</a>[39;22m[39;1m\n
+    [39;22m[39;1m</div>[39;22m[39;1m\n
+[39;22m[39;1m</footer>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/js/tinymce-vacio.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/NiceAdmin/assets/js/main.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/js/api.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/js/sesion.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+        [39;22m[39;1m<script src="/assets/vendor/sweetalert2/sweetalert2.min.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/js/comun/avisos.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/vendor/datatables/js/dataTables.min.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/vendor/datatables/js/dataTables.bootstrap5.min.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/vendor/datatables/js/dataTables.buttons.min.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/vendor/datatables/js/buttons.bootstrap5.min.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/vendor/jszip/jszip.min.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/vendor/pdfmake/pdfmake.min.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/vendor/pdfmake/vfs_fonts.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/js/comun/tabla.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+    [39;22m[39;1m<script src="/assets/js/modulos/jugadores/ver.js">[39;22m[39;1m</script>[39;22m[39;1m\n
+[39;22m[39;1m</body>[39;22m[39;1m\n
+[39;22m[39;1m</html>[39;22m[39;1m\n
+' matches PCRE pattern "/[39;22m[39;1m<div id="acciones-del-entrenador"[^>[39;22m[39;1m]*data-roles="entrenador" hidden>/".[39;22m
+
+  at [32mtests/Feature/Web/PlantelTest.php[39m:[32m196[39m
+    192▕     usuarioDelPlantel($this);
+    193▕     $id = Identificador::generar()->valor();
+    194▕     $html = (string) $this->get('/jugadores/'.$id)->getContent();
+    195▕ 
+  ➜ 196▕     expect($html)->toMatch('/<div id="acciones-del-entrenador"[^>]*data-roles="entrenador" hidden>/')
+    197▕         ->and($html)->toContain('<a id="enlace-editar" class="btn btn-outline-primary btn-sm" href="/jugadores/'.$id.'/editar">')
+    198▕         ->and($html)->toMatch('/<form id="formulario-baja"[^>]*data-endpoint="POST \/jugadores\/\{jugador\}\/baja"[^>]*hidden/');
+    199▕ });
+    200▕
+
+  [33m1   [39m[39;1mtests/Feature/Web/PlantelTest.php[39;22m:[39;1m196[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\EntornoDePruebasTest[22m [90m>[39m F1-H0-T03: toda ruta registr…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m     1 => 'contrasena',[39m[39;1m
+  [39;22m[32m     2 => 'ingreso',[39m[39;1m
+  [39;22m[32m     3 => 'jugadores',[39m[39;1m
+  [39;22m[31m-    4 => 'jugadores/crear',[39m[39;1m
+  [39;22m[31m-    5 => 'jugadores/{jugador}',[39m[39;1m
+  [39;22m[31m-    6 => 'jugadores/{jugador}/editar',[39m[39;1m
+  [39;22m[31m-    7 => 'panel',[39m[39;1m
+  [39;22m[31m-    8 => 'plantel/categorias',[39m[39;1m
+  [39;22m[31m-    9 => 'plantel/equipos',[39m[39;1m
+  [39;22m[31m-    10 => 'plantel/equipos/{equipo}',[39m[39;1m
+  [39;22m[31m-    11 => 'sanctum/csrf-cookie',[39m[39;1m
+  [39;22m[32m+    4 => 'jugadores/{jugador}',[39m[39;1m
+  [39;22m[32m+    5 => 'panel',[39m[39;1m
+  [39;22m[32m+    6 => 'sanctum/csrf-cookie',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/EntornoDePruebasTest.php[39m:[32m30[39m
+     26▕ 
+     27▕     // Fuera de /api/v1 solo se permiten la cookie csrf (DD-28) y las rutas web aprobadas del frontend (DA-122): las tres de
+     28▕     // PT-12, la de FRONT-R2, las dos de FRONT-R3 y las cinco de FRONT-R6 (ampliacion autorizada por el responsable el 24/11/2026
+     29▕     // y para cada rebanada nueva el 25/11/2026); cualquier otra falla.
+  ➜  30▕     expect($rutas)->toBe([
+     31▕         '/', 'contrasena', 'ingreso', 'jugadores', 'jugadores/crear', 'jugadores/{jugador}', 'jugadores/{jugador}/editar', 'panel',
+     32▕         'plantel/categorias', 'plantel/equipos', 'plantel/equipos/{equipo}', 'sanctum/csrf-cookie',
+     33▕     ]);
+     34▕ });
+
+  [33m1   [39m[39;1mtests/Feature/EntornoDePruebasTest.php[39;22m:[39;1m30[39;22m
+
+
+  [90mTests:[39m    [31;1m14 failed[39;22m[90m,[39m[39m [39m[32;1m60 passed[39;22m[90m (749 assertions)[39m
+  [90mDuration:[39m [39m32.62s[39m
+
+# codigo de salida: 2
