@@ -80,7 +80,7 @@ final class RepositorioDeEstadosSql implements RepositorioDeEstados
 
     private function vigentes(Identificador $jugadorId): Builder
     {
-        return $this->conexion->table('estados_disponibilidad')->where('jugador_id', $jugadorId->valor())->whereNull('vigente_hasta');
+        return $this->conexion->table('estados_disponibilidad')->where('jugador_id', $jugadorId->valor())->whereNull('vigente_hasta')->whereNull('eliminado_en');
     }
 
     /** @return array{jugador_id: string, estado: string, lesion_id: string|null, fecha_estimada_regreso: string|null, confirmado_por: string, vigente_desde: string, vigente_hasta: string|null} */

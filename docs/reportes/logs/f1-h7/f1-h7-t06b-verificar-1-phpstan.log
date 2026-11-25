@@ -1,0 +1,54 @@
+inicio: 2026-11-25T04:33:59Z; base: d4b0a60 (todas las correcciones y pruebas de T06b commiteadas)
+docker compose exec -T app bash bin/con-candado.sh composer verificar
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  .......................................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ........................................................ 1027 files  
+
+Note: Using configuration file /var/www/html/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Feature/Seguridad/HistorialPorPerfilTest.php                     
+ ------ ----------------------------------------------------------------------- 
+  64     Access to an undefined property Pest\Mixins\Expectation<list<string>>  
+         ::$not.                                                                
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  94     Access to an undefined property Pest\Mixins\Expectation<list<string>|  
+         null>::$not.                                                           
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   tests/Integration/Consultas/RamaDelDocenteConAliasTest.php             
+ ------ ----------------------------------------------------------------------- 
+  26     Method                                                                 
+         Src\Compartido\Aplicacion\UsuarioActual@anonymous/tests/Integration/C  
+         onsultas/RamaDelDocenteConAliasTest.php:21::identificador() never      
+         returns null so it can be removed from the return type.                
+         🪪  return.unusedType                                                  
+ ------ ----------------------------------------------------------------------- 
+
+ [ERROR] Found 3 errors                                                         
+
+Script @php vendor/bin/phpstan analyse --memory-limit=1G --no-progress handling the verificar event returned with error code 1
+make: *** [Makefile:38: verificar] Error 1
+codigo de salida: 2
+segundos: 41

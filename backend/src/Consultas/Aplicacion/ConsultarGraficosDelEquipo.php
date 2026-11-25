@@ -25,6 +25,14 @@ final class ConsultarGraficosDelEquipo
         private readonly HoyDeNegocio $hoyDeNegocio,
     ) {}
 
+    /** Si el usuario entrena el equipo: el 404 va antes que el 422 (A6-10, DD-50). */
+    public function puedeVer(Identificador $equipo): bool
+    {
+        $usuario = $this->usuarioActual->identificador();
+
+        return $usuario !== null && $this->equipos->entrena($usuario, $equipo);
+    }
+
     public function ejecutar(Identificador $equipo, ?Identificador $jugador = null): ?GraficosDelEquipo
     {
         $usuario = $this->usuarioActual->identificador();

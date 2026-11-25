@@ -40,3 +40,16 @@ La numeración empieza en DA-134 (orden del responsable del 23/11/2026 a las 13:
 | DA-148 | Donde el caso de uso ya abre su `Transaccion` (`ConfirmarAviso`, `CambiarEstado`, `RegistrarMedicion`, `RegistrarPrueba` y `CapturarRendimiento`), el puerto se llama como guarda con una escritura vacía, justo después de la comprobación rápida de la baja, y no envuelve el resto del caso de uso | El puerto abre un punto de guardado; al liberarse, PostgreSQL conserva el candado hasta que termina la transacción externa. Así el cambio es mínimo y el orden de los errores no cambia (DA-33, DA-38, DA-58 y DA-11 de H4) | Esos cinco casos de uso |
 | DA-149 | El puerto acepta una lista vacía de jugadores: no bloquea nada y ejecuta la escritura en la transacción. Corrige la anotación `non-empty-list` de DA-139 | Una alineación sin jugadores (todos quedan sin rol) o un lote vacío no deben exigir un caso aparte; con `whereIn` vacío la consulta no devuelve filas y no hay inactivos | `src/Compartido/Aplicacion/CandadoDeJugadores.php`; `RepositorioDeJugadores::bloquearActivos` |
 | DA-150 | En la asistencia de entrenamiento, un jugador que queda en baja durante la captura responde el mismo 422 `jugador_no_pertenece_al_equipo` que hoy, en el campo `registros.N.jugador_id` del primer registro afectado | Es la respuesta que ya da la captura con un jugador en baja (§7.3 fila 5 de H3). Los inactivos que devuelve el puerto vienen en el orden de la lista, así que el primero es el primer registro afectado | `src/Competencia/Aplicacion/RegistrarAsistencias.php` |
+
+## T06b (PR #39, orden del 24/11/2026, 09:31)
+
+| # | Decisión | Por qué | Dónde está |
+|---|---|---|---|
+| DA-151 | Ante el cambio de digest de `composer:2`, el entorno se levanta con los pasos de `make levantar` pero sin `--build`, sobre la imagen ya construida (`9ed434f7b27a`, la misma de T06) | Si la construcción terminaba, la versión de Composer cambiaría a mitad de la tarea y las corridas de T06b no serían comparables con las de T06. Un cambio de herramienta no pedido no debe entrar a mitad de una tarea | `docs/reportes/f1-h7-t06b.md` §6 y §8 |
+| DA-152 | La prueba de c2 de los estados se retiró del commit, con su log de falla, en lugar de marcarla como omitida o de corregir `src/Salud/**`. **Superada** por la orden del responsable del 25/11/2026, 10:08 (opción a): la prueba vuelve y `RepositorioDeEstadosSql::vigentes()` excluye el borrado lógico (`0402f07`; logs `f1-h7-t06b-c2-estado-sin-filtro.log` y `f1-h7-t06b-c2-estado-con-filtro.log`) | La corrección estaba fuera de las rutas permitidas de T06b; una prueba omitida o debilitada iría contra la regla del encargo | `docs/reportes/f1-h7-t06b.md` §4 y §8 |
+
+## T07 (PR #40, orden del 24/11/2026, 09:31)
+
+| # | Decisión | Por qué | Dónde está |
+|---|---|---|---|
+| DA-153 | La nota de `docs/arquitectura.md` §4.1 no sube la versión del documento (1.5.7) ni agrega fila en §14 | La ruta permitida de T07 es «§4.1 (solo una nota)»; el encabezado y §14 quedan fuera. Propuesta: que T09, o una tarea DOC, suba a 1.5.8 con la fila «§4.1: nota que distingue `CalculoDeDesempeno` de `CalculadorDeDesempeno` (T07)» | `docs/reportes/f1-h7-t07.md` §5 y §7 |

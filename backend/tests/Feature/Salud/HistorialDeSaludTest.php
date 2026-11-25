@@ -361,3 +361,63 @@ test('HU-26: el historial de salud cumple el contrato de OpenAPI (200, 401, 403,
         }
     }
 });
+
+/**
+ * Marca la fila con borrado lógico e inserta su entrada `eliminar` (D-5: ningún caso de uso de H5 borra; F1-H7-T06b).
+ *
+ * @param  array<string, mixed>  $anteriores
+ */
+function historialDeSaludEliminar(string $tabla, string $columna, string $id, string $usuario, array $anteriores): void
+{
+    DB::connection('propietario')->table($tabla)->where('id', $id)->update(['eliminado_en' => '2026-11-15 17:00:00+00', 'eliminado_por' => $usuario]);
+    DB::connection('propietario')->table("{$tabla}_historial")->insert([
+        'id' => Identificador::generar()->valor(), $columna => $id, 'version' => 1, 'operacion' => 'eliminar',
+        'datos_anteriores' => json_encode($anteriores), 'datos_nuevos' => null,
+        'usuario_id' => $usuario, 'ocurrido_en' => '2026-11-15 17:00:00+00', 'motivo' => null,
+    ]);
+}
+
+test('HU-26 c2 (DA-18): un aviso con borrado lógico no aparece en la lectura pero sí en el historial', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $aviso = avisoInsertar($m['f1'], $m['e1']);
+    historialDeSaludEliminar('avisos_lesion', 'aviso_id', $aviso, $m['e1'], ['estado' => 'pendiente', 'nota' => 'Molestia en el tobillo', 'creado_por' => $m['e1']]);
+
+    $lectura = sesionesPeticion($this, 'GET', avisosRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk()->json('datos');
+    $historial = historialDeSaludDatos($this, $m['f1'], 'avisos-lesion', 'e1@x.com');
+
+    expect(array_column($lectura, 'id'))->not->toContain($aviso)
+        ->and($historial)->toHaveCount(1)
+        ->and($historial[0])->toMatchArray(['entidad_id' => $aviso, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
+    historialDeSaludSinCamposDeDa18($historial);
+});
+
+test('HU-26 c2 (DA-18): una lesión con borrado lógico no aparece en la lectura pero sí en el historial', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $lesion = lesionInsertar($m['f1'], $m['e1']);
+    historialDeSaludEliminar('lesiones', 'lesion_id', $lesion, $m['e1'], ['tipo' => 'Esguince', 'zona' => 'Tobillo', 'registrada_por' => $m['e1']]);
+
+    $lectura = sesionesPeticion($this, 'GET', lesionesRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk()->json('datos');
+    $historial = historialDeSaludDatos($this, $m['f1'], 'lesiones', 'e1@x.com');
+
+    expect(array_column($lectura, 'id'))->not->toContain($lesion)
+        ->and($historial)->toHaveCount(1)
+        ->and($historial[0])->toMatchArray(['entidad_id' => $lesion, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
+    historialDeSaludSinCamposDeDa18($historial);
+});
+
+test('HU-26 c2 (DA-18): un estado con borrado lógico no aparece en la lectura pero sí en el historial', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $estado = estadoInsertar($m['f1'], $m['e1'])['estado'];
+    historialDeSaludEliminar('estados_disponibilidad', 'estado_id', $estado, $m['e1'], ['estado' => 'lesionado', 'confirmado_por' => $m['e1']]);
+
+    $lectura = sesionesPeticion($this, 'GET', estadoRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk()->json('datos');
+    $historial = historialDeSaludDatos($this, $m['f1'], 'estados-disponibilidad', 'e1@x.com');
+
+    expect($lectura)->toMatchArray(['estado' => 'apto', 'es_implicito' => true])
+        ->and($historial)->toHaveCount(1)
+        ->and($historial[0])->toMatchArray(['entidad_id' => $estado, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
+    historialDeSaludSinCamposDeDa18($historial);
+});

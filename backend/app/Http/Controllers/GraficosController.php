@@ -31,6 +31,10 @@ class GraficosController extends Controller
      */
     public function delEquipo(Request $solicitud, string $equipo, ConsultarGraficosDelEquipo $consultar): JsonResponse
     {
+        // El 404 va antes que el 422 (A6-10, DD-50).
+        if (! $consultar->puedeVer(IdentificadorDeRuta::desde($equipo))) {
+            throw new NotFoundHttpException;
+        }
         $datos = $solicitud->validate([
             'filtro' => ['array'],
             'filtro.jugador_id' => [FiltroInvalido::uuid()],
