@@ -1,0 +1,54 @@
+inicio: 2026-11-25T04:31:43Z; base: d4b0a60 (pruebas de T06b commiteadas); lote 1
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 1: paginación de T02, c2 en H5 y RN-13 
+=== control antes: 50 passed (980 assertions)
+=== 7.01 el historial académico admite por_pagina mayor que 100 (app/Http/Controllers/HistorialAcademicoController.php)
+pruebas (tests/Feature/Academico/HistorialAcademicoTest.php --filter="por_pagina=101"): 1 failed, 1 passed (26 assertions)
+  falla: HU-26: el historial académico con por_pagina=101 responde 422
+MUERE
+restaurado: app/Http/Controllers/HistorialAcademicoController.php idéntico al original
+=== 7.02 el historial académico pagina de 20 en 20 por omisión (app/Http/Controllers/HistorialAcademicoController.php)
+pruebas (tests/Feature/Academico/HistorialAcademicoTest.php --filter="sin por_pagina"): 1 failed (3 assertions)
+  falla: HU-26: sin por_pagina, el historial académico entrega 15 entradas p…
+MUERE
+restaurado: app/Http/Controllers/HistorialAcademicoController.php idéntico al original
+=== 7.03 el desempate del historial académico va por id ascendente (src/Consultas/Infraestructura/ConsultaDeHistorialAcademicoSql.php)
+pruebas (tests/Feature/Academico/HistorialAcademicoTest.php --filter="con el mismo ocurrido_en"): 1 failed (3 assertions)
+  falla: HU-26: con el mismo ocurrido_en, las entradas del historial académi…
+MUERE
+restaurado: src/Consultas/Infraestructura/ConsultaDeHistorialAcademicoSql.php idéntico al original
+=== 7.04 el historial de avisos oculta los avisos con borrado lógico (src/Salud/Infraestructura/ConsultaDeHistorialDeSaludSql.php)
+pruebas (tests/Feature/Salud/HistorialDeSaludTest.php --filter="HU-26 c2"): 1 failed, 1 passed (27 assertions)
+  falla: HU-26 c2 (DA-18): un aviso con borrado lógico no aparece en la lect…
+MUERE
+restaurado: src/Salud/Infraestructura/ConsultaDeHistorialDeSaludSql.php idéntico al original
+=== 7.05 el historial de lesiones oculta las lesiones con borrado lógico (src/Salud/Infraestructura/ConsultaDeHistorialDeSaludSql.php)
+pruebas (tests/Feature/Salud/HistorialDeSaludTest.php --filter="HU-26 c2"): 1 failed, 1 passed (27 assertions)
+  falla: HU-26 c2 (DA-18): una lesión con borrado lógico no aparece en la le…
+MUERE
+restaurado: src/Salud/Infraestructura/ConsultaDeHistorialDeSaludSql.php idéntico al original
+=== 7.06 el historial de mediciones oculta las mediciones con borrado lógico (src/CondicionFisica/Infraestructura/ConsultaDeHistorialDeCondicionFisicaSql.php)
+pruebas (tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php --filter="HU-26 c2"): 1 failed, 1 passed (21 assertions)
+  falla: HU-26 c2 (DA-18): una medición con borrado lógico no aparece en la…
+MUERE
+restaurado: src/CondicionFisica/Infraestructura/ConsultaDeHistorialDeCondicionFisicaSql.php idéntico al original
+=== 7.07 el historial de pruebas físicas oculta las pruebas con borrado lógico (src/CondicionFisica/Infraestructura/ConsultaDeHistorialDeCondicionFisicaSql.php)
+pruebas (tests/Feature/CondicionFisica/HistorialDeCondicionFisicaTest.php --filter="HU-26 c2"): 1 failed, 1 passed (21 assertions)
+  falla: HU-26 c2 (DA-18): una prueba física con borrado lógico no aparece e…
+MUERE
+restaurado: src/CondicionFisica/Infraestructura/ConsultaDeHistorialDeCondicionFisicaSql.php idéntico al original
+=== 7.08 el docente cuenta como entrenador en Condición física (la mutación 3.05 de T05) (src/CondicionFisica/Infraestructura/VisibilidadDeJugadorSql.php)
+pruebas (tests/Feature/Seguridad/HistorialPorPerfilTest.php --filter="RN-13"): 1 failed, 2 passed (47 assertions)
+  falla: RN-13: un usuario con los dos roles que da clase a F sin entrenarlo…
+MUERE
+restaurado: src/CondicionFisica/Infraestructura/VisibilidadDeJugadorSql.php idéntico al original
+=== 7.09 el docente cuenta como entrenador en las lesiones de Salud (la mutación 2.07 de T05) (src/Salud/Infraestructura/VisibilidadDeJugadorSql.php)
+pruebas (tests/Feature/Seguridad/HistorialPorPerfilTest.php --filter="RN-13"): 1 failed, 2 passed (43 assertions)
+  falla: RN-13: un usuario con los dos roles que da clase a F sin entrenarlo…
+MUERE
+restaurado: src/Salud/Infraestructura/VisibilidadDeJugadorSql.php idéntico al original
+=== control después: 50 passed (980 assertions)
+=== resultado: mueren 9 (7.01, 7.02, 7.03, 7.04, 7.05, 7.06, 7.07, 7.08, 7.09); sobreviven 0 ()
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory
+codigo de salida: 0
