@@ -406,3 +406,18 @@ test('HU-26 c2 (DA-18): una lesión con borrado lógico no aparece en la lectura
         ->and($historial[0])->toMatchArray(['entidad_id' => $lesion, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
     historialDeSaludSinCamposDeDa18($historial);
 });
+
+test('HU-26 c2 (DA-18): un estado con borrado lógico no aparece en la lectura pero sí en el historial', function () {
+    /** @var TestCase $this */
+    $m = avisosMundo();
+    $estado = estadoInsertar($m['f1'], $m['e1'])['estado'];
+    historialDeSaludEliminar('estados_disponibilidad', 'estado_id', $estado, $m['e1'], ['estado' => 'lesionado', 'confirmado_por' => $m['e1']]);
+
+    $lectura = sesionesPeticion($this, 'GET', estadoRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk()->json('datos');
+    $historial = historialDeSaludDatos($this, $m['f1'], 'estados-disponibilidad', 'e1@x.com');
+
+    expect($lectura)->toMatchArray(['estado' => 'apto', 'es_implicito' => true])
+        ->and($historial)->toHaveCount(1)
+        ->and($historial[0])->toMatchArray(['entidad_id' => $estado, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
+    historialDeSaludSinCamposDeDa18($historial);
+});
