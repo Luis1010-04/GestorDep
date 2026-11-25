@@ -61,8 +61,10 @@ test('RN-13: el docente de F ve del lado deportivo el historial de estados de di
     $propio = perfilAviso($this, $m['f1'], 'd1@x.com');
     $ajeno = perfilAviso($this, $m['f1'], 'e1@x.com');
 
+    $avisos = perfilEntidades($this, $m['f1'], 'avisos-lesion', 'd1@x.com');
     expect(perfilEstado($this, "/api/v1/jugadores/{$m['f1']}/historial/estados-disponibilidad", 'd1@x.com'))->toBe(200)
-        ->and(perfilEntidades($this, $m['f1'], 'avisos-lesion', 'd1@x.com'))->toContain($propio)->not->toContain($ajeno);
+        ->and($avisos)->toContain($propio)
+        ->and($avisos)->not->toContain($ajeno);
     foreach (perfilRutasDeEntrenador($m['f1']) as $recurso => [$historial, $lectura]) {
         expect(perfilEstado($this, $historial, 'd1@x.com'))->toBe(perfilEstado($this, $lectura, 'd1@x.com'), $recurso)->toBe(403, $recurso);
     }
@@ -91,7 +93,9 @@ test('RN-13: un usuario con los dos roles que da clase a F sin entrenarlo ve el 
     $deD1 = perfilCalificar($this, $m['inscripcion_f1'], 'd1@x.com');
     medicionInsertar($m['f1'], $m['a'], $m['e1']);
 
-    expect(perfilEntidades($this, $m['f1'], 'calificaciones', 'dd@x.com'))->toBe([$suya])->not->toContain($deD1)
+    $calificaciones = perfilEntidades($this, $m['f1'], 'calificaciones', 'dd@x.com');
+    expect($calificaciones)->toBe([$suya])
+        ->and($calificaciones)->not->toContain($deD1)
         ->and(perfilEstado($this, "/api/v1/jugadores/{$m['f1']}/historial/estados-disponibilidad", 'dd@x.com'))->toBe(200);
     foreach (perfilRutasDeEntrenador($m['f1']) as $recurso => [$historial, $lectura]) {
         expect(perfilEstado($this, $historial, 'dd@x.com'))->toBe(perfilEstado($this, $lectura, 'dd@x.com'), $recurso)->toBe(404, $recurso);

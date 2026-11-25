@@ -23,7 +23,7 @@ function ramaDelDocenteUsuario(string $id, array $roles): UsuarioActual
         /** @param  list<string>  $roles */
         public function __construct(private readonly string $id, private readonly array $roles) {}
 
-        public function identificador(): ?Identificador
+        public function identificador(): Identificador
         {
             return Identificador::desdeTexto($this->id);
         }
