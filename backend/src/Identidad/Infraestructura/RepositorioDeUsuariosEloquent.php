@@ -5,9 +5,10 @@ namespace Src\Identidad\Infraestructura;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Query\Expression;
 use Src\Compartido\Aplicacion\UsuarioActual;
 use Src\Compartido\Dominio\Identificador;
+use Src\Compartido\Dominio\Instante;
+use Src\Compartido\Dominio\Reloj;
 use Src\Compartido\Infraestructura\Historial\EscritorDeHistorial;
 use Src\Identidad\Dominio\RepositorioDeUsuarios;
 use Src\Identidad\Dominio\Usuario;
@@ -20,6 +21,7 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
         private readonly ConnectionInterface $conexion,
         private readonly EscritorDeHistorial $historial,
         private readonly UsuarioActual $usuarioActual,
+        private readonly Reloj $reloj,
     ) {}
 
     public function existeCorreo(string $correo): bool
@@ -82,8 +84,25 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
         ]);
     }
 
+    public function modificarAccesoConCandado(Identificador $id, callable $cambio): void
+    {
+        $this->conexion->transaction(function () use ($id, $cambio): void {
+            $usuario = $this->reconstituir(
+                $this->conexion->table('usuarios')->where('id', $id->valor())->whereNull('eliminado_en')->lockForUpdate()->first(),
+            );
+            if ($usuario === null) {
+                return;
+            }
+
+            $cambio($usuario);
+            $this->guardarAcceso($usuario);
+        });
+    }
+
     public function guardarContrasena(Usuario $usuario): void
     {
+        $momento = Instante::truncadoASegundos($this->reloj->ahora());
+
         $this->historial->registrar(
             'usuarios',
             'usuario_afectado_id',
@@ -93,15 +112,18 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
             ['contrasena_modificada' => true],
             fn () => $this->conexion->table('usuarios')->where('id', $usuario->id()->valor())->update([
                 'contrasena_hash' => $usuario->contrasenaHash(),
-                'actualizado_en' => new Expression('now()'),
+                'actualizado_en' => $momento->format('Y-m-d H:i:sP'),
                 'actualizado_por' => $this->usuarioActual->identificador()?->valor(),
             ]),
+            instante: $momento,
         );
     }
 
     public function guardarNuevo(Usuario $usuario): void
     {
         $autor = $this->usuarioActual->identificador()?->valor();
+        $momento = Instante::truncadoASegundos($this->reloj->ahora());
+        $instante = $momento->format('Y-m-d H:i:sP');
 
         $this->historial->registrar(
             'usuarios',
@@ -115,7 +137,7 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
                 'activo' => $usuario->activo(),
                 'roles' => $usuario->roles(),
             ],
-            function () use ($usuario, $autor): void {
+            function () use ($usuario, $autor, $instante): void {
                 $this->conexion->table('usuarios')->insert([
                     'id' => $usuario->id()->valor(),
                     'nombre' => $usuario->nombre(),
@@ -123,6 +145,8 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
                     'contrasena_hash' => $usuario->contrasenaHash(),
                     'activo' => $usuario->activo(),
                     'intentos_fallidos' => $usuario->intentosFallidos(),
+                    'creado_en' => $instante,
+                    'actualizado_en' => $instante,
                     'creado_por' => $autor,
                     'actualizado_por' => $autor,
                 ]);
@@ -134,6 +158,7 @@ final class RepositorioDeUsuariosEloquent implements RepositorioDeUsuarios
                     ]);
                 }
             },
+            instante: $momento,
         );
     }
 }

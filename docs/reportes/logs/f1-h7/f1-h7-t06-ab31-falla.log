@@ -1,0 +1,76 @@
+inicio: 2026-11-24T19:46:42Z; base: 94cc4c6 con las pruebas de AB-31, sin la corrección
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Seguridad\BajaConcurrenteTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAB-31: una convocatoria concurrente con la baja responde 404 y no s[39m[90m…[39m [90m3.40s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAB-31: una alineación concurrente con la baja responde 404 y no cam[39m[90m…[39m [90m3.28s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAB-31: una asistencia de entrenamiento concurrente con la baja resp[39m[90m…[39m [90m0.43s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAB-31: un rendimiento concurrente con la baja responde 404 y no se[39m[90m… [39m [90m0.64s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Seguridad\BajaConcurrenteTest[22m [90m>[39m AB-31: una convocat…   
+[39;1m  Expected response status code [404] but received 201.
+Failed asserting that 201 is identical to 404.[39;22m
+
+  at [32mtests/Feature/Seguridad/BajaConcurrenteTest.php[39m:[32m218[39m
+    214▕         concurrenciaBajaDe($m['j1']),
+    215▕         fn () => sesionesPeticion($this, 'POST', "/api/v1/partidos/$partido/convocatoria", ['jugador_id' => $m['j1']], $sesion),
+    216▕     );
+    217▕ 
+  ➜ 218▕     $respuesta->assertNotFound()->assertJsonPath('codigo', 'recurso_no_encontrado');
+    219▕     expect(DB::table('convocatorias')->where('jugador_id', $m['j1'])->count())->toBe(0)
+    220▕         ->and($espero)->toBeTrue();
+    221▕ });
+    222▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Seguridad\BajaConcurrenteTest[22m [90m>[39m AB-31: una alineaci…   
+[39;1m  Expected response status code [404] but received 200.
+Failed asserting that 200 is identical to 404.[39;22m
+
+  at [32mtests/Feature/Seguridad/BajaConcurrenteTest.php[39m:[32m240[39m
+    236▕             ['jugador_id' => $m['j1'], 'posicion_id' => $defensa, 'rol_alineacion' => 'titular'],
+    237▕         ]], $sesion),
+    238▕     );
+    239▕ 
+  ➜ 240▕     $respuesta->assertNotFound()->assertJsonPath('codigo', 'recurso_no_encontrado');
+    241▕     expect(DB::table('convocatorias')->where('partido_id', $partido)->whereNotNull('rol_alineacion')->count())->toBe(0)
+    242▕         ->and($espero)->toBeTrue();
+    243▕ });
+    244▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Seguridad\BajaConcurrenteTest[22m [90m>[39m AB-31: una asistenc…   
+[39;1m  Expected response status code [422] but received 201.
+Failed asserting that 201 is identical to 422.[39;22m
+
+  at [32mtests/Feature/Seguridad/BajaConcurrenteTest.php[39m:[32m260[39m
+    256▕             ['jugador_id' => $m['j1'], 'estado' => 'presente'],
+    257▕         ]], $sesion),
+    258▕     );
+    259▕ 
+  ➜ 260▕     $respuesta->assertUnprocessable()
+    261▕         ->assertJsonPath('codigo', 'jugador_no_pertenece_al_equipo')
+    262▕         ->assertJsonPath('errores.0.campo', 'registros.0.jugador_id')
+    263▕         ->assertJsonPath('errores.0.codigo', 'jugador_no_pertenece_al_equipo');
+    264▕     expect(DB::table('asistencias_entrenamiento')->where('entrenamiento_id', $entrenamiento)->count())->toBe(0)
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Seguridad\BajaConcurrenteTest[22m [90m>[39m AB-31: un rendimien…   
+[39;1m  Expected response status code [404] but received 201.
+Failed asserting that 201 is identical to 404.[39;22m
+
+  at [32mtests/Feature/Seguridad/BajaConcurrenteTest.php[39m:[32m280[39m
+    276▕         concurrenciaBajaDe($m['f1']),
+    277▕         fn () => sesionesPeticion($this, 'POST', "/api/v1/partidos/{$m['pj1']}/rendimientos", capturaCuerpo($m['f1'], 'delantero'), $sesion),
+    278▕     );
+    279▕ 
+  ➜ 280▕     $respuesta->assertNotFound()->assertJsonPath('codigo', 'recurso_no_encontrado');
+    281▕     expect(DB::table('rendimientos_partido')->where('jugador_id', $m['f1'])->count())->toBe(0)
+    282▕         ->and($espero)->toBeTrue();
+    283▕ });
+    284▕
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m (8 assertions)[39m
+  [90mDuration:[39m [39m8.23s[39m
+
+codigo de salida: 1

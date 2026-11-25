@@ -1,0 +1,84 @@
+inicio: 2026-11-24T20:17:03Z; base: 3678f44 (las seis correcciones de T06 commiteadas); lote 3
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 3: cada caso de uso sin el puerto 
+=== control antes: 15 passed (80 assertions)
+=== 3.01 AsignarJugadorAEquipo (src/Plantel/Aplicacion/AsignarJugadorAEquipo.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-20"): 1 failed (2 assertions)
+  falla: AB-20: una asignación concurrente con la baja responde 409 jugador_…
+MUERE
+restaurado: src/Plantel/Aplicacion/AsignarJugadorAEquipo.php idéntico al original
+=== 3.02 InscribirJugador (src/Academico/Aplicacion/InscribirJugador.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-26: una inscripción"): 1 failed (2 assertions)
+  falla: AB-26: una inscripción concurrente con la baja responde 409 jugador…
+MUERE
+restaurado: src/Academico/Aplicacion/InscribirJugador.php idéntico al original
+=== 3.03 RegistrarCalificacion (src/Academico/Aplicacion/RegistrarCalificacion.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-26: una calificación"): 1 failed (2 assertions)
+  falla: AB-26: una calificación concurrente con la baja responde 409 y no s…
+MUERE
+restaurado: src/Academico/Aplicacion/RegistrarCalificacion.php idéntico al original
+=== 3.04 CorregirCalificacion (src/Academico/Aplicacion/CorregirCalificacion.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-26: la corrección de una calificación"): 1 failed (2 assertions)
+  falla: AB-26: la corrección de una calificación concurrente con la baja re…
+MUERE
+restaurado: src/Academico/Aplicacion/CorregirCalificacion.php idéntico al original
+=== 3.05 RegistrarAsistencia (clase) (src/Academico/Aplicacion/RegistrarAsistencia.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-26: una asistencia a clase"): 1 failed (2 assertions)
+  falla: AB-26: una asistencia a clase concurrente con la baja responde 409…
+MUERE
+restaurado: src/Academico/Aplicacion/RegistrarAsistencia.php idéntico al original
+=== 3.06 CorregirAsistencia (clase) (src/Academico/Aplicacion/CorregirAsistencia.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-26: la corrección de una asistencia"): 1 failed (2 assertions)
+  falla: AB-26: la corrección de una asistencia a clase concurrente con la b…
+MUERE
+restaurado: src/Academico/Aplicacion/CorregirAsistencia.php idéntico al original
+=== 3.07 CrearAviso (src/Salud/Aplicacion/CrearAviso.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-29: un aviso"): 1 failed (2 assertions)
+  falla: AB-29: un aviso concurrente con la baja responde 409 y no se guarda
+MUERE
+restaurado: src/Salud/Aplicacion/CrearAviso.php idéntico al original
+=== 3.08 ConfirmarAviso (src/Salud/Aplicacion/ConfirmarAviso.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-29: la confirmación"): 1 failed (2 assertions)
+  falla: AB-29: la confirmación de un aviso concurrente con la baja responde…
+MUERE
+restaurado: src/Salud/Aplicacion/ConfirmarAviso.php idéntico al original
+=== 3.09 CambiarEstado (src/Salud/Aplicacion/CambiarEstado.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-29: un cambio de estado"): 1 failed (2 assertions)
+  falla: AB-29: un cambio de estado concurrente con la baja responde 409 y n…
+MUERE
+restaurado: src/Salud/Aplicacion/CambiarEstado.php idéntico al original
+=== 3.10 RegistrarMedicion (src/CondicionFisica/Aplicacion/RegistrarMedicion.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-29: una medición"): 1 failed (2 assertions)
+  falla: AB-29: una medición concurrente con la baja responde 409 y no se gu…
+MUERE
+restaurado: src/CondicionFisica/Aplicacion/RegistrarMedicion.php idéntico al original
+=== 3.11 RegistrarPrueba (src/CondicionFisica/Aplicacion/RegistrarPrueba.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-29: una prueba física"): 1 failed (2 assertions)
+  falla: AB-29: una prueba física concurrente con la baja responde 409 y no…
+MUERE
+restaurado: src/CondicionFisica/Aplicacion/RegistrarPrueba.php idéntico al original
+=== 3.12 ConvocarJugador (src/Competencia/Aplicacion/ConvocarJugador.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-31: una convocatoria"): 1 failed (2 assertions)
+  falla: AB-31: una convocatoria concurrente con la baja responde 404 y no s…
+MUERE
+restaurado: src/Competencia/Aplicacion/ConvocarJugador.php idéntico al original
+=== 3.13 DefinirAlineacion (src/Competencia/Aplicacion/DefinirAlineacion.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-31: una alineación"): 1 failed (2 assertions)
+  falla: AB-31: una alineación concurrente con la baja responde 404 y no cam…
+MUERE
+restaurado: src/Competencia/Aplicacion/DefinirAlineacion.php idéntico al original
+=== 3.14 RegistrarAsistencias (entrenamiento) (src/Competencia/Aplicacion/RegistrarAsistencias.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-31: una asistencia de entrenamiento"): 1 failed (2 assertions)
+  falla: AB-31: una asistencia de entrenamiento concurrente con la baja resp…
+MUERE
+restaurado: src/Competencia/Aplicacion/RegistrarAsistencias.php idéntico al original
+=== 3.15 CapturarRendimiento (src/Rendimiento/Aplicacion/CapturarRendimiento.php)
+pruebas (tests/Feature/Seguridad/BajaConcurrenteTest.php --filter="AB-31: un rendimiento"): 1 failed (2 assertions)
+  falla: AB-31: un rendimiento concurrente con la baja responde 404 y no se…
+MUERE
+restaurado: src/Rendimiento/Aplicacion/CapturarRendimiento.php idéntico al original
+=== control después: 15 passed (80 assertions)
+=== resultado: mueren 15 (3.01, 3.02, 3.03, 3.04, 3.05, 3.06, 3.07, 3.08, 3.09, 3.10, 3.11, 3.12, 3.13, 3.14, 3.15); sobreviven 0 ()
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory
+codigo de salida: 0

@@ -3,6 +3,7 @@
 namespace Src\CondicionFisica\Aplicacion;
 
 use InvalidArgumentException;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\EquiposDelEntrenador;
 use Src\Compartido\Aplicacion\PosicionEnEquipo;
 use Src\Compartido\Aplicacion\UsuarioActual;
@@ -36,6 +37,7 @@ final class RegistrarMedicion
         private readonly UsuarioActual $usuarioActual,
         private readonly HoyDeNegocio $hoyDeNegocio,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /**
@@ -52,6 +54,12 @@ final class RegistrarMedicion
             if (! $this->visibilidad->esVisibleComoEntrenador($jugadorId, incluirBajas: false)) {
                 throw new JugadorEnBajaSinMedicion;
             }
+            // Bloquea la fila del jugador hasta el final de la transacción: una baja simultánea se serializa (AB-29).
+            $this->candado->conJugadoresActivos(
+                [$jugadorId],
+                fn (): JugadorEnBajaSinMedicion => new JugadorEnBajaSinMedicion,
+                fn (): null => null,
+            );
 
             $equipoId = $this->equipoDe($datos['equipo_id'], $jugadorId, $autor);
             $peso = NumeroDecimal::desdeTexto($datos['peso_kg']);

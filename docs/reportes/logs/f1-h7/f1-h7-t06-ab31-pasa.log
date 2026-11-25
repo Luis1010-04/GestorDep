@@ -1,0 +1,430 @@
+inicio: 2026-11-24T19:47:48Z; base: 94cc4c6 con la corrección de AB-31 sin commitear
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Seguridad\BajaConcurrenteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAB-20: una asignación concurrente con la baja responde 409 jugador_[39m[90m…[39m [90m3.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una inscripción concurrente con la baja responde 409 jugador[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una calificación concurrente con la baja responde 409 y no s[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: la corrección de una calificación concurrente con la baja re[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una asistencia a clase concurrente con la baja responde 409[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: la corrección de una asistencia a clase concurrente con la b[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: un aviso concurrente con la baja responde 409 y no se guarda[39m[90m [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: la confirmación de un aviso concurrente con la baja responde[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: un cambio de estado concurrente con la baja responde 409 y n[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: una medición concurrente con la baja responde 409 y no se gu[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: una prueba física concurrente con la baja responde 409 y no[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-31: una convocatoria concurrente con la baja responde 404 y no s[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-31: una alineación concurrente con la baja responde 404 y no cam[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-31: una asistencia de entrenamiento concurrente con la baja resp[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-31: un rendimiento concurrente con la baja responde 404 y no se[39m[90m… [39m [90m0.72s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\AdvertenciasDeLesionTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§7.7 fila 1 (HU-11 c2, DA-15, DA-66): con F1 lesionado y J1 apto, u[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-66: el mensaje no lleva nombre, apellidos ni matrícula del jugad[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.7 fila 2 (DA-15): con F1 con_molestia, la asistencia no advierte[39m[90m [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.7 fila 3 (HU-12 c3, DA-15): convocar a F1 lesionado guarda la co[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.7 fila 4 (DA-01): con F1 apto implícito, la convocatoria no advi[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.7 fila 5: con F1 dado de alta tras estar lesionado, la convocato[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.7 fila 6 (DA-15): con F1 y J1 lesionados, dos advertencias, en r[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.7 fila 7 (DA-15): un entrenamiento que se empalma responde empal[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-67: corregir la asistencia de un jugador lesionado no devuelve l[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT07: sin jugadores lesionados, la asistencia y la convocatoria resp[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT07: una petición rechazada no genera advertencias[39m[90m                  [39m [90m0.48s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\AlineacionYResultadoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 4): con J1 convocado, E1 lo define titular en la p[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 5): incluir a J2, que no está convocado, da 422 ju[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 6): cambiar la alineación de un partido jugado da[39m[90m… [39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 7): E1 captura el resultado 3-1 de un partido prog[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§7.5 fila 8): goles de 100 dan 422 valor_fuera_de_rango en g[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 6): un partido cancelado no admite resultado: PUT[39m[90m… [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§2.3): el resultado de un partido jugado no se corrige[39m[90m       [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-33): goles fuera de rango, negativos o con forma inválida[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-33): goles fuera de rango, negativos o con forma inválida[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-33): goles fuera de rango, negativos o con forma inválida[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-33): goles fuera de rango, negativos o con forma inválida[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-33): goles fuera de rango, negativos o con forma inválida[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-33): goles fuera de rango, negativos o con forma inválida[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-33): goles fuera de rango, negativos o con forma inválida[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: los límites 0 y 99 se aceptan[39m[90m                                [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (§3.4): la alineación reemplaza la anterior: quien sale queda[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-34): un jugador visible cuya convocatoria se quitó da 422[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (DA-34): un jugador fuera del alcance en la alineación, tamb[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-34): para E3, que entrena A y B, J4 es visible y no está[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-31): una posición inexistente o con UUID que no es v7 da[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13 (DA-31): una posición inexistente o con UUID que no es v7 da[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: la alineación con forma inválida da 422 with dataset "sin al[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: la alineación con forma inválida da 422 with dataset "rol in[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: la alineación con forma inválida da 422 with dataset "sin po[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: la alineación con forma inválida da 422 with dataset "campo[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: la alineación con forma inválida da 422 with dataset "repeti[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la alineación y el resultado de un partido ajeno dan 404 by[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: E3, que entrena A y B, define la alineación y captura el res[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-13: un docente recibe 403 y sin sesión 401 en la alineación y el[39m[90m…[39m [90m0.27s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\AsistenciaDeEntrenamientosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 1): capturar asistencia en un entrenamiento progra[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 1): un entrenamiento cancelado tampoco admite asis[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 2): E1 captura J1 presente, J2 falta y J3 falta ju[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 3): capturar de nuevo da 409 asistencia_ya_registr[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 4): E1 corrige J2 a presente y el historial guarda[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 5): una lista con J5 (baja) da 422 jugador_no_pert[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11: un jugador de otro equipo, con la membresía cerrada o inexis[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 6): con 3 presentes, 1 falta y 1 justificada en en[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 7): sin entrenamientos realizados el porcentaje de[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 filas 8 y 9): el porcentaje de J3 solo cuenta los entre[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 10): con 2 presentes de 4 registros, el porcentaje[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11: un equipo sin registros tiene porcentaje null y sus jugadore[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (§7.3 fila 11): E1 consulta el porcentaje de J4 (equipo B) y[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (DA-20): un jugador en baja sigue visible para su entrenador;[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (DA-17): un jugador repetido, una lista vacía o un estado inv[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (DA-17): un jugador repetido, una lista vacía o un estado inv[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (DA-17): un jugador repetido, una lista vacía o un estado inv[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (DA-17): un jugador repetido, una lista vacía o un estado inv[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11 (DA-18): E3 corrige la asistencia de un jugador que ya está e[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11: una corrección vacía, con un estado inválido o con un campo[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11: el listado de asistencias de un entrenamiento trae sus regis[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.6 fila 1): E2, sin relación con A, consulta un entrenami[39m[90m…[39m [90m0.86s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.6 fila 2): E2 intenta registrar asistencia en un entrena[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.6 fila 8): la asistencia de un equipo ajeno responde 404[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-11: un docente recibe 403 en las rutas de entrenador de asistenc[39m[90m…[39m [90m0.35s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\CatalogosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 1): E1 crea el lugar L2 y E2 lo ve en el listado[39m[90m   [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 2): E1 crea un lugar con el nombre de L1 y recibe[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 3): E1 crea la temporada T2 que se cruza con T1 y[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-07: una temporada que empieza el día en que termina otra se cruz[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-07: una temporada eliminada no cuenta para el cruce[39m[90m              [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 4): una temporada con fecha_fin anterior a fecha_i[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 5): E1 crea un torneo en T1[39m[90m                        [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 6): un docente que crea un lugar recibe 403 sin_pe[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 en todas las rutas de catálogos de Com[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('GET',[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('POST'[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('DELET[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('GET',[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('POST'[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('DELET[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('GET',[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('POST'[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('DELET[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('GET',[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('POST'[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las rutas de catálogos responden 401 with ('DELET[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28 (§7.1 fila 7): E1 borra L1, que tiene un partido; el partido[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: tras el borrado lógico el nombre puede darse de alta de nuev[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: tras el borrado lógico el nombre puede darse de alta de nuev[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: tras el borrado lógico el nombre puede darse de alta de nuev[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un rival, una temporada o un torneo repetidos con otras mayú[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: el mismo nombre de torneo se permite en otra temporada[39m[90m       [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un torneo en una temporada inexistente, eliminada o con UUID[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un campo faltante, demasiado largo o con formato inválido da[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un campo faltante, demasiado largo o con formato inválido da[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un campo faltante, demasiado largo o con formato inválido da[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un campo faltante, demasiado largo o con formato inválido da[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un campo faltante, demasiado largo o con formato inválido da[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un campo faltante, demasiado largo o con formato inválido da[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un campo faltante, demasiado largo o con formato inválido da[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: los listados excluyen los eliminados y ordenan por nombre, o[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: el listado pagina con pagina y por_pagina[39m[90m                    [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: cada alta y cada borrado de catálogo escriben su historial[39m[90m… [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: cada alta y cada borrado de catálogo escriben su historial[39m[90m… [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: cada alta y cada borrado de catálogo escriben su historial[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: cada alta y cada borrado de catálogo escriben su historial[39m[90m… [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: borrar un id inexistente o un UUID que no es v7 da el mismo[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: borrar un id inexistente o un UUID que no es v7 da el mismo[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: borrar un id inexistente o un UUID que no es v7 da el mismo[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: borrar un id inexistente o un UUID que no es v7 da el mismo[39m[90m… [39m [90m0.25s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\ContratoDeAdvertenciasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-15: la advertencia con campo de la asistencia y de la convocator[39m[90m…[39m [90m0.82s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\ContratoDeAlineacionYResultadoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-13: las respuestas de alineación y resultado cumplen el contrato[39m[90m [39m [90m1.77s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\ContratoDeAsistenciaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-11: las respuestas de asistencia a entrenamientos cumplen el con[39m[90m…[39m [90m1.88s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\ContratoDeCompetenciaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: las respuestas de los catálogos de Competencia cumplen el co[39m[90m…[39m [90m1.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: las respuestas de los catálogos de Competencia cumplen el co[39m[90m…[39m [90m0.97s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: las respuestas de los catálogos de Competencia cumplen el co[39m[90m…[39m [90m0.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: las respuestas de los catálogos de Competencia cumplen el co[39m[90m…[39m [90m0.97s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-07: el 409 temporada_solapada cumple el contrato[39m[90m                 [39m [90m0.88s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\ContratoDeConvocatoriaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12: las respuestas de convocatoria cumplen el contrato[39m[90m           [39m [90m1.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\ContratoDeEntrenamientosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10: las respuestas de entrenamientos cumplen el contrato[39m[90m         [39m [90m1.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\ContratoDePartidosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12: las respuestas de partidos cumplen el contrato[39m[90m               [39m [90m1.26s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\ConvocatoriaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.5 fila 1): E1 convoca a J1 a un partido programado de A[39m[90m   [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.5 fila 2): convocar de nuevo a J1 da 409 jugador_ya_convo[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.5 fila 3): convocar a J5 (baja) da el mismo 404 que un ju[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DA-28): un jugador de otro equipo, con la membresía cerrada[39m[90m… [39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29 (§7.5 fila 9): J5, dado de baja después de convocarlo, no apa[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.5 fila 10): E1 quita a J1 de la convocatoria; el historia[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: la convocatoria lista en orden de convocatoria, excluye las[39m[90m… [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§3.4): en un partido cancelado o jugado no se convoca ni se[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§3.4): en un partido cancelado o jugado no se convoca ni se[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un jugador_id faltante, que no es UUID o un campo no admitid[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un jugador_id faltante, que no es UUID o un campo no admitid[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un jugador_id faltante, que no es UUID o un campo no admitid[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.6 fila 3): E2 intenta convocar a J1 a un partido de A y[39m[90m… [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la convocatoria de un equipo ajeno da 404 byte a byte por c[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un docente recibe 403 y sin sesión 401 en las rutas de convo[39m[90m…[39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\EntrenamientosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (§7.2 fila 1): E1 crea un entrenamiento de A con L1 y respons[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (§7.2 fila 2): otro entrenamiento en L1 de 17:30 a 18:30 se g[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (§7.2 fila 3): E1 cambia la hora y entrenamientos_historial r[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (§7.2 fila 4): E1 cancela un entrenamiento programado y ya no[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (§7.2 fila 5): poner realizado un entrenamiento cancelado da[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (§7.2 fila 6): E1 crea un entrenamiento de B y recibe 404[39m[90m     [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (§7.2 fila 7): un responsable que no entrena A da 422 en resp[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: el responsable puede ser otro entrenador del equipo, pero no[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: cambiar el responsable a quien no entrena el equipo da 422;[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: el empalme cuenta entrenamientos de otro equipo en el mismo[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: modificar un entrenamiento hacia un horario ocupado advierte[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: de programado se pasa a realizado; de realizado no se pasa a[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (DA-08): un entrenamiento cancelado o realizado no admite cam[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10 (DA-08): un entrenamiento cancelado o realizado no admite cam[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: cambiar datos y cancelar en la misma petición aplica los dos[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: un horario invertido da 422 en termina_en al crear y rango_d[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: un lugar inexistente o eliminado da 422 lugar_inexistente[39m[90m    [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: los campos faltantes o mal formados dan 422 con el campo señ[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: los campos faltantes o mal formados dan 422 con el campo señ[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: los campos faltantes o mal formados dan 422 con el campo señ[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: un PATCH vacío, con un campo no admitido o con un estado inv[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: el detalle lista los jugadores del equipo; E2 recibe 404 y E[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: el 404 de un entrenamiento ajeno gana al 422 y no cambia nad[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: el listado de un equipo filtra por días locales y ordena por[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-10: un docente recibe 403 y sin sesión 401 en las rutas de entre[39m[90m…[39m [90m0.38s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Competencia\PartidosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 1): E1 crea un partido oficial en T1 con TO1; temp[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 2): sin temporada que contenga la fecha, crear un[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 3): un partido oficial sin torneo da 422 torneo_ob[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 3): un partido oficial sin torneo da 422 torneo_ob[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 4): un partido amistoso sin torneo se crea; uno in[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 4): un partido amistoso sin torneo se crea; uno in[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 5): un partido en fecha de otra temporada con TO1[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 6, parcial hasta T07): E1 cancela un partido de A;[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 7): E1 consulta un partido de B y recibe el mismo[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (§7.4 fila 8): a las 00:30 UTC del 16 de diciembre (el 15 en[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DD-07): la frontera del día local decide la temporada en los[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DD-07): la frontera del día local decide la temporada en los[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DD-07): la frontera del día local decide la temporada en los[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DD-07): la frontera del día local decide la temporada en los[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DD-07): la frontera del día local decide la temporada en los[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DA-25): mover la fecha a otra temporada vuelve a derivarla y[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DA-25): cambiar el tipo o quitar el torneo reevalúa torneo_o[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un partido conserva su temporada eliminada mientras no cambi[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DA-24): un lugar, un rival o un torneo inexistente o elimina[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DA-24): un lugar, un rival o un torneo inexistente o elimina[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DA-24): un lugar, un rival o un torneo inexistente o elimina[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: cancelar un partido jugado o ya cancelado da 409 transicion_[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: cancelar un partido jugado o ya cancelado da 409 transicion_[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: datos y cancelación en la misma petición quedan en una sola[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un PATCH vacío, con campos no admitidos o con un estado dist[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un PATCH vacío, con campos no admitidos o con un estado dist[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un PATCH vacío, con campos no admitidos o con un estado dist[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un PATCH vacío, con campos no admitidos o con un estado dist[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un PATCH vacío, con campos no admitidos o con un estado dist[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: los campos faltantes o mal formados del alta dan 422 con el[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: los campos faltantes o mal formados del alta dan 422 con el[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: los campos faltantes o mal formados del alta dan 422 con el[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 (DA-26): el listado de un equipo filtra por temporada y estad[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un partido o el listado de un equipo ajeno dan 404 byte a b[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: E3, que entrena A y B, consulta y modifica un partido de A[39m[90m   [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12: un docente recibe 403 y sin sesión 401 en las rutas de parti[39m[90m…[39m [90m0.35s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rendimiento\CapturaDeRendimientoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 1): E1 captura a P1 en PJ1 con sus métricas obliga[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 2): una segunda captura de P1 en PJ1 da 409 rendim[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-22, v1.0.8): la carrera de dos capturas del mismo entrena[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14 (v1.0.8): E1 y E3 capturan al mismo jugador en el mismo parti[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (v1.0.8): los pendientes cuentan solo los rendimientos del en[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (M-1 de la auditoría del Lote C): si falla la inserción de la[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-06 (v1.0.4): la captura, la corrección y la lista devuelven cate[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 3): capturar en un partido programado da 409 parti[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 4): capturar a D1 sin recuperaciones da 422 metric[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 5): capturar a D1 con tiros a portería da 422 metr[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 6): una calificación de 11 da 422 valor_fuera_de_r[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 7): 151 minutos dan 422 valor_fuera_de_rango en mi[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 8): capturar a J2, visible pero no convocado a PJ1[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 9): PJ1 aparece en pendientes solo mientras le fal[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 10): E2, sin relación con A, consulta o corrige el[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 11): E1 corrige la calificación de su rendimiento[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (§7.1 fila 13, RN-14): E3, que entrena A, corrige el rendimie[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14 (§7.4 fila 3): E3 lista los rendimientos de PJ1 y solo ve los[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.4 fila 4): un UUID válido que no es v7 en {rendimiento}[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: E1 consulta el catálogo de métricas con sus posiciones, sin[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: un docente recibe 403 en las rutas de captura, y sin sesión[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): un jugador fuera del alcance de E1 da el 404 de uno[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): un partido ajeno da 404 antes de validar el cuerpo[39m[90m   [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): tarjetas, observación y valor de métrica fuera de ra[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): tarjetas, observación y valor de métrica fuera de ra[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): tarjetas, observación y valor de métrica fuera de ra[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): tarjetas, observación y valor de métrica fuera de ra[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): tarjetas, observación y valor de métrica fuera de ra[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): tarjetas, observación y valor de métrica fuera de ra[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: la corrección reemplaza la lista de métricas y escribe el hi[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: la corrección rechaza un cuerpo vacío, jugador_id y un campo[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: la captura valida tipos y rechaza campos desconocidos o métr[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: la captura valida tipos y rechaza campos desconocidos o métr[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: la captura valida tipos y rechaza campos desconocidos o métr[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14: la captura valida tipos y rechaza campos desconocidos o métr[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-14 (DA-11): un jugador_id o un metrica_id con UUID válido que no[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: corregir quitando y volviendo a poner una métrica opcional[39m[90m… [39m [90m0.50s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rendimiento\ContratoDeDesempenoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-16: las respuestas del desempeño cumplen el contrato[39m[90m             [39m [90m1.25s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rendimiento\ContratoDePlantillasYUmbralesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15: las respuestas de plantillas y umbral cumplen el contrato[39m[90m    [39m [90m1.46s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rendimiento\ContratoDeRendimientoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-14: las respuestas de métricas, pendientes y rendimientos cumple[39m[90m…[39m [90m1.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rendimiento\DesempenoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 1): con cuatro calificaciones de E1 para F1 (7, 7,[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 2): con cinco calificaciones (7, 7, 8, 6, 5) el pr[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 3): con (5, 5, 6, 6, 5) el promedio es 5.40 y no p[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 4): un promedio exactamente igual al umbral (6, 6,[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 5, RN-14): con calificaciones de E1 y de E2 para F[39m[90m…[39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 6): una captura que cambia el resultado inserta un[39m[90m…[39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (§7.3 fila 7): un cambio de umbral inserta una evaluación con[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-08 (v1.0.5): las últimas N se ordenan por la fecha del partido,[39m[90m… [39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-08 (v1.0.5): solo cuentan las calificaciones del entrenador en e[39m[90m…[39m [90m0.65s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16: una corrección inserta una evaluación, y una captura rechaza[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (v1.0.5): al corregir el rendimiento de un jugador que ya no[39m[90m… [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (v1.0.5): sin evaluaciones guardadas, la lectura calcula sin[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (DA-33): sin umbral propio y sin plantilla de fábrica de la p[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (§7.4 fila 5): un jugador ajeno al alcance de E2 da el 404 d[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-16 (RNF-01): un docente recibe 403 en el desempeño, y sin sesión[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rendimiento\PlantillasYUmbralesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 1): sin umbral propio, E1 consulta el umbral de F1[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 2): E1 cambia el umbral de F1 a 7.0 con ventana 3;[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 3): E1 consulta o cambia el umbral de F1 en B, que[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 5): E1 crea una plantilla de defensa; creada_por e[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 6): E1 usa una plantilla de portero para F1 y reci[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): un umbral con calificación 0, o con una ventan[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): un umbral con calificación 0, o con una ventan[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): un umbral con calificación 0, o con una ventan[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (§7.2 fila 7): un umbral con calificación 0, o con una ventan[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (criterio 2): el umbral de E1 se aplica solo a F1, en A, y pa[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-07: cada posición tiene su plantilla de fábrica, y el umbral de[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: el primer PUT no cierra nada; sin cuerpo copia la plantilla[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: un umbral con una plantilla propia de la posición copia sus[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (v1.0.4): una plantilla inexistente, ajena o con UUID no v7 d[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (v1.0.4): plantilla_id junto con valores propios da 422 umbra[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: el PUT del umbral valida tipos, exige la calificación y la v[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: el PUT del umbral valida tipos, exige la calificación y la v[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: el PUT del umbral valida tipos, exige la calificación y la v[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: el PUT del umbral valida tipos, exige la calificación y la v[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: el PUT del umbral valida tipos, exige la calificación y la v[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: el PUT del umbral valida tipos, exige la calificación y la v[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: el PUT del umbral valida tipos, exige la calificación y la v[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (RNF-01): un jugador fuera del alcance, sin membresía en el e[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: la carrera de dos PUT que choca con el índice del umbral vig[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: E1 lista las plantillas de fábrica y las suyas, nunca las de[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (DA-26): un filtro de posición con UUID válido no v7 da una l[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (v1.0.4): una plantilla propia con el nombre de otra suya o d[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (v1.0.4): el nombre de una plantilla de otro entrenador o de[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (v1.0.4): la carrera de dos plantillas con el mismo nombre qu[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla con una posición inexistente o con UUID no v7[39m[90m… [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla con una posición inexistente o con UUID no v7[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla fuera de rango da valor_fuera_de_rango y una m[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla fuera de rango da valor_fuera_de_rango y una m[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla fuera de rango da valor_fuera_de_rango y una m[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla fuera de rango da valor_fuera_de_rango y una m[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla fuera de rango da valor_fuera_de_rango y una m[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla fuera de rango da valor_fuera_de_rango y una m[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla fuera de rango da valor_fuera_de_rango y una m[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15: una plantilla fuera de rango da valor_fuera_de_rango y una m[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-15 (RNF-01): un docente recibe 403 en las rutas de plantillas y[39m[90m… [39m [90m0.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\AlcanceDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la lista de usos autorizados sin alcance es exactamente la[39m[90m… [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: el detector marca consultas de jugadores sin alcance y deja[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un archivo exento no se revisa[39m[90m                              [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: ninguna consulta de jugadores en src ni app evita AlcanceDe[39m[90m…[39m [90m2.71s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la implementación del alcance existe donde la lista la espe[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\ArquitecturaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: existen los contextos con sus capas[39m[90m                      [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: cada contexto tiene su proveedor de servicios registrado[39m[90m [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: el dominio no depende del framework[39m[90m                     [39m [90m11.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Compartido no depende de su infraestruc[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Compartido no importa el dominio de otro contexto[39m[90m        [39m [90m2.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Identidad no depende de su infraestruct[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Identidad no importa el dominio de otro contexto[39m[90m         [39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Plantel no depende de su infraestructur[39m[90m…[39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Plantel no importa el dominio de otro contexto[39m[90m           [39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Academico no depende de su infraestruct[39m[90m…[39m [90m1.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Academico no importa el dominio de otro contexto[39m[90m         [39m [90m1.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Competencia no depende de su infraestru[39m[90m…[39m [90m1.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Competencia no importa el dominio de otro contexto[39m[90m       [39m [90m1.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Rendimiento no depende de su infraestru[39m[90m…[39m [90m0.72s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Rendimiento no importa el dominio de otro contexto[39m[90m       [39m [90m1.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de CondicionFisica no depende de su infrae[39m[90m…[39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: CondicionFisica no importa el dominio de otro contexto[39m[90m   [39m [90m0.78s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Salud no depende de su infraestructura[39m[90m  [39m [90m0.84s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Salud no importa el dominio de otro contexto[39m[90m             [39m [90m0.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Alertas no depende de su infraestructur[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Alertas no importa el dominio de otro contexto[39m[90m           [39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Consultas no depende de su infraestruct[39m[90m…[39m [90m1.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Consultas no importa el dominio de otro contexto[39m[90m         [39m [90m0.89s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\BorradoLogicoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: la lista de tablas del framework permitidas es exactamen[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: el detector marca borrados de negocio y deja pasar las t[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: ningun codigo de src ni app borra fisicamente tablas de[39m[90m… [39m [90m2.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\CompetenciaSinPlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T03: el detector encuentra importaciones de Plantel y tablas[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T03: Competencia no importa Plantel ni lee sus tablas[39m[90m         [39m [90m2.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\CompetenciaSinSaludTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T04: el detector encuentra importaciones de Salud y tablas de[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T04: Competencia no importa Salud ni lee sus tablas[39m[90m           [39m [90m2.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\DecimalesEnDominioTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el detector reconoce float y las funciones de redondeo, y d[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el dominio no usa float ni round, floor, ceil ni number_for[39m[90m…[39m [90m0.93s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el dominio no usa round, floor, ceil ni number_format (arch[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\LocalizadorDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el detector encuentra los archivos que nombran el localizado[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: solo la declaración, el adaptador, su enlace y el caso de us[39m[90m…[39m [90m2.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el puerto devuelve solo el identificador y si el jugador est[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el adaptador del localizador no consulta la tabla de jugador[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\RendimientoSinPlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T02: el detector encuentra importaciones de Plantel y tablas[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T02: Rendimiento no importa Plantel ni lee sus tablas[39m[90m         [39m [90m2.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\TextosEnLangTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T09: el detector reconoce texto visible y deja pasar codigos[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T09: ningun texto visible esta escrito fuera de lang/es[39m[90m       [39m [90m2.27s[39m  
+
+  [90mTests:[39m    [32;1m363 passed[39;22m[90m (3038 assertions)[39m
+  [90mDuration:[39m [39m170.87s[39m
+
+codigo de salida: 0

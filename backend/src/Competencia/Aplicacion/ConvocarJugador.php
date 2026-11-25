@@ -3,6 +3,7 @@
 namespace Src\Competencia\Aplicacion;
 
 use InvalidArgumentException;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\JugadorDelEquipo;
 use Src\Compartido\Aplicacion\JugadoresDelEquipo;
 use Src\Compartido\Dominio\Identificador;
@@ -23,6 +24,7 @@ final class ConvocarJugador
         private readonly BuscarPartidoDelEntrenador $buscarPartido,
         private readonly JugadoresDelEquipo $jugadores,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /** @throws RecursoNoEncontrado|PartidoNoProgramado|JugadorYaConvocado */
@@ -37,7 +39,12 @@ final class ConvocarJugador
         }
 
         $convocatoria = Convocatoria::nueva($partidoId, $jugador, Instante::truncadoASegundos($this->reloj->ahora()));
-        $this->convocatorias->guardarNueva($convocatoria);
+        // Con la fila del jugador bloqueada: una baja simultánea se serializa con la convocatoria (AB-31).
+        $this->candado->conJugadoresActivos(
+            [$jugador],
+            fn (): RecursoNoEncontrado => new RecursoNoEncontrado,
+            fn () => $this->convocatorias->guardarNueva($convocatoria),
+        );
 
         return $convocatoria;
     }

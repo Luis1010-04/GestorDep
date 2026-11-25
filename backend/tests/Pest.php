@@ -15,5 +15,6 @@ require_once __DIR__.'/Ayudantes/DominioDePrueba.php';
 require_once __DIR__.'/Ayudantes/MundoDeAlertas.php';
 require_once __DIR__.'/Ayudantes/MundoDeGraficos.php';
 require_once __DIR__.'/Ayudantes/MundoParaConvocar.php';
+require_once __DIR__.'/Ayudantes/TransaccionConcurrente.php';
 
 pest()->extend(TestCase::class)->in('Feature', 'Arch', 'Integration');

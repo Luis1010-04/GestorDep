@@ -3,6 +3,7 @@
 namespace Src\Competencia\Aplicacion;
 
 use InvalidArgumentException;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\JugadorDelEquipo;
 use Src\Compartido\Aplicacion\JugadoresDelEquipo;
 use Src\Compartido\Dominio\Identificador;
@@ -24,6 +25,7 @@ final class RegistrarAsistencias
         private readonly BuscarEntrenamientoDelEntrenador $buscarEntrenamiento,
         private readonly JugadoresDelEquipo $jugadores,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /**
@@ -50,10 +52,20 @@ final class RegistrarAsistencias
             $nuevas[] = new AsistenciaDeEntrenamiento(Identificador::generar(), $entrenamientoId, $jugador, $registro['estado'], $instante);
         }
 
-        if ($this->asistencias->hayAlgunaDe($entrenamientoId, array_map(fn (AsistenciaDeEntrenamiento $a) => $a->jugadorId(), $nuevas))) {
+        $jugadores = array_map(fn (AsistenciaDeEntrenamiento $a) => $a->jugadorId(), $nuevas);
+        if ($this->asistencias->hayAlgunaDe($entrenamientoId, $jugadores)) {
             throw new AsistenciaYaRegistrada;
         }
-        $this->asistencias->guardarNuevas($nuevas);
+        // Con las filas de los jugadores bloqueadas: una baja simultánea se serializa con la captura (AB-31). El jugador que
+        // quedó en baja responde como hoy uno en baja: 422 en su registro. Los inactivos vienen en el orden de la lista.
+        $valores = array_map(fn (Identificador $jugador) => $jugador->valor(), $jugadores);
+        $this->candado->conJugadoresActivos(
+            $jugadores,
+            fn (array $inactivos): JugadorNoPerteneceAlEquipo => new JugadorNoPerteneceAlEquipo(
+                'registros.'.(int) array_search($inactivos[0]->valor(), $valores, true).'.jugador_id',
+            ),
+            fn () => $this->asistencias->guardarNuevas($nuevas),
+        );
 
         return $nuevas;
     }
