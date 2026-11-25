@@ -48,3 +48,19 @@ test('CONSOLA: UsuariosDemoSeeder crea dos docentes y dos entrenadores y es idem
         ->and(Hash::check(UsuariosDemoSeeder::contrasena(), $usuario->contrasena_hash))->toBeTrue()
         ->and(strlen(UsuariosDemoSeeder::contrasena()))->toBeGreaterThanOrEqual(10);
 });
+
+test('A6-16: con APP_ENV=staging no se crean usuarios de demostración', function () {
+    app()->detectEnvironment(fn () => 'staging');
+
+    consolaArtisan('db:seed', ['--force' => true])->assertSuccessful();
+
+    expect(DB::table('usuarios')->count())->toBe(0);
+});
+
+test('A6-16: con APP_ENV local y testing sí se crean', function (string $entorno) {
+    app()->detectEnvironment(fn () => $entorno);
+
+    consolaArtisan('db:seed', ['--force' => true])->assertSuccessful();
+
+    expect(DB::table('usuarios')->count())->toBe(4);
+})->with(['local', 'testing']);

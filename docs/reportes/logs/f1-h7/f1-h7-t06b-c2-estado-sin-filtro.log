@@ -1,0 +1,31 @@
+inicio: 2026-11-25T16:27:17Z; base: c162cb0 (main con #37 y #40) con la prueba de c2 de estados y sin el filtro en vigentes()
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Salud\HistorialDeSaludTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mHU-26 c2 (DA-18): un estado con borrado lógico no aparece en la lec[39m[90m…[39m [90m6.33s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Salud\HistorialDeSaludTest[22m [90m>[39m HU-26 c2 (DA-18): un e…   
+[39;1m  Failed asserting that an array has a key 'estado' with the value 'lesionado'.
+Failed asserting that two strings are equal.
+  [39;22m[31m-'apto'[39m[39;1m
+  [39;22m[32m+'lesionado'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Salud/HistorialDeSaludTest.php[39m:[32m419[39m
+    415▕ 
+    416▕     $lectura = sesionesPeticion($this, 'GET', estadoRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk()->json('datos');
+    417▕     $historial = historialDeSaludDatos($this, $m['f1'], 'estados-disponibilidad', 'e1@x.com');
+    418▕ 
+  ➜ 419▕     expect($lectura)->toMatchArray(['estado' => 'apto', 'es_implicito' => true])
+    420▕         ->and($historial)->toHaveCount(1)
+    421▕         ->and($historial[0])->toMatchArray(['entidad_id' => $estado, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
+    422▕     historialDeSaludSinCamposDeDa18($historial);
+    423▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Salud/HistorialDeSaludTest.php[39;22m:[39;1m419[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (6 assertions)[39m
+  [90mDuration:[39m [39m7.55s[39m
+
+codigo de salida: 1

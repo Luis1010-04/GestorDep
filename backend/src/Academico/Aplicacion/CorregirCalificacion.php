@@ -5,6 +5,7 @@ namespace Src\Academico\Aplicacion;
 use LogicException;
 use Src\Academico\Dominio\EscalaDeCalificaciones;
 use Src\Academico\Dominio\RepositorioDeCalificaciones;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\PublicadorDeEventos;
 use Src\Compartido\Dominio\Eventos\CalificacionRegistrada;
 use Src\Compartido\Dominio\Identificador;
@@ -25,6 +26,7 @@ final class CorregirCalificacion
         private readonly RepositorioDeCalificaciones $calificaciones,
         private readonly PublicadorDeEventos $eventos,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /** @throws CalificacionFueraDeRango|JugadorEnBajaSinCaptura */
@@ -38,7 +40,13 @@ final class CorregirCalificacion
             throw new JugadorEnBajaSinCaptura;
         }
 
-        if ($this->calificaciones->corregirValor($calificacionId, $valor, Instante::truncadoASegundos($this->reloj->ahora()))) {
+        // Con la fila del jugador bloqueada: una baja simultánea se serializa con la corrección (AB-26).
+        $cambio = $this->candado->conJugadoresActivos(
+            [$inscripcion->jugadorId],
+            fn (): JugadorEnBajaSinCaptura => new JugadorEnBajaSinCaptura,
+            fn (): bool => $this->calificaciones->corregirValor($calificacionId, $valor, Instante::truncadoASegundos($this->reloj->ahora())),
+        );
+        if ($cambio) {
             $this->eventos->publicar(new CalificacionRegistrada($inscripcion->id->valor(), $inscripcion->materiaId->valor(), $inscripcion->jugadorId->valor()));
         }
 

@@ -228,3 +228,68 @@ test('HU-26 c1: un cambio hecho sin sesión entrega `autor` nulo', function () {
         ->and($datos[0]['autor'])->toBeNull()
         ->and($datos[0])->toMatchArray(['entidad_id' => $id, 'operacion' => 'crear', 'ocurrido_en' => '2026-03-10T12:00:00+00:00']);
 });
+
+/**
+ * Entradas de historial insertadas directo para una calificación y una asistencia de I1 (F1-H7-T06b, paginación de T02).
+ *
+ * @param  array<string, string>  $m
+ * @param  list<array{id: string, version: int, ocurrido_en: string}>  $entradas
+ * @return array{calificaciones: string, asistencias-clase: string} la entidad de cada recurso
+ */
+function historialAcademicoSembrar(array $m, array $entradas): array
+{
+    $entidades = ['calificaciones' => mundoCalificar($m['i1'], 'final', '7.00'), 'asistencias-clase' => mundoAsistir($m['i1'], '2026-03-02', 'falta')];
+    $tablas = ['calificaciones' => ['calificaciones_historial', 'calificacion_id'], 'asistencias-clase' => ['asistencias_clase_historial', 'asistencia_clase_id']];
+    foreach ($tablas as $recurso => [$tabla, $columna]) {
+        foreach ($entradas as $entrada) {
+            DB::connection('propietario')->table($tabla)->insert([
+                'id' => $recurso === 'calificaciones' ? $entrada['id'] : Identificador::generar()->valor(), $columna => $entidades[$recurso],
+                'version' => $entrada['version'], 'operacion' => 'actualizar', 'datos_anteriores' => json_encode([]), 'datos_nuevos' => json_encode([]),
+                'usuario_id' => $m['d1'], 'ocurrido_en' => $entrada['ocurrido_en'], 'motivo' => null,
+            ]);
+        }
+    }
+
+    return $entidades;
+}
+
+test('HU-26: el historial académico con por_pagina=101 responde 422', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+
+    foreach (RUTAS_DE_HISTORIAL_ACADEMICO as $recurso) {
+        historialAcademicoPedir($this, $m['j1'], $recurso, 'd1@x.com', '?por_pagina=101')->assertUnprocessable()->assertJsonPath('errores.0.campo', 'por_pagina');
+        historialAcademicoPedir($this, $m['j1'], $recurso, 'd1@x.com', '?por_pagina=100')->assertOk();
+    }
+});
+
+test('HU-26: sin por_pagina, el historial académico entrega 15 entradas por página', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    historialAcademicoSembrar($m, array_map(
+        fn (int $version): array => ['id' => Identificador::generar()->valor(), 'version' => $version, 'ocurrido_en' => sprintf('2026-03-%02d 10:00:00+00', $version)],
+        range(1, 16),
+    ));
+
+    foreach (RUTAS_DE_HISTORIAL_ACADEMICO as $recurso) {
+        $primera = historialAcademicoPedir($this, $m['j1'], $recurso, 'd1@x.com')->assertOk();
+        expect($primera->json('datos'))->toHaveCount(15)
+            ->and($primera->json('meta'))->toMatchArray(['pagina' => 1, 'por_pagina' => 15, 'total' => 16]);
+        expect(historialAcademicoPedir($this, $m['j1'], $recurso, 'd1@x.com', '?pagina=2')->assertOk()->json('datos'))->toHaveCount(1);
+    }
+});
+
+test('HU-26: con el mismo ocurrido_en, las entradas del historial académico salen por id descendente', function () {
+    /** @var TestCase $this */
+    $m = mundoDeDocentes();
+    // Los id fijados no siguen el orden de las versiones: si el desempate fuera por versión, el orden sería otro (§3.3).
+    historialAcademicoSembrar($m, [
+        ['id' => '01936b8e-0000-7000-8000-000000000001', 'version' => 3, 'ocurrido_en' => '2026-03-10 10:00:00+00'],
+        ['id' => '01936b8e-0000-7000-8000-000000000002', 'version' => 1, 'ocurrido_en' => '2026-03-10 10:00:00+00'],
+        ['id' => '01936b8e-0000-7000-8000-000000000003', 'version' => 2, 'ocurrido_en' => '2026-03-10 10:00:00+00'],
+    ]);
+
+    $versiones = array_column(historialAcademicoPedir($this, $m['j1'], 'calificaciones', 'd1@x.com')->assertOk()->json('datos'), 'version');
+
+    expect($versiones)->toBe([2, 1, 3]);
+});

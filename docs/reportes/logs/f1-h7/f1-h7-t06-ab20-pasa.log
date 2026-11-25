@@ -1,0 +1,298 @@
+inicio: 2026-11-24T15:53:30Z; base: 6787e6a con la corrección de AB-20 (puerto) sin commitear
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Seguridad\BajaConcurrenteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAB-20: una asignación concurrente con la baja responde 409 jugador_[39m[90m…[39m [90m3.92s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\ActualizadoEnCoherenteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: POST y GET de categorías devuelven el mismo actualizado_en,[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: POST y GET de equipos devuelven el mismo actualizado_en, qu[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: POST y GET de jugadores devuelven el mismo actualizado_en,[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: el historial de equipos y jugadores comparte el instante de[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: con el reloj real, ocurrido_en y actualizado_en guardados c[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: el borrado lógico de una categoría guarda el mismo instante[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: el historial sin instante explícito sale del reloj truncado[39m[90m…[39m [90m0.25s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\AsignacionDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-04: B asigna a J1 a EB por matrícula, con posición, y obtiene al[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: la asignación escribe la membresía y su historial crear con[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la matrícula se busca sin distinguir mayúsculas ni espacios[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la matrícula se busca sin distinguir mayúsculas ni espacios[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la matrícula se busca sin distinguir mayúsculas ni espacios[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la matrícula se busca sin distinguir mayúsculas ni espacios[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: asignar de nuevo al mismo jugador al mismo equipo da 409 jug[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: una membresía cerrada no impide asignar de nuevo[39m[90m             [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: si otra petición ganó la carrera por la membresía vigente, e[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: una matrícula inexistente da 404[39m[90m                             [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-30: asignar a un jugador en baja da 409 jugador_en_baja[39m[90m          [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: un equipo que no es del entrenador da 404 sin importar la ma[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: un identificador de equipo que no es UUID v7 da 404, no 403[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: una posición desconocida da 422 posicion_invalida y un campo[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un docente recibe 403 sin_permiso en ambas rutas y sin sesió[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: un usuario con los dos roles asigna a un equipo propio[39m[90m       [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: A cambia la posición de J1 en EA de medio a defensa y el his[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: dos cambios seguidos dejan versiones consecutivas[39m[90m            [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: la posición es de cada equipo: cambiar la de J3 en EA no toc[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un cambio sin diferencia real responde 200 sin escribir hist[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: cambiar la posición de un jugador en baja es válido[39m[90m          [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un jugador que no está vigente en ese equipo da 404[39m[90m          [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un equipo ajeno da 404 y no 403, también con una posición in[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: una posición desconocida da 422 posicion_invalida y un campo[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: los campos desconocidos del cuerpo se ignoran[39m[90m                [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-04: los casos de uso comprueban el equipo del entrenador y exige[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, la asignación no deja la membresía n[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, el cambio de posición no se guarda[39m[90m   [39m [90m1.94s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\BajaDeJugadorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-29: A da de baja a J1 con motivo y fecha; se guardan la baja, lo[39m[90m…[39m [90m1.97s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-17: la baja no cierra las membresías del jugador[39m[90m                 [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: la fecha futura y el motivo de 500 caracteres se aceptan[39m[90m     [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: un motivo ausente, vacío o de solo espacios da 422 motivo_ob[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: un motivo ausente, vacío o de solo espacios da 422 motivo_ob[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: un motivo ausente, vacío o de solo espacios da 422 motivo_ob[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: un motivo ausente, vacío o de solo espacios da 422 motivo_ob[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: un motivo ausente, vacío o de solo espacios da 422 motivo_ob[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: una fecha ausente o mal formada da 422 validacion_fallida se[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: una fecha ausente o mal formada da 422 validacion_fallida se[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: una fecha ausente o mal formada da 422 validacion_fallida se[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: una fecha ausente o mal formada da 422 validacion_fallida se[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: una fecha ausente o mal formada da 422 validacion_fallida se[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: una fecha ausente o mal formada da 422 validacion_fallida se[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: una fecha ausente o mal formada da 422 validacion_fallida se[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: una fecha ausente o mal formada da 422 validacion_fallida se[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: un motivo de más de 500 caracteres o de tipo incorrecto da 4[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: un motivo de más de 500 caracteres o de tipo incorrecto da 4[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: un motivo de más de 500 caracteres o de tipo incorrecto da 4[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: un jugador ajeno o inexistente da 404 con cualquier cuerpo y[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: un UUID mal formado o que no es v7 da 404, no 500[39m[90m            [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: el docente recibe 403 y no se guarda nada[39m[90m                    [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: dar de baja a quien ya está en baja da 409 jugador_ya_en_baj[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: un jugador que ya figura en baja (J5) da 409 jugador_ya_en_b[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: el repositorio comprueba el estatus bajo el bloqueo y rechaz[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29: el caso de uso exige usuario identificado[39m[90m                    [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-30: la baja de J3 por A lo quita del listado de A y de B, sin ce[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-30: B puede dar de baja a J3, que comparte con A[39m[90m                 [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-40: un jugador dado de baja por la API sigue recibiendo PATCH de[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: el CHECK de la base rechaza un motivo vacío o de solo espaci[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23: el CHECK de la base rechaza un motivo vacío o de solo espaci[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, la baja no se guarda with dataset "f[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, la baja no se guarda with dataset "f[39m[90m…[39m [90m1.85s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\CategoriasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un entrenador crea "Sub-17" y cualquier entrenador la ve[39m[90m     [39m [90m1.92s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: otro entrenador crea "sub-17" y recibe 409 categoria_duplica[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un docente recibe 403 al crear y al listar[39m[90m                   [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: borrar una categoría sin equipos da 204 y deja de listarse[39m[90m   [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: borrar una categoría con equipos da 204 y el equipo conserva[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: se puede crear de nuevo el nombre de una categoría borrada[39m[90m   [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: borrar una categoría inexistente o ya borrada da 404[39m[90m         [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: sin sesión las tres rutas responden 401[39m[90m                      [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: el nombre se recorta y el vacío o de más de 100 caracteres d[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: el listado va por nombre y admite orden descendente y pagina[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: si otra petición ganó la carrera por el mismo nombre, el índ[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\ConsultaDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-02: un entrenador ve en el listado solo a los jugadores de sus e[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: el detalle de un jugador en dos equipos muestra solo el equi[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un jugador de un equipo ajeno responde 404 en el detalle[39m[90m    [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: un UUID válido pero que no es v7 responde 404 en el detalle[39m[90m  [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un jugador sin equipo responde 404 en el detalle[39m[90m            [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: el entrenador de otro equipo recibe 404 por un jugador que[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: un jugador en baja se puede consultar por quien ya lo tenía[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: filtrar por el equipo de otro entrenador devuelve lista vací[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: el filtro no revela que un jugador propio también está en el[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: filtrar por un equipo propio devuelve a sus jugadores vigent[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: un filtro por equipo mal formado responde 422 validacion_fal[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: el arreglo equipos solo incluye membresías vigentes; una cer[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: una membresía cerrada deja al jugador fuera del alcance[39m[90m      [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: en el listado, un jugador en dos equipos propios sale una ve[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: un docente recibe lista vacía en el listado[39m[90m                  [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: un docente recibe 404 en el detalle de un jugador[39m[90m            [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: un usuario con los dos roles y sin equipos recibe lista vací[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la búsqueda por matrícula de un jugador no asignado devuelve[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: un docente también puede buscar por matrícula[39m[90m                [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: una matrícula inexistente responde 404[39m[90m                       [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la búsqueda no distingue mayúsculas y recorta espacios (DD-3[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la búsqueda encuentra a un jugador en baja, con los mismos t[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la búsqueda no encuentra a un jugador eliminado[39m[90m              [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la búsqueda sin matrícula o con una de más de 30 caracteres[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: la búsqueda no otorga alcance sobre el jugador encontrado[39m[90m    [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: sin sesión, las tres rutas de jugadores responden 401[39m[90m       [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: el listado se ordena por apellidos y nombres, y admite orden[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: un orden no permitido responde 422[39m[90m                           [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: la paginación recorta la página y meta.total cuenta con el m[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: los parámetros de paginación fuera de rango responden 422[39m[90m    [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: el listado hace el mismo número de consultas con 2 jugadore[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-02: el detalle y el 201 de POST /jugadores tienen exactamente el[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\EquiposTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-22: un docente recibe 403 al crear un equipo y una categoría[39m[90m     [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: un usuario con los dos roles crea un equipo[39m[90m                  [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: quien crea un equipo queda asignado con una fila vigente y s[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: la asignación empieza el día de hoy en America/Mexico_City[39m[90m   [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: el mismo nombre y categoría da 409 equipo_duplicado[39m[90m          [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: una categoría inexistente o eliminada da 422 categoria_inexi[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: GET /equipos devuelve solo los equipos del entrenador que co[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: una asignación cerrada o un equipo eliminado no aparecen en[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: sin sesión las dos rutas de equipos responden 401[39m[90m            [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: el listado va por nombre y admite orden descendente y pagina[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: el nombre se recorta y el vacío, el largo o la categoría mal[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-28: un equipo cuya categoría fue eliminada sigue mostrándola en[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si otra petición ganó la carrera por el mismo equipo, el ín[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si la categoría se elimina justo antes de escribir, la clav[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22: crear o listar equipos sin usuario identificado falla[39m[90m        [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, el equipo y la asignación tampoco se[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, el equipo y la asignación tampoco se[39m[90m…[39m [90m1.92s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\ExpedienteDeJugadorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-05: A actualiza nombres de J1 y el historial guarda la instantán[39m[90m…[39m [90m1.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: dos cambios seguidos dejan versiones consecutivas[39m[90m            [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: una actualización parcial cambia solo el campo enviado with[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: una actualización parcial cambia solo el campo enviado with[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: una actualización parcial cambia solo el campo enviado with[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: se actualizan los tres campos a la vez y el recurso solo mue[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un jugador en baja puede actualizar su expediente[39m[90m            [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un campo no permitido da 422 validacion_fallida señalando el[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un campo no permitido da 422 validacion_fallida señalando el[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un campo no permitido da 422 validacion_fallida señalando el[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un campo no permitido da 422 validacion_fallida señalando el[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un campo no permitido da 422 validacion_fallida señalando el[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un cuerpo vacío da 422 en el campo cuerpo y uno sin campos p[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un cuerpo vacío da 422 en el campo cuerpo y uno sin campos p[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: nombres y apellidos vacíos, de solo espacios, largos o de ti[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: 120 caracteres y una fecha extrema se aceptan (sin mínimo ni[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: una actualización sin cambios reales responde 200 sin escrib[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: una actualización sin cambios reales responde 200 sin escrib[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un jugador ajeno o inexistente da 404 con cualquier cuerpo y[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: un UUID mal formado o que no es v7 da 404, no 500[39m[90m            [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: el caso de uso exige usuario identificado[39m[90m                    [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-05: si el jugador desaparece antes del bloqueo, el repositorio l[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, la actualización del expediente no s[39m[90m…[39m [90m0.29s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\JugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-03: un entrenador registra un jugador y se crean su expediente,[39m[90m… [39m [90m2.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: la membresía empieza el día de hoy en America/Mexico_City[39m[90m    [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: la categoría que se muestra es la del equipo[39m[90m                 [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los textos se recortan y la matrícula se guarda como la escr[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: un usuario con los dos roles registra un jugador[39m[90m             [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: una matrícula ya existente da 409 matricula_duplicada sin d[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: una matrícula en otras mayúsculas o con espacios alrededor[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: una matrícula en otras mayúsculas o con espacios alrededor[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: una matrícula en otras mayúsculas o con espacios alrededor[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: una matrícula en otras mayúsculas o con espacios alrededor[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: una matrícula en otras mayúsculas o con espacios alrededor[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: un entrenador no puede registrar la matrícula que ya tiene[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: la matrícula de un jugador con borrado lógico se puede regi[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-03: si otra petición ganó la carrera por la matrícula, el índic[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: el equipo de otro entrenador, uno inexistente o con asignaci[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: una posición desconocida da 422 posicion_invalida[39m[90m            [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: falta un campo obligatorio, 422 validacion_fallida con el ca[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: falta un campo obligatorio, 422 validacion_fallida con el ca[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: falta un campo obligatorio, 422 validacion_fallida con el ca[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: falta un campo obligatorio, 422 validacion_fallida con el ca[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: falta un campo obligatorio, 422 validacion_fallida con el ca[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: falta un campo obligatorio, 422 validacion_fallida con el ca[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los campos vacíos, demasiado largos o mal formados dan 422 y[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: los límites exactos de 120 y 30 caracteres se aceptan[39m[90m        [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: un docente recibe 403 sin_permiso al registrar un jugador[39m[90m    [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-01: sin sesión, POST /jugadores responde 401[39m[90m                     [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-03: registrar un jugador sin usuario identificado falla[39m[90m          [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, ni el jugador, ni la membresía ni lo[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: si falla el historial, ni el jugador, ni la membresía ni lo[39m[90m…[39m [90m2.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Plantel\UuidQueNoEsV7Test[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-FIX: un UUID que no es v7 en la ruta responde el mismo 404 qu[39m[90m…[39m [90m1.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-FIX: un UUID que no es v7 en la ruta responde el mismo 404 qu[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-FIX: un UUID que no es v7 en la ruta responde el mismo 404 qu[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-FIX: un UUID que no es v7 en la ruta responde el mismo 404 qu[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-FIX: un UUID que no es v7 en la ruta responde el mismo 404 qu[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-FIX: un UUID que no es v7 en la ruta responde el mismo 404 qu[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H2-FIX: un UUID que no es v7 en la ruta responde el mismo 404 qu[39m[90m…[39m [90m0.31s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\AlcanceDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la lista de usos autorizados sin alcance es exactamente la[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: el detector marca consultas de jugadores sin alcance y deja[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un archivo exento no se revisa[39m[90m                              [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: ninguna consulta de jugadores en src ni app evita AlcanceDe[39m[90m…[39m [90m2.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la implementación del alcance existe donde la lista la espe[39m[90m…[39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\ArquitecturaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: existen los contextos con sus capas[39m[90m                      [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: cada contexto tiene su proveedor de servicios registrado[39m[90m [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: el dominio no depende del framework[39m[90m                     [39m [90m13.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Compartido no depende de su infraestruc[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Compartido no importa el dominio de otro contexto[39m[90m        [39m [90m1.82s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Identidad no depende de su infraestruct[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Identidad no importa el dominio de otro contexto[39m[90m         [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Plantel no depende de su infraestructur[39m[90m…[39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Plantel no importa el dominio de otro contexto[39m[90m           [39m [90m0.80s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Academico no depende de su infraestruct[39m[90m…[39m [90m1.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Academico no importa el dominio de otro contexto[39m[90m         [39m [90m1.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Competencia no depende de su infraestru[39m[90m…[39m [90m1.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Competencia no importa el dominio de otro contexto[39m[90m       [39m [90m1.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Rendimiento no depende de su infraestru[39m[90m…[39m [90m0.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Rendimiento no importa el dominio de otro contexto[39m[90m       [39m [90m1.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de CondicionFisica no depende de su infrae[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: CondicionFisica no importa el dominio de otro contexto[39m[90m   [39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Salud no depende de su infraestructura[39m[90m  [39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Salud no importa el dominio de otro contexto[39m[90m             [39m [90m0.84s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Alertas no depende de su infraestructur[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Alertas no importa el dominio de otro contexto[39m[90m           [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Consultas no depende de su infraestruct[39m[90m…[39m [90m0.98s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Consultas no importa el dominio de otro contexto[39m[90m         [39m [90m0.86s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\BorradoLogicoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: la lista de tablas del framework permitidas es exactamen[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: el detector marca borrados de negocio y deja pasar las t[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: ningun codigo de src ni app borra fisicamente tablas de[39m[90m… [39m [90m2.35s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\CompetenciaSinPlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T03: el detector encuentra importaciones de Plantel y tablas[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T03: Competencia no importa Plantel ni lee sus tablas[39m[90m         [39m [90m2.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\CompetenciaSinSaludTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T04: el detector encuentra importaciones de Salud y tablas de[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T04: Competencia no importa Salud ni lee sus tablas[39m[90m           [39m [90m2.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\DecimalesEnDominioTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el detector reconoce float y las funciones de redondeo, y d[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el dominio no usa float ni round, floor, ceil ni number_for[39m[90m…[39m [90m0.93s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el dominio no usa round, floor, ceil ni number_format (arch[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\LocalizadorDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el detector encuentra los archivos que nombran el localizado[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: solo la declaración, el adaptador, su enlace y el caso de us[39m[90m…[39m [90m2.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el puerto devuelve solo el identificador y si el jugador est[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el adaptador del localizador no consulta la tabla de jugador[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\RendimientoSinPlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T02: el detector encuentra importaciones de Plantel y tablas[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T02: Rendimiento no importa Plantel ni lee sus tablas[39m[90m         [39m [90m2.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\TextosEnLangTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T09: el detector reconoce texto visible y deja pasar codigos[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T09: ningun texto visible esta escrito fuera de lang/es[39m[90m       [39m [90m2.29s[39m  
+
+  [90mTests:[39m    [32;1m253 passed[39;22m[90m (1698 assertions)[39m
+  [90mDuration:[39m [39m130.47s[39m
+
+codigo de salida: 0

@@ -1,0 +1,144 @@
+inicio: 2026-11-24T20:21:51Z; base: ae680a7 con la corrección de A6-10 sin commitear
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Seguridad\NoEncontradoAntesDeValidarTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (A6-10): con un recurso ajeno y un parámetro inválido, GET /[39m[90m…[39m [90m3.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (A6-10): con un recurso ajeno y un parámetro inválido, GET /[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (A6-10): con un recurso ajeno y un parámetro inválido, GET /[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (A6-10): con un recurso ajeno y un parámetro inválido, GET /[39m[90m…[39m [90m0.42s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\ContratoDeEstatusTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-22, HU-23 (DA-105): las respuestas de las alertas y del listado[39m[90m… [39m [90m1.38s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\ContratoDeGraficosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-25 (DA-105): las respuestas de los gráficos del jugador y del eq[39m[90m…[39m [90m1.39s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\ContratoDeVistaDeLaConvocatoriaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 c2 (DA-96): las respuestas de GET /partidos/{partido}/convoca[39m[90m…[39m [90m1.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (DA-96): el 404 de un partido ajeno, inexistente, con id que[39m[90m…[39m [90m0.96s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\ContratoDeVistaParaConvocarTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (DA-94, DA-119): las respuestas de la vista para convocar y d[39m[90m…[39m [90m1.23s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\EstatusDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c1 (RNF-01): cada usuario ve solo a sus jugadores asignados y[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c3 (RN-13, DA-105): el entrenador recibe el resumen académico[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23: la fila trae los datos de identificación del jugador y nada[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c4 (DA-108): el indicador de aviso pendiente es verdadero par[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c4 (DA-108, RN-16): el docente no ve el aviso pendiente que c[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c3 (RN-13, RN-15): el estado oficial es el mismo para todos,[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c3: un jugador sin ningún estado registrado sale como apto im[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-22, HU-23 (DA-89, DA-90): la fila trae las alertas abiertas que[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c2: filtro[equipo_id] deja solo a los jugadores del equipo, y[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c2: filtro[materia_id] deja solo a los inscritos en una mater[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c2, §7.6 fila 9: filtro[tipo_alerta] deja solo a quienes tien[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23 c2: los filtros se combinan con AND[39m[90m                           [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mP-05 (HU-23 c2): un filtro con un valor que no corresponde responde[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mP-05 (HU-23 c2): un filtro con un valor que no corresponde responde[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mP-05 (HU-23 c2): un filtro con un valor que no corresponde responde[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mP-05: un id válido pero ajeno o inexistente devuelve la lista vacía[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23: la paginación usa pagina y por_pagina, ordena por apellidos[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23 (DA-99): un jugador dado de baja desaparece del listado de to[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-23: sin sesión responde 401[39m[90m                                      [39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\GraficosDelEquipoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-25 c2 (DA-97): el entrenador del equipo recibe la evolución del[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25 c2 (RN-14, T07): el promedio del equipo excluye lo que regist[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25 c2: con filtro[jugador_id] llega también el jugador contra el[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25 c3 (RN-14): el jugador de dos equipos, visto desde un equipo,[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01, HU-25: un equipo que el usuario no entrena o inexistente re[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01, RN-23: filtro[jugador_id] de un jugador que no es del equip[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mP-05 (HU-25): un filtro[jugador_id] que no es un UUID responde 422[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25: sin sesión responde 401[39m[90m                                      [39m [90m0.32s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\GraficosDelJugadorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-25 c1 (RN-14, DA-97): el entrenador recibe el rendimiento en par[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25 c3 (RN-14, §7.7): un jugador en dos equipos con dos entrenado[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25 c3 (RN-14): las mediciones y la asistencia del entrenador de[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25 c1, §7.7 fila 5 (RN-13): el docente recibe las calificaciones[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25 (RN-13): el docente solo recibe sus materias, no las de otro[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04, §7.7 filas 1 y 2 (DD-15): la serie se marca como posiblemen[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-09 (DD-15): los días para marcar un dato como desactualizado sa[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25, RNF-04: una serie sin datos va vacía, con actualizado_en nul[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-13 (RN-14): un usuario con los dos roles recibe lo del entrenado[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01, RN-23: un jugador fuera del alcance, en baja o inexistente[39m[90m… [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-25: sin sesión responde 401, y con un id que no es un UUID, 404[39m[90m  [39m [90m0.35s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\GuardaDeDocenteEnGraficosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (guarda de defensa en profundidad): calificacionesDeLaMateri[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\OrdenPorDesempenoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-18 (§7.5 fila 1, por la ruta): P1 8.0, D1 6.5 y M1 7.2 se ordena[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-18 (§7.5 fila 2, por la ruta): P1 7.0, D1 datos insuficientes y[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-18 (§7.5 fila 3, por la ruta): P1 7.0 y D1 7.0 conservan el orde[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-18 (DA-106): el orden usa la última evaluación de cada jugador,[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14 (DA-95): el orden usa solo las evaluaciones del entrenador qu[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-95: el orden se calcula sobre todos los jugadores y después se p[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (RN-23): la lista del equipo no incluye jugadores en baja[39m[90m    [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un entrenador que no entrena el equipo, un equipo inexisten[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24: el docente recibe 403 y sin sesión 401 en la lista del equip[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (DA-119): un parámetro de paginación inválido responde 422[39m[90m   [39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\ParidadDeVistaParaConvocarTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-98: con una medición de hace 31 días, la vista y los gráficos de[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-98: con una medición de hace 30 días, la vista y los gráficos de[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-98: sin evaluación ni mediciones, la vista y los gráficos de T07[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51: con los mismos datos, el porcentaje de asistencia de la vist[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-51: sin registros de asistencia, la vista y el puerto de T07 no[39m[90m… [39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\VistaDeLaConvocatoriaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-12 c2 (DA-96): la ruta devuelve la vista de cada convocado, idén[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96 (aditivo): GET /partidos/{partido}/convocatoria sigue devolvi[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96 (HU-12 c2): la vista de la convocatoria no trae campos de la[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96 (convenciones §1): la vista pagina con 15 por defecto, máximo[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96 (paridad con H3): página por página, la vista y la ruta de co[39m[90m…[39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96: la vista no filtra por el estado del partido, igual que H3[39m[90m   [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-29 (DA-29, paridad con H3): un convocado dado de baja se omite d[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (paridad con H3): un convocado sin membresía vigente en ning[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96 (matiz de alcance heredado de H3): un convocado que dejó el e[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14 (DD-17): con dos entrenadores en el equipo del partido, cada[39m[90m… [39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96: una convocatoria vacía da una lista vacía con total 0[39m[90m        [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un partido inexistente, con id que no es v7, eliminado o de[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-12 c2: el docente recibe 403 y sin sesión 401[39m[90m                    [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96: la vista de la convocatoria no escribe nada en la base[39m[90m       [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96 (paridad con H3): un jugador quitado de la convocatoria con l[39m[90m…[39m [90m0.84s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Consultas\VistaParaConvocarTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (§7.7): una última medición de hace 31 días marca estado_fisi[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (§7.7): una última medición de hace 30 días no la marca[39m[90m       [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-09 (DA-98): los días de desactualización salen de la tabla de p[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (§7.7): sin evaluación de rendimiento, rendimiento_reciente t[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-106 (plan §4): el promedio de rendimiento_reciente es el de las[39m[90m… [39m [90m0.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14 (§7.7, DD-17): con dos entrenadores en dos equipos, cada uno[39m[90m… [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-119: filtro[equipo_id] fija el equipo de rendimiento_reciente; s[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-119 (RNF-01): un equipo que el consultante no entrena, o donde e[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-119: un filtro[equipo_id] que no es UUID responde 422 con filtro[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (RN-23): un jugador sin alcance, en baja o inexistente respo[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24: el docente recibe 403 y sin sesión 401[39m[90m                       [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (DA-94): disponibilidad trae el estado oficial, la fecha de r[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (DA-94): sin estado guardado, disponibilidad es apto, sin fec[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (DA-94, RN-13): situacion_academica trae el resumen simplific[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (DA-94): sin periodo vigente, situacion_academica trae period[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (DA-94): con periodo vigente pero sin resumen calculado, el d[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (DA-94): estado_fisico trae la última medición y la última pr[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-111: asistencia.equipo cuenta la asistencia de los equipos del c[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-24 (DA-94): el jugador de la vista lleva id, nombres, apellidos[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la vista no escribe nada en la base[39m[90m                         [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-119 (v1.15 §6.2, RNF-01): un jugador que dejó el equipo A y sigu[39m[90m…[39m [90m0.61s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Seguridad\RecorridoDeAlcanceH6Test[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-01 (DA-119, P-05): el literal que usa el recorrido es un UUID v[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: sin sesión, las siete rutas de H6 responden 401 con el mism[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un recurso ajeno, inexistente o con UUID v4 responde el mis[39m[90m…[39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mP-05 (RNF-01): en el listado de estatus, un filtro con un UUID v4 e[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-119 (RNF-01): en la vista para convocar, un filtro[equipo_id] co[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23 (DA-99, RNF-01): un jugador en baja responde 404 en las rutas[39m[90m…[39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-23 (RN-13): para el docente, un jugador en baja responde 404 en[39m[90m… [39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-13 (HU-01): el docente recibe 403 en las cuatro rutas de entrena[39m[90m…[39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-13, RN-14: un usuario con los dos roles recibe por cada rol lo q[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-96 (paridad con H3): un usuario docente y entrenador no ve en la[39m[90m…[39m [90m0.73s[39m  
+
+  [90mTests:[39m    [32;1m109 passed[39;22m[90m (1044 assertions)[39m
+  [90mDuration:[39m [39m51.67s[39m
+
+codigo de salida: 0

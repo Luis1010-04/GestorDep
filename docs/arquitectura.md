@@ -70,6 +70,8 @@ Este documento define la arquitectura lógica (DDD), el modelo de datos en Postg
 | `CalculadorDeDesempeno` | Consultas | RN-18 (promedio de la ventana del umbral; sin datos al final) |
 | `AlcanceDeJugadores` (interfaz) | Compartido | RNF-01 (implementación SQL de solo lectura en Consultas) |
 
+**Nota (H7, T07):** `CalculoDeDesempeno` y `CalculadorDeDesempeno` tienen nombres casi iguales y hacen cosas distintas; no se renombran. `CalculoDeDesempeno` (`src/Rendimiento/Dominio/`, RN-08) calcula: con las N calificaciones de partido más recientes del jugador decide pasa, no pasa o datos insuficientes, y su promedio redondeado se guarda en la evaluación. `CalculadorDeDesempeno` (`src/Consultas/Aplicacion/`, RN-18) solo ordena: toma el promedio que RN-08 ya guardó en la evaluación más reciente del consultante (DA-106), pone primero el mayor, deja al final a los jugadores sin promedio y conserva el orden de entrada en los empates (DA-118). No repite la fórmula de RN-08. Está en `Aplicacion/` porque Consultas no tiene `Dominio/`.
+
 ### 4.2 Eventos de dominio
 
 Los eventos que existen, en `src/Compartido/Dominio/Eventos/`, llevan solo identificadores y valores primitivos. Los publica Académico, y solo Académico:

@@ -3,6 +3,7 @@
 namespace Src\CondicionFisica\Aplicacion;
 
 use InvalidArgumentException;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\EquiposDelEntrenador;
 use Src\Compartido\Aplicacion\PosicionEnEquipo;
 use Src\Compartido\Aplicacion\UsuarioActual;
@@ -38,6 +39,7 @@ final class RegistrarPrueba
         private readonly UsuarioActual $usuarioActual,
         private readonly HoyDeNegocio $hoyDeNegocio,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /**
@@ -54,6 +56,12 @@ final class RegistrarPrueba
             if (! $this->visibilidad->esVisibleComoEntrenador($jugadorId, incluirBajas: false)) {
                 throw new JugadorEnBajaSinPrueba;
             }
+            // Bloquea la fila del jugador hasta el final de la transacción: una baja simultánea se serializa (AB-29).
+            $this->candado->conJugadoresActivos(
+                [$jugadorId],
+                fn (): JugadorEnBajaSinPrueba => new JugadorEnBajaSinPrueba,
+                fn (): null => null,
+            );
 
             $equipoId = $this->equipoDe($datos['equipo_id'], $jugadorId, $autor);
             $tipo = $this->tipoDe($datos['tipo_prueba_id']);

@@ -5,6 +5,7 @@ namespace Src\Academico\Aplicacion;
 use LogicException;
 use Src\Academico\Dominio\Inscripcion;
 use Src\Academico\Dominio\RepositorioDeInscripciones;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\LocalizadorDeJugadores;
 use Src\Compartido\Aplicacion\PublicadorDeEventos;
 use Src\Compartido\Dominio\Eventos\JugadorInscrito;
@@ -25,6 +26,7 @@ final class InscribirJugador
         private readonly ConsultaDeInscripciones $consulta,
         private readonly PublicadorDeEventos $eventos,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /** @throws JugadorNoRegistrado|JugadorEnBajaNoInscribible|JugadorYaInscrito */
@@ -39,7 +41,12 @@ final class InscribirJugador
         }
 
         $inscripcion = new Inscripcion(Identificador::generar(), $materiaId, $jugador->id, Instante::truncadoASegundos($this->reloj->ahora()));
-        $this->inscripciones->guardarNueva($inscripcion);
+        // Con la fila del jugador bloqueada: una baja simultánea se serializa con la inscripción (AB-26).
+        $this->candado->conJugadoresActivos(
+            [$jugador->id],
+            fn (): JugadorEnBajaNoInscribible => new JugadorEnBajaNoInscribible,
+            fn () => $this->inscripciones->guardarNueva($inscripcion),
+        );
         $this->eventos->publicar(new JugadorInscrito($inscripcion->id()->valor(), $materiaId->valor(), $jugador->id->valor()));
 
         return $this->consulta->buscar($inscripcion->id()) ?? throw new LogicException('jugador_sin_alcance_tras_inscribir');

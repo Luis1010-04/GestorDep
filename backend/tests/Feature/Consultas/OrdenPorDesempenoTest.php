@@ -5,7 +5,8 @@ use Tests\TestCase;
 /**
  * Orden por desempeño en `GET /equipos/{equipo}/jugadores/para-convocar` (HU-24, RN-18, DD-12, DA-95, DA-118): con los
  * cinco jugadores de A del mundo de H4. En orden de entrada (apellidos, nombres, id) son D1 «Defensa», F1 «Delantero», J2
- * «Dos», M1 «Medio» y P1 «Portero». El promedio sale de la última evaluación de E1 en A (DA-106).
+ * «Dos», M1 «Medio» y P1 «Portero». El orden usa el promedio de las últimas N calificaciones de partido (DA-106), el que
+ * guarda la evaluación más reciente de E1 en A.
  */
 
 /**
@@ -49,7 +50,7 @@ test('RN-18 (§7.5 fila 3, por la ruta): P1 7.0 y D1 7.0 conservan el orden de e
     expect(ordenIds($this, $m))->toBe([$m['d1'], $m['p1'], $m['f1'], $m['j2'], $m['m1']]);
 });
 
-test('RN-18 (DA-106): el orden usa la última evaluación de cada jugador, no las anteriores', function () {
+test('RN-18 (DA-106): el orden usa el promedio de las últimas N calificaciones de partido, el de la evaluación más reciente, no el de las anteriores', function () {
     /** @var TestCase $this */
     $m = convocarMundo();
     convocarEvaluar($m['p1'], $m['a'], $m['e1'], 'pasa', '9.00', '2026-09-01 12:00:00+00');

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\TestResponse;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use Src\Compartido\Dominio\Identificador;
@@ -192,4 +193,49 @@ test('HU-26: el historial de condición física cumple el contrato de OpenAPI (2
             expect($validador->validate($respuesta->baseResponse, $ruta, 'get'))->toBeTrue("GET $ruta {$respuesta->getStatusCode()}");
         }
     }
+});
+
+/**
+ * Marca la fila con borrado lógico e inserta su entrada `eliminar` (D-5: ningún caso de uso de H5 borra; F1-H7-T06b).
+ *
+ * @param  array<string, mixed>  $anteriores
+ */
+function historialFisicoEliminar(string $tabla, string $columna, string $id, string $usuario, array $anteriores): void
+{
+    DB::connection('propietario')->table($tabla)->where('id', $id)->update(['eliminado_en' => '2026-11-15 17:00:00+00', 'eliminado_por' => $usuario]);
+    DB::connection('propietario')->table("{$tabla}_historial")->insert([
+        'id' => Identificador::generar()->valor(), $columna => $id, 'version' => 1, 'operacion' => 'eliminar',
+        'datos_anteriores' => json_encode($anteriores), 'datos_nuevos' => null,
+        'usuario_id' => $usuario, 'ocurrido_en' => '2026-11-15 17:00:00+00', 'motivo' => null,
+    ]);
+}
+
+test('HU-26 c2 (DA-18): una medición con borrado lógico no aparece en la lectura pero sí en el historial', function () {
+    /** @var TestCase $this */
+    $m = medicionesMundo();
+    $medicion = medicionInsertar($m['f1'], $m['a'], $m['e1']);
+    historialFisicoEliminar('mediciones_corporales', 'medicion_id', $medicion, $m['e1'], ['peso_kg' => '70.00', 'registrado_por' => $m['e1']]);
+
+    $lectura = sesionesPeticion($this, 'GET', medicionesRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk()->json('datos');
+    $historial = historialFisicoDatos($this, $m['f1'], 'mediciones', 'e1@x.com');
+
+    expect(array_column($lectura, 'id'))->not->toContain($medicion)
+        ->and($historial)->toHaveCount(1)
+        ->and($historial[0])->toMatchArray(['entidad_id' => $medicion, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
+    historialFisicoSinCamposDeDa18($historial);
+});
+
+test('HU-26 c2 (DA-18): una prueba física con borrado lógico no aparece en la lectura pero sí en el historial', function () {
+    /** @var TestCase $this */
+    $m = pruebasMundo();
+    $prueba = pruebaInsertar($m['f1'], $m['a'], $m['e1'], $m['velocidad']);
+    historialFisicoEliminar('pruebas_fisicas', 'prueba_id', $prueba, $m['e1'], ['resultado' => '4.35', 'registrado_por' => $m['e1']]);
+
+    $lectura = sesionesPeticion($this, 'GET', pruebasRuta($m['f1']), [], sesionesIniciar($this, 'e1@x.com'))->assertOk()->json('datos');
+    $historial = historialFisicoDatos($this, $m['f1'], 'pruebas-fisicas', 'e1@x.com');
+
+    expect(array_column($lectura, 'id'))->not->toContain($prueba)
+        ->and($historial)->toHaveCount(1)
+        ->and($historial[0])->toMatchArray(['entidad_id' => $prueba, 'operacion' => 'eliminar', 'datos_nuevos' => null]);
+    historialFisicoSinCamposDeDa18($historial);
 });

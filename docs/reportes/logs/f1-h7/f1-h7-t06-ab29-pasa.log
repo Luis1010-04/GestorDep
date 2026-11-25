@@ -1,0 +1,443 @@
+inicio: 2026-11-24T16:14:05Z; base: 0d2eece con la corrección de AB-29 sin commitear
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Seguridad\BajaConcurrenteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAB-20: una asignación concurrente con la baja responde 409 jugador_[39m[90m…[39m [90m3.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una inscripción concurrente con la baja responde 409 jugador[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una calificación concurrente con la baja responde 409 y no s[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: la corrección de una calificación concurrente con la baja re[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: una asistencia a clase concurrente con la baja responde 409[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-26: la corrección de una asistencia a clase concurrente con la b[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: un aviso concurrente con la baja responde 409 y no se guarda[39m[90m [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: la confirmación de un aviso concurrente con la baja responde[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: un cambio de estado concurrente con la baja responde 409 y n[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: una medición concurrente con la baja responde 409 y no se gu[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-29: una prueba física concurrente con la baja responde 409 y no[39m[90m… [39m [90m0.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Salud\AvisosTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 1 (HU-19 c1, c3): E1 crea un aviso, queda pendiente y el[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 2 (HU-19 c2): D1 crea un aviso reportado por el jugador[39m[90m   [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 3 (RNF-01): D2, sin relación con F1, recibe el mismo 404[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 4 (DD-58): E2 ve el aviso pendiente de D1 con la nota nul[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 5 (§5.3): D1 no ve el aviso pendiente de E1[39m[90m               [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 6 (DD-56): E1 lista los tres avisos, del más reciente al[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 7 (HU-30 c3): E2 descarta con nota; el estado oficial no[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 8 (§6.3): descartar un aviso ya descartado responde 409 a[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.3: descartar un aviso confirmado responde 409 aviso_no_pendiente[39m[90m [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-28: descartar un aviso no pendiente con el cuerpo inválido respo[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-28: descartar un aviso no pendiente con el cuerpo inválido respo[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-28: descartar un aviso no pendiente con el cuerpo inválido respo[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-28: descartar un aviso no pendiente con el cuerpo inválido respo[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-28: descartar un aviso no pendiente con el cuerpo inválido respo[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-28: descartar un aviso no pendiente con el cuerpo inválido respo[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 9 (DD-61): D1 no descarta: 403 sin_permiso, también con u[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 10 (DA-11): la nota y la nota del descarte según quién li[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 11 (DD-60, DA-27): crear un aviso de JB en baja responde[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 11 (DD-60, DA-27): crear un aviso de JB en baja responde[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-27: el mensaje existente de jugador_en_baja no cambia[39m[90m            [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.1 fila 12 (HU-19): un aviso sin nota responde 422 validacion_fal[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: la nota se recorta y admite hasta 500 caracteres[39m[90m              [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: la fecha es obligatoria y con formato AAAA-MM-DD with dataset[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: la fecha es obligatoria y con formato AAAA-MM-DD with dataset[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: la fecha es obligatoria y con formato AAAA-MM-DD with dataset[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-23: la fecha de un aviso puede ser futura[39m[90m                        [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-24: con el jugador en baja, un cuerpo inválido responde 422 ante[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: los campos desconocidos y los booleanos no estrictos responde[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: los campos desconocidos y los booleanos no estrictos responde[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: los campos desconocidos y los booleanos no estrictos responde[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: los campos desconocidos y los booleanos no estrictos responde[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: fuera del alcance, el 404 gana sobre el 422 al crear y al des[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: un aviso ajeno responde igual que uno inexistente[39m[90m             [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: un UUID válido que no es v7 responde 404, nunca 500[39m[90m           [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: listar a un jugador fuera del alcance responde el mismo 404[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12: con el jugador en baja, E1 lista los avisos y descarta uno p[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12: el docente lista sus avisos de un jugador en baja[39m[90m            [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-61: DE descarta como entrenador del jugador[39m[90m                      [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-61: un usuario con los dos roles que solo le da clase al jugador[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-25: un usuario con los dos roles ve todos los avisos si entrena[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-25: un usuario con los dos roles ve solo los suyos si únicamente[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-16 frente a §6.1 (opción A): un docente sin alcance recibe 404 a[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-58: la nota de un aviso confirmado la ve quien lo confirmó, no o[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-18: la respuesta trae solo los campos del recurso, al crear, lis[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el aviso devuelve sus instantes y el descarte actualiza act[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: el listado pagina con pagina y por_pagina[39m[90m                     [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: nota_descarte es obligatoria, se recorta, admite hasta 500 ca[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: crear escribe la auditoría y el historial con su autor[39m[90m      [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-26 (§7.1 fila 1): tras crear un aviso, la API sigue dando a F1 a[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-26 (§7.1 fila 7): tras descartar un aviso, la API da el mismo es[39m[90m…[39m [90m0.29s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Salud\ConfirmacionYEstadoTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 1 (HU-20 c1, RN-16): E2 confirma lesionado y queda como r[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 2 (HU-04 c3, HU-21 c1): E1 y E2 ven el mismo estado y la[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 3 (RN-13, DA-10): D1 ve el estado y la fecha, sin lesion_[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 4 (DD-57): confirmar con_molestia sin zona responde 422 e[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 5 (DD-57): confirmar apto con tipo responde 422 en tipo[39m[90m   [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 6: confirmar apto deja un estado apto explícito, sin lesi[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 7 (HU-20 c2): D1 no confirma: 403 sin_permiso[39m[90m             [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 8 (DD-61): DE confirma como entrenador[39m[90m                    [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 9 (HU-30 c2, DA-14): E2 cambia la fecha; la fila vigente[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 10 (HU-20 c3): E1 cambia la fecha de un estado de E2: 403[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 11 (DA-14): E2 cambia a con_molestia; la fila anterior se[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 12 (HU-30 c1): E2 da de alta; estado apto, fecha de alta[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 13 (§3.4): dar de alta sin estado responde 409 sin_lesion[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 14 (HU-21 c3, DA-09): con el regreso vencido, requiere ac[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 15 (DA-09): con el regreso hoy, no requiere actualización[39m[90m [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 16 (DA-17): confirmar con el regreso anterior a la fecha[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 17 (§6.3): confirmar otra vez responde 409 aviso_no_pendi[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 18 (DA-12): confirmar un aviso de JB en baja responde 409[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 19 (RN-16): E2 corrige la zona y queda la anterior en el[39m[90m… [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 20 (DD-63): E2 confirma con un estado vigente de E1; el d[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 21 (DD-63): tras la sustitución, E1 recibe 403 y E2 cambi[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 22 (DA-19): al confirmar, las tres columnas son el mismo[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.2 fila 23 (DA-19): tras la sustitución por E1 y su alta, el avis[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-63: confirmar sustituye también un estado propio o un apto explí[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-63: confirmar sustituye también un estado propio o un apto explí[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-45: confirmar otro aviso deja sin alta la lesión propia anterior[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-76 (sustituye a DA-45 en apto): confirmar apto cierra la lesión[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-76 (RN-15, RN-16): confirmar apto no cierra la lesión de otro en[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-76: confirmar apto no toca una lesión propia que ya tenía alta[39m[90m   [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-76 (inicio posterior a hoy): confirmar apto tiene éxito y no cie[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-76 (inicio hoy): confirmar apto cierra la lesión propia que empi[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: confirmar escribe el historial del aviso, de la lesión y de[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-01: sin registro, el jugador está apto implícito[39m[90m                 [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-18: el estado devuelve solo sus campos[39m[90m                           [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-15: el estado oficial sigue visible para quien lo consulta sin s[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: consultar el estado de un jugador fuera del alcance respond[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-30: el estado de un jugador en baja sigue disponible para quien[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: el docente recibe 403 en cambio de estado, alta y lesiones[39m[90m    [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: fuera del alcance de entrenador, 404 antes que 422, y nunca n[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-61: un usuario con los dos roles que solo le da clase al jugador[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: un UUID válido que no es v7 responde 404, nunca 500[39m[90m           [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: en confirmación, descarte y avisos del jugador, un UUID v7 in[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: en estado, alta, lesiones del jugador y lesión, un UUID v7 in[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPlan de T03: PATCH sin campos responde 422 en el estado y en la les[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPlan de T03: PATCH del estado con valores idénticos responde 200 si[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPlan de T03: PATCH del estado con valores idénticos responde 200 si[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPlan de T03: PATCH del estado con valores idénticos responde 200 si[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPlan de T03: el mismo estado con otra fecha no abre fila nueva, sol[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-14: cambiar estado y fecha a la vez abre otra fila con la fecha[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPlan de T03: PATCH de la lesión con valores idénticos responde 200[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPunto 2 del plan: con estado apto explícito, cualquier entrenador r[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPunto 2 del plan: el 422 va antes que el 409 sin_lesion_vigente[39m[90m     [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPunto 2 del plan: con el jugador en baja, el 403 no_es_registrante[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12: cambiar el estado o la fecha de un jugador en baja responde[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12: cambiar el estado o la fecha de un jugador en baja responde[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12: con el jugador en baja, el alta y la corrección de la lesión[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-17: cambiar la fecha a una anterior al inicio de la lesión respo[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-17: dar de alta con una fecha anterior al inicio responde 422 y[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPunto 7 del plan: el mensaje existente de rango_de_fechas_invalido[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§3.4: el alta sin fecha usa el hoy de negocio[39m[90m                       [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPunto 5 del plan: la fecha de alta y la estimada pueden ser futuras[39m[90m [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPunto 6 del plan: con un aviso de fecha futura, el alta sin fecha r[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-30: cambiar el estado en el mismo segundo en que se abrió respon[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-30: dar de alta en el mismo segundo responde 409 conflicto y no[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-30: confirmar en el mismo segundo que otra confirmación responde[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar rechaza campos desconocidos, una causa o un estado[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: confirmar guarda la nota opcional de la lesión[39m[90m                [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-32: confirmar con la nota nula o vacía responde 422 y no registr[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-32: confirmar con la nota nula o vacía responde 422 y no registr[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-32: confirmar con la nota nula o vacía responde 422 y no registr[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: PATCH del estado rechaza campos desconocidos, apto y fechas m[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: el alta rechaza campos desconocidos y fechas mal formadas wit[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: el alta rechaza campos desconocidos y fechas mal formadas wit[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: PATCH de la lesión rechaza la fecha estimada, campos desconoc[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-32: PATCH de la lesión con la nota nula o vacía responde 422; la[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-32: PATCH de la lesión con la nota nula o vacía responde 422; la[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-32: PATCH de la lesión con la nota nula o vacía responde 422; la[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-15: GET de la lesión devuelve solo sus campos a quien la registr[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-15: una lesión ajena responde igual que una inexistente, en GET[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPunto 1 del plan: quien registró la lesión y perdió el alcance sobr[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-15: GET de las lesiones del jugador trae solo las propias, por i[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-15: las lesiones del jugador siguen disponibles con el jugador e[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-79: si corregir la lesión choca con un índice único de su histor[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-33: un aviso ya confirmado de un jugador en baja responde 409 av[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-33: con el jugador en baja, un cuerpo inválido responde 422 vali[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-33: con el aviso ya confirmado, un cuerpo inválido responde 422[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-33: con el jugador en baja y el regreso anterior al aviso, respo[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-33: con una escritura que chocaría y el regreso anterior al avis[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: el estado recién confirmado tiene actualizado_en igual a vig[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: cambiar la fecha estimada actualiza actualizado_en, no vigen[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: cambiar el estado abre una fila con actualizado_en igual al[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: un PATCH con valores idénticos no cambia actualizado_en (DA-[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: el alta deja un apto con actualizado_en igual al instante de[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: corregir el detalle de la lesión no cambia actualizado_en de[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: sin estado registrado, actualizado_en es nulo como vigente_d[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: D1 y E1 ven el momento de la última actualización, sin lesio[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-56: D1 y E1 ven el momento de la última actualización, sin lesio[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Salud\ContratoDeAvisosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-19 y HU-30: las respuestas de avisos cumplen el contrato[39m[90m         [39m [90m1.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-79: el 409 conflicto del descarte cumple el contrato[39m[90m             [39m [90m0.75s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Salud\ContratoDeEstadoYLesionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-20, HU-21 y HU-30: las respuestas de confirmación, estado y lesi[39m[90m…[39m [90m1.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-79 (M1): el 409 conflicto de PATCH /lesiones/{lesion} cumple el[39m[90m… [39m [90m0.76s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Salud\HistorialDeSaludTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de avisos entrega fecha, valor anter[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (§7.2 fila 4, DA-125): el historial de un aviso confirmado[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de lesiones entrega fecha, valor ant[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de estados entrega fecha, valor ante[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-125: el historial de estados no incluye lesion_id para quien no[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 4): E1 ve el historial de la lesión que registr[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 5): E2 recibe 200 sin la lesión registrada por[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 6): D1 recibe en el historial de lesiones lo mi[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 8): D1 ve en el historial de avisos solo el avi[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 9, D-2): E2 no recibe las entradas de un aviso[39m[90m… [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 10): E1, E2 y D1 reciben 200 en el historial de[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-15: el historial de una lesión solo lo ve quien la registró[39m[90m      [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mD-2: el historial de un aviso no se entrega a quien ve el aviso per[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAB-30: una lesión sin fecha_alta aparece en el historial[39m[90m            [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mD-2 y DA-25: quien confirmó un aviso y solo da clase al jugador no[39m[90m… [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-125: un estado apto sin lesión no incluye lesion_id[39m[90m              [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26: el historial de salud cumple el contrato de OpenAPI (200, 40[39m[90m…[39m [90m1.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Salud\RegistroRN15Test[39m
+  [32;1m✓[39;22m[90m [39m[90m§7.4 fila 3 (RN-15): E3, co-entrenador de A y B, recibe 404 al corr[39m[90m…[39m [90m0.32s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Salud\RegistroRN16Test[39m
+  [32;1m✓[39;22m[90m [39m[90m§7.3 filas 3 a 5 (RN-16): tras la confirmación de E2, E1 no modific[39m[90m…[39m [90m0.35s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CondicionFisica\ContratoDeMedicionesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-17: las respuestas de mediciones cumplen el contrato[39m[90m             [39m [90m1.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-70: el 422 rango_no_configurado de mediciones cumple el contrato[39m[90m [39m [90m0.82s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CondicionFisica\ContratoDePruebasFisicasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-18: las respuestas de tipos de prueba y pruebas físicas cumplen[39m[90m… [39m [90m1.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CondicionFisica\HistorialDeCondicionFisicaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de mediciones entrega fecha, valor a[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (DA-18): el historial de pruebas físicas entrega fecha, va[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c3 (§7.1 fila 7): E2 no recibe las mediciones de F registrada[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-14: el segundo entrenador no ve en el historial las mediciones n[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26 c1 (§7.2 fila 2): una medición corregida con motivo lleva el[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden 404 antes de 422: jugador inexistente con por_pagina=0 respon[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mHU-26: el historial de condición física cumple el contrato de OpenA[39m[90m…[39m [90m1.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CondicionFisica\MedicionesTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 1 (HU-17 c1, DA-05): E1 registra; 201 con el periodo y el[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 2 (DA-05): 72.50 kg y 180.0 cm dan un IMC de 22.38[39m[90m        [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 3 (DA-05): 12.505 se redondea HALF_UP a 12.51 y la base d[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 4 (HU-17 c2): otra medición en el periodo sin es_correcci[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 5 (HU-17 c2): la corrección con motivo responde 200, reem[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 6 (convenciones §4.1): es_correccion sin motivo responde[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 6 (convenciones §4.1): es_correccion sin motivo responde[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 7 (convenciones §4.1): es_correccion sin nada en el perio[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 8 (DD-59): E2 registra la suya en el mismo periodo y no c[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 9 (DD-59): E2 lista solo la suya[39m[90m                          [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22 (RN-14, DD-17): E3, del mismo equipo A que E1, no ve la medic[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 10 (HU-17 c3, DA-06): E1 lista tres periodos en orden asc[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 11 (DD-62): 19.99 kg responde 422 valor_fuera_de_rango en[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 12 (DD-62): 230.1 cm responde 422 valor_fuera_de_rango en[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 13 (DD-62): 200.00 kg y 100.0 cm son válidos, y también l[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 13 (DD-62): 200.00 kg y 100.0 cm son válidos, y también l[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 14 (DA-13): E1 con el equipo B responde 422 equipo_inexis[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 15 (DD-60, DA-41): registrar una medición de JB responde[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 16 (§5.3): D1 no lista las mediciones: 403 sin_permiso[39m[90m    [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.5 fila 17 (RNF-09, DA-16): el máximo cambiado en la base se apli[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT05 (condición del 03/11/2026): un valor fuera de rango responde 42[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: peso y estatura exigen cadena con sus decimales; lo demás res[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: peso y estatura exigen cadena con sus decimales; lo demás res[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: peso y estatura exigen cadena con sus decimales; lo demás res[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: peso y estatura exigen cadena con sus decimales; lo demás res[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: peso y estatura exigen cadena con sus decimales; lo demás res[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: peso y estatura exigen cadena con sus decimales; lo demás res[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: peso y estatura exigen cadena con sus decimales; lo demás res[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: peso y estatura exigen cadena con sus decimales; lo demás res[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: campos obligatorios, fecha, booleano estricto y campos descon[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: campos obligatorios, fecha, booleano estricto y campos descon[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: campos obligatorios, fecha, booleano estricto y campos descon[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: campos obligatorios, fecha, booleano estricto y campos descon[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: campos obligatorios, fecha, booleano estricto y campos descon[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: campos obligatorios, fecha, booleano estricto y campos descon[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: campos obligatorios, fecha, booleano estricto y campos descon[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: campos obligatorios, fecha, booleano estricto y campos descon[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-03: la fecha es opcional, puede ser futura y decide el periodo[39m[90m   [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-44: el motivo admite 255 caracteres; 256 responden 422 validacio[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-39: motivo sin es_correccion responde 422 prohibited, aunque est[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-39: motivo sin es_correccion responde 422 prohibited, aunque est[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-39: motivo sin es_correccion responde 422 prohibited, aunque est[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-39: es_correccion falso sin motivo registra como una medición no[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-40: una corrección con valores idénticos responde 200 sin histor[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12: corregir una medición de un jugador en baja responde 409 jug[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12, DD-30: las mediciones de un jugador en baja se siguen listan[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-13: inexistente, eliminado, ajeno, sin el jugador o UUID no v7 r[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-13: con el jugador en dos equipos suyos hay una sola medición po[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-38: el 422 del cuerpo va antes que el 409 jugador_en_baja[39m[90m        [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-38: jugador_en_baja va antes que equipo_inexistente y que valor_[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-38: equipo_inexistente va antes que valor_fuera_de_rango[39m[90m         [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-38: valor_fuera_de_rango va antes que nada_que_corregir y que me[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-38: valor_fuera_de_rango va antes que nada_que_corregir y que me[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: sin sesión responde 401 y el docente no registra[39m[90m              [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDD-61: un usuario con los dos roles solo registra con el alcance de[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: el listado pagina y valida sus parámetros[39m[90m                     [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-02: una medición borrada lógicamente no se lista ni cuenta para[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAU-09: con el máximo de peso en 1500.00, 1200.00 responde 422 valor[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAU-09: con el máximo de estatura en 9999.99, sobre la columna, 9999[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAU-09: por HTTP, 9999.95 cm responde 422 validacion_fallida por sus[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-71: un IMC que no cabe en la columna responde 422 valor_fuera_de[39m[90m…[39m [90m0.32s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CondicionFisica\PruebasFisicasTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 1 (HU-18 c1): E1 registra velocidad 4.35 con fecha 2026-1[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 2 (DA-04, DA-60): otra velocidad de E1 en 2026-11 respond[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 3 (convenciones §4.1): con es_correccion y motivo respond[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 4 (DA-04): con velocidad de E1 en 2026-11, resistencia en[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 5 (HU-18 c3, DA-63): la vista de 2026-11 trae los tres ti[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 6 (HU-18 c2): con filtro[tipo_prueba_id] de velocidad, la[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 7 (DD-62): resistencia 6000.01 responde 422 valor_fuera_d[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 8 (DA-60): un tipo_prueba_id inexistente responde 422 tip[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 9 (DD-59): E2 lista las de F1 sin las de E1[39m[90m               [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-22 (RN-14, DD-17): E3, del mismo equipo A que E1, no ve la prueb[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 10 (DD-60, DA-59): registrar una prueba de JB responde 40[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 11 (DA-63): GET /tipos-prueba trae los tres tipos por cód[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 12 (RNF-09, DA-16): el máximo de resistencia cambiado en[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§7.6 fila 13 (DD-62): velocidad 1.00 y tiempo de prueba 3600.00 son[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-39: motivo sin es_correccion responde 422 prohibited, aunque est[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-39: motivo sin es_correccion responde 422 prohibited, aunque est[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-39: motivo sin es_correccion responde 422 prohibited, aunque est[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mConvenciones §4.1: es_correccion sin motivo responde 422 en motivo,[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-44: el motivo admite 255 caracteres; 256 responden 422 validacio[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-40: una corrección con valores idénticos responde 200 sin histor[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12, DA-59: corregir una prueba de un jugador en baja responde 40[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-12, DD-30: las pruebas de un jugador en baja se siguen listando[39m[90m  [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-58: el 422 del cuerpo va antes que el 409 jugador_en_baja[39m[90m        [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-58: jugador_en_baja va antes que equipo_inexistente, tipo_prueba[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-58: equipo_inexistente va antes que tipo_prueba_inexistente[39m[90m      [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-58: tipo_prueba_inexistente va antes que valor_fuera_de_rango[39m[90m    [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-58: valor_fuera_de_rango va antes que nada_que_corregir y que pr[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-58: valor_fuera_de_rango va antes que nada_que_corregir y que pr[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-61: un tipo_prueba_id que no es UUID responde 422 validacion_fal[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-61: un UUID no v7, un tipo eliminado y uno inexistente responden[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-77: con el tipo borrado, el listado de historial conserva su pru[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-62: con los dos filtros, la vista del periodo trae solo ese tipo[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-63: la vista del periodo no lee pagina ni por_pagina[39m[90m             [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-64: el doble envío del mismo entrenador deja una sola fila; el s[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-64: dos entrenadores distintos no chocan: cada uno tiene su fila[39m[90m [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: filtros inválidos responden 422 validacion_fallida with datas[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: filtros inválidos responden 422 validacion_fallida with datas[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: filtros inválidos responden 422 validacion_fallida with datas[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: filtros inválidos responden 422 validacion_fallida with datas[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: filtros inválidos responden 422 validacion_fallida with datas[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: resultado exige cadena con hasta dos decimales; campos obliga[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: resultado exige cadena con hasta dos decimales; campos obliga[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: resultado exige cadena con hasta dos decimales; campos obliga[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: resultado exige cadena con hasta dos decimales; campos obliga[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: resultado exige cadena con hasta dos decimales; campos obliga[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: resultado exige cadena con hasta dos decimales; campos obliga[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.2: resultado exige cadena con hasta dos decimales; campos obliga[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT06: cero y negativos responden 422 valor_fuera_de_rango, nunca 500[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-13: un equipo ajeno responde 422 equipo_inexistente; la correcci[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: fuera del alcance, el 404 gana sobre el 422 y es igual al de[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: un UUID válido que no es v7 en {jugador} responde 404, nunca[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: sin sesión responde 401 y el docente recibe 403 en las tres r[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mOrden del listado: por periodo ascendente y, dentro del periodo, po[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§6.1: el listado pagina y no muestra pruebas borradas lógicamente[39m[90m   [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-13: un UUID no v7, un equipo inexistente y uno ajeno responden e[39m[90m…[39m [90m0.38s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CondicionFisica\RangoFaltanteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDA-70: sin la fila de peso, registrar una medición responde 422 ran[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-70: con la fila de estatura borrada lógicamente, responde lo mis[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDA-78: correr el seeder de rangos dos veces no repone la fila borra[39m[90m…[39m [90m0.32s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\AlcanceDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la lista de usos autorizados sin alcance es exactamente la[39m[90m… [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: el detector marca consultas de jugadores sin alcance y deja[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: un archivo exento no se revisa[39m[90m                              [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: ninguna consulta de jugadores en src ni app evita AlcanceDe[39m[90m…[39m [90m2.78s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-01: la implementación del alcance existe donde la lista la espe[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\ArquitecturaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: existen los contextos con sus capas[39m[90m                      [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: cada contexto tiene su proveedor de servicios registrado[39m[90m [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: el dominio no depende del framework[39m[90m                     [39m [90m12.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Compartido no depende de su infraestruc[39m[90m…[39m [90m0.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Compartido no importa el dominio de otro contexto[39m[90m        [39m [90m2.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Identidad no depende de su infraestruct[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Identidad no importa el dominio de otro contexto[39m[90m         [39m [90m0.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Plantel no depende de su infraestructur[39m[90m…[39m [90m1.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Plantel no importa el dominio de otro contexto[39m[90m           [39m [90m0.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Academico no depende de su infraestruct[39m[90m…[39m [90m1.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Academico no importa el dominio de otro contexto[39m[90m         [39m [90m1.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Competencia no depende de su infraestru[39m[90m…[39m [90m1.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Competencia no importa el dominio de otro contexto[39m[90m       [39m [90m1.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Rendimiento no depende de su infraestru[39m[90m…[39m [90m0.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Rendimiento no importa el dominio de otro contexto[39m[90m       [39m [90m0.92s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de CondicionFisica no depende de su infrae[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: CondicionFisica no importa el dominio de otro contexto[39m[90m   [39m [90m0.80s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Salud no depende de su infraestructura[39m[90m  [39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Salud no importa el dominio de otro contexto[39m[90m             [39m [90m0.78s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Alertas no depende de su infraestructur[39m[90m…[39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Alertas no importa el dominio de otro contexto[39m[90m           [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: la aplicacion de Consultas no depende de su infraestruct[39m[90m…[39m [90m0.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T05: Consultas no importa el dominio de otro contexto[39m[90m         [39m [90m0.84s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\BorradoLogicoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: la lista de tablas del framework permitidas es exactamen[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: el detector marca borrados de negocio y deja pasar las t[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H1-T08: ningun codigo de src ni app borra fisicamente tablas de[39m[90m… [39m [90m2.25s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\CompetenciaSinPlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T03: el detector encuentra importaciones de Plantel y tablas[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H3-T03: Competencia no importa Plantel ni lee sus tablas[39m[90m         [39m [90m2.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\CompetenciaSinSaludTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T04: el detector encuentra importaciones de Salud y tablas de[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H5-T04: Competencia no importa Salud ni lee sus tablas[39m[90m           [39m [90m2.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\DecimalesEnDominioTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el detector reconoce float y las funciones de redondeo, y d[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el dominio no usa float ni round, floor, ceil ni number_for[39m[90m…[39m [90m1.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRNF-04: el dominio no usa round, floor, ceil ni number_format (arch[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\LocalizadorDeJugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el detector encuentra los archivos que nombran el localizado[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: solo la declaración, el adaptador, su enlace y el caso de us[39m[90m…[39m [90m2.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el puerto devuelve solo el identificador y si el jugador est[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mRN-20: el adaptador del localizador no consulta la tabla de jugador[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\RendimientoSinPlantelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T02: el detector encuentra importaciones de Plantel y tablas[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H4-T02: Rendimiento no importa Plantel ni lee sus tablas[39m[90m         [39m [90m2.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\TextosEnLangTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T09: el detector reconoce texto visible y deja pasar codigos[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T09: ningun texto visible esta escrito fuera de lang/es[39m[90m       [39m [90m2.60s[39m  
+
+  [90mTests:[39m    [32;1m390 passed[39;22m[90m (2623 assertions)[39m
+  [90mDuration:[39m [39m167.71s[39m
+
+codigo de salida: 0

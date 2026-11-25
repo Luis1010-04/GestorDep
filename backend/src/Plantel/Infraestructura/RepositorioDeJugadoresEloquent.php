@@ -50,6 +50,24 @@ final class RepositorioDeJugadoresEloquent implements RepositorioDeJugadores
         return $fila === null ? null : new JugadorParaAsignar(Identificador::desdeTexto($fila->id), $fila->estatus_deportivo === 'baja');
     }
 
+    public function bloquearActivos(array $jugadores): array
+    {
+        $ids = array_values(array_unique(array_map(fn (Identificador $jugador): string => $jugador->valor(), $jugadores)));
+        sort($ids);
+
+        /** @var list<string> $activos */
+        $activos = $this->conexion->table('jugadores')
+            ->whereIn('id', $ids)
+            ->whereNull('eliminado_en')
+            ->where('estatus_deportivo', '<>', 'baja')
+            ->orderBy('id')
+            ->sharedLock()
+            ->pluck('id')
+            ->all();
+
+        return array_values(array_filter($jugadores, fn (Identificador $jugador): bool => ! in_array($jugador->valor(), $activos, true)));
+    }
+
     public function actualizarExpediente(Identificador $jugadorId, ?string $nombres, ?string $apellidos, ?DateTimeImmutable $fechaNacimiento): void
     {
         $autor = $this->usuarioActual->identificador()?->valor();

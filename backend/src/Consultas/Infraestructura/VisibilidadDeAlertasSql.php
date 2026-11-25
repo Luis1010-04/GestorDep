@@ -79,17 +79,20 @@ final class VisibilidadDeAlertasSql
         return $rama;
     }
 
-    /** Inscripción del jugador en una materia del docente cuyo periodo contiene la fecha de hoy de negocio (DA-89). */
+    /**
+     * Inscripción del jugador en una materia del docente cuyo periodo contiene la fecha de hoy de negocio (DA-89). Con alias
+     * propios: una columna externa `inscripciones.jugador_id` no queda sombreada (hallazgo 5).
+     */
     private function esDocenteDelJugador(ConsultaSql $rama, string $usuario, string $columnaJugador, string $hoy): ConsultaSql
     {
-        return $rama->from('inscripciones')
-            ->join('materias', 'materias.id', '=', 'inscripciones.materia_id')
-            ->join('periodos_escolares as periodo', 'periodo.id', '=', 'materias.periodo_id')
-            ->whereColumn('inscripciones.jugador_id', $columnaJugador)
-            ->whereNull('inscripciones.eliminado_en')
-            ->whereNull('materias.eliminado_en')
+        return $rama->from('inscripciones as inscripcion_del_docente')
+            ->join('materias as materia_del_docente', 'materia_del_docente.id', '=', 'inscripcion_del_docente.materia_id')
+            ->join('periodos_escolares as periodo', 'periodo.id', '=', 'materia_del_docente.periodo_id')
+            ->whereColumn('inscripcion_del_docente.jugador_id', $columnaJugador)
+            ->whereNull('inscripcion_del_docente.eliminado_en')
+            ->whereNull('materia_del_docente.eliminado_en')
             ->whereNull('periodo.eliminado_en')
-            ->where('materias.docente_id', $usuario)
+            ->where('materia_del_docente.docente_id', $usuario)
             ->where('periodo.fecha_inicio', '<=', $hoy)
             ->where('periodo.fecha_fin', '>=', $hoy);
     }

@@ -5,6 +5,7 @@ namespace Src\Academico\Aplicacion;
 use LogicException;
 use Src\Academico\Dominio\EstadoDeAsistencia;
 use Src\Academico\Dominio\RepositorioDeAsistencias;
+use Src\Compartido\Aplicacion\CandadoDeJugadores;
 use Src\Compartido\Aplicacion\PublicadorDeEventos;
 use Src\Compartido\Dominio\Eventos\AsistenciaDeClaseRegistrada;
 use Src\Compartido\Dominio\Identificador;
@@ -24,6 +25,7 @@ final class CorregirAsistencia
         private readonly RepositorioDeAsistencias $asistencias,
         private readonly PublicadorDeEventos $eventos,
         private readonly Reloj $reloj,
+        private readonly CandadoDeJugadores $candado,
     ) {}
 
     /** @throws JugadorEnBajaSinCaptura */
@@ -34,7 +36,13 @@ final class CorregirAsistencia
             throw new JugadorEnBajaSinCaptura;
         }
 
-        if ($this->asistencias->corregirEstado($asistenciaId, $estado, Instante::truncadoASegundos($this->reloj->ahora()))) {
+        // Con la fila del jugador bloqueada: una baja simultánea se serializa con la corrección (AB-26).
+        $cambio = $this->candado->conJugadoresActivos(
+            [$inscripcion->jugadorId],
+            fn (): JugadorEnBajaSinCaptura => new JugadorEnBajaSinCaptura,
+            fn (): bool => $this->asistencias->corregirEstado($asistenciaId, $estado, Instante::truncadoASegundos($this->reloj->ahora())),
+        );
+        if ($cambio) {
             $this->eventos->publicar(new AsistenciaDeClaseRegistrada($inscripcion->id->valor(), $inscripcion->materiaId->valor(), $inscripcion->jugadorId->valor()));
         }
 
