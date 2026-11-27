@@ -28,7 +28,24 @@ function paginasConContrato(): array
         '/plantel/equipos/'.Identificador::generar()->valor(),
         '/jugadores/crear',
         '/jugadores/'.Identificador::generar()->valor().'/editar',
+        '/estatus',
     ];
+}
+
+/**
+ * Valores del enum de un parámetro de consulta de la operación (los filtros de un GET); vacío si no tiene enum.
+ *
+ * @return list<string>
+ */
+function enumDelParametro(Operation $operacion, string $nombre): array
+{
+    foreach ($operacion->parameters as $parametro) {
+        if ($parametro instanceof Parameter && $parametro->name === $nombre && $parametro->schema instanceof Schema) {
+            return array_values(array_map(fn ($valor) => (string) $valor, $parametro->schema->enum ?? []));
+        }
+    }
+
+    return [];
 }
 
 /**
@@ -232,7 +249,7 @@ test('FRONT-R3 11: cada columna ordenable (data-orden) usa un valor del parámet
     expect($revisadas)->toBeGreaterThan(0);
 });
 
-test('FRONT-R6 10: cada lista fija de opciones de un formulario usa exactamente los valores del enum de su campo en el contrato (CA-FOR-001: no se inventan catálogos)', function () {
+test('FRONT-R6 10: cada lista fija de opciones de un formulario usa exactamente los valores del enum de su campo en el contrato, en el cuerpo de las escrituras y en los filtros de los GET (enmienda FRONT-R4) (CA-FOR-001: no se inventan catálogos)', function () {
     /** @var TestCase $this */
     usuarioDelContrato($this);
     $contrato = contratoDeVistas();
@@ -252,7 +269,11 @@ test('FRONT-R6 10: cada lista fija de opciones de un formulario usa exactamente 
                 continue; // Lista que se llena con datos de la API (equipos, categorías): no tiene valores fijos.
             }
 
-            $enum = enumDelCuerpo(operacionDelContrato($contrato, endpointDe($lista)), $lista->getAttribute('name'));
+            $endpoint = endpointDe($lista);
+            $operacion = operacionDelContrato($contrato, $endpoint);
+            $enum = str_starts_with($endpoint, 'GET ')
+                ? enumDelParametro($operacion, $lista->getAttribute('name'))
+                : enumDelCuerpo($operacion, $lista->getAttribute('name'));
             sort($valores);
             sort($enum);
 

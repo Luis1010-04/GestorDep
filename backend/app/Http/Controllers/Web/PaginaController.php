@@ -43,6 +43,11 @@ class PaginaController extends Controller
         return view('modulos.jugadores.editar', ['jugador' => $jugador]);
     }
 
+    public function estatus(): View
+    {
+        return view('modulos.estatus.index');
+    }
+
     public function categorias(): View
     {
         return view('modulos.categorias.index');

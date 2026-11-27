@@ -81,6 +81,7 @@
                 fila.insertCell().textContent = tj.posiciones[equipo.posicion];
             });
             nombreDelJugador = jugador.nombres + ' ' + jugador.apellidos;
+            equiposDelJugador = jugador.equipos;
             if (jugador.estatus_deportivo === 'baja' || jugador.estatus_academico === 'baja') {
                 document.getElementById('boton-baja').classList.add('d-none');
             }
@@ -222,7 +223,115 @@
         });
     });
 
+    /*
+     * Alertas, disponibilidad y avisos de lesión (FRONT-R4, docente y entrenador). Solo se muestra lo que manda la API:
+     * cada quien ve las alertas que le corresponden (DA-89, DA-90) y la nota de un aviso solo si la escribió o lo confirmó
+     * (DD-58); para los demás llega nula y se dice que no es visible.
+     */
+    var te = textos.estatus;
+    var equiposDelJugador = [];
+
+    function nombreDeEquipo(equipoId) {
+        var equipo = equiposDelJugador.find(function (candidato) { return candidato.equipo_id === equipoId; });
+        return equipo ? equipo.nombre : tj.sin_dato;
+    }
+
+    function cargarAlertas() {
+        var contenedor = panel('alertas');
+        window.Api.solicitar('GET', ruta + '/alertas').then(function (respuesta) {
+            var cuerpo = document.getElementById('alertas-del-jugador');
+            cuerpo.textContent = '';
+            if (respuesta.datos.length === 0) {
+                var celda = cuerpo.insertRow().insertCell();
+                celda.colSpan = 4;
+                celda.className = 'text-muted';
+                celda.textContent = te.sin_alertas;
+            }
+            respuesta.datos.forEach(function (alerta) {
+                var fila = cuerpo.insertRow();
+                fila.insertCell().textContent = window.Estatus.textoDeTipo(alerta.tipo);
+                fila.insertCell().textContent = window.Estatus.textoDeCausa(alerta.causa);
+                fila.insertCell().textContent = alerta.equipo_id ? nombreDeEquipo(alerta.equipo_id) : tj.sin_dato;
+                fila.insertCell().textContent = fechaHora(alerta.activada_en);
+            });
+            listo(contenedor);
+        }, function (error) {
+            if (error.status === 404) {
+                // Un jugador en baja o fuera de alcance no tiene alertas visibles (RN-23).
+                mensaje(contenedor, te.alertas_no_disponibles);
+                return;
+            }
+            mensaje(contenedor, tj.error_de_carga);
+            window.Avisos.error(error);
+        });
+    }
+
+    function cargarDisponibilidad() {
+        var contenedor = panel('disponibilidad');
+        window.Api.solicitar('GET', ruta + '/estado-disponibilidad').then(function (respuesta) {
+            var estado = respuesta.datos;
+            poner(contenedor, 'estado', te.estados[estado.estado]);
+            poner(contenedor, 'fecha_estimada_regreso', conDato(estado.fecha_estimada_regreso));
+            poner(contenedor, 'vigente_desde', fechaHora(estado.vigente_desde));
+            poner(contenedor, 'es_implicito', estado.es_implicito ? te.es_implicito : te.registrado);
+            poner(contenedor, 'requiere_actualizacion', estado.requiere_actualizacion ? tj.si : tj.no);
+            listo(contenedor);
+        }, function (error) {
+            mensaje(contenedor, error.status === 404 ? tj.no_disponible : tj.error_de_carga);
+            if (error.status !== 404) {
+                window.Avisos.error(error);
+            }
+        });
+    }
+
+    var tablaDeAvisos = null;
+    var formularioAviso = document.getElementById('formulario-aviso');
+    var avisoDeLesion = document.getElementById('aviso-de-lesion');
+
+    function prepararAvisos() {
+        tablaDeAvisos = window.Tabla.crear(document.getElementById('tabla-avisos'), {
+            ruta: ruta + '/avisos-lesion',
+            archivo: 'avisos-de-lesion',
+            titulo: function () { return document.getElementById('titulo-ficha').textContent; },
+            descargas: false,
+            columnas: [
+                { data: 'fecha_aviso' },
+                { data: 'estado', texto: function (estado) { return te.estados_de_aviso[estado] || estado; } },
+                { data: 'reportado_por_jugador', texto: function (valor) { return valor ? tj.si : tj.no; } },
+                { data: 'nota', texto: function (nota) { return nota === null ? te.nota_no_visible : nota; } },
+                { data: 'es_propio', texto: function (valor) { return valor ? tj.si : tj.no; } }
+            ]
+        });
+    }
+
+    formularioAviso.addEventListener('submit', function (evento) {
+        evento.preventDefault();
+        var boton = formularioAviso.querySelector('button[type="submit"]');
+        if (boton.disabled) {
+            return;
+        }
+        window.Formularios.limpiar(formularioAviso);
+        window.Formularios.ocultarAviso(avisoDeLesion);
+        window.Formularios.ocupar(boton);
+        window.Api.solicitar('POST', ruta + '/avisos-lesion', window.Formularios.datos(formularioAviso))
+            .then(function () {
+                formularioAviso.reset();
+                window.Avisos.aviso(te.aviso_creado);
+                if (tablaDeAvisos) {
+                    tablaDeAvisos.recargar();
+                }
+            }, function (error) {
+                return window.Formularios.mostrarError(formularioAviso, avisoDeLesion, error);
+            })
+            .then(function () {
+                window.Formularios.liberar(boton);
+            });
+    });
+
     alAbrirPorPrimeraVez(document.getElementById('boton-academica'), cargarSituacionAcademica);
     alAbrirPorPrimeraVez(document.getElementById('boton-asistencia'), cargarAsistencia);
+    alAbrirPorPrimeraVez(document.getElementById('boton-alertas'), cargarAlertas);
+    alAbrirPorPrimeraVez(document.getElementById('boton-disponibilidad'), cargarDisponibilidad);
+    alAbrirPorPrimeraVez(document.getElementById('boton-avisos'), prepararAvisos);
     cargarDatos();
 })();

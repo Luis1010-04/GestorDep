@@ -50,12 +50,15 @@
         }
     }
 
-    /** Los valores de los controles con name del formulario, tal como los escribió el usuario (la API los recorta y valida). */
+    /**
+     * Los valores de los controles con name del formulario, tal como los escribió el usuario (la API los recorta y valida).
+     * Una casilla envía true o false, que es lo que espera un campo booleano del contrato.
+     */
     function datos(formulario) {
         var valores = {};
         Array.prototype.forEach.call(formulario.elements, function (control) {
             if (control.name) {
-                valores[control.name] = control.value;
+                valores[control.name] = control.type === 'checkbox' ? control.checked : control.value;
             }
         });
         return valores;

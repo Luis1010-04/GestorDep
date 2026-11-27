@@ -15,6 +15,7 @@ return [
     'menu' => [
         'panel' => 'Panel',
         'jugadores' => 'Jugadores',
+        'estatus' => 'Estatus de jugadores',
         'plantel' => 'Plantel',
         'categorias' => 'Categorías',
         'equipos' => 'Equipos',
@@ -28,6 +29,68 @@ return [
         'defensa' => 'Defensa',
         'medio' => 'Medio',
         'delantero' => 'Delantero',
+    ],
+
+    // Valores del enum tipo de Alerta y de filtro[tipo_alerta]; aquí solo va el texto visible.
+    'tipos_de_alerta' => [
+        'riesgo_baja_academica' => 'Riesgo de baja académica',
+        'riesgo_baja_deportiva' => 'Riesgo de baja deportiva',
+        'acumulacion_sanciones_deportivas' => 'Acumulación de sanciones deportivas',
+    ],
+
+    'estatus' => [
+        'titulo' => 'Estatus de jugadores',
+        'ayuda' => 'Sus jugadores, con su estado oficial de disponibilidad, avisos pendientes y alertas abiertas. Cada quien ve lo que le corresponde según su rol.',
+        'filtro_equipo' => 'Equipo',
+        'filtro_materia' => 'Materia',
+        'filtro_tipo_alerta' => 'Tipo de alerta',
+        'todos' => 'Todos',
+        'listado_titulo' => 'Jugadores',
+        'columnas' => [
+            'jugador' => 'Jugador',
+            'matricula' => 'Matrícula',
+            'estado_oficial' => 'Estado oficial',
+            'aviso_pendiente' => 'Aviso pendiente',
+            'alertas' => 'Alertas',
+            'resumen_academico' => 'Resumen académico',
+            'materias' => 'Mis materias',
+            'acciones' => 'Acciones',
+        ],
+    ],
+
+    'avisos' => [
+        'titulo' => 'Avisos de molestia o lesión',
+        'nuevo' => 'Nuevo aviso',
+        'ayuda' => 'El aviso queda pendiente hasta que un entrenador del jugador lo confirme o lo descarte; no cambia su estado oficial.',
+        'nota' => 'Nota',
+        'fecha' => 'Fecha',
+        'reportado_por_jugador' => 'Lo reportó el propio jugador',
+        'guardar' => 'Registrar aviso',
+        'columnas' => [
+            'fecha_aviso' => 'Fecha',
+            'estado' => 'Estado',
+            'reportado_por_jugador' => 'Reportado por el jugador',
+            'nota' => 'Nota',
+            'es_propio' => 'Registrado por usted',
+        ],
+    ],
+
+    'alertas' => [
+        'titulo' => 'Alertas abiertas',
+        'columnas' => [
+            'tipo' => 'Tipo',
+            'causa' => 'Causa',
+            'equipo' => 'Equipo',
+            'activada_en' => 'Activada el',
+        ],
+    ],
+
+    'disponibilidad' => [
+        'estado' => 'Estado oficial',
+        'fecha_estimada_regreso' => 'Fecha estimada de regreso',
+        'vigente_desde' => 'Vigente desde',
+        'es_implicito' => 'Origen',
+        'requiere_actualizacion' => '¿Requiere actualización?',
     ],
 
     'formulario' => [
@@ -93,6 +156,9 @@ return [
             'datos' => 'Datos',
             'academica' => 'Situación académica',
             'asistencia' => 'Asistencia a entrenamientos',
+            'alertas' => 'Alertas',
+            'disponibilidad' => 'Disponibilidad',
+            'avisos' => 'Avisos de lesión',
         ],
         'campos' => [
             'apellidos' => 'Apellidos',
@@ -230,6 +296,41 @@ return [
             'baja_texto' => 'La baja es definitiva y no se puede revertir desde la aplicación. El jugador dejará de aparecer en los listados de todos sus entrenadores.',
             'baja_boton' => 'Sí, registrar la baja',
             'baja_registrada' => 'Baja registrada.',
+        ],
+
+        'estatus' => [
+            // Los mismos textos que interfaz.tipos_de_alerta, para los scripts.
+            'tipos' => [
+                'riesgo_baja_academica' => 'Riesgo de baja académica',
+                'riesgo_baja_deportiva' => 'Riesgo de baja deportiva',
+                'acumulacion_sanciones_deportivas' => 'Acumulación de sanciones deportivas',
+            ],
+            'estados' => ['apto' => 'Apto', 'con_molestia' => 'Con molestia', 'lesionado' => 'Lesionado'],
+            'estados_de_aviso' => ['pendiente' => 'Pendiente', 'confirmado' => 'Confirmado', 'descartado' => 'Descartado'],
+            'resultados' => ['pasa' => 'Pasa', 'no_pasa' => 'No pasa', 'datos_insuficientes' => 'Datos insuficientes'],
+            'causa' => [
+                'nivel_riesgo' => 'Nivel de riesgo',
+                'promedio' => 'Promedio',
+                'materias_reprobadas' => 'Materias reprobadas',
+                'resultado' => 'Desempeño',
+                'acumulacion_sanciones' => 'Acumulación de sanciones',
+                'tarjetas_amarillas' => 'Tarjetas amarillas',
+                'tarjetas_rojas' => 'Tarjetas rojas',
+                'faltas_en_ventana' => 'Faltas en la ventana',
+            ],
+            'regreso' => 'regreso estimado :fecha',
+            'requiere_actualizacion' => 'Requiere actualización',
+            'es_implicito' => 'Sin registros: apto por omisión',
+            'registrado' => 'Registrado',
+            'sin_alertas' => 'Sin alertas abiertas que usted pueda ver.',
+            'nota_no_visible' => 'No visible para usted',
+            'sin_nota' => 'Sin nota',
+            'aviso_creado' => 'Aviso registrado.',
+            'alertas_no_disponibles' => 'No hay alertas que mostrar para este jugador.',
+            'materia_aprobada' => 'aprobada',
+            'materia_reprobada' => 'reprobada',
+            'materia_sin_calificar' => 'sin calificar',
+            'ninguna' => 'Ninguna',
         ],
     ],
 ];

@@ -11,6 +11,7 @@ Route::get('/jugadores', [PaginaController::class, 'jugadores'])->middleware('au
 Route::get('/jugadores/crear', [PaginaController::class, 'crearJugador'])->middleware('auth:web');
 Route::get('/jugadores/{jugador}', [PaginaController::class, 'jugador'])->middleware('auth:web')->whereUuid('jugador');
 Route::get('/jugadores/{jugador}/editar', [PaginaController::class, 'editarJugador'])->middleware('auth:web')->whereUuid('jugador');
+Route::get('/estatus', [PaginaController::class, 'estatus'])->middleware('auth:web');
 Route::get('/plantel/categorias', [PaginaController::class, 'categorias'])->middleware('auth:web');
 Route::get('/plantel/equipos', [PaginaController::class, 'equipos'])->middleware('auth:web');
 Route::get('/plantel/equipos/{equipo}', [PaginaController::class, 'equipo'])->middleware('auth:web')->whereUuid('equipo');

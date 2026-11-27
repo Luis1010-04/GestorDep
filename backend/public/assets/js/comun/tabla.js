@@ -281,8 +281,9 @@
             pageLength: 15,
             lengthMenu: [15, 25, 50, 100],
             language: idioma(),
-            layout: { topStart: 'pageLength', topEnd: 'buttons', bottomStart: 'info', bottomEnd: 'paging' },
-            buttons: botones()
+            // descargas: false quita las descargas de la tabla (DAF-16: tablas de salud, hasta que el responsable lo confirme).
+            layout: { topStart: 'pageLength', topEnd: config.descargas === false ? null : 'buttons', bottomStart: 'info', bottomEnd: 'paging' },
+            buttons: config.descargas === false ? [] : botones()
         };
 
         if (servidor) {

@@ -60,6 +60,15 @@
                     <li class="nav-item" role="presentation" data-roles="entrenador" hidden>
                         <button class="nav-link" id="boton-asistencia" data-bs-toggle="tab" data-bs-target="#pestana-asistencia" type="button" role="tab">{{ __('interfaz.jugadores.pestanas.asistencia') }}</button>
                     </li>
+                    <li class="nav-item" role="presentation" data-roles="docente entrenador" hidden>
+                        <button class="nav-link" id="boton-alertas" data-bs-toggle="tab" data-bs-target="#pestana-alertas" type="button" role="tab">{{ __('interfaz.jugadores.pestanas.alertas') }}</button>
+                    </li>
+                    <li class="nav-item" role="presentation" data-roles="docente entrenador" hidden>
+                        <button class="nav-link" id="boton-disponibilidad" data-bs-toggle="tab" data-bs-target="#pestana-disponibilidad" type="button" role="tab">{{ __('interfaz.jugadores.pestanas.disponibilidad') }}</button>
+                    </li>
+                    <li class="nav-item" role="presentation" data-roles="docente entrenador" hidden>
+                        <button class="nav-link" id="boton-avisos" data-bs-toggle="tab" data-bs-target="#pestana-avisos" type="button" role="tab">{{ __('interfaz.jugadores.pestanas.avisos') }}</button>
+                    </li>
                 </ul>
                 <div class="tab-content pt-3">
                     <div class="tab-pane fade show active" id="pestana-datos" role="tabpanel" data-endpoint="GET /jugadores/{jugador}">
@@ -144,6 +153,78 @@
                             </dl>
                         </div>
                     </div>
+                    <div class="tab-pane fade" id="pestana-alertas" role="tabpanel" data-endpoint="GET /jugadores/{jugador}/alertas">
+                        <p class="text-muted" data-mensaje>{{ __('interfaz.jugadores.cargando') }}</p>
+                        <div data-contenido hidden>
+                            <h2 class="card-title">{{ __('interfaz.alertas.titulo') }}</h2>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th data-campo="tipo">{{ __('interfaz.alertas.columnas.tipo') }}</th>
+                                        <th data-campo="causa">{{ __('interfaz.alertas.columnas.causa') }}</th>
+                                        <th data-campo="equipo_id">{{ __('interfaz.alertas.columnas.equipo') }}</th>
+                                        <th data-campo="activada_en">{{ __('interfaz.alertas.columnas.activada_en') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="alertas-del-jugador"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pestana-disponibilidad" role="tabpanel" data-endpoint="GET /jugadores/{jugador}/estado-disponibilidad">
+                        <p class="text-muted" data-mensaje>{{ __('interfaz.jugadores.cargando') }}</p>
+                        <div data-contenido hidden>
+                            <dl class="row">
+                                <dt class="col-sm-4">{{ __('interfaz.disponibilidad.estado') }}</dt>
+                                <dd class="col-sm-8" data-campo="estado"></dd>
+                                <dt class="col-sm-4">{{ __('interfaz.disponibilidad.fecha_estimada_regreso') }}</dt>
+                                <dd class="col-sm-8" data-campo="fecha_estimada_regreso"></dd>
+                                <dt class="col-sm-4">{{ __('interfaz.disponibilidad.vigente_desde') }}</dt>
+                                <dd class="col-sm-8" data-campo="vigente_desde"></dd>
+                                <dt class="col-sm-4">{{ __('interfaz.disponibilidad.es_implicito') }}</dt>
+                                <dd class="col-sm-8" data-campo="es_implicito"></dd>
+                                <dt class="col-sm-4">{{ __('interfaz.disponibilidad.requiere_actualizacion') }}</dt>
+                                <dd class="col-sm-8" data-campo="requiere_actualizacion"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pestana-avisos" role="tabpanel">
+                        <h2 class="card-title">{{ __('interfaz.avisos.nuevo') }}</h2>
+                        <p class="text-muted small">{{ __('interfaz.avisos.ayuda') }}</p>
+                        <div id="aviso-de-lesion" class="alert alert-danger d-none" role="alert"></div>
+                        <form id="formulario-aviso" data-endpoint="POST /jugadores/{jugador}/avisos-lesion" class="row g-3" novalidate>
+                            <div class="col-12">
+                                <label for="nota-aviso" class="form-label">{{ __('interfaz.avisos.nota') }}</label>
+                                <textarea class="form-control" id="nota-aviso" name="nota" rows="2"></textarea>
+                                <div class="invalid-feedback" data-error-de="nota"></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="fecha-aviso" class="form-label">{{ __('interfaz.avisos.fecha') }}</label>
+                                <input type="date" class="form-control" id="fecha-aviso" name="fecha">
+                                <div class="invalid-feedback" data-error-de="fecha"></div>
+                            </div>
+                            <div class="col-sm-6 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="reportado-por-jugador" name="reportado_por_jugador">
+                                    <label for="reportado-por-jugador" class="form-check-label">{{ __('interfaz.avisos.reportado_por_jugador') }}</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">{{ __('interfaz.avisos.guardar') }}</button>
+                            </div>
+                        </form>
+                        <h2 class="card-title mt-3">{{ __('interfaz.avisos.titulo') }}</h2>
+                        <table id="tabla-avisos" class="table table-striped w-100" data-endpoint="GET /jugadores/{jugador}/avisos-lesion">
+                            <thead>
+                                <tr>
+                                    <th data-campo="fecha_aviso">{{ __('interfaz.avisos.columnas.fecha_aviso') }}</th>
+                                    <th data-campo="estado">{{ __('interfaz.avisos.columnas.estado') }}</th>
+                                    <th data-campo="reportado_por_jugador">{{ __('interfaz.avisos.columnas.reportado_por_jugador') }}</th>
+                                    <th data-campo="nota">{{ __('interfaz.avisos.columnas.nota') }}</th>
+                                    <th data-campo="es_propio">{{ __('interfaz.avisos.columnas.es_propio') }}</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -162,5 +243,6 @@
     <script src="/assets/vendor/pdfmake/pdfmake.min.js"></script>
     <script src="/assets/vendor/pdfmake/vfs_fonts.js"></script>
     <script src="/assets/js/comun/tabla.js"></script>
+    <script src="/assets/js/comun/estatus.js"></script>
     <script src="/assets/js/modulos/jugadores/ver.js"></script>
 @endpush
