@@ -63,4 +63,25 @@ class PaginaController extends Controller
     {
         return view('modulos.equipos.ver', ['equipo' => $equipo]);
     }
+
+    public function periodos(): View
+    {
+        return view('modulos.periodos.index');
+    }
+
+    public function asignaturas(): View
+    {
+        return view('modulos.asignaturas.index');
+    }
+
+    public function materias(): View
+    {
+        return view('modulos.materias.index');
+    }
+
+    /** Solo entrega la página; la materia y si es del docente los decide la API (DD-50). */
+    public function materia(string $materia): View
+    {
+        return view('modulos.materias.ver', ['materia' => $materia]);
+    }
 }

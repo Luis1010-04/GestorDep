@@ -65,7 +65,7 @@ test('FRONT-R2 13: solo comun/avisos.js usa SweetAlert2; ninguna vista ni otro s
             continue;
         }
 
-        expect(File::get($archivo->getPathname()))->not->toContain('Swal', $archivo->getFilename());
+        expect(str_contains(File::get($archivo->getPathname()), 'Swal'))->toBeFalse($archivo->getFilename());
     }
 });
 

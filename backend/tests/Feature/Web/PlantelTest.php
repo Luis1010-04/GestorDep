@@ -53,7 +53,7 @@ test('FRONT-R6 1: las páginas del plantel sin sesión redirigen a /ingreso sin 
     foreach (paginasDelPlantel() as $pagina) {
         $respuesta = $prueba->get($pagina)->assertRedirect('/ingreso');
 
-        expect((string) $respuesta->getContent())->not->toContain('data-endpoint', $pagina);
+        expect(str_contains((string) $respuesta->getContent(), 'data-endpoint'))->toBeFalse($pagina);
     }
 });
 

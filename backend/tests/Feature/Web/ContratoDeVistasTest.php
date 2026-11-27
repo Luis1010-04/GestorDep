@@ -29,6 +29,10 @@ function paginasConContrato(): array
         '/jugadores/crear',
         '/jugadores/'.Identificador::generar()->valor().'/editar',
         '/estatus',
+        '/academico/periodos',
+        '/academico/asignaturas',
+        '/academico/materias',
+        '/academico/materias/'.Identificador::generar()->valor(),
     ];
 }
 

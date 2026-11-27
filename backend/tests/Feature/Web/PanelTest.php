@@ -16,7 +16,7 @@ function usuarioDelPanel(TestCase $prueba): void
 }
 
 /** Rutas web propias que las páginas enlazan; no son activos (enmiendas FRONT-R2, FRONT-R3, FRONT-R6 y FRONT-R4). */
-const PAGINAS_PROPIAS = ['/panel', '/ingreso', '/contrasena', '/jugadores', '/estatus', '/plantel/categorias', '/plantel/equipos'];
+const PAGINAS_PROPIAS = ['/panel', '/ingreso', '/contrasena', '/jugadores', '/estatus', '/plantel/categorias', '/plantel/equipos', '/academico/periodos', '/academico/asignaturas', '/academico/materias'];
 
 /**
  * Direcciones de recursos y enlaces de una página, sin las rutas web propias ni el enlace del crédito de BootstrapMade.
@@ -87,7 +87,7 @@ test('PT-12 7: las páginas cargan activos solo desde /assets/ o /NiceAdmin/ y t
     }
 });
 
-test('PT-12 8: el menú lateral contiene exactamente los ítems aprobados y ningún enlace a pantallas no construidas (enmiendas FRONT-R3: «Jugadores»; FRONT-R6: «Categorías» y «Equipos»; FRONT-R4: «Estatus de jugadores»)', function () {
+test('PT-12 8: el menú lateral contiene exactamente los ítems aprobados y ningún enlace a pantallas no construidas (enmiendas FRONT-R3: «Jugadores»; FRONT-R6: «Categorías» y «Equipos»; FRONT-R4: «Estatus de jugadores»; FRONT-R5a: «Periodos», «Asignaturas» y «Materias»)', function () {
     /** @var TestCase $this */
     usuarioDelPanel($this);
     $html = (string) $this->get('/panel')->getContent();
@@ -95,9 +95,10 @@ test('PT-12 8: el menú lateral contiene exactamente los ítems aprobados y ning
     preg_match('/<aside id="sidebar".*?<\/aside>/s', $html, $menu);
     preg_match_all('/<a\b[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/s', $menu[0] ?? '', $enlaces);
 
-    expect($enlaces[1])->toBe(['/panel', '/jugadores', '/estatus', '/plantel/categorias', '/plantel/equipos'])
+    expect($enlaces[1])->toBe(['/panel', '/jugadores', '/estatus', '/plantel/categorias', '/plantel/equipos', '/academico/periodos', '/academico/asignaturas', '/academico/materias'])
         ->and(array_map(fn (string $texto) => trim(strip_tags($texto)), $enlaces[2]))->toBe([
             __('interfaz.menu.panel'), __('interfaz.menu.jugadores'), __('interfaz.menu.estatus'), __('interfaz.menu.categorias'), __('interfaz.menu.equipos'),
+            __('interfaz.menu.periodos'), __('interfaz.menu.asignaturas'), __('interfaz.menu.materias'),
         ]);
 });
 

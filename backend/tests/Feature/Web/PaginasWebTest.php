@@ -119,7 +119,7 @@ test('FRONT-R2 10: ninguna vista usa las clases que main.js de la plantilla inic
     }
 });
 
-test('PT-12 15: las rutas web registradas son exactamente las aprobadas, con su middleware (enmiendas FRONT-R2, FRONT-R3, FRONT-R6 y FRONT-R4)', function () {
+test('PT-12 15: las rutas web registradas son exactamente las aprobadas, con su middleware (enmiendas FRONT-R2, FRONT-R3, FRONT-R6, FRONT-R4 y FRONT-R5a)', function () {
     $rutas = collect(Route::getRoutes()->getRoutes())
         ->filter(fn ($ruta) => in_array('web', $ruta->gatherMiddleware(), true) && ! str_starts_with($ruta->uri(), 'sanctum/'))
         ->mapWithKeys(fn ($ruta) => [$ruta->uri() => array_values(array_diff($ruta->gatherMiddleware(), ['web']))])
@@ -128,6 +128,10 @@ test('PT-12 15: las rutas web registradas son exactamente las aprobadas, con su 
 
     expect($rutas)->toBe([
         '/' => [],
+        'academico/asignaturas' => ['auth:web'],
+        'academico/materias' => ['auth:web'],
+        'academico/materias/{materia}' => ['auth:web'],
+        'academico/periodos' => ['auth:web'],
         'contrasena' => ['auth:web'],
         'estatus' => ['auth:web'],
         'ingreso' => ['guest:web'],

@@ -79,6 +79,6 @@ test('FRONT-R3 14: no hay jQuery: ningún archivo de public/assets ni de public/
     expect($jquery)->toBe([]);
 
     foreach (File::allFiles(resource_path('views')) as $vista) {
-        expect(strtolower(File::get($vista->getPathname())))->not->toContain('jquery', $vista->getFilename());
+        expect(str_contains(strtolower(File::get($vista->getPathname())), 'jquery'))->toBeFalse($vista->getFilename());
     }
 });

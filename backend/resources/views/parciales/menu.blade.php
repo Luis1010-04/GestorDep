@@ -31,5 +31,24 @@
                 <span>{{ __('interfaz.menu.equipos') }}</span>
             </a>
         </li>
+        <li class="nav-heading" data-roles="docente" hidden>{{ __('interfaz.menu.academico') }}</li>
+        <li class="nav-item" data-roles="docente" hidden>
+            <a class="nav-link{{ request()->is('academico/periodos*') ? '' : ' collapsed' }}" href="/academico/periodos"@if (request()->is('academico/periodos*')) aria-current="page"@endif>
+                <i class="bi bi-calendar3"></i>
+                <span>{{ __('interfaz.menu.periodos') }}</span>
+            </a>
+        </li>
+        <li class="nav-item" data-roles="docente" hidden>
+            <a class="nav-link{{ request()->is('academico/asignaturas*') ? '' : ' collapsed' }}" href="/academico/asignaturas"@if (request()->is('academico/asignaturas*')) aria-current="page"@endif>
+                <i class="bi bi-book"></i>
+                <span>{{ __('interfaz.menu.asignaturas') }}</span>
+            </a>
+        </li>
+        <li class="nav-item" data-roles="docente" hidden>
+            <a class="nav-link{{ request()->is('academico/materias*') ? '' : ' collapsed' }}" href="/academico/materias"@if (request()->is('academico/materias*')) aria-current="page"@endif>
+                <i class="bi bi-journal-text"></i>
+                <span>{{ __('interfaz.menu.materias') }}</span>
+            </a>
+        </li>
     </ul>
 </aside>

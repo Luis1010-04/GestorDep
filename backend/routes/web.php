@@ -15,3 +15,7 @@ Route::get('/estatus', [PaginaController::class, 'estatus'])->middleware('auth:w
 Route::get('/plantel/categorias', [PaginaController::class, 'categorias'])->middleware('auth:web');
 Route::get('/plantel/equipos', [PaginaController::class, 'equipos'])->middleware('auth:web');
 Route::get('/plantel/equipos/{equipo}', [PaginaController::class, 'equipo'])->middleware('auth:web')->whereUuid('equipo');
+Route::get('/academico/periodos', [PaginaController::class, 'periodos'])->middleware('auth:web');
+Route::get('/academico/asignaturas', [PaginaController::class, 'asignaturas'])->middleware('auth:web');
+Route::get('/academico/materias', [PaginaController::class, 'materias'])->middleware('auth:web');
+Route::get('/academico/materias/{materia}', [PaginaController::class, 'materia'])->middleware('auth:web')->whereUuid('materia');

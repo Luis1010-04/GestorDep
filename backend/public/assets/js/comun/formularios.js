@@ -52,13 +52,19 @@
 
     /**
      * Los valores de los controles con name del formulario, tal como los escribió el usuario (la API los recorta y valida).
-     * Una casilla envía true o false, que es lo que espera un campo booleano del contrato.
+     * Una casilla envía true o false, que es lo que espera un campo booleano del contrato. Un campo numérico con valor envía
+     * un número, que es lo que espera un campo entero; vacío se envía como texto vacío, para que la API diga que falta.
      */
     function datos(formulario) {
         var valores = {};
         Array.prototype.forEach.call(formulario.elements, function (control) {
-            if (control.name) {
-                valores[control.name] = control.type === 'checkbox' ? control.checked : control.value;
+            if (!control.name) {
+                return;
+            }
+            if (control.type === 'checkbox') {
+                valores[control.name] = control.checked;
+            } else {
+                valores[control.name] = control.type === 'number' && control.value !== '' ? Number(control.value) : control.value;
             }
         });
         return valores;

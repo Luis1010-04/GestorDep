@@ -74,10 +74,11 @@
         });
     }
 
+    /** El título va como texto (titleText): suele llevar nombres que llegan de la API, y title de SweetAlert2 es HTML. */
     function confirmar(opciones) {
         return mostrar({
             icon: opciones.peligro ? 'warning' : 'question',
-            title: opciones.titulo,
+            titleText: opciones.titulo,
             text: opciones.texto,
             showCancelButton: true,
             focusCancel: true,
