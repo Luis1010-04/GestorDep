@@ -37,6 +37,10 @@ services:
   app:
     <<: *aplicacion
     command: tail -f /dev/null
+    # init: un proceso init (tini) como PID 1 reenvia SIGTERM al comando; sin el, `tail` como PID 1 ignora SIGTERM y
+    # `make bajar` lo mata con SIGKILL (codigo 137). restart: vuelve a levantarlo si el motor de Docker se reinicia.
+    init: true
+    restart: unless-stopped
     healthcheck:
       # Conecta con el rol de aplicacion; una excepcion de PDO termina con codigo distinto de cero
       test: ["CMD", "php", "-r", "new PDO('pgsql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));"]
@@ -53,6 +57,7 @@ services:
     command: php -S 0.0.0.0:8000 -t public
     ports:
       - "127.0.0.1:8000:8000"
+    init: true
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:8000/api/v1/salud') === false ? 1 : 0);"]
@@ -64,16 +69,19 @@ services:
   worker:
     <<: *aplicacion
     command: php artisan queue:work --tries=3
+    init: true
     restart: unless-stopped
 
   # Planificador de Laravel (docs/arquitectura.md §11); las tareas programadas llegan en H6
   scheduler:
     <<: *aplicacion
     command: php artisan schedule:work
+    init: true
     restart: unless-stopped
 
   db:
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: ${DB_SUPERUSUARIO_CLAVE:?Falta DB_SUPERUSUARIO_CLAVE en .env}
       DB_DATABASE: ${DB_DATABASE}
