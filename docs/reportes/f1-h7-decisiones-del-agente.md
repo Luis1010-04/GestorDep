@@ -66,3 +66,10 @@ La numeración empieza en DA-134 (orden del responsable del 23/11/2026 a las 13:
 |---|---|---|---|
 | DA-155 | «Pasando por los candados de T06» se lee así: las escrituras por jugador de `VolumenSeeder` (membresía, inscripción, calificación, medición, aviso, convocatoria, asistencia a entrenamiento y rendimiento) usan los casos de uso que toman `CandadoDeJugadores`. Los catálogos y las entidades base (usuarios, equipos, jugadores, periodo, materias, partidos y entrenamientos) se insertan directo, como en los demás seeders | Es la forma de que la prueba de volumen ejercite los candados sin crear rutas ni casos de uso. La mutación 9.01 (el candado rechaza a todos) mata la prueba | `backend/database/seeders/VolumenSeeder.php`; `docs/reportes/f1-h7-t08.md` §2 y §3 |
 | DA-156 | Cada una de las dos pruebas de capacidad siembra su propio volumen, aunque cueste el doble de tiempo | Así ninguna depende del orden ni de los datos que dejó la otra, como el resto de la suite. El costo está medido en el reporte | `backend/tests/Feature/Volumen/CapacidadTest.php`; `docs/reportes/f1-h7-t08.md` §4 |
+
+## T09, cierre (orden del 26/11/2026, 22:38)
+
+| # | Decisión | Por qué | Dónde está |
+|---|---|---|---|
+| DA-162 | Las cinco decisiones de `docs/hitos/f1-h7.md` §3.3 se registran como DA-157 a DA-161, no «a continuación de DA-124» | DA-125 a DA-133 ya están en el registro y DA-134 a DA-156 en este archivo. Repetir un número crearía otro caso como el DA-20 duplicado | `docs/decisiones/registro-decisiones.md` §11 |
+| DA-163 | La tabla de valores de fábrica registra AB-28 con sus dos usos, la pregunta del aviso reportado por el jugador y los rangos de condición física, sin renumerar | La sección 2 del registro define AB-28 como la pregunta. `docs/arquitectura.md`, DA-85 y P-12 lo usan para los rangos. Darles un identificador nuevo no le toca al agente | `docs/decisiones/registro-decisiones.md` §12 |
