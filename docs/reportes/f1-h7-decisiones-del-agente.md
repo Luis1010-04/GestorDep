@@ -53,3 +53,16 @@ La numeración empieza en DA-134 (orden del responsable del 23/11/2026 a las 13:
 | # | Decisión | Por qué | Dónde está |
 |---|---|---|---|
 | DA-153 | La nota de `docs/arquitectura.md` §4.1 no sube la versión del documento (1.5.7) ni agrega fila en §14 | La ruta permitida de T07 es «§4.1 (solo una nota)»; el encabezado y §14 quedan fuera. Propuesta: que T09, o una tarea DOC, suba a 1.5.8 con la fila «§4.1: nota que distingue `CalculoDeDesempeno` de `CalculadorDeDesempeno` (T07)» | `docs/reportes/f1-h7-t07.md` §5 y §7 |
+
+## T06c, reinicio e `init` (PR #41, orden del 25/11/2026, 10:08)
+
+| # | Decisión | Por qué | Dónde está |
+|---|---|---|---|
+| DA-154 | T06c (reinicio e `init`) no corre `make verificar`; la comprobación es la secuencia de `make bajar` y `make levantar` y el CI del PR | La orden pide esa secuencia y prohíbe `make verificar` mientras el agente del front corre el suyo, y su pila estaba arriba. El cambio no toca código. El responsable aceptó el 143 el 26/11/2026 a las 22:38 y dejó `pcntl` y la versión fija de `composer:2` como deuda posterior a H7 | `docs/reportes/f1-h7-t06c.md` §8.3, §8.4 y §8.6 |
+
+## T08, capacidad (orden del 26/11/2026, 22:38)
+
+| # | Decisión | Por qué | Dónde está |
+|---|---|---|---|
+| DA-155 | «Pasando por los candados de T06» se lee así: las escrituras por jugador de `VolumenSeeder` (membresía, inscripción, calificación, medición, aviso, convocatoria, asistencia a entrenamiento y rendimiento) usan los casos de uso que toman `CandadoDeJugadores`. Los catálogos y las entidades base (usuarios, equipos, jugadores, periodo, materias, partidos y entrenamientos) se insertan directo, como en los demás seeders | Es la forma de que la prueba de volumen ejercite los candados sin crear rutas ni casos de uso. La mutación 9.01 (el candado rechaza a todos) mata la prueba | `backend/database/seeders/VolumenSeeder.php`; `docs/reportes/f1-h7-t08.md` §2 y §3 |
+| DA-156 | Cada una de las dos pruebas de capacidad siembra su propio volumen, aunque cueste el doble de tiempo | Así ninguna depende del orden ni de los datos que dejó la otra, como el resto de la suite. El costo está medido en el reporte | `backend/tests/Feature/Volumen/CapacidadTest.php`; `docs/reportes/f1-h7-t08.md` §4 |
