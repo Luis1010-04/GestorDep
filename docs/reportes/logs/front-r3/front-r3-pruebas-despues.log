@@ -1,0 +1,95 @@
+# FRONT-R3, pruebas después de implementar y de las correcciones de la comprobación en navegador (exportable sin :visible, autoClose, reemplazar, tablas.css, singular). Base: 692e8f8 con R3 sin commitear. 24/11/2026 22:21
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\BibliotecasLocalesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 7: los archivos de SweetAlert2 existen y su SHA-256 coinci[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 8: SweetAlert2 es la versión 11.26.26 y su licencia es MIT[39m[90m [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 9: SweetAlert2 no contiene código que dependa del dominio[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 12: los archivos de DataTables, Buttons, JSZip y pdfmake e[39m[90m…[39m [90m0.65s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 13: las versiones son DataTables 3.1.6, Buttons 4.1.4, JSZ[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 14: no hay jQuery: ningún archivo de public/assets ni de p[39m[90m…[39m [90m4.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\BootstrapLocalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 12: existen los archivos de NiceAdmin que usa la rebanada 1 y[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 13: el SHA-256 de cada archivo de Bootstrap coincide con el r[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 14: Bootstrap declara su licencia MIT en el encabezado de sus[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 20: main.js y style.css conservan su encabezado de licencia y[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 21: LICENCIA.md remite a la licencia oficial de BootstrapMade[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\ContrasenaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 1: GET /contrasena sin sesión redirige a /ingreso y no env[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 2: GET /contrasena con sesión responde 200 con el layout y[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 3: el formulario envía a PUT /contrasena solo contrasena_a[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 4: los textos de la página salen de lang/es/interfaz.php[39m[90m   [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 5: la cabecera de las páginas con sesión enlaza a /contras[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 6: la página carga SweetAlert2 y sus scripts después de se[39m[90m…[39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\ContratoDeVistasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 9: cada columna y dato de las vistas (data-campo) existe e[39m[90m…[39m [90m8.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 10: cada control de formulario existe en el contrato (pará[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 11: cada columna ordenable (data-orden) usa un valor del p[39m[90m…[39m [90m0.60s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\ErroresWebTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 H-01: un error interno fuera de /api con APP_DEBUG=true no ex[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 H-01: un 404 web con APP_DEBUG=true no expone trazas ni detal[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\EstructuraDelFrontTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 11: las vistas nuevas viven en modulos/{modulo}/ con los n[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 12: cada vista de módulo extiende el layout, define titulo[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 13: solo comun/avisos.js usa SweetAlert2; ninguna vista ni[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 14: comun/avisos.js ofrece exito, error, aviso y confirmar[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\IngresoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 1: GET /ingreso sin sesión responde 200 con el formulario de[39m[90m… [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 2: GET /ingreso con sesión redirige a /panel[39m[90m                  [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 3: GET / redirige a /panel[39m[90m                                    [39m [90m0.27s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\JugadoresTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 1: /jugadores y la ficha sin sesión redirigen a /ingreso s[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 2: /jugadores con sesión responde 200 con el layout, la bú[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 3: la ficha con sesión responde 200 y lleva el identificad[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 4: el menú lateral muestra «Jugadores» a docente y entrena[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 5: la tabla de jugadores solo ordena por apellidos y nombr[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 6: los textos de las páginas de jugadores y de las tablas[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 7: las páginas de jugadores cargan SweetAlert2, DataTables[39m[90m…[39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R3 8: comun/tabla.js traduce la paginación al contrato y ofre[39m[90m…[39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\PaginasWebTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 10: ninguna vista ni script propio usa localStorage ni sessio[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 11: los textos de ingreso y panel salen de lang/es/interfaz.p[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 17: ninguna vista ni script propio carga recursos externos, s[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 18: la plantilla se versiona sin forms/ y sin ningún archivo[39m[90m… [39m [90m1.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 22: no existe ningún archivo .html dentro de public/NiceAdmin[39m[90m [39m [90m1.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 19: el layout define el tinymce vacío antes de main.js, carga[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFRONT-R2 10: ninguna vista usa las clases que main.js de la plantil[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 15: las rutas web registradas son exactamente las aprobadas,[39m[90m… [39m [90m0.40s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\PanelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-12 4: GET /panel sin sesión redirige a /ingreso y no envía conte[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 5: GET /panel con sesión responde 200[39m[90m                         [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 6: el panel usa el layout y los tres parciales[39m[90m                [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 7: las páginas cargan activos solo desde /assets/ o /NiceAdmi[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 8: el menú lateral contiene exactamente los ítems aprobados y[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 9: el panel no contiene tarjetas, tablas, lienzos de gráfica[39m[90m… [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-12 16: el pie conserva el crédito «Designed by BootstrapMade» co[39m[90m…[39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Web\SesionesAnonimasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET / anónimo sin cookie redirige a /panel sin crear fila en[39m[90m…[39m [90m3.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /ingreso anónimo sin cookie responde 200 sin crear fila[39m[90m… [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /panel anónimo sin cookie redirige a /ingreso sin crear[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: una cookie de sesión que no se puede descifrar se trata como[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: HEAD /ingreso anónimo sin cookie responde 200 sin crear fila[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: con la cookie de una sesión autenticada, GET /panel responde[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: con la cookie de una sesión anónima existente, GET /ingreso[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: un usuario autenticado en GET /ingreso sigue redirigido a /p[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: GET /sanctum/csrf-cookie sin cookie sigue creando la sesión[39m[90m… [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPT-16: una cookie de sesión válida con fila inexistente crea la fil[39m[90m…[39m [90m0.23s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\EntornoDePruebasTest[39m
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T03 (DA-101): las pruebas usan la base de pruebas, o la de su[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mF1-H0-T03: toda ruta registrada esta bajo /api/v1 o es la cookie cs[39m[90m…[39m [90m0.12s[39m  
+
+  [90mTests:[39m    [32;1m64 passed[39;22m[90m (740 assertions)[39m
+  [90mDuration:[39m [39m35.19s[39m
+
+# codigo de salida: 0

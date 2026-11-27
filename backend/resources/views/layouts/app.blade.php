@@ -9,6 +9,7 @@
     <link href="/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="/NiceAdmin/assets/css/style.css" rel="stylesheet">
+    @stack('estilos')
 </head>
 <body data-textos="{{ json_encode(__('interfaz.js'), JSON_UNESCAPED_UNICODE) }}">
     @include('parciales.cabecera')
@@ -22,5 +23,6 @@
     <script src="/NiceAdmin/assets/js/main.js"></script>
     <script src="/assets/js/api.js"></script>
     <script src="/assets/js/sesion.js"></script>
+    @stack('scripts')
 </body>
 </html>

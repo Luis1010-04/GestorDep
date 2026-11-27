@@ -1,0 +1,15 @@
+Total messages: 28 (Errors: 12, Warnings: 0)
+Returning 12 messages for level "warning"
+
+[ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://localhost:8001/api/v1/categorias:1
+[ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://localhost:8001/api/v1/categorias:1
+[ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://localhost:8001/api/v1/equipos:1
+[ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://localhost:8001/api/v1/equipos:1
+[ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://localhost:8001/api/v1/equipos/01a213a2-0a94-76b8-8c19-cfbed82aa3a5/jugadores:1
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8001/api/v1/equipos/01a213a2-0a94-76b8-8c19-cfbed82aa3a5/jugadores:1
+[ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://localhost:8001/api/v1/jugadores:1
+[ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://localhost:8001/api/v1/jugadores:1
+[ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8:1
+[ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8/baja:1
+[ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost:8001/api/v1/equipos?pagina=1&por_pagina=15:1
+[ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost:8001/api/v1/categorias?orden=nombre&pagina=1&por_pagina=100:1

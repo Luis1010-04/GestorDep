@@ -1,0 +1,65 @@
+8. [GET] http://localhost:8001/sanctum/csrf-cookie => [204] No Content
+9. [POST] http://localhost:8001/api/v1/sesion => [200] OK
+21. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+22. [GET] http://localhost:8001/assets/js/comun/formularios.js => [200] OK
+23. [GET] http://localhost:8001/assets/js/comun/tabla.js => [200] OK
+24. [GET] http://localhost:8001/assets/js/modulos/jugadores/ver.js => [200] OK
+52. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+53. [GET] http://localhost:8001/api/v1/categorias?pagina=1&por_pagina=15 => [200] OK
+54. [POST] http://localhost:8001/api/v1/categorias => [422] Unprocessable Content
+55. [POST] http://localhost:8001/api/v1/categorias => [201] Created
+56. [GET] http://localhost:8001/api/v1/categorias?pagina=1&por_pagina=15 => [200] OK
+57. [POST] http://localhost:8001/api/v1/categorias => [409] Conflict
+58. [POST] http://localhost:8001/api/v1/categorias => [201] Created
+59. [GET] http://localhost:8001/api/v1/categorias?pagina=1&por_pagina=15 => [200] OK
+60. [DELETE] http://localhost:8001/api/v1/categorias/01a213a1-ace4-754e-aaf2-c9ff521b5705 => [204] No Content
+61. [GET] http://localhost:8001/api/v1/categorias?pagina=1&por_pagina=15 => [200] OK
+89. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+90. [GET] http://localhost:8001/api/v1/equipos?pagina=1&por_pagina=15 => [200] OK
+91. [GET] http://localhost:8001/api/v1/categorias?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+92. [POST] http://localhost:8001/api/v1/equipos => [422] Unprocessable Content
+93. [POST] http://localhost:8001/api/v1/equipos => [201] Created
+94. [GET] http://localhost:8001/api/v1/equipos?pagina=1&por_pagina=15 => [200] OK
+95. [POST] http://localhost:8001/api/v1/equipos => [409] Conflict
+123. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+124. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+125. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a213a2-0a94-76b8-8c19-cfbed82aa3a5&pagina=1&por_pagina=15 => [200] OK
+126. [POST] http://localhost:8001/api/v1/equipos/01a213a2-0a94-76b8-8c19-cfbed82aa3a5/jugadores => [201] Created
+127. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a213a2-0a94-76b8-8c19-cfbed82aa3a5&pagina=1&por_pagina=15 => [200] OK
+128. [POST] http://localhost:8001/api/v1/equipos/01a213a2-0a94-76b8-8c19-cfbed82aa3a5/jugadores => [409] Conflict
+129. [POST] http://localhost:8001/api/v1/equipos/01a213a2-0a94-76b8-8c19-cfbed82aa3a5/jugadores => [404] Not Found
+130. [PATCH] http://localhost:8001/api/v1/equipos/01a213a2-0a94-76b8-8c19-cfbed82aa3a5/jugadores/01a20f39-fe78-7800-b237-ec70ea001b15 => [200] OK
+131. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a213a2-0a94-76b8-8c19-cfbed82aa3a5&pagina=1&por_pagina=15 => [200] OK
+149. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+150. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+151. [POST] http://localhost:8001/api/v1/jugadores => [422] Unprocessable Content
+152. [POST] http://localhost:8001/api/v1/jugadores => [409] Conflict
+153. [POST] http://localhost:8001/api/v1/jugadores => [201] Created
+181. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+182. [GET] http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8 => [200] OK
+199. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+200. [GET] http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8 => [200] OK
+201. [PATCH] http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8 => [422] Unprocessable Content
+202. [PATCH] http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8 => [200] OK
+230. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+231. [GET] http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8 => [200] OK
+232. [POST] http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8/baja => [422] Unprocessable Content
+233. [POST] http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8/baja => [201] Created
+261. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+262. [GET] http://localhost:8001/api/v1/jugadores/01a213a2-a751-740e-a705-0c8604f90ac8 => [200] OK
+291. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+292. [GET] http://localhost:8001/api/v1/equipos?pagina=1&por_pagina=15 => [200] OK
+293. [GET] http://localhost:8001/api/v1/categorias?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+321. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+322. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+323. [GET] http://localhost:8001/api/v1/jugadores?filtro%5Bequipo_id%5D=01a213a2-0a94-76b8-8c19-cfbed82aa3a5&pagina=1&por_pagina=15 => [200] OK
+341. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+342. [GET] http://localhost:8001/api/v1/equipos?orden=nombre&pagina=1&por_pagina=100 => [200] OK
+350. [GET] http://localhost:8001/sanctum/csrf-cookie => [204] No Content
+351. [POST] http://localhost:8001/api/v1/sesion => [200] OK
+363. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+391. [GET] http://localhost:8001/api/v1/sesion => [200] OK
+392. [GET] http://localhost:8001/api/v1/equipos?pagina=1&por_pagina=15 => [403] Forbidden
+393. [GET] http://localhost:8001/api/v1/categorias?orden=nombre&pagina=1&por_pagina=100 => [403] Forbidden
+
+Note: 330 static requests not shown, run with "static" option to see them.

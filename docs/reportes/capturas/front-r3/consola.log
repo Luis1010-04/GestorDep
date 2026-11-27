@@ -1,0 +1,19 @@
+Total messages: 26 (Errors: 6, Warnings: 0)
+Returning 6 messages for level "warning"
+
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8001/api/v1/jugadores/busqueda?matricula=NO-EXISTE-99:1
+[ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://localhost:8001/api/v1/jugadores/busqueda?matricula=:1
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8001/api/v1/jugadores/0193b2c4-1111-7222-8333-444455556666:1
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=25:1
+[ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8001/api/v1/jugadores?pagina=1&por_pagina=15:1
+SyntaxError: Failed to execute 'matches' on 'Element': ':visible:not(.no-exportar)' is not a valid selector.
+    at http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:17462
+    at HTMLTableCellElement.<anonymous> (http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:19326)
+    at H.each (http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:16916)
+    at H.map (http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:19311)
+    at H.filter (http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:17337)
+    at http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:87974
+    at Wr (http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:74336)
+    at ApiColumns.<anonymous> (http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:87106)
+    at V.iterator (http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:78107)
+    at V.<anonymous> (http://localhost:8001/assets/vendor/datatables/js/dataTables.min.js:4:87052)

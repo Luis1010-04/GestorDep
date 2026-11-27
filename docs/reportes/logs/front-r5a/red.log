@@ -1,0 +1,47 @@
+11. [POST] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+23. [GET] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+51. [GET] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+52. [GET] http://127.0.0.1:8001/api/v1/periodos-escolares?pagina=1&por_pagina=15 => [200] OK
+53. [POST] http://127.0.0.1:8001/api/v1/periodos-escolares => [422] Unprocessable Content
+54. [POST] http://127.0.0.1:8001/api/v1/periodos-escolares => [422] Unprocessable Content
+55. [POST] http://127.0.0.1:8001/api/v1/periodos-escolares => [201] Created
+56. [GET] http://127.0.0.1:8001/api/v1/periodos-escolares?pagina=1&por_pagina=15 => [200] OK
+57. [POST] http://127.0.0.1:8001/api/v1/periodos-escolares => [409] Conflict
+58. [POST] http://127.0.0.1:8001/api/v1/periodos-escolares => [201] Created
+59. [GET] http://127.0.0.1:8001/api/v1/periodos-escolares?pagina=1&por_pagina=15 => [200] OK
+60. [DELETE] http://127.0.0.1:8001/api/v1/periodos-escolares/01a21dea-c7a7-7b39-a8d5-c808daa526ee => [204] No Content
+61. [GET] http://127.0.0.1:8001/api/v1/periodos-escolares?pagina=1&por_pagina=15 => [200] OK
+62. [GET] http://127.0.0.1:8001/api/v1/periodos-escolares?orden=fecha_inicio&pagina=1&por_pagina=15 => [200] OK
+90. [GET] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+91. [GET] http://127.0.0.1:8001/api/v1/asignaturas?pagina=1&por_pagina=15 => [200] OK
+92. [POST] http://127.0.0.1:8001/api/v1/asignaturas => [422] Unprocessable Content
+93. [POST] http://127.0.0.1:8001/api/v1/asignaturas => [422] Unprocessable Content
+94. [POST] http://127.0.0.1:8001/api/v1/asignaturas => [201] Created
+95. [GET] http://127.0.0.1:8001/api/v1/asignaturas?pagina=1&por_pagina=15 => [200] OK
+96. [POST] http://127.0.0.1:8001/api/v1/asignaturas => [409] Conflict
+124. [GET] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+125. [GET] http://127.0.0.1:8001/api/v1/materias?pagina=1&por_pagina=15 => [200] OK
+126. [GET] http://127.0.0.1:8001/api/v1/asignaturas?orden=clave&pagina=1&por_pagina=100 => [200] OK
+127. [GET] http://127.0.0.1:8001/api/v1/periodos-escolares?orden=-fecha_inicio&pagina=1&por_pagina=100 => [200] OK
+128. [POST] http://127.0.0.1:8001/api/v1/materias => [201] Created
+129. [GET] http://127.0.0.1:8001/api/v1/materias?pagina=1&por_pagina=15 => [200] OK
+130. [POST] http://127.0.0.1:8001/api/v1/materias => [422] Unprocessable Content
+131. [POST] http://127.0.0.1:8001/api/v1/materias => [409] Conflict
+132. [GET] http://127.0.0.1:8001/api/v1/materias?filtro%5Bperiodo_id%5D=01a21dea-7644-71d5-bafc-c96608ec81e7&pagina=1&por_pagina=15 => [200] OK
+160. [GET] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+161. [GET] http://127.0.0.1:8001/api/v1/materias?pagina=1&por_pagina=15 => [200] OK
+162. [GET] http://127.0.0.1:8001/api/v1/asignaturas?orden=clave&pagina=1&por_pagina=100 => [200] OK
+163. [GET] http://127.0.0.1:8001/api/v1/periodos-escolares?orden=-fecha_inicio&pagina=1&por_pagina=100 => [200] OK
+164. [GET] http://127.0.0.1:8001/api/v1/materias?filtro%5Bperiodo_id%5D=01a21dea-7644-71d5-bafc-c96608ec81e7&pagina=1&por_pagina=15 => [200] OK
+181. [GET] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+182. [GET] http://127.0.0.1:8001/api/v1/materias/01a21deb-94ae-7c73-bdfa-52b5757d5acc => [200] OK
+183. [PUT] http://127.0.0.1:8001/api/v1/materias/01a21deb-94ae-7c73-bdfa-52b5757d5acc/criterio => [422] Unprocessable Content
+184. [PUT] http://127.0.0.1:8001/api/v1/materias/01a21deb-94ae-7c73-bdfa-52b5757d5acc/criterio => [200] OK
+201. [GET] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+202. [GET] http://127.0.0.1:8001/api/v1/materias/01a20f42-8202-7e95-945b-000000000000 => [404] Not Found
+230. [GET] http://127.0.0.1:8001/api/v1/sesion => [200] OK
+231. [GET] http://127.0.0.1:8001/api/v1/materias?pagina=1&por_pagina=15 => [200] OK
+232. [GET] http://127.0.0.1:8001/api/v1/asignaturas?orden=clave&pagina=1&por_pagina=100 => [200] OK
+233. [GET] http://127.0.0.1:8001/api/v1/periodos-escolares?orden=-fecha_inicio&pagina=1&por_pagina=100 => [200] OK
+
+Note: 185 static requests not shown, run with "static" option to see them.

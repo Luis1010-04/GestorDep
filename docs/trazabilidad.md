@@ -229,3 +229,16 @@ Las rutas web devuelven vistas HTML y no forman parte del contrato de la API
 | `/` | GET | Público; redirige a `/panel` | PT-12 | CA-GEN-005 |
 | `/ingreso` | GET | Invitado (`guest:web`) | PT-12 | CA-AUT-001, CA-LAY-001 |
 | `/panel` | GET | Autenticado (`auth:web`) | PT-12 | CA-GEN-005, CA-LAY-002, CA-PAN-001 |
+| `/contrasena` | GET | Autenticado (`auth:web`); la página usa `PUT /api/v1/contrasena` | FRONT-R2 | CA-FOR-001 a 003, CA-GEN-002 a 005, CA-LAY-001 |
+| `/jugadores` | GET | Autenticado (`auth:web`); la página usa `GET /api/v1/jugadores`, `/jugadores/busqueda` y, para el entrenador, `/equipos` | FRONT-R3 | CA-TAB-001 a 004, CA-GEN-001 a 006, CA-LAY-002 |
+| `/jugadores/{jugador}` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET /api/v1/jugadores/{jugador}`, `/situacion-academica` y `/asistencia-entrenamientos`; desde FRONT-R6, `POST /api/v1/jugadores/{jugador}/baja`; desde FRONT-R4, `GET /api/v1/jugadores/{jugador}/alertas`, `/estado-disponibilidad` y `GET` y `POST /avisos-lesion` | FRONT-R3, FRONT-R6, FRONT-R4 | CA-GEN-001, 003 y 005, CA-TAB-001, CA-FOR-001 a 003 |
+| `/estatus` | GET | Autenticado (`auth:web`); la página usa `GET /api/v1/estatus-de-jugadores` y, para los filtros, `GET /api/v1/equipos` (entrenador) y `GET /api/v1/materias` (docente) | FRONT-R4 | CA-TAB-001 a 004, CA-GEN-001 a 006, CA-LAY-002 |
+| `/jugadores/crear` | GET | Autenticado (`auth:web`); la página usa `GET /api/v1/equipos` y `POST /api/v1/jugadores` | FRONT-R6 | CA-FOR-001 a 003, CA-GEN-002 a 005 |
+| `/jugadores/{jugador}/editar` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET` y `PATCH /api/v1/jugadores/{jugador}` | FRONT-R6 | CA-FOR-001 a 003, CA-GEN-002 a 005 |
+| `/plantel/categorias` | GET | Autenticado (`auth:web`); la página usa `GET` y `POST /api/v1/categorias` y `DELETE /api/v1/categorias/{id}` | FRONT-R6 | CA-TAB-001 a 004, CA-FOR-001 a 003, CA-LAY-002 |
+| `/plantel/equipos` | GET | Autenticado (`auth:web`); la página usa `GET` y `POST /api/v1/equipos` y `GET /api/v1/categorias` | FRONT-R6 | CA-TAB-001 a 004, CA-FOR-001 a 003, CA-LAY-002 |
+| `/plantel/equipos/{equipo}` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET /api/v1/equipos`, `GET /api/v1/jugadores?filtro[equipo_id]`, `POST /api/v1/equipos/{equipo}/jugadores` y `PATCH /api/v1/equipos/{equipo}/jugadores/{jugador}` | FRONT-R6 | CA-TAB-001 a 004, CA-FOR-001 a 003 |
+| `/academico/periodos` | GET | Autenticado (`auth:web`); la página usa `GET` y `POST /api/v1/periodos-escolares` y `DELETE /api/v1/periodos-escolares/{id}` | FRONT-R5a | CA-TAB-001 a 004, CA-FOR-001 a 003, CA-LAY-002 |
+| `/academico/asignaturas` | GET | Autenticado (`auth:web`); la página usa `GET` y `POST /api/v1/asignaturas` y `DELETE /api/v1/asignaturas/{id}` | FRONT-R5a | CA-TAB-001 a 004, CA-FOR-001 a 003, CA-LAY-002 |
+| `/academico/materias` | GET | Autenticado (`auth:web`); la página usa `GET` y `POST /api/v1/materias` y, para las listas, `GET /api/v1/asignaturas` y `GET /api/v1/periodos-escolares` | FRONT-R5a | CA-TAB-001 a 004, CA-FOR-001 a 003, CA-LAY-002 |
+| `/academico/materias/{materia}` | GET (`whereUuid`) | Autenticado (`auth:web`); la página usa `GET /api/v1/materias/{materia}` y `PUT /api/v1/materias/{materia}/criterio` | FRONT-R5a | CA-GEN-001, 003 y 005, CA-FOR-001 a 003 |
