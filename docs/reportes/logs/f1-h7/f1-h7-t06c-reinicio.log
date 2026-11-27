@@ -1,0 +1,336 @@
+inicio: 2026-11-25T16:43:47Z; rama: tecnico/f1-h7-t06c-reinicio @ 5a3ae93 con docker-compose.yml sin commit
+imagen gestordep-app antes: sha256:9ed434f7b27af1db9575d4a2c603ef266bde5a37129c6d8626518831935c8f0a
+--- contenedores antes (creados con la configuracion de main):
+/gestordep-app-1 reinicio=no init=no estado=running salud=healthy
+/gestordep-db-1 reinicio=no init=no estado=running salud=healthy
+/gestordep-scheduler-1 reinicio=unless-stopped init=no estado=running salud=-
+/gestordep-web-1 reinicio=unless-stopped init=no estado=running salud=healthy
+/gestordep-worker-1 reinicio=unless-stopped init=no estado=running salud=-
+
+=== 1. make bajar (configuracion anterior): inicio 2026-11-25T16:43:48Z
+docker compose down
+ Container gestordep-app-1 Stopping 
+ Container gestordep-worker-1 Stopping 
+ Container gestordep-web-1 Stopping 
+ Container gestordep-scheduler-1 Stopping 
+ Container gestordep-worker-1 Stopped 
+ Container gestordep-worker-1 Removing 
+ Container gestordep-worker-1 Removed 
+ Container gestordep-app-1 Stopped 
+ Container gestordep-app-1 Removing 
+ Container gestordep-app-1 Removed 
+ Container gestordep-scheduler-1 Stopped 
+ Container gestordep-scheduler-1 Removing 
+ Container gestordep-scheduler-1 Removed 
+ Container gestordep-web-1 Stopped 
+ Container gestordep-web-1 Removing 
+ Container gestordep-web-1 Removed 
+ Container gestordep-db-1 Stopping 
+ Container gestordep-db-1 Stopped 
+ Container gestordep-db-1 Removing 
+ Container gestordep-db-1 Removed 
+ Network gestordep_default Removing 
+ Network gestordep_default Removed 
+=== 1. make bajar (configuracion anterior): codigo 0; fin 2026-11-25T16:43:53Z; duracion 5 s
+--- eventos die del paso 1:
+16:43:52 gestordep-worker-1 exitCode=137
+16:43:52 gestordep-app-1 exitCode=137
+16:43:52 gestordep-scheduler-1 exitCode=137
+16:43:52 gestordep-web-1 exitCode=137
+
+=== 2. make levantar (configuracion nueva): inicio 2026-11-25T16:43:54Z
+docker compose up -d --build --wait db app
+ Image gestordep-app Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 575B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 477B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/php:8.4-cli
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/composer:2
+#4 ...
+
+#5 [auth] library/composer:pull token for registry-1.docker.io
+#5 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/composer:2
+#4 DONE 1.2s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [stage-0 1/4] FROM docker.io/library/php:8.4-cli@sha256:7e7413ed31b8c42b31c939cc83b3758b1cd618f7bf3803f5a0c39f98d4adcbee
+#7 resolve docker.io/library/php:8.4-cli@sha256:7e7413ed31b8c42b31c939cc83b3758b1cd618f7bf3803f5a0c39f98d4adcbee 0.0s done
+#7 DONE 0.0s
+
+#8 FROM docker.io/library/composer:2@sha256:0049ce90b432795bf413a738b073963ada1a689e1a8708104684baafe94586ec
+#8 resolve docker.io/library/composer:2@sha256:0049ce90b432795bf413a738b073963ada1a689e1a8708104684baafe94586ec 0.0s done
+#8 DONE 0.1s
+
+#8 FROM docker.io/library/composer:2@sha256:0049ce90b432795bf413a738b073963ada1a689e1a8708104684baafe94586ec
+#8 sha256:7670ac95c054d202cbbbd210fe1853f891e58463b0b019ce7085de928976d1c6 93B / 93B 0.1s done
+#8 sha256:818926440cc3c4cd76b5c09e532f13cd289b6ae0dc273e92d1c67a6a46fc68a6 420B / 420B 0.2s done
+#8 sha256:0e73c2a5d3a29429acb81472127679827f91f5f0625d1589ee32fc179b989df2 0B / 1.45MB 0.2s
+#8 sha256:bbdece32b8c1ccf3acd53bfe2c90a43e9433f49c9274a938176a8480b6344e3f 0B / 260B 0.2s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 0B / 32.26MB 0.2s
+#8 sha256:0e73c2a5d3a29429acb81472127679827f91f5f0625d1589ee32fc179b989df2 1.45MB / 1.45MB 0.4s done
+#8 sha256:bbdece32b8c1ccf3acd53bfe2c90a43e9433f49c9274a938176a8480b6344e3f 260B / 260B 0.3s done
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 2.10MB / 32.26MB 0.5s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 4.19MB / 32.26MB 0.6s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 6.29MB / 32.26MB 0.8s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 8.39MB / 32.26MB 0.9s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 11.53MB / 32.26MB 1.2s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 14.68MB / 32.26MB 1.5s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 16.78MB / 32.26MB 1.7s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 19.92MB / 32.26MB 2.0s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 22.02MB / 32.26MB 2.1s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 24.12MB / 32.26MB 2.4s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 27.26MB / 32.26MB 2.7s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 29.36MB / 32.26MB 2.9s
+#8 sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 32.26MB / 32.26MB 3.0s done
+#8 extracting sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719
+#8 extracting sha256:eb51f96e996c2422e157e124689106141fb1a210554a74f7d445050026e1e719 1.1s done
+#8 DONE 4.3s
+
+#8 FROM docker.io/library/composer:2@sha256:0049ce90b432795bf413a738b073963ada1a689e1a8708104684baafe94586ec
+#8 extracting sha256:bbdece32b8c1ccf3acd53bfe2c90a43e9433f49c9274a938176a8480b6344e3f 0.0s done
+#8 extracting sha256:0e73c2a5d3a29429acb81472127679827f91f5f0625d1589ee32fc179b989df2 0.0s done
+#8 extracting sha256:818926440cc3c4cd76b5c09e532f13cd289b6ae0dc273e92d1c67a6a46fc68a6 0.0s done
+#8 extracting sha256:7670ac95c054d202cbbbd210fe1853f891e58463b0b019ce7085de928976d1c6 0.0s done
+#8 DONE 4.4s
+
+#9 [stage-0 2/4] RUN apt-get update     && apt-get install -y --no-install-recommends git unzip libpq-dev libzip-dev autoconf 		dpkg-dev 		file 		g++ 		gcc 		libc-dev 		make 		pkg-config 		re2c     && docker-php-ext-install pdo_pgsql pgsql zip bcmath     && pecl install pcov     && docker-php-ext-enable pcov     && apt-get purge -y --auto-remove autoconf 		dpkg-dev 		file 		g++ 		gcc 		libc-dev 		make 		pkg-config 		re2c     && rm -rf /var/lib/apt/lists/* /tmp/pear
+#9 CACHED
+
+#10 [stage-0 3/4] COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+#10 DONE 0.2s
+
+#11 [stage-0 4/4] WORKDIR /var/www/html
+#11 DONE 0.0s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.3s done
+#12 exporting manifest sha256:59a51b7ca19488255afb86e073a1b11f4210c48ec7125ac2986f7ea27d006114 0.0s done
+#12 exporting config sha256:221a5c1307bf2f4d3262cad155701e051dff1fe3ffddcd4bd97de7cc1911bc81 0.0s done
+#12 exporting attestation manifest sha256:d7b3cc0c3032e419b3812023624a9a559532d897baac8bdffbdb60b49a9db7a7 0.0s done
+#12 exporting manifest list sha256:8d57085f614e5014fe30797abafe47f4ac6da9522f83192c79bf7bdfd289e6bc 0.0s done
+#12 naming to docker.io/library/gestordep-app:latest done
+#12 unpacking to docker.io/library/gestordep-app:latest 0.1s done
+#12 DONE 0.4s
+
+#13 resolving provenance for metadata file
+#13 DONE 0.1s
+ Image gestordep-app Built 
+ Network gestordep_default Creating 
+ Network gestordep_default Creating 
+ Network gestordep_default Created 
+ Network gestordep_default Created 
+ Container gestordep-db-1 Creating 
+ Container gestordep-db-1 Created 
+ Container gestordep-app-1 Creating 
+ Container gestordep-app-1 Created 
+ Container gestordep-db-1 Starting 
+ Container gestordep-db-1 Started 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-app-1 Starting 
+ Container gestordep-app-1 Started 
+ Container gestordep-app-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-app-1 Healthy 
+docker compose exec -T db bash /docker-entrypoint-initdb.d/02-bases-por-proceso.sh
+docker compose exec -T app sh -c 'test -f vendor/autoload.php || composer install --no-interaction --no-progress'
+docker compose up -d --wait
+ Container gestordep-db-1 Running 
+ Container gestordep-app-1 Running 
+ Container gestordep-worker-1 Creating 
+ Container gestordep-scheduler-1 Creating 
+ Container gestordep-web-1 Creating 
+ Container gestordep-worker-1 Created 
+ Container gestordep-web-1 Created 
+ Container gestordep-scheduler-1 Created 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-web-1 Starting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-worker-1 Starting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-scheduler-1 Starting 
+ Container gestordep-web-1 Started 
+ Container gestordep-worker-1 Started 
+ Container gestordep-scheduler-1 Started 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-app-1 Waiting 
+ Container gestordep-web-1 Waiting 
+ Container gestordep-worker-1 Waiting 
+ Container gestordep-scheduler-1 Waiting 
+ Container gestordep-app-1 Healthy 
+ Container gestordep-worker-1 Healthy 
+ Container gestordep-scheduler-1 Healthy 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-web-1 Healthy 
+=== 2. make levantar (configuracion nueva): codigo 0; fin 2026-11-25T16:44:21Z; duracion 27 s
+--- contenedores tras el paso 2:
+/gestordep-app-1 reinicio=unless-stopped init=true estado=running salud=healthy
+/gestordep-db-1 reinicio=unless-stopped init=no estado=running salud=healthy
+/gestordep-scheduler-1 reinicio=unless-stopped init=true estado=running salud=-
+/gestordep-web-1 reinicio=unless-stopped init=true estado=running salud=healthy
+/gestordep-worker-1 reinicio=unless-stopped init=true estado=running salud=-
+imagen gestordep-app despues: sha256:8d57085f614e5014fe30797abafe47f4ac6da9522f83192c79bf7bdfd289e6bc
+
+=== 3. make bajar (configuracion nueva): inicio 2026-11-25T16:44:22Z
+docker compose down
+ Container gestordep-app-1 Stopping 
+ Container gestordep-scheduler-1 Stopping 
+ Container gestordep-web-1 Stopping 
+ Container gestordep-worker-1 Stopping 
+ Container gestordep-app-1 Stopped 
+ Container gestordep-app-1 Removing 
+ Container gestordep-app-1 Removed 
+ Container gestordep-web-1 Stopped 
+ Container gestordep-web-1 Removing 
+ Container gestordep-web-1 Removed 
+ Container gestordep-scheduler-1 Stopped 
+ Container gestordep-scheduler-1 Removing 
+ Container gestordep-scheduler-1 Removed 
+ Container gestordep-worker-1 Stopped 
+ Container gestordep-worker-1 Removing 
+ Container gestordep-worker-1 Removed 
+ Container gestordep-db-1 Stopping 
+ Container gestordep-db-1 Stopped 
+ Container gestordep-db-1 Removing 
+ Container gestordep-db-1 Removed 
+ Network gestordep_default Removing 
+ Network gestordep_default Removed 
+=== 3. make bajar (configuracion nueva): codigo 0; fin 2026-11-25T16:44:24Z; duracion 2 s
+--- eventos die del paso 3:
+16:44:23 gestordep-app-1 exitCode=143
+16:44:23 gestordep-web-1 exitCode=143
+16:44:23 gestordep-scheduler-1 exitCode=143
+16:44:23 gestordep-worker-1 exitCode=143
+
+=== 4. make levantar (la pila vuelve): inicio 2026-11-25T16:44:24Z
+docker compose up -d --build --wait db app
+ Image gestordep-app Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 575B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 477B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/php:8.4-cli
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/composer:2
+#4 DONE 0.2s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [stage-0 1/4] FROM docker.io/library/php:8.4-cli@sha256:7e7413ed31b8c42b31c939cc83b3758b1cd618f7bf3803f5a0c39f98d4adcbee
+#6 resolve docker.io/library/php:8.4-cli@sha256:7e7413ed31b8c42b31c939cc83b3758b1cd618f7bf3803f5a0c39f98d4adcbee 0.0s done
+#6 DONE 0.0s
+
+#7 FROM docker.io/library/composer:2@sha256:0049ce90b432795bf413a738b073963ada1a689e1a8708104684baafe94586ec
+#7 resolve docker.io/library/composer:2@sha256:0049ce90b432795bf413a738b073963ada1a689e1a8708104684baafe94586ec 0.0s done
+#7 DONE 0.0s
+
+#8 [stage-0 2/4] RUN apt-get update     && apt-get install -y --no-install-recommends git unzip libpq-dev libzip-dev autoconf 		dpkg-dev 		file 		g++ 		gcc 		libc-dev 		make 		pkg-config 		re2c     && docker-php-ext-install pdo_pgsql pgsql zip bcmath     && pecl install pcov     && docker-php-ext-enable pcov     && apt-get purge -y --auto-remove autoconf 		dpkg-dev 		file 		g++ 		gcc 		libc-dev 		make 		pkg-config 		re2c     && rm -rf /var/lib/apt/lists/* /tmp/pear
+#8 CACHED
+
+#9 [stage-0 3/4] COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+#9 CACHED
+
+#10 [stage-0 4/4] WORKDIR /var/www/html
+#10 CACHED
+
+#11 exporting to image
+#11 exporting layers done
+#11 exporting manifest sha256:59a51b7ca19488255afb86e073a1b11f4210c48ec7125ac2986f7ea27d006114 done
+#11 exporting config sha256:221a5c1307bf2f4d3262cad155701e051dff1fe3ffddcd4bd97de7cc1911bc81 done
+#11 exporting attestation manifest sha256:eb6adb7f6b12bf75459f0bdf205db451d9690f33ecca93c8e3339fe6cddc249a 0.0s done
+#11 exporting manifest list sha256:16a48ee0a7721b641c76a69748905079e0f9b189b83e153724e869de943d461b
+#11 exporting manifest list sha256:16a48ee0a7721b641c76a69748905079e0f9b189b83e153724e869de943d461b 0.0s done
+#11 naming to docker.io/library/gestordep-app:latest done
+#11 unpacking to docker.io/library/gestordep-app:latest done
+#11 DONE 0.1s
+
+#12 resolving provenance for metadata file
+#12 DONE 0.0s
+ Image gestordep-app Built 
+ Network gestordep_default Creating 
+ Network gestordep_default Creating 
+ Network gestordep_default Created 
+ Network gestordep_default Created 
+ Container gestordep-db-1 Creating 
+ Container gestordep-db-1 Created 
+ Container gestordep-app-1 Creating 
+ Container gestordep-app-1 Created 
+ Container gestordep-db-1 Starting 
+ Container gestordep-db-1 Started 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-app-1 Starting 
+ Container gestordep-app-1 Started 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-app-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-app-1 Healthy 
+docker compose exec -T db bash /docker-entrypoint-initdb.d/02-bases-por-proceso.sh
+docker compose exec -T app sh -c 'test -f vendor/autoload.php || composer install --no-interaction --no-progress'
+docker compose up -d --wait
+ Container gestordep-db-1 Running 
+ Container gestordep-app-1 Running 
+ Container gestordep-worker-1 Creating 
+ Container gestordep-web-1 Creating 
+ Container gestordep-scheduler-1 Creating 
+ Container gestordep-web-1 Created 
+ Container gestordep-scheduler-1 Created 
+ Container gestordep-worker-1 Created 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-scheduler-1 Starting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-worker-1 Starting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-web-1 Starting 
+ Container gestordep-scheduler-1 Started 
+ Container gestordep-worker-1 Started 
+ Container gestordep-web-1 Started 
+ Container gestordep-app-1 Waiting 
+ Container gestordep-web-1 Waiting 
+ Container gestordep-worker-1 Waiting 
+ Container gestordep-scheduler-1 Waiting 
+ Container gestordep-db-1 Waiting 
+ Container gestordep-db-1 Healthy 
+ Container gestordep-worker-1 Healthy 
+ Container gestordep-scheduler-1 Healthy 
+ Container gestordep-app-1 Healthy 
+ Container gestordep-web-1 Healthy 
+=== 4. make levantar (la pila vuelve): codigo 0; fin 2026-11-25T16:44:47Z; duracion 23 s
+--- contenedores al final:
+/gestordep-app-1 reinicio=unless-stopped init=true estado=running salud=healthy
+/gestordep-db-1 reinicio=unless-stopped init=no estado=running salud=healthy
+/gestordep-scheduler-1 reinicio=unless-stopped init=true estado=running salud=-
+/gestordep-web-1 reinicio=unless-stopped init=true estado=running salud=healthy
+/gestordep-worker-1 reinicio=unless-stopped init=true estado=running salud=-
+fin: 2026-11-25T16:44:48Z

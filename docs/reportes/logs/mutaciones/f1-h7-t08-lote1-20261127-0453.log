@@ -1,0 +1,24 @@
+inicio: 2026-11-27T04:53:37Z; punta: ea27447 (tecnico/f1-h7-t08) con VolumenSeeder, CapacidadTest y el arnés sin commit
+Entrada estandar cerrada: el vigilante queda desactivado; protegen el candado y el tope de 20 min.
+Lote 1: capacidad (RNF-06) 
+=== control antes: 2 passed (32 assertions)
+=== 9.01 el candado de T06 rechaza a todos los jugadores (prueba que el seeder pasa por él) (src/Plantel/Infraestructura/CandadoDeJugadoresPlantel.php)
+pruebas (tests/Feature/Volumen/CapacidadTest.php --filter="terminan con código 0"): 1 failed (0 assertions)
+  falla: RNF-06: con 15 equipos, 25 usuarios y 375 jugadores, alertas:recalc…
+MUERE
+restaurado: src/Plantel/Infraestructura/CandadoDeJugadoresPlantel.php idéntico al original
+=== 9.02 alertas:recalcular termina con código 1 (src/Alertas/Infraestructura/Consola/RecalcularAlertasComando.php)
+pruebas (tests/Feature/Volumen/CapacidadTest.php --filter="terminan con código 0"): 1 failed (10 assertions)
+  falla: RNF-06: con 15 equipos, 25 usuarios y 375 jugadores, alertas:recal…
+MUERE
+restaurado: src/Alertas/Infraestructura/Consola/RecalcularAlertasComando.php idéntico al original
+=== 9.03 resumenes:conciliar termina con código 1 (src/Academico/Infraestructura/Consola/ConciliarResumenesComando.php)
+pruebas (tests/Feature/Volumen/CapacidadTest.php --filter="terminan con código 0"): 1 failed (11 assertions)
+  falla: RNF-06: con 15 equipos, 25 usuarios y 375 jugadores, alertas:recal…
+MUERE
+restaurado: src/Academico/Infraestructura/Consola/ConciliarResumenesComando.php idéntico al original
+=== control después: 2 passed (32 assertions)
+=== resultado: mueren 3 (9.01, 9.02, 9.03); sobreviven 0 ()
+ls: cannot access '/tmp/mut': No such file or directory
+ls: cannot access '/tmp/docs': No such file or directory
+codigo de salida: 0; fin: 2026-11-27T04:58:35Z
