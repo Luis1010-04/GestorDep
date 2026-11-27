@@ -1,0 +1,256 @@
+inicio: 2026-11-27T05:28:33Z; rama tecnico/f1-h7-t09 @ 51ad9c6; tras make fresh; front con 0 procesos de pest o phpunit
+docker compose exec -T app bash -s < scripts/humo/humo-h0.sh
+HUMO H0 OK: GET /api/v1/salud -> 200
+docker compose exec -T app bash /scripts/humo/humo-h1.sh
+OK     paso 1: GET /api/v1/salud -> HTTP 200
+OK     paso 2: el entrenador 1 inicia sesión -> HTTP 200
+OK     paso 3: crea la categoría Sub-17 -> HTTP 201
+OK     paso 4: crea el equipo Tigres Sub-17 -> HTTP 201
+OK     paso 4: el equipo aparece en GET /equipos -> HTTP 200
+OK     paso 5: registra un jugador en ese equipo -> HTTP 201
+OK     paso 6: la misma matrícula responde 409 sin datos del primero -> HTTP 409
+OK     paso 7: el entrenador 2 inicia sesión con otro archivo de cookies -> HTTP 200
+OK     paso 8: el jugador del entrenador 1 responde 404 al entrenador 2 -> HTTP 404
+OK     paso 9: la búsqueda por matrícula devuelve solo nombres, apellidos y matrícula -> HTTP 200
+OK     paso 10: el entrenador 2 crea su equipo -> HTTP 201
+OK     paso 10: asigna al jugador por matrícula -> HTTP 201
+OK     paso 11: GET /jugadores del entrenador 2 devuelve al jugador con solo su equipo -> HTTP 200
+OK     paso 12: el docente inicia sesión -> HTTP 200
+OK     paso 12: el docente recibe 403 al crear un equipo -> HTTP 403
+OK     paso 12: el docente recibe una lista vacía en GET /jugadores -> HTTP 200
+OK     paso 13: el entrenador 1 da de baja al jugador -> HTTP 201
+OK     paso 13: deja de aparecer en GET /jugadores del entrenador 1 -> HTTP 200
+OK     paso 13: deja de aparecer en GET /jugadores del entrenador 2 -> HTTP 200
+OK     paso 14: el entrenador 1 cierra sesión -> HTTP 204
+OK     paso 14: la misma cookie responde 401 -> HTTP 401
+HUMO H1 OK: 14 pasos
+docker compose exec -T app bash /scripts/humo/humo-h2.sh
+Servidor del guion con QUEUE_CONNECTION=sync
+OK     paso 1: GET /api/v1/salud -> HTTP 200
+OK     paso 2: el docente 1 inicia sesión -> HTTP 200
+OK     paso 3: crea un periodo escolar que contiene hoy y sale vigente -> HTTP 201
+OK     paso 4: crea la asignatura MAT-101 -> HTTP 201
+OK     paso 5: crea la materia con esa asignatura y ese periodo -> HTTP 201
+OK     paso 6: el entrenador 1 inicia sesión (otro archivo de cookies) -> HTTP 200
+OK     paso 6: crea su categoría Sub-15 -> HTTP 201
+OK     paso 6: crea su equipo -> HTTP 201
+OK     paso 6: registra un jugador -> HTTP 201
+OK     paso 7: el docente 1 busca la matrícula: solo nombres, apellidos y matrícula -> HTTP 200
+OK     paso 7: lo inscribe por matrícula -> HTTP 201
+OK     paso 8: captura la calificación parcial 8.50 -> HTTP 201
+OK     paso 8: captura la calificación final 8.00 -> HTTP 201
+OK     paso 9: captura la asistencia presente del 2026-11-24 -> HTTP 201
+OK     paso 9: captura la asistencia presente del 2026-11-25 -> HTTP 201
+OK     paso 9: captura la asistencia falta del 2026-11-26 -> HTTP 201
+OK     paso 10: situación como docente: 8.00, sin_riesgo, 66.67 y con materias -> HTTP 200
+OK     paso 11: define el criterio propio 8.50 -> HTTP 200
+OK     paso 11: la situación pasa a 1 reprobada y en_observacion -> HTTP 200
+OK     paso 12: el entrenador 1 ve el mismo nivel, sin materias -> HTTP 200
+OK     paso 13: el docente 2 inicia sesión -> HTTP 200
+OK     paso 13: el docente 2 recibe 404 en la situación -> HTTP 404
+OK     paso 13: el docente 2 recibe una lista vacía en GET /jugadores -> HTTP 200
+OK     paso 14: el entrenador 1 recibe 403 al crear un periodo -> HTTP 403
+OK     paso 14: el docente 1 recibe 403 al crear un equipo -> HTTP 403
+OK     paso 15: un valor fuera de rango responde calificacion_fuera_de_rango -> HTTP 422
+OK     paso 16: el docente 1 cierra sesión -> HTTP 204
+OK     paso 16: la misma cookie responde 401 -> HTTP 401
+HUMO H2 OK: 16 pasos
+docker compose exec -T app bash /scripts/humo/humo-h3.sh
+OK     paso 1: GET /api/v1/salud -> HTTP 200
+OK     paso 2: E1 inicia sesión -> HTTP 200
+OK     paso 2: E1 crea la categoría Sub-13 -> HTTP 201
+OK     paso 2: E1 crea el equipo A -> HTTP 201
+OK     paso 2: registra a Jota Uno (HUMO-H3-001) -> HTTP 201
+OK     paso 2: registra a Jota Dos (HUMO-H3-002) -> HTTP 201
+OK     paso 2: registra a Jota Tres (HUMO-H3-003) -> HTTP 201
+OK     paso 2: E2 inicia sesión (otro archivo de cookies) -> HTTP 200
+OK     paso 2: E2 crea el equipo B -> HTTP 201
+OK     paso 2: registra a Jota Cuatro (HUMO-H3-004) -> HTTP 201
+OK     paso 2: E2 asigna a J3 al equipo B -> HTTP 201
+OK     paso 3: E1 crea el lugar L2 -> HTTP 201
+OK     paso 3: E1 crea la temporada que contiene hoy -> HTTP 201
+OK     paso 4: E1 crea un torneo en esa temporada -> HTTP 201
+OK     paso 5: E1 crea un entrenamiento de A con J1, J2 y J3 listados -> HTTP 201
+OK     paso 6: E1 crea otro entrenamiento en L2 que se cruza: advierte empalme_de_lugar -> HTTP 201
+OK     paso 7: E1 marca el primero realizado -> HTTP 200
+OK     paso 7: E1 captura la asistencia de J1, J2 y J3 -> HTTP 201
+OK     paso 8: E1 consulta el porcentaje de J1: 100.00 -> HTTP 200
+OK     paso 8: el porcentaje del equipo A es 33.33 (la falta justificada cuenta en el denominador) -> HTTP 200
+OK     paso 9: E1 crea el rival R1 -> HTTP 201
+OK     paso 9: E1 crea un partido oficial con el torneo, en la temporada esperada -> HTTP 201
+OK     paso 10: registra a Jota Cinco (HUMO-H3-005) -> HTTP 201
+OK     paso 10: E1 convoca a J1 -> HTTP 201
+OK     paso 10: E1 convoca a J5 -> HTTP 201
+OK     paso 10: E1 define la alineación: J1 titular -> HTTP 200
+OK     paso 11: E1 captura el resultado 2-1 -> HTTP 200
+OK     paso 11: el partido queda jugado -> HTTP 200
+OK     paso 12: E2 consulta un entrenamiento inexistente (referencia) -> HTTP 404
+OK     paso 12: E2 consulta el entrenamiento de A: 404 igual byte a byte -> HTTP 404
+OK     paso 13: el docente inicia sesión -> HTTP 200
+OK     paso 13: el docente recibe 403 al crear un lugar -> HTTP 403
+OK     paso 14: antes de la baja, J5 está en la convocatoria -> HTTP 200
+OK     paso 14: E1 da de baja a J5 -> HTTP 201
+OK     paso 14: J5 desaparece de la convocatoria y J1 sigue -> HTTP 200
+OK     paso 15: E1 crea un amistoso programado -> HTTP 201
+OK     paso 15: 100 goles responde valor_fuera_de_rango -> HTTP 422
+OK     paso 16: E1 cierra sesión -> HTTP 204
+OK     paso 16: la misma cookie responde 401 -> HTTP 401
+HUMO H3 OK: 16 pasos
+docker compose exec -T app bash /scripts/humo/humo-h4.sh
+OK     paso 1: E1 inicia sesión -> HTTP 200
+OK     paso 2: E1 consulta el catálogo: las nueve métricas sembradas -> HTTP 200
+OK     paso 3: E1 crea la categoría Sub-11 -> HTTP 201
+OK     paso 3: E1 crea el equipo A -> HTTP 201
+OK     paso 3: registra a Pe Uno (HUMO-H4-001, portero) -> HTTP 201
+OK     paso 3: registra a De Uno (HUMO-H4-002, defensa) -> HTTP 201
+OK     paso 3: registra a Efe Uno (HUMO-H4-003, delantero) -> HTTP 201
+OK     paso 3: ya hay una temporada que contiene hoy (la del humo de H3) -> HTTP 409
+OK     paso 3: E1 crea un lugar -> HTTP 201
+OK     paso 3: E1 crea un rival -> HTTP 201
+OK     paso 3: E1 crea el amistoso PJ1 -> HTTP 201
+OK     paso 3: E1 convoca a un jugador a PJ1 -> HTTP 201
+OK     paso 3: E1 convoca a un jugador a PJ1 -> HTTP 201
+OK     paso 3: E1 convoca a un jugador a PJ1 -> HTTP 201
+OK     paso 3: E1 captura el resultado: PJ1 queda jugado -> HTTP 200
+OK     paso 3: E1 captura a P1 en PJ1 con sus métricas -> HTTP 201
+OK     paso 4: E1 captura a D1 sin recuperaciones: metrica_obligatoria_faltante -> HTTP 422
+OK     paso 5: E1 consulta pendientes: PJ1 aparece porque le faltan D1 y F1 -> HTTP 200
+OK     paso 6: E1 consulta el umbral de F1: la plantilla «Desarrollo» (6.00, ventana 5) -> HTTP 200
+OK     paso 7: E1 cambia el umbral de F1 a 7.0 con ventana 3 -> HTTP 200
+OK     paso 8: E1 consulta el desempeño de F1: datos_insuficientes con el umbral nuevo -> HTTP 200
+OK     paso 9: E2 inicia sesión (otro archivo de cookies) -> HTTP 200
+OK     paso 9: E2 lista los rendimientos de un partido inexistente (referencia) -> HTTP 404
+OK     paso 9: E2 lista los rendimientos de PJ1: 404 igual byte a byte -> HTTP 404
+OK     paso 10: E2 intenta corregir el rendimiento de E1: 404 igual byte a byte -> HTTP 404
+OK     paso 11: el docente inicia sesión -> HTTP 200
+OK     paso 11: el docente consulta pendientes: 403 -> HTTP 403
+OK     paso 12: sin sesión, el desempeño responde 401 -> HTTP 401
+OK     paso 13: E1 captura a F1 con 151 minutos: valor_fuera_de_rango -> HTTP 422
+OK     paso 14: E1 cierra sesión -> HTTP 204
+OK     paso 14: la misma cookie responde 401 -> HTTP 401
+HUMO H4 OK: 14 pasos
+docker compose exec -T app bash /scripts/humo/humo-h5.sh
+OK     paso 1: E1 inicia sesión -> HTTP 200
+OK     paso 1: E1 crea la categoría Sub-9 -> HTTP 201
+OK     paso 1: E1 crea el equipo A -> HTTP 201
+OK     paso 1: E1 registra a F en A -> HTTP 201
+OK     paso 2: E2 inicia sesión -> HTTP 200
+OK     paso 2: E2 crea el equipo B -> HTTP 201
+OK     paso 2: E2 asigna a F a B por matrícula -> HTTP 201
+OK     paso 3: el docente 1 inicia sesión -> HTTP 200
+OK     paso 3: el docente 1 crea un periodo que contiene hoy -> HTTP 201
+OK     paso 3: el docente 1 crea la asignatura HUM-501 -> HTTP 201
+OK     paso 3: el docente 1 crea la materia -> HTTP 201
+OK     paso 3: el docente 1 inscribe a F -> HTTP 201
+OK     paso 4: el docente 1 crea un aviso de F reportado por el jugador -> HTTP 201
+OK     paso 5: E1 consulta el estado de F: apto implícito, el aviso no lo cambia -> HTTP 200
+OK     paso 6: el docente 1 intenta confirmar el aviso: 403 -> HTTP 403
+OK     paso 7: E2 confirma el aviso como lesionado con fecha estimada -> HTTP 200
+OK     paso 7: E2 ve el estado que registró, con su lesión -> HTTP 200
+OK     paso 8: E1 consulta el estado de F: lesionado, la misma fecha que ve E2 y sin lesion_id -> HTTP 200
+OK     paso 9: E1 pide una lesión inexistente (referencia) -> HTTP 404
+OK     paso 9: E1 pide el detalle de la lesión de E2: 404 igual byte a byte -> HTTP 404
+OK     paso 10: E1 intenta cambiar la fecha estimada: 403 -> HTTP 403
+OK     paso 11: ya hay una temporada que contiene hoy (la del humo de H3) -> HTTP 409
+OK     paso 11: E1 crea un lugar -> HTTP 201
+OK     paso 11: E1 crea un rival -> HTTP 201
+OK     paso 11: E1 crea un partido de A -> HTTP 201
+OK     paso 11: E1 convoca a F: 201 con la advertencia jugador_lesionado -> HTTP 201
+OK     paso 12: E1 registra una medición de F (70.00 kg, 175.0 cm): IMC calculado -> HTTP 201
+OK     paso 13: E1 registra otra en el mismo periodo: 409 -> HTTP 409
+OK     paso 13: E1 la corrige con es_correccion y motivo -> HTTP 200
+OK     paso 14: E2 lista las mediciones de F: sin las de E1 -> HTTP 200
+OK     paso 15: E1 consulta los tipos de prueba sembrados -> HTTP 200
+OK     paso 15: E1 registra una prueba de velocidad -> HTTP 201
+OK     paso 15: E1 consulta el periodo: tres tipos, dos con prueba nula -> HTTP 200
+OK     paso 16: E2 da de alta a F: apto -> HTTP 200
+OK     paso 17: sin sesión, el estado de F responde 401 -> HTTP 401
+OK     paso 18: E1 cierra sesión -> HTTP 204
+OK     paso 18: la misma cookie responde 401 -> HTTP 401
+HUMO H5 OK: 18 pasos
+docker compose exec -T app bash /scripts/humo/humo-h6.sh
+Servidor del guion con QUEUE_CONNECTION=sync
+OK     paso 1: E1 inicia sesión -> HTTP 200
+OK     paso 1: E1 crea la categoría Sub-7 -> HTTP 201
+OK     paso 1: E1 crea el equipo A -> HTTP 201
+OK     paso 1: ya hay una temporada que contiene hoy (la del humo de H3) -> HTTP 409
+OK     paso 1: E1 crea un lugar -> HTTP 201
+OK     paso 1: E1 crea un rival -> HTTP 201
+OK     paso 1: E1 registra a F en A -> HTTP 201
+OK     paso 2: el docente 1 inicia sesión -> HTTP 200
+OK     paso 2: el docente 1 crea un periodo que contiene hoy -> HTTP 201
+OK     paso 2: el docente 1 crea la asignatura HUM-601 -> HTTP 201
+OK     paso 2: el docente 1 crea la materia -> HTTP 201
+OK     paso 2: el docente 1 inscribe a F -> HTTP 201
+OK     paso 3: E1 consulta el catálogo de métricas -> HTTP 200
+OK     paso 3: E1 crea el partido de las 08:00 -> HTTP 201
+OK     paso 3: E1 convoca a F -> HTTP 201
+OK     paso 3: E1 captura el resultado: el partido queda jugado -> HTTP 200
+OK     paso 3: E1 registra el rendimiento de F con calificación general 4 -> HTTP 201
+OK     paso 3: E1 crea el partido de las 10:00 -> HTTP 201
+OK     paso 3: E1 convoca a F -> HTTP 201
+OK     paso 3: E1 captura el resultado: el partido queda jugado -> HTTP 200
+OK     paso 3: E1 registra el rendimiento de F con calificación general 4 -> HTTP 201
+OK     paso 3: E1 crea el partido de las 12:00 -> HTTP 201
+OK     paso 3: E1 convoca a F -> HTTP 201
+OK     paso 3: E1 captura el resultado: el partido queda jugado -> HTTP 200
+OK     paso 3: E1 registra el rendimiento de F con calificación general 4 -> HTTP 201
+OK     paso 3: E1 crea el partido de las 14:00 -> HTTP 201
+OK     paso 3: E1 convoca a F -> HTTP 201
+OK     paso 3: E1 captura el resultado: el partido queda jugado -> HTTP 200
+OK     paso 3: E1 registra el rendimiento de F con calificación general 4 -> HTTP 201
+OK     paso 3: E1 crea el partido de las 16:00 -> HTTP 201
+OK     paso 3: E1 convoca a F -> HTTP 201
+OK     paso 3: E1 captura el resultado: el partido queda jugado -> HTTP 200
+OK     paso 3: E1 registra el rendimiento de F con calificación general 4 -> HTTP 201
+OK     paso 3: la evaluación de F queda en no_pasa (umbral 6.00, ventana de 5) -> HTTP 200
+OK     paso 4: alertas:recalcular -> código 0
+OK     paso 4: E1 consulta las alertas de F: aparece riesgo_baja_deportiva -> HTTP 200
+OK     paso 5: el docente 1 captura la calificación final 4.00 de F: queda en_riesgo -> HTTP 201
+OK     paso 5: el docente 1 consulta las alertas de F: con riesgo_baja_academica y sin la deportiva -> HTTP 200
+OK     paso 6: el docente 1 corrige la calificación a 9.00: F queda sin_riesgo -> HTTP 200
+OK     paso 6: el docente 1 consulta las alertas de F: sin riesgo_baja_academica -> HTTP 200
+OK     paso 7: el docente 1 crea un aviso de lesión de F -> HTTP 201
+OK     paso 8: E1 consulta el listado de estatus: F con aviso_pendiente y la alerta deportiva -> HTTP 200
+OK     paso 9: filtro[tipo_alerta]=riesgo_baja_deportiva: con F -> HTTP 200
+OK     paso 9: filtro[tipo_alerta]=riesgo_baja_academica: sin F -> HTTP 200
+OK     paso 9: filtro[tipo_alerta]=otra: 422 validacion_fallida -> HTTP 422
+OK     paso 10: E1 consulta la vista para convocar de F: las cinco dimensiones y ninguna posiblemente desactualizada -> HTTP 200
+OK     paso 11: el docente 1 consulta la vista para convocar de F: 403 -> HTTP 403
+OK     paso 12: E1 pide los gráficos de F: cinco puntos en rendimiento_partidos -> HTTP 200
+OK     paso 13: el docente 1 pide los gráficos de F: con calificaciones y sin mediciones -> HTTP 200
+OK     paso 14: E2 inicia sesión -> HTTP 200
+OK     paso 14: E2 crea el equipo B -> HTTP 201
+OK     paso 14: E2 pide las alertas de F: 404 -> HTTP 404
+OK     paso 15: alertas:recalcular otra vez -> código 0
+OK     paso 15: E1 consulta las alertas de F: una sola riesgo_baja_deportiva -> HTTP 200
+OK     paso 16: E1 da de baja a F -> HTTP 201
+OK     paso 16: F ya no aparece en el listado de estatus -> HTTP 200
+OK     paso 16: las alertas de F responden 404 -> HTTP 404
+OK     paso 17: sin sesión, las alertas de F responden 401 -> HTTP 401
+OK     paso 18: E1 cierra sesión -> HTTP 204
+OK     paso 18: la misma cookie responde 401 -> HTTP 401
+HUMO H6 OK: 18 pasos
+docker compose exec -T app bash /scripts/humo/humo-h7.sh
+OK     paso 1: E1 inicia sesión -> HTTP 200
+OK     paso 1: E1 crea la categoría Sub-6 -> HTTP 201
+OK     paso 1: E1 crea el equipo A -> HTTP 201
+OK     paso 1: E1 registra a F en A -> HTTP 201
+OK     paso 2: el docente 1 inicia sesión -> HTTP 200
+OK     paso 2: el docente 1 crea un periodo que contiene hoy -> HTTP 201
+OK     paso 2: el docente 1 crea la asignatura HUM-701 -> HTTP 201
+OK     paso 2: el docente 1 crea la materia -> HTTP 201
+OK     paso 2: el docente 1 inscribe a F -> HTTP 201
+OK     paso 3: el docente 1 captura una calificación de F -> HTTP 201
+OK     paso 3: el docente 1 corrige la calificación -> HTTP 200
+OK     paso 4: el docente 1 consulta el historial de calificaciones de F: crear y actualizar, con autor y valores -> HTTP 200
+OK     paso 5: E1 registra una medición de F -> HTTP 201
+OK     paso 5: E1 consulta el historial de mediciones de F: la entrada crear, sin autor (DA-125) -> HTTP 200
+OK     paso 6: E2 inicia sesión -> HTTP 200
+OK     paso 6: E2 consulta el historial de mediciones de F -> HTTP 404
+OK     paso 7: el docente 1 recibe del historial de mediciones lo mismo que de la lectura -> HTTP 403
+OK     paso 8: sin sesión, el historial de calificaciones de F -> HTTP 401
+OK     paso 9: E1 cierra sesión -> HTTP 204
+OK     paso 9: el docente 1 cierra sesión -> HTTP 204
+HUMO H7 OK: 9 pasos
+codigo de salida: 0; fin: 2026-11-27T05:29:52Z
