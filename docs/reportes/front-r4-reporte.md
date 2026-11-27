@@ -118,6 +118,8 @@ Con `worker` encendido se abrió la alerta académica de PRB-0002. Con la corrid
 - **No se dejaron encendidos `worker` ni `scheduler`:** `worker` se apagó y se retiró al terminar la comprobación, y `scheduler` no se encendió.
 - **Las acciones del entrenador sobre avisos y estado** (descartar, confirmar, cambiar estado y dar de alta) no se construyeron: son de R8b. Para la prueba, el aviso de PRB-0003 se confirmó por la API.
 
+**Resolución (27/11/2026):** la actualización de Symfony llegó a `main` en `c419503` (#42). Esperé además a que el backend fusionara T08 (#43) y T09 (#44) y fusioné `main` en la rama del front (`9b4f84b`), sin conflictos. Instalé en el entorno del front las dependencias del `composer.lock` nuevo (`symfony/routing`, `http-kernel`, `http-foundation` y `mailer` a la 8.1.12). Antes de verificar, `docker compose -p gestordep top app` no mostraba `composer`, `pest` ni `phpstan` en el backend. `front-r4-verificar-2.log`: **`make verificar` pasó completo.** Pint sin cambios en 1045 archivos, PHPStan sin errores, 2487 pruebas y 17 082 aserciones, sin avisos de seguridad, cobertura 100,0 / 99,7 / 99,5 %, código de salida 0, 495 s.
+
 ## Peticiones para el backend
 
 - **PB-07 (bloqueante para que `make verificar` pase en todas las ramas):** actualizar `symfony/http-kernel`, `symfony/mailer` y `symfony/routing` a versiones sin los 5 avisos del 25/11/2026 (`symfony/routing` 8.1.12 o superior) en `backend/composer.lock`. Hoy fallan por eso el CI de `main` y `make verificar` del front.
